@@ -27,4 +27,9 @@ std::expected<std::string, std::string> token_dump(std::string_view source,
 std::expected<std::string, std::string> ast_dump(std::string_view source,
                                                  std::string_view chunk_name = "?");
 
+// Like ast_dump, but as a Graphviz DOT graph (see `lua2 --ast=dot`), to draw
+// the tree with `dot -Tsvg tree.dot -o tree.svg`.
+std::expected<std::string, std::string> ast_dot_dump(std::string_view source,
+                                                     std::string_view chunk_name = "?");
+
 } // namespace lua2

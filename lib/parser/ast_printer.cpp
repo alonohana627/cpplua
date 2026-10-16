@@ -1,8 +1,10 @@
 #include "parser/ast_printer.hpp"
 
+#include <cstddef>
 #include <format>
 #include <ranges>
 #include <string>
+#include <string_view>
 #include <variant>
 #include <vector>
 
@@ -375,6 +377,48 @@ private:
 
 std::string print_ast(const Ast& ast) {
     return Printer{ast}.print_chunk();
+}
+
+// Built from print_ast()'s text rather than from the tree, so both views
+// always show the same nodes with the same labels. In that text a node's
+// parent is the closest line above it indented one level less, so a stack
+// of the open ancestors' ids, one per depth, finds it.
+std::string print_ast_dot(const Ast& ast) {
+    const std::string tree = print_ast(ast);
+
+    std::string out = "digraph ast {\n"
+                      "  ordering=out;\n" // keep children in source order
+                      "  node [shape=box, fontname=\"monospace\"];\n";
+    std::vector<std::size_t> ancestors; // ancestors[d] is the open node at depth d
+    std::size_t id = 0;
+    for (const auto line : std::views::split(tree, '\n')) {
+        const std::string_view text{line.begin(), line.end()};
+        if (text.empty()) {
+            continue; // after the last newline
+        }
+        const std::size_t indent = text.find_first_not_of(' ');
+        const std::size_t depth = indent / 2;
+        const std::string_view label = text.substr(indent);
+
+        // DOT strings escape '"' and '\' with a backslash.
+        std::string escaped;
+        for (const char c : label) {
+            if (c == '"' || c == '\\') {
+                escaped += '\\';
+            }
+            escaped += c;
+        }
+        out += std::format("  n{} [label=\"{}\"];\n", id, escaped);
+
+        ancestors.resize(depth);
+        if (depth > 0) {
+            out += std::format("  n{} -> n{};\n", ancestors.back(), id);
+        }
+        ancestors.push_back(id);
+        ++id;
+    }
+    out += "}\n";
+    return out;
 }
 
 } // namespace lua2

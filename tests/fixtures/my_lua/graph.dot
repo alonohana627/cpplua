@@ -1,0 +1,31 @@
+digraph ast {
+  ordering=out;
+  node [shape=box, fontname="monospace"];
+  n0 [label="Chunk"];
+  n1 [label="Local name"];
+  n0 -> n1;
+  n2 [label="String \"a \\\"quoted\\\" \\\\ name\""];
+  n1 -> n2;
+  n3 [label="If"];
+  n0 -> n3;
+  n4 [label="If"];
+  n3 -> n4;
+  n5 [label="Name name (local 0)"];
+  n4 -> n5;
+  n6 [label="Then"];
+  n4 -> n6;
+  n7 [label="CallStatement"];
+  n6 -> n7;
+  n8 [label="Call"];
+  n7 -> n8;
+  n9 [label="Name print"];
+  n8 -> n9;
+  n10 [label="Name name (local 0)"];
+  n8 -> n10;
+  n11 [label="Binary +"];
+  n8 -> n11;
+  n12 [label="Integer 1"];
+  n11 -> n12;
+  n13 [label="Integer 2"];
+  n11 -> n13;
+}

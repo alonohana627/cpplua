@@ -1,4 +1,4 @@
-﻿# lua2
+# lua2
 
 A Lua 5.4 interpreter written from scratch in C++26, built step by step.
 The plan is in [docs/ROADMAP.md](docs/ROADMAP.md); background reading for each step is in [docs/learn/](docs/learn/), and the exact rules we implement are in [docs/spec/](docs/spec/).
@@ -38,6 +38,8 @@ Use `release` instead of `debug` for an optimized build.
 ./build/debug/lua2                      # print the version (also -v, --version)
 ./build/debug/lua2 --tokens file.lua    # print every token of a file (lexer debugging)
 ./build/debug/lua2 --ast file.lua       # print the syntax tree of a file (parser debugging)
+./build/debug/lua2 --ast=dot file.lua > tree.dot   # the tree as a Graphviz graph
+dot -Tsvg tree.dot -o tree.svg          # draw it (needs Graphviz: pacman -S mingw-w64-clang-x86_64-graphviz)
 ```
 
 ## Test
@@ -50,7 +52,7 @@ ctest --preset debug                         # run all tests
 
 Lua programs used as tests live in `tests/fixtures/`: the official Lua 5.4.9 suite, and
 `my_lua/`, where every Lua program written while developing lua2 is kept with its expected
-`--ast` output (see `tests/fixtures/my_lua/README.md`).
+`--ast` output, and optionally its `--ast=dot` output (see `tests/fixtures/my_lua/README.md`).
 
 ## Format
 

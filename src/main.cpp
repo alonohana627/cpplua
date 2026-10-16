@@ -16,7 +16,8 @@ namespace {
 
 constexpr std::string_view usage = "usage: lua2 [-v | --version]\n"
                                    "       lua2 --tokens <file.lua>\n"
-                                   "       lua2 --ast <file.lua>\n";
+                                   "       lua2 --ast <file.lua>\n"
+                                   "       lua2 --ast=dot <file.lua>\n";
 
 // The debug views: each turns source text into printable text or an error.
 using Dump = std::expected<std::string, std::string> (*)(std::string_view, std::string_view);
@@ -30,7 +31,7 @@ std::expected<std::string, std::string> read_file(const std::string& path) {
     return std::string{std::istreambuf_iterator<char>{file}, std::istreambuf_iterator<char>{}};
 }
 
-// `lua2 --tokens file.lua` and `lua2 --ast file.lua`: print a debug view of
+// `lua2 --tokens file.lua`, `lua2 --ast file.lua` and `--ast=dot`: print a debug view of
 // the file, or the error that stopped it.
 int print_dump(const std::string& path, Dump dump_view) {
     const auto source = read_file(path);
@@ -59,6 +60,9 @@ int run(std::span<char*> args) {
     }
     if (args.size() == 3 && std::string_view{args[1]} == "--ast") {
         return print_dump(args[2], &lua2::ast_dump);
+    }
+    if (args.size() == 3 && std::string_view{args[1]} == "--ast=dot") {
+        return print_dump(args[2], &lua2::ast_dot_dump);
     }
     std::print(stderr, "{}", usage);
     return EXIT_FAILURE;

@@ -14,6 +14,7 @@
 //   name.lua    the program
 //   name.ast    the expected `lua2 --ast` output, if it parses
 //   name.error  the expected error message, if it does not
+//   name.dot    optionally, the expected `lua2 --ast=dot` output
 //
 // The chunk name in error messages is the file name. See
 // tests/fixtures/my_lua/README.md.
@@ -60,6 +61,13 @@ TEST_CASE("every file in my_lua parses to its golden output", "[my_lua]") {
         } else {
             REQUIRE_FALSE(result.has_value());
             CHECK(result.error() + "\n" == read_bytes(error_path));
+        }
+
+        const auto dot_path = std::filesystem::path{path}.replace_extension(".dot");
+        if (std::filesystem::exists(dot_path)) {
+            const auto dot = lua2::ast_dot_dump(read_bytes(path), name);
+            REQUIRE(dot.has_value());
+            CHECK(*dot == read_bytes(dot_path));
         }
     }
 }

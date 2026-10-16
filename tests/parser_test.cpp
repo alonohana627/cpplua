@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <array>
 #include <string>
 #include <string_view>
@@ -1523,4 +1524,62 @@ TEST_CASE("G10 at most 255 upvalues per function", "[parser][resolve]") {
     // Like Lua, the name is resolved after it is read, so "near" is the token after it.
     CHECK(parse_error(source(57)) ==
           "input:6: too many upvalues (limit is 255) in function at line 4 near 'end'");
+}
+
+// ---- Part 11: the AST as a graph ----
+
+TEST_CASE("the DOT graph links each node to its parent", "[parser][ast]") {
+    Parser parser{"do local x end y = 1"};
+    const auto ast = parser.parse_chunk();
+    REQUIRE(ast.has_value());
+
+    // print_ast:            ids:
+    //   Chunk                n0
+    //     Do                 n1
+    //       Local x          n2
+    //     Assign             n3
+    //       Targets          n4
+    //         Name y         n5
+    //       Values           n6
+    //         Integer 1      n7
+    CHECK(lua2::print_ast_dot(*ast) == "digraph ast {\n"
+                                       "  ordering=out;\n"
+                                       "  node [shape=box, fontname=\"monospace\"];\n"
+                                       "  n0 [label=\"Chunk\"];\n"
+                                       "  n1 [label=\"Do\"];\n"
+                                       "  n0 -> n1;\n"
+                                       "  n2 [label=\"Local x\"];\n"
+                                       "  n1 -> n2;\n"
+                                       "  n3 [label=\"Assign\"];\n"
+                                       "  n0 -> n3;\n"
+                                       "  n4 [label=\"Targets\"];\n"
+                                       "  n3 -> n4;\n"
+                                       "  n5 [label=\"Name y\"];\n"
+                                       "  n4 -> n5;\n"
+                                       "  n6 [label=\"Values\"];\n"
+                                       "  n3 -> n6;\n"
+                                       "  n7 [label=\"Integer 1\"];\n"
+                                       "  n6 -> n7;\n"
+                                       "}\n");
+}
+
+TEST_CASE("the DOT graph has one node per printed line", "[parser][ast]") {
+    Parser parser{"local function f(a) return function() return a, print end end"};
+    const auto ast = parser.parse_chunk();
+    REQUIRE(ast.has_value());
+
+    const std::string text = lua2::print_ast(*ast);
+    const std::string dot = lua2::print_ast_dot(*ast);
+    const auto occurrences = [](std::string_view haystack, std::string_view needle) {
+        std::size_t count = 0;
+        for (auto at = haystack.find(needle); at != std::string_view::npos;
+             at = haystack.find(needle, at + 1)) {
+            ++count;
+        }
+        return count;
+    };
+    const auto lines = static_cast<std::size_t>(std::ranges::count(text, '\n'));
+    CHECK(occurrences(dot, "[label=") == lines);
+    // Every node but the root has exactly one arrow into it.
+    CHECK(occurrences(dot, " -> ") == lines - 1);
 }

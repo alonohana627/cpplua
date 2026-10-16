@@ -61,4 +61,14 @@ std::expected<std::string, std::string> ast_dump(std::string_view source,
     return print_ast(*ast);
 }
 
+std::expected<std::string, std::string> ast_dot_dump(std::string_view source,
+                                                     std::string_view chunk_name) {
+    Parser parser{source, chunk_name};
+    auto ast = parser.parse_chunk();
+    if (!ast) {
+        return std::unexpected(std::move(ast.error().message));
+    }
+    return print_ast_dot(*ast);
+}
+
 } // namespace lua2

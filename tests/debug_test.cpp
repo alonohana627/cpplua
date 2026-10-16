@@ -61,3 +61,28 @@ TEST_CASE("ast_dump returns the parser's error", "[debug]") {
     REQUIRE_FALSE(dump.has_value());
     CHECK(dump.error() == "test.lua:1: syntax error near <eof>");
 }
+
+TEST_CASE("ast_dot_dump draws the tree as a DOT graph", "[debug]") {
+    const auto dump = lua2::ast_dot_dump(R"(return 1, "a\\b")");
+
+    REQUIRE(dump.has_value());
+    CHECK(*dump == "digraph ast {\n"
+                   "  ordering=out;\n"
+                   "  node [shape=box, fontname=\"monospace\"];\n"
+                   "  n0 [label=\"Chunk\"];\n"
+                   "  n1 [label=\"Return\"];\n"
+                   "  n0 -> n1;\n"
+                   "  n2 [label=\"Integer 1\"];\n"
+                   "  n1 -> n2;\n"
+                   // print_ast shows the string as "a\\b"; DOT escapes each " and \ again.
+                   "  n3 [label=\"String \\\"a\\\\\\\\b\\\"\"];\n"
+                   "  n1 -> n3;\n"
+                   "}\n");
+}
+
+TEST_CASE("ast_dot_dump returns the parser's error", "[debug]") {
+    const auto dump = lua2::ast_dot_dump("x", "test.lua");
+
+    REQUIRE_FALSE(dump.has_value());
+    CHECK(dump.error() == "test.lua:1: syntax error near <eof>");
+}

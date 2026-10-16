@@ -1,0 +1,14 @@
+Chunk
+  Local name
+    String "a \"quoted\" \\ name"
+  If
+    If
+      Name name (local 0)
+      Then
+        CallStatement
+          Call
+            Name print
+            Name name (local 0)
+            Binary +
+              Integer 1
+              Integer 2

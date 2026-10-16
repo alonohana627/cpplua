@@ -4,7 +4,7 @@ How the parser works today. This page describes the code as it is, and is update
 grows. The rules it implements are in [../spec/grammar.md](../spec/grammar.md), and the remaining
 work is in [../plan/parser.md](../plan/parser.md).
 
-**Status:** parts 0 to 10 of the plan: **the whole Lua 5.4 grammar parses.** A chunk is a list
+**Status:** parts 0 to 11 of the plan: **the whole Lua 5.4 grammar parses.** A chunk is a list
 of statements: function calls, assignments, `local` declarations (with `<const>` and
 `<close>`), empty `;` statements, `do`, `while`, `repeat`, `if`/`elseif`/`else`, numeric and
 generic `for`, `function` statements, `local function`, `goto`, labels, `break`, and a final
@@ -12,8 +12,8 @@ generic `for`, `function` statements, `local function`, `goto`, labels, `break`,
 need scopes are in place (part 9): `break` and `goto` targets, duplicate labels, jumps into a
 local's scope, `<const>` assignment, the 200-local limit and a nesting limit. Every name in the
 tree records whether it is a local, an upvalue or a global, and every function lists its
-upvalues (part 10). Still to come: the graph view (part 11) and the official test suite
-(part 12).
+upvalues (part 10), and `lua2 --ast=dot` draws the tree as a graph (part 11). Still to come:
+the official test suite (part 12).
 
 ## Where it lives
 
@@ -25,9 +25,9 @@ upvalues (part 10). Still to come: the graph view (part 11) and the official tes
 | `lib/parser/parser.cpp`               | its implementation                                |
 | `lib/internal/parser/scopes.hpp`      | `Scopes`: scopes, compile-time checks, name resolution |
 | `lib/parser/scopes.cpp`               | its implementation                                |
-| `lib/internal/parser/ast_printer.hpp` | `print_ast()`, the tree as indented text          |
+| `lib/internal/parser/ast_printer.hpp` | `print_ast()`, the tree as indented text, and `print_ast_dot()`, as a graph |
 | `lib/parser/ast_printer.cpp`          | its implementation                                |
-| `include/lua2/debug.hpp`              | `ast_dump()`, public, for `lua2 --ast`            |
+| `include/lua2/debug.hpp`              | `ast_dump()` and `ast_dot_dump()`, public, for `lua2 --ast` and `--ast=dot` |
 | `lib/internal/overloaded.hpp`         | `Overloaded`, for `std::visit` with lambdas       |
 | `lib/internal/text_format.hpp`        | `quoted()`, `format_float()`, shared by the debug views |
 | `tests/parser_test.cpp`               | parser tests, tagged `[parser]` (and `[ast]`, `[resolve]`) |
@@ -646,10 +646,35 @@ Chunk
 `lua2 --ast` reaches the internal parser through `lua2::ast_dump(source, chunk_name)` in
 `include/lua2/debug.hpp`, the same way `--tokens` uses `token_dump`.
 
+### The graph view
+
+`print_ast_dot(ast)` gives the same tree as a Graphviz DOT graph, and `lua2 --ast=dot`
+(through `ast_dot_dump()`) prints it. `dot -Tsvg tree.dot -o tree.svg` draws it as a picture.
+For `return 1`:
+
+```
+digraph ast {
+  ordering=out;
+  node [shape=box, fontname="monospace"];
+  n0 [label="Chunk"];
+  n1 [label="Return"];
+  n0 -> n1;
+  n2 [label="Integer 1"];
+  n1 -> n2;
+}
+```
+
+It is built from `print_ast()`'s text, not from the tree: each line becomes a box labeled with
+the line's text, and its parent is the closest line above it with one level less indentation.
+A stack of the open ancestors, one per depth, finds it in one pass. So the two views can never
+disagree, a new node type needs only its `print()` overload, and the graph writer is as
+non-recursive as the printer. Labels escape `"` and `\` for DOT, and `ordering=out` keeps
+children left to right in source order.
+
 ## Not handled yet
 
 - **A difference in the nesting limit**: Lua reads a multiple assignment `a, b, c = ...`
   recursively, one level per target, so more than about 200 targets is `C stack overflow`
   there. Ours reads them in a loop and accepts any number. The official test suite checks this
   (`errors.lua`), so part 12 may need to count them.
-- The graph view (part 11).
+

@@ -7,6 +7,7 @@ Every Lua program written while developing lua2, kept as a regression test.
 | `name.lua`   | the program                                                  |
 | `name.ast`   | the expected `lua2 --ast name.lua` output, if it parses      |
 | `name.error` | the expected error message, if it does not (one line)        |
+| `name.dot`   | optional: the expected `lua2 --ast=dot name.lua` output      |
 
 `tests/my_lua_test.cpp` (tag `[my_lua]`) parses each `.lua` file and compares the result with
 its golden file. Error messages use the file name as the chunk name: `too_deep.lua:1: ...`.
@@ -18,3 +19,4 @@ its golden file. Error messages use the file name as the chunk name: `too_deep.l
    only protects behavior that was checked to be right.
 3. Save the output as `name.ast`, or the error message (without the `lua2: ` prefix) as
    `name.error`. Keep Unix line endings; `.gitattributes` keeps these files byte for byte.
+4. For a program that tests the graph view, also save `lua2 --ast=dot name.lua` as `name.dot`.
