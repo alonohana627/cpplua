@@ -4,8 +4,8 @@ How the lexer works today. This page describes the code as it is, and is updated
 grows. The rules it implements are in [../spec/lexical.md](../spec/lexical.md), and the remaining
 work is in [../plan/lexer.md](../plan/lexer.md).
 
-**Status:** parts 0 to 3 of the plan: operators, whitespace, line counting, names and keywords.
-Numbers, strings and comments are not lexed yet.
+**Status:** parts 0 to 4 of the plan: operators, whitespace, line counting, names, keywords,
+stray characters and the error type. Numbers, strings and comments are not lexed yet.
 
 ## Where it lives
 
@@ -14,7 +14,10 @@ Numbers, strings and comments are not lexed yet.
 | `lib/internal/lexer/token.hpp`  | `TokenKind`, `TokenValue`, `Token`, `keywords`   |
 | `lib/internal/lexer/lexer.hpp`  | the `Lexer` class                                |
 | `lib/lexer/lexer.cpp`           | its implementation                               |
-| `tests/lexer_test.cpp`          | its tests, tagged `[lexer]`                      |
+| `lib/internal/syntax_error.hpp` | `SyntaxError`, `near_eof`, `near_char`           |
+| `lib/syntax_error.cpp`          | their implementation                             |
+| `tests/lexer_test.cpp`          | lexer tests, tagged `[lexer]`                    |
+| `tests/syntax_error_test.cpp`   | error tests, tagged `[syntax-error]`             |
 
 The lexer is internal to the library: embedders never see tokens.
 
@@ -23,11 +26,19 @@ The lexer is internal to the library: embedders never see tokens.
 The lexer turns source text into tokens, one per call:
 
 ```cpp
-lua2::Lexer lexer{"local x = y"};   // the text must outlive the lexer
-lua2::Token token = lexer.next();   // Local, then Name("x"), Assign, Name("y"), EndOfStream
+lua2::Lexer lexer{"local x = y", "test.lua"};  // the text and name must outlive the lexer
+std::expected<lua2::Token, lua2::SyntaxError> result = lexer.next();
+if (!result) {
+    // result.error().message is "test.lua:1: ... near ..."
+}
+// *result is Local, then Name("x"), Assign, Name("y"), EndOfStream
 ```
 
-`next()` returns the next token. At the end of the input it returns `EndOfStream`, and keeps
+The second argument is the **chunk name** that error messages start with (`test.lua:3: ...`).
+It defaults to `"?"`, which is what Lua uses for a chunk with no name.
+
+`next()` returns a `std::expected`: either the next token, or the `SyntaxError` that stopped
+lexing. Nothing is ever thrown. At the end of the input it returns `EndOfStream`, and keeps
 returning it on every later call.
 
 The lexer hands these tokens to the parser, which checks the grammar and builds the syntax tree.
@@ -40,8 +51,9 @@ A `Token` has three fields:
 - `kind`: a `TokenKind`, an `enum class` with one entry per kind of token.
 - `line`: the line the token **starts** on, counted from 1.
 - `value`: a `TokenValue`, a `std::variant` of `std::monostate`, `std::string`, `std::int64_t`
-  and `double`. A `Name` holds its text as a `std::string`. Operators and keywords hold
-  `std::monostate` (no value). Strings and numbers will use the other alternatives.
+  and `double`. A `Name` holds its text as a `std::string`, and an `Other` holds its one byte as
+  a `std::string`. Operators and keywords hold `std::monostate` (no value). Strings and numbers
+  will use the other alternatives.
 
 Tokens compare with `==` (kind, line and value), which keeps tests short.
 
@@ -49,6 +61,7 @@ Tokens compare with `==` (kind, line and value), which keeps tests short.
 
 - `EndOfStream`
 - `Name`
+- `Other`, for a stray byte such as `@`
 - 23 single-character tokens: `+ - * / % ^ # & ~ | < > = ( ) { } [ ] ; : , .`
 - 10 multi-character tokens: `== ~= <= >= << >> // :: .. ...`
 - 22 keywords, one kind each: `And`, `Break`, ... `While` (`ElseIf` for `elseif`)
@@ -80,13 +93,15 @@ build if a keyword is added or lost.
 
 ## Lexer state
 
-The `Lexer` holds only three things:
+The `Lexer` holds only five things:
 
 - `source_`: a `std::string_view` of the text. The lexer does not copy it, so the caller keeps it
   alive. The constructor's `[[clang::lifetimebound]]` makes clang warn about obvious mistakes,
   such as passing a temporary `std::string`.
+- `chunk_name_`: a `std::string_view` of the chunk name, also not copied.
 - `pos_`: the index of the next character to read.
 - `line_`: the current line.
+- `failed_`: a `std::optional<SyntaxError>`, set once an error stops lexing.
 
 ## How `next()` works
 
@@ -101,8 +116,10 @@ The `Lexer` holds only three things:
    take the **longest** token that matches (*maximal munch*). So `==` is one token, `<<=` is `<<`
    then `=`, and `....` is `...` then `.`.
 6. **A letter or `_`**: call `read_name()`, which returns a name or a keyword.
-7. **Anything else** throws `std::logic_error("lexer: unsupported character ...")`. This is a
-   placeholder until numbers, strings and stray characters are handled.
+7. **A digit or a quote** returns the temporary error `not supported yet near '1'`. This is
+   a placeholder until numbers and strings are handled.
+8. **Any other byte** (`@`, `$`, `!`, a byte above 127, even `\0`) becomes an `Other` token
+   holding that byte. See "Stray characters" below.
 
 Private helpers:
 
@@ -114,6 +131,7 @@ Private helpers:
 | `peek(offset)`      | the character `offset` places ahead, or `'\0'` past the end      |
 | `read_newline()`    | moves past one line break and counts the line                    |
 | `read_name()`       | reads a name, then checks the keyword table                      |
+| `error(msg, near)`  | records a `SyntaxError` on the current line and returns it       |
 
 `take` builds the token before moving forward, which is how every token gets the line it starts on.
 `peek` never reads past the end of the text, so the lookahead cases need no bounds checks.
@@ -136,6 +154,61 @@ and `_while` are all names. Names like `_ENV` and `_G` are ordinary names to the
 in `lexer.cpp` check these ranges by hand instead of calling `std::isalpha`, because `std::isalpha`
 depends on the C locale, and Lua never treats bytes 128-255 as letters.
 
+## Stray characters
+
+A byte that cannot start any token, such as `@`, is **not** a lexer error. The lexer returns it
+as an `Other` token and keeps going, so `a@b` is `Name`, `Other`, `Name`. The parser will reject
+it later with `unexpected symbol near '@'`. This matches Lua, whose lexer also passes such bytes
+through and leaves the complaint to the parser.
+
+Bytes above 127 are never letters, so the two bytes of a UTF-8 `é` are two `Other` tokens.
+
+## Errors
+
+Errors are **returned, never thrown**. `next()` returns `std::expected<Token, SyntaxError>`, so
+every place an error can come from or travel through is visible in the code. (This is a project
+decision, recorded in [../ROADMAP.md](../ROADMAP.md).)
+
+`SyntaxError` (`lib/internal/syntax_error.hpp`) is a plain struct:
+
+| Field     | Contents                                                              |
+| --------- | --------------------------------------------------------------------- |
+| `message` | the message Lua prints: `<chunk>:<line>: <message> near <near>`       |
+| `line`    | the line of the error                                                 |
+| `origin`  | a `std::source_location`: the function, file and line of **our** C++ that created the error |
+
+```
+test.lua:3: unfinished string near '"abc'
+```
+
+`origin` is for debugging the interpreter, not for Lua users: when an error looks wrong, it says
+which line of the lexer produced it. `make_syntax_error(chunk, line, message, near)` builds the
+struct, and its last parameter defaults to `std::source_location::current()`, which captures the
+caller automatically. `SyntaxError` sits outside `lexer/` because the parser will produce it too.
+
+The `near` part says where the error is, and is passed in already formatted:
+
+- `near_eof` is `<eof>`, with no quotes, for errors at the end of the input.
+- `near_char(byte)` quotes a single byte: `'@'` for printable ASCII (space to `~`), and the
+  decimal value otherwise, as in `'<\128>'`. It checks the range by hand rather than calling
+  `std::isprint`, for the same locale reason as `is_letter`.
+- For a name, number or string, it is the text read so far in quotes (added with those tokens).
+
+Inside the lexer, `error(message, near)` builds the `SyntaxError` with the chunk name, the current
+line and the caller's `origin`, and returns it as a `std::unexpected`, so a lexing function
+reports an error with:
+
+```cpp
+return error("unfinished string", near_eof);
+```
+
+**One error at a time:** `error()` also stores the error in `failed_`. From then on, `next()`
+returns that same error on every call: lexing is over. Like Lua, the lexer never tries to recover
+and find more errors. (Reporting all errors is a possible later mode, stage 15 of the roadmap.)
+
+For now the only error is the temporary "not supported yet" for digits and quotes. Unfinished
+strings, malformed numbers and bad escapes come with their parts.
+
 ## Line counting
 
 A line break is `\n`, `\r`, `\r\n` or `\n\r`, and each counts as **one** line. `read_newline()`
@@ -144,6 +217,6 @@ character. So `\r\n` is one line, but `\n\n` and `\r\r` are two.
 
 ## Not handled yet
 
-In plan order: error messages and stray characters, comments, numbers, strings, long strings and
-long comments. Until then, `-` is always `Minus` (no `--` comments), `[` is always `LBracket` (no
-`[[` strings), and a digit or a byte such as `@` throws the placeholder error.
+In plan order: comments, numbers, strings, long strings and long comments. Until then, `-` is
+always `Minus` (no `--` comments), `[` is always `LBracket` (no `[[` strings), and a digit or a
+quote returns the temporary "not supported yet" error.

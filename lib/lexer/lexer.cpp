@@ -1,8 +1,9 @@
 #include "lexer/lexer.hpp"
 
 #include <algorithm>
-#include <stdexcept>
 #include <string>
+
+#include "syntax_error.hpp"
 
 namespace lua2 {
 
@@ -20,10 +21,15 @@ constexpr bool is_digit(char c) {
 
 } // namespace
 
-Lexer::Lexer(std::string_view source) : source_(source) {}
+Lexer::Lexer(std::string_view source, std::string_view chunk_name)
+    : source_(source), chunk_name_(chunk_name) {}
 
 // @TODO: make more efficient
-Token Lexer::next() {
+std::expected<Token, SyntaxError> Lexer::next() {
+    // One error at a time: after an error, lexing is over.
+    if (failed_) {
+        return std::unexpected(*failed_);
+    }
     for (;;) {
         if (pos_ >= source_.size()) {
             return make(TokenKind::EndOfStream);
@@ -94,10 +100,25 @@ Token Lexer::next() {
             if (is_letter(c)) {
                 return read_name();
             }
-            // Numbers, strings and the rest arrive in later parts.
-            throw std::logic_error("lexer: unsupported character '" + std::string(1, c) + "'");
+            // Numbers and strings arrive in parts 6 and 8.
+            if (is_digit(c) || c == '"' || c == '\'') {
+                return error("not supported yet", near_char(static_cast<unsigned char>(c)));
+            }
+            // Any other byte, such as @, $ or a byte above 127, is not an
+            // error here: it becomes an Other token, and the parser rejects
+            // it with "unexpected symbol near '@'" (L9.1).
+            Token token = make(TokenKind::Other);
+            token.value = std::string(1, c);
+            ++pos_;
+            return token;
         }
     }
+}
+
+std::unexpected<SyntaxError> Lexer::error(std::string_view message, std::string_view near,
+                                          std::source_location origin) {
+    failed_ = make_syntax_error(chunk_name_, line_, message, near, origin);
+    return std::unexpected(*failed_);
 }
 
 Token Lexer::make(TokenKind kind) const {

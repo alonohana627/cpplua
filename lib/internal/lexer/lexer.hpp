@@ -1,9 +1,13 @@
 #pragma once
 
 #include <cstddef>
+#include <expected>
+#include <optional>
+#include <source_location>
 #include <string_view>
 
 #include "lexer/token.hpp"
+#include "syntax_error.hpp"
 
 namespace lua2 {
 
@@ -15,13 +19,28 @@ namespace lua2 {
 // `Lexer lexer{std::string("x = 1")};`.
 class Lexer {
 public:
-    explicit Lexer(std::string_view source [[clang::lifetimebound]]);
+    // `chunk_name` is the name errors start with, as in `input:3: ...` (L10.1).
+    // Lua uses "?" when a chunk has no name. Like the source, it is not copied.
+    explicit Lexer(std::string_view source [[clang::lifetimebound]],
+                   std::string_view chunk_name [[clang::lifetimebound]] = "?");
 
-    // Returns the next token. At the end of the input it returns
-    // EndOfStream, and keeps returning it on every later call (L1.2).
-    Token next();
+    // Returns the next token, or the SyntaxError that stopped lexing.
+    //
+    // At the end of the input it returns EndOfStream, and keeps returning it
+    // on every later call (L1.2). After an error, lexing is over: every later
+    // call returns that same error. Nothing is thrown.
+    [[nodiscard]] std::expected<Token, SyntaxError> next();
+
+    [[nodiscard]] std::string_view chunk_name() const noexcept { return chunk_name_; }
 
 private:
+    // Records a SyntaxError on the current line, such as
+    // `input:3: unfinished string near '"abc'` (L10.1), and returns it ready
+    // for `return error(...);`. `origin` is where in our code it was called.
+    std::unexpected<SyntaxError>
+    error(std::string_view message, std::string_view near,
+          std::source_location origin = std::source_location::current());
+
     // Builds a token of `kind` on the current line, with no value.
     [[nodiscard]] Token make(TokenKind kind) const;
 
@@ -43,8 +62,12 @@ private:
     Token read_name();
 
     std::string_view source_;
+    std::string_view chunk_name_;
     std::size_t pos_ = 0; // index of the next character to read
     int line_ = 1;        // current line (L2.2)
+
+    // The error that stopped lexing, if any. Once set, next() returns it.
+    std::optional<SyntaxError> failed_;
 };
 
 } // namespace lua2

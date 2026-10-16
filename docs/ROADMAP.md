@@ -16,3 +16,8 @@ Each stage ends with green tests before the next starts.
 12. **Coroutines**: `coroutine.*`, yield across the interpreter.
 13. **Bytecode VM** (optional rewrite of stage 5 for speed), kept honest by the same tests.
 14. **Conformance**: run the official Lua 5.4 test suite (`lua-5.4.x-tests`) and work through failures.
+15. **Multi-error mode** (optional, for editors and linters): the lexer and parser recover after an error and report every error in a chunk. The default stays one error at a time, like Lua.
+
+## Decisions
+
+- **Errors in the lexer and parser** are returned with `std::expected<..., SyntaxError>`, not thrown, so every error path is visible in the code. Lexing and parsing stop at the first error. How the interpreter handles `error()`/`pcall` is decided in stage 10.

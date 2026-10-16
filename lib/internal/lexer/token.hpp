@@ -15,7 +15,8 @@ enum class TokenKind : std::uint8_t {
     EndOfStream, // end of the input, repeated on every later call (L1.2)
 
     // Tokens with a value
-    Name, // a name such as x or _ENV; value holds its text (L4.1)
+    Name,  // a name such as x or _ENV; value holds its text (L4.1)
+    Other, // any other byte, such as @ or $; value holds that byte (L9.1)
 
     // Single-character tokens (L8.1)
     Plus,      // +  addition

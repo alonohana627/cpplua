@@ -22,6 +22,7 @@ target_compile_options(lua2_warnings INTERFACE
 # The interpreter library. Embedders link lua2::lua2.
 add_library(lua2_lib
   lib/version.cpp
+  lib/syntax_error.cpp
   lib/lexer/lexer.cpp
 )
 add_library(lua2::lua2 ALIAS lua2_lib)
@@ -50,6 +51,7 @@ if(BUILD_TESTING)
   add_executable(lua2_tests
     tests/version_test.cpp
     tests/lexer_test.cpp
+    tests/syntax_error_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
   # Tests may include internal headers from lib/internal/ to test internals directly.

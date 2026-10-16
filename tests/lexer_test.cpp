@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <string>
 #include <string_view>
+#include <utility>
 #include <variant>
 #include <vector>
 
@@ -14,12 +15,21 @@ using lua2::TokenKind;
 
 namespace {
 
+// Returns the next token, failing the test if the lexer returned an error.
+lua2::Token next_token(Lexer& lexer) {
+    auto result = lexer.next();
+    if (!result) {
+        FAIL("unexpected lexer error: " << result.error().message);
+    }
+    return *std::move(result);
+}
+
 // Lexes all of `source` and returns every token kind, EndOfStream included.
 std::vector<TokenKind> kinds(std::string_view source) {
     Lexer lexer{source};
     std::vector<TokenKind> result;
     for (;;) {
-        const auto token = lexer.next();
+        const auto token = next_token(lexer);
         result.push_back(token.kind);
         if (token.kind == TokenKind::EndOfStream) {
             return result;
@@ -32,7 +42,7 @@ std::vector<int> lines(std::string_view source) {
     Lexer lexer{source};
     std::vector<int> result;
     for (;;) {
-        const auto token = lexer.next();
+        const auto token = next_token(lexer);
         result.push_back(token.line);
         if (token.kind == TokenKind::EndOfStream) {
             return result;
@@ -49,7 +59,7 @@ struct SingleCase {
 
 TEST_CASE("L1.2 empty input gives EndOfStream on line 1", "[lexer]") {
     Lexer lexer{""};
-    const auto token = lexer.next();
+    const auto token = next_token(lexer);
 
     CHECK(token.kind == TokenKind::EndOfStream);
     CHECK(token.line == 1);
@@ -58,9 +68,9 @@ TEST_CASE("L1.2 empty input gives EndOfStream on line 1", "[lexer]") {
 
 TEST_CASE("L1.2 EndOfStream repeats after the end", "[lexer]") {
     Lexer lexer{""};
-    const auto first = lexer.next();
-    const auto second = lexer.next();
-    const auto third = lexer.next();
+    const auto first = next_token(lexer);
+    const auto second = next_token(lexer);
+    const auto third = next_token(lexer);
 
     CHECK(first.kind == TokenKind::EndOfStream);
     CHECK(second == first);
@@ -96,12 +106,12 @@ TEST_CASE("L8.1 every single-character token", "[lexer]") {
     CAPTURE(source);
 
     Lexer lexer{source};
-    const auto token = lexer.next();
+    const auto token = next_token(lexer);
 
     CHECK(token.kind == kind);
     CHECK(token.line == 1);
     CHECK(std::holds_alternative<std::monostate>(token.value));
-    CHECK(lexer.next().kind == TokenKind::EndOfStream);
+    CHECK(next_token(lexer).kind == TokenKind::EndOfStream);
 }
 
 TEST_CASE("L8.1 tokens in a row without spaces", "[lexer]") {
@@ -160,13 +170,13 @@ TEST_CASE("L4.1 a name carries its text", "[lexer]") {
     CAPTURE(source);
 
     Lexer lexer{source};
-    const auto token = lexer.next();
+    const auto token = next_token(lexer);
 
     CHECK(token.kind == TokenKind::Name);
     CHECK(token.line == 1);
     REQUIRE(std::holds_alternative<std::string>(token.value));
     CHECK(std::get<std::string>(token.value) == source);
-    CHECK(lexer.next().kind == TokenKind::EndOfStream);
+    CHECK(next_token(lexer).kind == TokenKind::EndOfStream);
 }
 
 TEST_CASE("L4.3 every keyword", "[lexer]") {
@@ -199,11 +209,11 @@ TEST_CASE("L4.3 every keyword", "[lexer]") {
     CAPTURE(source);
 
     Lexer lexer{source};
-    const auto token = lexer.next();
+    const auto token = next_token(lexer);
 
     CHECK(token.kind == kind);
     CHECK(std::holds_alternative<std::monostate>(token.value));
-    CHECK(lexer.next().kind == TokenKind::EndOfStream);
+    CHECK(next_token(lexer).kind == TokenKind::EndOfStream);
 }
 
 TEST_CASE("L4.2 keywords are case-sensitive", "[lexer]") {
@@ -254,10 +264,81 @@ TEST_CASE("L2.2 names and keywords get their line", "[lexer]") {
 
 TEST_CASE("L4.1 two names lexed in a row keep their own text", "[lexer]") {
     Lexer lexer{"first second"};
-    const auto first = lexer.next();
-    const auto second = lexer.next();
+    const auto first = next_token(lexer);
+    const auto second = next_token(lexer);
 
     CHECK(first == lua2::Token{.kind = TokenKind::Name, .line = 1, .value = std::string("first")});
     CHECK(second ==
           lua2::Token{.kind = TokenKind::Name, .line = 1, .value = std::string("second")});
+}
+
+// ---- Part 4: errors and stray characters ----
+
+TEST_CASE("L10.1 the chunk name defaults to ?", "[lexer]") {
+    CHECK(Lexer{""}.chunk_name() == "?");
+    CHECK(Lexer{"", "test.lua"}.chunk_name() == "test.lua");
+}
+
+TEST_CASE("L9.1 a stray byte is an Other token holding that byte", "[lexer]") {
+    // Built as std::string(1, byte) so that '\0' really is one zero byte.
+    const auto byte =
+        GENERATE(as<char>{}, '@', '$', '!', '`', '?', '\\', '\0', '\x01', '\x7f', '\x80', '\xff');
+    CAPTURE(static_cast<int>(static_cast<unsigned char>(byte)));
+    const std::string source(1, byte);
+
+    Lexer lexer{source};
+    const auto token = next_token(lexer);
+
+    CHECK(token.kind == TokenKind::Other);
+    CHECK(token.line == 1);
+    CHECK(token.value == lua2::TokenValue{source});
+    CHECK(next_token(lexer).kind == TokenKind::EndOfStream);
+}
+
+TEST_CASE("L9.1 a stray byte does not stop lexing", "[lexer]") {
+    CHECK(kinds("a@b") ==
+          std::vector{TokenKind::Name, TokenKind::Other, TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("x != y") == std::vector{TokenKind::Name, TokenKind::Other, TokenKind::Assign,
+                                         TokenKind::Name, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L1.3 bytes above 127 are not letters", "[lexer]") {
+    // "é" in UTF-8 is the two bytes C3 A9: two Other tokens, not part of a name.
+    CHECK(kinds("a\xC3\xA9") ==
+          std::vector{TokenKind::Name, TokenKind::Other, TokenKind::Other, TokenKind::EndOfStream});
+}
+
+// ---- Errors are returned, not thrown ----
+//
+// No real lexical error exists yet, so these use the temporary "not supported
+// yet" error for a quote. Part 8 turns a lone quote into a real error
+// (unfinished string), and these tests move to it then.
+
+TEST_CASE("L10.1 an error is returned with chunk, line and near text", "[lexer]") {
+    Lexer lexer{"x\n\n'", "test.lua"};
+    REQUIRE(lexer.next().has_value()); // x
+
+    const auto result = lexer.next();
+
+    REQUIRE_FALSE(result.has_value());
+    CHECK(result.error().message == "test.lua:3: not supported yet near '''");
+    CHECK(result.error().line == 3);
+}
+
+TEST_CASE("L10.1 the error records where in the lexer it was made", "[lexer]") {
+    Lexer lexer{"'"};
+    const auto result = lexer.next();
+
+    REQUIRE_FALSE(result.has_value());
+    CHECK(std::string_view{result.error().origin.file_name()}.ends_with("lexer.cpp"));
+}
+
+TEST_CASE("L10.1 lexing stops at the first error", "[lexer]") {
+    Lexer lexer{"' + x"};
+    const auto first = lexer.next();
+    const auto second = lexer.next();
+
+    REQUIRE_FALSE(first.has_value());
+    REQUIRE_FALSE(second.has_value());
+    CHECK(second.error().message == first.error().message);
 }
