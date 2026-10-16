@@ -33,6 +33,7 @@ add_library(lua2_lib
   lib/parser/parser.cpp
   lib/parser/scopes.cpp
   lib/value/value.cpp
+  lib/value/arith.cpp
 )
 add_library(lua2::lua2 ALIAS lua2_lib)
 target_include_directories(lua2_lib
@@ -67,6 +68,7 @@ if(BUILD_TESTING)
     tests/my_lua_test.cpp
     tests/source_file_test.cpp
     tests/value_test.cpp
+    tests/arith_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
   # Tests may include internal headers from lib/internal/ to test internals directly.

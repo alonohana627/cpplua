@@ -60,7 +60,7 @@ V3.1   +  -  *  /  //  %  ^  and unary -
   **(impl)**
 - **V3.7** Integer `%` has the sign of the divisor: `a % b == a - (a // b) * b`. So
   `5 % 3 == 2`, `-5 % 3 == 1`, `5 % -3 == -1`, and `x % -1 == 0` for every `x`. **(impl)**
-- **V3.8** Integer `//` or `%` by zero is an error: `attempt to perform 'n//0'` and
+- **V3.8** Integer `//` or `%` by zero is an error: `attempt to divide by zero` and
   `attempt to perform 'n%0'`. **(impl)**
 - **V3.9** Float `//` is `floor(a / b)`. Float `%` is `a - floor(a / b) * b`, computed as
   `fmod(a, b)` and then moved by `b` when its sign differs from `b`'s: `5.5 % 2 == 1.5`,

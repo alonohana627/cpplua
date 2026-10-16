@@ -9,16 +9,11 @@
 
 #include "value/number.hpp"
 #include "value/value.hpp"
+#include "value_printer.hpp"
 
 using lua2::Tag;
 using lua2::Type;
 using lua2::Value;
-
-// Catch2 prints values with debug_text when a check fails.
-template <>
-struct Catch::StringMaker<Value> {
-    static std::string convert(Value value) { return lua2::debug_text(value); }
-};
 
 namespace {
 
@@ -169,6 +164,9 @@ TEST_CASE("floor_float rounds toward minus infinity", "[value]") {
     STATIC_REQUIRE(lua2::floor_float(1e300) == 1e300);
     STATIC_REQUIRE(lua2::floor_float(-inf) == -inf);
     CHECK(std::isnan(lua2::floor_float(std::nan(""))));
+    CHECK(std::signbit(lua2::floor_float(-0.0)));
+    CHECK_FALSE(std::signbit(lua2::floor_float(0.0)));
+    CHECK_FALSE(std::signbit(lua2::floor_float(0.5)));
     // The same as std::floor on many values.
     for (int eighths = -8000; eighths <= 8000; ++eighths) {
         const double f = eighths * 0.125;

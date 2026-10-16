@@ -17,8 +17,12 @@ constexpr double int_to_float(std::int64_t i) {
 
 // The largest whole double below `f` or equal to it. Like std::floor, but
 // constexpr (libc++'s is not) and never a library call. From 2^52 up every
-// double is whole, and inf and nan come back as they are.
+// double is whole, and inf and nan come back as they are. Zeros keep their
+// sign, as with std::floor: -0.0 // 1 is -0.0 in Lua.
 constexpr double floor_float(double f) {
+    if (f == 0) {
+        return f;
+    }
     constexpr double two_to_52 = 4503599627370496.0;
     // Written so that nan is not in range (every comparison with nan is
     // false): converting nan to an integer would be undefined behavior.

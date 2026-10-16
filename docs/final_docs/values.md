@@ -5,9 +5,10 @@ built. The rules are in [../spec/values.md](../spec/values.md), the background a
 in [../learn/values.md](../learn/values.md), and the remaining work in
 [../plan/values.md](../plan/values.md).
 
-**Status:** parts 0 and 1 of the plan. A `Value` holds `nil`, a boolean, an integer or a float,
-and knows its Lua type and its truthiness; numbers convert between integer and float. Still to
-come: operations on numbers (parts 2 to 4), strings (part 5) and conversions between strings
+**Status:** parts 0 to 2 of the plan. A `Value` holds `nil`, a boolean, an integer or a float,
+and knows its Lua type and its truthiness; numbers convert between integer and float; the
+arithmetic operators work with Lua's rules and error messages. Still to come: bitwise
+operations and comparisons (parts 3 and 4), strings (part 5) and conversions between strings
 and numbers (parts 6 to 8).
 
 ## Where it lives
@@ -17,6 +18,10 @@ and numbers (parts 6 to 8).
 | `lib/internal/value/value.hpp`   | `Type`, `type_name()`, `Tag`, `Value`, `debug_text()` |
 | `lib/value/value.cpp`            | its implementation                                   |
 | `lib/internal/value/number.hpp`  | conversions between integers and floats (header only, `constexpr`) |
+| `lib/internal/value/arith.hpp`   | the arithmetic operators, and their integer and float versions |
+| `lib/value/arith.cpp`            | its implementation                                   |
+| `lib/internal/runtime_error.hpp` | `RuntimeError`, an error raised while Lua code runs  |
+| `tests/arith_test.cpp`           | arithmetic tests, tagged `[value][arith]`            |
 | `tests/value_test.cpp`           | tests, tagged `[value]`                              |
 
 Values are internal to the library for now.
@@ -126,9 +131,68 @@ only smaller ones are rounded: truncate through `std::int64_t` (exact in that ra
 subtract one when truncation went up, which happens for negative non-whole numbers. Out of
 range values, `inf` and `nan` come back unchanged; the range test is written so that `nan` is
 out of range, because converting `nan` to an integer would be undefined behavior. A test checks
-it against `std::floor` on 16,001 values. (`floor_float(-0.0)` is `0.0`; the sign of zero does
-not matter for any of its uses.)
+it against `std::floor` on 16,001 values. Zeros come back unchanged, so `-0.0` keeps its sign, as with `std::floor`; float `//` needs that (part 2).
 
 **On values**: `to_float(value)` and `to_integer(value, rounding)` apply these to a `Value`:
 an integer or a float converts, anything else gives `std::nullopt`. Strings that look like
 numbers join in part 8.
+## Arithmetic
+
+`arith.hpp` has one function per operator, each taking `Value`s and returning
+`ArithResult`, which is `std::expected<Value, RuntimeError>`:
+
+| Function             | Lua      | Integers give        | Error                                |
+| -------------------- | -------- | -------------------- | ------------------------------------ |
+| `add(a, b)`          | `a + b`  | an integer, wrapping | non-numbers                          |
+| `subtract(a, b)`     | `a - b`  | an integer, wrapping | non-numbers                          |
+| `multiply(a, b)`     | `a * b`  | an integer, wrapping | non-numbers                          |
+| `divide(a, b)`       | `a / b`  | a float, always      | non-numbers                          |
+| `floor_divide(a, b)` | `a // b` | an integer, floored  | non-numbers, `attempt to divide by zero` |
+| `modulo(a, b)`       | `a % b`  | an integer, floored  | non-numbers, `attempt to perform 'n%0'` |
+| `power(a, b)`        | `a ^ b`  | a float, always      | non-numbers                          |
+| `negate(a)`          | `-a`     | an integer, wrapping | non-numbers                          |
+
+Each follows the same shape: two integers take the integer path (V3.2), otherwise both operands
+become floats with `to_float()` and the float path runs (V3.4). `/` and `^` have only the float
+path (V3.3). If an operand is not a number, the result is
+`attempt to perform arithmetic on a X value` (V3.12), naming the first operand unless it is a
+number, then the second, like Lua's `luaG_opinterror`. The type error comes before the check
+for division by zero: `nil // 0` complains about `nil`.
+
+`RuntimeError` is only a message for now. Where the error happened is added by the interpreter
+(stage 5), and catching it with `pcall` is stage 10.
+
+### The integer versions
+
+`int_add`, `int_subtract`, `int_multiply` and `int_negate` compute on `std::uint64_t` and
+convert back: unsigned arithmetic wraps modulo 2^64, which is exactly Lua's wraparound (V3.5),
+while signed overflow in C++ is undefined behavior. They are `constexpr`.
+
+`int_floor_divide(a, b)` and `int_modulo(a, b)` (for `b != 0`) are Lua's `luaV_idiv` and
+`luaV_mod`:
+
+- C++'s `/` rounds toward zero, Lua's `//` toward minus infinity. They differ when the signs
+  differ and the division is not exact, and then the quotient is one too high: subtract one.
+- C++'s `%` has the sign of `a`, Lua's the sign of `b`. When a nonzero remainder has the wrong
+  sign, add `b`.
+- `b == -1` is handled first, as negation and as `0`, because `mininteger / -1` overflows in
+  C++ (on x86 it is a crash).
+
+A test checks `a % b == a - (a // b) * b` for every `a` in -20..20 and `b` in -7..7.
+
+### The float versions
+
+- `float_floor_divide(a, b)` is `floor_float(a / b)`. Division by zero follows IEEE:
+  `1 // 0.0` is `inf`, `0 / 0` is `nan`. This is why `floor_float()` keeps the sign of zero:
+  `-0.0 // 1` is `-0.0` in Lua.
+- `float_modulo(a, b)` is Lua's `luai_nummod`: `std::fmod` (sign of `a`), then add `b` when the
+  remainder is nonzero and its sign differs from `b`'s. So `-5.5 % 2` is `0.5`, `5 % -inf` is
+  `-inf` and `-5 % -inf` is `-5`.
+- `float_power(a, b)` is `std::pow`, except `b == 2`, which is `a * a`, as in Lua.
+
+### Checked against Lua's source
+
+Two details first written from memory were wrong and were corrected against the Lua 5.4.6
+source (`lvm.c`, `llimits.h`) and the 5.4.9 test suite: integer `//` by zero says
+`attempt to divide by zero` (the suite checks this in `math.lua` and `errors.lua`), and the float
+modulo adds `b` only when the remainder and `b` have different signs.
