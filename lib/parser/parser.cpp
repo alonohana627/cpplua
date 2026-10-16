@@ -243,14 +243,171 @@ std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
         expression = StringExpr{.text = ast_.add_text(std::get<std::string>(current_.value))};
         break;
     default:
-        // Nothing here can start an expression (G4.7). Names, '(', tables and
-        // functions arrive in parts 3 to 7.
-        return error("unexpected symbol");
+        // Names and '(' start a suffixed expression; anything else is
+        // "unexpected symbol" there (G4.7). Tables and functions arrive in
+        // parts 4 and 7.
+        return parse_suffixed_expression();
     }
     if (auto moved = advance(); !moved) {
         return std::unexpected(std::move(moved.error()));
     }
     return ast_.add_expression(expression, line);
+}
+
+std::expected<ExprId, SyntaxError> Parser::parse_suffixed_expression() {
+    const int line = current_.line; // a call records the line its expression starts on
+    auto primary = parse_primary_expression();
+    if (!primary) {
+        return primary;
+    }
+    ExprId expression = *primary;
+
+    for (;;) {
+        switch (current_.kind) {
+        case TokenKind::Dot: { // .name, the same as ["name"]
+            const int dot_line = current_.line;
+            if (auto moved = advance(); !moved) {
+                return std::unexpected(std::move(moved.error()));
+            }
+            const int name_line = current_.line;
+            auto name = expect_name();
+            if (!name) {
+                return std::unexpected(std::move(name.error()));
+            }
+            const ExprId key = ast_.add_expression(StringExpr{.text = *name}, name_line);
+            expression = ast_.add_expression(IndexExpr{.object = expression, .key = key}, dot_line);
+            break;
+        }
+        case TokenKind::LBracket: { // [exp]
+            const int bracket_line = current_.line;
+            if (auto moved = advance(); !moved) {
+                return std::unexpected(std::move(moved.error()));
+            }
+            auto key = parse_expression();
+            if (!key) {
+                return key;
+            }
+            if (auto closed = expect(TokenKind::RBracket); !closed) {
+                return std::unexpected(std::move(closed.error()));
+            }
+            expression =
+                ast_.add_expression(IndexExpr{.object = expression, .key = *key}, bracket_line);
+            break;
+        }
+        case TokenKind::Colon: { // :name args
+            if (auto moved = advance(); !moved) {
+                return std::unexpected(std::move(moved.error()));
+            }
+            auto method = expect_name();
+            if (!method) {
+                return std::unexpected(std::move(method.error()));
+            }
+            auto arguments = parse_call_arguments();
+            if (!arguments) {
+                return std::unexpected(std::move(arguments.error()));
+            }
+            expression = ast_.add_expression(
+                MethodCallExpr{.object = expression, .method = *method, .arguments = *arguments},
+                line);
+            break;
+        }
+        case TokenKind::LParen:
+        case TokenKind::String: { // args
+            auto arguments = parse_call_arguments();
+            if (!arguments) {
+                return std::unexpected(std::move(arguments.error()));
+            }
+            expression = ast_.add_expression(
+                CallExpr{.function = expression, .arguments = *arguments}, line);
+            break;
+        }
+        default: return expression;
+        }
+    }
+}
+
+std::expected<ExprId, SyntaxError> Parser::parse_primary_expression() {
+    const int line = current_.line;
+    switch (current_.kind) {
+    case TokenKind::Name: {
+        auto name = expect_name();
+        if (!name) {
+            return std::unexpected(std::move(name.error()));
+        }
+        return ast_.add_expression(NameExpr{.name = *name}, line);
+    }
+    case TokenKind::LParen: {
+        if (auto moved = advance(); !moved) {
+            return std::unexpected(std::move(moved.error()));
+        }
+        auto inner = parse_expression();
+        if (!inner) {
+            return inner;
+        }
+        if (auto closed = expect_match(TokenKind::RParen, TokenKind::LParen, line); !closed) {
+            return std::unexpected(std::move(closed.error()));
+        }
+        return ast_.add_expression(ParenExpr{.inner = *inner}, line);
+    }
+    default: return error("unexpected symbol"); // G4.7
+    }
+}
+
+std::expected<IdRange<ExprId>, SyntaxError> Parser::parse_call_arguments() {
+    switch (current_.kind) {
+    case TokenKind::String: { // f"str": exactly one argument (G4.10)
+        auto argument = parse_simple_expression();
+        if (!argument) {
+            return std::unexpected(std::move(argument.error()));
+        }
+        return ast_.add_expression_list(std::span{&*argument, 1});
+    }
+    case TokenKind::LParen: {
+        const int open_line = current_.line;
+        if (auto moved = advance(); !moved) {
+            return std::unexpected(std::move(moved.error()));
+        }
+        IdRange<ExprId> arguments;
+        if (!check(TokenKind::RParen)) {
+            auto list = parse_expression_list();
+            if (!list) {
+                return list;
+            }
+            arguments = *list;
+        }
+        if (auto closed = expect_match(TokenKind::RParen, TokenKind::LParen, open_line); !closed) {
+            return std::unexpected(std::move(closed.error()));
+        }
+        return arguments;
+    }
+    default:
+        // After obj:name the arguments are required (G4.9).
+        return error("function arguments expected");
+    }
+}
+
+std::expected<TextRange, SyntaxError> Parser::expect_name() {
+    if (!check(TokenKind::Name)) {
+        return error_expected(TokenKind::Name);
+    }
+    const TextRange name = ast_.add_text(std::get<std::string>(current_.value));
+    if (auto moved = advance(); !moved) {
+        return std::unexpected(std::move(moved.error()));
+    }
+    return name;
+}
+
+std::expected<void, SyntaxError> Parser::expect_match(TokenKind closing, TokenKind opening,
+                                                      int line) {
+    if (check(closing)) {
+        return advance();
+    }
+    // On the same line, the short form is clearer (Lua's check_match).
+    if (line == current_.line) {
+        return error_expected(closing);
+    }
+    return error(std::format("{} expected (to close {} at line {})", expected_text(closing),
+                             expected_text(opening), line));
 }
 
 bool Parser::block_follow() const noexcept {

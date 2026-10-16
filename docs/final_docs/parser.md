@@ -4,9 +4,10 @@ How the parser works today. This page describes the code as it is, and is update
 grows. The rules it implements are in [../spec/grammar.md](../spec/grammar.md), and the remaining
 work is in [../plan/parser.md](../plan/parser.md).
 
-**Status:** parts 0 to 2 of the plan. A chunk may be empty or hold one `return` with a list of
-expressions built from simple values (`nil`, `true`, `false`, numbers, strings, `...`) and every
-unary and binary operator, with Lua's precedence. Anything else is an error for now.
+**Status:** parts 0 to 3 of the plan. A chunk may be empty or hold one `return` with a list of
+expressions: simple values (`nil`, `true`, `false`, numbers, strings, `...`), names,
+parentheses, fields, indexing, calls and method calls, combined with every unary and binary
+operator at Lua's precedence. Tables, functions and other statements come later.
 
 ## Where it lives
 
@@ -71,7 +72,7 @@ Each kind of node is a small struct, and the node types are two `std::variant`s:
 
 | Variant | Alternatives so far                                                           |
 | ------- | ----------------------------------------------------------------------------- |
-| `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}` |
+| `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}`, `NameExpr{name}`, `ParenExpr{inner}`, `IndexExpr{object, key}`, `CallExpr{function, arguments}`, `MethodCallExpr{object, method, arguments}` |
 | `Stat`  | `ReturnStat{values}`, where `values` is an `IdRange<ExprId>`                    |
 
 The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
@@ -105,7 +106,12 @@ Code that walks the tree uses `std::visit` with one lambda per node type, throug
 | `parse_expression_list()` | `explist ::= exp { ',' exp }` (G4.6)     | collects ids, then stores them as one list |
 | `parse_expression()`      | `exp` (G4.1)                             | `parse_subexpression(0)`                  |
 | `parse_subexpression(limit)` | `exp binop exp`, `unop exp` (G7)      | precedence climbing, see below            |
-| `parse_simple_expression()` | the simple values of G4.1             | anything else is `unexpected symbol` (G4.7) |
+| `parse_simple_expression()` | the simple values of G4.1             | anything else goes to `parse_suffixed_expression()` |
+| `parse_suffixed_expression()` | a prefixexp with its suffixes (G4.8) | Lua's `suffixedexp()`, see "Names, fields and calls" |
+| `parse_primary_expression()` | `Name` or `( exp )` (G4.2)            | anything else is `unexpected symbol` (G4.7) |
+| `parse_call_arguments()`  | `args` (G4.5)                            | `( explist )` or one string; tables come in part 4 |
+| `expect_name()`           | -                                        | a `Name`, copied into the text buffer, or `<name> expected` |
+| `expect_match(closing, opening, line)` | -                           | like `expect`, but names the opening token when it is on another line |
 | `block_follow()`          | -                                        | whether the current token ends a block: `<eof>`, `end`, `else`, `elseif`, `until` |
 
 **Why `return` must be last (G2.5).** `parse_block()` stops right after a `return`. Whatever
@@ -213,6 +219,48 @@ input:1: <eof> expected near 'x'
     its own quotes, so `"\65"` shows as `'"A"'`. A long string shows as written, brackets
     included.
 
+## Names, fields and calls
+
+These are the **suffixed expressions**: a start, then any number of suffixes applied left to
+right. `a.b[c](d):e"f"` is one expression: `a`, then `.b`, then `[c]`, then `(d)`, then `:e"f"`.
+
+`parse_primary_expression()` reads the start, and only two tokens can begin one (G4.2):
+
+- a `Name`, giving a `NameExpr`;
+- `(`, giving a `ParenExpr` around an expression, closed with `expect_match`.
+
+Anything else is `unexpected symbol`. So a literal cannot be called or indexed directly: in
+`return 's':upper()`, the string is a complete simple expression, and the `:` left over gives
+`<eof> expected near ':'`, exactly as in Lua. `('s'):upper()` works.
+
+`parse_suffixed_expression()` then loops over suffixes, each one wrapping the expression so far:
+
+| Suffix          | Node                                            |
+| --------------- | ----------------------------------------------- |
+| `.name`         | `IndexExpr` with a `StringExpr` key: `a.b` is `a["b"]` |
+| `[exp]`         | `IndexExpr`                                     |
+| `:name args`    | `MethodCallExpr`; the arguments are required (`function arguments expected`) |
+| `(args)` or a string | `CallExpr`                                 |
+
+A string right after an expression is a call with that one argument (G4.10): `require 'mod'` is
+`require('mod')`, and `f'a''b'` is `f('a')('b')`.
+
+Because suffixes are part of the *operand*, they bind tighter than every operator: `-f(x)` is
+`-(f(x))`, and `#t.list` is `#(t.list)`.
+
+**Parentheses are a real node.** `ParenExpr` is kept even though the tree shape already shows
+grouping, because in Lua parentheses change the meaning: `(f())` is only the first value of the
+call, and `(a)` is not a variable, so it cannot be assigned to (G4.11).
+
+**Lines.** A call records the line where its whole expression starts (Lua does the same). `.`
+and `[` record their own line.
+
+**Errors that name the opener.** `expect_match(closing, opening, line)` is Lua's
+`check_match()`. If the closing token is missing and the opening one is on the **same** line, the
+error is the short `')' expected near 'x'`. If it is on an earlier line, the message points back
+to it: `')' expected (to close '(' at line 1) near <eof>`. Statements like `if ... end` will use
+the same helper.
+
 ## The AST printer
 
 `print_ast(ast)` turns a tree into indented text, one node per line, two spaces per level. It is
@@ -224,14 +272,30 @@ Values are shown the way the debug views show them everywhere (`text_format.hpp`
 double quotes with unprintable bytes escaped (`"a\tb\x00"`), and floats in their shortest exact
 form with `.0` when they look like integers (`1000.0`).
 
+Children appear in source order: `Call` prints the function first, then the arguments;
+`MethodCall m` prints the object, then the arguments. For `return a.b[c](d):e"f"`:
+
+```
+Chunk
+  Return
+    MethodCall e
+      Call
+        Index
+          Index
+            Name a
+            String "b"
+          Name c
+        Name d
+      String "f"
+```
+
 `lua2 --ast` reaches the internal parser through `lua2::ast_dump(source, chunk_name)` in
 `include/lua2/debug.hpp`, the same way `--tokens` uses `token_dump`.
 
 ## Not handled yet
 
-- **Expressions** with names, parentheses, fields and calls (part 3), tables (part 4) and
-  functions (part 7). Until then they are `unexpected symbol`, even where Lua would accept them:
-  `return x` fails.
+- **Tables** (part 4), including table arguments `f{...}`, and **functions** (part 7). Until
+  then they are `unexpected symbol` (and `obj:m{...}` is `function arguments expected`).
 - **A depth limit** (part 9). Parsing is recursive, so a very deeply nested expression, such as
   thousands of `-` or `..` in a row, can overflow the C++ stack until the limit exists. The
   printer is recursive too.

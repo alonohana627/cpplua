@@ -226,8 +226,12 @@ TEST_CASE("string values are stored once in the shared text buffer", "[parser][a
 
 namespace {
 
+std::string grouped_list(const lua2::Ast& ast, lua2::IdRange<lua2::ExprId> list);
+
 // Writes an expression with every operator in parentheses, so precedence is
-// visible on one line: "1 + 2 * 3" becomes "(1 + (2 * 3))".
+// visible on one line: "1 + 2 * 3" becomes "(1 + (2 * 3))". Indexing shows as
+// object{key} and Lua's own parentheses as [ ], so they cannot be confused
+// with the grouping.
 std::string grouped(const lua2::Ast& ast, lua2::ExprId id) {
     return std::visit(
         lua2::Overloaded{
@@ -250,8 +254,30 @@ std::string grouped(const lua2::Ast& ast, lua2::ExprId id) {
                        std::string(lua2::operator_text(node.op)) + " " + grouped(ast, node.right) +
                        ")";
             },
+            [&](const lua2::NameExpr& node) { return std::string(ast.text(node.name)); },
+            // Lua's own parentheses are shown as [ ] to tell them from the grouping.
+            [&](const lua2::ParenExpr& node) { return "[" + grouped(ast, node.inner) + "]"; },
+            [&](const lua2::IndexExpr& node) {
+                return grouped(ast, node.object) + "{" + grouped(ast, node.key) + "}";
+            },
+            [&](const lua2::CallExpr& node) {
+                return grouped(ast, node.function) + "(" + grouped_list(ast, node.arguments) + ")";
+            },
+            [&](const lua2::MethodCallExpr& node) {
+                return grouped(ast, node.object) + ":" + std::string(ast.text(node.method)) + "(" +
+                       grouped_list(ast, node.arguments) + ")";
+            },
         },
         ast.expression(id));
+}
+
+std::string grouped_list(const lua2::Ast& ast, lua2::IdRange<lua2::ExprId> list) {
+    std::string out;
+    for (const auto id : ast.expressions(list)) {
+        out += out.empty() ? "" : ", ";
+        out += grouped(ast, id);
+    }
+    return out;
 }
 
 // Parses `return <expression>` and returns the expression, grouped.
@@ -381,4 +407,120 @@ TEST_CASE("G7.8 an operator node records its operator's line", "[parser][operato
     const auto values =
         ast->expressions(std::get<lua2::ReturnStat>(ast->statement(statement)).values);
     CHECK(ast->line(values[0]) == 2);
+}
+
+// ---- Part 3: names, fields, indexing and calls ----
+
+TEST_CASE("G4.3 names", "[parser][suffix]") {
+    CHECK(group("x") == "x");
+    CHECK(group("_ENV") == "_ENV");
+    CHECK(group("x + y * z") == "(x + (y * z))");
+    CHECK(group("-x ^ 2") == "(-(x ^ 2))");
+}
+
+TEST_CASE("G4.3 fields and indexing", "[parser][suffix]") {
+    CHECK(group("a.b") == "a{'b'}"); // a.b is a["b"]
+    CHECK(group("a[1]") == "a{1}");
+    CHECK(group("a[b + 1]") == "a{(b + 1)}");
+    CHECK(group("a.b.c") == "a{'b'}{'c'}");
+    CHECK(group("a[b][c]") == "a{b}{c}");
+    CHECK(group("a[b[c]]") == "a{b{c}}");
+}
+
+TEST_CASE("G4.4 G4.5 calls", "[parser][suffix]") {
+    CHECK(group("f()") == "f()");
+    CHECK(group("f(1)") == "f(1)");
+    CHECK(group("f(1, x, 'a')") == "f(1, x, 'a')");
+    CHECK(group("f(g(1))") == "f(g(1))");
+    CHECK(group("f()()") == "f()()");
+    CHECK(group("f(1 + 2, ...)") == "f((1 + 2), ...)");
+}
+
+TEST_CASE("G4.10 string arguments", "[parser][suffix]") {
+    CHECK(group("f'x'") == "f('x')");
+    CHECK(group("f\"x\"") == "f('x')");
+    CHECK(group("f[[x]]") == "f('x')");
+    CHECK(group("require 'mod'") == "require('mod')");
+    CHECK(group("f'a''b'") == "f('a')('b')"); // each string is another call
+}
+
+TEST_CASE("G4.9 method calls", "[parser][suffix]") {
+    CHECK(group("obj:m()") == "obj:m()");
+    CHECK(group("obj:m(1, 2)") == "obj:m(1, 2)");
+    CHECK(group("obj:m'x'") == "obj:m('x')");
+    CHECK(group("a.b:c(d)") == "a{'b'}:c(d)");
+}
+
+TEST_CASE("G4.8 suffixes chain left to right", "[parser][suffix]") {
+    CHECK(group("a.b[c](d):e'f'") == "a{'b'}{c}(d):e('f')");
+    CHECK(group("f().x") == "f(){'x'}");
+    CHECK(group("t[1]:m()[2]") == "t{1}:m(){2}");
+}
+
+TEST_CASE("G4.8 suffixes bind tighter than every operator", "[parser][suffix]") {
+    CHECK(group("-f(x)") == "(-f(x))");
+    CHECK(group("#t.list") == "(#t{'list'})");
+    CHECK(group("a.b ^ 2") == "(a{'b'} ^ 2)");
+    CHECK(group("not obj:ok()") == "(not obj:ok())");
+}
+
+TEST_CASE("G4.11 parentheses are a node of their own", "[parser][suffix]") {
+    CHECK(group("(1)") == "[1]");
+    CHECK(group("(f())") == "[f()]");
+    CHECK(group("(...)") == "[...]");
+    CHECK(group("(1 + 2) * 3") == "([(1 + 2)] * 3)");
+    CHECK(group("(f).x") == "[f]{'x'}");
+    CHECK(group("('s'):upper()") == "['s']:upper()");
+    CHECK(group("((x))") == "[[x]]");
+}
+
+TEST_CASE("G3.16 a call may continue on the next line", "[parser][suffix]") {
+    CHECK(group("f\n(1)") == "f(1)");
+    CHECK(group("a\n.b\n[c]\n:d()") == "a{'b'}{c}:d()");
+}
+
+TEST_CASE("G4.7 a literal cannot be called or indexed directly", "[parser][suffix]") {
+    // Lua stops the expression after the string, then finds ':' left over.
+    CHECK(parse_error("return 's':upper()") == "input:1: <eof> expected near ':'");
+    CHECK(parse_error("return 1.x") == "input:1: malformed number near '1.x'");
+}
+
+TEST_CASE("G9.3 errors inside suffixes", "[parser][suffix]") {
+    CHECK(parse_error("return a.") == "input:1: <name> expected near <eof>");
+    CHECK(parse_error("return a.1") == "input:1: <eof> expected near '.1'"); // .1 is a number
+    CHECK(parse_error("return a.end") == "input:1: <name> expected near 'end'");
+    CHECK(parse_error("return a[1") == "input:1: ']' expected near <eof>");
+    CHECK(parse_error("return a[]") == "input:1: unexpected symbol near ']'");
+    CHECK(parse_error("return obj:m") == "input:1: function arguments expected near <eof>");
+    CHECK(parse_error("return obj:m.x") == "input:1: function arguments expected near '.'");
+    CHECK(parse_error("return obj:1") == "input:1: <name> expected near '1'");
+    CHECK(parse_error("return f(1") == "input:1: ')' expected near <eof>");
+    CHECK(parse_error("return f(1,)") == "input:1: unexpected symbol near ')'");
+    CHECK(parse_error("return ()") == "input:1: unexpected symbol near ')'");
+    CHECK(parse_error("return (1") == "input:1: ')' expected near <eof>");
+}
+
+TEST_CASE("G9.3 a missing ')' names the '(' when it is on another line", "[parser][suffix]") {
+    CHECK(parse_error("return f(1,\n2") ==
+          "input:2: ')' expected (to close '(' at line 1) near <eof>");
+    CHECK(parse_error("return (1\n+ 2\nx") ==
+          "input:3: ')' expected (to close '(' at line 1) near 'x'");
+    CHECK(parse_error("return (1 x") == "input:1: ')' expected near 'x'");
+}
+
+TEST_CASE("G4.4 the tree of calls and indexing", "[parser][suffix]") {
+    CHECK(ast_of("return obj:m(1).x") == "Chunk\n"
+                                         "  Return\n"
+                                         "    Index\n"
+                                         "      MethodCall m\n"
+                                         "        Name obj\n"
+                                         "        Integer 1\n"
+                                         "      String \"x\"\n");
+    CHECK(ast_of("return f(a, (b))") == "Chunk\n"
+                                        "  Return\n"
+                                        "    Call\n"
+                                        "      Name f\n"
+                                        "      Name a\n"
+                                        "      Paren\n"
+                                        "        Name b\n");
 }

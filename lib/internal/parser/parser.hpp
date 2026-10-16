@@ -47,9 +47,30 @@ private:
     // limit are left for the caller.
     std::expected<ExprId, SyntaxError> parse_subexpression(int limit);
 
-    // An operand without operators. For now: nil, true, false, numerals,
-    // strings and '...'.
+    // An operand without operators: nil, true, false, numerals, strings,
+    // '...', or a suffixed expression.
     std::expected<ExprId, SyntaxError> parse_simple_expression();
+
+    // A primary expression followed by any number of suffixes, applied left
+    // to right: .name, [exp], :name args, args (G4.8). Lua's suffixedexp().
+    std::expected<ExprId, SyntaxError> parse_suffixed_expression();
+
+    // A Name or a parenthesized expression; nothing else can start a
+    // prefixexp (G4.2, G4.7). Lua's primaryexp().
+    std::expected<ExprId, SyntaxError> parse_primary_expression();
+
+    // args ::= '(' [ explist ] ')' | LiteralString (G4.5). Tables come in
+    // part 4.
+    std::expected<IdRange<ExprId>, SyntaxError> parse_call_arguments();
+
+    // The current token must be a Name: moves past it and returns its text,
+    // or the error "<name> expected".
+    std::expected<TextRange, SyntaxError> expect_name();
+
+    // Like expect(), for a closing token that pairs with an opening one at
+    // `line`. When they are on different lines the error names the opener:
+    // "')' expected (to close '(' at line 3)" (G9.3). Lua's check_match().
+    std::expected<void, SyntaxError> expect_match(TokenKind closing, TokenKind opening, int line);
 
     // Whether the current token ends a block: <eof>, 'end', 'else',
     // 'elseif', and 'until' (which ends a repeat block).

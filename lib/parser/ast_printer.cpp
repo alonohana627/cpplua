@@ -41,12 +41,16 @@ private:
             Overloaded{
                 [&](const ReturnStat& node) {
                     line(depth, "Return");
-                    for (const ExprId value : ast_.expressions(node.values)) {
-                        expression(value, depth + 1);
-                    }
+                    expressions(node.values, depth + 1);
                 },
             },
             ast_.statement(id));
+    }
+
+    void expressions(IdRange<ExprId> list, int depth) {
+        for (const ExprId id : ast_.expressions(list)) {
+            expression(id, depth);
+        }
     }
 
     // Every alternative of Expr needs a lambda here, or this does not compile.
@@ -72,6 +76,28 @@ private:
                     line(depth, std::format("Binary {}", operator_text(node.op)));
                     expression(node.left, depth + 1);
                     expression(node.right, depth + 1);
+                },
+                [&](const NameExpr& node) {
+                    line(depth, std::format("Name {}", ast_.text(node.name)));
+                },
+                [&](const ParenExpr& node) {
+                    line(depth, "Paren");
+                    expression(node.inner, depth + 1);
+                },
+                [&](const IndexExpr& node) {
+                    line(depth, "Index");
+                    expression(node.object, depth + 1);
+                    expression(node.key, depth + 1);
+                },
+                [&](const CallExpr& node) {
+                    line(depth, "Call"); // the function first, then the arguments
+                    expression(node.function, depth + 1);
+                    expressions(node.arguments, depth + 1);
+                },
+                [&](const MethodCallExpr& node) {
+                    line(depth, std::format("MethodCall {}", ast_.text(node.method)));
+                    expression(node.object, depth + 1);
+                    expressions(node.arguments, depth + 1);
                 },
             },
             ast_.expression(id));

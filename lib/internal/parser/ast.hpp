@@ -143,8 +143,54 @@ struct BinaryExpr {
     bool operator==(const BinaryExpr&) const = default;
 };
 
-using Expr = std::variant<NilExpr, TrueExpr, FalseExpr, IntegerExpr, FloatExpr, StringExpr,
-                          VarargExpr, UnaryExpr, BinaryExpr>;
+// A variable name (G4.3). Whether it is a local, an upvalue or a global is
+// decided in part 10.
+struct NameExpr {
+    TextRange name;
+
+    bool operator==(const NameExpr&) const = default;
+};
+
+// `(exp)`. Kept as its own node, because the parentheses change the meaning:
+// they cut a call or '...' down to one value, and the result is never a
+// variable (G4.11).
+struct ParenExpr {
+    ExprId inner;
+
+    bool operator==(const ParenExpr&) const = default;
+};
+
+// `object[key]`, and `object.name`, which is the same as `object["name"]`
+// (G4.3). For `.name` the key is a StringExpr.
+struct IndexExpr {
+    ExprId object;
+    ExprId key;
+
+    bool operator==(const IndexExpr&) const = default;
+};
+
+// `function(arguments)` (G4.4). Also `f"str"`, `f[[str]]` and (part 4) `f{...}`,
+// which pass exactly one argument (G4.10).
+struct CallExpr {
+    ExprId function;
+    IdRange<ExprId> arguments;
+
+    bool operator==(const CallExpr&) const = default;
+};
+
+// `object:method(arguments)` (G4.9): calls object.method with object as an
+// extra first argument, evaluating object once.
+struct MethodCallExpr {
+    ExprId object;
+    TextRange method;
+    IdRange<ExprId> arguments;
+
+    bool operator==(const MethodCallExpr&) const = default;
+};
+
+using Expr =
+    std::variant<NilExpr, TrueExpr, FalseExpr, IntegerExpr, FloatExpr, StringExpr, VarargExpr,
+                 UnaryExpr, BinaryExpr, NameExpr, ParenExpr, IndexExpr, CallExpr, MethodCallExpr>;
 
 // ---- Statements (G3.1) ----
 
