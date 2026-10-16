@@ -1,6 +1,6 @@
 ﻿# Lua 5.4 lexical rules
 
-The complete specification our lexer implements. It is based on the Lua 5.4 Reference Manual ֲ§3.1.
+The complete specification our lexer implements. It is based on the Lua 5.4 Reference Manual §3.1.
 Where the manual is silent, the behavior of the reference implementation (`llex.c`, `lobject.c`
 in Lua 5.4) is the tie-breaker, and those rules are marked **(impl)**.
 

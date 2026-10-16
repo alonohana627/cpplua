@@ -69,7 +69,9 @@ Two rules decide the tricky cases:
 Keywords are lexed like names, then checked against the keyword list: read `while` as a name and
 then see that it is reserved. That is simpler than special-casing every keyword.
 
-## 4. Lua 5.4's lexical rules (manual ֲ§3.1)
+## 4. Lua 5.4's lexical rules (manual §3.1)
+
+This is a summary. The full rules, numbered for tests, are in [../spec/lexical.md](../spec/lexical.md).
 
 **Names**: letters, digits and `_`, not starting with a digit. Case-sensitive.
 
@@ -139,7 +141,7 @@ Read in this order. The first two are enough to start.
 1. **Crafting Interpreters, chapter 4 "Scanning"** by Robert Nystrom (free online at
    craftinginterpreters.com/scanning.html). The best gentle introduction. The language is Java and
    the target language is Lox, but the ideas map one to one.
-2. **Lua 5.4 Reference Manual ֲ§3.1 "Lexical Conventions"** (lua.org/manual/5.4/manual.html#3.1).
+2. **Lua 5.4 Reference Manual §3.1 "Lexical Conventions"** (lua.org/manual/5.4/manual.html#3.1).
    Short and precise: this is the spec our tests will follow.
 3. **`llex.c` in the Lua 5.4 source** (github.com/lua/lua/blob/v5.4/llex.c, about 600 lines of C).
    The real thing. Read `llex()`, `read_numeral()`, `read_long_string()` and `read_string()`
