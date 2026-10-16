@@ -5,11 +5,11 @@ built. The rules are in [../spec/values.md](../spec/values.md), the background a
 in [../learn/values.md](../learn/values.md), and the remaining work in
 [../plan/values.md](../plan/values.md).
 
-**Status:** parts 0 to 2 of the plan. A `Value` holds `nil`, a boolean, an integer or a float,
+**Status:** parts 0 to 3 of the plan. A `Value` holds `nil`, a boolean, an integer or a float,
 and knows its Lua type and its truthiness; numbers convert between integer and float; the
-arithmetic operators work with Lua's rules and error messages. Still to come: bitwise
-operations and comparisons (parts 3 and 4), strings (part 5) and conversions between strings
-and numbers (parts 6 to 8).
+arithmetic and bitwise operators work with Lua's rules and error messages. Still to come:
+comparisons (part 4), strings (part 5) and conversions between strings and numbers (parts 6
+to 8).
 
 ## Where it lives
 
@@ -20,8 +20,12 @@ and numbers (parts 6 to 8).
 | `lib/internal/value/number.hpp`  | conversions between integers and floats (header only, `constexpr`) |
 | `lib/internal/value/arith.hpp`   | the arithmetic operators, and their integer and float versions |
 | `lib/value/arith.cpp`            | its implementation                                   |
+| `lib/internal/value/bitwise.hpp` | the bitwise operators, and their integer versions    |
+| `lib/value/bitwise.cpp`          | its implementation                                   |
 | `lib/internal/runtime_error.hpp` | `RuntimeError`, an error raised while Lua code runs  |
 | `tests/arith_test.cpp`           | arithmetic tests, tagged `[value][arith]`            |
+| `tests/bitwise_test.cpp`         | bitwise tests, tagged `[value][bitwise]`             |
+| `tests/value_printer.hpp`        | shows a `Value` in Catch2 failure messages           |
 | `tests/value_test.cpp`           | tests, tagged `[value]`                              |
 
 Values are internal to the library for now.
@@ -157,7 +161,9 @@ become floats with `to_float()` and the float path runs (V3.4). `/` and `^` have
 path (V3.3). If an operand is not a number, the result is
 `attempt to perform arithmetic on a X value` (V3.12), naming the first operand unless it is a
 number, then the second, like Lua's `luaG_opinterror`. The type error comes before the check
-for division by zero: `nil // 0` complains about `nil`.
+for division by zero: `nil // 0` complains about `nil`. The message is built by
+`operand_error(action, a, b)`, which the bitwise operators share; unary operators pass their
+operand twice, as Lua does.
 
 `RuntimeError` is only a message for now. Where the error happened is added by the interpreter
 (stage 5), and catching it with `pcall` is stage 10.
@@ -196,3 +202,32 @@ Two details first written from memory were wrong and were corrected against the 
 source (`lvm.c`, `llimits.h`) and the 5.4.9 test suite: integer `//` by zero says
 `attempt to divide by zero` (the suite checks this in `math.lua` and `errors.lua`), and the float
 modulo adds `b` only when the remainder and `b` have different signs.
+## Bitwise operations
+
+`bitwise.hpp` has `bit_and`, `bit_or`, `bit_xor`, `shift_left`, `shift_right` and `bit_not`
+(`&`, `|`, `~`, `<<`, `>>`, unary `~`), returning `ArithResult` like the arithmetic operators.
+
+All of them go through one helper: convert both operands with `to_integer()` (exact rounding,
+V4.2), then apply the integer version. The result is always an integer: `3.0 | 0` is `3`.
+When a conversion fails, the error follows Lua's `luaT_trybinTM`:
+
+- if an operand is not a number: `attempt to perform bitwise operation on a X value`, through
+  `operand_error()` (V4.5). This comes first, so `1.5 & nil` names `nil`;
+- otherwise a float had no exact integer value: `number has no integer representation`.
+
+**Strings are never converted** (V4.3). Lua 5.4's core does not convert them, and its string
+library has metamethods for arithmetic only. The official suite's `bitwise.lua` passes strings
+to `&` only because it first loads `bwcoercion.lua`, which adds bitwise metamethods to strings.
+
+**The integer versions** are `constexpr` and work on the bits as `std::uint64_t`, like Lua's
+`intop`: `int_and`, `int_or`, `int_xor`, `int_not`, and the shifts:
+
+- `int_shift_left(x, y)` is Lua's `luaV_shiftl`. Shifts are logical, so `-1 >> 1` is
+  `math.maxinteger`. A displacement of 64 or more either way gives 0, and a negative one
+  shifts the other way. (In C++, shifting by 64 or more is undefined behavior, so the limits
+  are checked before shifting.)
+- `int_shift_right(x, y)` is `int_shift_left(x, -y)`, with the negation wrapping:
+  `-mininteger` is `mininteger`, a right shift by more than 64, so `1 >> mininteger` is 0.
+
+The tests use the cases of the official suite's `bitwise.lua` that need no strings and no
+interpreter.

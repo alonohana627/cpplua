@@ -69,12 +69,15 @@ V3.1   +  -  *  /  //  %  ^  and unary -
   `1 % 0.0` is `nan`. **(impl: `luai_numidiv`, `luai_nummod`)**
 - **V3.10** `^` is `pow(a, b)` on floats.
 - **V3.11** Strings that look like numbers take part in arithmetic after conversion (V5):
-  `"10" + 1 == 11`, `"3.0" + 1 == 4.0`, `"0x10" * 1 == 16`.
+  `"10" + 1 == 11`, `"3.0" + 1 == 4.0`, `"0x10" * 1 == 16`. **(impl: this is not in the core
+  but in the string library's metamethods, `__add` and friends in `lstrlib.c`; the standard
+  `lua` program always has them)** When a string takes part and the other operand cannot be
+  converted, the error comes from the string library: `attempt to add a 'string' with a 'nil'`,
+  with the metamethod's name (`add`, `sub`, `mul`, `mod`, `pow`, `div`, `idiv`, `unm`) and
+  both operands' type names in order **(impl: `trymt`)**.
 - **V3.12** Any other operand is an error: `attempt to perform arithmetic on a X value`, with
   `X` the type name (V1.2) of the first operand if it is not a number, otherwise of the second.
-  **(impl: `luaG_opinterror`)** When one operand is a string, real Lua reaches this error
-  through the string library's metamethods, and the operand it names can differ; we match
-  that with the string library (stage 11).
+  **(impl: `luaG_opinterror`)**
 
 ## V4. Bitwise operations
 
@@ -83,13 +86,20 @@ V4.1   &  |  ~  <<  >>  and unary ~
 ```
 
 - **V4.2** Both operands are converted to integers (V2.4), and the result is always an
-  integer: `3.0 | 0 == 3`. A float with no exact integer value is the error
-  `number has no integer representation`.
-- **V4.3** Strings convert first to numbers (V5), then to integers: `"3" & 1 == 1`. **(impl)**
+  integer: `3.0 | 0 == 3`. When both operands are numbers but one is a float with no exact
+  integer value, the error is `number has no integer representation` **(impl:
+  `luaG_tointerror`)**.
+- **V4.3** Strings are **not** converted: `"3" & 1` is the error
+  `attempt to perform bitwise operation on a string value`. The string library has no bitwise
+  metamethods. (The official test suite's `bitwise.lua` adds them itself, from
+  `bwcoercion.lua`.) **(impl: `luaV_tointegerns`, `lstrlib.c`)**
 - **V4.4** `<<` and `>>` are logical shifts: vacated bits are zeros, also for `>>` on negative
   numbers. A displacement of 64 or more (either way) gives `0`; a negative displacement shifts
   the other way: `1 << -1 == 0`, `2 >> -1 == 4`, `-1 >> 1 == math.maxinteger`.
-- **V4.5** Any other operand is an error: `attempt to perform bitwise operation on a X value`.
+- **V4.5** When an operand is not a number, the error is
+  `attempt to perform bitwise operation on a X value`, naming the first operand if it is not a
+  number, otherwise the second (as V3.12). This check comes first: `1.5 & nil` names `nil`.
+  **(impl: `luaT_trybinTM`)**
 
 ## V5. Strings to numbers
 

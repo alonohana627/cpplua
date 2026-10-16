@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <expected>
+#include <string_view>
 
 #include "runtime_error.hpp"
 #include "value/number.hpp"
@@ -25,6 +26,12 @@ ArithResult floor_divide(Value a, Value b); // a // b
 ArithResult modulo(Value a, Value b);       // a % b
 ArithResult power(Value a, Value b);        // a ^ b, always float
 ArithResult negate(Value a);                // -a
+
+// `attempt to <action> a X value`, as in "attempt to perform arithmetic on a
+// nil value" (V3.12, V4.5). Like Lua's luaG_opinterror, X is the type of the
+// first operand if that is not a number, otherwise of the second. Unary
+// operators pass their operand twice.
+RuntimeError operand_error(std::string_view action, Value a, Value b);
 
 // ---- The operations on plain numbers ----
 //

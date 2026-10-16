@@ -143,7 +143,8 @@ Lua snippets used to check what real Lua does go into `tests/fixtures/my_lua/` a
 
 ### Part 8: Coercions, concatenation and length
 
-- Strings in arithmetic and bitwise operations; `..` with numbers converted; the concatenate
+- Strings in arithmetic, with the string library's error messages (bitwise operations never
+  convert strings); `..` with numbers converted; the concatenate
   and length errors.
 - **Rules**: V3.11, V4.3, V9.1, V9.2, V9.4.
 
