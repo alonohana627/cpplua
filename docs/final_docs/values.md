@@ -5,11 +5,10 @@ built. The rules are in [../spec/values.md](../spec/values.md), the background a
 in [../learn/values.md](../learn/values.md), and the remaining work in
 [../plan/values.md](../plan/values.md).
 
-**Status:** parts 0 to 3 of the plan. A `Value` holds `nil`, a boolean, an integer or a float,
+**Status:** parts 0 to 4 of the plan. A `Value` holds `nil`, a boolean, an integer or a float,
 and knows its Lua type and its truthiness; numbers convert between integer and float; the
-arithmetic and bitwise operators work with Lua's rules and error messages. Still to come:
-comparisons (part 4), strings (part 5) and conversions between strings and numbers (parts 6
-to 8).
+arithmetic, bitwise and comparison operators work with Lua's rules and error messages. Still to
+come: strings (part 5) and conversions between strings and numbers (parts 6 to 8).
 
 ## Where it lives
 
@@ -22,9 +21,12 @@ to 8).
 | `lib/value/arith.cpp`            | its implementation                                   |
 | `lib/internal/value/bitwise.hpp` | the bitwise operators, and their integer versions    |
 | `lib/value/bitwise.cpp`          | its implementation                                   |
+| `lib/internal/value/compare.hpp` | `==`, `<`, `<=`, and the exact integer/float comparisons |
+| `lib/value/compare.cpp`          | its implementation                                   |
 | `lib/internal/runtime_error.hpp` | `RuntimeError`, an error raised while Lua code runs  |
 | `tests/arith_test.cpp`           | arithmetic tests, tagged `[value][arith]`            |
 | `tests/bitwise_test.cpp`         | bitwise tests, tagged `[value][bitwise]`             |
+| `tests/compare_test.cpp`         | comparison tests, tagged `[value][compare]`          |
 | `tests/value_printer.hpp`        | shows a `Value` in Catch2 failure messages           |
 | `tests/value_test.cpp`           | tests, tagged `[value]`                              |
 
@@ -231,3 +233,54 @@ to `&` only because it first loads `bwcoercion.lua`, which adds bitwise metameth
 
 The tests use the cases of the official suite's `bitwise.lua` that need no strings and no
 interpreter.
+## Equality and order
+
+`compare.hpp` has three functions; the other three operators are built from them:
+
+| Lua      | Call                          |
+| -------- | ----------------------------- |
+| `a == b` | `equals(a, b)`                |
+| `a ~= b` | `!equals(a, b)`               |
+| `a < b`  | `less_than(a, b)`             |
+| `a <= b` | `less_equal(a, b)`            |
+| `a > b`  | `less_than(b, a)`             |
+| `a >= b` | `less_equal(b, a)`            |
+
+**`equals(a, b)`** returns a plain `bool`: `==` never fails (V7). Like Lua's `luaV_equalobj`:
+
+- Different tags: only an integer and a float can still be equal, when the float has an exact
+  integer value equal to the integer (`to_integer()` with exact rounding). So `1 == 1.0`, but
+  `maxint == maxint + 0.0` is false: the float is 2^63.
+- Same tag: nil and the booleans are equal (the tag says it all), integers compare as
+  integers, floats as floats, so `nan` equals nothing, itself included, and `0.0 == -0.0`.
+
+Metamethods (`__eq`) come with tables, in stage 8.
+
+**`less_than(a, b)` and `less_equal(a, b)`** return `CompareResult`, a
+`std::expected<bool, RuntimeError>`. Two numbers compare by value; anything else is an error
+(V8.6), for now, until strings (part 5) and metamethods (stage 8):
+
+- `attempt to compare two X values` when both type names are the same,
+- `attempt to compare X with Y` otherwise.
+
+The names come in the order compared. For `a > b` that is `b` first, since `a > b` is
+`less_than(b, a)`: `1 > nil` says `attempt to compare nil with number`, as Lua does.
+
+### Exact integer/float comparison
+
+Comparing an integer with a float by converting the integer would round integers beyond 2^53,
+and `maxint < 2^63` would come out false. The four `constexpr` helpers, `int_less_float`,
+`int_less_equal_float`, `float_less_int` and `float_less_equal_int`, are Lua's `LTintfloat`,
+`LEintfloat`, `LTfloatint` and `LEfloatint`:
+
+1. If the integer is within ±2^53 (`fits_float()`, Lua's `l_intfitsf`), it converts to float
+   exactly, and the two floats are compared. This is the common, fast case.
+2. Otherwise the float is rounded to an integer in the direction that keeps the answer:
+   `i < f` exactly when `i < ceil(f)`, `i <= f` when `i <= floor(f)`, `f < i` when
+   `floor(f) < i`, `f <= i` when `ceil(f) <= i`. Then two integers are compared.
+3. If that rounding fails, the float is beyond every integer (or is `nan`): `i < f` is `f > 0`,
+   `f < i` is `f < 0`, and `nan` gives false.
+
+The tests use `math.lua`'s border cases (2^53, 2^63, `minint`), check every comparison with
+`nan`, and compare the helpers with plain integer comparison on 81 pairs around 2^53 and ±2^62,
+where every float is a whole number.
