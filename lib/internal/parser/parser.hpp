@@ -5,6 +5,7 @@
 #include <source_location>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include "lexer/lexer.hpp"
 #include "lexer/token.hpp"
@@ -50,6 +51,19 @@ private:
 
     // attrib ::= [ '<' Name '>' ] (G3.3, G3.15)
     std::expected<LocalName::Attribute, SyntaxError> parse_attribute();
+
+    // ---- Functions (G5) ----
+
+    // funcbody ::= '(' [ parlist ] ')' block 'end', after 'function' has
+    // been read. `line` is the line of 'function'. A method gets `self` as
+    // its first parameter (G3.11).
+    std::expected<FunctionId, SyntaxError> parse_function_body(int line, bool is_method);
+
+    // 'function' funcname funcbody (G3.5, G3.11)
+    std::expected<StatId, SyntaxError> parse_function_statement();
+
+    // 'local' 'function' Name funcbody, after 'local' (G3.12)
+    std::expected<StatId, SyntaxError> parse_local_function(int line);
 
     // ---- Control flow (G3.1) ----
 
@@ -171,6 +185,10 @@ private:
     Token current_;                  // the token being looked at
     std::optional<Token> lookahead_; // the next one, once peek() has read it
     Ast ast_;
+
+    // For each function being parsed, innermost last: whether it is vararg,
+    // so '...' can be checked (G4.12). The main chunk is vararg (G2.4).
+    std::vector<bool> vararg_functions_{true};
 };
 
 } // namespace lua2

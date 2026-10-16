@@ -4,12 +4,13 @@ How the parser works today. This page describes the code as it is, and is update
 grows. The rules it implements are in [../spec/grammar.md](../spec/grammar.md), and the remaining
 work is in [../plan/parser.md](../plan/parser.md).
 
-**Status:** parts 0 to 6 of the plan. A chunk is a list of statements: function calls,
+**Status:** parts 0 to 7 of the plan. A chunk is a list of statements: function calls,
 assignments, `local` declarations (with `<const>` and `<close>`), empty `;` statements, `do`,
-`while`, `repeat`, `if`/`elseif`/`else`, numeric and generic `for`, and a final `return`.
-Expressions cover everything except function definitions: simple values, names, parentheses,
-fields, indexing, calls, method calls and table constructors, with every unary and binary
-operator at Lua's precedence. Functions, `goto` and `break` come later.
+`while`, `repeat`, `if`/`elseif`/`else`, numeric and generic `for`, `function` statements,
+`local function`, and a final `return`. Every expression parses: simple values, names,
+parentheses, fields, indexing, calls, method calls, table constructors and function
+definitions, with every unary and binary operator at Lua's precedence. `goto`, labels and
+`break` come next, then the scope checks.
 
 ## Where it lives
 
@@ -74,8 +75,9 @@ Each kind of node is a small struct, and the node types are two `std::variant`s:
 
 | Variant | Alternatives so far                                                           |
 | ------- | ----------------------------------------------------------------------------- |
-| `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}`, `NameExpr{name}`, `ParenExpr{inner}`, `IndexExpr{object, key}`, `CallExpr{function, arguments}`, `MethodCallExpr{object, method, arguments}`, `TableExpr{fields}` |
-| `Stat`  | `ReturnStat{values}`, `CallStat{call}`, `AssignStat{targets, values}`, `LocalStat{names, values}`, `DoStat{body}`, `WhileStat{condition, body}`, `RepeatStat{body, condition}`, `IfStat{clauses, else_body, has_else}`, `NumericForStat{variable, start, limit, step, has_step, body}`, `GenericForStat{names, values, body}`; lists are `IdRange`s, bodies are `Block`s |
+| `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}`, `NameExpr{name}`, `ParenExpr{inner}`, `IndexExpr{object, key}`, `CallExpr{function, arguments}`, `MethodCallExpr{object, method, arguments}`, `TableExpr{fields}`, `FunctionExpr{function}` |
+| `Stat`  | `ReturnStat{values}`, `CallStat{call}`, `AssignStat{targets, values}`, `LocalStat{names, values}`, `DoStat{body}`, `WhileStat{condition, body}`, `RepeatStat{body, condition}`, `IfStat{clauses, else_body, has_else}`, `NumericForStat{variable, start, limit, step, has_step, body}`, `GenericForStat{names, values, body}`, `FunctionStat{target, function, is_method}`, `LocalFunctionStat{name, function}`; lists are `IdRange`s, bodies are `Block`s |
+| -       | `Function{parameters, is_vararg, body, line, end_line}`: function bodies, in their own vector, referred to by `FunctionId` |
 
 The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
 
@@ -96,6 +98,11 @@ The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
 - **Bodies are embedded.** A `Block` is only an `IdRange<StatId>`, 8 bytes, so loops and
   branches hold their bodies directly (`WhileStat{condition, body}`) instead of through another
   id.
+- **Functions have their own vector.** A function body is a `Function` struct in
+  `functions_`, added with `add_function()` and read with `function(id)`. Function expressions
+  and both function statements refer to it by `FunctionId`. Keeping functions apart makes them
+  easy to find later, when part 10 gives each one its list of upvalues, and when the interpreter
+  turns each into a prototype.
 
 Because nodes hold only numbers and ids, `Expr` and `Stat` are **trivially copyable**: copying a
 node is a plain memory copy, and the vectors never run destructors. `static_assert`s in
@@ -119,6 +126,9 @@ Code that walks the tree uses `std::visit` with one lambda per node type, throug
 | `parse_do()`, `parse_while()`, `parse_repeat()`, `parse_if()` | the control statements of G3.1 | see "Control flow" |
 | `parse_for()`             | `for Name` then `=` or `,`/`in` (G3.10)  | dispatches to `parse_numeric_for()` or `parse_generic_for()` |
 | `parse_for_body(line)`    | `'do' block 'end'`                       | shared by both fors                       |
+| `parse_function_body(line, is_method)` | `funcbody ::= '(' [parlist] ')' block 'end'` (G5.2) | see "Functions" |
+| `parse_function_statement()` | `'function' funcname funcbody` (G3.5)  | builds the target like a variable |
+| `parse_local_function(line)` | `'local' 'function' Name funcbody` (G3.12) | called by `parse_local()` |
 | `parse_return()`          | `retstat ::= 'return' [ explist ] [ ';' ]` (G2.3) | values are skipped when the block ends or a `;` follows; one `;` is allowed |
 | `parse_expression_list()` | `explist ::= exp { ',' exp }` (G4.6)     | collects ids, then stores them as one list |
 | `parse_expression()`      | `exp` (G4.1)                             | `parse_subexpression(0)`                  |
@@ -195,6 +205,47 @@ input:1: multiple to-be-closed variables in local list
 
 `semantic_error(message)` builds them, by passing an empty `near` to `make_syntax_error`, which
 then omits that part. The `goto`, label, `break` and `<const>` checks of part 9 will use it too.
+
+## Functions
+
+All three forms share one body parser, `parse_function_body(line, is_method)`:
+
+1. **Parameters** (G5.3): names separated by commas, optionally ending with `...`, which sets
+   `is_vararg`. `...` must be last, so `(..., a)` is `')' expected near ','`. Anything else in
+   the list is `<name> or '...' expected` (G5.4).
+2. **Body**: a block, then the `end` (with `expect_match`, so `(to close 'function' at line N)`
+   when it is missing). The function records the line of `function` and of its `end`.
+
+The three forms:
+
+| Source                         | Node                                                     |
+| ------------------------------ | -------------------------------------------------------- |
+| `function (params) ... end` as an expression | `FunctionExpr{function}`                   |
+| `function a.b.c(params) ... end` | `FunctionStat{target, function, is_method = false}` |
+| `function a.b:m(params) ... end` | `FunctionStat{target, function, is_method = true}`, with `self` added as the first parameter |
+| `local function f(params) ... end` | `LocalFunctionStat{name, function}`                  |
+
+- **The target of a function statement** is built exactly like a variable in an expression:
+  `function a.b.c()` gives the target `a["b"]["c"]`, as `NameExpr` and `IndexExpr` nodes, which
+  is what the interpreter will assign to. After `:`, only the method name may follow, so
+  `function a:b.c()` is `'(' expected near '.'`, Lua's message.
+- **Methods** (G3.11): `function obj:m(x)` is `function obj.m(self, x)`. The parser adds `self`
+  to the parameter list itself, so the rest of the interpreter never needs to know.
+- **`local function f`** is a separate statement from `local f = function() end`, because they
+  differ in scope (G3.12): in the first, `f` already exists inside its own body, so it can call
+  itself. That matters in part 10.
+- **A function expression cannot be called directly**, like a literal: it is a simple
+  expression, not a prefix expression. `function() end ()` leaves the `(` over;
+  `(function() end)()` works.
+
+### `...` only in vararg functions
+
+`...` is the extra arguments of a vararg function, so using it anywhere else is an error
+(G4.12): `cannot use '...' outside a vararg function near '...'`. The parser keeps
+`vararg_functions_`, a stack with one entry per function being parsed: the main chunk's `true`
+at the bottom (the main chunk is vararg, G2.4), and each function body pushes its own
+`is_vararg` and pops it when it ends. `...` checks the top. So a non-vararg function nested in a
+vararg one cannot use the outer `...`, and once it ends, the outer function can again.
 
 ## Control flow
 
@@ -400,8 +451,19 @@ A table is also a call argument: `f{...}` passes exactly one table (G4.10), like
 
 `print_ast(ast)` turns a tree into indented text, one node per line, two spaces per level. It is
 what `lua2 --ast` prints, and what parser tests compare against, so each part adds its nodes'
-lines to it. It visits each node with `std::visit`, so a node type it does not print is a compile
-error.
+lines to it.
+
+Inside, the `Printer` class has one `print(const XStat&, int depth)` or
+`print(const XExpr&, int depth)` overload per node type, each a few lines long.
+`statement(id, depth)` and `expression(id, depth)` dispatch to them with one generic lambda:
+
+```cpp
+std::visit([&](const auto& node) { print(node, depth); }, ast_.statement(id));
+```
+
+If a node type has no `print` overload, that call does not compile, so the printer can never
+silently skip a node, and adding a node type means adding one small function rather than growing
+one big one.
 
 Values are shown the way the debug views show them everywhere (`text_format.hpp`): strings in
 double quotes with unprintable bytes escaped (`"a\tb\x00"`), and floats in their shortest exact
@@ -415,7 +477,10 @@ then the value below). Statements print as `CallStatement` (the call below), `As
 `Local a, b <const>` (the names on one line with their attributes, the values below). Loops print
 their condition or range first and their statements under a `Body` heading; `Repeat` puts its
 condition under `Until` after the body; an `If` lists each clause as `If`/`ElseIf` with the
-condition and a `Then` heading, then an optional `Else`. For `return a.b[c](d):e"f"`:
+condition and a `Then` heading, then an optional `Else`. A function prints as
+`Function(a, b, ...)` with its statements below; a `FunctionStatement` (marked `(method)` for
+`:`) prints its target, then the function; `LocalFunction f` prints the function below. For
+`return a.b[c](d):e"f"`:
 
 ```
 Chunk
@@ -436,12 +501,10 @@ Chunk
 
 ## Not handled yet
 
-- **Functions** (part 7). Until then `function` is `unexpected symbol`.
 - **A depth limit** (part 9). Parsing is recursive, so a very deeply nested expression, such as
   thousands of `-` or `..` in a row, can overflow the C++ stack until the limit exists. The
   printer is recursive too.
-- **The remaining statements**: `function` statements and `local function` (part 7), `goto`,
-  labels and `break` (part 8). Until then their keyword is `unexpected symbol` (and
-  `local function` is `<name> expected near 'function'`).
+- **The remaining statements**: `goto`, labels and `break` (part 8). Until then their keyword
+  (or `::`) is `unexpected symbol`.
 - **The `<const>` assignment check** (part 9): `local x <const> = 1; x = 2` parses for now.
 - Scopes and name resolution (parts 9 and 10), the graph view (part 11).

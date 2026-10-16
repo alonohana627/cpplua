@@ -283,6 +283,7 @@ std::string grouped(const lua2::Ast& ast, lua2::ExprId id) {
                 return grouped(ast, node.object) + ":" + std::string(ast.text(node.method)) + "(" +
                        grouped_list(ast, node.arguments) + ")";
             },
+            [](const lua2::FunctionExpr&) -> std::string { return "function"; },
             // Tables as {item, name=value, [key]=value}.
             [&](const lua2::TableExpr& node) {
                 std::string out = "{";
@@ -996,4 +997,144 @@ TEST_CASE("G2.2 block-ending words cannot start a chunk", "[parser][control]") {
     CHECK(parse_error("else") == "input:1: <eof> expected near 'else'");
     CHECK(parse_error("until x") == "input:1: <eof> expected near 'until'");
     CHECK(parse_error("do end end") == "input:1: <eof> expected near 'end'");
+}
+
+// ---- Part 7: functions ----
+
+TEST_CASE("G5.1 function expressions", "[parser][function]") {
+    CHECK(ast_of("return function() end") == "Chunk\n  Return\n    Function()\n");
+    CHECK(ast_of("return function(a, b) return a + b end") == "Chunk\n"
+                                                              "  Return\n"
+                                                              "    Function(a, b)\n"
+                                                              "      Return\n"
+                                                              "        Binary +\n"
+                                                              "          Name a\n"
+                                                              "          Name b\n");
+    CHECK(group("function() end") == "function");
+    CHECK(group("f(function() end, 1)") == "f(function, 1)");
+    CHECK(group("{function() end}") == "{function}");
+}
+
+TEST_CASE("G5.3 parameter lists", "[parser][function]") {
+    CHECK(ast_of("return function(a) end") == "Chunk\n  Return\n    Function(a)\n");
+    CHECK(ast_of("return function(...) end") == "Chunk\n  Return\n    Function(...)\n");
+    CHECK(ast_of("return function(a, b, ...) end") == "Chunk\n  Return\n    Function(a, b, ...)\n");
+}
+
+TEST_CASE("G5.4 broken parameter lists", "[parser][function]") {
+    CHECK(parse_error("return function(1) end") == "input:1: <name> or '...' expected near '1'");
+    CHECK(parse_error("return function(a,) end") == "input:1: <name> or '...' expected near ')'");
+    CHECK(parse_error("return function(..., a) end") == "input:1: ')' expected near ','");
+    CHECK(parse_error("return function(a b) end") == "input:1: ')' expected near 'b'");
+    CHECK(parse_error("return function end") == "input:1: '(' expected near 'end'");
+}
+
+TEST_CASE("G5.2 a function body needs its end", "[parser][function]") {
+    CHECK(parse_error("return function()") == "input:1: 'end' expected near <eof>");
+    CHECK(parse_error("f = function()\n  return 1\n") ==
+          "input:3: 'end' expected (to close 'function' at line 1) near <eof>");
+}
+
+TEST_CASE("G4.7 a function expression cannot be called directly", "[parser][function]") {
+    // Like a literal: it is a simple expression, not a prefix expression.
+    CHECK(parse_error("return function() end ()") == "input:1: <eof> expected near '('");
+    CHECK(group("(function() end)()") == "[function]()");
+}
+
+TEST_CASE("G3.11 function statements", "[parser][function]") {
+    CHECK(ast_of("function f() end") == "Chunk\n"
+                                        "  FunctionStatement\n"
+                                        "    Name f\n"
+                                        "    Function()\n");
+    CHECK(ast_of("function a.b.c(x) end") == "Chunk\n"
+                                             "  FunctionStatement\n"
+                                             "    Index\n"
+                                             "      Index\n"
+                                             "        Name a\n"
+                                             "        String \"b\"\n"
+                                             "      String \"c\"\n"
+                                             "    Function(x)\n");
+}
+
+TEST_CASE("G3.11 methods get self as their first parameter", "[parser][function]") {
+    CHECK(ast_of("function obj:m(x) end") == "Chunk\n"
+                                             "  FunctionStatement (method)\n"
+                                             "    Index\n"
+                                             "      Name obj\n"
+                                             "      String \"m\"\n"
+                                             "    Function(self, x)\n");
+    CHECK(ast_of("function a.b:m(...) end") == "Chunk\n"
+                                               "  FunctionStatement (method)\n"
+                                               "    Index\n"
+                                               "      Index\n"
+                                               "        Name a\n"
+                                               "        String \"b\"\n"
+                                               "      String \"m\"\n"
+                                               "    Function(self, ...)\n");
+}
+
+TEST_CASE("G3.12 local functions", "[parser][function]") {
+    CHECK(ast_of("local function f(n) return f(n) end") == "Chunk\n"
+                                                           "  LocalFunction f\n"
+                                                           "    Function(n)\n"
+                                                           "      Return\n"
+                                                           "        Call\n"
+                                                           "          Name f\n"
+                                                           "          Name n\n");
+    // Not the same statement as a local holding a function expression.
+    CHECK(ast_of("local f = function() end") == "Chunk\n  Local f\n    Function()\n");
+}
+
+TEST_CASE("G3.5 broken function names", "[parser][function]") {
+    CHECK(parse_error("function") == "input:1: <name> expected near <eof>");
+    CHECK(parse_error("function f") == "input:1: '(' expected near <eof>");
+    CHECK(parse_error("function a.() end") == "input:1: <name> expected near '('");
+    CHECK(parse_error("function a:b.c() end") == "input:1: '(' expected near '.'");
+    CHECK(parse_error("function a[1]() end") == "input:1: '(' expected near '['");
+    CHECK(parse_error("function a.1() end") == "input:1: '(' expected near '.1'"); // .1 is a number
+    CHECK(parse_error("local function") == "input:1: <name> expected near <eof>");
+    CHECK(parse_error("local function a.b() end") == "input:1: '(' expected near '.'");
+}
+
+TEST_CASE("G4.12 G2.4 '...' only inside a vararg function", "[parser][function]") {
+    // The main chunk is vararg.
+    CHECK(ast_of("return ...") == "Chunk\n  Return\n    Vararg\n");
+    CHECK(ast_of("return function(...) return ... end") == "Chunk\n"
+                                                           "  Return\n"
+                                                           "    Function(...)\n"
+                                                           "      Return\n"
+                                                           "        Vararg\n");
+    CHECK(parse_error("return function() return ... end") ==
+          "input:1: cannot use '...' outside a vararg function near '...'");
+    CHECK(parse_error("function f(a) local t = {...} end") ==
+          "input:1: cannot use '...' outside a vararg function near '...'");
+    // A non-vararg function inside a vararg one cannot see the outer '...'.
+    CHECK(parse_error("return function(...) return function() return ... end end") ==
+          "input:1: cannot use '...' outside a vararg function near '...'");
+    // After a nested function ends, '...' works again in the outer one.
+    CHECK(ast_of("return function(...) local f = function() end return ... end") ==
+          "Chunk\n"
+          "  Return\n"
+          "    Function(...)\n"
+          "      Local f\n"
+          "        Function()\n"
+          "      Return\n"
+          "        Vararg\n");
+}
+
+TEST_CASE("G5.2 a function records where it starts and ends", "[parser][function]") {
+    Parser parser{"\nlocal f = function(a)\n  return a\nend"};
+    const auto ast = parser.parse_chunk();
+    REQUIRE(ast.has_value());
+
+    const auto statement = ast->statements(ast->root())[0];
+    const auto& local = std::get<lua2::LocalStat>(ast->statement(statement));
+    const auto value = ast->expressions(local.values)[0];
+    const auto& function =
+        ast->function(std::get<lua2::FunctionExpr>(ast->expression(value)).function);
+
+    CHECK(function.line == 2);
+    CHECK(function.end_line == 4);
+    CHECK_FALSE(function.is_vararg);
+    CHECK(ast->local_names(function.parameters).size() == 1);
 }

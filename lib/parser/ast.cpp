@@ -34,6 +34,10 @@ StatId Ast::add_statement(Stat stat, int line) {
     return push<StatId>(statements_, stat);
 }
 
+FunctionId Ast::add_function(const Function& function) {
+    return push<FunctionId>(functions_, function);
+}
+
 IdRange<StatId> Ast::add_statement_list(std::span<const StatId> ids) {
     return append<StatId>(statement_lists_, ids);
 }

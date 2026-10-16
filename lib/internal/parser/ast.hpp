@@ -37,11 +37,14 @@ struct LocalNameTag {};
 
 struct IfClauseTag {};
 
+struct FunctionTag {};
+
 using ExprId = NodeId<ExprTag>;           // an expression node
 using StatId = NodeId<StatTag>;           // a statement node
 using FieldId = NodeId<FieldTag>;         // a field of a table constructor
 using LocalNameId = NodeId<LocalNameTag>; // a name declared by `local`
 using IfClauseId = NodeId<IfClauseTag>;   // an if or elseif clause
+using FunctionId = NodeId<FunctionTag>;   // a function body
 
 // A run of consecutive ids in one of the Ast's list vectors, such as the
 // statements of a block. Storing (first, count) instead of a std::vector in
@@ -219,9 +222,17 @@ struct TableExpr {
     bool operator==(const TableExpr&) const = default;
 };
 
+// `function funcbody`: a function value (G5.1). The body itself is a
+// Function in the Ast's function vector.
+struct FunctionExpr {
+    FunctionId function;
+
+    bool operator==(const FunctionExpr&) const = default;
+};
+
 using Expr = std::variant<NilExpr, TrueExpr, FalseExpr, IntegerExpr, FloatExpr, StringExpr,
                           VarargExpr, UnaryExpr, BinaryExpr, NameExpr, ParenExpr, IndexExpr,
-                          CallExpr, MethodCallExpr, TableExpr>;
+                          CallExpr, MethodCallExpr, TableExpr, FunctionExpr>;
 
 // ---- Statements (G3.1) ----
 
@@ -340,13 +351,48 @@ struct GenericForStat {
     bool operator==(const GenericForStat&) const = default;
 };
 
-using Stat = std::variant<ReturnStat, CallStat, AssignStat, LocalStat, DoStat, WhileStat,
-                          RepeatStat, IfStat, NumericForStat, GenericForStat>;
+// `function funcname funcbody` (G3.5, G3.11). The target is what gets
+// assigned: a NameExpr for `function f`, or an IndexExpr chain for
+// `function a.b.c`. With `:` (is_method), the last name is the method and the
+// function has an extra first parameter named `self`.
+struct FunctionStat {
+    ExprId target;
+    FunctionId function;
+    bool is_method = false;
+
+    bool operator==(const FunctionStat&) const = default;
+};
+
+// `local function Name funcbody` (G3.12). The local exists inside its own
+// body, so the function can call itself.
+struct LocalFunctionStat {
+    TextRange name;
+    FunctionId function;
+
+    bool operator==(const LocalFunctionStat&) const = default;
+};
+
+using Stat =
+    std::variant<ReturnStat, CallStat, AssignStat, LocalStat, DoStat, WhileStat, RepeatStat, IfStat,
+                 NumericForStat, GenericForStat, FunctionStat, LocalFunctionStat>;
+
+// A function body: `( parlist ) block end` (G5.2, G5.3). Shared by function
+// expressions, function statements and local functions.
+struct Function {
+    IdRange<LocalNameId> parameters; // in order; `self` first for methods
+    bool is_vararg = false;          // the parameter list ends with `...`
+    Block body;
+    int line = 0;     // where `function` is
+    int end_line = 0; // where the closing `end` is
+
+    bool operator==(const Function&) const = default;
+};
 
 // Nodes hold only numbers and ids, never strings or pointers, so copying one
 // is a plain memory copy and the vectors never run destructors. Keep it so.
 static_assert(std::is_trivially_copyable_v<Expr>);
 static_assert(std::is_trivially_copyable_v<Stat>);
+static_assert(std::is_trivially_copyable_v<Function>);
 
 class Ast {
 public:
@@ -370,6 +416,11 @@ public:
     [[nodiscard]] const Stat& statement(StatId id) const { return statements_[id.index]; }
 
     [[nodiscard]] int line(StatId id) const { return statement_lines_[id.index]; }
+
+    // Function bodies record their own lines (Function::line, end_line).
+    FunctionId add_function(const Function& function);
+
+    [[nodiscard]] const Function& function(FunctionId id) const { return functions_[id.index]; }
 
     // ---- Lists ----
     // Each copies `ids` to the end of its list vector and returns where they
@@ -405,6 +456,7 @@ private:
     std::vector<int> expression_lines_;
     std::vector<Stat> statements_;
     std::vector<int> statement_lines_;
+    std::vector<Function> functions_;
 
     std::vector<StatId> statement_lists_;
     std::vector<ExprId> expression_lists_;

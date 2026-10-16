@@ -100,9 +100,9 @@ std::expected<std::optional<StatId>, SyntaxError> Parser::parse_statement() {
     case TokenKind::Repeat: return parse_repeat();
     case TokenKind::If: return parse_if();
     case TokenKind::For: return parse_for();
-    // function, goto, break and labels arrive in parts 7 and 8. Until then
-    // they reach parse_expression_statement(), which reports
-    // "unexpected symbol".
+    case TokenKind::Function: return parse_function_statement();
+    // goto, break and labels arrive in part 8. Until then they reach
+    // parse_expression_statement(), which reports "unexpected symbol".
     default: return parse_expression_statement();
     }
 }
@@ -176,8 +176,9 @@ std::expected<StatId, SyntaxError> Parser::parse_local() {
     if (auto moved = advance(); !moved) { // 'local'
         return std::unexpected(std::move(moved.error()));
     }
-    // `local function f` arrives in part 7. Until then 'function' fails as
-    // "<name> expected near 'function'".
+    if (check(TokenKind::Function)) {
+        return parse_local_function(line);
+    }
 
     // attnamelist ::= Name attrib { ',' Name attrib } (G3.2)
     std::vector<LocalName> names;
@@ -251,6 +252,124 @@ std::expected<LocalName::Attribute, SyntaxError> Parser::parse_attribute() {
         return LocalName::Attribute::Close;
     }
     return semantic_error(std::format("unknown attribute '{}'", attribute)); // G3.15
+}
+
+// ---- Functions ----
+
+std::expected<FunctionId, SyntaxError> Parser::parse_function_body(int line, bool is_method) {
+    Function function;
+    function.line = line;
+
+    // parlist ::= namelist [ ',' '...' ] | '...' (G5.3). A method's `self`
+    // comes first (G3.11).
+    std::vector<LocalName> parameters;
+    if (is_method) {
+        parameters.push_back(LocalName{.name = ast_.add_text("self")});
+    }
+    if (auto open = expect(TokenKind::LParen); !open) {
+        return std::unexpected(std::move(open.error()));
+    }
+    if (!check(TokenKind::RParen)) {
+        for (;;) {
+            if (check(TokenKind::Name)) {
+                auto name = expect_name();
+                if (!name) {
+                    return std::unexpected(std::move(name.error()));
+                }
+                parameters.push_back(LocalName{.name = *name});
+            } else if (check(TokenKind::Ellipsis)) {
+                if (auto moved = advance(); !moved) {
+                    return std::unexpected(std::move(moved.error()));
+                }
+                function.is_vararg = true;
+                break; // '...' must be last
+            } else {
+                return error("<name> or '...' expected"); // G5.4
+            }
+            auto comma = accept(TokenKind::Comma);
+            if (!comma) {
+                return std::unexpected(std::move(comma.error()));
+            }
+            if (!*comma) {
+                break;
+            }
+        }
+    }
+    if (auto close = expect(TokenKind::RParen); !close) {
+        return std::unexpected(std::move(close.error()));
+    }
+    function.parameters = ast_.add_local_name_list(parameters);
+
+    // The body sees '...' only if this function is vararg (G4.12).
+    vararg_functions_.push_back(function.is_vararg);
+    auto body = parse_block();
+    vararg_functions_.pop_back();
+    if (!body) {
+        return std::unexpected(std::move(body.error()));
+    }
+    function.body = *body;
+    function.end_line = current_.line;
+    if (auto closed = expect_match(TokenKind::End, TokenKind::Function, line); !closed) {
+        return std::unexpected(std::move(closed.error()));
+    }
+    return ast_.add_function(function);
+}
+
+std::expected<StatId, SyntaxError> Parser::parse_function_statement() {
+    const int line = current_.line;
+    if (auto moved = advance(); !moved) { // 'function'
+        return std::unexpected(std::move(moved.error()));
+    }
+
+    // funcname ::= Name { '.' Name } [ ':' Name ] (G3.5). It is built as the
+    // variable being assigned: f, then f.a, then f.a.b, like a.b.c in an
+    // expression.
+    const int name_line = current_.line;
+    auto first = expect_name();
+    if (!first) {
+        return std::unexpected(std::move(first.error()));
+    }
+    ExprId target = ast_.add_expression(NameExpr{.name = *first}, name_line);
+    bool is_method = false;
+    while (check(TokenKind::Dot) || check(TokenKind::Colon)) {
+        is_method = check(TokenKind::Colon);
+        const int field_line = current_.line;
+        if (auto moved = advance(); !moved) {
+            return std::unexpected(std::move(moved.error()));
+        }
+        const int key_line = current_.line;
+        auto field = expect_name();
+        if (!field) {
+            return std::unexpected(std::move(field.error()));
+        }
+        const ExprId key = ast_.add_expression(StringExpr{.text = *field}, key_line);
+        target = ast_.add_expression(IndexExpr{.object = target, .key = key}, field_line);
+        if (is_method) {
+            break; // the method name is the last part
+        }
+    }
+
+    auto function = parse_function_body(line, is_method);
+    if (!function) {
+        return std::unexpected(std::move(function.error()));
+    }
+    return ast_.add_statement(
+        FunctionStat{.target = target, .function = *function, .is_method = is_method}, line);
+}
+
+std::expected<StatId, SyntaxError> Parser::parse_local_function(int line) {
+    if (auto moved = advance(); !moved) { // 'function'
+        return std::unexpected(std::move(moved.error()));
+    }
+    auto name = expect_name();
+    if (!name) {
+        return std::unexpected(std::move(name.error()));
+    }
+    auto function = parse_function_body(line, false);
+    if (!function) {
+        return std::unexpected(std::move(function.error()));
+    }
+    return ast_.add_statement(LocalFunctionStat{.name = *name, .function = *function}, line);
 }
 
 // ---- Control flow ----
@@ -622,7 +741,13 @@ std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
     case TokenKind::Nil: expression = NilExpr{}; break;
     case TokenKind::True: expression = TrueExpr{}; break;
     case TokenKind::False: expression = FalseExpr{}; break;
-    case TokenKind::Ellipsis: expression = VarargExpr{}; break;
+    case TokenKind::Ellipsis:
+        // Only a vararg function has extra arguments to give (G4.12).
+        if (!vararg_functions_.back()) {
+            return error("cannot use '...' outside a vararg function");
+        }
+        expression = VarargExpr{};
+        break;
     case TokenKind::Integer:
         expression = IntegerExpr{.value = std::get<std::int64_t>(current_.value)};
         break;
@@ -631,9 +756,19 @@ std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
         expression = StringExpr{.text = ast_.add_text(std::get<std::string>(current_.value))};
         break;
     case TokenKind::LBrace: return parse_table();
+    case TokenKind::Function: { // function funcbody (G5.1)
+        if (auto moved = advance(); !moved) {
+            return std::unexpected(std::move(moved.error()));
+        }
+        auto function = parse_function_body(line, false);
+        if (!function) {
+            return std::unexpected(std::move(function.error()));
+        }
+        return ast_.add_expression(FunctionExpr{.function = *function}, line);
+    }
     default:
         // Names and '(' start a suffixed expression; anything else is
-        // "unexpected symbol" there (G4.7). Functions arrive in part 7.
+        // "unexpected symbol" there (G4.7).
         return parse_suffixed_expression();
     }
     if (auto moved = advance(); !moved) {
