@@ -1,7 +1,7 @@
 ﻿# lua2
 
 A Lua 5.4 interpreter written from scratch in C++26, built step by step.
-The plan is in [docs/ROADMAP.md](docs/ROADMAP.md); background reading for each step is in [docs/learn/](docs/learn/).
+The plan is in [docs/ROADMAP.md](docs/ROADMAP.md); background reading for each step is in [docs/learn/](docs/learn/), and the exact rules we implement are in [docs/spec/](docs/spec/).
 
 ## Requirements
 
