@@ -22,6 +22,15 @@ public:
     Token next();
 
 private:
+    // Builds a token of `kind` on the current line, with no value.
+    [[nodiscard]] Token make(TokenKind kind) const;
+
+    // Consumes one character and returns a token of `kind` for it.
+    Token single(TokenKind kind);
+
+    // Consumes one line break (\n, \r, \r\n or \n\r) and counts the line (L2.1).
+    void read_newline();
+
     std::string_view source_;
     std::size_t pos_ = 0; // index of the next character to read
     int line_ = 1;        // current line (L2.2)
