@@ -59,9 +59,14 @@ private:
     // prefixexp (G4.2, G4.7). Lua's primaryexp().
     std::expected<ExprId, SyntaxError> parse_primary_expression();
 
-    // args ::= '(' [ explist ] ')' | LiteralString (G4.5). Tables come in
-    // part 4.
+    // args ::= '(' [ explist ] ')' | tableconstructor | LiteralString (G4.5)
     std::expected<IdRange<ExprId>, SyntaxError> parse_call_arguments();
+
+    // tableconstructor ::= '{' [ fieldlist ] '}' (G6). Lua's constructor().
+    std::expected<ExprId, SyntaxError> parse_table();
+
+    // One field: [exp] = exp, name = exp, or exp (G6.3).
+    std::expected<TableField, SyntaxError> parse_table_field();
 
     // The current token must be a Name: moves past it and returns its text,
     // or the error "<name> expected".

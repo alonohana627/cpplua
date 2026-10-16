@@ -267,6 +267,26 @@ std::string grouped(const lua2::Ast& ast, lua2::ExprId id) {
                 return grouped(ast, node.object) + ":" + std::string(ast.text(node.method)) + "(" +
                        grouped_list(ast, node.arguments) + ")";
             },
+            // Tables as {item, name=value, [key]=value}.
+            [&](const lua2::TableExpr& node) {
+                std::string out = "{";
+                for (const auto& field : ast.fields(node.fields)) {
+                    out += out.size() == 1 ? "" : ", ";
+                    switch (field.kind) {
+                    case lua2::TableField::Kind::Positional: break;
+                    case lua2::TableField::Kind::Named:
+                        out += std::string(ast.text(
+                                   std::get<lua2::StringExpr>(ast.expression(field.key)).text)) +
+                               "=";
+                        break;
+                    case lua2::TableField::Kind::Keyed:
+                        out += "[" + grouped(ast, field.key) + "]=";
+                        break;
+                    }
+                    out += grouped(ast, field.value);
+                }
+                return out + "}";
+            },
         },
         ast.expression(id));
 }
@@ -523,4 +543,85 @@ TEST_CASE("G4.4 the tree of calls and indexing", "[parser][suffix]") {
                                         "      Name a\n"
                                         "      Paren\n"
                                         "        Name b\n");
+}
+
+// ---- Part 4: table constructors ----
+
+TEST_CASE("G6.1 an empty table", "[parser][table]") {
+    CHECK(group("{}") == "{}");
+    CHECK(group("{ }") == "{}");
+}
+
+TEST_CASE("G6.3 the three kinds of field", "[parser][table]") {
+    CHECK(group("{1, 2, 3}") == "{1, 2, 3}");
+    CHECK(group("{x = 1}") == "{x=1}");
+    CHECK(group("{[1 + 1] = 'two'}") == "{[(1 + 1)]='two'}");
+    CHECK(group("{1, x = 2, [3] = 4, 5}") == "{1, x=2, [3]=4, 5}");
+}
+
+TEST_CASE("G6.5 one token past the name decides", "[parser][table]") {
+    CHECK(group("{x}") == "{x}");             // a positional field holding x
+    CHECK(group("{x = y}") == "{x=y}");       // a named field
+    CHECK(group("{x == y}") == "{(x == y)}"); // '==' is not '='
+    CHECK(group("{x.y}") == "{x{'y'}}");      // '.' is not '=' either
+}
+
+TEST_CASE("G6.4 G6.7 separators", "[parser][table]") {
+    CHECK(group("{1; 2, 3}") == "{1, 2, 3}");
+    CHECK(group("{1,}") == "{1}");
+    CHECK(group("{1;}") == "{1}");
+    CHECK(group("{x = 1,\n y = 2,\n}") == "{x=1, y=2}");
+}
+
+TEST_CASE("G6.3 values are any expression", "[parser][table]") {
+    CHECK(group("{f(), ..., {}, -x}") == "{f(), ..., {}, (-x)}");
+    CHECK(group("{{1, 2}, {3}}") == "{{1, 2}, {3}}");
+    CHECK(group("{[{}] = {}}") == "{[{}]={}}");
+}
+
+TEST_CASE("G6.1 a table is an operand", "[parser][table]") {
+    CHECK(group("#{1, 2}") == "(#{1, 2})");
+    CHECK(group("{} == {}") == "({} == {})");
+    CHECK(group("({}).x") == "[{}]{'x'}");
+}
+
+TEST_CASE("G4.10 table arguments", "[parser][table]") {
+    CHECK(group("f{}") == "f({})");
+    CHECK(group("f{1, x = 2}") == "f({1, x=2})");
+    CHECK(group("obj:m{1}") == "obj:m({1})");
+    CHECK(group("f{1}{2}") == "f({1})({2})");
+    CHECK(group("f{}'s'()") == "f({})('s')()");
+}
+
+TEST_CASE("G9.3 errors in table constructors", "[parser][table]") {
+    CHECK(parse_error("return {1 2}") == "input:1: '}' expected near '2'");
+    CHECK(parse_error("return {[1] 2}") == "input:1: '=' expected near '2'");
+    CHECK(parse_error("return {[1 = 2}") == "input:1: ']' expected near '='");
+    CHECK(parse_error("return {x = }") == "input:1: unexpected symbol near '}'");
+    CHECK(parse_error("return {,}") == "input:1: unexpected symbol near ','");
+    CHECK(parse_error("return {1,,}") == "input:1: unexpected symbol near ','");
+    CHECK(parse_error("return {1;;}") == "input:1: unexpected symbol near ';'");
+    CHECK(parse_error("return {end = 1}") == "input:1: unexpected symbol near 'end'");
+    CHECK(parse_error("return {1, 2") == "input:1: '}' expected near <eof>");
+    CHECK(parse_error("return {1,\n2") ==
+          "input:2: '}' expected (to close '{' at line 1) near <eof>");
+}
+
+TEST_CASE("G6.5 the key of a named field must be a plain name", "[parser][table]") {
+    // {x.y = 1} parses x.y as a positional value, then finds '=' where ','
+    // or '}' should be. Same message as Lua.
+    CHECK(parse_error("return {x.y = 1}") == "input:1: '}' expected near '='");
+}
+
+TEST_CASE("G6.3 the tree of a table", "[parser][table]") {
+    CHECK(ast_of("return {1, x = 2, [k] = 3}") == "Chunk\n"
+                                                  "  Return\n"
+                                                  "    Table\n"
+                                                  "      Item\n"
+                                                  "        Integer 1\n"
+                                                  "      Field x\n"
+                                                  "        Integer 2\n"
+                                                  "      Field\n"
+                                                  "        Name k\n"
+                                                  "        Integer 3\n");
 }

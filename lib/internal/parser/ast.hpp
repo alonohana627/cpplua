@@ -31,8 +31,11 @@ struct ExprTag {};
 
 struct StatTag {};
 
-using ExprId = NodeId<ExprTag>; // an expression node
-using StatId = NodeId<StatTag>; // a statement node
+struct FieldTag {};
+
+using ExprId = NodeId<ExprTag>;   // an expression node
+using StatId = NodeId<StatTag>;   // a statement node
+using FieldId = NodeId<FieldTag>; // a field of a table constructor
 
 // A run of consecutive ids in one of the Ast's list vectors, such as the
 // statements of a block. Storing (first, count) instead of a std::vector in
@@ -188,9 +191,31 @@ struct MethodCallExpr {
     bool operator==(const MethodCallExpr&) const = default;
 };
 
-using Expr =
-    std::variant<NilExpr, TrueExpr, FalseExpr, IntegerExpr, FloatExpr, StringExpr, VarargExpr,
-                 UnaryExpr, BinaryExpr, NameExpr, ParenExpr, IndexExpr, CallExpr, MethodCallExpr>;
+// One field of a table constructor (G6.3).
+struct TableField {
+    enum class Kind : std::uint8_t {
+        Positional, // exp: gets the next key 1, 2, 3, ... (G6.6)
+        Named,      // name = exp: the key is a StringExpr with the name (G6.5)
+        Keyed,      // [exp] = exp
+    };
+
+    Kind kind = Kind::Positional;
+    ExprId key; // unused for Positional
+    ExprId value;
+
+    bool operator==(const TableField&) const = default;
+};
+
+// `{ fields }` (G6.1). The fields are stored in the Ast's field-list vector.
+struct TableExpr {
+    IdRange<FieldId> fields;
+
+    bool operator==(const TableExpr&) const = default;
+};
+
+using Expr = std::variant<NilExpr, TrueExpr, FalseExpr, IntegerExpr, FloatExpr, StringExpr,
+                          VarargExpr, UnaryExpr, BinaryExpr, NameExpr, ParenExpr, IndexExpr,
+                          CallExpr, MethodCallExpr, TableExpr>;
 
 // ---- Statements (G3.1) ----
 
@@ -244,10 +269,12 @@ public:
 
     IdRange<StatId> add_statement_list(std::span<const StatId> ids);
     IdRange<ExprId> add_expression_list(std::span<const ExprId> ids);
+    IdRange<FieldId> add_field_list(std::span<const TableField> fields);
 
     // The statements of a block, in order.
     [[nodiscard]] std::span<const StatId> statements(const Block& block) const;
     [[nodiscard]] std::span<const ExprId> expressions(IdRange<ExprId> range) const;
+    [[nodiscard]] std::span<const TableField> fields(IdRange<FieldId> range) const;
 
     // ---- Text ----
 
@@ -267,6 +294,7 @@ private:
 
     std::vector<StatId> statement_lists_;
     std::vector<ExprId> expression_lists_;
+    std::vector<TableField> field_lists_; // fields are small, so stored directly
 
     std::string text_;
 };

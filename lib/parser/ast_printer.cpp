@@ -47,6 +47,29 @@ private:
             ast_.statement(id));
     }
 
+    //   Item           a positional field, its value below
+    //   Field name     a named field, its value below
+    //   Field          a [key] = value field, the key then the value below
+    void table_field(const TableField& field, int depth) {
+        switch (field.kind) {
+        case TableField::Kind::Positional:
+            line(depth, "Item");
+            expression(field.value, depth + 1);
+            return;
+        case TableField::Kind::Named: {
+            const auto& key = std::get<StringExpr>(ast_.expression(field.key));
+            line(depth, std::format("Field {}", ast_.text(key.text)));
+            expression(field.value, depth + 1);
+            return;
+        }
+        case TableField::Kind::Keyed:
+            line(depth, "Field");
+            expression(field.key, depth + 1);
+            expression(field.value, depth + 1);
+            return;
+        }
+    }
+
     void expressions(IdRange<ExprId> list, int depth) {
         for (const ExprId id : ast_.expressions(list)) {
             expression(id, depth);
@@ -98,6 +121,12 @@ private:
                     line(depth, std::format("MethodCall {}", ast_.text(node.method)));
                     expression(node.object, depth + 1);
                     expressions(node.arguments, depth + 1);
+                },
+                [&](const TableExpr& node) {
+                    line(depth, "Table");
+                    for (const TableField& field : ast_.fields(node.fields)) {
+                        table_field(field, depth + 1);
+                    }
                 },
             },
             ast_.expression(id));

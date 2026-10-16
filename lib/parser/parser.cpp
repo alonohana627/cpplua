@@ -242,10 +242,10 @@ std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
     case TokenKind::String:
         expression = StringExpr{.text = ast_.add_text(std::get<std::string>(current_.value))};
         break;
+    case TokenKind::LBrace: return parse_table();
     default:
         // Names and '(' start a suffixed expression; anything else is
-        // "unexpected symbol" there (G4.7). Tables and functions arrive in
-        // parts 4 and 7.
+        // "unexpected symbol" there (G4.7). Functions arrive in part 7.
         return parse_suffixed_expression();
     }
     if (auto moved = advance(); !moved) {
@@ -312,6 +312,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_suffixed_expression() {
             break;
         }
         case TokenKind::LParen:
+        case TokenKind::LBrace:
         case TokenKind::String: { // args
             auto arguments = parse_call_arguments();
             if (!arguments) {
@@ -355,7 +356,8 @@ std::expected<ExprId, SyntaxError> Parser::parse_primary_expression() {
 
 std::expected<IdRange<ExprId>, SyntaxError> Parser::parse_call_arguments() {
     switch (current_.kind) {
-    case TokenKind::String: { // f"str": exactly one argument (G4.10)
+    case TokenKind::LBrace:   // f{...}: exactly one argument, a table (G4.10)
+    case TokenKind::String: { // f"str": exactly one argument, a string (G4.10)
         auto argument = parse_simple_expression();
         if (!argument) {
             return std::unexpected(std::move(argument.error()));
@@ -384,6 +386,103 @@ std::expected<IdRange<ExprId>, SyntaxError> Parser::parse_call_arguments() {
         // After obj:name the arguments are required (G4.9).
         return error("function arguments expected");
     }
+}
+
+std::expected<ExprId, SyntaxError> Parser::parse_table() {
+    const int line = current_.line;
+    if (auto moved = advance(); !moved) { // '{'
+        return std::unexpected(std::move(moved.error()));
+    }
+
+    // fieldlist ::= field { fieldsep field } [ fieldsep ] (G6.2). After each
+    // field, a ',' or ';' allows another; without one the table must end. A
+    // separator right before '}' is allowed (G6.7).
+    std::vector<TableField> fields;
+    while (!check(TokenKind::RBrace)) {
+        auto field = parse_table_field();
+        if (!field) {
+            return std::unexpected(std::move(field.error()));
+        }
+        fields.push_back(*field);
+
+        auto comma = accept(TokenKind::Comma);
+        if (!comma) {
+            return std::unexpected(std::move(comma.error()));
+        }
+        if (*comma) {
+            continue;
+        }
+        auto semicolon = accept(TokenKind::Semicolon);
+        if (!semicolon) {
+            return std::unexpected(std::move(semicolon.error()));
+        }
+        if (!*semicolon) {
+            break;
+        }
+    }
+    if (auto closed = expect_match(TokenKind::RBrace, TokenKind::LBrace, line); !closed) {
+        return std::unexpected(std::move(closed.error()));
+    }
+    return ast_.add_expression(TableExpr{.fields = ast_.add_field_list(fields)}, line);
+}
+
+std::expected<TableField, SyntaxError> Parser::parse_table_field() {
+    // name = exp. To tell `{x = 1}` from `{x}` or `{x == 1}`, look one token
+    // past the name: only an '=' makes it a named field (G6.5). This is the
+    // one place in Lua's grammar that needs two tokens of lookahead.
+    if (check(TokenKind::Name)) {
+        auto next = peek();
+        if (!next) {
+            return std::unexpected(std::move(next.error()));
+        }
+        if ((*next)->kind == TokenKind::Assign) {
+            const int line = current_.line;
+            auto name = expect_name();
+            if (!name) {
+                return std::unexpected(std::move(name.error()));
+            }
+            const ExprId key = ast_.add_expression(StringExpr{.text = *name}, line);
+            if (auto moved = advance(); !moved) { // '='
+                return std::unexpected(std::move(moved.error()));
+            }
+            auto value = parse_expression();
+            if (!value) {
+                return std::unexpected(std::move(value.error()));
+            }
+            return TableField{.kind = TableField::Kind::Named, .key = key, .value = *value};
+        }
+    }
+
+    // [exp] = exp
+    if (check(TokenKind::LBracket)) {
+        if (auto moved = advance(); !moved) {
+            return std::unexpected(std::move(moved.error()));
+        }
+        auto key = parse_expression();
+        if (!key) {
+            return std::unexpected(std::move(key.error()));
+        }
+        if (auto closed = expect(TokenKind::RBracket); !closed) {
+            return std::unexpected(std::move(closed.error()));
+        }
+        if (auto assign = expect(TokenKind::Assign); !assign) {
+            return std::unexpected(std::move(assign.error()));
+        }
+        auto value = parse_expression();
+        if (!value) {
+            return std::unexpected(std::move(value.error()));
+        }
+        return TableField{.kind = TableField::Kind::Keyed, .key = *key, .value = *value};
+    }
+
+    // exp: a positional field.
+    auto value = parse_expression();
+    if (!value) {
+        return std::unexpected(std::move(value.error()));
+    }
+    TableField field; // Positional by default, and the key stays unused
+    field.value = *value;
+    return field;
 }
 
 std::expected<TextRange, SyntaxError> Parser::expect_name() {

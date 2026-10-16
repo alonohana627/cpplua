@@ -4,10 +4,10 @@ How the parser works today. This page describes the code as it is, and is update
 grows. The rules it implements are in [../spec/grammar.md](../spec/grammar.md), and the remaining
 work is in [../plan/parser.md](../plan/parser.md).
 
-**Status:** parts 0 to 3 of the plan. A chunk may be empty or hold one `return` with a list of
+**Status:** parts 0 to 4 of the plan. A chunk may be empty or hold one `return` with a list of
 expressions: simple values (`nil`, `true`, `false`, numbers, strings, `...`), names,
-parentheses, fields, indexing, calls and method calls, combined with every unary and binary
-operator at Lua's precedence. Tables, functions and other statements come later.
+parentheses, fields, indexing, calls, method calls and table constructors, combined with every
+unary and binary operator at Lua's precedence. Functions and other statements come later.
 
 ## Where it lives
 
@@ -72,7 +72,7 @@ Each kind of node is a small struct, and the node types are two `std::variant`s:
 
 | Variant | Alternatives so far                                                           |
 | ------- | ----------------------------------------------------------------------------- |
-| `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}`, `NameExpr{name}`, `ParenExpr{inner}`, `IndexExpr{object, key}`, `CallExpr{function, arguments}`, `MethodCallExpr{object, method, arguments}` |
+| `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}`, `NameExpr{name}`, `ParenExpr{inner}`, `IndexExpr{object, key}`, `CallExpr{function, arguments}`, `MethodCallExpr{object, method, arguments}`, `TableExpr{fields}` |
 | `Stat`  | `ReturnStat{values}`, where `values` is an `IdRange<ExprId>`                    |
 
 The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
@@ -85,7 +85,9 @@ The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
   `std::string` with its own allocation. `ast.text(range)` reads it back (the view is only valid
   until the next `add_text`).
 - **Lists.** Lists of expressions work like statement lists: `add_expression_list(ids)` and
-  `expressions(range)`.
+  `expressions(range)`. Table fields have a list vector of their own, holding the small
+  `TableField` structs directly: `add_field_list(fields)` and `fields(range)`, with
+  `IdRange<FieldId>` ranges.
 
 Because nodes hold only numbers and ids, `Expr` and `Stat` are **trivially copyable**: copying a
 node is a plain memory copy, and the vectors never run destructors. `static_assert`s in
@@ -109,7 +111,9 @@ Code that walks the tree uses `std::visit` with one lambda per node type, throug
 | `parse_simple_expression()` | the simple values of G4.1             | anything else goes to `parse_suffixed_expression()` |
 | `parse_suffixed_expression()` | a prefixexp with its suffixes (G4.8) | Lua's `suffixedexp()`, see "Names, fields and calls" |
 | `parse_primary_expression()` | `Name` or `( exp )` (G4.2)            | anything else is `unexpected symbol` (G4.7) |
-| `parse_call_arguments()`  | `args` (G4.5)                            | `( explist )` or one string; tables come in part 4 |
+| `parse_call_arguments()`  | `args` (G4.5)                            | `( explist )`, or one table or string |
+| `parse_table()`           | `tableconstructor` (G6.1, G6.2)          | Lua's `constructor()`, see "Tables" |
+| `parse_table_field()`     | `field` (G6.3)                           | the one user of `peek()`                  |
 | `expect_name()`           | -                                        | a `Name`, copied into the text buffer, or `<name> expected` |
 | `expect_match(closing, opening, line)` | -                           | like `expect`, but names the opening token when it is on another line |
 | `block_follow()`          | -                                        | whether the current token ends a block: `<eof>`, `end`, `else`, `elseif`, `until` |
@@ -240,7 +244,7 @@ Anything else is `unexpected symbol`. So a literal cannot be called or indexed d
 | `.name`         | `IndexExpr` with a `StringExpr` key: `a.b` is `a["b"]` |
 | `[exp]`         | `IndexExpr`                                     |
 | `:name args`    | `MethodCallExpr`; the arguments are required (`function arguments expected`) |
-| `(args)` or a string | `CallExpr`                                 |
+| `(args)`, a table or a string | `CallExpr`                        |
 
 A string right after an expression is a call with that one argument (G4.10): `require 'mod'` is
 `require('mod')`, and `f'a''b'` is `f('a')('b')`.
@@ -261,6 +265,33 @@ error is the short `')' expected near 'x'`. If it is on an earlier line, the mes
 to it: `')' expected (to close '(' at line 1) near <eof>`. Statements like `if ... end` will use
 the same helper.
 
+## Tables
+
+A table constructor is a `TableExpr`, whose fields are `TableField` structs in the field-list
+vector. Each field has a `kind`, a `key` and a `value`:
+
+| Source        | Kind         | Key                                   |
+| ------------- | ------------ | ------------------------------------- |
+| `exp`         | `Positional` | none; it gets the next of 1, 2, 3, ... |
+| `name = exp`  | `Named`      | a `StringExpr` with the name: `{x = 1}` is `{["x"] = 1}` |
+| `[exp] = exp` | `Keyed`      | the expression                        |
+
+`Named` and `Keyed` mean the same thing; the kind is kept so the tree shows what was written.
+
+`parse_table()` (Lua's `constructor()`) reads `{`, then fields until `}`. After each field a `,`
+or `;` allows another one; without a separator the table must end there, so `{1 2}` is
+`'}' expected near '2'`. A separator right before `}` is allowed: `{1, 2,}`. The closing `}` uses
+`expect_match`, so a table spanning lines reports `(to close '{' at line N)`.
+
+**The two-token lookahead.** In `parse_table_field()`, a field starting with a `Name` is
+ambiguous: `{x = 1}` is a named field, but `{x}` and `{x == 1}` are positional ones. The parser
+calls `peek()` to look at the token *after* the name: only an `=` makes it a named field. This is
+the one place in Lua's grammar that needs it, and the first real use of the parser's lookahead
+buffer. A key that is not a plain name, like `{x.y = 1}`, is read as the positional value `x.y`,
+and then the `=` fails with `'}' expected near '='`, Lua's own message.
+
+A table is also a call argument: `f{...}` passes exactly one table (G4.10), like `f"..."`.
+
 ## The AST printer
 
 `print_ast(ast)` turns a tree into indented text, one node per line, two spaces per level. It is
@@ -273,7 +304,9 @@ double quotes with unprintable bytes escaped (`"a\tb\x00"`), and floats in their
 form with `.0` when they look like integers (`1000.0`).
 
 Children appear in source order: `Call` prints the function first, then the arguments;
-`MethodCall m` prints the object, then the arguments. For `return a.b[c](d):e"f"`:
+`MethodCall m` prints the object, then the arguments. A `Table` lists its fields as `Item`
+(positional, the value below), `Field name` (named, the value below) or `Field` (keyed, the key
+then the value below). For `return a.b[c](d):e"f"`:
 
 ```
 Chunk
@@ -294,8 +327,7 @@ Chunk
 
 ## Not handled yet
 
-- **Tables** (part 4), including table arguments `f{...}`, and **functions** (part 7). Until
-  then they are `unexpected symbol` (and `obj:m{...}` is `function arguments expected`).
+- **Functions** (part 7). Until then `function` is `unexpected symbol`.
 - **A depth limit** (part 9). Parsing is recursive, so a very deeply nested expression, such as
   thousands of `-` or `..` in a row, can overflow the C++ stack until the limit exists. The
   printer is recursive too.

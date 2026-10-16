@@ -15,11 +15,11 @@ Id push(std::vector<T>& nodes, T node) {
     return Id{.index = index};
 }
 
-template <typename Id>
-IdRange<Id> append(std::vector<Id>& lists, std::span<const Id> ids) {
+template <typename Id, typename T>
+IdRange<Id> append(std::vector<T>& lists, std::span<const T> items) {
     const auto first = static_cast<std::uint32_t>(lists.size());
-    lists.insert(lists.end(), ids.begin(), ids.end());
-    return IdRange<Id>{.first = first, .count = static_cast<std::uint32_t>(ids.size())};
+    lists.insert(lists.end(), items.begin(), items.end());
+    return IdRange<Id>{.first = first, .count = static_cast<std::uint32_t>(items.size())};
 }
 
 } // namespace
@@ -35,11 +35,19 @@ StatId Ast::add_statement(Stat stat, int line) {
 }
 
 IdRange<StatId> Ast::add_statement_list(std::span<const StatId> ids) {
-    return append(statement_lists_, ids);
+    return append<StatId>(statement_lists_, ids);
 }
 
 IdRange<ExprId> Ast::add_expression_list(std::span<const ExprId> ids) {
-    return append(expression_lists_, ids);
+    return append<ExprId>(expression_lists_, ids);
+}
+
+IdRange<FieldId> Ast::add_field_list(std::span<const TableField> fields) {
+    return append<FieldId>(field_lists_, fields);
+}
+
+std::span<const TableField> Ast::fields(IdRange<FieldId> range) const {
+    return std::span{field_lists_}.subspan(range.first, range.count);
 }
 
 std::span<const StatId> Ast::statements(const Block& block) const {
