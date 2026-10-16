@@ -151,3 +151,113 @@ TEST_CASE("L2.2 EndOfStream is on the last line", "[lexer]") {
     CHECK(lines("+\n") == std::vector{1, 2});
     CHECK(lines("\n\n\n") == std::vector{4});
 }
+
+// ---- Part 3: names and keywords ----
+
+TEST_CASE("L4.1 a name carries its text", "[lexer]") {
+    const auto source =
+        GENERATE(as<std::string_view>{}, "x", "abc", "_", "_x1", "x9y", "_ENV", "A_long_Name_42");
+    CAPTURE(source);
+
+    Lexer lexer{source};
+    const auto token = lexer.next();
+
+    CHECK(token.kind == TokenKind::Name);
+    CHECK(token.line == 1);
+    REQUIRE(std::holds_alternative<std::string>(token.value));
+    CHECK(std::get<std::string>(token.value) == source);
+    CHECK(lexer.next().kind == TokenKind::EndOfStream);
+}
+
+TEST_CASE("L4.3 every keyword", "[lexer]") {
+    // Spelled out here rather than read from the lexer's own table, so a typo
+    // in the table cannot hide from the test.
+    const auto [source, kind] = GENERATE(values<SingleCase>({
+        {.source = "and", .kind = TokenKind::And},
+        {.source = "break", .kind = TokenKind::Break},
+        {.source = "do", .kind = TokenKind::Do},
+        {.source = "else", .kind = TokenKind::Else},
+        {.source = "elseif", .kind = TokenKind::ElseIf},
+        {.source = "end", .kind = TokenKind::End},
+        {.source = "false", .kind = TokenKind::False},
+        {.source = "for", .kind = TokenKind::For},
+        {.source = "function", .kind = TokenKind::Function},
+        {.source = "goto", .kind = TokenKind::Goto},
+        {.source = "if", .kind = TokenKind::If},
+        {.source = "in", .kind = TokenKind::In},
+        {.source = "local", .kind = TokenKind::Local},
+        {.source = "nil", .kind = TokenKind::Nil},
+        {.source = "not", .kind = TokenKind::Not},
+        {.source = "or", .kind = TokenKind::Or},
+        {.source = "repeat", .kind = TokenKind::Repeat},
+        {.source = "return", .kind = TokenKind::Return},
+        {.source = "then", .kind = TokenKind::Then},
+        {.source = "true", .kind = TokenKind::True},
+        {.source = "until", .kind = TokenKind::Until},
+        {.source = "while", .kind = TokenKind::While},
+    }));
+    CAPTURE(source);
+
+    Lexer lexer{source};
+    const auto token = lexer.next();
+
+    CHECK(token.kind == kind);
+    CHECK(std::holds_alternative<std::monostate>(token.value));
+    CHECK(lexer.next().kind == TokenKind::EndOfStream);
+}
+
+TEST_CASE("L4.2 keywords are case-sensitive", "[lexer]") {
+    const auto source = GENERATE(as<std::string_view>{}, "While", "WHILE", "And", "NIL", "True");
+    CAPTURE(source);
+
+    CHECK(kinds(source) == std::vector{TokenKind::Name, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L4.4 a keyword inside a longer name is just a name", "[lexer]") {
+    const auto source = GENERATE(as<std::string_view>{}, "whilex", "while_", "_while", "end1",
+                                 "iff", "dot", "nil0", "functions", "localx", "orx", "do_");
+    CAPTURE(source);
+
+    CHECK(kinds(source) == std::vector{TokenKind::Name, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L4.5 names reserved by convention are ordinary names", "[lexer]") {
+    CHECK(kinds("_ENV _G _VERSION") ==
+          std::vector{TokenKind::Name, TokenKind::Name, TokenKind::Name, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L4.1 names end at operators and whitespace", "[lexer]") {
+    CHECK(kinds("a+b") ==
+          std::vector{TokenKind::Name, TokenKind::Plus, TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("t.x") ==
+          std::vector{TokenKind::Name, TokenKind::Dot, TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("f(x,y)") == std::vector{TokenKind::Name, TokenKind::LParen, TokenKind::Name,
+                                         TokenKind::Comma, TokenKind::Name, TokenKind::RParen,
+                                         TokenKind::EndOfStream});
+    CHECK(kinds("a\tb\nc") ==
+          std::vector{TokenKind::Name, TokenKind::Name, TokenKind::Name, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L4.3 keywords and names together", "[lexer]") {
+    CHECK(kinds("local x = y") == std::vector{TokenKind::Local, TokenKind::Name, TokenKind::Assign,
+                                              TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("while x do end") == std::vector{TokenKind::While, TokenKind::Name, TokenKind::Do,
+                                                 TokenKind::End, TokenKind::EndOfStream});
+    CHECK(kinds("if a~=nil then") == std::vector{TokenKind::If, TokenKind::Name,
+                                                 TokenKind::NotEqual, TokenKind::Nil,
+                                                 TokenKind::Then, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L2.2 names and keywords get their line", "[lexer]") {
+    CHECK(lines("local\nx\n\ny") == std::vector{1, 2, 4, 4});
+}
+
+TEST_CASE("L4.1 two names lexed in a row keep their own text", "[lexer]") {
+    Lexer lexer{"first second"};
+    const auto first = lexer.next();
+    const auto second = lexer.next();
+
+    CHECK(first == lua2::Token{.kind = TokenKind::Name, .line = 1, .value = std::string("first")});
+    CHECK(second ==
+          lua2::Token{.kind = TokenKind::Name, .line = 1, .value = std::string("second")});
+}

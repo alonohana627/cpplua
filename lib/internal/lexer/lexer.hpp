@@ -28,8 +28,19 @@ private:
     // Consumes one character and returns a token of `kind` for it.
     Token single(TokenKind kind);
 
+    // Consumes `length` characters and returns a token of `kind` for them.
+    Token take(std::size_t length, TokenKind kind);
+
+    // Looks `offset` characters ahead without consuming anything.
+    // Returns '\0' past the end of the input.
+    [[nodiscard]] char peek(std::size_t offset) const;
+
     // Consumes one line break (\n, \r, \r\n or \n\r) and counts the line (L2.1).
     void read_newline();
+
+    // Consumes a name and returns it as a Name token, or as a keyword token
+    // when its text is one of the 22 keywords (L4.1-L4.4).
+    Token read_name();
 
     std::string_view source_;
     std::size_t pos_ = 0; // index of the next character to read
