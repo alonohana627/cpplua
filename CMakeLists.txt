@@ -53,3 +53,6 @@ if(BUILD_TESTING)
   include(Catch)
   catch_discover_tests(lua2_tests)
 endif()
+
+# format / format-check / tidy targets. Last, so it can see our targets.
+include(cmake/Tooling.cmake)

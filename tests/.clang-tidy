@@ -1,0 +1,7 @@
+# Catch2's TEST_CASE macros expand to static registrars these checks dislike.
+InheritParentConfig: true
+Checks: >
+  -bugprone-throwing-static-initialization,
+  -cert-err58-cpp,
+  -misc-use-anonymous-namespace,
+  -cppcoreguidelines-avoid-non-const-global-variables

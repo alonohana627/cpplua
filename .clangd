@@ -1,0 +1,6 @@
+# Editors using clangd get live clang-tidy diagnostics from .clang-tidy.
+CompileFlags:
+  CompilationDatabase: build/debug
+Diagnostics:
+  ClangTidy:
+    FastCheckFilter: None

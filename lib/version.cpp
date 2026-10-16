@@ -2,6 +2,8 @@
 
 namespace lua2 {
 
-std::string_view version() { return "lua2 " LUA2_VERSION; }
+std::string_view version() {
+    return "lua2 " LUA2_VERSION;
+}
 
 } // namespace lua2

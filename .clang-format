@@ -1,0 +1,27 @@
+# LLVM style, with a wider line and a few readability tweaks.
+BasedOnStyle: LLVM
+Standard: Latest
+ColumnLimit: 100
+IndentWidth: 4
+AccessModifierOffset: -4
+PointerAlignment: Left
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakTemplateDeclarations: Yes
+BreakBeforeBraces: Attach
+InsertBraces: true
+InsertNewlineAtEOF: true
+SeparateDefinitionBlocks: Always
+FixNamespaceComments: true
+# Our own headers <lua2/...> after the standard library, third party in between.
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^<lua2/'
+    Priority: 3
+  - Regex: '^<[a-z_]+>$'
+    Priority: 1
+  - Regex: '^<'
+    Priority: 2
+  - Regex: '.*'
+    Priority: 4
