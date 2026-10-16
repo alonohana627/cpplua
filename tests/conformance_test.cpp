@@ -5,6 +5,10 @@
 #include <vector>
 
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/generators/catch_generators.hpp>
+
+#include <lua2/debug.hpp>
+#include <lua2/source_file.hpp>
 
 #include "lexer/lexer.hpp"
 
@@ -13,10 +17,11 @@
 
 namespace {
 
+const std::filesystem::path suite = LUA2_FIXTURES_DIR "/lua-5.4.9-tests";
+
 std::vector<std::filesystem::path> lua_files() {
     std::vector<std::filesystem::path> files;
-    for (const auto& entry :
-         std::filesystem::recursive_directory_iterator{LUA2_FIXTURES_DIR "/lua-5.4.9-tests"}) {
+    for (const auto& entry : std::filesystem::recursive_directory_iterator{suite}) {
         if (entry.is_regular_file() && entry.path().extension() == ".lua") {
             files.push_back(entry.path());
         }
@@ -71,4 +76,109 @@ TEST_CASE("every file of the Lua 5.4.9 test suite lexes", "[conformance]") {
         // Every line break was counted: the end is on the file's last line.
         CHECK(last_line == count_lines(source));
     }
+}
+
+namespace {
+
+// The files are loaded as files, like `lua file.lua` does: all.lua and
+// main.lua start with a '#' line, which only the file loader skips.
+std::string parsed_tree(const std::filesystem::path& path) {
+    const std::string source = read_bytes(path);
+    const auto tree = lua2::ast_dump(lua2::skip_file_prefix(source), path.filename().string());
+    if (!tree) {
+        FAIL(tree.error());
+    }
+    return *tree;
+}
+
+} // namespace
+
+TEST_CASE("every file of the Lua 5.4.9 test suite parses", "[conformance]") {
+    const auto files = lua_files();
+    REQUIRE(files.size() == 33);
+
+    for (const auto& path : files) {
+        CAPTURE(path.filename().string());
+        CHECK(parsed_tree(path).starts_with("Chunk\n"));
+    }
+}
+
+TEST_CASE("spot checks of the test suite's trees", "[conformance]") {
+    // all.lua: the '#!../lua' line is skipped, line 6 is the first statement.
+    CHECK(parsed_tree(suite / "all.lua")
+              .starts_with("Chunk\n"
+                           "  Local version\n"
+                           "    String \"Lua 5.4\"\n"));
+
+    // main.lua: '# testing special comment on first line'.
+    CHECK(parsed_tree(suite / "main.lua")
+              .starts_with("Chunk\n"
+                           "  If\n"
+                           "    If\n"
+                           "      Name _port\n"));
+
+    // locals.lua, line 181: `local a<const>, b, c<const> = 10, 20, 30`.
+    CHECK(parsed_tree(suite / "locals.lua").contains("Local a <const>, b, c <const>\n"));
+
+    // goto.lua, lines 45-51: gotos and labels in and after a block.
+    const std::string go = parsed_tree(suite / "goto.lua");
+    CHECK(go.contains("  Do\n"
+                      "    Local y\n"
+                      "      Integer 12\n"
+                      "    Goto l1\n"
+                      "    Label l2\n"));
+    CHECK(go.contains("\n  Label l3\n"
+                      "  Label l3_1\n"));
+    // goto.lua, line 164: a closure capturing four locals.
+    CHECK(go.contains("Function() [upvalues: a, b, c, d]\n"));
+}
+
+namespace {
+
+// errors.lua's testrep: a construct repeated 100 times must load, and 500
+// times must not ("too many ..." or "... overflow").
+std::string repeated(const char* init, const char* rep, const char* close, const char* repc,
+                     int times) {
+    std::string out = init;
+    for (int i = 0; i < times; ++i) {
+        out += rep;
+    }
+    out += close;
+    for (int i = 0; i < times; ++i) {
+        out += repc;
+    }
+    return out;
+}
+
+} // namespace
+
+TEST_CASE("errors.lua: 100 levels of nesting load, 500 do not", "[conformance]") {
+    struct Case {
+        const char* init;
+        const char* rep;
+        const char* close;
+        const char* repc;
+    };
+
+    // errors.lua, lines 650-659.
+    const auto [init, rep, close, repc] = GENERATE(values<Case>({
+        {"local a; a", ",a", "= 1", ",1"}, // multiple assignment
+        {"local a; a=", "{", "0", "}"},
+        {"return ", "(", "2", ")"},
+        {"local function a (x) return x end; return ", "a(", "2.2", ")"},
+        {"", "do ", "", " end"},
+        {"", "while a do ", "", " end"},
+        {"local a; ", "if a then else ", "", " end"},
+        {"", "function foo () ", "", " end"},
+        {"local a = ''; return ", "a..", "'a'", ""},
+        {"local a = 1; return ", "a^", "a", ""},
+    }));
+    CAPTURE(rep);
+
+    const auto ok = lua2::ast_dump(repeated(init, rep, close, repc, 100));
+    CHECK(ok.has_value());
+
+    const auto too_deep = lua2::ast_dump(repeated(init, rep, close, repc, 500));
+    REQUIRE_FALSE(too_deep.has_value());
+    CHECK((too_deep.error().contains("too many") || too_deep.error().contains("overflow")));
 }

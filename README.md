@@ -48,6 +48,7 @@ dot -Tsvg tree.dot -o tree.svg          # draw it (needs Graphviz: pacman -S min
 ctest --preset debug                         # run all tests
 ./build/debug/lua2_tests                     # run Catch2 directly
 ./build/debug/lua2_tests "[some-tag]"        # run tests with a tag
+./build/debug/lua2_tests "[conformance]"     # only the official Lua test suite checks
 ```
 
 Lua programs used as tests live in `tests/fixtures/`: the official Lua 5.4.9 suite, and

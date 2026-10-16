@@ -1,10 +1,11 @@
 # The parser
 
-How the parser works today. This page describes the code as it is, and is updated as the parser
-grows. The rules it implements are in [../spec/grammar.md](../spec/grammar.md), and the remaining
-work is in [../plan/parser.md](../plan/parser.md).
+How the parser works. This page describes the code as it is. The rules it implements are in
+[../spec/grammar.md](../spec/grammar.md), and the plan it was built from is
+[../plan/parser.md](../plan/parser.md).
 
-**Status:** parts 0 to 11 of the plan: **the whole Lua 5.4 grammar parses.** A chunk is a list
+**Status:** complete (all parts of the plan, version 0.0.3): **the whole Lua 5.4 grammar
+parses**, and so does every file of the official Lua 5.4.9 test suite. A chunk is a list
 of statements: function calls, assignments, `local` declarations (with `<const>` and
 `<close>`), empty `;` statements, `do`, `while`, `repeat`, `if`/`elseif`/`else`, numeric and
 generic `for`, `function` statements, `local function`, `goto`, labels, `break`, and a final
@@ -12,8 +13,7 @@ generic `for`, `function` statements, `local function`, `goto`, labels, `break`,
 need scopes are in place (part 9): `break` and `goto` targets, duplicate labels, jumps into a
 local's scope, `<const>` assignment, the 200-local limit and a nesting limit. Every name in the
 tree records whether it is a local, an upvalue or a global, and every function lists its
-upvalues (part 10), and `lua2 --ast=dot` draws the tree as a graph (part 11). Still to come:
-the official test suite (part 12).
+upvalues (part 10), and `lua2 --ast=dot` draws the tree as a graph (part 11).
 
 ## Where it lives
 
@@ -30,6 +30,9 @@ the official test suite (part 12).
 | `include/lua2/debug.hpp`              | `ast_dump()` and `ast_dot_dump()`, public, for `lua2 --ast` and `--ast=dot` |
 | `lib/internal/overloaded.hpp`         | `Overloaded`, for `std::visit` with lambdas       |
 | `lib/internal/text_format.hpp`        | `quoted()`, `format_float()`, shared by the debug views |
+| `include/lua2/source_file.hpp`        | `skip_file_prefix()`, what Lua's file loader skips |
+| `lib/source_file.cpp`                 | its implementation                                |
+| `tests/conformance_test.cpp`          | the official test suite, tagged `[conformance]`   |
 | `tests/parser_test.cpp`               | parser tests, tagged `[parser]` (and `[ast]`, `[resolve]`) |
 
 Like the lexer, the parser is internal to the library.
@@ -339,6 +342,12 @@ The parser is recursive, so very deep nesting would overflow the C++ stack. Like
 of left-associative operators (`1 + 1 + ... + 1`) are a loop, not recursion, so they have no
 limit. (Real Lua reports this error without a chunk name and line, because it is raised as a
 runtime error; ours has both.)
+
+The one exception is a multiple assignment. Lua reads `a, b, c = ...` recursively
+(`restassign`), one level for each target after the first, and holds those levels until the
+values are read. Ours reads the targets in a loop, but counts the same levels with the
+`DepthLevels` class, so 199 targets parse and 200 are `C stack overflow`. `errors.lua` checks
+that 500 targets fail.
 
 ### After an error
 
@@ -671,10 +680,34 @@ disagree, a new node type needs only its `print()` overload, and the graph write
 non-recursive as the printer. Labels escape `"` and `\` for DOT, and `ordering=out` keeps
 children left to right in source order.
 
+## Loading files
+
+Lua's file loader (`luaL_loadfilex`), not its lexer, skips two things at the start of a file:
+a UTF-8 byte order mark, and a first line starting with `#`, such as `#!/usr/bin/env lua`.
+`lua2::skip_file_prefix(contents)` in `include/lua2/source_file.hpp` does the same and returns
+a view of what is left. It keeps the `\n` that ends the skipped line, so line numbers stay
+right. `lua2 --tokens` and `--ast` use it, and so do the tests that read files. A chunk given
+as a string keeps every byte, so `#` at its start is `unexpected symbol near '#'`, as in Lua.
+
+## Conformance
+
+`tests/conformance_test.cpp` (tag `[conformance]`) runs the parser over the official Lua 5.4.9
+test suite in `tests/fixtures/lua-5.4.9-tests/`:
+
+- every one of its 33 files parses, loaded as a file;
+- spot checks compare parts of a few trees with the source: the first statement of `all.lua`
+  and `main.lua`, which both start with a `#` line, a `local` with attributes in `locals.lua`,
+  and gotos, labels and a closure's upvalues in `goto.lua`;
+- `errors.lua`'s `testrep` check: each of its ten kinds of nesting parses at 100 levels and
+  fails at 500.
+
+The sweep found two differences, both now fixed and tested: the `#` first line, and the
+multiple assignment that was not counted as nesting.
+
 ## Not handled yet
 
-- **A difference in the nesting limit**: Lua reads a multiple assignment `a, b, c = ...`
-  recursively, one level per target, so more than about 200 targets is `C stack overflow`
-  there. Ours reads them in a loop and accepts any number. The official test suite checks this
-  (`errors.lua`), so part 12 may need to count them.
+- **Compile-time constants** (see "Name resolution"): a `<const>` local still takes an
+  upvalue when captured.
+- **Limits that belong to the code generator**, such as `too many registers` (`errors.lua`
+  passes a call 261 arguments). The parser has no registers yet, so it accepts these.
 

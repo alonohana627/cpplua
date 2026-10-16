@@ -170,6 +170,33 @@ private:
     int* depth_;
 };
 
+// Levels entered one at a time and all left together. Lua reads the targets
+// of a multiple assignment recursively (restassign), one level for each
+// target after the first, and leaves them only when the whole statement is
+// read; the loop in parse_expression_statement() counts them the same way.
+class DepthLevels {
+public:
+    explicit DepthLevels(int& depth) : depth_(&depth) {}
+
+    DepthLevels(const DepthLevels&) = delete;
+    DepthLevels& operator=(const DepthLevels&) = delete;
+    DepthLevels(DepthLevels&&) = delete;
+    DepthLevels& operator=(DepthLevels&&) = delete;
+
+    ~DepthLevels() { *depth_ -= count_; }
+
+    // Enters one more level; false if that is too deep.
+    [[nodiscard]] bool enter() {
+        ++*depth_;
+        ++count_;
+        return *depth_ <= max_depth;
+    }
+
+private:
+    int* depth_;
+    int count_ = 0;
+};
+
 } // namespace
 
 std::expected<std::optional<StatId>, SyntaxError> Parser::parse_statement() {
@@ -223,6 +250,7 @@ std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
     // An assignment: `var { ',' var } '=' explist`.
     if (check(TokenKind::Assign) || check(TokenKind::Comma)) {
         std::vector<ExprId> targets{*first};
+        DepthLevels levels{depth_};
         for (;;) {
             // Like Lua, each target is checked once the token after it is
             // read, so the error points there: `f() = 1` is "syntax error
@@ -245,6 +273,9 @@ std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
                 return std::unexpected(std::move(target.error()));
             }
             targets.push_back(*target);
+            if (!levels.enter()) {
+                return semantic_error("C stack overflow");
+            }
         }
         if (auto assign = expect(TokenKind::Assign); !assign) {
             return std::unexpected(std::move(assign.error()));

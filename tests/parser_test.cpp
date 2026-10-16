@@ -1583,3 +1583,22 @@ TEST_CASE("the DOT graph has one node per printed line", "[parser][ast]") {
     // Every node but the root has exactly one arrow into it.
     CHECK(occurrences(dot, " -> ") == lines - 1);
 }
+
+// ---- Part 12: conformance sweep ----
+
+TEST_CASE("G10 each extra target of an assignment is a level of nesting", "[parser]") {
+    const auto targets = [](int count) {
+        std::string out = "a";
+        for (int i = 1; i < count; ++i) {
+            out += ",a";
+        }
+        return out + " = 1";
+    };
+    // The statement is one level, each target after the first is one more,
+    // like Lua's recursive restassign, and they are held while the values
+    // are read, which is one more: 1 + 198 + 1 = 200 levels.
+    CHECK_NOTHROW(ast_of(targets(199)));
+    CHECK(parse_error(targets(200)) == "input:1: C stack overflow");
+    // The levels are left after the statement, so the next one starts over.
+    CHECK_NOTHROW(ast_of(targets(199) + "\n" + targets(199)));
+}

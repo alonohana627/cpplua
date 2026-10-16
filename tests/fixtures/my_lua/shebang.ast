@@ -1,0 +1,5 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      String "hi"

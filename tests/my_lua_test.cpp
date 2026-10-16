@@ -7,6 +7,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <lua2/debug.hpp>
+#include <lua2/source_file.hpp>
 
 // Golden-file tests over tests/fixtures/my_lua/: every Lua file written while
 // developing lua2 is kept there with its expected result next to it:
@@ -54,7 +55,8 @@ TEST_CASE("every file in my_lua parses to its golden output", "[my_lua]") {
         // Exactly one golden file per program.
         REQUIRE(has_ast != has_error);
 
-        const auto result = lua2::ast_dump(read_bytes(path), name);
+        const std::string source = read_bytes(path); // a file, so loaded like Lua loads files
+        const auto result = lua2::ast_dump(lua2::skip_file_prefix(source), name);
         if (has_ast) {
             REQUIRE(result.has_value());
             CHECK(*result == read_bytes(ast_path));
@@ -65,7 +67,7 @@ TEST_CASE("every file in my_lua parses to its golden output", "[my_lua]") {
 
         const auto dot_path = std::filesystem::path{path}.replace_extension(".dot");
         if (std::filesystem::exists(dot_path)) {
-            const auto dot = lua2::ast_dot_dump(read_bytes(path), name);
+            const auto dot = lua2::ast_dot_dump(lua2::skip_file_prefix(source), name);
             REQUIRE(dot.has_value());
             CHECK(*dot == read_bytes(dot_path));
         }

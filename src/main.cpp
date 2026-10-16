@@ -10,6 +10,7 @@
 #include <string_view>
 
 #include <lua2/debug.hpp>
+#include <lua2/source_file.hpp>
 #include <lua2/version.hpp>
 
 namespace {
@@ -40,7 +41,7 @@ int print_dump(const std::string& path, Dump dump_view) {
         return EXIT_FAILURE;
     }
     // Lua names a file chunk after its path in error messages.
-    const auto dump = dump_view(*source, path);
+    const auto dump = dump_view(lua2::skip_file_prefix(*source), path);
     if (!dump) {
         std::println(stderr, "lua2: {}", dump.error());
         return EXIT_FAILURE;

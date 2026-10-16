@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 # Pre-release: bump by 0.0.1 per step. The release becomes 5.4.
-project(lua2 VERSION 0.0.2 LANGUAGES CXX)
+project(lua2 VERSION 0.0.3 LANGUAGES CXX)
 
 # C++26 (clang spells it -std=c++2c), no compiler extensions.
 set(CMAKE_CXX_STANDARD 26)
@@ -24,6 +24,7 @@ add_library(lua2_lib
   lib/version.cpp
   lib/syntax_error.cpp
   lib/debug.cpp
+  lib/source_file.cpp
   lib/text_format.cpp
   lib/lexer/lexer.cpp
   lib/lexer/token.cpp
@@ -63,6 +64,7 @@ if(BUILD_TESTING)
     tests/conformance_test.cpp
     tests/parser_test.cpp
     tests/my_lua_test.cpp
+    tests/source_file_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
   # Tests may include internal headers from lib/internal/ to test internals directly.

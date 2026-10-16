@@ -11,6 +11,7 @@ Every Lua program written while developing lua2, kept as a regression test.
 
 `tests/my_lua_test.cpp` (tag `[my_lua]`) parses each `.lua` file and compares the result with
 its golden file. Error messages use the file name as the chunk name: `too_deep.lua:1: ...`.
+Like `lua2 --ast`, it loads them as files, so a `#` first line (`#!/usr/bin/env lua`) is skipped.
 
 ## Adding a program
 
