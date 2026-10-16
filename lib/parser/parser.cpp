@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <format>
+#include <optional>
 #include <string>
 #include <utility>
 #include <variant>
@@ -96,7 +97,137 @@ std::expected<IdRange<ExprId>, SyntaxError> Parser::parse_expression_list() {
     }
 }
 
+namespace {
+
+// ---- Operator tables (G7.3, G7.8) ----
+
+std::optional<UnaryOp> unary_operator(TokenKind kind) {
+    switch (kind) {
+    case TokenKind::Minus: return UnaryOp::Negate;
+    case TokenKind::Not: return UnaryOp::Not;
+    case TokenKind::Hash: return UnaryOp::Length;
+    case TokenKind::Tilde: return UnaryOp::BitwiseNot;
+    default: return std::nullopt;
+    }
+}
+
+std::optional<BinaryOp> binary_operator(TokenKind kind) {
+    switch (kind) {
+    case TokenKind::Plus: return BinaryOp::Add;
+    case TokenKind::Minus: return BinaryOp::Subtract;
+    case TokenKind::Star: return BinaryOp::Multiply;
+    case TokenKind::Slash: return BinaryOp::Divide;
+    case TokenKind::DoubleSlash: return BinaryOp::FloorDivide;
+    case TokenKind::Percent: return BinaryOp::Modulo;
+    case TokenKind::Caret: return BinaryOp::Power;
+    case TokenKind::Concat: return BinaryOp::Concat;
+    case TokenKind::Equal: return BinaryOp::Equal;
+    case TokenKind::NotEqual: return BinaryOp::NotEqual;
+    case TokenKind::Less: return BinaryOp::Less;
+    case TokenKind::LessEqual: return BinaryOp::LessEqual;
+    case TokenKind::Greater: return BinaryOp::Greater;
+    case TokenKind::GreaterEqual: return BinaryOp::GreaterEqual;
+    case TokenKind::And: return BinaryOp::And;
+    case TokenKind::Or: return BinaryOp::Or;
+    case TokenKind::Ampersand: return BinaryOp::BitwiseAnd;
+    case TokenKind::Pipe: return BinaryOp::BitwiseOr;
+    case TokenKind::Tilde: return BinaryOp::BitwiseXor;
+    case TokenKind::ShiftLeft: return BinaryOp::ShiftLeft;
+    case TokenKind::ShiftRight: return BinaryOp::ShiftRight;
+    default: return std::nullopt;
+    }
+}
+
+// Lua's priority table (lparser.c). An operator binds its *left* operand
+// with `left`, and parses its right operand with `right` as the new limit.
+// A right priority lower than the left one makes the operator
+// right-associative: .. and ^.
+struct Priority {
+    int left;
+    int right;
+};
+
+constexpr Priority priority(BinaryOp op) {
+    switch (op) {
+    case BinaryOp::Or: return {.left = 1, .right = 1};
+    case BinaryOp::And: return {.left = 2, .right = 2};
+    case BinaryOp::Equal:
+    case BinaryOp::NotEqual:
+    case BinaryOp::Less:
+    case BinaryOp::LessEqual:
+    case BinaryOp::Greater:
+    case BinaryOp::GreaterEqual: return {.left = 3, .right = 3};
+    case BinaryOp::BitwiseOr: return {.left = 4, .right = 4};
+    case BinaryOp::BitwiseXor: return {.left = 5, .right = 5};
+    case BinaryOp::BitwiseAnd: return {.left = 6, .right = 6};
+    case BinaryOp::ShiftLeft:
+    case BinaryOp::ShiftRight: return {.left = 7, .right = 7};
+    case BinaryOp::Concat: return {.left = 9, .right = 8}; // right-associative
+    case BinaryOp::Add:
+    case BinaryOp::Subtract: return {.left = 10, .right = 10};
+    case BinaryOp::Multiply:
+    case BinaryOp::Divide:
+    case BinaryOp::FloorDivide:
+    case BinaryOp::Modulo: return {.left = 11, .right = 11};
+    case BinaryOp::Power: return {.left = 14, .right = 13}; // right-associative
+    }
+    return {.left = 0, .right = 0}; // only reachable with an invalid enum value
+}
+
+// The operand of a unary operator is parsed with this limit, between '%' and
+// '^': so -x^2 is -(x^2), but -x*y is (-x)*y (G7.4).
+constexpr int unary_priority = 12;
+
+} // namespace
+
 std::expected<ExprId, SyntaxError> Parser::parse_expression() {
+    return parse_subexpression(0);
+}
+
+std::expected<ExprId, SyntaxError> Parser::parse_subexpression(int limit) {
+    // 1. One operand: a unary operator and its own operand, or a simple
+    //    expression.
+    ExprId left;
+    if (const auto unary = unary_operator(current_.kind)) {
+        const int line = current_.line;
+        if (auto moved = advance(); !moved) {
+            return std::unexpected(std::move(moved.error()));
+        }
+        auto operand = parse_subexpression(unary_priority);
+        if (!operand) {
+            return std::unexpected(std::move(operand.error()));
+        }
+        left = ast_.add_expression(UnaryExpr{.op = *unary, .operand = *operand}, line);
+    } else {
+        auto simple = parse_simple_expression();
+        if (!simple) {
+            return std::unexpected(std::move(simple.error()));
+        }
+        left = *simple;
+    }
+
+    // 2. While the next token is a binary operator that binds tighter than
+    //    the limit, take it, and parse its right side with its own right
+    //    priority as the new limit. The result becomes the new left side,
+    //    which makes equal operators group to the left: 1-2-3 is (1-2)-3.
+    for (;;) {
+        const auto binary = binary_operator(current_.kind);
+        if (!binary || priority(*binary).left <= limit) {
+            return left;
+        }
+        const int line = current_.line; // a binary node records its operator's line
+        if (auto moved = advance(); !moved) {
+            return std::unexpected(std::move(moved.error()));
+        }
+        auto right = parse_subexpression(priority(*binary).right);
+        if (!right) {
+            return std::unexpected(std::move(right.error()));
+        }
+        left = ast_.add_expression(BinaryExpr{.op = *binary, .left = left, .right = *right}, line);
+    }
+}
+
+std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
     const int line = current_.line;
     Expr expression;
     switch (current_.kind) {
@@ -112,8 +243,8 @@ std::expected<ExprId, SyntaxError> Parser::parse_expression() {
         expression = StringExpr{.text = ast_.add_text(std::get<std::string>(current_.value))};
         break;
     default:
-        // Nothing here can start an expression (G4.7). Names, '(', operators,
-        // tables and functions arrive in parts 2 to 7.
+        // Nothing here can start an expression (G4.7). Names, '(', tables and
+        // functions arrive in parts 3 to 7.
         return error("unexpected symbol");
     }
     if (auto moved = advance(); !moved) {

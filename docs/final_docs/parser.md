@@ -4,9 +4,9 @@ How the parser works today. This page describes the code as it is, and is update
 grows. The rules it implements are in [../spec/grammar.md](../spec/grammar.md), and the remaining
 work is in [../plan/parser.md](../plan/parser.md).
 
-**Status:** parts 0 and 1 of the plan. A chunk may be empty or hold one `return` with a list of
-simple expressions (`nil`, `true`, `false`, numbers, strings, `...`). Anything else is an error
-for now.
+**Status:** parts 0 to 2 of the plan. A chunk may be empty or hold one `return` with a list of
+expressions built from simple values (`nil`, `true`, `false`, numbers, strings, `...`) and every
+unary and binary operator, with Lua's precedence. Anything else is an error for now.
 
 ## Where it lives
 
@@ -71,7 +71,7 @@ Each kind of node is a small struct, and the node types are two `std::variant`s:
 
 | Variant | Alternatives so far                                                           |
 | ------- | ----------------------------------------------------------------------------- |
-| `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr` |
+| `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}` |
 | `Stat`  | `ReturnStat{values}`, where `values` is an `IdRange<ExprId>`                    |
 
 The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
@@ -103,7 +103,9 @@ Code that walks the tree uses `std::visit` with one lambda per node type, throug
 | `parse_block()`           | `block ::= { stat } [ retstat ]` (G2.2)  | for now only the optional `return`; other statements come in parts 5 to 8 |
 | `parse_return()`          | `retstat ::= 'return' [ explist ] [ ';' ]` (G2.3) | values are skipped when the block ends or a `;` follows; one `;` is allowed |
 | `parse_expression_list()` | `explist ::= exp { ',' exp }` (G4.6)     | collects ids, then stores them as one list |
-| `parse_expression()`      | `exp` (G4.1)                             | for now only the simple expressions; anything else is `unexpected symbol` (G4.7) |
+| `parse_expression()`      | `exp` (G4.1)                             | `parse_subexpression(0)`                  |
+| `parse_subexpression(limit)` | `exp binop exp`, `unop exp` (G7)      | precedence climbing, see below            |
+| `parse_simple_expression()` | the simple values of G4.1             | anything else is `unexpected symbol` (G4.7) |
 | `block_follow()`          | -                                        | whether the current token ends a block: `<eof>`, `end`, `else`, `elseif`, `until` |
 
 **Why `return` must be last (G2.5).** `parse_block()` stops right after a `return`. Whatever
@@ -111,7 +113,59 @@ comes next must then be the end of the block, so `return 1 return 2` fails in `p
 with `<eof> expected near 'return'`, which is exactly Lua's message.
 
 Each node records the line of its first token: `parse_return()` reads `current_.line` before it
-moves past `return`.
+moves past `return`. Binary nodes are the exception: they record the line of their **operator**,
+as Lua does, because that is the line a run-time error like "attempt to add a nil value" will
+point at.
+
+## Operators and precedence
+
+`UnaryExpr` holds a `UnaryOp` (`Negate`, `Not`, `Length`, `BitwiseNot`) and its operand.
+`BinaryExpr` holds a `BinaryOp` (21 of them: `Add`, `Concat`, `And`, `ShiftLeft`, ...) and its
+two sides. `operator_text(op)` gives the spelling (`"+"`, `"not"`, `".."`), used by the printer.
+
+`parse_subexpression(limit)` is **precedence climbing**, a direct port of Lua's `subexpr()`.
+Each binary operator has two priorities, from Lua's own table (G7.8):
+
+| Operator               | Left | Right |
+| ---------------------- | ---- | ----- |
+| `or`                   | 1    | 1     |
+| `and`                  | 2    | 2     |
+| `< > <= >= ~= ==`      | 3    | 3     |
+| `\|`                   | 4    | 4     |
+| `~`                    | 5    | 5     |
+| `&`                    | 6    | 6     |
+| `<< >>`                | 7    | 7     |
+| `..`                   | 9    | 8     |
+| `+ -`                  | 10   | 10    |
+| `* / // %`             | 11   | 11    |
+| unary `- not # ~`      | 12   |       |
+| `^`                    | 14   | 13    |
+
+The function works in two steps:
+
+1. **Read one operand.** If the current token is a unary operator, take it and parse its operand
+   with limit 12. Otherwise read a simple expression.
+2. **Extend it.** While the next token is a binary operator whose *left* priority is **greater**
+   than `limit`, take it, parse its right side with the operator's *right* priority as the new
+   limit, and make the result the new left side.
+
+Why this gives Lua's rules:
+
+- **Precedence:** in `1 + 2 * 3`, the right side of `+` is parsed with limit 10. `*` (11) is
+  greater, so it is taken inside: `1 + (2 * 3)`. In `1 * 2 + 3`, the right side of `*` has limit
+  11, `+` (10) is not greater, so it stops, and the outer loop takes `+`: `(1 * 2) + 3`.
+- **Left associativity:** in `1 - 2 - 3`, the right side of the first `-` has limit 10, and the
+  second `-` (10) is not *greater*, so it is left for the outer loop: `(1 - 2) - 3`.
+- **Right associativity:** `..` has right priority 8, lower than its left priority 9. In
+  `a .. b .. c`, the right side of the first `..` has limit 8, and the second `..` (9) is
+  greater, so it is taken inside: `a .. (b .. c)`. The same for `^` (14/13).
+- **Unary operators and `^`:** a unary operand is parsed with limit 12. `^` (14) is greater, so
+  `-2 ^ 2` is `-(2 ^ 2)`. `*` (11) is not, so `-2 * 3` is `(-2) * 3`. On the right of `^`, the
+  limit is 13, but a unary operator is read in step 1 regardless, so `2 ^ -3` works.
+
+The tables are `constexpr` functions over the `TokenKind`: `unary_operator()`,
+`binary_operator()` and `priority()`. `-` and `~` appear in both, as unary and as binary:
+step 1 only looks for unary operators and step 2 only for binary ones, so the position decides.
 
 ### Moving through tokens
 
@@ -175,9 +229,12 @@ form with `.0` when they look like integers (`1000.0`).
 
 ## Not handled yet
 
-- **Expressions** other than the simple ones: operators (part 2), names, parentheses, fields and
-  calls (part 3), tables (part 4), functions (part 7). Until then they are `unexpected symbol`,
-  even where Lua would accept them: `return x` fails.
+- **Expressions** with names, parentheses, fields and calls (part 3), tables (part 4) and
+  functions (part 7). Until then they are `unexpected symbol`, even where Lua would accept them:
+  `return x` fails.
+- **A depth limit** (part 9). Parsing is recursive, so a very deeply nested expression, such as
+  thousands of `-` or `..` in a row, can overflow the C++ stack until the limit exists. The
+  printer is recursive too.
 - **Statements** other than `return` (parts 5 to 8). Until then they end the chunk early, and the
   token is reported as `<eof> expected near 'x'`.
 - Scopes and name resolution (parts 9 and 10), the graph view (part 11).

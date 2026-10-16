@@ -39,9 +39,17 @@ private:
     // explist ::= exp { ',' exp } (G4.6)
     std::expected<IdRange<ExprId>, SyntaxError> parse_expression_list();
 
-    // exp (G4.1). For now only the simple expressions: nil, true, false,
-    // numerals, strings and '...'.
+    // exp (G4.1): a whole expression, operators included.
     std::expected<ExprId, SyntaxError> parse_expression();
+
+    // An expression whose binary operators all bind tighter than `limit`
+    // (precedence climbing, G7.8; Lua's subexpr()). Operators at or below the
+    // limit are left for the caller.
+    std::expected<ExprId, SyntaxError> parse_subexpression(int limit);
+
+    // An operand without operators. For now: nil, true, false, numerals,
+    // strings and '...'.
+    std::expected<ExprId, SyntaxError> parse_simple_expression();
 
     // Whether the current token ends a block: <eof>, 'end', 'else',
     // 'elseif', and 'until' (which ends a repeat block).

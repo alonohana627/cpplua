@@ -8,9 +8,11 @@
 #include <catch2/generators/catch_generators.hpp>
 
 #include "lexer/token.hpp"
+#include "overloaded.hpp"
 #include "parser/ast.hpp"
 #include "parser/ast_printer.hpp"
 #include "parser/parser.hpp"
+#include "text_format.hpp"
 
 using lua2::Parser;
 
@@ -218,4 +220,165 @@ TEST_CASE("string values are stored once in the shared text buffer", "[parser][a
     CHECK(third == lua2::TextRange{.first = 5, .length = 5});
     CHECK(ast.text(first) == "hello");
     CHECK(ast.text(third) == "world");
+}
+
+// ---- Part 2: operators and precedence ----
+
+namespace {
+
+// Writes an expression with every operator in parentheses, so precedence is
+// visible on one line: "1 + 2 * 3" becomes "(1 + (2 * 3))".
+std::string grouped(const lua2::Ast& ast, lua2::ExprId id) {
+    return std::visit(
+        lua2::Overloaded{
+            [](const lua2::NilExpr&) -> std::string { return "nil"; },
+            [](const lua2::TrueExpr&) -> std::string { return "true"; },
+            [](const lua2::FalseExpr&) -> std::string { return "false"; },
+            [](const lua2::VarargExpr&) -> std::string { return "..."; },
+            [](const lua2::IntegerExpr& node) { return std::to_string(node.value); },
+            [](const lua2::FloatExpr& node) { return lua2::format_float(node.value); },
+            [&](const lua2::StringExpr& node) {
+                return "'" + std::string(ast.text(node.text)) + "'";
+            },
+            [&](const lua2::UnaryExpr& node) {
+                const auto op = lua2::operator_text(node.op);
+                const std::string_view separator = op == "not" ? " " : "";
+                return "(" + std::string(op) + separator + grouped(ast, node.operand) + ")";
+            },
+            [&](const lua2::BinaryExpr& node) {
+                return "(" + grouped(ast, node.left) + " " +
+                       std::string(lua2::operator_text(node.op)) + " " + grouped(ast, node.right) +
+                       ")";
+            },
+        },
+        ast.expression(id));
+}
+
+// Parses `return <expression>` and returns the expression, grouped.
+std::string group(std::string_view expression) {
+    const std::string source = "return " + std::string(expression);
+    Parser parser{source, "input"};
+    const auto ast = parser.parse_chunk();
+    if (!ast) {
+        FAIL("unexpected parse error: " << ast.error().message);
+    }
+    const auto statement = ast->statements(ast->root())[0];
+    const auto values =
+        ast->expressions(std::get<lua2::ReturnStat>(ast->statement(statement)).values);
+    return grouped(*ast, values[0]);
+}
+
+} // namespace
+
+TEST_CASE("G7.1 G7.2 every operator", "[parser][operator]") {
+    const auto op =
+        GENERATE(as<std::string_view>{}, "+", "-", "*", "/", "//", "%", "^", "..", "==", "~=", "<",
+                 "<=", ">", ">=", "and", "or", "&", "|", "~", "<<", ">>");
+    CAPTURE(op);
+    const std::string source = "1 " + std::string(op) + " 2";
+
+    CHECK(group(source) == "(" + source + ")");
+}
+
+TEST_CASE("G7.2 every unary operator", "[parser][operator]") {
+    CHECK(group("-1") == "(-1)");
+    CHECK(group("not true") == "(not true)");
+    CHECK(group("#'abc'") == "(#'abc')");
+    CHECK(group("~0") == "(~0)");
+}
+
+TEST_CASE("G7.3 each precedence level binds tighter than the one below", "[parser][operator]") {
+    const auto [source, expected] = GENERATE(values<std::pair<std::string_view, std::string_view>>({
+        {"1 or 2 and 3", "(1 or (2 and 3))"},
+        {"1 and 2 < 3", "(1 and (2 < 3))"},
+        {"1 < 2 | 3", "(1 < (2 | 3))"},
+        {"1 | 2 ~ 3", "(1 | (2 ~ 3))"},
+        {"1 ~ 2 & 3", "(1 ~ (2 & 3))"},
+        {"1 & 2 << 3", "(1 & (2 << 3))"},
+        {"1 << 2 .. 3", "(1 << (2 .. 3))"},
+        {"1 .. 2 + 3", "(1 .. (2 + 3))"},
+        {"1 + 2 * 3", "(1 + (2 * 3))"},
+        {"-1 * 2", "((-1) * 2)"}, // unary above *
+        {"-2 ^ 2", "(-(2 ^ 2))"}, // ^ above unary
+        // The same pairs written the other way round.
+        {"1 and 2 or 3", "((1 and 2) or 3)"},
+        {"1 < 2 and 3", "((1 < 2) and 3)"},
+        {"1 * 2 + 3", "((1 * 2) + 3)"},
+        {"1 + 2 .. 3", "((1 + 2) .. 3)"},
+    }));
+    CAPTURE(source);
+
+    CHECK(group(source) == expected);
+}
+
+TEST_CASE("G7.3 operators on the same level", "[parser][operator]") {
+    CHECK(group("1 == 2 ~= 3 < 4") == "(((1 == 2) ~= 3) < 4)");
+    CHECK(group("1 + 2 - 3") == "((1 + 2) - 3)");
+    CHECK(group("1 * 2 / 3 // 4 % 5") == "((((1 * 2) / 3) // 4) % 5)");
+    CHECK(group("1 << 2 >> 3") == "((1 << 2) >> 3)");
+}
+
+TEST_CASE("G7.5 left and right associativity", "[parser][operator]") {
+    CHECK(group("1 - 2 - 3") == "((1 - 2) - 3)");
+    CHECK(group("'a' .. 'b' .. 'c'") == "('a' .. ('b' .. 'c'))");
+    CHECK(group("2 ^ 3 ^ 2") == "(2 ^ (3 ^ 2))");
+    CHECK(group("1 or 2 or 3") == "((1 or 2) or 3)");
+}
+
+TEST_CASE("G7.4 ^ against unary operators", "[parser][operator]") {
+    CHECK(group("-2 ^ 2") == "(-(2 ^ 2))");
+    CHECK(group("2 ^ -3") == "(2 ^ (-3))");
+    CHECK(group("2 ^ -3 ^ 2") == "(2 ^ (-(3 ^ 2)))");
+    CHECK(group("not 1 == 2") == "((not 1) == 2)");
+    CHECK(group("#'s' + 1") == "((#'s') + 1)");
+}
+
+TEST_CASE("G7.6 comparisons chain syntactically", "[parser][operator]") {
+    CHECK(group("1 < 2 < 3") == "((1 < 2) < 3)");
+}
+
+TEST_CASE("G7.7 unary operators nest", "[parser][operator]") {
+    CHECK(group("not not true") == "(not (not true))");
+    CHECK(group("- -1") == "(-(-1))");
+    CHECK(group("~~0") == "(~(~0))");
+    CHECK(group("#-1") == "(#(-1))");
+    CHECK(group("-#'ab'") == "(-(#'ab'))");
+}
+
+TEST_CASE("G7.7 two minus signs are a comment", "[parser][operator]") {
+    CHECK(ast_of("return --1") == "Chunk\n  Return\n");
+    CHECK(group("1 - -1") == "(1 - (-1))");
+}
+
+TEST_CASE("G7.8 a long mixed expression", "[parser][operator]") {
+    CHECK(group("1 + 2 * 3 ^ 2 .. 'x' == 'y' and not false or nil") ==
+          "(((((1 + (2 * (3 ^ 2))) .. 'x') == 'y') and (not false)) or nil)");
+}
+
+TEST_CASE("G4.7 an operator needs operands", "[parser][operator]") {
+    CHECK(parse_error("return 1 +") == "input:1: unexpected symbol near <eof>");
+    CHECK(parse_error("return * 2") == "input:1: unexpected symbol near '*'");
+    CHECK(parse_error("return 1 + + 2") == "input:1: unexpected symbol near '+'");
+    CHECK(parse_error("return not") == "input:1: unexpected symbol near <eof>");
+    CHECK(parse_error("return 1 and\n\nor 2") == "input:3: unexpected symbol near 'or'");
+}
+
+TEST_CASE("G7.8 the tree of an operator expression", "[parser][operator]") {
+    CHECK(ast_of("return -1 + 2") == "Chunk\n"
+                                     "  Return\n"
+                                     "    Binary +\n"
+                                     "      Unary -\n"
+                                     "        Integer 1\n"
+                                     "      Integer 2\n");
+}
+
+TEST_CASE("G7.8 an operator node records its operator's line", "[parser][operator]") {
+    Parser parser{"return 1\n+\n2"};
+    const auto ast = parser.parse_chunk();
+    REQUIRE(ast.has_value());
+
+    const auto statement = ast->statements(ast->root())[0];
+    const auto values =
+        ast->expressions(std::get<lua2::ReturnStat>(ast->statement(statement)).values);
+    CHECK(ast->line(values[0]) == 2);
 }

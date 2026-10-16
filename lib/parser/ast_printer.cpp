@@ -64,6 +64,15 @@ private:
                 [&](const StringExpr& node) {
                     line(depth, "String " + quoted(ast_.text(node.text)));
                 },
+                [&](const UnaryExpr& node) {
+                    line(depth, std::format("Unary {}", operator_text(node.op)));
+                    expression(node.operand, depth + 1);
+                },
+                [&](const BinaryExpr& node) {
+                    line(depth, std::format("Binary {}", operator_text(node.op)));
+                    expression(node.left, depth + 1);
+                    expression(node.right, depth + 1);
+                },
             },
             ast_.expression(id));
     }

@@ -60,4 +60,41 @@ std::string_view Ast::text(TextRange range) const {
     return std::string_view{text_}.substr(range.first, range.length);
 }
 
+std::string_view operator_text(UnaryOp op) {
+    switch (op) {
+    case UnaryOp::Negate: return "-";
+    case UnaryOp::Not: return "not";
+    case UnaryOp::Length: return "#";
+    case UnaryOp::BitwiseNot: return "~";
+    }
+    return "?"; // only reachable with an invalid enum value
+}
+
+std::string_view operator_text(BinaryOp op) {
+    switch (op) {
+    case BinaryOp::Add: return "+";
+    case BinaryOp::Subtract: return "-";
+    case BinaryOp::Multiply: return "*";
+    case BinaryOp::Divide: return "/";
+    case BinaryOp::FloorDivide: return "//";
+    case BinaryOp::Modulo: return "%";
+    case BinaryOp::Power: return "^";
+    case BinaryOp::Concat: return "..";
+    case BinaryOp::Equal: return "==";
+    case BinaryOp::NotEqual: return "~=";
+    case BinaryOp::Less: return "<";
+    case BinaryOp::LessEqual: return "<=";
+    case BinaryOp::Greater: return ">";
+    case BinaryOp::GreaterEqual: return ">=";
+    case BinaryOp::And: return "and";
+    case BinaryOp::Or: return "or";
+    case BinaryOp::BitwiseAnd: return "&";
+    case BinaryOp::BitwiseOr: return "|";
+    case BinaryOp::BitwiseXor: return "~";
+    case BinaryOp::ShiftLeft: return "<<";
+    case BinaryOp::ShiftRight: return ">>";
+    }
+    return "?"; // only reachable with an invalid enum value
+}
+
 } // namespace lua2

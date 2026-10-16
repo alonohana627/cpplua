@@ -91,8 +91,60 @@ struct VarargExpr {
     bool operator==(const VarargExpr&) const = default;
 };
 
-using Expr =
-    std::variant<NilExpr, TrueExpr, FalseExpr, IntegerExpr, FloatExpr, StringExpr, VarargExpr>;
+// The unary operators (G7.2).
+enum class UnaryOp : std::uint8_t {
+    Negate,     // -x
+    Not,        // not x
+    Length,     // #x
+    BitwiseNot, // ~x
+};
+
+// The binary operators (G7.1).
+enum class BinaryOp : std::uint8_t {
+    Add,          // +
+    Subtract,     // -
+    Multiply,     // *
+    Divide,       // /  (always a float)
+    FloorDivide,  // //
+    Modulo,       // %
+    Power,        // ^  (always a float, right-associative)
+    Concat,       // .. (right-associative)
+    Equal,        // ==
+    NotEqual,     // ~=
+    Less,         // <
+    LessEqual,    // <=
+    Greater,      // >
+    GreaterEqual, // >=
+    And,          // and (short-circuit)
+    Or,           // or  (short-circuit)
+    BitwiseAnd,   // &
+    BitwiseOr,    // |
+    BitwiseXor,   // ~
+    ShiftLeft,    // <<
+    ShiftRight,   // >>
+};
+
+// How an operator is written in Lua: "-", "not", "..".
+std::string_view operator_text(UnaryOp op);
+std::string_view operator_text(BinaryOp op);
+
+struct UnaryExpr {
+    UnaryOp op = UnaryOp::Negate;
+    ExprId operand;
+
+    bool operator==(const UnaryExpr&) const = default;
+};
+
+struct BinaryExpr {
+    BinaryOp op = BinaryOp::Add;
+    ExprId left;
+    ExprId right;
+
+    bool operator==(const BinaryExpr&) const = default;
+};
+
+using Expr = std::variant<NilExpr, TrueExpr, FalseExpr, IntegerExpr, FloatExpr, StringExpr,
+                          VarargExpr, UnaryExpr, BinaryExpr>;
 
 // ---- Statements (G3.1) ----
 
