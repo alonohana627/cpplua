@@ -4,10 +4,9 @@ How the lexer works today. This page describes the code as it is, and is updated
 grows. The rules it implements are in [../spec/lexical.md](../spec/lexical.md), and the remaining
 work is in [../plan/lexer.md](../plan/lexer.md).
 
-**Status:** parts 0 to 8 of the plan except part 9: operators, whitespace, line counting, names,
-keywords, stray characters, the error type, all numbers, short comments, and short strings with
-the simple escapes. Numeric and `\u{}` escapes (part 9) and long brackets (part 10) are not lexed
-yet.
+**Status:** parts 0 to 9 of the plan: operators, whitespace, line counting, names, keywords,
+stray characters, the error type, all numbers, short comments, and short strings with every
+escape. Long brackets (part 10) are not lexed yet.
 
 ## Where it lives
 
@@ -142,6 +141,8 @@ Private helpers:
 | `read_number()`     | reads a numeral greedily, then validates and converts it         |
 | `skip_comment()`    | moves past `--` and the rest of the line, not the line break     |
 | `read_string()`     | reads a short string, processing escapes                         |
+| `read_escape(text)` | reads one escape and appends its bytes to `text`                 |
+| `escape_error(...)` | an error inside an escape, with Lua's near text                  |
 | `error(msg, near)`  | records a `SyntaxError` on the current line and returns it       |
 
 `take` builds the token before moving forward, which is how every token gets the line it starts on.
@@ -217,7 +218,8 @@ return error("unfinished string", near_eof);
 returns that same error on every call: lexing is over. Like Lua, the lexer never tries to recover
 and find more errors. (Reporting all errors is a possible later mode, stage 15 of the roadmap.)
 
-The errors so far are `malformed number`, `unfinished string` and `invalid escape sequence`.
+The errors so far are `malformed number`, `unfinished string`, and the escape errors listed under
+"Escapes".
 
 ## Numbers
 
@@ -287,15 +289,8 @@ It builds the string's value byte by byte in a `std::string`:
 - **The closing quote** ends the string.
 - **A raw line break** is an error: a short string must stay on one line (`unfinished string`).
 - **End of input** is an error too (`unfinished string near <eof>`).
-- **A backslash** starts an escape, which adds a different byte to the value:
-
-  | Escape                    | Adds                                              |
-  | ------------------------- | ------------------------------------------------- |
-  | `\a \b \f \n \r \t \v`    | bell, backspace, form feed, newline, carriage return, tab, vertical tab |
-  | `\\ \" \'`                | the backslash or quote itself                     |
-  | `\` + a real line break   | one `\n`, whatever the line break was; the line is counted |
-  | anything else             | the error `invalid escape sequence`               |
-
+- **A backslash** starts an escape. `read_escape()` reads it and appends the bytes it stands for
+  (see the next section).
 - **Any other byte** is added as it is, including `\0` and bytes above 127.
 
 The token's line is the line the string **starts** on, even when an escaped line break moves the
@@ -303,10 +298,48 @@ lexer to the next line.
 
 Like Lua, the value starts out with the opening quote in it, because error messages show the
 string read so far, *after* escapes: for `"a\tb` followed by a line break the message is
-`unfinished string near '"a<TAB>b'`, and for `"abc\q"` it is
-`invalid escape sequence near '"abc\q'`. The quote is removed before the token is returned.
+`unfinished string near '"a<TAB>b'`. The quote is removed before the token is returned.
 
-`\x`, `\z`, `\ddd` and `\u{...}` are part 9. Until then they are `invalid escape sequence`.
+## Escapes
+
+`read_escape(text)` starts at the backslash, reads one escape, and appends its bytes to `text`.
+It returns `std::expected<void, SyntaxError>`: nothing on success, or the error.
+
+| Escape                  | Adds                                                              |
+| ----------------------- | ----------------------------------------------------------------- |
+| `\a \b \f \n \r \t \v`  | bell, backspace, form feed, newline, carriage return, tab, vertical tab |
+| `\\ \" \'`              | the backslash or quote itself                                     |
+| `\` + a real line break | one `\n`, whatever the line break was; the line is counted        |
+| `\xXX`                  | one byte from **exactly two** hex digits: `\x41` is `A`           |
+| `\ddd`                  | one byte from **one to three** decimal digits, at most 255: `\65` is `A`, and `\0651` is `A1` because only three digits are read |
+| `\z`                    | nothing: it skips the whitespace after it, line breaks included (and counts them), so a long string can be split across lines |
+| `\u{XXX}`               | the UTF-8 bytes of a code point, any number of hex digits, below 2^31: `\u{E9}` is `é` (2 bytes) |
+| anything else           | the error `invalid escape sequence`                               |
+
+**UTF-8 encoding.** `append_utf8(out, code)` writes a code point the way Lua's own
+`luaO_utf8esc` does, using the *original* UTF-8 scheme of up to 6 bytes. That covers every value
+below 2^31, so surrogates such as `\u{D800}` and values above U+10FFFF are allowed, even though
+they are not valid Unicode. The encoder fills continuation bytes (`10xxxxxx`, 6 bits each) from
+the end, and each one leaves one bit less room in the first byte. The first byte then starts with
+as many `1` bits as there are bytes in total. Code points below 128 are a single byte.
+
+**Escape errors.** Each failing escape has Lua's exact message:
+
+| Problem                              | Message                       | Example near text   |
+| ------------------------------------ | ----------------------------- | ------------------- |
+| unknown escape letter                | `invalid escape sequence`     | `'"abc\q'`          |
+| `\x` without two hex digits          | `hexadecimal digit expected`  | `'"\x4"'`           |
+| `\ddd` above 255                     | `decimal escape too large`    | `'"\256"'`          |
+| `\u` without `{`                     | `missing '{'`                 | `'"\u4'`            |
+| `\u{` without a hex digit            | `hexadecimal digit expected`  | `'"\u{}'`           |
+| a code point of 2^31 or more         | `UTF-8 value too large`       | `'"\u{80000000'`    |
+| no `}` after the digits              | `missing '}'`                 | `'"\u{48"'`         |
+
+The near text is built by `escape_error(message, text, raw)`, the same way Lua builds it: the
+string so far (`text`), the escape exactly as written so far (`raw`, such as `\x4`), and then
+the character that broke it, unless the input ended. To stop `\u{}` from overflowing, the check
+happens *before* each new digit: if the value is already above `0x7FFFFFF`, one more digit would
+pass 2^31 - 1.
 
 ## Line counting
 
@@ -316,9 +349,5 @@ character. So `\r\n` is one line, but `\n\n` and `\r\r` are two.
 
 ## Not handled yet
 
-In plan order:
-
-- **Part 9:** the escapes `\xXX`, `\z`, `\ddd` and `\u{XXX}`, which are `invalid escape
-  sequence` for now.
 - **Part 10:** long brackets. `[` is always `LBracket` (no `[[ ... ]]` strings), and `--[[`
   starts a short comment instead of a long one.

@@ -1,7 +1,9 @@
 #include "lexer/lexer.hpp"
 
 #include <algorithm>
+#include <array>
 #include <charconv>
+#include <cstddef>
 #include <cstdint>
 #include <optional>
 #include <string>
@@ -38,6 +40,38 @@ constexpr unsigned hex_value(char c) {
         return static_cast<unsigned>(c - 'a' + 10);
     }
     return static_cast<unsigned>(c - 'A' + 10);
+}
+
+// Whitespace for \z (L1.3): the same set next() skips, line breaks included.
+constexpr bool is_space(char c) {
+    return c == ' ' || c == '\t' || c == '\v' || c == '\f' || c == '\n' || c == '\r';
+}
+
+// Appends `code` encoded as UTF-8 (L7.5). This is the original UTF-8 scheme,
+// as in Lua's luaO_utf8esc: up to 6 bytes, so it covers every value below
+// 2^31, including surrogates and values above U+10FFFF.
+void append_utf8(std::string& out, std::uint32_t code) {
+    if (code < 0x80) {
+        out += static_cast<char>(code); // ASCII: one byte
+        return;
+    }
+    // Fill continuation bytes (10xxxxxx) from the end. `first_max` is the
+    // largest value that still fits in the first byte; each continuation
+    // byte leaves one bit less room there.
+    std::array<char, 6> bytes{};
+    std::size_t count = 0;
+    std::uint32_t first_max = 0x3F;
+    do {
+        bytes.at(5 - count) = static_cast<char>(0x80U | (code & 0x3FU));
+        ++count;
+        code >>= 6U;
+        first_max >>= 1U;
+    } while (code > first_max);
+    // The first byte: as many leading 1 bits as there are bytes, then a 0,
+    // then what is left of the code.
+    bytes.at(5 - count) = static_cast<char>(((~first_max << 1U) | code) & 0xFFU);
+    ++count;
+    out.append(bytes.data() + (6 - count), count);
 }
 
 constexpr bool has_hex_prefix(std::string_view text) {
@@ -344,44 +378,11 @@ std::expected<Token, SyntaxError> Lexer::read_string() {
         case '\n':
         case '\r': return error("unfinished string", near_text(text));
 
-        case '\\': {
-            ++pos_; // the backslash
-            if (pos_ >= source_.size()) {
-                continue; // end of input: reported as unfinished above
+        case '\\':
+            if (auto escaped = read_escape(text); !escaped) {
+                return std::unexpected(std::move(escaped.error()));
             }
-            const char escape = source_[pos_];
-            switch (escape) {
-            // Named escapes (L7.3).
-            case 'a': text += '\a'; break;
-            case 'b': text += '\b'; break;
-            case 'f': text += '\f'; break;
-            case 'n': text += '\n'; break;
-            case 'r': text += '\r'; break;
-            case 't': text += '\t'; break;
-            case 'v': text += '\v'; break;
-            case '\\':
-            case '"':
-            case '\'': text += escape; break;
-
-            // A backslash before a real line break is a newline, whatever the
-            // line break was, and the line is counted (L7.3).
-            case '\n':
-            case '\r':
-                read_newline();
-                text += '\n';
-                continue; // read_newline already moved past it
-
-            // \x, \z, \ddd and \u{} arrive in part 9. Anything else is an
-            // error, shown with the backslash and the bad character (L7.6).
-            default:
-                text += '\\';
-                text += escape;
-                ++pos_;
-                return error("invalid escape sequence", near_text(text));
-            }
-            ++pos_; // the escape character
             break;
-        }
 
         // Any other byte stands for itself (L7.7), including '\0' and
         // bytes above 127.
@@ -394,6 +395,129 @@ std::expected<Token, SyntaxError> Lexer::read_string() {
 
     text.erase(0, 1); // drop the opening quote
     return Token{.kind = TokenKind::String, .line = start_line, .value = std::move(text)};
+}
+
+std::expected<void, SyntaxError> Lexer::read_escape(std::string& text) {
+    ++pos_; // the backslash
+    if (pos_ >= source_.size()) {
+        return {}; // end of input: read_string reports the unfinished string
+    }
+    const char escape = source_[pos_];
+    switch (escape) {
+    // Named escapes (L7.3).
+    case 'a': text += '\a'; break;
+    case 'b': text += '\b'; break;
+    case 'f': text += '\f'; break;
+    case 'n': text += '\n'; break;
+    case 'r': text += '\r'; break;
+    case 't': text += '\t'; break;
+    case 'v': text += '\v'; break;
+    case '\\':
+    case '"':
+    case '\'': text += escape; break;
+
+    // A backslash before a real line break is a newline, whatever the line
+    // break was, and the line is counted (L7.3).
+    case '\n':
+    case '\r':
+        read_newline();
+        text += '\n';
+        return {}; // read_newline already moved past it
+
+    // \xXX: exactly two hex digits (L7.3).
+    case 'x': {
+        std::string raw = "\\x"; // what was read, for error messages
+        ++pos_;
+        unsigned value = 0;
+        for (int i = 0; i < 2; ++i) {
+            if (!is_hex_digit(peek(0))) {
+                return escape_error("hexadecimal digit expected", text, raw);
+            }
+            value = (value * 16) + hex_value(peek(0));
+            raw += peek(0);
+            ++pos_;
+        }
+        text += static_cast<char>(value);
+        return {};
+    }
+
+    // \z: skip all following whitespace, line breaks included (L7.3).
+    case 'z':
+        ++pos_;
+        while (is_space(peek(0))) { // peek gives '\0' at the end, which is not a space
+            if (peek(0) == '\n' || peek(0) == '\r') {
+                read_newline();
+            } else {
+                ++pos_;
+            }
+        }
+        return {};
+
+    // \u{XXX}: a code point below 2^31, written as UTF-8 (L7.5).
+    case 'u': {
+        // @TODO: should be in a seperate function called handle_utf8
+        std::string raw = "\\u";
+        ++pos_;
+        if (peek(0) != '{') {
+            return escape_error("missing '{'", text, raw);
+        }
+        raw += '{';
+        ++pos_;
+        if (!is_hex_digit(peek(0))) {
+            return escape_error("hexadecimal digit expected", text, raw);
+        }
+        std::uint32_t code = 0;
+        while (is_hex_digit(peek(0))) {
+            // One more hex digit multiplies by 16: refuse before passing 2^31 - 1.
+            if (code > (0x7FFF'FFFFU >> 4U)) {
+                return escape_error("UTF-8 value too large", text, raw);
+            }
+            code = (code * 16) + hex_value(peek(0));
+            raw += peek(0);
+            ++pos_;
+        }
+        if (peek(0) != '}') {
+            return escape_error("missing '}'", text, raw);
+        }
+        ++pos_;
+        append_utf8(text, code);
+        return {};
+    }
+
+    default:
+        // \ddd: one to three decimal digits, at most 255 (L7.3, L7.4).
+        if (is_digit(escape)) {
+            std::string raw = "\\";
+            unsigned value = 0;
+            for (int i = 0; i < 3 && is_digit(peek(0)); ++i) {
+                value = (value * 10) + static_cast<unsigned>(peek(0) - '0');
+                raw += peek(0);
+                ++pos_;
+            }
+            if (value > 255) {
+                return escape_error("decimal escape too large", text, raw);
+            }
+            text += static_cast<char>(value);
+            return {};
+        }
+        // Anything else is an invalid escape (L7.6).
+        return escape_error("invalid escape sequence", text, "\\");
+    }
+    ++pos_; // the named escape's character
+    return {};
+}
+
+std::unexpected<SyntaxError> Lexer::escape_error(std::string_view message, std::string_view text,
+                                                 std::string_view raw,
+                                                 std::source_location origin) {
+    // Like Lua, show the string so far, the escape as written so far, and the
+    // character that broke it (unless the input ended): '"abc\x4"'.
+    std::string near{text};
+    near += raw;
+    if (pos_ < source_.size()) {
+        near += source_[pos_];
+    }
+    return error(message, near_text(near), origin);
 }
 
 } // namespace lua2

@@ -4,6 +4,7 @@
 #include <expected>
 #include <optional>
 #include <source_location>
+#include <string>
 #include <string_view>
 
 #include "lexer/token.hpp"
@@ -72,6 +73,17 @@ private:
     // token holding its bytes after escapes, or an error for an unfinished
     // string or a bad escape (L7.1-L7.3, L7.6, L7.7).
     std::expected<Token, SyntaxError> read_string();
+
+    // Consumes one escape sequence, starting at its backslash, and appends
+    // the bytes it stands for to `text` (L7.3-L7.6).
+    std::expected<void, SyntaxError> read_escape(std::string& text);
+
+    // An error inside an escape. Like Lua, the near text is the string so far
+    // (`text`), the escape as written so far (`raw`), and the offending
+    // character, as in `'"abc\x4"'`.
+    std::unexpected<SyntaxError>
+    escape_error(std::string_view message, std::string_view text, std::string_view raw,
+                 std::source_location origin = std::source_location::current());
 
     std::string_view source_;
     std::string_view chunk_name_;

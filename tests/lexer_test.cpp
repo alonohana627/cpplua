@@ -746,3 +746,132 @@ TEST_CASE("L7.1 strings next to other tokens", "[lexer][string]") {
     CHECK(kinds(R"(x = 'y' -- comment)") == std::vector{TokenKind::Name, TokenKind::Assign,
                                                         TokenKind::String, TokenKind::EndOfStream});
 }
+
+// ---- Part 9: numeric escapes, \u{} and \z ----
+
+namespace {
+
+using EscapeCase = std::pair<std::string_view, std::string_view>;
+
+} // namespace
+
+// The sv suffix keeps every byte of a literal, including a '\0' inside it:
+// "a\0b"sv is 3 bytes, while a plain "a\0b" would stop at the zero.
+using namespace std::string_view_literals;
+
+TEST_CASE("L7.3 \\xXX is a byte from two hex digits", "[lexer][string]") {
+    const auto [source, value] = GENERATE(values<EscapeCase>({
+        {R"("\x41")", "A"},
+        {R"("\x4a\x4A")", "JJ"},
+        {R"("\x41\x42C")", "ABC"},
+        {R"("\x00")", "\0"sv},
+        {R"("\xff")", "\xff"},
+        {R"("\x7F")", "\x7f"},
+    }));
+    CAPTURE(source);
+
+    CHECK(string_value(source) == value);
+}
+
+TEST_CASE("L7.6 \\x needs exactly two hex digits", "[lexer][string]") {
+    CHECK(error_message(R"("\x4")") == R"(input:1: hexadecimal digit expected near '"\x4"')");
+    CHECK(error_message(R"("\xg1")") == R"(input:1: hexadecimal digit expected near '"\xg')");
+    CHECK(error_message(R"("ab\x")") == R"(input:1: hexadecimal digit expected near '"ab\x"')");
+    CHECK(error_message(R"("\x)") == R"(input:1: hexadecimal digit expected near '"\x')");
+}
+
+TEST_CASE("L7.4 \\ddd is a byte from up to three decimal digits", "[lexer][string]") {
+    const auto [source, value] = GENERATE(values<EscapeCase>({
+        {R"("\65")", "A"},
+        {R"("\065")", "A"},
+        {R"("\0651")", "A1"}, // at most three digits are read
+        {R"("\9")", "\t"},
+        {R"("\09")", "\t"},
+        {R"("\009")", "\t"},
+        {R"("\0")", "\0"sv},
+        {R"("a\0b")", "a\0b"sv},
+        {R"("\255")", "\xff"},
+        {R"("\72\105")", "Hi"},
+    }));
+    CAPTURE(source);
+
+    CHECK(string_value(source) == value);
+}
+
+TEST_CASE("L7.6 \\ddd above 255 is an error", "[lexer][string]") {
+    CHECK(error_message(R"("\256")") == R"(input:1: decimal escape too large near '"\256"')");
+    CHECK(error_message(R"("x\999z")") == R"(input:1: decimal escape too large near '"x\999z')");
+    CHECK(error_message(R"("\300)") == R"(input:1: decimal escape too large near '"\300')");
+}
+
+TEST_CASE("L7.3 \\z skips the whitespace that follows", "[lexer][string]") {
+    CHECK(string_value(R"("a\z    b")") == "ab");
+    CHECK(string_value(R"("a\zb")") == "ab");
+    CHECK(string_value(R"("a\z")") == "a");
+    CHECK(string_value("\"a\\z \t\v\f b\"") == "ab");
+    CHECK(string_value("\"a\\z  \n\n   b c\"") == "ab c"); // only the whitespace right after
+}
+
+TEST_CASE("L7.3 \\z counts the lines it skips", "[lexer][string]") {
+    Lexer lexer{"\"a\\z\n\r\n  b\" x"};
+    const auto string = next_token(lexer);
+    const auto name = next_token(lexer);
+
+    CHECK(string.value == lua2::TokenValue{std::string("ab")});
+    CHECK(string.line == 1);
+    CHECK(name.line == 3);
+}
+
+TEST_CASE("L7.5 \\u{XXX} is the UTF-8 encoding of a code point", "[lexer][string]") {
+    const auto [source, value] = GENERATE(values<EscapeCase>({
+        {R"("\u{48}")", "H"},
+        {R"("\u{0}")", "\0"sv},
+        {R"("\u{000041}")", "A"}, // leading zeros
+        {R"("\u{7F}")", "\x7f"},  // the largest 1-byte value
+        {R"("\u{80}")", "\xC2\x80"},
+        {R"("\u{E9}")", "\xC3\xA9"}, // é
+        {R"("\u{7FF}")", "\xDF\xBF"},
+        {R"("\u{800}")", "\xE0\xA0\x80"},
+        {R"("\u{20AC}")", "\xE2\x82\xAC"}, // €
+        {R"("\u{FFFF}")", "\xEF\xBF\xBF"},
+        {R"("\u{10000}")", "\xF0\x90\x80\x80"},
+        {R"("\u{1F600}")", "\xF0\x9F\x98\x80"},
+        {R"("\u{10FFFF}")", "\xF4\x8F\xBF\xBF"},
+    }));
+    CAPTURE(source);
+
+    CHECK(string_value(source) == value);
+}
+
+TEST_CASE("L7.5 \\u{} goes beyond Unicode, up to 2^31 - 1", "[lexer][string]") {
+    const auto [source, value] = GENERATE(values<EscapeCase>({
+        {R"("\u{D800}")", "\xED\xA0\x80"},           // a surrogate
+        {R"("\u{110000}")", "\xF4\x90\x80\x80"},     // above U+10FFFF
+        {R"("\u{1FFFFF}")", "\xF7\xBF\xBF\xBF"},     // the largest 4-byte value
+        {R"("\u{200000}")", "\xF8\x88\x80\x80\x80"}, // 5 bytes
+        {R"("\u{3FFFFFF}")", "\xFB\xBF\xBF\xBF\xBF"},
+        {R"("\u{4000000}")", "\xFC\x84\x80\x80\x80\x80"}, // 6 bytes
+        {R"("\u{7FFFFFFF}")", "\xFD\xBF\xBF\xBF\xBF\xBF"},
+        {R"("\u{000000007FFFFFFF}")", "\xFD\xBF\xBF\xBF\xBF\xBF"},
+    }));
+    CAPTURE(source);
+
+    CHECK(string_value(source) == value);
+}
+
+TEST_CASE("L7.6 malformed \\u escapes", "[lexer][string]") {
+    CHECK(error_message(R"("\u48")") == R"(input:1: missing '{' near '"\u4')");
+    CHECK(error_message(R"("\u{}")") == R"(input:1: hexadecimal digit expected near '"\u{}')");
+    CHECK(error_message(R"("\u{g}")") == R"(input:1: hexadecimal digit expected near '"\u{g')");
+    CHECK(error_message(R"("\u{48")") == R"(input:1: missing '}' near '"\u{48"')");
+    CHECK(error_message(R"("\u{48 }")") == R"(input:1: missing '}' near '"\u{48 ')");
+    CHECK(error_message(R"("\u{80000000}")") ==
+          R"(input:1: UTF-8 value too large near '"\u{80000000')");
+    CHECK(error_message(R"("\u{7FFFFFFF0}")") ==
+          R"(input:1: UTF-8 value too large near '"\u{7FFFFFFF0')");
+}
+
+TEST_CASE("L7.6 escapes mixed with text", "[lexer][string]") {
+    CHECK(string_value(R"("caf\u{E9} \x26 \65\z
+                           !")") == "caf\xC3\xA9 & A!");
+}
