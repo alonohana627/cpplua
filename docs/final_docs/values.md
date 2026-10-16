@@ -5,9 +5,10 @@ built. The rules are in [../spec/values.md](../spec/values.md), the background a
 in [../learn/values.md](../learn/values.md), and the remaining work in
 [../plan/values.md](../plan/values.md).
 
-**Status:** part 0 of the plan. A `Value` holds `nil`, a boolean, an integer or a float, and
-knows its Lua type and its truthiness. Still to come: operations on numbers (parts 1 to 4),
-strings (part 5) and conversions (parts 6 to 8).
+**Status:** parts 0 and 1 of the plan. A `Value` holds `nil`, a boolean, an integer or a float,
+and knows its Lua type and its truthiness; numbers convert between integer and float. Still to
+come: operations on numbers (parts 2 to 4), strings (part 5) and conversions between strings
+and numbers (parts 6 to 8).
 
 ## Where it lives
 
@@ -15,6 +16,7 @@ strings (part 5) and conversions (parts 6 to 8).
 | -------------------------------- | ---------------------------------------------------- |
 | `lib/internal/value/value.hpp`   | `Type`, `type_name()`, `Tag`, `Value`, `debug_text()` |
 | `lib/value/value.cpp`            | its implementation                                   |
+| `lib/internal/value/number.hpp`  | conversions between integers and floats (header only, `constexpr`) |
 | `tests/value_test.cpp`           | tests, tagged `[value]`                              |
 
 Values are internal to the library for now.
@@ -97,3 +99,36 @@ which uses `%.14g`. Catch2 prints failed checks with it through a `StringMaker` 
 
 `tag_name(tag)` names a tag for messages: `"nil"`, `"false"`, `"true"`, `"integer"`,
 `"float"`.
+
+## Integer and float conversions
+
+All in `number.hpp`, all `constexpr`, and tested with `STATIC_REQUIRE` where they can be.
+
+**Integer to float** (V2.3): `int_to_float(i)` is a plain `static_cast<double>`, the nearest
+double. Exact up to 2^53; beyond that it rounds, so `math.maxinteger` becomes 2^63.
+
+**Float to integer** (V2.4): `float_to_int(f, rounding)` returns the integer with the same
+value, or `std::nullopt`. It works like Lua's `luaV_flttointns`:
+
+1. Take the whole part below `f` with `floor_float()`.
+2. If that is not `f`, the float is not whole. `Rounding::Exact` (the default) gives up;
+   `Rounding::Floor` keeps the whole part; `Rounding::Ceil` adds one.
+3. Check the range: `-2^63 <= whole < 2^63`. Both bounds are exact doubles. Anything outside,
+   `inf`, `-inf` and `nan` give `std::nullopt`; `nan` fails every comparison.
+
+Exact is what bitwise operations need (part 3: `3.0 | 0` is `3`, `3.5 | 0` is an error).
+Floor and ceil are for exact comparisons between integers and floats (part 4) and later for
+`for` loops.
+
+**`floor_float(f)`** is our own floor. libc++'s `std::floor` is not `constexpr`, and without
+`-march` it can be a call into the C library. Every double from 2^52 up is already whole, so
+only smaller ones are rounded: truncate through `std::int64_t` (exact in that range) and
+subtract one when truncation went up, which happens for negative non-whole numbers. Out of
+range values, `inf` and `nan` come back unchanged; the range test is written so that `nan` is
+out of range, because converting `nan` to an integer would be undefined behavior. A test checks
+it against `std::floor` on 16,001 values. (`floor_float(-0.0)` is `0.0`; the sign of zero does
+not matter for any of its uses.)
+
+**On values**: `to_float(value)` and `to_integer(value, rounding)` apply these to a `Value`:
+an integer or a float converts, anything else gives `std::nullopt`. Strings that look like
+numbers join in part 8.
