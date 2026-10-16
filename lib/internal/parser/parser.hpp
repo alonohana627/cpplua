@@ -51,6 +51,33 @@ private:
     // attrib ::= [ '<' Name '>' ] (G3.3, G3.15)
     std::expected<LocalName::Attribute, SyntaxError> parse_attribute();
 
+    // ---- Control flow (G3.1) ----
+
+    // 'do' block 'end'
+    std::expected<StatId, SyntaxError> parse_do();
+
+    // 'while' exp 'do' block 'end'
+    std::expected<StatId, SyntaxError> parse_while();
+
+    // 'repeat' block 'until' exp
+    std::expected<StatId, SyntaxError> parse_repeat();
+
+    // 'if' exp 'then' block { 'elseif' exp 'then' block } [ 'else' block ] 'end'
+    std::expected<StatId, SyntaxError> parse_if();
+
+    // 'for' Name '=' ... (numeric) or 'for' namelist 'in' ... (generic)
+    std::expected<StatId, SyntaxError> parse_for();
+
+    // The rest of a numeric for, after `for Name`: '=' exp ',' exp [ ',' exp ]
+    std::expected<StatId, SyntaxError> parse_numeric_for(TextRange variable, int line);
+
+    // The rest of a generic for, after `for Name`: { ',' Name } 'in' explist
+    std::expected<StatId, SyntaxError> parse_generic_for(TextRange first_name, int line);
+
+    // 'do' block 'end', the body shared by both fors. `line` is the line of
+    // 'for', for the "to close 'for'" message.
+    std::expected<Block, SyntaxError> parse_for_body(int line);
+
     // explist ::= exp { ',' exp } (G4.6)
     std::expected<IdRange<ExprId>, SyntaxError> parse_expression_list();
 

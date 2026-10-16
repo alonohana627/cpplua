@@ -35,10 +35,13 @@ struct FieldTag {};
 
 struct LocalNameTag {};
 
+struct IfClauseTag {};
+
 using ExprId = NodeId<ExprTag>;           // an expression node
 using StatId = NodeId<StatTag>;           // a statement node
 using FieldId = NodeId<FieldTag>;         // a field of a table constructor
 using LocalNameId = NodeId<LocalNameTag>; // a name declared by `local`
+using IfClauseId = NodeId<IfClauseTag>;   // an if or elseif clause
 
 // A run of consecutive ids in one of the Ast's list vectors, such as the
 // statements of a block. Storing (first, count) instead of a std::vector in
@@ -222,6 +225,13 @@ using Expr = std::variant<NilExpr, TrueExpr, FalseExpr, IntegerExpr, FloatExpr, 
 
 // ---- Statements (G3.1) ----
 
+// A list of statements (G2.2): the body of a chunk, function, loop or branch.
+struct Block {
+    IdRange<StatId> statements;
+
+    bool operator==(const Block&) const = default;
+};
+
 // `return explist` (G2.3). Always the last statement of its block.
 struct ReturnStat {
     IdRange<ExprId> values;
@@ -268,17 +278,75 @@ struct LocalStat {
     bool operator==(const LocalStat&) const = default;
 };
 
-using Stat = std::variant<ReturnStat, CallStat, AssignStat, LocalStat>;
+// `do block end`
+struct DoStat {
+    Block body;
+
+    bool operator==(const DoStat&) const = default;
+};
+
+// `while exp do block end`
+struct WhileStat {
+    ExprId condition;
+    Block body;
+
+    bool operator==(const WhileStat&) const = default;
+};
+
+// `repeat block until exp`. The condition can see the body's locals (G3.14).
+struct RepeatStat {
+    Block body;
+    ExprId condition;
+
+    bool operator==(const RepeatStat&) const = default;
+};
+
+// One `if exp then block` or `elseif exp then block` of an IfStat.
+struct IfClause {
+    ExprId condition;
+    Block body;
+
+    bool operator==(const IfClause&) const = default;
+};
+
+// `if exp then block { elseif exp then block } [ else block ] end`. The
+// first clause is the `if`, the others are the `elseif`s, in order.
+struct IfStat {
+    IdRange<IfClauseId> clauses;
+    Block else_body;
+    bool has_else = false;
+
+    bool operator==(const IfStat&) const = default;
+};
+
+// `for Name = exp, exp [ , exp ] do block end` (G3.10)
+struct NumericForStat {
+    TextRange variable;
+    ExprId start;
+    ExprId limit;
+    ExprId step; // only meaningful when has_step
+    bool has_step = false;
+    Block body;
+
+    bool operator==(const NumericForStat&) const = default;
+};
+
+// `for namelist in explist do block end`
+struct GenericForStat {
+    IdRange<LocalNameId> names; // all without attributes
+    IdRange<ExprId> values;
+    Block body;
+
+    bool operator==(const GenericForStat&) const = default;
+};
+
+using Stat = std::variant<ReturnStat, CallStat, AssignStat, LocalStat, DoStat, WhileStat,
+                          RepeatStat, IfStat, NumericForStat, GenericForStat>;
 
 // Nodes hold only numbers and ids, never strings or pointers, so copying one
 // is a plain memory copy and the vectors never run destructors. Keep it so.
 static_assert(std::is_trivially_copyable_v<Expr>);
 static_assert(std::is_trivially_copyable_v<Stat>);
-
-// A list of statements (G2.2).
-struct Block {
-    IdRange<StatId> statements;
-};
 
 class Ast {
 public:
@@ -313,12 +381,14 @@ public:
     IdRange<ExprId> add_expression_list(std::span<const ExprId> ids);
     IdRange<FieldId> add_field_list(std::span<const TableField> fields);
     IdRange<LocalNameId> add_local_name_list(std::span<const LocalName> names);
+    IdRange<IfClauseId> add_if_clause_list(std::span<const IfClause> clauses);
 
     // The statements of a block, in order.
     [[nodiscard]] std::span<const StatId> statements(const Block& block) const;
     [[nodiscard]] std::span<const ExprId> expressions(IdRange<ExprId> range) const;
     [[nodiscard]] std::span<const TableField> fields(IdRange<FieldId> range) const;
     [[nodiscard]] std::span<const LocalName> local_names(IdRange<LocalNameId> range) const;
+    [[nodiscard]] std::span<const IfClause> if_clauses(IdRange<IfClauseId> range) const;
 
     // ---- Text ----
 
@@ -340,6 +410,7 @@ private:
     std::vector<ExprId> expression_lists_;
     std::vector<TableField> field_lists_; // fields are small, so stored directly
     std::vector<LocalName> local_name_lists_;
+    std::vector<IfClause> if_clause_lists_;
 
     std::string text_;
 };

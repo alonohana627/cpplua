@@ -4,11 +4,12 @@ How the parser works today. This page describes the code as it is, and is update
 grows. The rules it implements are in [../spec/grammar.md](../spec/grammar.md), and the remaining
 work is in [../plan/parser.md](../plan/parser.md).
 
-**Status:** parts 0 to 5 of the plan. A chunk is a list of statements: function calls,
-assignments, `local` declarations (with `<const>` and `<close>`), empty `;` statements, and a
-final `return`. Expressions cover everything except function definitions: simple values,
-names, parentheses, fields, indexing, calls, method calls and table constructors, with every
-unary and binary operator at Lua's precedence. Control flow and functions come later.
+**Status:** parts 0 to 6 of the plan. A chunk is a list of statements: function calls,
+assignments, `local` declarations (with `<const>` and `<close>`), empty `;` statements, `do`,
+`while`, `repeat`, `if`/`elseif`/`else`, numeric and generic `for`, and a final `return`.
+Expressions cover everything except function definitions: simple values, names, parentheses,
+fields, indexing, calls, method calls and table constructors, with every unary and binary
+operator at Lua's precedence. Functions, `goto` and `break` come later.
 
 ## Where it lives
 
@@ -74,7 +75,7 @@ Each kind of node is a small struct, and the node types are two `std::variant`s:
 | Variant | Alternatives so far                                                           |
 | ------- | ----------------------------------------------------------------------------- |
 | `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}`, `NameExpr{name}`, `ParenExpr{inner}`, `IndexExpr{object, key}`, `CallExpr{function, arguments}`, `MethodCallExpr{object, method, arguments}`, `TableExpr{fields}` |
-| `Stat`  | `ReturnStat{values}`, `CallStat{call}`, `AssignStat{targets, values}`, `LocalStat{names, values}`; lists are `IdRange`s |
+| `Stat`  | `ReturnStat{values}`, `CallStat{call}`, `AssignStat{targets, values}`, `LocalStat{names, values}`, `DoStat{body}`, `WhileStat{condition, body}`, `RepeatStat{body, condition}`, `IfStat{clauses, else_body, has_else}`, `NumericForStat{variable, start, limit, step, has_step, body}`, `GenericForStat{names, values, body}`; lists are `IdRange`s, bodies are `Block`s |
 
 The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
 
@@ -89,7 +90,12 @@ The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
   `expressions(range)`. Table fields have a list vector of their own, holding the small
   `TableField` structs directly: `add_field_list(fields)` and `fields(range)`, with
   `IdRange<FieldId>` ranges. The names of a `local` statement work the same way, as
-  `LocalName{name, attribute}` structs: `add_local_name_list(names)` and `local_names(range)`.
+  `LocalName{name, attribute}` structs: `add_local_name_list(names)` and `local_names(range)`
+  (a generic `for` reuses them for its loop variables). The clauses of an `if` are
+  `IfClause{condition, body}` structs: `add_if_clause_list(clauses)` and `if_clauses(range)`.
+- **Bodies are embedded.** A `Block` is only an `IdRange<StatId>`, 8 bytes, so loops and
+  branches hold their bodies directly (`WhileStat{condition, body}`) instead of through another
+  id.
 
 Because nodes hold only numbers and ids, `Expr` and `Stat` are **trivially copyable**: copying a
 node is a plain memory copy, and the vectors never run destructors. `static_assert`s in
@@ -110,6 +116,9 @@ Code that walks the tree uses `std::visit` with one lambda per node type, throug
 | `parse_expression_statement()` | a call, or `varlist = explist` (G3.1) | Lua's `exprstat()`, see "Statements" |
 | `parse_local()`           | `'local' attnamelist [ '=' explist ]` (G3.1) | Lua's `localstat()` |
 | `parse_attribute()`       | `attrib ::= [ '<' Name '>' ]` (G3.3)     | `<const>`, `<close>`, or `unknown attribute` |
+| `parse_do()`, `parse_while()`, `parse_repeat()`, `parse_if()` | the control statements of G3.1 | see "Control flow" |
+| `parse_for()`             | `for Name` then `=` or `,`/`in` (G3.10)  | dispatches to `parse_numeric_for()` or `parse_generic_for()` |
+| `parse_for_body(line)`    | `'do' block 'end'`                       | shared by both fors                       |
 | `parse_return()`          | `retstat ::= 'return' [ explist ] [ ';' ]` (G2.3) | values are skipped when the block ends or a `;` follows; one `;` is allowed |
 | `parse_expression_list()` | `explist ::= exp { ',' exp }` (G4.6)     | collects ids, then stores them as one list |
 | `parse_expression()`      | `exp` (G4.1)                             | `parse_subexpression(0)`                  |
@@ -186,6 +195,41 @@ input:1: multiple to-be-closed variables in local list
 
 `semantic_error(message)` builds them, by passing an empty `near` to `make_syntax_error`, which
 then omits that part. The `goto`, label, `break` and `<const>` checks of part 9 will use it too.
+
+## Control flow
+
+Each control statement is its keyword, its parts, and a block, read directly from the grammar:
+
+| Statement                                      | Node                                     |
+| ---------------------------------------------- | ---------------------------------------- |
+| `do block end`                                 | `DoStat{body}`                           |
+| `while exp do block end`                       | `WhileStat{condition, body}`             |
+| `repeat block until exp`                       | `RepeatStat{body, condition}`            |
+| `if exp then block {elseif exp then block} [else block] end` | `IfStat{clauses, else_body, has_else}` |
+| `for Name = exp, exp [, exp] do block end`     | `NumericForStat{variable, start, limit, step, has_step, body}` |
+| `for namelist in explist do block end`         | `GenericForStat{names, values, body}`    |
+
+A few details:
+
+- **Where a block ends.** `parse_block()` stops at `block_follow()`: `end`, `else`, `elseif`,
+  `until` or the end of input. The statement that called it then checks that the right word is
+  there. So `if x then else elseif y then end` fails with `'end' expected near 'elseif'`: after an
+  `else`, only `end` may come.
+- **Missing closing words.** Every closing `end` or `until` uses `expect_match()` with the line of
+  the opening keyword, so a block left open across lines reports its opener, like Lua:
+  `'end' expected (to close 'while' at line 2) near <eof>`. Within one line it is just
+  `'end' expected near <eof>`. The middle words (`do`, `then`, `in`, the `,` of a numeric for)
+  use plain `expect()`: `'then' expected near 'f'`.
+- **`if` clauses.** The `if` and each `elseif` become `IfClause{condition, body}` entries, in
+  order. `has_else` records whether there was an `else`, even an empty one, so the tree shows
+  what was written.
+- **Two kinds of `for`.** `parse_for()` reads `for Name`, then the next token decides (G3.10):
+  `=` is a numeric for; `,` or `in` is a generic one; anything else is
+  `'=' or 'in' expected`. The numeric step is optional (`has_step`). The generic for's names
+  reuse the `LocalName` list (without attributes), because they are new locals of the loop body.
+- **`return` inside blocks.** `return` must end its *own* block (G2.5), so
+  `if x then return 1 else return 2 end` is fine, and so is `repeat return until x`, because
+  `until` ends a block too. `do return 1 x = 2 end` fails with `'end' expected near 'x'`.
 
 ## Operators and precedence
 
@@ -368,8 +412,10 @@ Children appear in source order: `Call` prints the function first, then the argu
 (positional, the value below), `Field name` (named, the value below) or `Field` (keyed, the key
 then the value below). Statements print as `CallStatement` (the call below), `Assign` (with
 `Targets` and `Values` sub-headings, since the two lists would otherwise run together), and
-`Local a, b <const>` (the names on one line with their attributes, the values below). For
-`return a.b[c](d):e"f"`:
+`Local a, b <const>` (the names on one line with their attributes, the values below). Loops print
+their condition or range first and their statements under a `Body` heading; `Repeat` puts its
+condition under `Until` after the body; an `If` lists each clause as `If`/`ElseIf` with the
+condition and a `Then` heading, then an optional `Else`. For `return a.b[c](d):e"f"`:
 
 ```
 Chunk
@@ -394,9 +440,8 @@ Chunk
 - **A depth limit** (part 9). Parsing is recursive, so a very deeply nested expression, such as
   thousands of `-` or `..` in a row, can overflow the C++ stack until the limit exists. The
   printer is recursive too.
-- **Control flow and the remaining statements**: `do`, `while`, `repeat`, `if`, `for` (part 6),
-  `function` statements and `local function` (part 7), `goto`, labels and `break` (part 8).
-  Until then their keyword is `unexpected symbol` (and `local function` is
-  `<name> expected near 'function'`).
+- **The remaining statements**: `function` statements and `local function` (part 7), `goto`,
+  labels and `break` (part 8). Until then their keyword is `unexpected symbol` (and
+  `local function` is `<name> expected near 'function'`).
 - **The `<const>` assignment check** (part 9): `local x <const> = 1; x = 2` parses for now.
 - Scopes and name resolution (parts 9 and 10), the graph view (part 11).

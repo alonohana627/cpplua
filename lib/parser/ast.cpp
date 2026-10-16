@@ -58,6 +58,14 @@ std::span<const LocalName> Ast::local_names(IdRange<LocalNameId> range) const {
     return std::span{local_name_lists_}.subspan(range.first, range.count);
 }
 
+IdRange<IfClauseId> Ast::add_if_clause_list(std::span<const IfClause> clauses) {
+    return append<IfClauseId>(if_clause_lists_, clauses);
+}
+
+std::span<const IfClause> Ast::if_clauses(IdRange<IfClauseId> range) const {
+    return std::span{if_clause_lists_}.subspan(range.first, range.count);
+}
+
 std::span<const StatId> Ast::statements(const Block& block) const {
     return std::span{statement_lists_}.subspan(block.statements.first, block.statements.count);
 }

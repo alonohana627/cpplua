@@ -35,6 +35,13 @@ private:
         }
     }
 
+    // A loop body under a "Body" heading, so it cannot be confused with the
+    // expressions printed before it.
+    void body(const Block& body, int depth) {
+        line(depth, "Body");
+        block(body, depth + 1);
+    }
+
     // Every alternative of Stat needs a lambda here, or this does not compile.
     void statement(StatId id, int depth) {
         std::visit(Overloaded{
@@ -67,6 +74,56 @@ private:
                            }
                            line(depth, "Local " + names);
                            expressions(node.values, depth + 1);
+                       },
+                       [&](const DoStat& node) {
+                           line(depth, "Do");
+                           block(node.body, depth + 1);
+                       },
+                       [&](const WhileStat& node) {
+                           line(depth, "While");
+                           expression(node.condition, depth + 1);
+                           body(node.body, depth + 1);
+                       },
+                       [&](const RepeatStat& node) {
+                           line(depth, "Repeat");
+                           body(node.body, depth + 1);
+                           line(depth + 1, "Until");
+                           expression(node.condition, depth + 2);
+                       },
+                       [&](const IfStat& node) {
+                           line(depth, "If");
+                           bool first = true;
+                           for (const IfClause& clause : ast_.if_clauses(node.clauses)) {
+                               line(depth + 1, first ? "If" : "ElseIf");
+                               first = false;
+                               expression(clause.condition, depth + 2);
+                               line(depth + 2, "Then");
+                               block(clause.body, depth + 3);
+                           }
+                           if (node.has_else) {
+                               line(depth + 1, "Else");
+                               block(node.else_body, depth + 2);
+                           }
+                       },
+                       [&](const NumericForStat& node) {
+                           line(depth, std::format("NumericFor {}", ast_.text(node.variable)));
+                           expression(node.start, depth + 1);
+                           expression(node.limit, depth + 1);
+                           if (node.has_step) {
+                               expression(node.step, depth + 1);
+                           }
+                           body(node.body, depth + 1);
+                       },
+                       [&](const GenericForStat& node) {
+                           std::string names;
+                           for (const LocalName& name : ast_.local_names(node.names)) {
+                               names += names.empty() ? "" : ", ";
+                               names += ast_.text(name.name);
+                           }
+                           line(depth, "GenericFor " + names);
+                           line(depth + 1, "In");
+                           expressions(node.values, depth + 2);
+                           body(node.body, depth + 1);
                        },
                    },
                    ast_.statement(id));

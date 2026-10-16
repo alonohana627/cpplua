@@ -230,6 +230,20 @@ namespace {
 
 std::string grouped_list(const lua2::Ast& ast, lua2::IdRange<lua2::ExprId> list);
 
+// Parses `source` and returns its single statement, failing the test on an
+// error or on any other number of statements.
+lua2::Stat only_statement(std::string_view source, lua2::Ast& ast) {
+    Parser parser{source, "input"};
+    auto parsed = parser.parse_chunk();
+    if (!parsed) {
+        FAIL("unexpected parse error: " << parsed.error().message);
+    }
+    ast = std::move(*parsed);
+    const auto statements = ast.statements(ast.root());
+    REQUIRE(statements.size() == 1);
+    return ast.statement(statements[0]);
+}
+
 // Writes an expression with every operator in parentheses, so precedence is
 // visible on one line: "1 + 2 * 3" becomes "(1 + (2 * 3))". Indexing shows as
 // object{key} and Lua's own parentheses as [ ], so they cannot be confused
@@ -776,4 +790,210 @@ TEST_CASE("G3.1 statement nodes record their line", "[parser][statement]") {
     CHECK(ast->line(statements[0]) == 2);
     CHECK(ast->line(statements[1]) == 4);
     CHECK(ast->line(statements[2]) == 5);
+}
+
+// ---- Part 6: blocks and control flow ----
+
+TEST_CASE("G3.1 do blocks", "[parser][control]") {
+    CHECK(ast_of("do end") == "Chunk\n  Do\n");
+    CHECK(ast_of("do local x = 1 f(x) end") == "Chunk\n"
+                                               "  Do\n"
+                                               "    Local x\n"
+                                               "      Integer 1\n"
+                                               "    CallStatement\n"
+                                               "      Call\n"
+                                               "        Name f\n"
+                                               "        Name x\n");
+    CHECK(ast_of("do do end end") == "Chunk\n  Do\n    Do\n");
+    CHECK(ast_of("do return 1 end") == "Chunk\n  Do\n    Return\n      Integer 1\n");
+}
+
+TEST_CASE("G3.1 while loops", "[parser][control]") {
+    CHECK(ast_of("while x do x = x - 1 end") == "Chunk\n"
+                                                "  While\n"
+                                                "    Name x\n"
+                                                "    Body\n"
+                                                "      Assign\n"
+                                                "        Targets\n"
+                                                "          Name x\n"
+                                                "        Values\n"
+                                                "          Binary -\n"
+                                                "            Name x\n"
+                                                "            Integer 1\n");
+    CHECK(ast_of("while true do end") == "Chunk\n  While\n    True\n    Body\n");
+}
+
+TEST_CASE("G3.1 repeat loops", "[parser][control]") {
+    CHECK(ast_of("repeat f() until x") == "Chunk\n"
+                                          "  Repeat\n"
+                                          "    Body\n"
+                                          "      CallStatement\n"
+                                          "        Call\n"
+                                          "          Name f\n"
+                                          "    Until\n"
+                                          "      Name x\n");
+    CHECK(ast_of("repeat until 1 > 2") == "Chunk\n"
+                                          "  Repeat\n"
+                                          "    Body\n"
+                                          "    Until\n"
+                                          "      Binary >\n"
+                                          "        Integer 1\n"
+                                          "        Integer 2\n");
+}
+
+TEST_CASE("G3.1 if statements", "[parser][control]") {
+    CHECK(ast_of("if a then f() end") == "Chunk\n"
+                                         "  If\n"
+                                         "    If\n"
+                                         "      Name a\n"
+                                         "      Then\n"
+                                         "        CallStatement\n"
+                                         "          Call\n"
+                                         "            Name f\n");
+    CHECK(ast_of("if a then elseif b then elseif c then else end") == "Chunk\n"
+                                                                      "  If\n"
+                                                                      "    If\n"
+                                                                      "      Name a\n"
+                                                                      "      Then\n"
+                                                                      "    ElseIf\n"
+                                                                      "      Name b\n"
+                                                                      "      Then\n"
+                                                                      "    ElseIf\n"
+                                                                      "      Name c\n"
+                                                                      "      Then\n"
+                                                                      "    Else\n");
+}
+
+TEST_CASE("G3.1 an empty else is kept, a missing one is not", "[parser][control]") {
+    lua2::Ast ast;
+    CHECK(std::get<lua2::IfStat>(only_statement("if a then else end", ast)).has_else);
+    CHECK_FALSE(std::get<lua2::IfStat>(only_statement("if a then end", ast)).has_else);
+}
+
+TEST_CASE("G3.10 numeric for", "[parser][control]") {
+    CHECK(ast_of("for i = 1, 10 do end") == "Chunk\n"
+                                            "  NumericFor i\n"
+                                            "    Integer 1\n"
+                                            "    Integer 10\n"
+                                            "    Body\n");
+    CHECK(ast_of("for i = 10, 1, -1 do f(i) end") == "Chunk\n"
+                                                     "  NumericFor i\n"
+                                                     "    Integer 10\n"
+                                                     "    Integer 1\n"
+                                                     "    Unary -\n"
+                                                     "      Integer 1\n"
+                                                     "    Body\n"
+                                                     "      CallStatement\n"
+                                                     "        Call\n"
+                                                     "          Name f\n"
+                                                     "          Name i\n");
+    lua2::Ast ast;
+    CHECK_FALSE(
+        std::get<lua2::NumericForStat>(only_statement("for i = 1, 2 do end", ast)).has_step);
+    CHECK(std::get<lua2::NumericForStat>(only_statement("for i = 1, 2, 3 do end", ast)).has_step);
+}
+
+TEST_CASE("G3.1 generic for", "[parser][control]") {
+    CHECK(ast_of("for k, v in pairs(t) do end") == "Chunk\n"
+                                                   "  GenericFor k, v\n"
+                                                   "    In\n"
+                                                   "      Call\n"
+                                                   "        Name pairs\n"
+                                                   "        Name t\n"
+                                                   "    Body\n");
+    CHECK(ast_of("for x in f, s, c do end") == "Chunk\n"
+                                               "  GenericFor x\n"
+                                               "    In\n"
+                                               "      Name f\n"
+                                               "      Name s\n"
+                                               "      Name c\n"
+                                               "    Body\n");
+}
+
+TEST_CASE("G3.1 control flow nests", "[parser][control]") {
+    CHECK(ast_of("while a do if b then for i = 1, 2 do repeat until c end end end") ==
+          "Chunk\n"
+          "  While\n"
+          "    Name a\n"
+          "    Body\n"
+          "      If\n"
+          "        If\n"
+          "          Name b\n"
+          "          Then\n"
+          "            NumericFor i\n"
+          "              Integer 1\n"
+          "              Integer 2\n"
+          "              Body\n"
+          "                Repeat\n"
+          "                  Body\n"
+          "                  Until\n"
+          "                    Name c\n");
+}
+
+TEST_CASE("G2.5 return is last in its own block", "[parser][control]") {
+    CHECK(ast_of("if x then return 1 else return 2 end") == "Chunk\n"
+                                                            "  If\n"
+                                                            "    If\n"
+                                                            "      Name x\n"
+                                                            "      Then\n"
+                                                            "        Return\n"
+                                                            "          Integer 1\n"
+                                                            "    Else\n"
+                                                            "      Return\n"
+                                                            "        Integer 2\n");
+    CHECK(parse_error("do return 1 x = 2 end") == "input:1: 'end' expected near 'x'");
+    // 'until' ends a block too, so a return may come right before it.
+    CHECK(ast_of("repeat return until x") == "Chunk\n"
+                                             "  Repeat\n"
+                                             "    Body\n"
+                                             "      Return\n"
+                                             "    Until\n"
+                                             "      Name x\n");
+}
+
+TEST_CASE("G9.3 missing closing words", "[parser][control]") {
+    // On the same line: the short form.
+    CHECK(parse_error("do") == "input:1: 'end' expected near <eof>");
+    CHECK(parse_error("while x do") == "input:1: 'end' expected near <eof>");
+    CHECK(parse_error("repeat") == "input:1: 'until' expected near <eof>");
+    CHECK(parse_error("if x then") == "input:1: 'end' expected near <eof>");
+    CHECK(parse_error("for i = 1, 2 do") == "input:1: 'end' expected near <eof>");
+    // On a later line: the message names the opening word and its line.
+    CHECK(parse_error("do\n") == "input:2: 'end' expected (to close 'do' at line 1) near <eof>");
+    CHECK(parse_error("x = 1\nwhile x do\n\n") ==
+          "input:4: 'end' expected (to close 'while' at line 2) near <eof>");
+    CHECK(parse_error("repeat\nf()") ==
+          "input:2: 'until' expected (to close 'repeat' at line 1) near <eof>");
+    CHECK(parse_error("if x then\nelse\n") ==
+          "input:3: 'end' expected (to close 'if' at line 1) near <eof>");
+    CHECK(parse_error("for k in t do\nf()") ==
+          "input:2: 'end' expected (to close 'for' at line 1) near <eof>");
+}
+
+TEST_CASE("G9.3 missing middle words", "[parser][control]") {
+    CHECK(parse_error("while x f() end") == "input:1: 'do' expected near 'f'");
+    CHECK(parse_error("if x f() end") == "input:1: 'then' expected near 'f'");
+    CHECK(parse_error("if x then elseif y end") == "input:1: 'then' expected near 'end'");
+    CHECK(parse_error("for i = 1, 2 f() end") == "input:1: 'do' expected near 'f'");
+    CHECK(parse_error("for k in t f() end") == "input:1: 'do' expected near 'f'");
+    CHECK(parse_error("if x then else elseif y then end") ==
+          "input:1: 'end' expected near 'elseif'");
+}
+
+TEST_CASE("G3.10 broken for loops", "[parser][control]") {
+    CHECK(parse_error("for") == "input:1: <name> expected near <eof>");
+    CHECK(parse_error("for 1 = 2") == "input:1: <name> expected near '1'");
+    CHECK(parse_error("for x") == "input:1: '=' or 'in' expected near <eof>");
+    CHECK(parse_error("for x do end") == "input:1: '=' or 'in' expected near 'do'");
+    CHECK(parse_error("for i = 1 do end") == "input:1: ',' expected near 'do'");
+    CHECK(parse_error("for a, b = 1, 2 do end") == "input:1: 'in' expected near '='");
+    CHECK(parse_error("for k, in t do end") == "input:1: <name> expected near 'in'");
+    CHECK(parse_error("for k in do end") == "input:1: unexpected symbol near 'do'");
+}
+
+TEST_CASE("G2.2 block-ending words cannot start a chunk", "[parser][control]") {
+    CHECK(parse_error("end") == "input:1: <eof> expected near 'end'");
+    CHECK(parse_error("else") == "input:1: <eof> expected near 'else'");
+    CHECK(parse_error("until x") == "input:1: <eof> expected near 'until'");
+    CHECK(parse_error("do end end") == "input:1: <eof> expected near 'end'");
 }

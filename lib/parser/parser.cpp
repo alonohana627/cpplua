@@ -95,9 +95,14 @@ std::expected<std::optional<StatId>, SyntaxError> Parser::parse_statement() {
         return std::nullopt;
     }
     case TokenKind::Local: return parse_local();
-    // if, while, do, for, repeat, function, goto, break and labels arrive in
-    // parts 6 to 8. Until then they reach parse_expression_statement(),
-    // which reports "unexpected symbol".
+    case TokenKind::Do: return parse_do();
+    case TokenKind::While: return parse_while();
+    case TokenKind::Repeat: return parse_repeat();
+    case TokenKind::If: return parse_if();
+    case TokenKind::For: return parse_for();
+    // function, goto, break and labels arrive in parts 7 and 8. Until then
+    // they reach parse_expression_statement(), which reports
+    // "unexpected symbol".
     default: return parse_expression_statement();
     }
 }
@@ -246,6 +251,219 @@ std::expected<LocalName::Attribute, SyntaxError> Parser::parse_attribute() {
         return LocalName::Attribute::Close;
     }
     return semantic_error(std::format("unknown attribute '{}'", attribute)); // G3.15
+}
+
+// ---- Control flow ----
+//
+// Each statement records the line of its keyword, and closes with
+// expect_match(), so a missing 'end' on a later line names its opener:
+// "'end' expected (to close 'while' at line 3) near <eof>".
+
+std::expected<StatId, SyntaxError> Parser::parse_do() {
+    const int line = current_.line;
+    if (auto moved = advance(); !moved) {
+        return std::unexpected(std::move(moved.error()));
+    }
+    auto body = parse_block();
+    if (!body) {
+        return std::unexpected(std::move(body.error()));
+    }
+    if (auto closed = expect_match(TokenKind::End, TokenKind::Do, line); !closed) {
+        return std::unexpected(std::move(closed.error()));
+    }
+    return ast_.add_statement(DoStat{.body = *body}, line);
+}
+
+std::expected<StatId, SyntaxError> Parser::parse_while() {
+    const int line = current_.line;
+    if (auto moved = advance(); !moved) {
+        return std::unexpected(std::move(moved.error()));
+    }
+    auto condition = parse_expression();
+    if (!condition) {
+        return std::unexpected(std::move(condition.error()));
+    }
+    if (auto keyword = expect(TokenKind::Do); !keyword) {
+        return std::unexpected(std::move(keyword.error()));
+    }
+    auto body = parse_block();
+    if (!body) {
+        return std::unexpected(std::move(body.error()));
+    }
+    if (auto closed = expect_match(TokenKind::End, TokenKind::While, line); !closed) {
+        return std::unexpected(std::move(closed.error()));
+    }
+    return ast_.add_statement(WhileStat{.condition = *condition, .body = *body}, line);
+}
+
+std::expected<StatId, SyntaxError> Parser::parse_repeat() {
+    const int line = current_.line;
+    if (auto moved = advance(); !moved) {
+        return std::unexpected(std::move(moved.error()));
+    }
+    auto body = parse_block(); // block_follow() stops at 'until'
+    if (!body) {
+        return std::unexpected(std::move(body.error()));
+    }
+    if (auto closed = expect_match(TokenKind::Until, TokenKind::Repeat, line); !closed) {
+        return std::unexpected(std::move(closed.error()));
+    }
+    auto condition = parse_expression();
+    if (!condition) {
+        return std::unexpected(std::move(condition.error()));
+    }
+    return ast_.add_statement(RepeatStat{.body = *body, .condition = *condition}, line);
+}
+
+std::expected<StatId, SyntaxError> Parser::parse_if() {
+    const int line = current_.line;
+    std::vector<IfClause> clauses;
+
+    // The 'if' clause, then each 'elseif' clause: keyword, condition,
+    // 'then', block.
+    do {
+        if (auto moved = advance(); !moved) { // 'if' or 'elseif'
+            return std::unexpected(std::move(moved.error()));
+        }
+        auto condition = parse_expression();
+        if (!condition) {
+            return std::unexpected(std::move(condition.error()));
+        }
+        if (auto then = expect(TokenKind::Then); !then) {
+            return std::unexpected(std::move(then.error()));
+        }
+        auto body = parse_block();
+        if (!body) {
+            return std::unexpected(std::move(body.error()));
+        }
+        clauses.push_back(IfClause{.condition = *condition, .body = *body});
+    } while (check(TokenKind::ElseIf));
+
+    IfStat statement; // no else until one is read
+    statement.clauses = ast_.add_if_clause_list(clauses);
+    auto has_else = accept(TokenKind::Else);
+    if (!has_else) {
+        return std::unexpected(std::move(has_else.error()));
+    }
+    if (*has_else) {
+        auto body = parse_block();
+        if (!body) {
+            return std::unexpected(std::move(body.error()));
+        }
+        statement.else_body = *body;
+        statement.has_else = true;
+    }
+    if (auto closed = expect_match(TokenKind::End, TokenKind::If, line); !closed) {
+        return std::unexpected(std::move(closed.error()));
+    }
+    return ast_.add_statement(statement, line);
+}
+
+std::expected<StatId, SyntaxError> Parser::parse_for() {
+    const int line = current_.line;
+    if (auto moved = advance(); !moved) {
+        return std::unexpected(std::move(moved.error()));
+    }
+    auto first_name = expect_name();
+    if (!first_name) {
+        return std::unexpected(std::move(first_name.error()));
+    }
+    // The token after the first name decides which for it is (G3.10).
+    switch (current_.kind) {
+    case TokenKind::Assign: return parse_numeric_for(*first_name, line);
+    case TokenKind::Comma:
+    case TokenKind::In: return parse_generic_for(*first_name, line);
+    default: return error("'=' or 'in' expected");
+    }
+}
+
+std::expected<StatId, SyntaxError> Parser::parse_numeric_for(TextRange variable, int line) {
+    if (auto moved = advance(); !moved) { // '='
+        return std::unexpected(std::move(moved.error()));
+    }
+    NumericForStat statement; // filled in as the parts are read
+    statement.variable = variable;
+
+    auto start = parse_expression();
+    if (!start) {
+        return std::unexpected(std::move(start.error()));
+    }
+    statement.start = *start;
+    if (auto comma = expect(TokenKind::Comma); !comma) {
+        return std::unexpected(std::move(comma.error()));
+    }
+    auto limit = parse_expression();
+    if (!limit) {
+        return std::unexpected(std::move(limit.error()));
+    }
+    statement.limit = *limit;
+
+    // The step is optional (it defaults to 1 at run time).
+    auto has_step = accept(TokenKind::Comma);
+    if (!has_step) {
+        return std::unexpected(std::move(has_step.error()));
+    }
+    if (*has_step) {
+        auto step = parse_expression();
+        if (!step) {
+            return std::unexpected(std::move(step.error()));
+        }
+        statement.step = *step;
+        statement.has_step = true;
+    }
+
+    auto body = parse_for_body(line);
+    if (!body) {
+        return std::unexpected(std::move(body.error()));
+    }
+    statement.body = *body;
+    return ast_.add_statement(statement, line);
+}
+
+std::expected<StatId, SyntaxError> Parser::parse_generic_for(TextRange first_name, int line) {
+    std::vector<LocalName> names{LocalName{.name = first_name}};
+    for (;;) {
+        auto comma = accept(TokenKind::Comma);
+        if (!comma) {
+            return std::unexpected(std::move(comma.error()));
+        }
+        if (!*comma) {
+            break;
+        }
+        auto name = expect_name();
+        if (!name) {
+            return std::unexpected(std::move(name.error()));
+        }
+        names.push_back(LocalName{.name = *name});
+    }
+    if (auto keyword = expect(TokenKind::In); !keyword) {
+        return std::unexpected(std::move(keyword.error()));
+    }
+    auto values = parse_expression_list();
+    if (!values) {
+        return std::unexpected(std::move(values.error()));
+    }
+    auto body = parse_for_body(line);
+    if (!body) {
+        return std::unexpected(std::move(body.error()));
+    }
+    return ast_.add_statement(
+        GenericForStat{.names = ast_.add_local_name_list(names), .values = *values, .body = *body},
+        line);
+}
+
+std::expected<Block, SyntaxError> Parser::parse_for_body(int line) {
+    if (auto keyword = expect(TokenKind::Do); !keyword) {
+        return std::unexpected(std::move(keyword.error()));
+    }
+    auto body = parse_block();
+    if (!body) {
+        return body;
+    }
+    if (auto closed = expect_match(TokenKind::End, TokenKind::For, line); !closed) {
+        return std::unexpected(std::move(closed.error()));
+    }
+    return body;
 }
 
 std::expected<IdRange<ExprId>, SyntaxError> Parser::parse_expression_list() {
