@@ -1,0 +1,18 @@
+# Roadmap
+
+Each stage ends with green tests before the next starts.
+
+1. **Skeleton + tests** (done): CMake + Ninja presets, clang++ with libc++, C++26, Catch2 v3 via FetchContent, a `lua2_core` library, a `lua2` executable, CTest.
+2. **Lexer**: source text to tokens (names, keywords, numbers incl. hex floats, long strings and comments, escapes), with line numbers for errors.
+3. **Parser + AST**: recursive descent with Lua's operator precedence; statements, blocks, functions; syntax errors that match Lua's wording.
+4. **Values**: nil, boolean, integer vs float (5.4 integer subtype), strings; arithmetic and comparison rules, string/number coercion.
+5. **Interpreter**: tree-walking evaluator first (simple to test), locals and scopes, control flow, `goto`, varargs, multiple returns.
+6. **Tables**: array part + hash part, `#` border, `next`/`pairs`.
+7. **Closures + upvalues**: shared upvalues, `<const>` and `<close>`.
+8. **Metatables**: `__index`, `__newindex`, arithmetic/comparison metamethods, `__call`, `__tostring`, `__gc`, `__close`.
+9. **Garbage collector**: mark and sweep (later incremental/generational), weak tables, finalizers.
+10. **Errors**: `error`, `pcall`/`xpcall`, tracebacks with line info.
+11. **Standard library**: base, string (incl. patterns and `string.format`), table, math, utf8, os/io subsets.
+12. **Coroutines**: `coroutine.*`, yield across the interpreter.
+13. **Bytecode VM** (optional rewrite of stage 5 for speed), kept honest by the same tests.
+14. **Conformance**: run the official Lua 5.4 test suite (`lua-5.4.x-tests`) and work through failures.
