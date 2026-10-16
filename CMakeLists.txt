@@ -21,6 +21,7 @@ target_compile_options(lua2_warnings INTERFACE
 # The interpreter library. Embedders link lua2::lua2.
 add_library(lua2_lib
   lib/version.cpp
+  lib/lexer/lexer.cpp
 )
 add_library(lua2::lua2 ALIAS lua2_lib)
 target_include_directories(lua2_lib
@@ -41,13 +42,17 @@ if(BUILD_TESTING)
   FetchContent_Declare(Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
     GIT_TAG        v3.9.1
-    GIT_SHALLOW    TRUE)
+    GIT_SHALLOW    TRUE
+    SYSTEM)  # treat Catch2's headers as system headers: no warnings from its macros
   FetchContent_MakeAvailable(Catch2)
 
   add_executable(lua2_tests
     tests/version_test.cpp
+    tests/lexer_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
+  # Tests may include internal headers from lib/ to test internals directly.
+  target_include_directories(lua2_tests PRIVATE lib)
   target_compile_definitions(lua2_tests PRIVATE LUA2_VERSION="${PROJECT_VERSION}")
 
   include(Catch)
