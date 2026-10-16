@@ -4,9 +4,10 @@ How the lexer works today. This page describes the code as it is, and is updated
 grows. The rules it implements are in [../spec/lexical.md](../spec/lexical.md), and the remaining
 work is in [../plan/lexer.md](../plan/lexer.md).
 
-**Status:** parts 0 to 4, 6 and 7 of the plan: operators, whitespace, line counting, names,
-keywords, stray characters, the error type, and all numbers (decimal, hex, malformed). Comments
-(part 5), strings and long brackets are not lexed yet.
+**Status:** parts 0 to 8 of the plan except part 9: operators, whitespace, line counting, names,
+keywords, stray characters, the error type, all numbers, short comments, and short strings with
+the simple escapes. Numeric and `\u{}` escapes (part 9) and long brackets (part 10) are not lexed
+yet.
 
 ## Where it lives
 
@@ -15,7 +16,7 @@ keywords, stray characters, the error type, and all numbers (decimal, hex, malfo
 | `lib/internal/lexer/token.hpp`  | `TokenKind`, `TokenValue`, `Token`, `keywords`   |
 | `lib/internal/lexer/lexer.hpp`  | the `Lexer` class                                |
 | `lib/lexer/lexer.cpp`           | its implementation                               |
-| `lib/internal/syntax_error.hpp` | `SyntaxError`, `near_eof`, `near_char`           |
+| `lib/internal/syntax_error.hpp` | `SyntaxError`, `near_eof`, `near_char`, `near_text` |
 | `lib/syntax_error.cpp`          | their implementation                             |
 | `tests/lexer_test.cpp`          | lexer tests, tagged `[lexer]`                    |
 | `tests/syntax_error_test.cpp`   | error tests, tagged `[syntax-error]`             |
@@ -53,8 +54,9 @@ A `Token` has three fields:
 - `line`: the line the token **starts** on, counted from 1.
 - `value`: a `TokenValue`, a `std::variant` of `std::monostate`, `std::string`, `std::int64_t`
   and `double`. A `Name` holds its text as a `std::string`, and an `Other` holds its one byte as
-  a `std::string`. An `Integer` holds a `std::int64_t` and a `Float` a `double`. Operators and
-  keywords hold `std::monostate` (no value). Strings will hold a `std::string`.
+  a `std::string`. An `Integer` holds a `std::int64_t`, a `Float` a `double`, and a `String` its
+  bytes after escapes as a `std::string`. Operators and keywords hold `std::monostate` (no
+  value).
 
 Tokens compare with `==` (kind, line and value), which keeps tests short.
 
@@ -64,6 +66,7 @@ Tokens compare with `==` (kind, line and value), which keeps tests short.
 - `Name`
 - `Other`, for a stray byte such as `@`
 - `Integer` and `Float`, for numerals
+- `String`, for string literals
 - 23 single-character tokens: `+ - * / % ^ # & ~ | < > = ( ) { } [ ] ; : , .`
 - 10 multi-character tokens: `== ~= <= >= << >> // :: .. ...`
 - 22 keywords, one kind each: `And`, `Break`, ... `While` (`ElseIf` for `elseif`)
@@ -112,17 +115,18 @@ The `Lexer` holds only five things:
 1. At the end of the input, return `EndOfStream`.
 2. **Whitespace** (space, `\t`, `\v`, `\f`): skip it and loop again.
 3. **Line breaks** (`\n`, `\r`): call `read_newline()` and loop again.
-4. **Characters that are always one token** (`+ - * % ^ # & | ( ) { } [ ] ; ,`): return that
+4. **`-`**: a second `-` starts a comment, so call `skip_comment()` and loop again. Otherwise it
+   is `Minus`.
+5. **A quote** (`"` or `'`): call `read_string()`, which returns a `String`.
+6. **Characters that are always one token** (`+ * % ^ # & | ( ) { } [ ] ; ,`): return that
    token.
-5. **Characters that may start a longer token** (`= ~ / : < > .`): look ahead with `peek()` and
+7. **Characters that may start a longer token** (`= ~ / : < > .`): look ahead with `peek()` and
    take the **longest** token that matches (*maximal munch*). So `==` is one token, `<<=` is `<<`
    then `=`, and `....` is `...` then `.`. The one exception: a `.` followed by a digit starts a
    number, as in `.5`.
-6. **A letter or `_`**: call `read_name()`, which returns a name or a keyword.
-7. **A digit**: call `read_number()`, which returns an `Integer` or a `Float`.
-8. **A quote** returns the temporary error `not supported yet near '''`, until strings are
-   handled.
-9. **Any other byte** (`@`, `$`, `!`, a byte above 127, even `\0`) becomes an `Other` token
+8. **A letter or `_`**: call `read_name()`, which returns a name or a keyword.
+9. **A digit**: call `read_number()`, which returns an `Integer` or a `Float`.
+10. **Any other byte** (`@`, `$`, `!`, a byte above 127, even `\0`) becomes an `Other` token
    holding that byte. See "Stray characters" below.
 
 Private helpers:
@@ -136,6 +140,8 @@ Private helpers:
 | `read_newline()`    | moves past one line break and counts the line                    |
 | `read_name()`       | reads a name, then checks the keyword table                      |
 | `read_number()`     | reads a numeral greedily, then validates and converts it         |
+| `skip_comment()`    | moves past `--` and the rest of the line, not the line break     |
+| `read_string()`     | reads a short string, processing escapes                         |
 | `error(msg, near)`  | records a `SyntaxError` on the current line and returns it       |
 
 `take` builds the token before moving forward, which is how every token gets the line it starts on.
@@ -211,8 +217,7 @@ return error("unfinished string", near_eof);
 returns that same error on every call: lexing is over. Like Lua, the lexer never tries to recover
 and find more errors. (Reporting all errors is a possible later mode, stage 15 of the roadmap.)
 
-The errors so far are `malformed number` and the temporary "not supported yet" for quotes.
-Unfinished strings and bad escapes come with their parts.
+The errors so far are `malformed number`, `unfinished string` and `invalid escape sequence`.
 
 ## Numbers
 
@@ -258,6 +263,51 @@ An integer is a numeral with no point and no exponent that fits; anything else t
 Numerals have no sign: `-5` is `Minus` then `Integer 5`. The parser turns that into a negation.
 This is why `-9223372036854775808` is minus a *float*: the integer part alone is too large.
 
+## Comments
+
+`--` starts a comment, so the `-` case in `next()` peeks at the next character: one `-` is
+`Minus`, two start a comment. `skip_comment()` moves past the `--` and everything up to the end of
+the line, then `next()` loops again as if it had seen whitespace.
+
+The line break itself is **not** part of the comment: `next()` reads it on its next turn and
+counts the line, so line numbers stay right after a comment. A comment may also run to the end of
+the input. Inside a comment nothing is lexed, so `-- "unfinished 3x @` produces no tokens and no
+error.
+
+Long comments (`--[[ ... ]]`) are not handled yet: until long brackets arrive, they are read as
+short comments that end at the end of the line.
+
+## Strings
+
+`read_string()` reads a string in `"..."` or `'...'`. The opening quote decides which quote
+closes it, so the other one may appear inside unescaped: `"it's"`, `'say "hi"'`.
+
+It builds the string's value byte by byte in a `std::string`:
+
+- **The closing quote** ends the string.
+- **A raw line break** is an error: a short string must stay on one line (`unfinished string`).
+- **End of input** is an error too (`unfinished string near <eof>`).
+- **A backslash** starts an escape, which adds a different byte to the value:
+
+  | Escape                    | Adds                                              |
+  | ------------------------- | ------------------------------------------------- |
+  | `\a \b \f \n \r \t \v`    | bell, backspace, form feed, newline, carriage return, tab, vertical tab |
+  | `\\ \" \'`                | the backslash or quote itself                     |
+  | `\` + a real line break   | one `\n`, whatever the line break was; the line is counted |
+  | anything else             | the error `invalid escape sequence`               |
+
+- **Any other byte** is added as it is, including `\0` and bytes above 127.
+
+The token's line is the line the string **starts** on, even when an escaped line break moves the
+lexer to the next line.
+
+Like Lua, the value starts out with the opening quote in it, because error messages show the
+string read so far, *after* escapes: for `"a\tb` followed by a line break the message is
+`unfinished string near '"a<TAB>b'`, and for `"abc\q"` it is
+`invalid escape sequence near '"abc\q'`. The quote is removed before the token is returned.
+
+`\x`, `\z`, `\ddd` and `\u{...}` are part 9. Until then they are `invalid escape sequence`.
+
 ## Line counting
 
 A line break is `\n`, `\r`, `\r\n` or `\n\r`, and each counts as **one** line. `read_newline()`
@@ -266,7 +316,9 @@ character. So `\r\n` is one line, but `\n\n` and `\r\r` are two.
 
 ## Not handled yet
 
-In plan order: comments (part 5), strings, long strings and long comments. Until then:
+In plan order:
 
-- `-` is always `Minus` (no `--` comments) and `[` is always `LBracket` (no `[[` strings).
-- A quote returns the temporary "not supported yet" error.
+- **Part 9:** the escapes `\xXX`, `\z`, `\ddd` and `\u{XXX}`, which are `invalid escape
+  sequence` for now.
+- **Part 10:** long brackets. `[` is always `LBracket` (no `[[ ... ]]` strings), and `--[[`
+  starts a short comment instead of a long one.

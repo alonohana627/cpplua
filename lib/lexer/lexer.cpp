@@ -7,6 +7,7 @@
 #include <string>
 #include <string_view>
 #include <system_error>
+#include <utility>
 
 #include "syntax_error.hpp"
 
@@ -120,10 +121,21 @@ std::expected<Token, SyntaxError> Lexer::next() {
         case '\n':
         case '\r': read_newline(); continue;
 
+        // '-' is minus, unless a second '-' starts a comment (L3.2, L8.3).
+        case '-':
+            if (peek(1) != '-') {
+                return single(TokenKind::Minus);
+            }
+            skip_comment();
+            continue;
+
+        // Quotes start a short string (L7.1).
+        case '"':
+        case '\'': return read_string();
+
         // Tokens that are always one character (L8.1).
-        // ('-' becomes a comment in part 5, '[' a long string in part 10.)
+        // ('[' becomes a long string in part 10.)
         case '+': return single(TokenKind::Plus);
-        case '-': return single(TokenKind::Minus);
         case '*': return single(TokenKind::Star);
         case '%': return single(TokenKind::Percent);
         case '^': return single(TokenKind::Caret);
@@ -180,10 +192,6 @@ std::expected<Token, SyntaxError> Lexer::next() {
             // A digit starts a number (L5.1).
             if (is_digit(c)) {
                 return read_number();
-            }
-            // Strings arrive in part 8.
-            if (c == '"' || c == '\'') {
-                return error("not supported yet", near_char(static_cast<unsigned char>(c)));
             }
             // Any other byte, such as @, $ or a byte above 127, is not an
             // error here: it becomes an Other token, and the parser rejects
@@ -298,6 +306,94 @@ std::expected<Token, SyntaxError> Lexer::read_number() {
         return Token{.kind = TokenKind::Float, .line = line_, .value = *number};
     }
     return error("malformed number", near_text(text));
+}
+
+void Lexer::skip_comment() {
+    // A short comment runs to the end of the line (L3.4). The line break is
+    // not part of it: next() reads it afterwards and counts the line. A
+    // comment may also end at the end of the input (L3.6).
+    // (Long comments, --[[ ... ]], arrive with long brackets in part 10.
+    // Until then they are read as short comments.)
+    pos_ += 2; // the "--"
+    while (pos_ < source_.size() && peek(0) != '\n' && peek(0) != '\r') {
+        ++pos_;
+    }
+}
+
+std::expected<Token, SyntaxError> Lexer::read_string() {
+    const char quote = peek(0);
+    const int start_line = line_; // the token gets the line it starts on (L2.2)
+    ++pos_;
+
+    // The string's bytes, after escapes are processed. Like Lua, it starts
+    // with the opening quote, because error messages show the string read so
+    // far: unfinished string near '"abc'. The quote is dropped at the end.
+    std::string text(1, quote);
+
+    for (;;) {
+        if (pos_ >= source_.size()) {
+            return error("unfinished string", near_eof); // L7.2
+        }
+        const char c = source_[pos_];
+        if (c == quote) {
+            ++pos_;
+            break;
+        }
+        switch (c) {
+        // A raw line break cannot appear in a short string (L7.2).
+        case '\n':
+        case '\r': return error("unfinished string", near_text(text));
+
+        case '\\': {
+            ++pos_; // the backslash
+            if (pos_ >= source_.size()) {
+                continue; // end of input: reported as unfinished above
+            }
+            const char escape = source_[pos_];
+            switch (escape) {
+            // Named escapes (L7.3).
+            case 'a': text += '\a'; break;
+            case 'b': text += '\b'; break;
+            case 'f': text += '\f'; break;
+            case 'n': text += '\n'; break;
+            case 'r': text += '\r'; break;
+            case 't': text += '\t'; break;
+            case 'v': text += '\v'; break;
+            case '\\':
+            case '"':
+            case '\'': text += escape; break;
+
+            // A backslash before a real line break is a newline, whatever the
+            // line break was, and the line is counted (L7.3).
+            case '\n':
+            case '\r':
+                read_newline();
+                text += '\n';
+                continue; // read_newline already moved past it
+
+            // \x, \z, \ddd and \u{} arrive in part 9. Anything else is an
+            // error, shown with the backslash and the bad character (L7.6).
+            default:
+                text += '\\';
+                text += escape;
+                ++pos_;
+                return error("invalid escape sequence", near_text(text));
+            }
+            ++pos_; // the escape character
+            break;
+        }
+
+        // Any other byte stands for itself (L7.7), including '\0' and
+        // bytes above 127.
+        default:
+            text += c;
+            ++pos_;
+            break;
+        }
+    }
+
+    text.erase(0, 1); // drop the opening quote
+    return Token{.kind = TokenKind::String, .line = start_line, .value = std::move(text)};
 }
 
 } // namespace lua2

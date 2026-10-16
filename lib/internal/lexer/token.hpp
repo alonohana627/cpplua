@@ -19,6 +19,7 @@ enum class TokenKind : std::uint8_t {
     Other,   // any other byte, such as @ or $; value holds that byte (L9.1)
     Integer, // an integer numeral such as 42; value holds a std::int64_t (L5.6, L5.7)
     Float,   // a float numeral such as 3.5 or 1e10; value holds a double (L5.6)
+    String,  // a string literal; value holds its bytes after escapes (L7)
 
     // Single-character tokens (L8.1)
     Plus,      // +  addition

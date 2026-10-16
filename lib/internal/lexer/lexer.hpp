@@ -65,6 +65,14 @@ private:
     // token, or a "malformed number" error (L5).
     std::expected<Token, SyntaxError> read_number();
 
+    // Consumes a short comment, from "--" up to the end of the line (L3.4).
+    void skip_comment();
+
+    // Consumes a short string in '...' or "..." and returns it as a String
+    // token holding its bytes after escapes, or an error for an unfinished
+    // string or a bad escape (L7.1-L7.3, L7.6, L7.7).
+    std::expected<Token, SyntaxError> read_string();
+
     std::string_view source_;
     std::string_view chunk_name_;
     std::size_t pos_ = 0; // index of the next character to read

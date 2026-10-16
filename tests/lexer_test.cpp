@@ -311,18 +311,16 @@ TEST_CASE("L1.3 bytes above 127 are not letters", "[lexer]") {
 
 // ---- Errors are returned, not thrown ----
 //
-// No real lexical error exists yet, so these use the temporary "not supported
-// yet" error for a quote. Part 8 turns a lone quote into a real error
-// (unfinished string), and these tests move to it then.
+// These use a lone quote, which is an unfinished string (L7.2).
 
 TEST_CASE("L10.1 an error is returned with chunk, line and near text", "[lexer]") {
-    Lexer lexer{"x\n\n'", "test.lua"};
+    Lexer lexer{"x\n\n'abc\n", "test.lua"};
     REQUIRE(lexer.next().has_value()); // x
 
     const auto result = lexer.next();
 
     REQUIRE_FALSE(result.has_value());
-    CHECK(result.error().message == "test.lua:3: not supported yet near '''");
+    CHECK(result.error().message == "test.lua:3: unfinished string near ''abc'");
     CHECK(result.error().line == 3);
 }
 
@@ -588,4 +586,163 @@ TEST_CASE("L5.2 the number ends at the first character that cannot belong", "[le
                       TokenKind::EndOfStream});
     CHECK(kinds("0xff-1") == std::vector{TokenKind::Integer, TokenKind::Minus, TokenKind::Integer,
                                          TokenKind::EndOfStream});
+}
+
+// ---- Part 5: short comments ----
+
+TEST_CASE("L3.2 a comment is skipped", "[lexer][comment]") {
+    CHECK(kinds("a -- c") == std::vector{TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("--only a comment") == std::vector{TokenKind::EndOfStream});
+    CHECK(kinds("--") == std::vector{TokenKind::EndOfStream});
+    CHECK(kinds("---") == std::vector{TokenKind::EndOfStream});
+}
+
+TEST_CASE("L3.4 a short comment ends at the line break", "[lexer][comment]") {
+    CHECK(kinds("x = 1 -- set x\ny = 2") ==
+          std::vector{TokenKind::Name, TokenKind::Assign, TokenKind::Integer, TokenKind::Name,
+                      TokenKind::Assign, TokenKind::Integer, TokenKind::EndOfStream});
+    CHECK(kinds("a--c\nb") ==
+          std::vector{TokenKind::Name, TokenKind::Name, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L3.4 the line break after a comment is still counted", "[lexer][comment]") {
+    const auto line_break = GENERATE(as<std::string_view>{}, "\n", "\r", "\r\n", "\n\r");
+    CAPTURE(line_break.size());
+
+    std::string source = "a -- comment";
+    source += line_break;
+    source += 'b';
+
+    CHECK(lines(source) == std::vector{1, 2, 2});
+}
+
+TEST_CASE("L3.4 text that is not a long bracket is a short comment", "[lexer][comment]") {
+    CHECK(kinds("--[ x\ny") == std::vector{TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("--[=x\ny") == std::vector{TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("--[==x\ny") == std::vector{TokenKind::Name, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L3.6 a comment may end at the end of the input", "[lexer][comment]") {
+    CHECK(lines("a\n-- last line") == std::vector{1, 2});
+}
+
+TEST_CASE("L8.3 one '-' is minus, two start a comment", "[lexer][comment]") {
+    CHECK(kinds("a - b") ==
+          std::vector{TokenKind::Name, TokenKind::Minus, TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("a-b") ==
+          std::vector{TokenKind::Name, TokenKind::Minus, TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("a - -b") == std::vector{TokenKind::Name, TokenKind::Minus, TokenKind::Minus,
+                                         TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("1--2") == std::vector{TokenKind::Integer, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L3.2 a comment hides everything on its line", "[lexer][comment]") {
+    // Even text that would be an error: an unfinished string, a bad number.
+    CHECK(kinds("-- \"unfinished 3x 0xg @") == std::vector{TokenKind::EndOfStream});
+}
+
+// ---- Part 8: short strings, simple escapes ----
+
+namespace {
+
+// Lexes `source`, which must be exactly one String token, and returns its bytes.
+std::string string_value(std::string_view source) {
+    const auto token = only_token(source);
+    REQUIRE(token.kind == TokenKind::String);
+    return std::get<std::string>(token.value);
+}
+
+// Lexes `source`, which must fail on its first token, and returns the message.
+std::string error_message(std::string_view source) {
+    Lexer lexer{source, "input"};
+    const auto result = lexer.next();
+    REQUIRE_FALSE(result.has_value());
+    return result.error().message;
+}
+
+} // namespace
+
+TEST_CASE("L7.1 strings in double and single quotes", "[lexer][string]") {
+    CHECK(string_value(R"("abc")") == "abc");
+    CHECK(string_value("'abc'") == "abc");
+    CHECK(string_value(R"("")").empty());
+    CHECK(string_value("''").empty());
+    CHECK(string_value(R"("hello, world")") == "hello, world");
+}
+
+TEST_CASE("L7.1 the other quote may appear unescaped", "[lexer][string]") {
+    CHECK(string_value(R"("it's")") == "it's");
+    CHECK(string_value(R"('say "hi"')") == R"(say "hi")");
+}
+
+TEST_CASE("L7.3 named escapes", "[lexer][string]") {
+    const auto [source, value] = GENERATE(values<std::pair<std::string_view, std::string_view>>({
+        {R"("\a")", "\a"},
+        {R"("\b")", "\b"},
+        {R"("\f")", "\f"},
+        {R"("\n")", "\n"},
+        {R"("\r")", "\r"},
+        {R"("\t")", "\t"},
+        {R"("\v")", "\v"},
+        {R"("\\")", "\\"},
+        {R"("\"")", "\""},
+        {R"("\'")", "'"},
+        {R"('\'')", "'"},
+        {R"("a\tb\nc")", "a\tb\nc"},
+    }));
+    CAPTURE(source);
+
+    CHECK(string_value(source) == value);
+}
+
+TEST_CASE("L7.3 a backslash before a line break is one newline", "[lexer][string]") {
+    const auto line_break = GENERATE(as<std::string_view>{}, "\n", "\r", "\r\n", "\n\r");
+    CAPTURE(line_break.size());
+
+    std::string source = "\"a\\";
+    source += line_break;
+    source += "b\" x";
+
+    Lexer lexer{source};
+    const auto string = next_token(lexer);
+    const auto name = next_token(lexer);
+
+    CHECK(string.value == lua2::TokenValue{std::string("a\nb")});
+    CHECK(string.line == 1); // the line the string starts on
+    CHECK(name.line == 2);   // the escaped line break was counted
+}
+
+TEST_CASE("L7.7 other bytes stand for themselves", "[lexer][string]") {
+    CHECK(string_value("\"a\xC3\xA9z\"") == "a\xC3\xA9z"); // UTF-8 bytes
+    const std::string with_zero{"\"a\0b\"", 5};
+    CHECK(string_value(with_zero) == std::string("a\0b", 3)); // a raw zero byte
+    CHECK(string_value(R"("-- not a comment")") == "-- not a comment");
+}
+
+TEST_CASE("L7.2 a raw line break makes an unfinished string", "[lexer][string]") {
+    CHECK(error_message("\"abc\ndef\"") == "input:1: unfinished string near '\"abc'");
+    CHECK(error_message("'abc\r'") == "input:1: unfinished string near ''abc'");
+    // The near text shows the bytes after escapes, as Lua does.
+    CHECK(error_message("\"a\\tb\n") == "input:1: unfinished string near '\"a\tb'");
+}
+
+TEST_CASE("L7.2 end of input makes an unfinished string near <eof>", "[lexer][string]") {
+    CHECK(error_message("\"abc") == "input:1: unfinished string near <eof>");
+    CHECK(error_message("'") == "input:1: unfinished string near <eof>");
+    CHECK(error_message("\"abc\\") == "input:1: unfinished string near <eof>");
+}
+
+TEST_CASE("L7.6 an unknown escape is an error", "[lexer][string]") {
+    CHECK(error_message(R"("abc\q")") == R"(input:1: invalid escape sequence near '"abc\q')");
+    CHECK(error_message(R"('\c')") == R"(input:1: invalid escape sequence near ''\c')");
+}
+
+TEST_CASE("L7.1 strings next to other tokens", "[lexer][string]") {
+    CHECK(kinds(R"(print("hi"))") == std::vector{TokenKind::Name, TokenKind::LParen,
+                                                 TokenKind::String, TokenKind::RParen,
+                                                 TokenKind::EndOfStream});
+    CHECK(kinds(R"("a".."b")") == std::vector{TokenKind::String, TokenKind::Concat,
+                                              TokenKind::String, TokenKind::EndOfStream});
+    CHECK(kinds(R"(x = 'y' -- comment)") == std::vector{TokenKind::Name, TokenKind::Assign,
+                                                        TokenKind::String, TokenKind::EndOfStream});
 }
