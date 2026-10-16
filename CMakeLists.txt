@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 # Pre-release: bump by 0.0.1 per step. The release becomes 5.4.
-project(lua2 VERSION 0.0.1 LANGUAGES CXX)
+project(lua2 VERSION 0.0.2 LANGUAGES CXX)
 
 # C++26 (clang spells it -std=c++2c), no compiler extensions.
 set(CMAKE_CXX_STANDARD 26)
@@ -23,7 +23,9 @@ target_compile_options(lua2_warnings INTERFACE
 add_library(lua2_lib
   lib/version.cpp
   lib/syntax_error.cpp
+  lib/debug.cpp
   lib/lexer/lexer.cpp
+  lib/lexer/token.cpp
 )
 add_library(lua2::lua2 ALIAS lua2_lib)
 target_include_directories(lua2_lib
@@ -52,11 +54,15 @@ if(BUILD_TESTING)
     tests/version_test.cpp
     tests/lexer_test.cpp
     tests/syntax_error_test.cpp
+    tests/debug_test.cpp
+    tests/conformance_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
   # Tests may include internal headers from lib/internal/ to test internals directly.
   target_include_directories(lua2_tests PRIVATE lib/internal)
-  target_compile_definitions(lua2_tests PRIVATE LUA2_VERSION="${PROJECT_VERSION}")
+  target_compile_definitions(lua2_tests PRIVATE
+    LUA2_VERSION="${PROJECT_VERSION}"
+    LUA2_FIXTURES_DIR="${PROJECT_SOURCE_DIR}/tests/fixtures")
 
   include(Catch)
   catch_discover_tests(lua2_tests)

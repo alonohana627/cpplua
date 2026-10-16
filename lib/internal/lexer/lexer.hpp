@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <expected>
 #include <optional>
 #include <source_location>
@@ -66,8 +67,32 @@ private:
     // token, or a "malformed number" error (L5).
     std::expected<Token, SyntaxError> read_number();
 
-    // Consumes a short comment, from "--" up to the end of the line (L3.4).
-    void skip_comment();
+    // Consumes a comment starting at "--": a long comment when a long
+    // bracket follows (L3.3), otherwise up to the end of the line (L3.4).
+    // Only an unfinished long comment is an error (L3.5).
+    std::expected<void, SyntaxError> skip_comment();
+
+    // A long bracket at the current '[' or ']' (L6.1): its level (the
+    // number of '=' signs), and whether the same bracket follows them.
+    struct LongBracket {
+        std::size_t level = 0;
+        bool valid = false;
+    };
+
+    // Looks at the bracket under the cursor without consuming anything.
+    [[nodiscard]] LongBracket long_bracket() const;
+
+    // Whether a long bracket holds a string or a comment. They are read the
+    // same way; a comment keeps no text and says "comment" in its error.
+    enum class LongKind : std::uint8_t { String, Comment };
+
+    // Consumes a long string [==[ ... ]==] of `level` and returns it as a
+    // String token (L7.8-L7.12).
+    std::expected<Token, SyntaxError> read_long_string(std::size_t level);
+
+    // Consumes a long bracket of `level`, from its opening bracket to the
+    // matching closing one, and returns the text in between (L6, L7.8-L7.12).
+    std::expected<std::string, SyntaxError> read_long_bracket(std::size_t level, LongKind kind);
 
     // Consumes a short string in '...' or "..." and returns it as a String
     // token holding its bytes after escapes, or an error for an unfinished

@@ -5,6 +5,7 @@
 #include <charconv>
 #include <cstddef>
 #include <cstdint>
+#include <format>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -160,15 +161,32 @@ std::expected<Token, SyntaxError> Lexer::next() {
             if (peek(1) != '-') {
                 return single(TokenKind::Minus);
             }
-            skip_comment();
+            if (auto skipped = skip_comment(); !skipped) {
+                return std::unexpected(std::move(skipped.error()));
+            }
             continue;
 
         // Quotes start a short string (L7.1).
         case '"':
         case '\'': return read_string();
 
+        // '[' is a bracket, unless it opens a long string: [[ or [==[ (L6).
+        case '[': {
+            const LongBracket bracket = long_bracket();
+            if (bracket.valid) {
+                return read_long_string(bracket.level);
+            }
+            if (bracket.level == 0) {
+                return single(TokenKind::LBracket); // L6.3
+            }
+            // '[' and '=' signs, but no second '[' (L6.2). Like Lua, the
+            // near text is what was read: '[=='.
+            const std::string_view read = source_.substr(pos_, 1 + bracket.level);
+            pos_ += read.size();
+            return error("invalid long string delimiter", near_text(read));
+        }
+
         // Tokens that are always one character (L8.1).
-        // ('[' becomes a long string in part 10.)
         case '+': return single(TokenKind::Plus);
         case '*': return single(TokenKind::Star);
         case '%': return single(TokenKind::Percent);
@@ -180,7 +198,6 @@ std::expected<Token, SyntaxError> Lexer::next() {
         case ')': return single(TokenKind::RParen);
         case '{': return single(TokenKind::LBrace);
         case '}': return single(TokenKind::RBrace);
-        case '[': return single(TokenKind::LBracket);
         case ']': return single(TokenKind::RBracket);
         case ';': return single(TokenKind::Semicolon);
         case ',': return single(TokenKind::Comma);
@@ -342,14 +359,94 @@ std::expected<Token, SyntaxError> Lexer::read_number() {
     return error("malformed number", near_text(text));
 }
 
-void Lexer::skip_comment() {
-    // A short comment runs to the end of the line (L3.4). The line break is
-    // not part of it: next() reads it afterwards and counts the line. A
-    // comment may also end at the end of the input (L3.6).
-    // (Long comments, --[[ ... ]], arrive with long brackets in part 10.
-    // Until then they are read as short comments.)
+std::expected<void, SyntaxError> Lexer::skip_comment() {
     pos_ += 2; // the "--"
+
+    // A long bracket right after "--" makes a long comment (L3.3).
+    if (peek(0) == '[') {
+        if (const LongBracket bracket = long_bracket(); bracket.valid) {
+            if (auto comment = read_long_bracket(bracket.level, LongKind::Comment); !comment) {
+                return std::unexpected(std::move(comment.error()));
+            }
+            return {};
+        }
+    }
+
+    // Anything else, including "--[" and "--[=x", is a short comment (L3.4).
+    // It runs to the end of the line. The line break is not part of it:
+    // next() reads it afterwards and counts the line. A comment may also end
+    // at the end of the input (L3.6).
     while (pos_ < source_.size() && peek(0) != '\n' && peek(0) != '\r') {
+        ++pos_;
+    }
+    return {};
+}
+
+Lexer::LongBracket Lexer::long_bracket() const {
+    // Count the '=' signs after the bracket, then check that the same
+    // bracket follows: [==[ or ]==] (L6.1). Nothing is consumed.
+    const char bracket = peek(0);
+    std::size_t level = 0;
+    while (peek(1 + level) == '=') {
+        ++level;
+    }
+    return LongBracket{.level = level, .valid = peek(1 + level) == bracket};
+}
+
+std::expected<Token, SyntaxError> Lexer::read_long_string(std::size_t level) {
+    const int start_line = line_; // the token gets the line it starts on (L2.2)
+    auto text = read_long_bracket(level, LongKind::String);
+    if (!text) {
+        return std::unexpected(std::move(text.error()));
+    }
+    return Token{.kind = TokenKind::String, .line = start_line, .value = std::move(*text)};
+}
+
+std::expected<std::string, SyntaxError> Lexer::read_long_bracket(std::size_t level, LongKind kind) {
+    const int start_line = line_;
+    pos_ += level + 2; // the opening bracket: '[', the '=' signs, '['
+
+    // A line break right after the opening bracket is dropped (L7.11).
+    if (peek(0) == '\n' || peek(0) == '\r') {
+        read_newline();
+    }
+
+    std::string text; // stays empty for a comment
+    for (;;) {
+        if (pos_ >= source_.size()) {
+            // L7.12, L3.5. The message names the line the bracket opened on.
+            const std::string message =
+                std::format("unfinished long {} (starting at line {})",
+                            kind == LongKind::String ? "string" : "comment", start_line);
+            return error(message, near_eof);
+        }
+        const char c = source_[pos_];
+        switch (c) {
+        case ']':
+            // The first closing bracket of the *same* level ends it (L7.8).
+            // A ']' of another level is just text.
+            if (const LongBracket bracket = long_bracket();
+                bracket.valid && bracket.level == level) {
+                pos_ += level + 2;
+                return text;
+            }
+            break;
+
+        // Every line break becomes a single '\n' (L7.10), and is counted.
+        case '\n':
+        case '\r':
+            read_newline();
+            if (kind == LongKind::String) {
+                text += '\n';
+            }
+            continue;
+
+        default: break;
+        }
+        // Any other byte stands for itself. No escapes inside (L7.9).
+        if (kind == LongKind::String) {
+            text += c;
+        }
         ++pos_;
     }
 }

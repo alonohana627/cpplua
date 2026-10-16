@@ -875,3 +875,150 @@ TEST_CASE("L7.6 escapes mixed with text", "[lexer][string]") {
     CHECK(string_value(R"("caf\u{E9} \x26 \65\z
                            !")") == "caf\xC3\xA9 & A!");
 }
+
+// ---- Part 10: long brackets: long strings and long comments ----
+
+TEST_CASE("L7.8 long strings of each level", "[lexer][long]") {
+    const auto [source, value] = GENERATE(values<EscapeCase>({
+        {"[[abc]]", "abc"},
+        {"[[]]", ""},
+        {"[=[abc]=]", "abc"},
+        {"[==[abc]==]", "abc"},
+        {"[====[x]====]", "x"},
+    }));
+    CAPTURE(source);
+
+    CHECK(string_value(source) == value);
+}
+
+TEST_CASE("L7.8 only a closing bracket of the same level ends it", "[lexer][long]") {
+    CHECK(string_value("[==[ a ]] b ]=] c ]==]") == " a ]] b ]=] c ");
+    CHECK(string_value("[[ a ]=] b ]]") == " a ]=] b ");
+    CHECK(string_value("[=[ ]==]=]") == " ]=="); // ']==' is text, then ']=]' closes
+    CHECK(string_value("[[a]b]]") == "a]b");
+    CHECK(string_value("[[ [[nested? no ]]") == " [[nested? no ");
+}
+
+TEST_CASE("L7.9 nothing is escaped inside a long string", "[lexer][long]") {
+    CHECK(string_value(R"([[\n]])") == R"(\n)");
+    CHECK(string_value(R"([[\]])") == R"(\)");
+    CHECK(string_value(R"([["quotes" and 'quotes']])") == R"("quotes" and 'quotes')");
+    CHECK(string_value("[[-- not a comment]]") == "-- not a comment");
+}
+
+TEST_CASE("L7.10 every line break inside becomes \\n", "[lexer][long]") {
+    const auto line_break = GENERATE(as<std::string_view>{}, "\n", "\r", "\r\n", "\n\r");
+    CAPTURE(line_break.size());
+
+    std::string source = "[[a";
+    source += line_break;
+    source += "b]] x";
+
+    Lexer lexer{source};
+    const auto string = next_token(lexer);
+    const auto name = next_token(lexer);
+
+    CHECK(string.value == lua2::TokenValue{std::string("a\nb")});
+    CHECK(string.line == 1); // the line the string starts on
+    CHECK(name.line == 2);
+}
+
+TEST_CASE("L7.11 a line break right after the opening bracket is dropped", "[lexer][long]") {
+    const auto line_break = GENERATE(as<std::string_view>{}, "\n", "\r", "\r\n", "\n\r");
+    CAPTURE(line_break.size());
+
+    std::string source = "[==[";
+    source += line_break;
+    source += "hello]==]";
+
+    CHECK(string_value(source) == "hello");
+}
+
+TEST_CASE("L7.11 only the first line break is dropped", "[lexer][long]") {
+    CHECK(string_value("[[\n\nhello]]") == "\nhello");
+    CHECK(string_value("[[\r\n\r\nhello]]") == "\nhello");
+    CHECK(string_value("[[ \nhello]]") == " \nhello"); // not right after the bracket
+}
+
+TEST_CASE("L7.12 an unfinished long string", "[lexer][long]") {
+    CHECK(error_message("[[abc") ==
+          "input:1: unfinished long string (starting at line 1) near <eof>");
+    CHECK(error_message("[==[abc]=]") ==
+          "input:1: unfinished long string (starting at line 1) near <eof>");
+    // The prefix has the line where the input ended; the message, where it started.
+    CHECK(error_message("[[a\nb\nc") ==
+          "input:3: unfinished long string (starting at line 1) near <eof>");
+}
+
+TEST_CASE("L6.2 '[' and '=' without a second '[' is an error", "[lexer][long]") {
+    CHECK(error_message("[=") == "input:1: invalid long string delimiter near '[='");
+    CHECK(error_message("[==x") == "input:1: invalid long string delimiter near '[=='");
+    CHECK(error_message("[= [") == "input:1: invalid long string delimiter near '[='");
+}
+
+TEST_CASE("L6.3 '[' alone is a bracket", "[lexer][long]") {
+    CHECK(kinds("t[1]") == std::vector{TokenKind::Name, TokenKind::LBracket, TokenKind::Integer,
+                                       TokenKind::RBracket, TokenKind::EndOfStream});
+    CHECK(kinds("[ [") ==
+          std::vector{TokenKind::LBracket, TokenKind::LBracket, TokenKind::EndOfStream});
+    CHECK(kinds("a[b[1]]") == std::vector{TokenKind::Name, TokenKind::LBracket, TokenKind::Name,
+                                          TokenKind::LBracket, TokenKind::Integer,
+                                          TokenKind::RBracket, TokenKind::RBracket,
+                                          TokenKind::EndOfStream});
+}
+
+TEST_CASE("L6.4 ']' outside a long bracket is a bracket", "[lexer][long]") {
+    CHECK(kinds("]]") ==
+          std::vector{TokenKind::RBracket, TokenKind::RBracket, TokenKind::EndOfStream});
+    CHECK(kinds("]=]") == std::vector{TokenKind::RBracket, TokenKind::Assign, TokenKind::RBracket,
+                                      TokenKind::EndOfStream});
+}
+
+TEST_CASE("L3.3 long comments", "[lexer][long][comment]") {
+    CHECK(kinds("--[[ a comment ]] x") == std::vector{TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("--[==[ ]] still ]=] inside ]==] x") ==
+          std::vector{TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("a --[[]] b") ==
+          std::vector{TokenKind::Name, TokenKind::Name, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L3.3 a long comment spans lines and counts them", "[lexer][long][comment]") {
+    CHECK(lines("a\n--[[ one\ntwo\r\nthree ]] b\nc") == std::vector{1, 4, 5, 5});
+}
+
+TEST_CASE("L3.3 code after a long comment on the same line is read", "[lexer][long][comment]") {
+    CHECK(kinds("--[[ off ]] return 1") ==
+          std::vector{TokenKind::Return, TokenKind::Integer, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L3.5 an unfinished long comment", "[lexer][long][comment]") {
+    CHECK(error_message("\n--[[ never closed\n") ==
+          "input:3: unfinished long comment (starting at line 2) near <eof>");
+    CHECK(error_message("--[=[ wrong level ]]") ==
+          "input:1: unfinished long comment (starting at line 1) near <eof>");
+}
+
+TEST_CASE("L3.4 a broken long bracket after -- is a short comment", "[lexer][long][comment]") {
+    // Not an "invalid long string delimiter": in a comment it is just text.
+    CHECK(kinds("--[= x\ny") == std::vector{TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("-- [[ not long\ny") == std::vector{TokenKind::Name, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L7.8 long strings next to other tokens", "[lexer][long]") {
+    CHECK(kinds("x = [[a]] .. [=[b]=]") == std::vector{TokenKind::Name, TokenKind::Assign,
+                                                       TokenKind::String, TokenKind::Concat,
+                                                       TokenKind::String, TokenKind::EndOfStream});
+    CHECK(kinds("f[[call]]") ==
+          std::vector{TokenKind::Name, TokenKind::String, TokenKind::EndOfStream});
+}
+
+// ---- Part 11: found while lexing the official Lua 5.4.9 test suite ----
+
+TEST_CASE("L1.4 a shebang line is not the lexer's job", "[lexer]") {
+    // all.lua starts with "#!../lua" and main.lua with "# testing ...". Lua's
+    // file loader skips such a first line before lexing; the lexer itself
+    // just sees '#' and the rest. The file loader will handle it.
+    CHECK(kinds("#!../lua\nx") == std::vector{TokenKind::Hash, TokenKind::Other, TokenKind::Concat,
+                                              TokenKind::Slash, TokenKind::Name, TokenKind::Name,
+                                              TokenKind::EndOfStream});
+}

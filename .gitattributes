@@ -1,0 +1,2 @@
+# Keep the official Lua test files byte for byte (no line-ending conversion).
+tests/fixtures/** -text

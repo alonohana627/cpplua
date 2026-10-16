@@ -83,6 +83,9 @@ enum class TokenKind : std::uint8_t {
     While,    // while     while loop
 };
 
+// The enumerator's name, such as "LParen" or "While", for debug output.
+std::string_view token_kind_name(TokenKind kind);
+
 // The spelling of each keyword. A name is a keyword exactly when its text
 // appears here (L4.3).
 //

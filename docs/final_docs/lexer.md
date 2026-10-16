@@ -4,9 +4,8 @@ How the lexer works today. This page describes the code as it is, and is updated
 grows. The rules it implements are in [../spec/lexical.md](../spec/lexical.md), and the remaining
 work is in [../plan/lexer.md](../plan/lexer.md).
 
-**Status:** parts 0 to 9 of the plan: operators, whitespace, line counting, names, keywords,
-stray characters, the error type, all numbers, short comments, and short strings with every
-escape. Long brackets (part 10) are not lexed yet.
+**Status:** complete (all parts of the plan, version 0.0.2). Every lexical rule of Lua 5.4 is
+implemented, and every file of the official Lua 5.4.9 test suite lexes without an error.
 
 ## Where it lives
 
@@ -19,6 +18,10 @@ escape. Long brackets (part 10) are not lexed yet.
 | `lib/syntax_error.cpp`          | their implementation                             |
 | `tests/lexer_test.cpp`          | lexer tests, tagged `[lexer]`                    |
 | `tests/syntax_error_test.cpp`   | error tests, tagged `[syntax-error]`             |
+| `lib/lexer/token.cpp`           | `token_kind_name()`                              |
+| `include/lua2/debug.hpp`        | `token_dump()`, public, for `lua2 --tokens`      |
+| `lib/debug.cpp`                 | its implementation                               |
+| `tests/debug_test.cpp`          | its tests, tagged `[debug]`                      |
 
 The lexer is internal to the library: embedders never see tokens.
 
@@ -117,15 +120,17 @@ The `Lexer` holds only five things:
 4. **`-`**: a second `-` starts a comment, so call `skip_comment()` and loop again. Otherwise it
    is `Minus`.
 5. **A quote** (`"` or `'`): call `read_string()`, which returns a `String`.
-6. **Characters that are always one token** (`+ * % ^ # & | ( ) { } [ ] ; ,`): return that
+6. **`[`**: if a long bracket starts here (`[[`, `[==[`), call `read_long_string()`. A bare `[`
+   is `LBracket`, and `[` with `=` signs but no second `[` is an error.
+7. **Characters that are always one token** (`+ * % ^ # & | ( ) { } ] ; ,`): return that
    token.
-7. **Characters that may start a longer token** (`= ~ / : < > .`): look ahead with `peek()` and
+8. **Characters that may start a longer token** (`= ~ / : < > .`): look ahead with `peek()` and
    take the **longest** token that matches (*maximal munch*). So `==` is one token, `<<=` is `<<`
    then `=`, and `....` is `...` then `.`. The one exception: a `.` followed by a digit starts a
    number, as in `.5`.
-8. **A letter or `_`**: call `read_name()`, which returns a name or a keyword.
-9. **A digit**: call `read_number()`, which returns an `Integer` or a `Float`.
-10. **Any other byte** (`@`, `$`, `!`, a byte above 127, even `\0`) becomes an `Other` token
+9. **A letter or `_`**: call `read_name()`, which returns a name or a keyword.
+10. **A digit**: call `read_number()`, which returns an `Integer` or a `Float`.
+11. **Any other byte** (`@`, `$`, `!`, a byte above 127, even `\0`) becomes an `Other` token
    holding that byte. See "Stray characters" below.
 
 Private helpers:
@@ -139,7 +144,10 @@ Private helpers:
 | `read_newline()`    | moves past one line break and counts the line                    |
 | `read_name()`       | reads a name, then checks the keyword table                      |
 | `read_number()`     | reads a numeral greedily, then validates and converts it         |
-| `skip_comment()`    | moves past `--` and the rest of the line, not the line break     |
+| `skip_comment()`    | moves past a long comment, or `--` and the rest of the line      |
+| `long_bracket()`    | looks at a `[` or `]`: its level, and whether it is a long bracket |
+| `read_long_string(level)` | reads a long string into a `String` token                  |
+| `read_long_bracket(level, kind)` | reads from an opening long bracket to its matching close |
 | `read_string()`     | reads a short string, processing escapes                         |
 | `read_escape(text)` | reads one escape and appends its bytes to `text`                 |
 | `escape_error(...)` | an error inside an escape, with Lua's near text                  |
@@ -268,16 +276,18 @@ This is why `-9223372036854775808` is minus a *float*: the integer part alone is
 ## Comments
 
 `--` starts a comment, so the `-` case in `next()` peeks at the next character: one `-` is
-`Minus`, two start a comment. `skip_comment()` moves past the `--` and everything up to the end of
-the line, then `next()` loops again as if it had seen whitespace.
+`Minus`, two start a comment. `skip_comment()` moves past it, then `next()` loops again as if it
+had seen whitespace.
 
-The line break itself is **not** part of the comment: `next()` reads it on its next turn and
-counts the line, so line numbers stay right after a comment. A comment may also run to the end of
-the input. Inside a comment nothing is lexed, so `-- "unfinished 3x @` produces no tokens and no
-error.
+- **Long comment:** if a valid long bracket follows the `--` (`--[[`, `--[==[`), the comment runs
+  to the matching closing bracket, across lines (see "Long brackets"). Code may follow it on the
+  same line: `--[[ off ]] return 1`.
+- **Short comment:** anything else, including `--[` and `--[=x`, runs to the end of the line.
+  The line break itself is **not** part of the comment: `next()` reads it on its next turn and
+  counts the line. A short comment may also run to the end of the input.
 
-Long comments (`--[[ ... ]]`) are not handled yet: until long brackets arrive, they are read as
-short comments that end at the end of the line.
+Inside a comment nothing is lexed, so `-- "unfinished 3x @` produces no tokens and no error. The
+only comment error is a long comment that never closes.
 
 ## Strings
 
@@ -341,13 +351,78 @@ the character that broke it, unless the input ended. To stop `\u{}` from overflo
 happens *before* each new digit: if the value is already above `0x7FFFFFF`, one more digit would
 pass 2^31 - 1.
 
+## Long brackets
+
+A **long bracket** of level *n* is `[`, *n* `=` signs, and `[`: `[[` is level 0, `[==[` is
+level 2. The closing one is `]`, *n* `=` signs, and `]`. Long brackets make long strings
+(`[[ ... ]]`) and long comments (`--[[ ... ]]`), and both are read by the same function.
+
+`long_bracket()` looks at the `[` or `]` under the cursor without moving: it counts the `=`
+signs and checks that the same bracket follows. It returns a `LongBracket` with the `level` and
+whether it is `valid`. In `next()`, a `[` that is:
+
+- a valid long bracket starts a long string;
+- not followed by `=` or `[` is just `LBracket`, as in `t[1]`;
+- followed by `=` signs but no second `[` is the error `invalid long string delimiter near '[=='`.
+
+`read_long_bracket(level, kind)` then reads from the opening bracket to the matching close:
+
+- A line break **right after** the opening bracket is dropped, so a long string can start on
+  the next line without a leading newline. Only that one line break is dropped.
+- Every line break inside becomes one `\n` and is counted.
+- Nothing is escaped: `[[\n]]` is a backslash and an `n`.
+- At a `]`, it calls `long_bracket()` again. Only a closing bracket of the **same** level ends
+  it; any other `]` is text. So `[==[ a ]] b ]=] c ]==]` is ` a ]] b ]=] c `. This is why the
+  levels exist: a long string can hold `]]` by using `[=[ ... ]=]`.
+- Reaching the end of the input is the error `unfinished long string (starting at line 3) near
+  <eof>` (or `comment`). The line at the front of the message is where the input ended, and the
+  one in parentheses is where the bracket opened.
+
+`kind` (`LongKind::String` or `LongKind::Comment`) only changes two things: a comment keeps no
+text, and its error says "comment". `read_long_string()` wraps the text in a `String` token on the
+line where the bracket opened. A long string and a short string give the same kind of token: the
+parser never knows which one was written.
+
 ## Line counting
 
 A line break is `\n`, `\r`, `\r\n` or `\n\r`, and each counts as **one** line. `read_newline()`
 moves past the first character, and also past the next one if it is the *other* line-break
 character. So `\r\n` is one line, but `\n\n` and `\r\r` are two.
 
-## Not handled yet
+## Seeing the tokens: `lua2 --tokens`
 
-- **Part 10:** long brackets. `[` is always `LBracket` (no `[[ ... ]]` strings), and `--[[`
-  starts a short comment instead of a long one.
+`lua2 --tokens file.lua` prints every token of a file, one per line: its line, its kind, and its
+value if it has one. Strings are shown in quotes with unprintable bytes escaped, and floats that
+look like integers get `.0`, as Lua prints them:
+
+```
+2     Local
+2     Name         name
+2     Assign
+2     String       "world"
+3     Float        1000.0
+4     EndOfStream
+```
+
+The lexer is internal to the library, and the `lua2` program may only use public headers. So the
+dump comes from a small public function, `lua2::token_dump(source, chunk_name)` in
+`include/lua2/debug.hpp`, which returns the text or the lexer's error message. Kind names come from
+`token_kind_name()` in `lib/lexer/token.cpp`, a `switch` with no `default`, so the compiler warns
+if a new `TokenKind` is ever added without a name.
+
+## Checked against the official test suite
+
+The official Lua 5.4.9 test suite (`lua-5.4.9-tests.tar.gz` from lua.org) is kept unchanged in
+`tests/fixtures/lua-5.4.9-tests/` (see `tests/fixtures/README.md`). `tests/conformance_test.cpp`
+(tag `[conformance]`) lexes all 33 of its `.lua` files on every `ctest` run, about 107,000
+tokens in all:
+
+- Every file lexes without an error.
+- In every file, the line of the final `EndOfStream` equals the file's line count, so line
+  breaks of every form are counted right.
+- The one surprise was `all.lua`, which starts with `#!../lua`. The lexer reads that as `Hash`,
+  `Other "!"` and so on. That is correct: skipping a first line starting with `#` is the file
+  loader's job (L1.4), not the lexer's, and a test now records this.
+
+No reference `lua` was available to compare tokens one by one, so this checks "no false errors
+and right line numbers", not every token value.
