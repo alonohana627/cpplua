@@ -4,21 +4,23 @@ How the parser works today. This page describes the code as it is, and is update
 grows. The rules it implements are in [../spec/grammar.md](../spec/grammar.md), and the remaining
 work is in [../plan/parser.md](../plan/parser.md).
 
-**Status:** part 0 of the plan, the foundations. The parser accepts an empty chunk (only
-whitespace and comments) and reports anything else as `<eof> expected`. No statements or
-expressions exist yet.
+**Status:** parts 0 and 1 of the plan. A chunk may be empty or hold one `return` with a list of
+simple expressions (`nil`, `true`, `false`, numbers, strings, `...`). Anything else is an error
+for now.
 
 ## Where it lives
 
 | File                                  | Contents                                          |
 | ------------------------------------- | ------------------------------------------------- |
-| `lib/internal/parser/ast.hpp`         | the tree: `NodeId`, `IdRange`, `Block`, `Ast`     |
+| `lib/internal/parser/ast.hpp`         | the tree: ids, ranges, node structs, `Ast`        |
 | `lib/parser/ast.cpp`                  | its implementation                                |
 | `lib/internal/parser/parser.hpp`      | the `Parser` class                                |
 | `lib/parser/parser.cpp`               | its implementation                                |
 | `lib/internal/parser/ast_printer.hpp` | `print_ast()`, the tree as indented text          |
 | `lib/parser/ast_printer.cpp`          | its implementation                                |
 | `include/lua2/debug.hpp`              | `ast_dump()`, public, for `lua2 --ast`            |
+| `lib/internal/overloaded.hpp`         | `Overloaded`, for `std::visit` with lambdas       |
+| `lib/internal/text_format.hpp`        | `quoted()`, `format_float()`, shared by the debug views |
 | `tests/parser_test.cpp`               | parser tests, tagged `[parser]` (and `[ast]`)     |
 
 Like the lexer, the parser is internal to the library.
@@ -33,10 +35,17 @@ std::expected<lua2::Ast, lua2::SyntaxError> ast = parser.parse_chunk();
 `parse_chunk()` reads the whole chunk and returns its tree, or the first error (lexical or
 syntax), never both and never by throwing.
 
-From the command line, `lua2 --ast file.lua` prints the tree:
+From the command line, `lua2 --ast file.lua` prints the tree. For
+`return nil, 0x10, 1e3, 'a\n', ...`:
 
 ```
 Chunk
+  Return
+    Nil
+    Integer 16
+    Float 1000.0
+    String "a\n"
+    Vararg
 ```
 
 ## The tree: an arena
@@ -56,14 +65,53 @@ and nodes refer to each other by index rather than by pointer.
   statements in a temporary vector first, because nested blocks add their own lists in between,
   then stores them in one go, so each block's list stays contiguous.
 
-So far the `Ast` holds only the root `Block` and the statement-list vector. Each part of the plan
-adds its node structs (each kind of node a `std::variant` alternative) and their vectors.
+### Nodes
+
+Each kind of node is a small struct, and the node types are two `std::variant`s:
+
+| Variant | Alternatives so far                                                           |
+| ------- | ----------------------------------------------------------------------------- |
+| `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr` |
+| `Stat`  | `ReturnStat{values}`, where `values` is an `IdRange<ExprId>`                    |
+
+The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
+
+- **Lines in parallel vectors.** Every node records the line it starts on, but not inside the
+  node: `expression_lines_[i]` is the line of expression `i` (a *structure of arrays*). The
+  variants stay small, and the interpreter can ignore lines until it needs one for an error.
+- **One text buffer.** A string literal's bytes are copied into one shared `std::string`, and
+  `StringExpr` holds a `TextRange{first, length}` into it: 8 bytes instead of a 32-byte
+  `std::string` with its own allocation. `ast.text(range)` reads it back (the view is only valid
+  until the next `add_text`).
+- **Lists.** Lists of expressions work like statement lists: `add_expression_list(ids)` and
+  `expressions(range)`.
+
+Because nodes hold only numbers and ids, `Expr` and `Stat` are **trivially copyable**: copying a
+node is a plain memory copy, and the vectors never run destructors. `static_assert`s in
+`ast.hpp` keep it that way, so a node that tried to hold a `std::string` would not compile.
+
+Code that walks the tree uses `std::visit` with one lambda per node type, through the small
+`Overloaded` helper. With no catch-all lambda, forgetting a node type is a compile error.
 
 ## The parser
 
 `Parser` is a **recursive-descent** parser, like Lua's `lparser.c`: one function per grammar rule.
-For now there are two: `parse_chunk()` (G2.1) and `parse_block()` (G2.2), which returns an empty
-block until statements exist.
+
+| Function                  | Rule                                     | Notes |
+| ------------------------- | ---------------------------------------- | ----- |
+| `parse_chunk()`           | `chunk ::= block <eof>` (G2.1)           | after the block, anything left is `<eof> expected near 'x'` |
+| `parse_block()`           | `block ::= { stat } [ retstat ]` (G2.2)  | for now only the optional `return`; other statements come in parts 5 to 8 |
+| `parse_return()`          | `retstat ::= 'return' [ explist ] [ ';' ]` (G2.3) | values are skipped when the block ends or a `;` follows; one `;` is allowed |
+| `parse_expression_list()` | `explist ::= exp { ',' exp }` (G4.6)     | collects ids, then stores them as one list |
+| `parse_expression()`      | `exp` (G4.1)                             | for now only the simple expressions; anything else is `unexpected symbol` (G4.7) |
+| `block_follow()`          | -                                        | whether the current token ends a block: `<eof>`, `end`, `else`, `elseif`, `until` |
+
+**Why `return` must be last (G2.5).** `parse_block()` stops right after a `return`. Whatever
+comes next must then be the end of the block, so `return 1 return 2` fails in `parse_chunk()`
+with `<eof> expected near 'return'`, which is exactly Lua's message.
+
+Each node records the line of its first token: `parse_return()` reads `current_.line` before it
+moves past `return`.
 
 ### Moving through tokens
 
@@ -115,12 +163,21 @@ input:1: <eof> expected near 'x'
 
 `print_ast(ast)` turns a tree into indented text, one node per line, two spaces per level. It is
 what `lua2 --ast` prints, and what parser tests compare against, so each part adds its nodes'
-lines to it. Today every tree prints as just `Chunk`.
+lines to it. It visits each node with `std::visit`, so a node type it does not print is a compile
+error.
+
+Values are shown the way the debug views show them everywhere (`text_format.hpp`): strings in
+double quotes with unprintable bytes escaped (`"a\tb\x00"`), and floats in their shortest exact
+form with `.0` when they look like integers (`1000.0`).
 
 `lua2 --ast` reaches the internal parser through `lua2::ast_dump(source, chunk_name)` in
 `include/lua2/debug.hpp`, the same way `--tokens` uses `token_dump`.
 
 ## Not handled yet
 
-Everything in the grammar: statements, expressions, functions and tables arrive in parts 1 to 8,
-scopes and name resolution in parts 9 and 10, the graph view in part 11.
+- **Expressions** other than the simple ones: operators (part 2), names, parentheses, fields and
+  calls (part 3), tables (part 4), functions (part 7). Until then they are `unexpected symbol`,
+  even where Lua would accept them: `return x` fails.
+- **Statements** other than `return` (parts 5 to 8). Until then they end the chunk early, and the
+  token is reported as `<eof> expected near 'x'`.
+- Scopes and name resolution (parts 9 and 10), the graph view (part 11).

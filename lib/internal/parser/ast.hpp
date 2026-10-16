@@ -2,6 +2,10 @@
 
 #include <cstdint>
 #include <span>
+#include <string>
+#include <string_view>
+#include <type_traits>
+#include <variant>
 #include <vector>
 
 namespace lua2 {
@@ -10,8 +14,8 @@ namespace lua2 {
 // "Decisions"): every node lives in a std::vector owned by one Ast, and nodes
 // refer to each other by small typed indices instead of pointers.
 //
-// Part 0 has only the skeleton: ids, ranges, Block, and the Ast that owns
-// them. Each later part adds its node structs and their vectors.
+// Each part of the parser plan adds its node structs to the Expr and Stat
+// variants below.
 
 // A typed index into one of the Ast's node vectors. The Tag makes ExprId and
 // StatId different types, so passing one where the other is expected does not
@@ -32,7 +36,7 @@ using StatId = NodeId<StatTag>; // a statement node
 
 // A run of consecutive ids in one of the Ast's list vectors, such as the
 // statements of a block. Storing (first, count) instead of a std::vector in
-// every block keeps all lists in one allocation.
+// every node keeps all lists in one allocation.
 template <typename Id>
 struct IdRange {
     std::uint32_t first = 0;
@@ -40,6 +44,71 @@ struct IdRange {
 
     bool operator==(const IdRange&) const = default;
 };
+
+// A run of bytes in the Ast's text buffer, such as a string literal's value.
+// All text lives in one std::string, so a node holds 8 bytes, not a string.
+struct TextRange {
+    std::uint32_t first = 0;
+    std::uint32_t length = 0;
+
+    bool operator==(const TextRange&) const = default;
+};
+
+// ---- Expressions (G4.1) ----
+
+struct NilExpr {
+    bool operator==(const NilExpr&) const = default;
+};
+
+struct TrueExpr {
+    bool operator==(const TrueExpr&) const = default;
+};
+
+struct FalseExpr {
+    bool operator==(const FalseExpr&) const = default;
+};
+
+struct IntegerExpr {
+    std::int64_t value = 0;
+
+    bool operator==(const IntegerExpr&) const = default;
+};
+
+struct FloatExpr {
+    double value = 0.0;
+
+    bool operator==(const FloatExpr&) const = default;
+};
+
+struct StringExpr {
+    TextRange text; // the bytes after escapes, in the Ast's text buffer
+
+    bool operator==(const StringExpr&) const = default;
+};
+
+// `...`, the extra arguments of a vararg function.
+struct VarargExpr {
+    bool operator==(const VarargExpr&) const = default;
+};
+
+using Expr =
+    std::variant<NilExpr, TrueExpr, FalseExpr, IntegerExpr, FloatExpr, StringExpr, VarargExpr>;
+
+// ---- Statements (G3.1) ----
+
+// `return explist` (G2.3). Always the last statement of its block.
+struct ReturnStat {
+    IdRange<ExprId> values;
+
+    bool operator==(const ReturnStat&) const = default;
+};
+
+using Stat = std::variant<ReturnStat>;
+
+// Nodes hold only numbers and ids, never strings or pointers, so copying one
+// is a plain memory copy and the vectors never run destructors. Keep it so.
+static_assert(std::is_trivially_copyable_v<Expr>);
+static_assert(std::is_trivially_copyable_v<Stat>);
 
 // A list of statements (G2.2).
 struct Block {
@@ -53,18 +122,55 @@ public:
 
     void set_root(Block block) noexcept { root_ = block; }
 
-    // Copies `ids` to the end of the statement-list vector and returns where
-    // they went. A block's statements are parsed into a temporary list first
-    // (nested blocks add their own lists in between), then stored in one go,
-    // so every block's statements end up next to each other.
+    // ---- Nodes ----
+    // Every node records the line it starts on, kept in a parallel vector
+    // (structure of arrays) so the node variants stay small.
+
+    ExprId add_expression(Expr expr, int line);
+
+    [[nodiscard]] const Expr& expression(ExprId id) const { return expressions_[id.index]; }
+
+    [[nodiscard]] int line(ExprId id) const { return expression_lines_[id.index]; }
+
+    StatId add_statement(Stat stat, int line);
+
+    [[nodiscard]] const Stat& statement(StatId id) const { return statements_[id.index]; }
+
+    [[nodiscard]] int line(StatId id) const { return statement_lines_[id.index]; }
+
+    // ---- Lists ----
+    // Each copies `ids` to the end of its list vector and returns where they
+    // went. A list is parsed into a temporary vector first (nested lists add
+    // their own entries in between), then stored in one go, so every list
+    // ends up contiguous.
+
     IdRange<StatId> add_statement_list(std::span<const StatId> ids);
+    IdRange<ExprId> add_expression_list(std::span<const ExprId> ids);
 
     // The statements of a block, in order.
     [[nodiscard]] std::span<const StatId> statements(const Block& block) const;
+    [[nodiscard]] std::span<const ExprId> expressions(IdRange<ExprId> range) const;
+
+    // ---- Text ----
+
+    // Copies `bytes` to the end of the text buffer and returns where they went.
+    TextRange add_text(std::string_view bytes);
+
+    // The bytes of a range. The view is invalidated by the next add_text().
+    [[nodiscard]] std::string_view text(TextRange range) const;
 
 private:
     Block root_;
+
+    std::vector<Expr> expressions_;
+    std::vector<int> expression_lines_;
+    std::vector<Stat> statements_;
+    std::vector<int> statement_lines_;
+
     std::vector<StatId> statement_lists_;
+    std::vector<ExprId> expression_lists_;
+
+    std::string text_;
 };
 
 } // namespace lua2

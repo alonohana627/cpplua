@@ -33,6 +33,20 @@ private:
     // block ::= { stat } [ retstat ] (G2.2)
     std::expected<Block, SyntaxError> parse_block();
 
+    // retstat ::= 'return' [ explist ] [ ';' ] (G2.3)
+    std::expected<StatId, SyntaxError> parse_return();
+
+    // explist ::= exp { ',' exp } (G4.6)
+    std::expected<IdRange<ExprId>, SyntaxError> parse_expression_list();
+
+    // exp (G4.1). For now only the simple expressions: nil, true, false,
+    // numerals, strings and '...'.
+    std::expected<ExprId, SyntaxError> parse_expression();
+
+    // Whether the current token ends a block: <eof>, 'end', 'else',
+    // 'elseif', and 'until' (which ends a repeat block).
+    [[nodiscard]] bool block_follow() const noexcept;
+
     // ---- Moving through tokens ----
 
     // Moves to the next token: the lookahead token if peek() read one,
