@@ -1,6 +1,6 @@
 #include <print>
 
-#include "core/version.hpp"
+#include <lua2/version.hpp>
 
 int main() {
   std::println("{}", lua2::version());

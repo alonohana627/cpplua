@@ -12,16 +12,24 @@ add_library(lua2_warnings INTERFACE)
 target_compile_options(lua2_warnings INTERFACE
   -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion)
 
-# The interpreter itself lives in a library so tests can link it directly.
-add_library(lua2_core
-  src/core/version.cpp
-)
-target_include_directories(lua2_core PUBLIC src)
-target_link_libraries(lua2_core PRIVATE lua2_warnings)
+# Layout:
+#   include/lua2/  public headers, the API embedders see (#include <lua2/...>)
+#   lib/           the embeddable interpreter library; private headers live here too
+#   src/           the standalone `lua2` command-line program
 
-# The command-line front end: the future `lua` executable.
+# The interpreter library. Embedders link lua2::lua2.
+add_library(lua2_lib
+  lib/version.cpp
+)
+add_library(lua2::lua2 ALIAS lua2_lib)
+target_include_directories(lua2_lib
+  PUBLIC  include
+  PRIVATE lib)
+target_link_libraries(lua2_lib PRIVATE lua2_warnings)
+
+# The command-line front end, built on the public API only.
 add_executable(lua2 src/main.cpp)
-target_link_libraries(lua2 PRIVATE lua2_core lua2_warnings)
+target_link_libraries(lua2 PRIVATE lua2::lua2 lua2_warnings)
 
 # Tests
 include(CTest)
@@ -36,7 +44,7 @@ if(BUILD_TESTING)
   add_executable(lua2_tests
     tests/version_test.cpp
   )
-  target_link_libraries(lua2_tests PRIVATE lua2_core lua2_warnings Catch2::Catch2WithMain)
+  target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
 
   include(Catch)
   catch_discover_tests(lua2_tests)

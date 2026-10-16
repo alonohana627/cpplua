@@ -1,8 +1,8 @@
-# Roadmap
+﻿# Roadmap
 
 Each stage ends with green tests before the next starts.
 
-1. **Skeleton + tests** (done): CMake + Ninja presets, clang++ with libc++, C++26, Catch2 v3 via FetchContent, a `lua2_core` library, a `lua2` executable, CTest.
+1. **Skeleton + tests** (done): CMake + Ninja presets, clang++ with libc++, C++26, Catch2 v3 via FetchContent, public headers in `include/lua2/`, the embeddable `lua2::lua2` library in `lib/`, the `lua2` executable in `src/`, CTest.
 2. **Lexer**: source text to tokens (names, keywords, numbers incl. hex floats, long strings and comments, escapes), with line numbers for errors.
 3. **Parser + AST**: recursive descent with Lua's operator precedence; statements, blocks, functions; syntax errors that match Lua's wording.
 4. **Values**: nil, boolean, integer vs float (5.4 integer subtype), strings; arithmetic and comparison rules, string/number coercion.

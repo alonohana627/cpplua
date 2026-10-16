@@ -1,4 +1,4 @@
-#include "core/version.hpp"
+#include <lua2/version.hpp>
 
 namespace lua2 {
 
