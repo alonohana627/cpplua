@@ -15,8 +15,9 @@ target_compile_options(lua2_warnings INTERFACE
 
 # Layout:
 #   include/lua2/  public headers, the API embedders see (#include <lua2/...>)
-#   lib/           the embeddable interpreter library; private headers live here too
-#   src/           the standalone `lua2` command-line program
+#   lib/           the embeddable interpreter library (.cpp files)
+#   lib/internal/  the library's private headers, kept apart from the sources
+#   src/           the `lua2` binary that runs Lua, built on lib
 
 # The interpreter library. Embedders link lua2::lua2.
 add_library(lua2_lib
@@ -26,7 +27,7 @@ add_library(lua2_lib
 add_library(lua2::lua2 ALIAS lua2_lib)
 target_include_directories(lua2_lib
   PUBLIC  include
-  PRIVATE lib)
+  PRIVATE lib/internal)
 target_link_libraries(lua2_lib PRIVATE lua2_warnings)
 # The single source of the version string is project() above.
 target_compile_definitions(lua2_lib PRIVATE LUA2_VERSION="${PROJECT_VERSION}")
@@ -51,8 +52,8 @@ if(BUILD_TESTING)
     tests/lexer_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
-  # Tests may include internal headers from lib/ to test internals directly.
-  target_include_directories(lua2_tests PRIVATE lib)
+  # Tests may include internal headers from lib/internal/ to test internals directly.
+  target_include_directories(lua2_tests PRIVATE lib/internal)
   target_compile_definitions(lua2_tests PRIVATE LUA2_VERSION="${PROJECT_VERSION}")
 
   include(Catch)

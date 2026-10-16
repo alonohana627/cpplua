@@ -17,8 +17,9 @@ Catch2 is downloaded by CMake on first configure.
 | Folder          | Contents                                                     |
 | --------------- | ------------------------------------------------------------ |
 | `include/lua2/` | Public headers, the embedding API (`#include <lua2/...>`)    |
-| `lib/`          | The embeddable interpreter library (`lua2::lua2`)            |
-| `src/`          | The standalone `lua2` command-line program                   |
+| `lib/`          | The embeddable interpreter library (`lua2::lua2`), `.cpp` only |
+| `lib/internal/` | The library's private headers, not visible to embedders      |
+| `src/`          | The `lua2` binary that runs Lua, built on `lib/`             |
 | `tests/`        | Catch2 tests                                                 |
 
 ## Build

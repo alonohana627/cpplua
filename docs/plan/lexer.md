@@ -13,8 +13,9 @@ Finishing part 11 makes the lexer Lua 5.4 compatible and bumps the version to 0.
 - **Tokens own their values**: `std::string` for names and strings, `std::int64_t` and `double` for
   numbers, held in a `std::variant`. This is simple first, and we can optimize later.
 - **Errors throw** a `SyntaxError` exception (Lua's own lexer stops at the first error too).
-- **Files**: the lexer is internal, so it lives in `lib/lexer/` (not `include/`). Tests may include
-  headers from `lib/` so internals can be tested directly.
+- **Files**: the lexer is internal: sources in `lib/lexer/`, headers in `lib/internal/lexer/`
+  (not `include/`). Tests may include headers from `lib/internal/` so internals can be tested
+  directly.
 
 ## Parts
 
