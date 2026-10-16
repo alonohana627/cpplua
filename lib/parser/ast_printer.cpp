@@ -138,13 +138,23 @@ private:
         return out;
     }
 
-    // Function(a, b, ...)   with the body's statements below
+    // Function(a, b, ...)                     with the body's statements below
+    // Function(a) [upvalues: _ENV, count]     when it uses upvalues
     void print_function(const Function& node, int depth) {
-        std::string parameters = names(node.parameters);
+        std::string text = "Function(" + names(node.parameters);
         if (node.is_vararg) {
-            parameters += parameters.empty() ? "..." : ", ...";
+            text += node.parameters.count == 0 ? "..." : ", ...";
         }
-        line(depth, "Function(" + parameters + ")");
+        text += ')';
+        std::string upvalues;
+        for (const Upvalue& upvalue : ast_.upvalues(node.upvalues)) {
+            upvalues += upvalues.empty() ? "" : ", ";
+            upvalues += ast_.text(upvalue.name);
+        }
+        if (!upvalues.empty()) {
+            text += " [upvalues: " + upvalues + "]";
+        }
+        line(depth, text);
         block(node.body, depth + 1);
     }
 
@@ -301,8 +311,23 @@ private:
         expression(node.right, depth + 1);
     }
 
+    // Name x               a global
+    // Name x (local 2)     a local in slot 2
+    // Name x (upvalue 0)   the function's upvalue 0
     void print(const NameExpr& node, int depth) {
-        line(depth, std::format("Name {}", ast_.text(node.name)));
+        switch (node.variable.kind) {
+        case VariableRef::Kind::Global:
+            line(depth, std::format("Name {}", ast_.text(node.name)));
+            return;
+        case VariableRef::Kind::Local:
+            line(depth,
+                 std::format("Name {} (local {})", ast_.text(node.name), node.variable.index));
+            return;
+        case VariableRef::Kind::Upvalue:
+            line(depth,
+                 std::format("Name {} (upvalue {})", ast_.text(node.name), node.variable.index));
+            return;
+        }
     }
 
     void print(const ParenExpr& node, int depth) {

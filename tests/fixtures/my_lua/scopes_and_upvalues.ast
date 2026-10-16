@@ -1,0 +1,35 @@
+Chunk
+  Local counter
+    Integer 0
+  LocalFunction increment
+    Function(step) [upvalues: counter, _ENV]
+      Assign
+        Targets
+          Name counter (upvalue 0)
+        Values
+          Binary +
+            Name counter (upvalue 0)
+            Name step (local 0)
+      Return
+        Function() [upvalues: counter, step, _ENV]
+          Return
+            Name counter (upvalue 0)
+            Name step (upvalue 1)
+            Name print
+  NumericFor i
+    Integer 1
+    Integer 2
+    Body
+      Local x
+        Name i (local 5)
+      CallStatement
+        Call
+          Name increment (local 1)
+          Name x (local 6)
+  Local _ENV
+    Table
+  Assign
+    Targets
+      Name y
+    Values
+      Integer 1

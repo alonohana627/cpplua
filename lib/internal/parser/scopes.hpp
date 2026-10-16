@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <expected>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -29,14 +30,21 @@ public:
 
     // ---- Functions ----
 
+    // The most upvalues one function may have (Lua's MAXUPVAL).
+    static constexpr std::size_t max_upvalues = 255;
+
+    // Starts the main chunk: line 0, with _ENV (named by `env_name`) as its
+    // one upvalue, as Lua's loader provides (G2.4).
+    void open_main_function(TextRange env_name);
+
     // Starts a function and its outermost block. `line` is where it is
-    // defined; 0 for the main chunk.
+    // defined.
     void open_function(int line);
 
-    // Ends the current function. Fails if a goto or break in it was never
-    // resolved: "no visible label 'x' for <goto> at line N" or "break outside
-    // loop at line N" (G8.2, G8.6).
-    std::expected<void, std::string> close_function();
+    // Ends the current function and returns its upvalues. Fails if a goto or
+    // break in it was never resolved: "no visible label 'x' for <goto> at
+    // line N" or "break outside loop at line N" (G8.2, G8.6).
+    std::expected<std::vector<Upvalue>, std::string> close_function();
 
     // The line of the current function, 0 for the main chunk.
     [[nodiscard]] int function_line() const { return functions_.back().line; }
@@ -69,6 +77,17 @@ public:
     };
 
     [[nodiscard]] Lookup lookup(std::string_view name) const;
+
+    // Resolves a name for the tree (G5.6), like Lua's singlevaraux(): a local
+    // of the current function gives its slot; a local of an enclosing
+    // function becomes an upvalue here (and in every function in between,
+    // each capturing it from its parent); anything else is a global. Fails
+    // with the line of the function that would get more than max_upvalues.
+    struct TooManyUpvalues {
+        int function_line;
+    };
+
+    std::expected<VariableRef, TooManyUpvalues> resolve(TextRange name);
 
     // ---- goto, labels and break ----
 
@@ -117,9 +136,15 @@ private:
         std::size_t active = 0;     // how many of its locals are visible
         std::size_t first_label;
         std::vector<Block> blocks;
+        std::vector<Upvalue> upvalues; // in order of first use
     };
 
     [[nodiscard]] bool same_name(TextRange a, TextRange b) const;
+
+    // resolve() for function `level` (0 is the main chunk). Returns nothing
+    // for a global.
+    std::expected<std::optional<VariableRef>, TooManyUpvalues> resolve_in(std::size_t level,
+                                                                          TextRange name);
 
     // The first visible label of the current function with this name.
     [[nodiscard]] const Label* find_label(TextRange name) const;

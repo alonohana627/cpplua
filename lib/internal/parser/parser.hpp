@@ -133,6 +133,13 @@ private:
     // One field: [exp] = exp, name = exp, or exp (G6.3).
     std::expected<TableField, SyntaxError> parse_table_field();
 
+    // A NameExpr for a name just read, resolved to a local, an upvalue or a
+    // global (G5.6). Lua's singlevar().
+    std::expected<ExprId, SyntaxError> make_name(TextRange name, int line);
+
+    // "too many upvalues (limit is 255) in function at line N" (G10).
+    [[nodiscard]] std::unexpected<SyntaxError> upvalue_limit_error(int function_line) const;
+
     // The current token must be a Name: moves past it and returns its text,
     // or the error "<name> expected".
     std::expected<TextRange, SyntaxError> expect_name();
@@ -208,6 +215,9 @@ private:
 
     // The name of the hidden control variables of for loops (G10).
     std::optional<TextRange> for_state_name_;
+
+    // The text "_ENV", for resolving globals.
+    TextRange env_name_;
 
     // Declares a local in the current function, or returns Lua's "too many
     // local variables" error (G10).

@@ -1,21 +1,21 @@
 Chunk
   LocalFunction fact
-    Function(n)
+    Function(n) [upvalues: fact]
       If
         If
           Binary ==
-            Name n
+            Name n (local 0)
             Integer 0
           Then
             Return
               Integer 1
       Return
         Binary *
-          Name n
+          Name n (local 0)
           Call
-            Name fact
+            Name fact (upvalue 0)
             Binary -
-              Name n
+              Name n (local 0)
               Integer 1
   FunctionStatement (method)
     Index

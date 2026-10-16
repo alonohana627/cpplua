@@ -3,10 +3,18 @@
 #include <algorithm>
 #include <format>
 #include <ranges>
+#include <utility>
 
 namespace lua2 {
 
 // ---- Functions ----
+
+void Scopes::open_main_function(TextRange env_name) {
+    open_function(0);
+    // The loader gives the main chunk _ENV as its upvalue 0 (Lua's mainfunc).
+    functions_.back().upvalues.push_back(
+        Upvalue{.name = env_name, .from_parent_local = true, .index = 0});
+}
 
 void Scopes::open_function(int line) {
     functions_.push_back(Function{
@@ -15,17 +23,18 @@ void Scopes::open_function(int line) {
         .active = 0,
         .first_label = labels_.size(),
         .blocks = {},
+        .upvalues = {},
     });
     open_block(false); // the function's outermost block
 }
 
-std::expected<void, std::string> Scopes::close_function() {
+std::expected<std::vector<Upvalue>, std::string> Scopes::close_function() {
     const std::size_t first_goto = functions_.back().blocks.front().first_goto;
     close_block(); // the outermost block, the only one left
 
     // Gotos that reached the function's outermost block without finding
     // their label (Lua's undefgoto). The first one is reported.
-    std::expected<void, std::string> result;
+    std::expected<std::vector<Upvalue>, std::string> result = std::move(functions_.back().upvalues);
     if (first_goto < gotos_.size()) {
         const Goto& pending = gotos_[first_goto];
         result = std::unexpected(pending.is_break
@@ -116,6 +125,63 @@ Scopes::Lookup Scopes::lookup(std::string_view name) const {
         }
     }
     return Lookup{.kind = Lookup::Kind::Global, .attribute = LocalName::Attribute::None};
+}
+
+std::expected<VariableRef, Scopes::TooManyUpvalues> Scopes::resolve(TextRange name) {
+    auto found = resolve_in(functions_.size() - 1, name);
+    if (!found) {
+        return std::unexpected(found.error());
+    }
+    return found->value_or(VariableRef{.kind = VariableRef::Kind::Global, .index = 0});
+}
+
+std::expected<std::optional<VariableRef>, Scopes::TooManyUpvalues>
+Scopes::resolve_in(std::size_t level, TextRange name) {
+    Function& function = functions_[level];
+
+    // 1. A visible local of this function, the most recent first.
+    for (std::size_t i = function.first_variable + function.active;
+         i-- > function.first_variable;) {
+        if (same_name(variables_[i].name, name)) {
+            return VariableRef{
+                .kind = VariableRef::Kind::Local,
+                .index = static_cast<std::uint32_t>(i - function.first_variable),
+            };
+        }
+    }
+
+    // 2. An upvalue this function already has.
+    for (std::size_t i = 0; i < function.upvalues.size(); ++i) {
+        if (same_name(function.upvalues[i].name, name)) {
+            return VariableRef{
+                .kind = VariableRef::Kind::Upvalue,
+                .index = static_cast<std::uint32_t>(i),
+            };
+        }
+    }
+
+    // 3. Something of an enclosing function: if it is a local or an upvalue
+    //    there, it becomes a new upvalue here. The main chunk has no
+    //    enclosing function, so there a name not found is a global.
+    if (level == 0) {
+        return std::nullopt;
+    }
+    auto outer = resolve_in(level - 1, name);
+    if (!outer || !*outer) {
+        return outer; // an error, or a global
+    }
+    if (function.upvalues.size() >= max_upvalues) {
+        return std::unexpected(TooManyUpvalues{.function_line = function.line});
+    }
+    function.upvalues.push_back(Upvalue{
+        .name = name,
+        .from_parent_local = (*outer)->kind == VariableRef::Kind::Local,
+        .index = (*outer)->index,
+    });
+    return VariableRef{
+        .kind = VariableRef::Kind::Upvalue,
+        .index = static_cast<std::uint32_t>(function.upvalues.size() - 1),
+    };
 }
 
 // ---- goto, labels and break ----

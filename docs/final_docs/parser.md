@@ -4,14 +4,16 @@ How the parser works today. This page describes the code as it is, and is update
 grows. The rules it implements are in [../spec/grammar.md](../spec/grammar.md), and the remaining
 work is in [../plan/parser.md](../plan/parser.md).
 
-**Status:** parts 0 to 8 of the plan: **the whole Lua 5.4 grammar parses.** A chunk is a list
+**Status:** parts 0 to 10 of the plan: **the whole Lua 5.4 grammar parses.** A chunk is a list
 of statements: function calls, assignments, `local` declarations (with `<const>` and
 `<close>`), empty `;` statements, `do`, `while`, `repeat`, `if`/`elseif`/`else`, numeric and
 generic `for`, `function` statements, `local function`, `goto`, labels, `break`, and a final
 `return`. Every expression parses, with every operator at Lua's precedence. The checks that
 need scopes are in place (part 9): `break` and `goto` targets, duplicate labels, jumps into a
-local's scope, `<const>` assignment, the 200-local limit and a nesting limit. Still to come:
-recording name resolution in the tree (part 10).
+local's scope, `<const>` assignment, the 200-local limit and a nesting limit. Every name in the
+tree records whether it is a local, an upvalue or a global, and every function lists its
+upvalues (part 10). Still to come: the graph view (part 11) and the official test suite
+(part 12).
 
 ## Where it lives
 
@@ -21,12 +23,14 @@ recording name resolution in the tree (part 10).
 | `lib/parser/ast.cpp`                  | its implementation                                |
 | `lib/internal/parser/parser.hpp`      | the `Parser` class                                |
 | `lib/parser/parser.cpp`               | its implementation                                |
+| `lib/internal/parser/scopes.hpp`      | `Scopes`: scopes, compile-time checks, name resolution |
+| `lib/parser/scopes.cpp`               | its implementation                                |
 | `lib/internal/parser/ast_printer.hpp` | `print_ast()`, the tree as indented text          |
 | `lib/parser/ast_printer.cpp`          | its implementation                                |
 | `include/lua2/debug.hpp`              | `ast_dump()`, public, for `lua2 --ast`            |
 | `lib/internal/overloaded.hpp`         | `Overloaded`, for `std::visit` with lambdas       |
 | `lib/internal/text_format.hpp`        | `quoted()`, `format_float()`, shared by the debug views |
-| `tests/parser_test.cpp`               | parser tests, tagged `[parser]` (and `[ast]`)     |
+| `tests/parser_test.cpp`               | parser tests, tagged `[parser]` (and `[ast]`, `[resolve]`) |
 
 Like the lexer, the parser is internal to the library.
 
@@ -76,9 +80,10 @@ Each kind of node is a small struct, and the node types are two `std::variant`s:
 
 | Variant | Alternatives so far                                                           |
 | ------- | ----------------------------------------------------------------------------- |
-| `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}`, `NameExpr{name}`, `ParenExpr{inner}`, `IndexExpr{object, key}`, `CallExpr{function, arguments}`, `MethodCallExpr{object, method, arguments}`, `TableExpr{fields}`, `FunctionExpr{function}` |
+| `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}`, `NameExpr{name, variable, environment}`, `ParenExpr{inner}`, `IndexExpr{object, key}`, `CallExpr{function, arguments}`, `MethodCallExpr{object, method, arguments}`, `TableExpr{fields}`, `FunctionExpr{function}` |
 | `Stat`  | `ReturnStat{values}`, `CallStat{call}`, `AssignStat{targets, values}`, `LocalStat{names, values}`, `DoStat{body}`, `WhileStat{condition, body}`, `RepeatStat{body, condition}`, `IfStat{clauses, else_body, has_else}`, `NumericForStat{variable, start, limit, step, has_step, body}`, `GenericForStat{names, values, body}`, `FunctionStat{target, function, is_method}`, `LocalFunctionStat{name, function}`, `GotoStat{label}`, `LabelStat{name}`, `BreakStat`; lists are `IdRange`s, bodies are `Block`s |
-| -       | `Function{parameters, is_vararg, body, line, end_line}`: function bodies, in their own vector, referred to by `FunctionId` |
+| -       | `Function{parameters, is_vararg, body, line, end_line, upvalues}`: function bodies, in their own vector, referred to by `FunctionId`; the main chunk is one too |
+| -       | `Upvalue{name, from_parent_local, index}`: one entry of a function's upvalue list, read with `upvalues(range)` |
 
 The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
 
@@ -101,9 +106,9 @@ The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
   id.
 - **Functions have their own vector.** A function body is a `Function` struct in
   `functions_`, added with `add_function()` and read with `function(id)`. Function expressions
-  and both function statements refer to it by `FunctionId`. Keeping functions apart makes them
-  easy to find later, when part 10 gives each one its list of upvalues, and when the interpreter
-  turns each into a prototype.
+  and both function statements refer to it by `FunctionId`. The main chunk is a `Function` too
+  (`main_function()`; `root()` is its body), with `is_vararg` set and `_ENV` as its one upvalue,
+  like Lua's main function. The interpreter will turn each `Function` into a prototype.
 
 Because nodes hold only numbers and ids, `Expr` and `Stat` are **trivially copyable**: copying a
 node is a plain memory copy, and the vectors never run destructors. `static_assert`s in
@@ -341,7 +346,44 @@ Parsing stops at the first error, and the scopes are left as they are: `parse_sc
 only closes its block when the block parsed successfully, because closing blocks in the middle
 of an unfinished construct would not match what was opened.
 
-## Control flow
+## Name resolution
+
+Every `NameExpr` records what its name means, in a `VariableRef{kind, index}` (G5.6):
+
+| `kind`    | `index`                                         | Printed as           |
+| --------- | ----------------------------------------------- | -------------------- |
+| `Local`   | the local's slot in its function                | `Name x (local 2)`   |
+| `Upvalue` | its position in the function's upvalue list     | `Name x (upvalue 0)` |
+| `Global`  | unused                                          | `Name x`             |
+
+A global `x` means `_ENV.x`, so a global's `NameExpr` also resolves `_ENV` into `environment`:
+upvalue 0 in the main chunk, the function's own `_ENV` upvalue in a nested function, or a local
+after `local _ENV = ...`.
+
+The parser calls `Scopes::resolve(name)` as soon as it reads a name (in
+`parse_primary_expression()` and for the first name of a `function` statement), through
+`make_name()`. `resolve_in()` works exactly like Lua's `singlevaraux`:
+
+1. a visible local of the current function, the most recent first: its slot is its position
+   among the function's declared locals, so finished blocks give their slots back, and a `for`
+   loop's hidden variables take slots before the loop variables (`for i` puts `i` in slot 3);
+2. an upvalue the function already has, so a name used many times is captured once;
+3. at the main chunk, nothing more: a global;
+4. otherwise the same search in the enclosing function. If found there, it becomes a new
+   upvalue here: `Upvalue{name, from_parent_local, index}`, where `from_parent_local` says whether
+   `index` is a local slot of the enclosing function or one of its upvalues. A name several
+   functions deep is added to every function in between.
+
+The main chunk starts with `_ENV` as upvalue 0 (`open_main_function()`). When a function closes,
+`close_function()` hands back its upvalue list, which the parser stores in the `Function`.
+
+More than 255 upvalues in one function (G10) is
+`too many upvalues (limit is 255) in function at line N`, a normal syntax error with `near`.
+Like Lua, the name is resolved after it is read, so `near` shows the token after the name.
+
+One difference: Lua turns a `<const>` local with a constant value into a compile-time constant
+that is never captured, so it uses no upvalue. Ours treats `<const>` locals like any other, so
+they become upvalues as usual. The limit can only be hit slightly sooner than in Lua.
 
 ## Control flow
 
@@ -583,8 +625,8 @@ then the value below). Statements print as `CallStatement` (the call below), `As
 their condition or range first and their statements under a `Body` heading; `Repeat` puts its
 condition under `Until` after the body; an `If` lists each clause as `If`/`ElseIf` with the
 condition and a `Then` heading, then an optional `Else`. A function prints as
-`Function(a, b, ...)` with its statements below; a `FunctionStatement` (marked `(method)` for
-`:`) prints its target, then the function; `LocalFunction f` prints the function below. For
+`Function(a, b, ...)`, with `[upvalues: x, _ENV]` added on the same line when it has upvalues,
+and its statements below; a `FunctionStatement` (marked `(method)` for `:`) prints its target, then the function; `LocalFunction f` prints the function below. For
 `return a.b[c](d):e"f"`:
 
 ```
@@ -606,9 +648,6 @@ Chunk
 
 ## Not handled yet
 
-- **Recording name resolution** (part 10): the scopes already know whether each name is a
-  local, an upvalue or a global, but the tree does not store it yet, and the 255-upvalue limit
-  is not checked.
 - **A difference in the nesting limit**: Lua reads a multiple assignment `a, b, c = ...`
   recursively, one level per target, so more than about 200 targets is `C stack overflow`
   there. Ours reads them in a loop and accepts any number. The official test suite checks this

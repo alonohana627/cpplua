@@ -9,14 +9,14 @@ Chunk
   Assign
     Targets
       Index
-        Name a
+        Name a (local 0)
         String "x"
       Index
-        Name b
+        Name b (local 1)
         Integer 1
     Values
       Call
         Name f
       Integer 2
   Return
-    Name a
+    Name a (local 0)

@@ -20,8 +20,10 @@ std::expected<Ast, SyntaxError> Parser::parse_chunk() {
         return std::unexpected(std::move(loaded.error()));
     }
 
-    // chunk ::= block <eof> (G2.1). The chunk is a function too (G2.4).
-    scopes_.open_function(0);
+    // chunk ::= block <eof> (G2.1). The chunk is a function too (G2.4), with
+    // _ENV as its upvalue.
+    env_name_ = ast_.add_text("_ENV");
+    scopes_.open_main_function(env_name_);
     auto block = parse_block();
     if (!block) {
         return std::unexpected(std::move(block.error()));
@@ -32,10 +34,16 @@ std::expected<Ast, SyntaxError> Parser::parse_chunk() {
         return error_expected(TokenKind::EndOfStream);
     }
     // Then gotos and breaks that never found their target (G8.2, G8.6).
-    if (auto closed = scopes_.close_function(); !closed) {
-        return semantic_error(closed.error());
+    auto upvalues = scopes_.close_function();
+    if (!upvalues) {
+        return semantic_error(upvalues.error());
     }
-    ast_.set_root(*block);
+    Function main;
+    main.is_vararg = true;
+    main.upvalues = ast_.add_upvalue_list(*upvalues);
+    main.body = *block;
+    main.end_line = current_.line;
+    ast_.set_main_function(ast_.add_function(main));
     return std::move(ast_);
 }
 
@@ -456,9 +464,11 @@ std::expected<FunctionId, SyntaxError> Parser::parse_function_body(int line, boo
     }
     // Like Lua, unresolved gotos and breaks are reported once the whole body
     // has been read, at the token after its 'end' (G8.2, G8.6).
-    if (auto closed = scopes_.close_function(); !closed) {
-        return semantic_error(closed.error());
+    auto upvalues = scopes_.close_function();
+    if (!upvalues) {
+        return semantic_error(upvalues.error());
     }
+    function.upvalues = ast_.add_upvalue_list(*upvalues);
     return ast_.add_function(function);
 }
 
@@ -476,7 +486,11 @@ std::expected<StatId, SyntaxError> Parser::parse_function_statement() {
     if (!first) {
         return std::unexpected(std::move(first.error()));
     }
-    ExprId target = ast_.add_expression(NameExpr{.name = *first}, name_line);
+    auto first_variable = make_name(*first, name_line);
+    if (!first_variable) {
+        return std::unexpected(std::move(first_variable.error()));
+    }
+    ExprId target = *first_variable;
     bool is_method = false;
     while (check(TokenKind::Dot) || check(TokenKind::Colon)) {
         is_method = check(TokenKind::Colon);
@@ -1094,7 +1108,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_primary_expression() {
         if (!name) {
             return std::unexpected(std::move(name.error()));
         }
-        return ast_.add_expression(NameExpr{.name = *name}, line);
+        return make_name(*name, line);
     }
     case TokenKind::LParen: {
         if (auto moved = advance(); !moved) {
@@ -1242,6 +1256,33 @@ std::expected<TableField, SyntaxError> Parser::parse_table_field() {
     TableField field; // Positional by default, and the key stays unused
     field.value = *value;
     return field;
+}
+
+std::expected<ExprId, SyntaxError> Parser::make_name(TextRange name, int line) {
+    // Like Lua's singlevar(): resolve the name; for a global, also resolve
+    // _ENV, since `x` means `_ENV.x` (G5.6).
+    auto variable = scopes_.resolve(name);
+    if (!variable) {
+        return upvalue_limit_error(variable.error().function_line);
+    }
+    VariableRef environment;
+    if (variable->kind == VariableRef::Kind::Global) {
+        auto env = scopes_.resolve(env_name_);
+        if (!env) {
+            return upvalue_limit_error(env.error().function_line);
+        }
+        environment = *env;
+    }
+    return ast_.add_expression(
+        NameExpr{.name = name, .variable = *variable, .environment = environment}, line);
+}
+
+std::unexpected<SyntaxError> Parser::upvalue_limit_error(int function_line) const {
+    // Lua's errorlimit(): a syntax error, so it shows the current token.
+    const std::string where = function_line == 0
+                                  ? std::string("main function")
+                                  : std::format("function at line {}", function_line);
+    return error(std::format("too many upvalues (limit is {}) in {}", Scopes::max_upvalues, where));
 }
 
 std::expected<TextRange, SyntaxError> Parser::expect_name() {

@@ -7,17 +7,17 @@ Chunk
       If
         If
           Binary >
-            Name i
+            Name i (local 3)
             Integer 5
           Then
             Assign
               Targets
                 Name break_
               Values
-                Name i
+                Name i (local 3)
         ElseIf
           Binary ==
-            Name i
+            Name i (local 3)
             Integer 3
           Then
             CallStatement
@@ -48,5 +48,5 @@ Chunk
       Local y
         Integer 1
     Until
-      Name y
+      Name y (local 0)
   Do

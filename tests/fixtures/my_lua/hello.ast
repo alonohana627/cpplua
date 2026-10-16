@@ -6,6 +6,6 @@ Chunk
       Name print
       Binary ..
         String "hello, "
-        Name name
+        Name name (local 0)
       Integer 16
       Float 1000.0

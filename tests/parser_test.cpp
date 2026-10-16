@@ -730,7 +730,7 @@ TEST_CASE("G2.2 statements followed by a return", "[parser][statement]") {
                                             "  Local x\n"
                                             "    Integer 1\n"
                                             "  Return\n"
-                                            "    Name x\n");
+                                            "    Name x (local 0)\n");
     CHECK(parse_error("return 1 x = 2") == "input:1: <eof> expected near 'x'");
 }
 
@@ -804,7 +804,7 @@ TEST_CASE("G3.1 do blocks", "[parser][control]") {
                                                "    CallStatement\n"
                                                "      Call\n"
                                                "        Name f\n"
-                                               "        Name x\n");
+                                               "        Name x (local 0)\n");
     CHECK(ast_of("do do end end") == "Chunk\n  Do\n    Do\n");
     CHECK(ast_of("do return 1 end") == "Chunk\n  Do\n    Return\n      Integer 1\n");
 }
@@ -887,7 +887,7 @@ TEST_CASE("G3.10 numeric for", "[parser][control]") {
                                                      "      CallStatement\n"
                                                      "        Call\n"
                                                      "          Name f\n"
-                                                     "          Name i\n");
+                                                     "          Name i (local 3)\n");
     lua2::Ast ast;
     CHECK_FALSE(
         std::get<lua2::NumericForStat>(only_statement("for i = 1, 2 do end", ast)).has_step);
@@ -1008,8 +1008,8 @@ TEST_CASE("G5.1 function expressions", "[parser][function]") {
                                                               "    Function(a, b)\n"
                                                               "      Return\n"
                                                               "        Binary +\n"
-                                                              "          Name a\n"
-                                                              "          Name b\n");
+                                                              "          Name a (local 0)\n"
+                                                              "          Name b (local 1)\n");
     CHECK(group("function() end") == "function");
     CHECK(group("f(function() end, 1)") == "f(function, 1)");
     CHECK(group("{function() end}") == "{function}");
@@ -1076,11 +1076,11 @@ TEST_CASE("G3.11 methods get self as their first parameter", "[parser][function]
 TEST_CASE("G3.12 local functions", "[parser][function]") {
     CHECK(ast_of("local function f(n) return f(n) end") == "Chunk\n"
                                                            "  LocalFunction f\n"
-                                                           "    Function(n)\n"
+                                                           "    Function(n) [upvalues: f]\n"
                                                            "      Return\n"
                                                            "        Call\n"
-                                                           "          Name f\n"
-                                                           "          Name n\n");
+                                                           "          Name f (upvalue 0)\n"
+                                                           "          Name n (local 0)\n");
     // Not the same statement as a local holding a function expression.
     CHECK(ast_of("local f = function() end") == "Chunk\n  Local f\n    Function()\n");
 }
@@ -1189,12 +1189,12 @@ TEST_CASE("G8.5 the continue idiom", "[parser][jump]") {
                            "      If\n"
                            "        If\n"
                            "          Binary ==\n"
-                           "            Name i\n"
+                           "            Name i (local 3)\n"
                            "            Integer 2\n"
                            "          Then\n"
                            "            Goto continue\n"
                            "      Local x\n"
-                           "        Name i\n"
+                           "        Name i (local 3)\n"
                            "      Label continue\n");
 }
 
@@ -1358,4 +1358,169 @@ TEST_CASE("G10 nesting is limited instead of overflowing the stack", "[parser][s
     CHECK(parse_error("return 1" + repeat(" .. 1", 1000)) == "input:1: C stack overflow");
     // Long left-associative chains are a loop, not recursion, so they are fine.
     CHECK_NOTHROW(ast_of("return 1" + repeat(" + 1", 10000)));
+}
+
+// ---- Part 10: name resolution ----
+
+namespace {
+
+// Parses `source` and returns the resolution of the first name in its
+// return statement's first value (which must be a NameExpr).
+lua2::NameExpr returned_name(std::string_view source, lua2::Ast& ast) {
+    Parser parser{source, "input"};
+    auto parsed = parser.parse_chunk();
+    if (!parsed) {
+        FAIL("unexpected parse error: " << parsed.error().message);
+    }
+    ast = std::move(*parsed);
+    const auto statements = ast.statements(ast.root());
+    const auto& ret = std::get<lua2::ReturnStat>(ast.statement(statements.back()));
+    return std::get<lua2::NameExpr>(ast.expression(ast.expressions(ret.values)[0]));
+}
+
+using Kind = lua2::VariableRef::Kind;
+
+lua2::VariableRef local(std::uint32_t slot) {
+    return {.kind = Kind::Local, .index = slot};
+}
+
+lua2::VariableRef upvalue(std::uint32_t index) {
+    return {.kind = Kind::Upvalue, .index = index};
+}
+
+} // namespace
+
+TEST_CASE("G5.6 locals get their slot", "[parser][resolve]") {
+    lua2::Ast ast;
+    CHECK(returned_name("local a return a", ast).variable == local(0));
+    CHECK(returned_name("local a, b return b", ast).variable == local(1));
+    // An inner declaration shadows an outer one, and takes the next slot.
+    CHECK(returned_name("local x local x return x", ast).variable == local(1));
+    // Slots of a finished block are reused.
+    CHECK(returned_name("do local a, b end local c return c", ast).variable == local(0));
+}
+
+TEST_CASE("G5.6 for loops reserve hidden slots first", "[parser][resolve]") {
+    CHECK(ast_of("for i = 1, 2 do return i end") == "Chunk\n"
+                                                    "  NumericFor i\n"
+                                                    "    Integer 1\n"
+                                                    "    Integer 2\n"
+                                                    "    Body\n"
+                                                    "      Return\n"
+                                                    "        Name i (local 3)\n");
+    CHECK(ast_of("for k, v in t do return v end") == "Chunk\n"
+                                                     "  GenericFor k, v\n"
+                                                     "    In\n"
+                                                     "      Name t\n"
+                                                     "    Body\n"
+                                                     "      Return\n"
+                                                     "        Name v (local 5)\n");
+}
+
+TEST_CASE("G5.6 globals go through _ENV", "[parser][resolve]") {
+    lua2::Ast ast;
+    // In the main chunk, _ENV is upvalue 0.
+    const auto global = returned_name("return x", ast);
+    CHECK(global.variable.kind == Kind::Global);
+    CHECK(global.environment == upvalue(0));
+
+    // `local _ENV` changes where globals come from.
+    const auto custom = returned_name("local _ENV = {} return x", ast);
+    CHECK(custom.variable.kind == Kind::Global);
+    CHECK(custom.environment == local(0));
+}
+
+TEST_CASE("G5.6 a nested function captures what it uses as upvalues", "[parser][resolve]") {
+    CHECK(ast_of("local x return function() return x end") == "Chunk\n"
+                                                              "  Local x\n"
+                                                              "  Return\n"
+                                                              "    Function() [upvalues: x]\n"
+                                                              "      Return\n"
+                                                              "        Name x (upvalue 0)\n");
+    // Using it twice still makes one upvalue.
+    CHECK(ast_of("local x return function() return x, x end") == "Chunk\n"
+                                                                 "  Local x\n"
+                                                                 "  Return\n"
+                                                                 "    Function() [upvalues: x]\n"
+                                                                 "      Return\n"
+                                                                 "        Name x (upvalue 0)\n"
+                                                                 "        Name x (upvalue 0)\n");
+    // A global in a nested function needs _ENV, which comes in as an upvalue.
+    CHECK(ast_of("return function() return print end") == "Chunk\n"
+                                                          "  Return\n"
+                                                          "    Function() [upvalues: _ENV]\n"
+                                                          "      Return\n"
+                                                          "        Name print\n");
+}
+
+TEST_CASE("G5.6 upvalues chain through every function in between", "[parser][resolve]") {
+    Parser parser{"local x return function() return function() return x end end"};
+    const auto ast = parser.parse_chunk();
+    REQUIRE(ast.has_value());
+
+    const auto& ret = std::get<lua2::ReturnStat>(ast->statement(ast->statements(ast->root())[1]));
+    const auto& middle = ast->function(
+        std::get<lua2::FunctionExpr>(ast->expression(ast->expressions(ret.values)[0])).function);
+    const auto& middle_ret =
+        std::get<lua2::ReturnStat>(ast->statement(ast->statements(middle.body)[0]));
+    const auto& inner = ast->function(
+        std::get<lua2::FunctionExpr>(ast->expression(ast->expressions(middle_ret.values)[0]))
+            .function);
+
+    // The middle function captures the main chunk's local 0...
+    REQUIRE(ast->upvalues(middle.upvalues).size() == 1);
+    CHECK(ast->upvalues(middle.upvalues)[0].from_parent_local);
+    CHECK(ast->upvalues(middle.upvalues)[0].index == 0);
+    // ...and the inner one captures the middle one's upvalue 0.
+    REQUIRE(ast->upvalues(inner.upvalues).size() == 1);
+    CHECK_FALSE(ast->upvalues(inner.upvalues)[0].from_parent_local);
+    CHECK(ast->upvalues(inner.upvalues)[0].index == 0);
+}
+
+TEST_CASE("G2.4 the main chunk is a vararg function with _ENV", "[parser][resolve]") {
+    Parser parser{"return 1"};
+    const auto ast = parser.parse_chunk();
+    REQUIRE(ast.has_value());
+
+    const auto& main = ast->function(ast->main_function());
+    CHECK(main.is_vararg);
+    CHECK(main.parameters.count == 0);
+    REQUIRE(ast->upvalues(main.upvalues).size() == 1);
+    CHECK(ast->text(ast->upvalues(main.upvalues)[0].name) == "_ENV");
+}
+
+TEST_CASE("G3.12 local function sees itself, local f = function does not", "[parser][resolve]") {
+    CHECK(ast_of("local function f() return f end") == "Chunk\n"
+                                                       "  LocalFunction f\n"
+                                                       "    Function() [upvalues: f]\n"
+                                                       "      Return\n"
+                                                       "        Name f (upvalue 0)\n");
+    CHECK(ast_of("local f = function() return f end") == "Chunk\n"
+                                                         "  Local f\n"
+                                                         "    Function() [upvalues: _ENV]\n"
+                                                         "      Return\n"
+                                                         "        Name f\n");
+}
+
+TEST_CASE("G10 at most 255 upvalues per function", "[parser][resolve]") {
+    // 199 locals in the main chunk (f is the 200th) and more in f: g returns
+    // all of them, so it needs one upvalue for each.
+    const auto names = [](std::string_view prefix, int count) {
+        std::string out;
+        for (int i = 1; i <= count; ++i) {
+            out += (i == 1 ? "" : ", ") + std::string(prefix) + std::to_string(i);
+        }
+        return out;
+    };
+    const auto source = [&](int f_locals) {
+        return "local " + names("a", 199) + "\n" +      // line 1
+               "local function f()\n" +                 // line 2
+               "local " + names("b", f_locals) + "\n" + // line 3
+               "local function g()\n" +                 // line 4
+               "return " + names("a", 199) + ", " + names("b", f_locals) + "\n" + "end\nend\n";
+    };
+    CHECK_NOTHROW(ast_of(source(56))); // exactly 255
+    // Like Lua, the name is resolved after it is read, so "near" is the token after it.
+    CHECK(parse_error(source(57)) ==
+          "input:6: too many upvalues (limit is 255) in function at line 4 near 'end'");
 }

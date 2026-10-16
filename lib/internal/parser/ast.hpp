@@ -39,12 +39,15 @@ struct IfClauseTag {};
 
 struct FunctionTag {};
 
+struct UpvalueTag {};
+
 using ExprId = NodeId<ExprTag>;           // an expression node
 using StatId = NodeId<StatTag>;           // a statement node
 using FieldId = NodeId<FieldTag>;         // a field of a table constructor
 using LocalNameId = NodeId<LocalNameTag>; // a name declared by `local`
 using IfClauseId = NodeId<IfClauseTag>;   // an if or elseif clause
 using FunctionId = NodeId<FunctionTag>;   // a function body
+using UpvalueId = NodeId<UpvalueTag>;     // an upvalue of a function
 
 // A run of consecutive ids in one of the Ast's list vectors, such as the
 // statements of a block. Storing (first, count) instead of a std::vector in
@@ -157,8 +160,26 @@ struct BinaryExpr {
 
 // A variable name (G4.3). Whether it is a local, an upvalue or a global is
 // decided in part 10.
+// Where a variable lives, decided while parsing (G5.6).
+struct VariableRef {
+    enum class Kind : std::uint8_t {
+        Global,  // a field of _ENV
+        Local,   // a local of the current function; index is its slot
+        Upvalue, // a local of an enclosing function; index is in the function's upvalue list
+    };
+
+    Kind kind = Kind::Global;
+    std::uint32_t index = 0; // unused for Global
+
+    bool operator==(const VariableRef&) const = default;
+};
+
 struct NameExpr {
     TextRange name;
+    VariableRef variable;
+    // For a global: where _ENV is, since `x` means `_ENV.x`. Usually an
+    // upvalue, but `local _ENV = t` makes it a local.
+    VariableRef environment;
 
     bool operator==(const NameExpr&) const = default;
 };
@@ -399,9 +420,22 @@ using Stat = std::variant<ReturnStat, CallStat, AssignStat, LocalStat, DoStat, W
 
 // A function body: `( parlist ) block end` (G5.2, G5.3). Shared by function
 // expressions, function statements and local functions.
+// A local of an enclosing function that a function uses, captured when the
+// closure is created (G5.6).
+struct Upvalue {
+    TextRange name;
+    // Where the enclosing function holds it: its local slot `index`, or (when
+    // it is itself an upvalue there) its upvalue `index`.
+    bool from_parent_local = false;
+    std::uint32_t index = 0;
+
+    bool operator==(const Upvalue&) const = default;
+};
+
 struct Function {
     IdRange<LocalNameId> parameters; // in order; `self` first for methods
     bool is_vararg = false;          // the parameter list ends with `...`
+    IdRange<UpvalueId> upvalues;     // in order of first use; the main chunk's is _ENV
     Block body;
     int line = 0;     // where `function` is
     int end_line = 0; // where the closing `end` is
@@ -417,10 +451,14 @@ static_assert(std::is_trivially_copyable_v<Function>);
 
 class Ast {
 public:
-    // The block of the whole chunk (G2.1).
-    [[nodiscard]] const Block& root() const noexcept { return root_; }
+    // The chunk is compiled as a function (G2.4): no parameters, vararg, and
+    // _ENV as its only upvalue.
+    [[nodiscard]] FunctionId main_function() const noexcept { return main_; }
 
-    void set_root(Block block) noexcept { root_ = block; }
+    void set_main_function(FunctionId id) noexcept { main_ = id; }
+
+    // The block of the whole chunk (G2.1).
+    [[nodiscard]] const Block& root() const { return function(main_).body; }
 
     // ---- Nodes ----
     // Every node records the line it starts on, kept in a parallel vector
@@ -454,6 +492,7 @@ public:
     IdRange<FieldId> add_field_list(std::span<const TableField> fields);
     IdRange<LocalNameId> add_local_name_list(std::span<const LocalName> names);
     IdRange<IfClauseId> add_if_clause_list(std::span<const IfClause> clauses);
+    IdRange<UpvalueId> add_upvalue_list(std::span<const Upvalue> upvalues);
 
     // The statements of a block, in order.
     [[nodiscard]] std::span<const StatId> statements(const Block& block) const;
@@ -461,6 +500,7 @@ public:
     [[nodiscard]] std::span<const TableField> fields(IdRange<FieldId> range) const;
     [[nodiscard]] std::span<const LocalName> local_names(IdRange<LocalNameId> range) const;
     [[nodiscard]] std::span<const IfClause> if_clauses(IdRange<IfClauseId> range) const;
+    [[nodiscard]] std::span<const Upvalue> upvalues(IdRange<UpvalueId> range) const;
 
     // ---- Text ----
 
@@ -471,7 +511,7 @@ public:
     [[nodiscard]] std::string_view text(TextRange range) const;
 
 private:
-    Block root_;
+    FunctionId main_;
 
     std::vector<Expr> expressions_;
     std::vector<int> expression_lines_;
@@ -484,6 +524,7 @@ private:
     std::vector<TableField> field_lists_; // fields are small, so stored directly
     std::vector<LocalName> local_name_lists_;
     std::vector<IfClause> if_clause_lists_;
+    std::vector<Upvalue> upvalue_lists_;
 
     std::string text_;
 };

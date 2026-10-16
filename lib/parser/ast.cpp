@@ -70,6 +70,14 @@ std::span<const IfClause> Ast::if_clauses(IdRange<IfClauseId> range) const {
     return std::span{if_clause_lists_}.subspan(range.first, range.count);
 }
 
+IdRange<UpvalueId> Ast::add_upvalue_list(std::span<const Upvalue> upvalues) {
+    return append<UpvalueId>(upvalue_lists_, upvalues);
+}
+
+std::span<const Upvalue> Ast::upvalues(IdRange<UpvalueId> range) const {
+    return std::span{upvalue_lists_}.subspan(range.first, range.count);
+}
+
 std::span<const StatId> Ast::statements(const Block& block) const {
     return std::span{statement_lists_}.subspan(block.statements.first, block.statements.count);
 }
