@@ -37,6 +37,7 @@ Use `release` instead of `debug` for an optimized build.
 ```sh
 ./build/debug/lua2                      # print the version (also -v, --version)
 ./build/debug/lua2 --tokens file.lua    # print every token of a file (lexer debugging)
+./build/debug/lua2 --ast file.lua       # print the syntax tree of a file (parser debugging)
 ```
 
 ## Test

@@ -47,3 +47,17 @@ TEST_CASE("token_dump returns the lexer's error", "[debug]") {
     REQUIRE_FALSE(dump.has_value());
     CHECK(dump.error() == "test.lua:1: unfinished string near <eof>");
 }
+
+TEST_CASE("ast_dump prints the tree", "[debug]") {
+    const auto dump = lua2::ast_dump("-- nothing yet");
+
+    REQUIRE(dump.has_value());
+    CHECK(*dump == "Chunk\n");
+}
+
+TEST_CASE("ast_dump returns the parser's error", "[debug]") {
+    const auto dump = lua2::ast_dump("x", "test.lua");
+
+    REQUIRE_FALSE(dump.has_value());
+    CHECK(dump.error() == "test.lua:1: <eof> expected near 'x'");
+}

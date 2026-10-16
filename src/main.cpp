@@ -15,7 +15,11 @@
 namespace {
 
 constexpr std::string_view usage = "usage: lua2 [-v | --version]\n"
-                                   "       lua2 --tokens <file.lua>\n";
+                                   "       lua2 --tokens <file.lua>\n"
+                                   "       lua2 --ast <file.lua>\n";
+
+// The debug views: each turns source text into printable text or an error.
+using Dump = std::expected<std::string, std::string> (*)(std::string_view, std::string_view);
 
 // Reads a whole file as raw bytes, or returns why it could not.
 std::expected<std::string, std::string> read_file(const std::string& path) {
@@ -26,15 +30,16 @@ std::expected<std::string, std::string> read_file(const std::string& path) {
     return std::string{std::istreambuf_iterator<char>{file}, std::istreambuf_iterator<char>{}};
 }
 
-// `lua2 --tokens file.lua`: print every token of the file (lexer debugging).
-int print_tokens(const std::string& path) {
+// `lua2 --tokens file.lua` and `lua2 --ast file.lua`: print a debug view of
+// the file, or the error that stopped it.
+int print_dump(const std::string& path, Dump dump_view) {
     const auto source = read_file(path);
     if (!source) {
         std::println(stderr, "lua2: {}", source.error());
         return EXIT_FAILURE;
     }
     // Lua names a file chunk after its path in error messages.
-    const auto dump = lua2::token_dump(*source, path);
+    const auto dump = dump_view(*source, path);
     if (!dump) {
         std::println(stderr, "lua2: {}", dump.error());
         return EXIT_FAILURE;
@@ -50,7 +55,10 @@ int run(std::span<char*> args) {
         return EXIT_SUCCESS;
     }
     if (args.size() == 3 && std::string_view{args[1]} == "--tokens") {
-        return print_tokens(args[2]);
+        return print_dump(args[2], &lua2::token_dump);
+    }
+    if (args.size() == 3 && std::string_view{args[1]} == "--ast") {
+        return print_dump(args[2], &lua2::ast_dump);
     }
     std::print(stderr, "{}", usage);
     return EXIT_FAILURE;

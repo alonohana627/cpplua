@@ -1,5 +1,9 @@
 #include "lexer/token.hpp"
 
+#include <algorithm>
+#include <format>
+#include <string>
+
 namespace lua2 {
 
 std::string_view token_kind_name(TokenKind kind) {
@@ -69,6 +73,69 @@ std::string_view token_kind_name(TokenKind kind) {
     case TokenKind::While: return "While";
     }
     return "?"; // only reachable with an invalid enum value
+}
+
+namespace {
+
+// The spelling of an operator or punctuation token, or "" for other kinds.
+std::string_view symbol_spelling(TokenKind kind) {
+    switch (kind) {
+    case TokenKind::Plus: return "+";
+    case TokenKind::Minus: return "-";
+    case TokenKind::Star: return "*";
+    case TokenKind::Slash: return "/";
+    case TokenKind::Percent: return "%";
+    case TokenKind::Caret: return "^";
+    case TokenKind::Hash: return "#";
+    case TokenKind::Ampersand: return "&";
+    case TokenKind::Tilde: return "~";
+    case TokenKind::Pipe: return "|";
+    case TokenKind::Less: return "<";
+    case TokenKind::Greater: return ">";
+    case TokenKind::Assign: return "=";
+    case TokenKind::LParen: return "(";
+    case TokenKind::RParen: return ")";
+    case TokenKind::LBrace: return "{";
+    case TokenKind::RBrace: return "}";
+    case TokenKind::LBracket: return "[";
+    case TokenKind::RBracket: return "]";
+    case TokenKind::Semicolon: return ";";
+    case TokenKind::Colon: return ":";
+    case TokenKind::Comma: return ",";
+    case TokenKind::Dot: return ".";
+    case TokenKind::Equal: return "==";
+    case TokenKind::NotEqual: return "~=";
+    case TokenKind::LessEqual: return "<=";
+    case TokenKind::GreaterEqual: return ">=";
+    case TokenKind::ShiftLeft: return "<<";
+    case TokenKind::ShiftRight: return ">>";
+    case TokenKind::DoubleSlash: return "//";
+    case TokenKind::DoubleColon: return "::";
+    case TokenKind::Concat: return "..";
+    case TokenKind::Ellipsis: return "...";
+    default: return {};
+    }
+}
+
+} // namespace
+
+std::string expected_text(TokenKind kind) {
+    // Like Lua's luaX_token2str: tokens without a fixed spelling are named in
+    // angle brackets and not quoted.
+    switch (kind) {
+    case TokenKind::EndOfStream: return "<eof>";
+    case TokenKind::Name: return "<name>";
+    case TokenKind::String: return "<string>";
+    case TokenKind::Integer: return "<integer>";
+    case TokenKind::Float: return "<number>";
+    case TokenKind::Other: return "<other>"; // never expected by the parser
+    default: break;
+    }
+    if (const auto* const keyword = std::ranges::find(keywords, kind, &Keyword::kind);
+        keyword != keywords.end()) {
+        return std::format("'{}'", keyword->text);
+    }
+    return std::format("'{}'", symbol_spelling(kind));
 }
 
 } // namespace lua2

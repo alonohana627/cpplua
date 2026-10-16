@@ -7,6 +7,8 @@
 
 #include "lexer/lexer.hpp"
 #include "lexer/token.hpp"
+#include "parser/ast_printer.hpp"
+#include "parser/parser.hpp"
 
 namespace lua2 {
 
@@ -78,6 +80,16 @@ std::expected<std::string, std::string> token_dump(std::string_view source,
             return out;
         }
     }
+}
+
+std::expected<std::string, std::string> ast_dump(std::string_view source,
+                                                 std::string_view chunk_name) {
+    Parser parser{source, chunk_name};
+    auto ast = parser.parse_chunk();
+    if (!ast) {
+        return std::unexpected(std::move(ast.error().message));
+    }
+    return print_ast(*ast);
 }
 
 } // namespace lua2

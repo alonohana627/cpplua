@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <format>
+#include <limits>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -134,13 +135,29 @@ std::optional<double> to_float(std::string_view text) {
 Lexer::Lexer(std::string_view source, std::string_view chunk_name)
     : source_(source), chunk_name_(chunk_name) {}
 
-// @TODO: make more efficient
 std::expected<Token, SyntaxError> Lexer::next() {
     // One error at a time: after an error, lexing is over.
     if (failed_) {
         return std::unexpected(*failed_);
     }
+    // Token offsets are 32 bits (Token::offset), so refuse sources that big.
+    if (source_.size() > std::numeric_limits<std::uint32_t>::max()) {
+        return error("chunk too large", near_eof);
+    }
+    auto token = scan();
+    if (token) {
+        // Record where the token is in the source. scan() set token_start_
+        // after skipping whitespace and comments, and pos_ is now its end.
+        token->offset = static_cast<std::uint32_t>(token_start_);
+        token->length = static_cast<std::uint32_t>(pos_ - token_start_);
+    }
+    return token;
+}
+
+// @TODO: make more efficient
+std::expected<Token, SyntaxError> Lexer::scan() {
     for (;;) {
+        token_start_ = pos_;
         if (pos_ >= source_.size()) {
             return make(TokenKind::EndOfStream);
         }

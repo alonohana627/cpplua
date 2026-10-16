@@ -135,7 +135,23 @@ struct Token {
     int line = 1; // the line the token starts on, counted from 1 (L2.2)
     TokenValue value;
 
-    bool operator==(const Token&) const = default;
+    // Where the token is in the source: source.substr(offset, length) is its
+    // text exactly as written, such as "0x10" for an Integer with value 16.
+    // Parser errors quote it (G9.2). 32 bits each keep the token small; the
+    // lexer refuses sources of 4 GiB or more.
+    std::uint32_t offset = 0;
+    std::uint32_t length = 0;
+
+    // Two tokens are equal when they mean the same thing: kind, line and
+    // value. Where they sit in the source does not count, so tests can write
+    // the expected token without computing offsets.
+    bool operator==(const Token& other) const {
+        return kind == other.kind && line == other.line && value == other.value;
+    }
 };
+
+// How Lua names a token kind in "X expected" messages (G9.3): keywords and
+// symbols quoted ('end', '=='), and the rest in angle brackets (<eof>, <name>).
+std::string expected_text(TokenKind kind);
 
 } // namespace lua2

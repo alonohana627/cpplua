@@ -21,4 +21,10 @@ namespace lua2 {
 std::expected<std::string, std::string> token_dump(std::string_view source,
                                                    std::string_view chunk_name = "?");
 
+// Parses `source` and prints its syntax tree as indented text, one node per
+// line (see `lua2 --ast`). Returns the error message instead if lexing or
+// parsing fails, such as `test.lua:1: <eof> expected near 'x'`.
+std::expected<std::string, std::string> ast_dump(std::string_view source,
+                                                 std::string_view chunk_name = "?");
+
 } // namespace lua2

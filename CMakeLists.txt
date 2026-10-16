@@ -26,6 +26,9 @@ add_library(lua2_lib
   lib/debug.cpp
   lib/lexer/lexer.cpp
   lib/lexer/token.cpp
+  lib/parser/ast.cpp
+  lib/parser/ast_printer.cpp
+  lib/parser/parser.cpp
 )
 add_library(lua2::lua2 ALIAS lua2_lib)
 target_include_directories(lua2_lib
@@ -56,6 +59,7 @@ if(BUILD_TESTING)
     tests/syntax_error_test.cpp
     tests/debug_test.cpp
     tests/conformance_test.cpp
+    tests/parser_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
   # Tests may include internal headers from lib/internal/ to test internals directly.

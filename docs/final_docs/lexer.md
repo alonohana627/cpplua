@@ -50,7 +50,7 @@ The lexer itself never decides whether the code is valid Lua.
 
 ## Tokens
 
-A `Token` has three fields:
+A `Token` has five fields:
 
 - `kind`: a `TokenKind`, an `enum class` with one entry per kind of token.
 - `line`: the line the token **starts** on, counted from 1.
@@ -59,8 +59,19 @@ A `Token` has three fields:
   a `std::string`. An `Integer` holds a `std::int64_t`, a `Float` a `double`, and a `String` its
   bytes after escapes as a `std::string`. Operators and keywords hold `std::monostate` (no
   value).
+- `offset` and `length`: where the token is in the source, as two `std::uint32_t`.
+  `source.substr(offset, length)` is its text exactly as written, such as `0x10` for an `Integer`
+  with value 16. The parser quotes this text in its errors (`near '0x10'`). Two 32-bit numbers
+  cost 8 bytes per token, half of a `std::string_view`; in exchange, the lexer refuses a source
+  of 4 GiB or more with `chunk too large`.
 
-Tokens compare with `==` (kind, line and value), which keeps tests short.
+`next()` fills in `offset` and `length` for every token. It calls a private `scan()`, which does
+the actual lexing and records in `token_start_` where the token began, after skipping whitespace
+and comments; `next()` then sets `offset = token_start_` and `length = pos_ - token_start_`.
+`EndOfStream` sits at the end of the source with length 0.
+
+Tokens compare with `==` on kind, line and value only, which keeps tests short: where a token
+sits in the source does not make it a different token.
 
 `TokenKind` currently has:
 

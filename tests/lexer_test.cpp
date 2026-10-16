@@ -1022,3 +1022,34 @@ TEST_CASE("L1.4 a shebang line is not the lexer's job", "[lexer]") {
                                               TokenKind::Slash, TokenKind::Name, TokenKind::Name,
                                               TokenKind::EndOfStream});
 }
+
+// ---- Token offsets (parser part 0) ----
+
+TEST_CASE("a token records its offset and length in the source", "[lexer]") {
+    const std::string_view source = "local x = 0x10 -- c\n  \"a\\65\"";
+    Lexer lexer{source};
+
+    const auto local = next_token(lexer);
+    const auto x = next_token(lexer);
+    const auto assign = next_token(lexer);
+    const auto number = next_token(lexer);
+    const auto string = next_token(lexer);
+    const auto end = next_token(lexer);
+
+    CHECK(source.substr(local.offset, local.length) == "local");
+    CHECK(source.substr(x.offset, x.length) == "x");
+    CHECK(source.substr(assign.offset, assign.length) == "=");
+    CHECK(source.substr(number.offset, number.length) == "0x10");      // as written, not 16
+    CHECK(source.substr(string.offset, string.length) == "\"a\\65\""); // quotes and escapes
+    CHECK(end.offset == source.size());
+    CHECK(end.length == 0);
+}
+
+TEST_CASE("token equality ignores the offset and length", "[lexer]") {
+    lua2::Token a{.kind = TokenKind::Name, .line = 1, .value = std::string("x")};
+    lua2::Token b = a;
+    b.offset = 10;
+    b.length = 1;
+
+    CHECK(a == b);
+}

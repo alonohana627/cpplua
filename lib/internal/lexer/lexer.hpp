@@ -36,6 +36,10 @@ public:
     [[nodiscard]] std::string_view chunk_name() const noexcept { return chunk_name_; }
 
 private:
+    // Skips whitespace and comments, then reads one token. next() wraps it to
+    // fill in the token's offset and length.
+    std::expected<Token, SyntaxError> scan();
+
     // Records a SyntaxError on the current line, such as
     // `input:3: unfinished string near '"abc'` (L10.1), and returns it ready
     // for `return error(...);`. `origin` is where in our code it was called.
@@ -112,8 +116,9 @@ private:
 
     std::string_view source_;
     std::string_view chunk_name_;
-    std::size_t pos_ = 0; // index of the next character to read
-    int line_ = 1;        // current line (L2.2)
+    std::size_t pos_ = 0;         // index of the next character to read
+    std::size_t token_start_ = 0; // index where the current token began
+    int line_ = 1;                // current line (L2.2)
 
     // The error that stopped lexing, if any. Once set, next() returns it.
     std::optional<SyntaxError> failed_;
