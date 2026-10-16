@@ -48,6 +48,10 @@ ctest --preset debug                         # run all tests
 ./build/debug/lua2_tests "[some-tag]"        # run tests with a tag
 ```
 
+Lua programs used as tests live in `tests/fixtures/`: the official Lua 5.4.9 suite, and
+`my_lua/`, where every Lua program written while developing lua2 is kept with its expected
+`--ast` output (see `tests/fixtures/my_lua/README.md`).
+
 ## Format
 
 ```sh

@@ -1,0 +1,22 @@
+Chunk
+  Local a, b <const>
+    Integer 1
+    Table
+  CallStatement
+    Call
+      Name print
+      String "hi"
+  Assign
+    Targets
+      Index
+        Name a
+        String "x"
+      Index
+        Name b
+        Integer 1
+    Values
+      Call
+        Name f
+      Integer 2
+  Return
+    Name a

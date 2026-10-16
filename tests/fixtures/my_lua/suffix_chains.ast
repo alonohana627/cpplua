@@ -1,0 +1,15 @@
+Chunk
+  Return
+    MethodCall e
+      Call
+        Index
+          Index
+            Name a
+            String "b"
+          Name c
+        Name d
+      String "f"
+    Paren
+      Call
+        Name g
+    Name x

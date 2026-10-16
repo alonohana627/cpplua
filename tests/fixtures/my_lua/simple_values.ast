@@ -1,0 +1,9 @@
+Chunk
+  Return
+    Nil
+    True
+    False
+    Integer 16
+    Float 1000.0
+    String "a\n"
+    Vararg

@@ -1211,3 +1211,151 @@ TEST_CASE("G9.3 broken goto and labels", "[parser][jump]") {
 TEST_CASE("G4.1 goto is a keyword, not a name", "[parser][jump]") {
     CHECK(parse_error("local goto = 1") == "input:1: <name> expected near 'goto'");
 }
+
+// ---- Part 9: scopes and compile-time checks ----
+//
+// These are semantic errors: no "near" part (G9.5).
+
+TEST_CASE("G8.6 break must be inside a loop", "[parser][scope]") {
+    CHECK(parse_error("break") == "input:1: break outside loop at line 1");
+    CHECK(parse_error("if x then break end") == "input:1: break outside loop at line 1");
+    // Reported at the end of the function, so the prefix is the last line.
+    CHECK(parse_error("x = 1\nbreak\n\n") == "input:4: break outside loop at line 2");
+    // A function is a new scope: the loop outside it does not count.
+    CHECK(parse_error("while true do local f = function() break end end") ==
+          "input:1: break outside loop at line 1");
+}
+
+TEST_CASE("G8.6 break works in every loop and nested blocks", "[parser][scope]") {
+    CHECK_NOTHROW(ast_of("while true do break end"));
+    CHECK_NOTHROW(ast_of("repeat break until true"));
+    CHECK_NOTHROW(ast_of("for i = 1, 2 do break end"));
+    CHECK_NOTHROW(ast_of("for k in pairs(t) do break end"));
+    CHECK_NOTHROW(ast_of("while true do if x then do break end end end"));
+    CHECK_NOTHROW(ast_of("local f = function() while true do break end end"));
+}
+
+TEST_CASE("G8.2 a goto needs a visible label", "[parser][scope]") {
+    CHECK(parse_error("goto nowhere") ==
+          "input:1: no visible label 'nowhere' for <goto> at line 1");
+    // A label inside a nested block is not visible from outside.
+    CHECK(parse_error("goto l do ::l:: end") ==
+          "input:1: no visible label 'l' for <goto> at line 1");
+    // Nor is a label of an enclosing function.
+    CHECK(parse_error("::a:: local f = function() goto a end") ==
+          "input:1: no visible label 'a' for <goto> at line 1");
+}
+
+TEST_CASE("G8.1 visible labels", "[parser][scope]") {
+    CHECK_NOTHROW(ast_of("goto done ::done::"));                   // forward
+    CHECK_NOTHROW(ast_of("::top:: local x = 1 goto top"));         // backward, out of a scope
+    CHECK_NOTHROW(ast_of("do goto out end ::out::"));              // out of a nested block
+    CHECK_NOTHROW(ast_of("::a:: do goto a end"));                  // to an enclosing block
+    CHECK_NOTHROW(ast_of("do ::a:: end do ::a:: end"));            // separate blocks
+    CHECK_NOTHROW(ast_of("::a:: local f = function() ::a:: end")); // separate functions
+}
+
+TEST_CASE("G8.3 a label cannot be defined twice where both are visible", "[parser][scope]") {
+    CHECK(parse_error("::a:: ::a::") == "input:1: label 'a' already defined on line 1");
+    CHECK(parse_error("::a:: do ::a:: end") == "input:1: label 'a' already defined on line 1");
+    // Like Lua, consecutive labels are registered last first, so the
+    // message names the later one.
+    CHECK(parse_error("::a::\n::a::") == "input:2: label 'a' already defined on line 2");
+}
+
+TEST_CASE("G8.4 a goto cannot jump into the scope of a local", "[parser][scope]") {
+    CHECK(parse_error("goto l local x = 1 ::l:: print(x)") ==
+          "input:1: <goto l> at line 1 jumps into the scope of local 'x'");
+    CHECK(parse_error("goto l\nlocal a, b = 1, 2\n::l::\nprint(a)") ==
+          "input:4: <goto l> at line 1 jumps into the scope of local 'a'");
+}
+
+TEST_CASE("G8.5 a label at the end of its block is outside the block's locals", "[parser][scope]") {
+    CHECK_NOTHROW(ast_of("goto l local x = 1 ::l::"));
+    CHECK_NOTHROW(ast_of("goto l local x = 1 ::l:: ;; ::m::"));
+    CHECK_NOTHROW(ast_of("for i = 1, 3 do\n"
+                         "  if i == 2 then goto continue end\n"
+                         "  local x = i\n"
+                         "  ::continue::\n"
+                         "end"));
+    // Before 'until' a label is not at the end: the condition still sees x.
+    CHECK(parse_error("repeat goto l local x ::l:: until x") ==
+          "input:1: <goto l> at line 1 jumps into the scope of local 'x'");
+    // Nor before a return.
+    CHECK(parse_error("goto l local x ::l:: return") ==
+          "input:1: <goto l> at line 1 jumps into the scope of local 'x'");
+}
+
+TEST_CASE("G3.15 const and close variables cannot be assigned", "[parser][scope]") {
+    CHECK(parse_error("local x <const> = 1 x = 2") ==
+          "input:1: attempt to assign to const variable 'x'");
+    CHECK(parse_error("local x <close> = nil x = 1") ==
+          "input:1: attempt to assign to const variable 'x'");
+    CHECK(parse_error("local x <const>\nx = 1") ==
+          "input:2: attempt to assign to const variable 'x'");
+    CHECK(parse_error("local a <const> = 1 b, a = 1, 2") ==
+          "input:1: attempt to assign to const variable 'a'");
+    // From a nested function: an upvalue keeps its attribute.
+    CHECK(parse_error("local x <const> = 1 local function f() x = 2 end") ==
+          "input:1: attempt to assign to const variable 'x'");
+    // A function statement assigns too.
+    CHECK(parse_error("local x <const> = 1 function x() end") ==
+          "input:1: attempt to assign to const variable 'x'");
+}
+
+TEST_CASE("G3.15 what a const variable still allows", "[parser][scope]") {
+    CHECK_NOTHROW(ast_of("local t <const> = {} t.x = 1 t[1] = 2")); // fields
+    CHECK_NOTHROW(ast_of("local t <const> = {} function t.f() end"));
+    CHECK_NOTHROW(ast_of("local x <const> = 1 do local x = 2 x = 3 end")); // shadowed
+    CHECK_NOTHROW(ast_of("x = 1 local x <const> = 2"));                    // a global before
+    CHECK_NOTHROW(ast_of("for i = 1, 2 do i = 3 end"));                    // loop variables
+}
+
+TEST_CASE("G3.13 a new local is visible only after its statement", "[parser][scope]") {
+    // Inside its own initializer, f is still the global f, so this assigns
+    // the global, not the const local.
+    CHECK_NOTHROW(ast_of("local f <const> = function() f = 1 end"));
+    CHECK(parse_error("local x = 1 local x <const> = x x = 2") ==
+          "input:1: attempt to assign to const variable 'x'");
+}
+
+TEST_CASE("G3.14 the until condition sees the body's locals", "[parser][scope]") {
+    CHECK(parse_error("repeat local x <const> = 1 until (function() x = 2 end)") ==
+          "input:1: attempt to assign to const variable 'x'");
+}
+
+TEST_CASE("G10 at most 200 local variables per function", "[parser][scope]") {
+    const auto locals = [](int count) {
+        std::string source = "local v1";
+        for (int i = 2; i <= count; ++i) {
+            source += ", v" + std::to_string(i);
+        }
+        return source;
+    };
+    CHECK_NOTHROW(ast_of(locals(200)));
+    CHECK(parse_error(locals(201)) ==
+          "input:1: too many local variables (limit is 200) in main function near <eof>");
+    CHECK(parse_error("local f = function()\n" + locals(201) + "\nend") ==
+          "input:3: too many local variables (limit is 200) in function at line 1 near 'end'");
+    // Locals of finished blocks no longer count.
+    CHECK_NOTHROW(ast_of("do " + locals(150) + " end do " + locals(150) + " end"));
+}
+
+TEST_CASE("G10 nesting is limited instead of overflowing the stack", "[parser][scope]") {
+    const auto repeat = [](std::string_view text, int count) {
+        std::string out;
+        for (int i = 0; i < count; ++i) {
+            out += text;
+        }
+        return out;
+    };
+    // Shallow nesting is fine.
+    CHECK_NOTHROW(ast_of("return " + repeat("(", 100) + "1" + repeat(")", 100)));
+    // Deep nesting is an error, not a crash.
+    CHECK(parse_error("return " + repeat("(", 1000) + "1" + repeat(")", 1000)) ==
+          "input:1: C stack overflow");
+    CHECK(parse_error(repeat("do ", 1000) + repeat("end ", 1000)) == "input:1: C stack overflow");
+    CHECK(parse_error("return 1" + repeat(" .. 1", 1000)) == "input:1: C stack overflow");
+    // Long left-associative chains are a loop, not recursion, so they are fine.
+    CHECK_NOTHROW(ast_of("return 1" + repeat(" + 1", 10000)));
+}

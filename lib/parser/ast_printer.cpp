@@ -1,8 +1,10 @@
 #include "parser/ast_printer.hpp"
 
 #include <format>
+#include <ranges>
 #include <string>
 #include <variant>
+#include <vector>
 
 #include "text_format.hpp"
 
@@ -12,10 +14,14 @@ namespace {
 
 // Writes one node per line, indented two spaces per level of depth.
 //
-// Each node type has its own print() overload. statement() and expression()
-// dispatch to them with std::visit, so a node type without an overload is a
-// compile error ("no matching function for call to print"), the same safety
-// as listing every lambda, without one giant function.
+// Each node type has its own print() overload, dispatched with std::visit,
+// so a node type without an overload is a compile error.
+//
+// The printer does not recurse: a tree can be far deeper than the C++ stack
+// allows (`1 + 1 + ... + 1` with ten thousand terms is ten thousand levels
+// deep on its left side). Instead, print() writes the node's own line and
+// *schedules* everything below it; run() then works through a stack of
+// scheduled items in order.
 class Printer {
 public:
     explicit Printer(const Ast& ast) : ast_(ast) {}
@@ -23,26 +29,79 @@ public:
     std::string print_chunk() {
         line(0, "Chunk");
         block(ast_.root(), 1);
+        run();
         return std::move(out_);
     }
 
 private:
-    // ---- Dispatch ----
+    // ---- Scheduled work ----
 
-    void statement(StatId id, int depth) {
+    struct Heading {
+        std::string_view text; // always a string literal
+    };
+
+    struct Work {
+        std::variant<StatId, ExprId, FunctionId, TableField, Heading> item;
+        int depth;
+    };
+
+    void run() {
+        flush_scheduled();
+        while (!stack_.empty()) {
+            const Work work = stack_.back();
+            stack_.pop_back();
+            std::visit([&](const auto& item) { emit(item, work.depth); }, work.item);
+            flush_scheduled();
+        }
+    }
+
+    // Moves the items scheduled by the last print() onto the stack, last
+    // first, so they come off it in the order they were scheduled.
+    void flush_scheduled() {
+        for (const Work& work : scheduled_ | std::views::reverse) {
+            stack_.push_back(work);
+        }
+        scheduled_.clear();
+    }
+
+    void emit(StatId id, int depth) {
         std::visit([&](const auto& node) { print(node, depth); }, ast_.statement(id));
     }
 
-    void expression(ExprId id, int depth) {
+    void emit(ExprId id, int depth) {
         std::visit([&](const auto& node) { print(node, depth); }, ast_.expression(id));
     }
 
+    void emit(FunctionId id, int depth) { print_function(ast_.function(id), depth); }
+
+    void emit(const TableField& field, int depth) { print_table_field(field, depth); }
+
+    void emit(Heading heading, int depth) { line(depth, heading.text); }
+
     // ---- Helpers ----
+    //
+    // line() writes immediately, so print() uses it only for the node's own
+    // first line. Everything after it goes through the schedulers below, to
+    // keep the order right.
 
     void line(int depth, std::string_view text) {
         out_.append(static_cast<std::size_t>(depth) * 2, ' ');
         out_ += text;
         out_ += '\n';
+    }
+
+    void heading(int depth, std::string_view text) {
+        scheduled_.push_back({.item = Heading{.text = text}, .depth = depth});
+    }
+
+    void statement(StatId id, int depth) { scheduled_.push_back({.item = id, .depth = depth}); }
+
+    void expression(ExprId id, int depth) { scheduled_.push_back({.item = id, .depth = depth}); }
+
+    void function(FunctionId id, int depth) { scheduled_.push_back({.item = id, .depth = depth}); }
+
+    void table_field(const TableField& field, int depth) {
+        scheduled_.push_back({.item = field, .depth = depth});
     }
 
     void block(const Block& block, int depth) {
@@ -54,7 +113,7 @@ private:
     // A loop body under a "Body" heading, so it cannot be confused with the
     // expressions printed before it.
     void body(const Block& body, int depth) {
-        line(depth, "Body");
+        heading(depth, "Body");
         block(body, depth + 1);
     }
 
@@ -80,8 +139,7 @@ private:
     }
 
     // Function(a, b, ...)   with the body's statements below
-    void function(FunctionId id, int depth) {
-        const Function& node = ast_.function(id);
+    void print_function(const Function& node, int depth) {
         std::string parameters = names(node.parameters);
         if (node.is_vararg) {
             parameters += parameters.empty() ? "..." : ", ...";
@@ -93,7 +151,7 @@ private:
     //   Item           a positional field, its value below
     //   Field name     a named field, its value below
     //   Field          a [key] = value field, the key then the value below
-    void table_field(const TableField& field, int depth) {
+    void print_table_field(const TableField& field, int depth) {
         switch (field.kind) {
         case TableField::Kind::Positional:
             line(depth, "Item");
@@ -127,9 +185,9 @@ private:
 
     void print(const AssignStat& node, int depth) {
         line(depth, "Assign");
-        line(depth + 1, "Targets");
+        heading(depth + 1, "Targets");
         expressions(node.targets, depth + 2);
-        line(depth + 1, "Values");
+        heading(depth + 1, "Values");
         expressions(node.values, depth + 2);
     }
 
@@ -152,7 +210,7 @@ private:
     void print(const RepeatStat& node, int depth) {
         line(depth, "Repeat");
         body(node.body, depth + 1);
-        line(depth + 1, "Until");
+        heading(depth + 1, "Until");
         expression(node.condition, depth + 2);
     }
 
@@ -160,14 +218,14 @@ private:
         line(depth, "If");
         bool first = true;
         for (const IfClause& clause : ast_.if_clauses(node.clauses)) {
-            line(depth + 1, first ? "If" : "ElseIf");
+            heading(depth + 1, first ? "If" : "ElseIf");
             first = false;
             expression(clause.condition, depth + 2);
-            line(depth + 2, "Then");
+            heading(depth + 2, "Then");
             block(clause.body, depth + 3);
         }
         if (node.has_else) {
-            line(depth + 1, "Else");
+            heading(depth + 1, "Else");
             block(node.else_body, depth + 2);
         }
     }
@@ -184,7 +242,7 @@ private:
 
     void print(const GenericForStat& node, int depth) {
         line(depth, "GenericFor " + names(node.names));
-        line(depth + 1, "In");
+        heading(depth + 1, "In");
         expressions(node.values, depth + 2);
         body(node.body, depth + 1);
     }
@@ -277,11 +335,15 @@ private:
         }
     }
 
-    void print(const FunctionExpr& node, int depth) { function(node.function, depth); }
+    void print(const FunctionExpr& node, int depth) {
+        print_function(ast_.function(node.function), depth);
+    }
 
     // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members): lives only during print
     const Ast& ast_;
     std::string out_;
+    std::vector<Work> stack_;     // items still to print, the next one last
+    std::vector<Work> scheduled_; // items scheduled by the print() running now
 };
 
 } // namespace

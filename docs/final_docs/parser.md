@@ -8,8 +8,10 @@ work is in [../plan/parser.md](../plan/parser.md).
 of statements: function calls, assignments, `local` declarations (with `<const>` and
 `<close>`), empty `;` statements, `do`, `while`, `repeat`, `if`/`elseif`/`else`, numeric and
 generic `for`, `function` statements, `local function`, `goto`, labels, `break`, and a final
-`return`. Every expression parses, with every operator at Lua's precedence. Still to come: the
-checks that need scopes (part 9) and name resolution (part 10).
+`return`. Every expression parses, with every operator at Lua's precedence. The checks that
+need scopes are in place (part 9): `break` and `goto` targets, duplicate labels, jumps into a
+local's scope, `<const>` assignment, the 200-local limit and a nesting limit. Still to come:
+recording name resolution in the tree (part 10).
 
 ## Where it lives
 
@@ -260,10 +262,86 @@ vararg one cannot use the outer `...`, and once it ends, the outer function can 
 Unlike `return`, these may appear anywhere in a block (G8.7): `while x do break f() end` is
 valid, even though `f()` can never run.
 
-For now they are only *syntax*. Whether a `goto` has a visible label, whether a label is defined
-twice, whether a `goto` jumps into a local's scope, and whether a `break` is inside a loop all
-need to know the scopes around the statement, so they are checked in part 9. Until then,
-`goto nowhere` and a `break` outside any loop parse without complaint.
+Whether a `goto` has a visible label, whether a label is defined twice, whether a `goto` jumps
+into a local's scope, and whether a `break` is inside a loop all depend on the scopes around the
+statement; see "Scopes and compile-time checks".
+
+## Scopes and compile-time checks
+
+Some errors are not about grammar but about what is visible where (G3.13-G3.15, G8, G10). The
+parser tracks that with a `Scopes` object (`lib/internal/parser/scopes.hpp`), a separate class so
+that the parse functions stay mostly grammar. The parser calls it at exactly the points where
+Lua's `lparser.c` calls `open_func`, `enterblock`, `new_localvar`, `adjustlocalvars`,
+`createlabel` and friends, so every check fails at the same moment, with the same message, as in
+Lua. The errors are semantic errors, without `near` (G9.5).
+
+### What it tracks
+
+| State          | Holds                                                                       |
+| -------------- | --------------------------------------------------------------------------- |
+| `functions_`   | one entry per function being parsed (the main chunk first): its line, where its locals and labels start, how many locals are visible, and its blocks |
+| `variables_`   | every declared local of every open function, with its attribute             |
+| `labels_`      | every visible label, with its line and how many locals were visible at it   |
+| `gotos_`       | every `goto` and `break` still waiting for its target, with how many locals were visible at it |
+
+**Declared vs visible.** A local is *declared* when its name is read but becomes *visible* only
+when `activate()` is called, which is after the whole statement: so in `local x = x`, the right
+side means the outer `x` (G3.13). `local function f` activates `f` before its body, so the
+function can call itself; `local f = function() ... end` does not (G3.12). Function parameters
+are visible in the body; loop variables only in the loop body.
+
+**Blocks.** `parse_scoped_block()` opens a block, parses, and closes it; closing removes the
+block's locals and labels. The scopes follow Lua's layout exactly: a loop is a *loop block* (what
+`break` jumps to) around the body; `repeat` keeps its body's block open through the `until`
+condition, so the condition sees the body's locals (G3.14); a `for` has a loop block holding its
+hidden control variables, and a block for the loop variables around the body.
+
+### The checks
+
+- **`break`** (G8.6) is recorded as pending, and every loop block resolves the breaks inside it
+  when it closes. One left when the function ends is `break outside loop at line N`. Like Lua,
+  that is reported at the end of the function, after its `end` (or at the end of the chunk).
+- **`goto`** (G8.2): if its label is already visible, it is a backward jump and always fine.
+  Otherwise it waits. When a block closes, its waiting gotos move out to the enclosing block
+  (now "outside" the block's locals); when the function ends, the first one still waiting is
+  `no visible label 'x' for <goto> at line N`. Labels of other functions are never visible.
+- **Labels** (G8.1, G8.3): a label visible where another with the same name is defined is
+  `label 'x' already defined on line N`. Creating a label resolves the waiting gotos of its
+  block.
+- **Jumping into a scope** (G8.4): a waiting goto that saw fewer locals than its label sees
+  would skip a local's declaration: `<goto x> at line N jumps into the scope of local 'y'`,
+  naming the first local it would skip.
+- **Labels at the end of a block** (G8.5): a label followed only by the end of its block (and
+  maybe `;` or more labels) counts as outside the block's locals, so the usual
+  `goto continue ... ::continue:: end` works. Lua decides this after skipping the `;` and labels
+  that follow, and registers consecutive labels last-first; `parse_block()` reproduces that by
+  holding labels back until the next real statement, then registering them in reverse. Before
+  `until` a label is *not* at the end, because the condition still sees the locals.
+- **`<const>` and `<close>`** (G3.15): assigning to a name that `lookup()` finds as such a local
+  (in this function or, as an upvalue, an enclosing one) is
+  `attempt to assign to const variable 'x'`. Fields are fine (`t.x = 1`), and so is a shadowing
+  local. `function x() end` assigns too, and is checked after its body, like Lua.
+- **200 locals per function** (G10): `too many local variables (limit is 200) in main function`
+  (or `in function at line N`), a normal syntax error with `near`. Like Lua, each `for` counts
+  its hidden control variables too (3 or 4, named `(for state)`), and locals of finished blocks
+  stop counting.
+
+### The nesting limit
+
+The parser is recursive, so very deep nesting would overflow the C++ stack. Like Lua's
+`enterlevel`, every statement and every subexpression counts one level while it is being parsed
+(the `DepthGuard` class), and more than 200 levels is the error `C stack overflow`. Long chains
+of left-associative operators (`1 + 1 + ... + 1`) are a loop, not recursion, so they have no
+limit. (Real Lua reports this error without a chunk name and line, because it is raised as a
+runtime error; ours has both.)
+
+### After an error
+
+Parsing stops at the first error, and the scopes are left as they are: `parse_scoped_block()`
+only closes its block when the block parsed successfully, because closing blocks in the middle
+of an unfinished construct would not match what was opened.
+
+## Control flow
 
 ## Control flow
 
@@ -472,8 +550,8 @@ what `lua2 --ast` prints, and what parser tests compare against, so each part ad
 lines to it.
 
 Inside, the `Printer` class has one `print(const XStat&, int depth)` or
-`print(const XExpr&, int depth)` overload per node type, each a few lines long.
-`statement(id, depth)` and `expression(id, depth)` dispatch to them with one generic lambda:
+`print(const XExpr&, int depth)` overload per node type, each a few lines long. They are
+dispatched with one generic lambda:
 
 ```cpp
 std::visit([&](const auto& node) { print(node, depth); }, ast_.statement(id));
@@ -482,6 +560,15 @@ std::visit([&](const auto& node) { print(node, depth); }, ast_.statement(id));
 If a node type has no `print` overload, that call does not compile, so the printer can never
 silently skip a node, and adding a node type means adding one small function rather than growing
 one big one.
+
+**The printer does not recurse.** A tree can be much deeper than the C++ stack allows:
+`1 + 1 + ... + 1` with ten thousand terms is ten thousand `Binary` nodes deep on its left side,
+and the parser accepts it (it is a loop there). A recursive printer crashed on it. So each
+`print()` writes only the node's **own** line, and *schedules* everything below it (children,
+and headings like `Body`) with `expression()`, `statement()`, `heading()` and friends.
+`run()` keeps a stack of scheduled items and works through them in order: after each `print()`,
+the items it scheduled are pushed in reverse, so the first one comes off next. The output is the
+same as a recursive walk, at any depth.
 
 Values are shown the way the debug views show them everywhere (`text_format.hpp`): strings in
 double quotes with unprintable bytes escaped (`"a\tb\x00"`), and floats in their shortest exact
@@ -519,9 +606,11 @@ Chunk
 
 ## Not handled yet
 
-- **A depth limit** (part 9). Parsing is recursive, so a very deeply nested expression, such as
-  thousands of `-` or `..` in a row, can overflow the C++ stack until the limit exists. The
-  printer is recursive too.
-- **The scope checks** (part 9): the `goto`/label/`break` rules of G8, and the `<const>`
-  assignment check (`local x <const> = 1; x = 2` parses for now).
-- Scopes and name resolution (parts 9 and 10), the graph view (part 11).
+- **Recording name resolution** (part 10): the scopes already know whether each name is a
+  local, an upvalue or a global, but the tree does not store it yet, and the 255-upvalue limit
+  is not checked.
+- **A difference in the nesting limit**: Lua reads a multiple assignment `a, b, c = ...`
+  recursively, one level per target, so more than about 200 targets is `C stack overflow`
+  there. Ours reads them in a loop and accepts any number. The official test suite checks this
+  (`errors.lua`), so part 12 may need to count them.
+- The graph view (part 11).

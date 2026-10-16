@@ -267,4 +267,5 @@ we only need to stay safe (no crash) near them, not match them exactly.
 - At most 255 upvalues in one function: `too many upvalues (limit is 255) ...`.
 - Nesting depth (of blocks, expressions and calls) is limited, about 200 levels, to protect the C
   stack. Our parser is recursive too, so it needs a similar depth limit with a clear error rather
-  than a stack overflow.
+  than a stack overflow. Lua's message is `C stack overflow` (raised as a runtime error, so
+  without chunk name and line); ours is `<chunk>:<line>: C stack overflow`.

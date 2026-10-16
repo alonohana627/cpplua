@@ -1,0 +1,52 @@
+Chunk
+  NumericFor i
+    Integer 1
+    Integer 10
+    Integer 2
+    Body
+      If
+        If
+          Binary >
+            Name i
+            Integer 5
+          Then
+            Assign
+              Targets
+                Name break_
+              Values
+                Name i
+        ElseIf
+          Binary ==
+            Name i
+            Integer 3
+          Then
+            CallStatement
+              Call
+                Name f
+        Else
+          CallStatement
+            Call
+              Name g
+  GenericFor k, v
+    In
+      Call
+        Name pairs
+        Name t
+    Body
+  While
+    Name x
+    Body
+      Assign
+        Targets
+          Name x
+        Values
+          Binary -
+            Name x
+            Integer 1
+  Repeat
+    Body
+      Local y
+        Integer 1
+    Until
+      Name y
+  Do

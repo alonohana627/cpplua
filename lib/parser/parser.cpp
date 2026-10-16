@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <format>
 #include <optional>
+#include <ranges>
 #include <string>
 #include <utility>
 #include <variant>
@@ -11,7 +12,7 @@
 namespace lua2 {
 
 Parser::Parser(std::string_view source, std::string_view chunk_name)
-    : source_(source), lexer_(source, chunk_name) {}
+    : source_(source), lexer_(source, chunk_name), scopes_(ast_) {}
 
 std::expected<Ast, SyntaxError> Parser::parse_chunk() {
     // Load the first token.
@@ -19,7 +20,8 @@ std::expected<Ast, SyntaxError> Parser::parse_chunk() {
         return std::unexpected(std::move(loaded.error()));
     }
 
-    // chunk ::= block <eof> (G2.1)
+    // chunk ::= block <eof> (G2.1). The chunk is a function too (G2.4).
+    scopes_.open_function(0);
     auto block = parse_block();
     if (!block) {
         return std::unexpected(std::move(block.error()));
@@ -29,8 +31,24 @@ std::expected<Ast, SyntaxError> Parser::parse_chunk() {
     if (!check(TokenKind::EndOfStream)) {
         return error_expected(TokenKind::EndOfStream);
     }
+    // Then gotos and breaks that never found their target (G8.2, G8.6).
+    if (auto closed = scopes_.close_function(); !closed) {
+        return semantic_error(closed.error());
+    }
     ast_.set_root(*block);
     return std::move(ast_);
+}
+
+std::expected<Block, SyntaxError> Parser::parse_scoped_block(bool is_loop) {
+    scopes_.open_block(is_loop);
+    auto body = parse_block();
+    if (body) {
+        // After an error parsing stops, and the scopes are abandoned as they
+        // are: closing blocks in the middle of an unfinished construct would
+        // not match what was opened.
+        scopes_.close_block();
+    }
+    return body;
 }
 
 std::expected<Block, SyntaxError> Parser::parse_block() {
@@ -38,16 +56,48 @@ std::expected<Block, SyntaxError> Parser::parse_block() {
     // go, so they sit next to each other (see Ast::add_statement_list).
     std::vector<StatId> statements;
 
+    // Labels are registered with the scopes only once the statements right
+    // after them are known: Lua's labelstat() first skips any ';' and further
+    // labels, so that a label followed only by the end of the block counts
+    // as outside the block's locals (G8.5). The skipped labels are
+    // registered first, innermost first, as Lua's recursion does.
+    std::vector<std::pair<TextRange, int>> pending_labels;
+    const auto register_labels = [&] -> std::expected<void, SyntaxError> {
+        // block_follow() without 'until': before 'until' a label is not last,
+        // because the until-condition still sees the body's locals.
+        const bool last = block_follow() && !check(TokenKind::Until);
+        for (const auto& [name, line] : pending_labels | std::views::reverse) {
+            if (auto added = scopes_.add_label(name, line, last); !added) {
+                return semantic_error(added.error());
+            }
+        }
+        pending_labels.clear();
+        return {};
+    };
+
     // { stat }: statements until the block ends or a 'return' comes. They
     // need no separator between them (G2.6).
     while (!block_follow() && !check(TokenKind::Return)) {
+        if (!pending_labels.empty() && !check(TokenKind::Semicolon) &&
+            !check(TokenKind::DoubleColon)) {
+            if (auto registered = register_labels(); !registered) {
+                return std::unexpected(std::move(registered.error()));
+            }
+        }
         auto statement = parse_statement();
         if (!statement) {
             return std::unexpected(std::move(statement.error()));
         }
-        if (*statement) { // an empty statement ';' adds nothing
-            statements.push_back(**statement);
+        if (!*statement) { // an empty statement ';' adds nothing
+            continue;
         }
+        statements.push_back(**statement);
+        if (const auto* label = std::get_if<LabelStat>(&ast_.statement(**statement))) {
+            pending_labels.emplace_back(label->name, ast_.line(**statement));
+        }
+    }
+    if (auto registered = register_labels(); !registered) {
+        return std::unexpected(std::move(registered.error()));
     }
 
     // [ retstat ]: 'return' can only be the last statement of its block
@@ -86,7 +136,39 @@ std::expected<StatId, SyntaxError> Parser::parse_return() {
     return ast_.add_statement(ReturnStat{.values = values}, line);
 }
 
+namespace {
+
+// The deepest nesting of statements and subexpressions allowed, like Lua's
+// LUAI_MAXCCALLS. The parser is recursive, so without a limit a deeply
+// nested chunk would overflow the C++ stack (G10).
+constexpr int max_depth = 200;
+
+// Counts one level of nesting for as long as it lives (Lua's enterlevel and
+// leavelevel).
+class DepthGuard {
+public:
+    explicit DepthGuard(int& depth) : depth_(&depth) { ++*depth_; }
+
+    DepthGuard(const DepthGuard&) = delete;
+    DepthGuard& operator=(const DepthGuard&) = delete;
+    DepthGuard(DepthGuard&&) = delete;
+    DepthGuard& operator=(DepthGuard&&) = delete;
+
+    ~DepthGuard() { --*depth_; }
+
+    [[nodiscard]] bool too_deep() const { return *depth_ > max_depth; }
+
+private:
+    int* depth_;
+};
+
+} // namespace
+
 std::expected<std::optional<StatId>, SyntaxError> Parser::parse_statement() {
+    const DepthGuard guard{depth_};
+    if (guard.too_deep()) {
+        return semantic_error("C stack overflow");
+    }
     switch (current_.kind) {
     case TokenKind::Semicolon: { // an empty statement (G2.6)
         if (auto moved = advance(); !moved) {
@@ -139,6 +221,9 @@ std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
             // near '='" (G3.9).
             if (!is_variable(ast_.expression(targets.back()))) {
                 return error("syntax error");
+            }
+            if (auto assignable = check_assignable(targets.back()); !assignable) {
+                return std::unexpected(std::move(assignable.error()));
             }
             auto comma = accept(TokenKind::Comma);
             if (!comma) {
@@ -201,6 +286,9 @@ std::expected<StatId, SyntaxError> Parser::parse_local() {
             has_close = true;
         }
         names.push_back(LocalName{.name = *name, .attribute = *attribute});
+        if (auto declared = declare_local(*name, *attribute); !declared) {
+            return std::unexpected(std::move(declared.error()));
+        }
 
         auto comma = accept(TokenKind::Comma);
         if (!comma) {
@@ -224,8 +312,50 @@ std::expected<StatId, SyntaxError> Parser::parse_local() {
         }
         values = *list;
     }
+    // The new locals become visible only now, after the values: in
+    // `local x = x`, the right side means the outer x (G3.13).
+    scopes_.activate(names.size());
     return ast_.add_statement(LocalStat{.names = ast_.add_local_name_list(names), .values = values},
                               line);
+}
+
+std::expected<void, SyntaxError> Parser::declare_local(TextRange name,
+                                                       LocalName::Attribute attribute) {
+    if (scopes_.declare(name, attribute)) {
+        return {};
+    }
+    // Lua's errorlimit(): a syntax error, so it shows the current token.
+    const int function_line = scopes_.function_line();
+    const std::string where = function_line == 0
+                                  ? std::string("main function")
+                                  : std::format("function at line {}", function_line);
+    return error(
+        std::format("too many local variables (limit is {}) in {}", Scopes::max_locals, where));
+}
+
+std::expected<void, SyntaxError> Parser::declare_for_state(int count) {
+    if (!for_state_name_) {
+        for_state_name_ = ast_.add_text("(for state)"); // cannot clash: names have no '('
+    }
+    const TextRange name = for_state_name_.value_or(TextRange{});
+    for (int i = 0; i < count; ++i) {
+        if (auto declared = declare_local(name, LocalName::Attribute::None); !declared) {
+            return declared;
+        }
+    }
+    return {};
+}
+
+std::expected<void, SyntaxError> Parser::check_assignable(ExprId target) {
+    const auto* name = std::get_if<NameExpr>(&ast_.expression(target));
+    if (name == nullptr) {
+        return {}; // t[k] = v is always allowed, even when t is const
+    }
+    const std::string_view text = ast_.text(name->name);
+    if (scopes_.lookup(text).attribute != LocalName::Attribute::None) {
+        return semantic_error(std::format("attempt to assign to const variable '{}'", text));
+    }
+    return {};
 }
 
 std::expected<LocalName::Attribute, SyntaxError> Parser::parse_attribute() {
@@ -260,12 +390,19 @@ std::expected<LocalName::Attribute, SyntaxError> Parser::parse_attribute() {
 std::expected<FunctionId, SyntaxError> Parser::parse_function_body(int line, bool is_method) {
     Function function;
     function.line = line;
+    // A new function: its own locals, labels and gotos. The parameters are
+    // its first locals.
+    scopes_.open_function(line);
 
     // parlist ::= namelist [ ',' '...' ] | '...' (G5.3). A method's `self`
     // comes first (G3.11).
     std::vector<LocalName> parameters;
     if (is_method) {
         parameters.push_back(LocalName{.name = ast_.add_text("self")});
+        if (auto declared = declare_local(parameters.back().name, LocalName::Attribute::None);
+            !declared) {
+            return std::unexpected(std::move(declared.error()));
+        }
     }
     if (auto open = expect(TokenKind::LParen); !open) {
         return std::unexpected(std::move(open.error()));
@@ -278,6 +415,9 @@ std::expected<FunctionId, SyntaxError> Parser::parse_function_body(int line, boo
                     return std::unexpected(std::move(name.error()));
                 }
                 parameters.push_back(LocalName{.name = *name});
+                if (auto declared = declare_local(*name, LocalName::Attribute::None); !declared) {
+                    return std::unexpected(std::move(declared.error()));
+                }
             } else if (check(TokenKind::Ellipsis)) {
                 if (auto moved = advance(); !moved) {
                     return std::unexpected(std::move(moved.error()));
@@ -300,6 +440,7 @@ std::expected<FunctionId, SyntaxError> Parser::parse_function_body(int line, boo
         return std::unexpected(std::move(close.error()));
     }
     function.parameters = ast_.add_local_name_list(parameters);
+    scopes_.activate(parameters.size());
 
     // The body sees '...' only if this function is vararg (G4.12).
     vararg_functions_.push_back(function.is_vararg);
@@ -312,6 +453,11 @@ std::expected<FunctionId, SyntaxError> Parser::parse_function_body(int line, boo
     function.end_line = current_.line;
     if (auto closed = expect_match(TokenKind::End, TokenKind::Function, line); !closed) {
         return std::unexpected(std::move(closed.error()));
+    }
+    // Like Lua, unresolved gotos and breaks are reported once the whole body
+    // has been read, at the token after its 'end' (G8.2, G8.6).
+    if (auto closed = scopes_.close_function(); !closed) {
+        return semantic_error(closed.error());
     }
     return ast_.add_function(function);
 }
@@ -354,6 +500,11 @@ std::expected<StatId, SyntaxError> Parser::parse_function_statement() {
     if (!function) {
         return std::unexpected(std::move(function.error()));
     }
+    // `function f() end` assigns to f, so f must not be const (G3.15). Lua
+    // checks this after the body.
+    if (auto assignable = check_assignable(target); !assignable) {
+        return std::unexpected(std::move(assignable.error()));
+    }
     return ast_.add_statement(
         FunctionStat{.target = target, .function = *function, .is_method = is_method}, line);
 }
@@ -366,6 +517,12 @@ std::expected<StatId, SyntaxError> Parser::parse_local_function(int line) {
     if (!name) {
         return std::unexpected(std::move(name.error()));
     }
+    // The local is visible before its body, so the function can call itself
+    // (G3.12).
+    if (auto declared = declare_local(*name, LocalName::Attribute::None); !declared) {
+        return std::unexpected(std::move(declared.error()));
+    }
+    scopes_.activate(1);
     auto function = parse_function_body(line, false);
     if (!function) {
         return std::unexpected(std::move(function.error()));
@@ -382,17 +539,21 @@ std::expected<StatId, SyntaxError> Parser::parse_jump() {
         return std::unexpected(std::move(moved.error()));
     }
     if (keyword == TokenKind::Break) {
+        scopes_.add_break(line); // resolved when the enclosing loop ends (G8.6)
         return ast_.add_statement(BreakStat{}, line);
     }
 
+    const int name_line = current_.line;
     auto name = expect_name();
     if (!name) {
         return std::unexpected(std::move(name.error()));
     }
     if (keyword == TokenKind::Goto) {
+        scopes_.add_goto(*name, name_line); // resolved now, or when its label appears (G8.2)
         return ast_.add_statement(GotoStat{.label = *name}, line);
     }
-    // ::Name:: (G3.4)
+    // ::Name:: (G3.4). parse_block() registers the label with the scopes,
+    // once it has seen what follows it.
     if (auto closed = expect(TokenKind::DoubleColon); !closed) {
         return std::unexpected(std::move(closed.error()));
     }
@@ -410,7 +571,7 @@ std::expected<StatId, SyntaxError> Parser::parse_do() {
     if (auto moved = advance(); !moved) {
         return std::unexpected(std::move(moved.error()));
     }
-    auto body = parse_block();
+    auto body = parse_scoped_block();
     if (!body) {
         return std::unexpected(std::move(body.error()));
     }
@@ -429,21 +590,29 @@ std::expected<StatId, SyntaxError> Parser::parse_while() {
     if (!condition) {
         return std::unexpected(std::move(condition.error()));
     }
+    // The loop block is where a break inside the body jumps to (G8.6).
+    scopes_.open_block(true);
     if (auto keyword = expect(TokenKind::Do); !keyword) {
         return std::unexpected(std::move(keyword.error()));
     }
-    auto body = parse_block();
+    auto body = parse_scoped_block();
     if (!body) {
         return std::unexpected(std::move(body.error()));
     }
     if (auto closed = expect_match(TokenKind::End, TokenKind::While, line); !closed) {
         return std::unexpected(std::move(closed.error()));
     }
+    scopes_.close_block();
     return ast_.add_statement(WhileStat{.condition = *condition, .body = *body}, line);
 }
 
 std::expected<StatId, SyntaxError> Parser::parse_repeat() {
     const int line = current_.line;
+    // Two scopes, as in Lua: the loop (for break), and inside it the body,
+    // which stays open through the condition, so `until` can see the body's
+    // locals (G3.14).
+    scopes_.open_block(true);
+    scopes_.open_block(false);
     if (auto moved = advance(); !moved) {
         return std::unexpected(std::move(moved.error()));
     }
@@ -458,6 +627,8 @@ std::expected<StatId, SyntaxError> Parser::parse_repeat() {
     if (!condition) {
         return std::unexpected(std::move(condition.error()));
     }
+    scopes_.close_block();
+    scopes_.close_block();
     return ast_.add_statement(RepeatStat{.body = *body, .condition = *condition}, line);
 }
 
@@ -478,7 +649,7 @@ std::expected<StatId, SyntaxError> Parser::parse_if() {
         if (auto then = expect(TokenKind::Then); !then) {
             return std::unexpected(std::move(then.error()));
         }
-        auto body = parse_block();
+        auto body = parse_scoped_block();
         if (!body) {
             return std::unexpected(std::move(body.error()));
         }
@@ -492,7 +663,7 @@ std::expected<StatId, SyntaxError> Parser::parse_if() {
         return std::unexpected(std::move(has_else.error()));
     }
     if (*has_else) {
-        auto body = parse_block();
+        auto body = parse_scoped_block();
         if (!body) {
             return std::unexpected(std::move(body.error()));
         }
@@ -507,6 +678,9 @@ std::expected<StatId, SyntaxError> Parser::parse_if() {
 
 std::expected<StatId, SyntaxError> Parser::parse_for() {
     const int line = current_.line;
+    // The loop block holds the loop's hidden control variables, and is where
+    // a break jumps to (G8.6).
+    scopes_.open_block(true);
     if (auto moved = advance(); !moved) {
         return std::unexpected(std::move(moved.error()));
     }
@@ -515,15 +689,28 @@ std::expected<StatId, SyntaxError> Parser::parse_for() {
         return std::unexpected(std::move(first_name.error()));
     }
     // The token after the first name decides which for it is (G3.10).
+    std::expected<StatId, SyntaxError> statement;
     switch (current_.kind) {
-    case TokenKind::Assign: return parse_numeric_for(*first_name, line);
+    case TokenKind::Assign: statement = parse_numeric_for(*first_name, line); break;
     case TokenKind::Comma:
-    case TokenKind::In: return parse_generic_for(*first_name, line);
+    case TokenKind::In: statement = parse_generic_for(*first_name, line); break;
     default: return error("'=' or 'in' expected");
     }
+    if (statement) {
+        scopes_.close_block();
+    }
+    return statement;
 }
 
 std::expected<StatId, SyntaxError> Parser::parse_numeric_for(TextRange variable, int line) {
+    // Like Lua: 3 hidden control variables, then the loop variable. All are
+    // declared now but visible only in the body, not in the expressions.
+    if (auto declared = declare_for_state(3); !declared) {
+        return std::unexpected(std::move(declared.error()));
+    }
+    if (auto declared = declare_local(variable, LocalName::Attribute::None); !declared) {
+        return std::unexpected(std::move(declared.error()));
+    }
     if (auto moved = advance(); !moved) { // '='
         return std::unexpected(std::move(moved.error()));
     }
@@ -558,7 +745,8 @@ std::expected<StatId, SyntaxError> Parser::parse_numeric_for(TextRange variable,
         statement.has_step = true;
     }
 
-    auto body = parse_for_body(line);
+    scopes_.activate(3); // the hidden control variables
+    auto body = parse_for_body(line, 1);
     if (!body) {
         return std::unexpected(std::move(body.error()));
     }
@@ -567,6 +755,13 @@ std::expected<StatId, SyntaxError> Parser::parse_numeric_for(TextRange variable,
 }
 
 std::expected<StatId, SyntaxError> Parser::parse_generic_for(TextRange first_name, int line) {
+    // Like Lua: 4 hidden control variables, then the loop variables.
+    if (auto declared = declare_for_state(4); !declared) {
+        return std::unexpected(std::move(declared.error()));
+    }
+    if (auto declared = declare_local(first_name, LocalName::Attribute::None); !declared) {
+        return std::unexpected(std::move(declared.error()));
+    }
     std::vector<LocalName> names{LocalName{.name = first_name}};
     for (;;) {
         auto comma = accept(TokenKind::Comma);
@@ -581,6 +776,9 @@ std::expected<StatId, SyntaxError> Parser::parse_generic_for(TextRange first_nam
             return std::unexpected(std::move(name.error()));
         }
         names.push_back(LocalName{.name = *name});
+        if (auto declared = declare_local(*name, LocalName::Attribute::None); !declared) {
+            return std::unexpected(std::move(declared.error()));
+        }
     }
     if (auto keyword = expect(TokenKind::In); !keyword) {
         return std::unexpected(std::move(keyword.error()));
@@ -589,7 +787,8 @@ std::expected<StatId, SyntaxError> Parser::parse_generic_for(TextRange first_nam
     if (!values) {
         return std::unexpected(std::move(values.error()));
     }
-    auto body = parse_for_body(line);
+    scopes_.activate(4); // the hidden control variables
+    auto body = parse_for_body(line, names.size());
     if (!body) {
         return std::unexpected(std::move(body.error()));
     }
@@ -598,11 +797,16 @@ std::expected<StatId, SyntaxError> Parser::parse_generic_for(TextRange first_nam
         line);
 }
 
-std::expected<Block, SyntaxError> Parser::parse_for_body(int line) {
+std::expected<Block, SyntaxError> Parser::parse_for_body(int line, std::size_t variables) {
     if (auto keyword = expect(TokenKind::Do); !keyword) {
         return std::unexpected(std::move(keyword.error()));
     }
-    auto body = parse_block();
+    // The loop variables are visible in a scope around the body (Lua's
+    // forbody), and the body is a block of its own inside it.
+    scopes_.open_block(false);
+    scopes_.activate(variables);
+    auto body = parse_scoped_block();
+    scopes_.close_block();
     if (!body) {
         return body;
     }
@@ -719,6 +923,11 @@ std::expected<ExprId, SyntaxError> Parser::parse_expression() {
 }
 
 std::expected<ExprId, SyntaxError> Parser::parse_subexpression(int limit) {
+    const DepthGuard guard{depth_};
+    if (guard.too_deep()) {
+        return semantic_error("C stack overflow");
+    }
+
     // 1. One operand: a unary operator and its own operand, or a simple
     //    expression.
     ExprId left;

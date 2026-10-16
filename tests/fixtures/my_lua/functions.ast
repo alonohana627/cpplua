@@ -1,0 +1,30 @@
+Chunk
+  LocalFunction fact
+    Function(n)
+      If
+        If
+          Binary ==
+            Name n
+            Integer 0
+          Then
+            Return
+              Integer 1
+      Return
+        Binary *
+          Name n
+          Call
+            Name fact
+            Binary -
+              Name n
+              Integer 1
+  FunctionStatement (method)
+    Index
+      Index
+        Name obj
+        String "a"
+      String "m"
+    Function(self, x, ...)
+      Return
+        Vararg
+  Return
+    Function()

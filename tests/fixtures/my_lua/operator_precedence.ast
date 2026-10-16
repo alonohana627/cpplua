@@ -1,0 +1,28 @@
+Chunk
+  Return
+    Binary -
+      Binary +
+        Integer 1
+        Binary *
+          Integer 2
+          Integer 3
+      Integer 4
+    Unary -
+      Binary ^
+        Integer 2
+        Integer 2
+    Binary ^
+      Integer 2
+      Unary -
+        Binary ^
+          Integer 3
+          Integer 2
+    Binary ..
+      String "a"
+      Binary ..
+        String "b"
+        String "c"
+    Binary ==
+      Unary not
+        Integer 1
+      Integer 2

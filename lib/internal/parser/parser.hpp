@@ -10,6 +10,7 @@
 #include "lexer/lexer.hpp"
 #include "lexer/token.hpp"
 #include "parser/ast.hpp"
+#include "parser/scopes.hpp"
 #include "syntax_error.hpp"
 
 namespace lua2 {
@@ -31,8 +32,12 @@ public:
 private:
     // ---- Grammar rules ----
 
-    // block ::= { stat } [ retstat ] (G2.2)
+    // block ::= { stat } [ retstat ] (G2.2), in the current scope.
     std::expected<Block, SyntaxError> parse_block();
+
+    // A block in a scope of its own: its locals and labels end with it.
+    // Lua's block().
+    std::expected<Block, SyntaxError> parse_scoped_block(bool is_loop = false);
 
     // retstat ::= 'return' [ explist ] [ ';' ] (G2.3)
     std::expected<StatId, SyntaxError> parse_return();
@@ -92,8 +97,9 @@ private:
     std::expected<StatId, SyntaxError> parse_generic_for(TextRange first_name, int line);
 
     // 'do' block 'end', the body shared by both fors. `line` is the line of
-    // 'for', for the "to close 'for'" message.
-    std::expected<Block, SyntaxError> parse_for_body(int line);
+    // 'for', for the "to close 'for'" message; `variables` is how many loop
+    // variables become visible in the body.
+    std::expected<Block, SyntaxError> parse_for_body(int line, std::size_t variables);
 
     // explist ::= exp { ',' exp } (G4.6)
     std::expected<IdRange<ExprId>, SyntaxError> parse_expression_list();
@@ -189,9 +195,31 @@ private:
     std::optional<Token> lookahead_; // the next one, once peek() has read it
     Ast ast_;
 
+    // What is visible where: functions, blocks, locals, labels, gotos.
+    Scopes scopes_;
+
     // For each function being parsed, innermost last: whether it is vararg,
     // so '...' can be checked (G4.12). The main chunk is vararg (G2.4).
     std::vector<bool> vararg_functions_{true};
+
+    // How deeply statements and expressions are nested right now, to stop
+    // before the C++ stack overflows (G10). See DepthGuard in parser.cpp.
+    int depth_ = 0;
+
+    // The name of the hidden control variables of for loops (G10).
+    std::optional<TextRange> for_state_name_;
+
+    // Declares a local in the current function, or returns Lua's "too many
+    // local variables" error (G10).
+    std::expected<void, SyntaxError> declare_local(TextRange name, LocalName::Attribute attribute);
+
+    // Declares the hidden control variables of a for loop: 3 for a numeric
+    // for, 4 for a generic one, as Lua does. They count toward the limit.
+    std::expected<void, SyntaxError> declare_for_state(int count);
+
+    // The const check for an assignment target (G3.15): a name that is a
+    // <const> or <close> local, here or in an enclosing function.
+    std::expected<void, SyntaxError> check_assignable(ExprId target);
 };
 
 } // namespace lua2

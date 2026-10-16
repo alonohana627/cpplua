@@ -30,6 +30,7 @@ add_library(lua2_lib
   lib/parser/ast.cpp
   lib/parser/ast_printer.cpp
   lib/parser/parser.cpp
+  lib/parser/scopes.cpp
 )
 add_library(lua2::lua2 ALIAS lua2_lib)
 target_include_directories(lua2_lib
@@ -61,6 +62,7 @@ if(BUILD_TESTING)
     tests/debug_test.cpp
     tests/conformance_test.cpp
     tests/parser_test.cpp
+    tests/my_lua_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
   # Tests may include internal headers from lib/internal/ to test internals directly.
