@@ -372,9 +372,30 @@ struct LocalFunctionStat {
     bool operator==(const LocalFunctionStat&) const = default;
 };
 
-using Stat =
-    std::variant<ReturnStat, CallStat, AssignStat, LocalStat, DoStat, WhileStat, RepeatStat, IfStat,
-                 NumericForStat, GenericForStat, FunctionStat, LocalFunctionStat>;
+// `goto Name` (G8.2). Whether the label exists and is visible is checked in
+// part 9.
+struct GotoStat {
+    TextRange label;
+
+    bool operator==(const GotoStat&) const = default;
+};
+
+// `::Name::` (G3.4)
+struct LabelStat {
+    TextRange name;
+
+    bool operator==(const LabelStat&) const = default;
+};
+
+// `break` (G8.6): leaves the innermost loop. Unlike `return`, it may appear
+// anywhere in a block (G8.7).
+struct BreakStat {
+    bool operator==(const BreakStat&) const = default;
+};
+
+using Stat = std::variant<ReturnStat, CallStat, AssignStat, LocalStat, DoStat, WhileStat,
+                          RepeatStat, IfStat, NumericForStat, GenericForStat, FunctionStat,
+                          LocalFunctionStat, GotoStat, LabelStat, BreakStat>;
 
 // A function body: `( parlist ) block end` (G5.2, G5.3). Shared by function
 // expressions, function statements and local functions.

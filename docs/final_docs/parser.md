@@ -4,13 +4,12 @@ How the parser works today. This page describes the code as it is, and is update
 grows. The rules it implements are in [../spec/grammar.md](../spec/grammar.md), and the remaining
 work is in [../plan/parser.md](../plan/parser.md).
 
-**Status:** parts 0 to 7 of the plan. A chunk is a list of statements: function calls,
-assignments, `local` declarations (with `<const>` and `<close>`), empty `;` statements, `do`,
-`while`, `repeat`, `if`/`elseif`/`else`, numeric and generic `for`, `function` statements,
-`local function`, and a final `return`. Every expression parses: simple values, names,
-parentheses, fields, indexing, calls, method calls, table constructors and function
-definitions, with every unary and binary operator at Lua's precedence. `goto`, labels and
-`break` come next, then the scope checks.
+**Status:** parts 0 to 8 of the plan: **the whole Lua 5.4 grammar parses.** A chunk is a list
+of statements: function calls, assignments, `local` declarations (with `<const>` and
+`<close>`), empty `;` statements, `do`, `while`, `repeat`, `if`/`elseif`/`else`, numeric and
+generic `for`, `function` statements, `local function`, `goto`, labels, `break`, and a final
+`return`. Every expression parses, with every operator at Lua's precedence. Still to come: the
+checks that need scopes (part 9) and name resolution (part 10).
 
 ## Where it lives
 
@@ -76,7 +75,7 @@ Each kind of node is a small struct, and the node types are two `std::variant`s:
 | Variant | Alternatives so far                                                           |
 | ------- | ----------------------------------------------------------------------------- |
 | `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}`, `NameExpr{name}`, `ParenExpr{inner}`, `IndexExpr{object, key}`, `CallExpr{function, arguments}`, `MethodCallExpr{object, method, arguments}`, `TableExpr{fields}`, `FunctionExpr{function}` |
-| `Stat`  | `ReturnStat{values}`, `CallStat{call}`, `AssignStat{targets, values}`, `LocalStat{names, values}`, `DoStat{body}`, `WhileStat{condition, body}`, `RepeatStat{body, condition}`, `IfStat{clauses, else_body, has_else}`, `NumericForStat{variable, start, limit, step, has_step, body}`, `GenericForStat{names, values, body}`, `FunctionStat{target, function, is_method}`, `LocalFunctionStat{name, function}`; lists are `IdRange`s, bodies are `Block`s |
+| `Stat`  | `ReturnStat{values}`, `CallStat{call}`, `AssignStat{targets, values}`, `LocalStat{names, values}`, `DoStat{body}`, `WhileStat{condition, body}`, `RepeatStat{body, condition}`, `IfStat{clauses, else_body, has_else}`, `NumericForStat{variable, start, limit, step, has_step, body}`, `GenericForStat{names, values, body}`, `FunctionStat{target, function, is_method}`, `LocalFunctionStat{name, function}`, `GotoStat{label}`, `LabelStat{name}`, `BreakStat`; lists are `IdRange`s, bodies are `Block`s |
 | -       | `Function{parameters, is_vararg, body, line, end_line}`: function bodies, in their own vector, referred to by `FunctionId` |
 
 The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
@@ -129,6 +128,7 @@ Code that walks the tree uses `std::visit` with one lambda per node type, throug
 | `parse_function_body(line, is_method)` | `funcbody ::= '(' [parlist] ')' block 'end'` (G5.2) | see "Functions" |
 | `parse_function_statement()` | `'function' funcname funcbody` (G3.5)  | builds the target like a variable |
 | `parse_local_function(line)` | `'local' 'function' Name funcbody` (G3.12) | called by `parse_local()` |
+| `parse_jump()`            | `'goto' Name`, `'::' Name '::'`, `'break'` (G3.1, G3.4) | see "goto, labels and break" |
 | `parse_return()`          | `retstat ::= 'return' [ explist ] [ ';' ]` (G2.3) | values are skipped when the block ends or a `;` follows; one `;` is allowed |
 | `parse_expression_list()` | `explist ::= exp { ',' exp }` (G4.6)     | collects ids, then stores them as one list |
 | `parse_expression()`      | `exp` (G4.1)                             | `parse_subexpression(0)`                  |
@@ -246,6 +246,24 @@ The three forms:
 at the bottom (the main chunk is vararg, G2.4), and each function body pushes its own
 `is_vararg` and pops it when it ends. `...` checks the top. So a non-vararg function nested in a
 vararg one cannot use the outer `...`, and once it ends, the outer function can again.
+
+## `goto`, labels and `break`
+
+`parse_jump()` reads the three jump statements, since they share their shape:
+
+| Source        | Node              |
+| ------------- | ----------------- |
+| `goto name`   | `GotoStat{label}` |
+| `::name::`    | `LabelStat{name}` |
+| `break`       | `BreakStat`       |
+
+Unlike `return`, these may appear anywhere in a block (G8.7): `while x do break f() end` is
+valid, even though `f()` can never run.
+
+For now they are only *syntax*. Whether a `goto` has a visible label, whether a label is defined
+twice, whether a `goto` jumps into a local's scope, and whether a `break` is inside a loop all
+need to know the scopes around the statement, so they are checked in part 9. Until then,
+`goto nowhere` and a `break` outside any loop parse without complaint.
 
 ## Control flow
 
@@ -504,7 +522,6 @@ Chunk
 - **A depth limit** (part 9). Parsing is recursive, so a very deeply nested expression, such as
   thousands of `-` or `..` in a row, can overflow the C++ stack until the limit exists. The
   printer is recursive too.
-- **The remaining statements**: `goto`, labels and `break` (part 8). Until then their keyword
-  (or `::`) is `unexpected symbol`.
-- **The `<const>` assignment check** (part 9): `local x <const> = 1; x = 2` parses for now.
+- **The scope checks** (part 9): the `goto`/label/`break` rules of G8, and the `<const>`
+  assignment check (`local x <const> = 1; x = 2` parses for now).
 - Scopes and name resolution (parts 9 and 10), the graph view (part 11).

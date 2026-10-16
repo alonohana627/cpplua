@@ -101,8 +101,9 @@ std::expected<std::optional<StatId>, SyntaxError> Parser::parse_statement() {
     case TokenKind::If: return parse_if();
     case TokenKind::For: return parse_for();
     case TokenKind::Function: return parse_function_statement();
-    // goto, break and labels arrive in part 8. Until then they reach
-    // parse_expression_statement(), which reports "unexpected symbol".
+    case TokenKind::Goto:
+    case TokenKind::DoubleColon:
+    case TokenKind::Break: return parse_jump();
     default: return parse_expression_statement();
     }
 }
@@ -370,6 +371,32 @@ std::expected<StatId, SyntaxError> Parser::parse_local_function(int line) {
         return std::unexpected(std::move(function.error()));
     }
     return ast_.add_statement(LocalFunctionStat{.name = *name, .function = *function}, line);
+}
+
+// ---- goto, labels and break ----
+
+std::expected<StatId, SyntaxError> Parser::parse_jump() {
+    const int line = current_.line;
+    const TokenKind keyword = current_.kind;
+    if (auto moved = advance(); !moved) { // 'goto', '::' or 'break'
+        return std::unexpected(std::move(moved.error()));
+    }
+    if (keyword == TokenKind::Break) {
+        return ast_.add_statement(BreakStat{}, line);
+    }
+
+    auto name = expect_name();
+    if (!name) {
+        return std::unexpected(std::move(name.error()));
+    }
+    if (keyword == TokenKind::Goto) {
+        return ast_.add_statement(GotoStat{.label = *name}, line);
+    }
+    // ::Name:: (G3.4)
+    if (auto closed = expect(TokenKind::DoubleColon); !closed) {
+        return std::unexpected(std::move(closed.error()));
+    }
+    return ast_.add_statement(LabelStat{.name = *name}, line);
 }
 
 // ---- Control flow ----

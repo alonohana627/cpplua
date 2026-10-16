@@ -1138,3 +1138,76 @@ TEST_CASE("G5.2 a function records where it starts and ends", "[parser][function
     CHECK_FALSE(function.is_vararg);
     CHECK(ast->local_names(function.parameters).size() == 1);
 }
+
+// ---- Part 8: goto, labels and break ----
+
+TEST_CASE("G3.4 labels", "[parser][jump]") {
+    CHECK(ast_of("::top::") == "Chunk\n  Label top\n");
+    CHECK(ast_of(":: spaced ::") == "Chunk\n  Label spaced\n");
+}
+
+TEST_CASE("G8.2 goto", "[parser][jump]") {
+    CHECK(ast_of("goto done ::done::") == "Chunk\n  Goto done\n  Label done\n");
+    CHECK(ast_of("::top:: goto top") == "Chunk\n  Label top\n  Goto top\n");
+}
+
+TEST_CASE("G8.6 break", "[parser][jump]") {
+    CHECK(ast_of("while true do break end") == "Chunk\n"
+                                               "  While\n"
+                                               "    True\n"
+                                               "    Body\n"
+                                               "      Break\n");
+}
+
+TEST_CASE("G8.7 break and goto may appear anywhere in a block", "[parser][jump]") {
+    // Unlike return, they do not have to be last.
+    CHECK(ast_of("while x do break f() end") == "Chunk\n"
+                                                "  While\n"
+                                                "    Name x\n"
+                                                "    Body\n"
+                                                "      Break\n"
+                                                "      CallStatement\n"
+                                                "        Call\n"
+                                                "          Name f\n");
+    CHECK(ast_of("goto a goto b ::a:: ::b::") == "Chunk\n"
+                                                 "  Goto a\n"
+                                                 "  Goto b\n"
+                                                 "  Label a\n"
+                                                 "  Label b\n");
+}
+
+TEST_CASE("G8.5 the continue idiom", "[parser][jump]") {
+    CHECK(ast_of("for i = 1, 3 do\n"
+                 "  if i == 2 then goto continue end\n"
+                 "  local x = i\n"
+                 "  ::continue::\n"
+                 "end") == "Chunk\n"
+                           "  NumericFor i\n"
+                           "    Integer 1\n"
+                           "    Integer 3\n"
+                           "    Body\n"
+                           "      If\n"
+                           "        If\n"
+                           "          Binary ==\n"
+                           "            Name i\n"
+                           "            Integer 2\n"
+                           "          Then\n"
+                           "            Goto continue\n"
+                           "      Local x\n"
+                           "        Name i\n"
+                           "      Label continue\n");
+}
+
+TEST_CASE("G9.3 broken goto and labels", "[parser][jump]") {
+    CHECK(parse_error("goto") == "input:1: <name> expected near <eof>");
+    CHECK(parse_error("goto 1") == "input:1: <name> expected near '1'");
+    CHECK(parse_error("goto end") == "input:1: <name> expected near 'end'");
+    CHECK(parse_error("::") == "input:1: <name> expected near <eof>");
+    CHECK(parse_error("::top") == "input:1: '::' expected near <eof>");
+    CHECK(parse_error("::top: x") == "input:1: '::' expected near ':'");
+    CHECK(parse_error("::break::") == "input:1: <name> expected near 'break'");
+}
+
+TEST_CASE("G4.1 goto is a keyword, not a name", "[parser][jump]") {
+    CHECK(parse_error("local goto = 1") == "input:1: <name> expected near 'goto'");
+}

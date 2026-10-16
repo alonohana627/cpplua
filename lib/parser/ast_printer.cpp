@@ -200,6 +200,16 @@ private:
         function(node.function, depth + 1);
     }
 
+    void print(const GotoStat& node, int depth) {
+        line(depth, std::format("Goto {}", ast_.text(node.label)));
+    }
+
+    void print(const LabelStat& node, int depth) {
+        line(depth, std::format("Label {}", ast_.text(node.name)));
+    }
+
+    void print(const BreakStat& /*node*/, int depth) { line(depth, "Break"); }
+
     // ---- Expressions ----
 
     void print(const NilExpr& /*node*/, int depth) { line(depth, "Nil"); }

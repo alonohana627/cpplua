@@ -65,6 +65,9 @@ private:
     // 'local' 'function' Name funcbody, after 'local' (G3.12)
     std::expected<StatId, SyntaxError> parse_local_function(int line);
 
+    // 'goto' Name, '::' Name '::', or 'break' (G3.1, G3.4)
+    std::expected<StatId, SyntaxError> parse_jump();
+
     // ---- Control flow (G3.1) ----
 
     // 'do' block 'end'
