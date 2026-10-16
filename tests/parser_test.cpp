@@ -49,9 +49,9 @@ TEST_CASE("G2.1 an empty chunk is a Chunk with no statements", "[parser]") {
 }
 
 TEST_CASE("G2.5 anything left after the chunk is '<eof> expected'", "[parser]") {
-    // No statements exist yet, so any token is left over. Note that <eof> is
-    // not quoted (G9.3).
-    CHECK(parse_error("x") == "input:1: <eof> expected near 'x'");
+    // A word that ends a block cannot start the chunk, and nothing may come
+    // after a return. Note that <eof> is not quoted (G9.3).
+    CHECK(parse_error("return; x") == "input:1: <eof> expected near 'x'");
     CHECK(parse_error("\n\n  end") == "input:3: <eof> expected near 'end'");
 }
 
@@ -72,7 +72,9 @@ TEST_CASE("G9.2 near shows the token as written in the source", "[parser]") {
     }));
     CAPTURE(source);
 
-    CHECK(parse_error(source) == "input:1: <eof> expected near " + std::string(near));
+    // After `return;` the block is over, so any token is left over and shown.
+    CHECK(parse_error("return; " + std::string(source)) ==
+          "input:1: <eof> expected near " + std::string(near));
 }
 
 TEST_CASE("G9.4 a lexer error stops the parser with the lexer's message", "[parser]") {
@@ -624,4 +626,154 @@ TEST_CASE("G6.3 the tree of a table", "[parser][table]") {
                                                   "      Field\n"
                                                   "        Name k\n"
                                                   "        Integer 3\n");
+}
+
+// ---- Part 5: statements: calls, assignment and local ----
+
+TEST_CASE("G3.1 a call as a statement", "[parser][statement]") {
+    CHECK(ast_of("print('hi')") == "Chunk\n"
+                                   "  CallStatement\n"
+                                   "    Call\n"
+                                   "      Name print\n"
+                                   "      String \"hi\"\n");
+    CHECK(ast_of("obj:m()") == "Chunk\n"
+                               "  CallStatement\n"
+                               "    MethodCall m\n"
+                               "      Name obj\n");
+    CHECK(ast_of("f{}") == "Chunk\n  CallStatement\n    Call\n      Name f\n      Table\n");
+    CHECK(ast_of("a.b.c()") == "Chunk\n"
+                               "  CallStatement\n"
+                               "    Call\n"
+                               "      Index\n"
+                               "        Index\n"
+                               "          Name a\n"
+                               "          String \"b\"\n"
+                               "        String \"c\"\n");
+}
+
+TEST_CASE("G3.6 assignment", "[parser][statement]") {
+    CHECK(ast_of("x = 1") == "Chunk\n"
+                             "  Assign\n"
+                             "    Targets\n"
+                             "      Name x\n"
+                             "    Values\n"
+                             "      Integer 1\n");
+    CHECK(ast_of("a, b.c, d[1] = 1, 2") == "Chunk\n"
+                                           "  Assign\n"
+                                           "    Targets\n"
+                                           "      Name a\n"
+                                           "      Index\n"
+                                           "        Name b\n"
+                                           "        String \"c\"\n"
+                                           "      Index\n"
+                                           "        Name d\n"
+                                           "        Integer 1\n"
+                                           "    Values\n"
+                                           "      Integer 1\n"
+                                           "      Integer 2\n");
+    CHECK(ast_of("f().x = 1") == "Chunk\n"
+                                 "  Assign\n"
+                                 "    Targets\n"
+                                 "      Index\n"
+                                 "        Call\n"
+                                 "          Name f\n"
+                                 "        String \"x\"\n"
+                                 "    Values\n"
+                                 "      Integer 1\n");
+}
+
+TEST_CASE("G3.2 local declarations", "[parser][statement]") {
+    CHECK(ast_of("local x") == "Chunk\n  Local x\n");
+    CHECK(ast_of("local x = 1") == "Chunk\n  Local x\n    Integer 1\n");
+    CHECK(ast_of("local a, b, c = 1, 2") ==
+          "Chunk\n  Local a, b, c\n    Integer 1\n    Integer 2\n");
+}
+
+TEST_CASE("G3.3 attributes", "[parser][statement]") {
+    CHECK(ast_of("local x <const> = 5") == "Chunk\n  Local x <const>\n    Integer 5\n");
+    CHECK(ast_of("local f <close> = nil") == "Chunk\n  Local f <close>\n    Nil\n");
+    CHECK(ast_of("local a <const>, b, c <close>") == "Chunk\n  Local a <const>, b, c <close>\n");
+    CHECK(ast_of("local x<const> =1") == "Chunk\n  Local x <const>\n    Integer 1\n");
+    // Without the space, ">=" is one token (maximal munch), so real Lua fails too.
+    CHECK(parse_error("local x<const>=1") == "input:1: '>' expected near '>='");
+}
+
+TEST_CASE("G2.6 statements need no separator", "[parser][statement]") {
+    const std::string expected = "Chunk\n"
+                                 "  Local a\n"
+                                 "    Integer 1\n"
+                                 "  Local b\n"
+                                 "    Integer 2\n";
+    CHECK(ast_of("local a = 1 local b = 2") == expected);
+    CHECK(ast_of("local a = 1; local b = 2") == expected);
+    CHECK(ast_of("local a = 1\nlocal b = 2") == expected);
+    CHECK(ast_of(";;local a = 1;;;local b = 2;") == expected); // ';' leaves nothing behind
+}
+
+TEST_CASE("G2.2 statements followed by a return", "[parser][statement]") {
+    CHECK(ast_of("local x = 1 return x") == "Chunk\n"
+                                            "  Local x\n"
+                                            "    Integer 1\n"
+                                            "  Return\n"
+                                            "    Name x\n");
+    CHECK(parse_error("return 1 x = 2") == "input:1: <eof> expected near 'x'");
+}
+
+TEST_CASE("G3.8 an expression statement must be a call or an assignment", "[parser][statement]") {
+    CHECK(parse_error("x") == "input:1: syntax error near <eof>");
+    CHECK(parse_error("x y") == "input:1: syntax error near 'y'");
+    CHECK(parse_error("a.b") == "input:1: syntax error near <eof>");
+    CHECK(parse_error("(f)") == "input:1: syntax error near <eof>");
+    CHECK(parse_error("(f())") == "input:1: syntax error near <eof>"); // parentheses are not a call
+    CHECK(parse_error("x\n\ny") == "input:3: syntax error near 'y'");
+}
+
+TEST_CASE("G3.8 a statement cannot start with a literal or an operator", "[parser][statement]") {
+    CHECK(parse_error("1 + 2") == "input:1: unexpected symbol near '1'");
+    CHECK(parse_error("'s':upper()") == "input:1: unexpected symbol near ''s''");
+    CHECK(parse_error("- x") == "input:1: unexpected symbol near '-'");
+}
+
+TEST_CASE("G3.9 assignment targets must be variables", "[parser][statement]") {
+    CHECK(parse_error("f() = 1") == "input:1: syntax error near '='");
+    CHECK(parse_error("(a) = 1") == "input:1: syntax error near '='");
+    CHECK(parse_error("a, f() = 1") == "input:1: syntax error near '='");
+    CHECK(parse_error("f(), a = 1") == "input:1: syntax error near ','");
+}
+
+TEST_CASE("G3.6 broken assignments", "[parser][statement]") {
+    CHECK(parse_error("x =") == "input:1: unexpected symbol near <eof>");
+    CHECK(parse_error("x = y = 1") == "input:1: unexpected symbol near '='"); // no chained =
+    CHECK(parse_error("a, = 1") == "input:1: unexpected symbol near '='");
+    CHECK(parse_error("a, b") == "input:1: '=' expected near <eof>");
+}
+
+TEST_CASE("G3.2 broken local declarations", "[parser][statement]") {
+    CHECK(parse_error("local") == "input:1: <name> expected near <eof>");
+    CHECK(parse_error("local 1") == "input:1: <name> expected near '1'");
+    CHECK(parse_error("local x,") == "input:1: <name> expected near <eof>");
+    CHECK(parse_error("local x, = 1") == "input:1: <name> expected near '='");
+    CHECK(parse_error("local x =") == "input:1: unexpected symbol near <eof>");
+}
+
+TEST_CASE("G3.15 attribute errors", "[parser][statement]") {
+    CHECK(parse_error("local x <const") == "input:1: '>' expected near <eof>");
+    CHECK(parse_error("local x <>") == "input:1: <name> expected near '>'");
+    // Semantic errors have no "near" part (G9.5).
+    CHECK(parse_error("local x <foo> = 1") == "input:1: unknown attribute 'foo'");
+    CHECK(parse_error("local x <CONST>") == "input:1: unknown attribute 'CONST'");
+    CHECK(parse_error("local a <close>, b <close>") ==
+          "input:1: multiple to-be-closed variables in local list");
+}
+
+TEST_CASE("G3.1 statement nodes record their line", "[parser][statement]") {
+    Parser parser{"\nlocal x\n\nf()\nx = 1"};
+    const auto ast = parser.parse_chunk();
+    REQUIRE(ast.has_value());
+
+    const auto statements = ast->statements(ast->root());
+    REQUIRE(statements.size() == 3);
+    CHECK(ast->line(statements[0]) == 2);
+    CHECK(ast->line(statements[1]) == 4);
+    CHECK(ast->line(statements[2]) == 5);
 }

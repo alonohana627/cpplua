@@ -252,6 +252,10 @@ G7.2  unop  ::= '-' | 'not' | '#' | '~'
   | the `goto` and `break` messages           | G8                                                |
 
 - **G9.4** Like the lexer, the parser stops at the first error.
+- **G9.5 Semantic errors have no `near` part.** The checks that are about meaning rather than
+  grammar (G3.15's attribute and const errors, and G8's `goto`, label and `break` errors) are
+  raised by Lua's `luaK_semerror`, which drops the token from the message:
+  `input:1: unknown attribute 'foo'`, not `... near '='`. **(impl)**
 
 ## G10. Limits (impl)
 

@@ -37,14 +37,39 @@ private:
 
     // Every alternative of Stat needs a lambda here, or this does not compile.
     void statement(StatId id, int depth) {
-        std::visit(
-            Overloaded{
-                [&](const ReturnStat& node) {
-                    line(depth, "Return");
-                    expressions(node.values, depth + 1);
-                },
-            },
-            ast_.statement(id));
+        std::visit(Overloaded{
+                       [&](const ReturnStat& node) {
+                           line(depth, "Return");
+                           expressions(node.values, depth + 1);
+                       },
+                       [&](const CallStat& node) {
+                           line(depth, "CallStatement");
+                           expression(node.call, depth + 1);
+                       },
+                       [&](const AssignStat& node) {
+                           line(depth, "Assign");
+                           line(depth + 1, "Targets");
+                           expressions(node.targets, depth + 2);
+                           line(depth + 1, "Values");
+                           expressions(node.values, depth + 2);
+                       },
+                       [&](const LocalStat& node) {
+                           // Local a, b <const>, c <close>   with the values below
+                           std::string names;
+                           for (const LocalName& name : ast_.local_names(node.names)) {
+                               names += names.empty() ? "" : ", ";
+                               names += ast_.text(name.name);
+                               switch (name.attribute) {
+                               case LocalName::Attribute::None: break;
+                               case LocalName::Attribute::Const: names += " <const>"; break;
+                               case LocalName::Attribute::Close: names += " <close>"; break;
+                               }
+                           }
+                           line(depth, "Local " + names);
+                           expressions(node.values, depth + 1);
+                       },
+                   },
+                   ast_.statement(id));
     }
 
     //   Item           a positional field, its value below

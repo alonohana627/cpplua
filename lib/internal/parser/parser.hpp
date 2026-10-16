@@ -36,6 +36,21 @@ private:
     // retstat ::= 'return' [ explist ] [ ';' ] (G2.3)
     std::expected<StatId, SyntaxError> parse_return();
 
+    // stat (G3.1). Returns no id for an empty statement ';', which leaves
+    // nothing in the tree.
+    std::expected<std::optional<StatId>, SyntaxError> parse_statement();
+
+    // A statement starting with an expression: a call, or an assignment
+    // `varlist = explist`. Anything else is "syntax error" (G3.8, G3.9).
+    // Lua's exprstat().
+    std::expected<StatId, SyntaxError> parse_expression_statement();
+
+    // 'local' attnamelist [ '=' explist ] (G3.1-G3.3). Lua's localstat().
+    std::expected<StatId, SyntaxError> parse_local();
+
+    // attrib ::= [ '<' Name '>' ] (G3.3, G3.15)
+    std::expected<LocalName::Attribute, SyntaxError> parse_attribute();
+
     // explist ::= exp { ',' exp } (G4.6)
     std::expected<IdRange<ExprId>, SyntaxError> parse_expression_list();
 
@@ -108,6 +123,12 @@ private:
     [[nodiscard]] std::unexpected<SyntaxError>
     error(std::string_view message,
           std::source_location origin = std::source_location::current()) const;
+
+    // A semantic error: like error(), but without the " near ..." part
+    // (G9.5). Lua's luaK_semerror().
+    [[nodiscard]] std::unexpected<SyntaxError>
+    semantic_error(std::string_view message,
+                   std::source_location origin = std::source_location::current()) const;
 
     // "'X' expected near ..." (G9.3).
     [[nodiscard]] std::unexpected<SyntaxError>

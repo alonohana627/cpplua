@@ -6,8 +6,10 @@ namespace lua2 {
 
 SyntaxError make_syntax_error(std::string_view chunk, int line, std::string_view message,
                               std::string_view near, std::source_location origin) {
+    // An empty `near` leaves the part out, for semantic errors (G9.5).
     return SyntaxError{
-        .message = std::format("{}:{}: {} near {}", chunk, line, message, near),
+        .message = near.empty() ? std::format("{}:{}: {}", chunk, line, message)
+                                : std::format("{}:{}: {} near {}", chunk, line, message, near),
         .line = line,
         .origin = origin,
     };

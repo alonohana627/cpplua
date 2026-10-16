@@ -4,10 +4,11 @@ How the parser works today. This page describes the code as it is, and is update
 grows. The rules it implements are in [../spec/grammar.md](../spec/grammar.md), and the remaining
 work is in [../plan/parser.md](../plan/parser.md).
 
-**Status:** parts 0 to 4 of the plan. A chunk may be empty or hold one `return` with a list of
-expressions: simple values (`nil`, `true`, `false`, numbers, strings, `...`), names,
-parentheses, fields, indexing, calls, method calls and table constructors, combined with every
-unary and binary operator at Lua's precedence. Functions and other statements come later.
+**Status:** parts 0 to 5 of the plan. A chunk is a list of statements: function calls,
+assignments, `local` declarations (with `<const>` and `<close>`), empty `;` statements, and a
+final `return`. Expressions cover everything except function definitions: simple values,
+names, parentheses, fields, indexing, calls, method calls and table constructors, with every
+unary and binary operator at Lua's precedence. Control flow and functions come later.
 
 ## Where it lives
 
@@ -73,7 +74,7 @@ Each kind of node is a small struct, and the node types are two `std::variant`s:
 | Variant | Alternatives so far                                                           |
 | ------- | ----------------------------------------------------------------------------- |
 | `Expr`  | `NilExpr`, `TrueExpr`, `FalseExpr`, `IntegerExpr{value}`, `FloatExpr{value}`, `StringExpr{text}`, `VarargExpr`, `UnaryExpr{op, operand}`, `BinaryExpr{op, left, right}`, `NameExpr{name}`, `ParenExpr{inner}`, `IndexExpr{object, key}`, `CallExpr{function, arguments}`, `MethodCallExpr{object, method, arguments}`, `TableExpr{fields}` |
-| `Stat`  | `ReturnStat{values}`, where `values` is an `IdRange<ExprId>`                    |
+| `Stat`  | `ReturnStat{values}`, `CallStat{call}`, `AssignStat{targets, values}`, `LocalStat{names, values}`; lists are `IdRange`s |
 
 The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
 
@@ -87,7 +88,8 @@ The `Ast` keeps one vector per variant (`expressions_`, `statements_`), plus:
 - **Lists.** Lists of expressions work like statement lists: `add_expression_list(ids)` and
   `expressions(range)`. Table fields have a list vector of their own, holding the small
   `TableField` structs directly: `add_field_list(fields)` and `fields(range)`, with
-  `IdRange<FieldId>` ranges.
+  `IdRange<FieldId>` ranges. The names of a `local` statement work the same way, as
+  `LocalName{name, attribute}` structs: `add_local_name_list(names)` and `local_names(range)`.
 
 Because nodes hold only numbers and ids, `Expr` and `Stat` are **trivially copyable**: copying a
 node is a plain memory copy, and the vectors never run destructors. `static_assert`s in
@@ -103,7 +105,11 @@ Code that walks the tree uses `std::visit` with one lambda per node type, throug
 | Function                  | Rule                                     | Notes |
 | ------------------------- | ---------------------------------------- | ----- |
 | `parse_chunk()`           | `chunk ::= block <eof>` (G2.1)           | after the block, anything left is `<eof> expected near 'x'` |
-| `parse_block()`           | `block ::= { stat } [ retstat ]` (G2.2)  | for now only the optional `return`; other statements come in parts 5 to 8 |
+| `parse_block()`           | `block ::= { stat } [ retstat ]` (G2.2)  | statements until `block_follow()` or `return` |
+| `parse_statement()`       | `stat` (G3.1)                            | dispatches on the first token; `;` gives no node |
+| `parse_expression_statement()` | a call, or `varlist = explist` (G3.1) | Lua's `exprstat()`, see "Statements" |
+| `parse_local()`           | `'local' attnamelist [ '=' explist ]` (G3.1) | Lua's `localstat()` |
+| `parse_attribute()`       | `attrib ::= [ '<' Name '>' ]` (G3.3)     | `<const>`, `<close>`, or `unknown attribute` |
 | `parse_return()`          | `retstat ::= 'return' [ explist ] [ ';' ]` (G2.3) | values are skipped when the block ends or a `;` follows; one `;` is allowed |
 | `parse_expression_list()` | `explist ::= exp { ',' exp }` (G4.6)     | collects ids, then stores them as one list |
 | `parse_expression()`      | `exp` (G4.1)                             | `parse_subexpression(0)`                  |
@@ -126,6 +132,60 @@ Each node records the line of its first token: `parse_return()` reads `current_.
 moves past `return`. Binary nodes are the exception: they record the line of their **operator**,
 as Lua does, because that is the line a run-time error like "attempt to add a nil value" will
 point at.
+
+## Statements
+
+`parse_block()` reads statements in a loop until the block ends (`block_follow()`) or a
+`return` comes. Statements need no separator: `a = 1 b = 2` is two statements, and `;` is an
+empty statement that `parse_statement()` skips without adding a node.
+
+### Calls and assignments
+
+A statement that does not start with a keyword starts with an expression, and
+`parse_expression_statement()` (Lua's `exprstat()`) reads it as a suffixed expression, then
+decides from the next token:
+
+- **`=` or `,`**: an assignment. It collects targets separated by commas, then `=`, then the
+  values, giving an `AssignStat{targets, values}`. Each target must be a *variable*, a
+  `NameExpr` or an `IndexExpr`; anything else is `syntax error` (G3.9). Like Lua, the check runs
+  once the token after the target has been read, so `f() = 1` reports `syntax error near '='`.
+- **Anything else**: it must be a call (`CallExpr` or `MethodCallExpr`), which becomes a
+  `CallStat`. Any other expression would do nothing, so `x` or `a.b` alone is
+  `syntax error` (G3.8).
+
+Because the statement starts with a *suffixed* expression, it cannot start with a literal or an
+operator: `1 + 2` as a statement is `unexpected symbol near '1'`. And `(f())` is a parenthesized
+expression, not a call, so it is `syntax error` too.
+
+### `local`
+
+`parse_local()` (Lua's `localstat()`) reads names, each with an optional attribute, then an
+optional `=` and values, giving a `LocalStat{names, values}`. No `=` means no values.
+
+`parse_attribute()` reads `<name>`:
+
+- `<const>`: the variable cannot be assigned to (checked in part 9);
+- `<close>`: its value is closed when the variable goes out of scope;
+- anything else: `unknown attribute 'foo'`.
+
+At most one `<close>` per statement: a second one is `multiple to-be-closed variables in local
+list`.
+
+Watch out for maximal munch here: in `local x<const>=1` the lexer reads `>=` as one token, so
+real Lua fails with `'>' expected near '>='`, and so do we. With a space, `<const> =1` works.
+
+### Semantic errors
+
+The attribute errors are *semantic* errors: about meaning, not grammar. Like Lua's
+`luaK_semerror()`, they leave out the `near` part (G9.5):
+
+```
+input:1: unknown attribute 'foo'
+input:1: multiple to-be-closed variables in local list
+```
+
+`semantic_error(message)` builds them, by passing an empty `near` to `make_syntax_error`, which
+then omits that part. The `goto`, label, `break` and `<const>` checks of part 9 will use it too.
 
 ## Operators and precedence
 
@@ -306,7 +366,10 @@ form with `.0` when they look like integers (`1000.0`).
 Children appear in source order: `Call` prints the function first, then the arguments;
 `MethodCall m` prints the object, then the arguments. A `Table` lists its fields as `Item`
 (positional, the value below), `Field name` (named, the value below) or `Field` (keyed, the key
-then the value below). For `return a.b[c](d):e"f"`:
+then the value below). Statements print as `CallStatement` (the call below), `Assign` (with
+`Targets` and `Values` sub-headings, since the two lists would otherwise run together), and
+`Local a, b <const>` (the names on one line with their attributes, the values below). For
+`return a.b[c](d):e"f"`:
 
 ```
 Chunk
@@ -331,6 +394,9 @@ Chunk
 - **A depth limit** (part 9). Parsing is recursive, so a very deeply nested expression, such as
   thousands of `-` or `..` in a row, can overflow the C++ stack until the limit exists. The
   printer is recursive too.
-- **Statements** other than `return` (parts 5 to 8). Until then they end the chunk early, and the
-  token is reported as `<eof> expected near 'x'`.
+- **Control flow and the remaining statements**: `do`, `while`, `repeat`, `if`, `for` (part 6),
+  `function` statements and `local function` (part 7), `goto`, labels and `break` (part 8).
+  Until then their keyword is `unexpected symbol` (and `local function` is
+  `<name> expected near 'function'`).
+- **The `<const>` assignment check** (part 9): `local x <const> = 1; x = 2` parses for now.
 - Scopes and name resolution (parts 9 and 10), the graph view (part 11).

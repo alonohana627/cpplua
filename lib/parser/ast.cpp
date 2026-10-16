@@ -50,6 +50,14 @@ std::span<const TableField> Ast::fields(IdRange<FieldId> range) const {
     return std::span{field_lists_}.subspan(range.first, range.count);
 }
 
+IdRange<LocalNameId> Ast::add_local_name_list(std::span<const LocalName> names) {
+    return append<LocalNameId>(local_name_lists_, names);
+}
+
+std::span<const LocalName> Ast::local_names(IdRange<LocalNameId> range) const {
+    return std::span{local_name_lists_}.subspan(range.first, range.count);
+}
+
 std::span<const StatId> Ast::statements(const Block& block) const {
     return std::span{statement_lists_}.subspan(block.statements.first, block.statements.count);
 }

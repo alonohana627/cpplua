@@ -38,9 +38,17 @@ std::expected<Block, SyntaxError> Parser::parse_block() {
     // go, so they sit next to each other (see Ast::add_statement_list).
     std::vector<StatId> statements;
 
-    // { stat }: the other statements arrive in parts 5 to 8, as a loop here
-    // that runs until block_follow() or 'return'. Until then, a block holds at
-    // most a return, and anything else is left for the caller to report.
+    // { stat }: statements until the block ends or a 'return' comes. They
+    // need no separator between them (G2.6).
+    while (!block_follow() && !check(TokenKind::Return)) {
+        auto statement = parse_statement();
+        if (!statement) {
+            return std::unexpected(std::move(statement.error()));
+        }
+        if (*statement) { // an empty statement ';' adds nothing
+            statements.push_back(**statement);
+        }
+    }
 
     // [ retstat ]: 'return' can only be the last statement of its block
     // (G2.5). The caller then expects the block's end, so `return 1 x` fails
@@ -76,6 +84,168 @@ std::expected<StatId, SyntaxError> Parser::parse_return() {
         return std::unexpected(std::move(semicolon.error()));
     }
     return ast_.add_statement(ReturnStat{.values = values}, line);
+}
+
+std::expected<std::optional<StatId>, SyntaxError> Parser::parse_statement() {
+    switch (current_.kind) {
+    case TokenKind::Semicolon: { // an empty statement (G2.6)
+        if (auto moved = advance(); !moved) {
+            return std::unexpected(std::move(moved.error()));
+        }
+        return std::nullopt;
+    }
+    case TokenKind::Local: return parse_local();
+    // if, while, do, for, repeat, function, goto, break and labels arrive in
+    // parts 6 to 8. Until then they reach parse_expression_statement(),
+    // which reports "unexpected symbol".
+    default: return parse_expression_statement();
+    }
+}
+
+namespace {
+
+// Whether an expression can be assigned to: a name or an indexing (G3.9).
+bool is_variable(const Expr& expression) {
+    return std::holds_alternative<NameExpr>(expression) ||
+           std::holds_alternative<IndexExpr>(expression);
+}
+
+bool is_call(const Expr& expression) {
+    return std::holds_alternative<CallExpr>(expression) ||
+           std::holds_alternative<MethodCallExpr>(expression);
+}
+
+} // namespace
+
+std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
+    const int line = current_.line;
+    auto first = parse_suffixed_expression();
+    if (!first) {
+        return std::unexpected(std::move(first.error()));
+    }
+
+    // An assignment: `var { ',' var } '=' explist`.
+    if (check(TokenKind::Assign) || check(TokenKind::Comma)) {
+        std::vector<ExprId> targets{*first};
+        for (;;) {
+            // Like Lua, each target is checked once the token after it is
+            // read, so the error points there: `f() = 1` is "syntax error
+            // near '='" (G3.9).
+            if (!is_variable(ast_.expression(targets.back()))) {
+                return error("syntax error");
+            }
+            auto comma = accept(TokenKind::Comma);
+            if (!comma) {
+                return std::unexpected(std::move(comma.error()));
+            }
+            if (!*comma) {
+                break;
+            }
+            auto target = parse_suffixed_expression();
+            if (!target) {
+                return std::unexpected(std::move(target.error()));
+            }
+            targets.push_back(*target);
+        }
+        if (auto assign = expect(TokenKind::Assign); !assign) {
+            return std::unexpected(std::move(assign.error()));
+        }
+        auto values = parse_expression_list();
+        if (!values) {
+            return std::unexpected(std::move(values.error()));
+        }
+        return ast_.add_statement(
+            AssignStat{.targets = ast_.add_expression_list(targets), .values = *values}, line);
+    }
+
+    // Otherwise it must be a call; `x` or `a.b` alone does nothing, so Lua
+    // refuses it (G3.8).
+    if (!is_call(ast_.expression(*first))) {
+        return error("syntax error");
+    }
+    return ast_.add_statement(CallStat{.call = *first}, line);
+}
+
+std::expected<StatId, SyntaxError> Parser::parse_local() {
+    const int line = current_.line;
+    if (auto moved = advance(); !moved) { // 'local'
+        return std::unexpected(std::move(moved.error()));
+    }
+    // `local function f` arrives in part 7. Until then 'function' fails as
+    // "<name> expected near 'function'".
+
+    // attnamelist ::= Name attrib { ',' Name attrib } (G3.2)
+    std::vector<LocalName> names;
+    bool has_close = false;
+    for (;;) {
+        auto name = expect_name();
+        if (!name) {
+            return std::unexpected(std::move(name.error()));
+        }
+        auto attribute = parse_attribute();
+        if (!attribute) {
+            return std::unexpected(std::move(attribute.error()));
+        }
+        // At most one <close> per statement (G3.15).
+        if (*attribute == LocalName::Attribute::Close) {
+            if (has_close) {
+                return semantic_error("multiple to-be-closed variables in local list");
+            }
+            has_close = true;
+        }
+        names.push_back(LocalName{.name = *name, .attribute = *attribute});
+
+        auto comma = accept(TokenKind::Comma);
+        if (!comma) {
+            return std::unexpected(std::move(comma.error()));
+        }
+        if (!*comma) {
+            break;
+        }
+    }
+
+    // [ '=' explist ]
+    IdRange<ExprId> values;
+    auto assign = accept(TokenKind::Assign);
+    if (!assign) {
+        return std::unexpected(std::move(assign.error()));
+    }
+    if (*assign) {
+        auto list = parse_expression_list();
+        if (!list) {
+            return std::unexpected(std::move(list.error()));
+        }
+        values = *list;
+    }
+    return ast_.add_statement(LocalStat{.names = ast_.add_local_name_list(names), .values = values},
+                              line);
+}
+
+std::expected<LocalName::Attribute, SyntaxError> Parser::parse_attribute() {
+    auto open = accept(TokenKind::Less);
+    if (!open) {
+        return std::unexpected(std::move(open.error()));
+    }
+    if (!*open) {
+        return LocalName::Attribute::None;
+    }
+    if (!check(TokenKind::Name)) {
+        return error_expected(TokenKind::Name);
+    }
+    const std::string attribute = std::get<std::string>(current_.value);
+    if (auto moved = advance(); !moved) {
+        return std::unexpected(std::move(moved.error()));
+    }
+    if (auto close = expect(TokenKind::Greater); !close) {
+        return std::unexpected(std::move(close.error()));
+    }
+    if (attribute == "const") {
+        return LocalName::Attribute::Const;
+    }
+    if (attribute == "close") {
+        return LocalName::Attribute::Close;
+    }
+    return semantic_error(std::format("unknown attribute '{}'", attribute)); // G3.15
 }
 
 std::expected<IdRange<ExprId>, SyntaxError> Parser::parse_expression_list() {
@@ -570,6 +740,12 @@ std::unexpected<SyntaxError> Parser::error(std::string_view message,
                                            std::source_location origin) const {
     return std::unexpected(
         make_syntax_error(lexer_.chunk_name(), current_.line, message, near_current(), origin));
+}
+
+std::unexpected<SyntaxError> Parser::semantic_error(std::string_view message,
+                                                    std::source_location origin) const {
+    return std::unexpected(
+        make_syntax_error(lexer_.chunk_name(), current_.line, message, "", origin));
 }
 
 std::unexpected<SyntaxError> Parser::error_expected(TokenKind kind,

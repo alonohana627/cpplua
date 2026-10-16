@@ -33,9 +33,12 @@ struct StatTag {};
 
 struct FieldTag {};
 
-using ExprId = NodeId<ExprTag>;   // an expression node
-using StatId = NodeId<StatTag>;   // a statement node
-using FieldId = NodeId<FieldTag>; // a field of a table constructor
+struct LocalNameTag {};
+
+using ExprId = NodeId<ExprTag>;           // an expression node
+using StatId = NodeId<StatTag>;           // a statement node
+using FieldId = NodeId<FieldTag>;         // a field of a table constructor
+using LocalNameId = NodeId<LocalNameTag>; // a name declared by `local`
 
 // A run of consecutive ids in one of the Ast's list vectors, such as the
 // statements of a block. Storing (first, count) instead of a std::vector in
@@ -226,7 +229,46 @@ struct ReturnStat {
     bool operator==(const ReturnStat&) const = default;
 };
 
-using Stat = std::variant<ReturnStat>;
+// A function call used as a statement (G3.1): the expression is a CallExpr
+// or a MethodCallExpr, and its results are thrown away.
+struct CallStat {
+    ExprId call;
+
+    bool operator==(const CallStat&) const = default;
+};
+
+// `varlist = explist` (G3.1, G3.6). Every target is a NameExpr or an
+// IndexExpr (G3.9).
+struct AssignStat {
+    IdRange<ExprId> targets;
+    IdRange<ExprId> values;
+
+    bool operator==(const AssignStat&) const = default;
+};
+
+// A name declared by `local`, with its attribute (G3.2, G3.3, G3.15).
+struct LocalName {
+    enum class Attribute : std::uint8_t {
+        None,
+        Const, // <const>: cannot be assigned to
+        Close, // <close>: closed (its __close metamethod runs) when it goes out of scope
+    };
+
+    TextRange name;
+    Attribute attribute = Attribute::None;
+
+    bool operator==(const LocalName&) const = default;
+};
+
+// `local attnamelist [ '=' explist ]` (G3.1). No '=' means no values.
+struct LocalStat {
+    IdRange<LocalNameId> names;
+    IdRange<ExprId> values;
+
+    bool operator==(const LocalStat&) const = default;
+};
+
+using Stat = std::variant<ReturnStat, CallStat, AssignStat, LocalStat>;
 
 // Nodes hold only numbers and ids, never strings or pointers, so copying one
 // is a plain memory copy and the vectors never run destructors. Keep it so.
@@ -270,11 +312,13 @@ public:
     IdRange<StatId> add_statement_list(std::span<const StatId> ids);
     IdRange<ExprId> add_expression_list(std::span<const ExprId> ids);
     IdRange<FieldId> add_field_list(std::span<const TableField> fields);
+    IdRange<LocalNameId> add_local_name_list(std::span<const LocalName> names);
 
     // The statements of a block, in order.
     [[nodiscard]] std::span<const StatId> statements(const Block& block) const;
     [[nodiscard]] std::span<const ExprId> expressions(IdRange<ExprId> range) const;
     [[nodiscard]] std::span<const TableField> fields(IdRange<FieldId> range) const;
+    [[nodiscard]] std::span<const LocalName> local_names(IdRange<LocalNameId> range) const;
 
     // ---- Text ----
 
@@ -295,6 +339,7 @@ private:
     std::vector<StatId> statement_lists_;
     std::vector<ExprId> expression_lists_;
     std::vector<TableField> field_lists_; // fields are small, so stored directly
+    std::vector<LocalName> local_name_lists_;
 
     std::string text_;
 };

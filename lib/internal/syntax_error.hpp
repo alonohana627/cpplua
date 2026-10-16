@@ -23,7 +23,8 @@ struct SyntaxError {
 };
 
 // Builds a SyntaxError. `near` is already formatted: a quoted token such as
-// `'@'`, or `<eof>`. `origin` defaults to the caller's location.
+// `'@'`, or `<eof>`. An empty `near` leaves the " near ..." part out, as Lua
+// does for semantic errors (G9.5). `origin` defaults to the caller's location.
 SyntaxError make_syntax_error(std::string_view chunk, int line, std::string_view message,
                               std::string_view near,
                               std::source_location origin = std::source_location::current());

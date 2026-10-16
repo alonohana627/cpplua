@@ -59,5 +59,5 @@ TEST_CASE("ast_dump returns the parser's error", "[debug]") {
     const auto dump = lua2::ast_dump("x", "test.lua");
 
     REQUIRE_FALSE(dump.has_value());
-    CHECK(dump.error() == "test.lua:1: <eof> expected near 'x'");
+    CHECK(dump.error() == "test.lua:1: syntax error near <eof>");
 }

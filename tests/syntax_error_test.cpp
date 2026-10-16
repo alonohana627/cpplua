@@ -48,3 +48,9 @@ TEST_CASE("L10.2 a non-printable byte is shown as its decimal value", "[syntax-e
     CHECK(near_char(128) == "'<\\128>'");
     CHECK(near_char(255) == "'<\\255>'");
 }
+
+TEST_CASE("G9.5 an empty near leaves the near part out", "[syntax-error]") {
+    const auto error = make_syntax_error("input", 2, "unknown attribute 'x'", "");
+
+    CHECK(error.message == "input:2: unknown attribute 'x'");
+}
