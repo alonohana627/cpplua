@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <limits>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -341,4 +342,149 @@ TEST_CASE("L10.1 lexing stops at the first error", "[lexer]") {
     REQUIRE_FALSE(first.has_value());
     REQUIRE_FALSE(second.has_value());
     CHECK(second.error().message == first.error().message);
+}
+
+// ---- Part 6: decimal numbers ----
+
+namespace {
+
+// Lexes `source`, which must be exactly one token, and returns that token.
+lua2::Token only_token(std::string_view source) {
+    Lexer lexer{source};
+    auto token = next_token(lexer);
+    CHECK(next_token(lexer).kind == TokenKind::EndOfStream);
+    return token;
+}
+
+struct IntegerCase {
+    std::string_view source;
+    std::int64_t value;
+};
+
+struct FloatCase {
+    std::string_view source;
+    double value;
+};
+
+} // namespace
+
+TEST_CASE("L5.4 L5.6 decimal integers", "[lexer][number]") {
+    const auto [source, value] = GENERATE(values<IntegerCase>({
+        {.source = "0", .value = 0},
+        {.source = "3", .value = 3},
+        {.source = "345", .value = 345},
+        {.source = "007", .value = 7}, // leading zeros do not mean octal
+        {.source = "9223372036854775807", .value = INT64_MAX},
+    }));
+    CAPTURE(source);
+
+    const auto token = only_token(source);
+
+    CHECK(token.kind == TokenKind::Integer);
+    CHECK(token.value == lua2::TokenValue{value});
+}
+
+TEST_CASE("L5.4 L5.6 decimal floats", "[lexer][number]") {
+    const auto [source, value] = GENERATE(values<FloatCase>({
+        {.source = "3.0", .value = 3.0},
+        {.source = "3.1416", .value = 3.1416},
+        {.source = "314.16e-2", .value = 314.16e-2},
+        {.source = "0.31416E1", .value = 0.31416E1},
+        {.source = "34e1", .value = 34e1},
+        {.source = "1e+2", .value = 1e+2},
+        {.source = ".5", .value = 0.5},
+        {.source = "5.", .value = 5.0},
+        {.source = "0.1", .value = 0.1},
+        {.source = "1e10", .value = 1e10},
+    }));
+    CAPTURE(source);
+
+    const auto token = only_token(source);
+
+    CHECK(token.kind == TokenKind::Float);
+    CHECK(token.value == lua2::TokenValue{value}); // exact: same rounding as the C++ literal
+}
+
+TEST_CASE("L5.6 a point or an exponent makes a float", "[lexer][number]") {
+    CHECK(only_token("1").kind == TokenKind::Integer);
+    CHECK(only_token("1.").kind == TokenKind::Float);
+    CHECK(only_token("1.0").kind == TokenKind::Float);
+    CHECK(only_token("1e0").kind == TokenKind::Float);
+    CHECK(only_token("1e2").value == lua2::TokenValue{100.0});
+}
+
+TEST_CASE("L5.7 a decimal integer too large for 64 bits becomes a float", "[lexer][number]") {
+    const auto max_plus_one = only_token("9223372036854775808");
+    CHECK(max_plus_one.kind == TokenKind::Float);
+    CHECK(max_plus_one.value == lua2::TokenValue{9223372036854775808.0});
+
+    const auto huge = only_token("100000000000000000000");
+    CHECK(huge.kind == TokenKind::Float);
+    CHECK(huge.value == lua2::TokenValue{1e20});
+}
+
+TEST_CASE("L5.9 floats too large are infinity, too small are zero", "[lexer][number]") {
+    CHECK(only_token("1e400").value == lua2::TokenValue{std::numeric_limits<double>::infinity()});
+    CHECK(only_token("1.8e308").value == lua2::TokenValue{std::numeric_limits<double>::infinity()});
+    CHECK(only_token("1e-400").value == lua2::TokenValue{0.0});
+
+    // 400 zeros after the point, with no exponent, still underflows to 0.
+    const std::string tiny = "0." + std::string(400, '0') + "1";
+    CHECK(only_token(tiny).value == lua2::TokenValue{0.0});
+
+    // The largest double and the smallest subnormal are still in range.
+    CHECK(only_token("1.7976931348623157e308").value ==
+          lua2::TokenValue{std::numeric_limits<double>::max()});
+    CHECK(only_token("4.9e-324").value ==
+          lua2::TokenValue{std::numeric_limits<double>::denorm_min()});
+}
+
+TEST_CASE("L5.10 numerals have no sign", "[lexer][number]") {
+    CHECK(kinds("-5") == std::vector{TokenKind::Minus, TokenKind::Integer, TokenKind::EndOfStream});
+    CHECK(kinds("+5") == std::vector{TokenKind::Plus, TokenKind::Integer, TokenKind::EndOfStream});
+    // So the smallest integer cannot be written directly: this is minus a float.
+    CHECK(kinds("-9223372036854775808") ==
+          std::vector{TokenKind::Minus, TokenKind::Float, TokenKind::EndOfStream});
+}
+
+TEST_CASE("L8.4 dots next to numbers", "[lexer][number]") {
+    CHECK(kinds("a..5") == std::vector{TokenKind::Name, TokenKind::Concat, TokenKind::Integer,
+                                       TokenKind::EndOfStream});
+    CHECK(kinds("...5") ==
+          std::vector{TokenKind::Ellipsis, TokenKind::Integer, TokenKind::EndOfStream});
+    CHECK(kinds("t.x") ==
+          std::vector{TokenKind::Name, TokenKind::Dot, TokenKind::Name, TokenKind::EndOfStream});
+    CHECK(kinds("1 .. 2") == std::vector{TokenKind::Integer, TokenKind::Concat, TokenKind::Integer,
+                                         TokenKind::EndOfStream});
+}
+
+TEST_CASE("L5.4 numbers end at operators and whitespace", "[lexer][number]") {
+    CHECK(kinds("1+2") == std::vector{TokenKind::Integer, TokenKind::Plus, TokenKind::Integer,
+                                      TokenKind::EndOfStream});
+    CHECK(kinds("x=1.5,2") == std::vector{TokenKind::Name, TokenKind::Assign, TokenKind::Float,
+                                          TokenKind::Comma, TokenKind::Integer,
+                                          TokenKind::EndOfStream});
+    CHECK(kinds("2e-3*4") == std::vector{TokenKind::Float, TokenKind::Star, TokenKind::Integer,
+                                         TokenKind::EndOfStream});
+}
+
+TEST_CASE("L2.2 numbers get their line", "[lexer][number]") {
+    CHECK(lines("1\n2.5\n\n.5") == std::vector{1, 2, 4, 4});
+}
+
+TEST_CASE("L5.3 an exponent without digits is a malformed number", "[lexer][number]") {
+    const auto [source, near] = GENERATE(values<std::pair<std::string_view, std::string_view>>({
+        {"1e", "'1e'"},
+        {"1e+", "'1e+'"},
+        {"1E-", "'1E-'"},
+        {"2.5e", "'2.5e'"},
+        {"1e+ 2", "'1e+'"},
+    }));
+    CAPTURE(source);
+
+    Lexer lexer{source, "input"};
+    const auto result = lexer.next();
+
+    REQUIRE_FALSE(result.has_value());
+    CHECK(result.error().message == "input:1: malformed number near " + std::string(near));
 }

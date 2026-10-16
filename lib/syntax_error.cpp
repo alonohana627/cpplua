@@ -22,4 +22,8 @@ std::string near_char(unsigned char c) {
     return std::format("'<\\{}>'", c);
 }
 
+std::string near_text(std::string_view text) {
+    return std::format("'{}'", text);
+}
+
 } // namespace lua2

@@ -28,6 +28,11 @@ TEST_CASE("a syntax error records the C++ location that created it", "[syntax-er
     CHECK(error.origin.line() > 0);
 }
 
+TEST_CASE("L10.2 text read so far is shown in quotes", "[syntax-error]") {
+    CHECK(lua2::near_text("1e+") == "'1e+'");
+    CHECK(lua2::near_text("") == "''");
+}
+
 TEST_CASE("L10.2 a printable byte is shown in quotes", "[syntax-error]") {
     CHECK(near_char('@') == "'@'");
     CHECK(near_char('a') == "'a'");

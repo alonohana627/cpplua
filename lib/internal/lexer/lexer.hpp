@@ -61,6 +61,10 @@ private:
     // when its text is one of the 22 keywords (L4.1-L4.4).
     Token read_name();
 
+    // Consumes a decimal numeral and returns it as an Integer or Float token
+    // (L5.1, L5.4, L5.6, L5.7, L5.9), or an error for a malformed exponent.
+    std::expected<Token, SyntaxError> read_number();
+
     std::string_view source_;
     std::string_view chunk_name_;
     std::size_t pos_ = 0; // index of the next character to read

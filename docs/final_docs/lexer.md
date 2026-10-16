@@ -4,8 +4,9 @@ How the lexer works today. This page describes the code as it is, and is updated
 grows. The rules it implements are in [../spec/lexical.md](../spec/lexical.md), and the remaining
 work is in [../plan/lexer.md](../plan/lexer.md).
 
-**Status:** parts 0 to 4 of the plan: operators, whitespace, line counting, names, keywords,
-stray characters and the error type. Numbers, strings and comments are not lexed yet.
+**Status:** parts 0 to 4 and 6 of the plan: operators, whitespace, line counting, names,
+keywords, stray characters, the error type and decimal numbers. Comments (part 5), hex numbers,
+strings and long brackets are not lexed yet.
 
 ## Where it lives
 
@@ -52,8 +53,8 @@ A `Token` has three fields:
 - `line`: the line the token **starts** on, counted from 1.
 - `value`: a `TokenValue`, a `std::variant` of `std::monostate`, `std::string`, `std::int64_t`
   and `double`. A `Name` holds its text as a `std::string`, and an `Other` holds its one byte as
-  a `std::string`. Operators and keywords hold `std::monostate` (no value). Strings and numbers
-  will use the other alternatives.
+  a `std::string`. An `Integer` holds a `std::int64_t` and a `Float` a `double`. Operators and
+  keywords hold `std::monostate` (no value). Strings will hold a `std::string`.
 
 Tokens compare with `==` (kind, line and value), which keeps tests short.
 
@@ -62,6 +63,7 @@ Tokens compare with `==` (kind, line and value), which keeps tests short.
 - `EndOfStream`
 - `Name`
 - `Other`, for a stray byte such as `@`
+- `Integer` and `Float`, for numerals
 - 23 single-character tokens: `+ - * / % ^ # & ~ | < > = ( ) { } [ ] ; : , .`
 - 10 multi-character tokens: `== ~= <= >= << >> // :: .. ...`
 - 22 keywords, one kind each: `And`, `Break`, ... `While` (`ElseIf` for `elseif`)
@@ -114,11 +116,13 @@ The `Lexer` holds only five things:
    token.
 5. **Characters that may start a longer token** (`= ~ / : < > .`): look ahead with `peek()` and
    take the **longest** token that matches (*maximal munch*). So `==` is one token, `<<=` is `<<`
-   then `=`, and `....` is `...` then `.`.
+   then `=`, and `....` is `...` then `.`. The one exception: a `.` followed by a digit starts a
+   number, as in `.5`.
 6. **A letter or `_`**: call `read_name()`, which returns a name or a keyword.
-7. **A digit or a quote** returns the temporary error `not supported yet near '1'`. This is
-   a placeholder until numbers and strings are handled.
-8. **Any other byte** (`@`, `$`, `!`, a byte above 127, even `\0`) becomes an `Other` token
+7. **A digit**: call `read_number()`, which returns an `Integer` or a `Float`.
+8. **A quote** returns the temporary error `not supported yet near '''`, until strings are
+   handled.
+9. **Any other byte** (`@`, `$`, `!`, a byte above 127, even `\0`) becomes an `Other` token
    holding that byte. See "Stray characters" below.
 
 Private helpers:
@@ -131,6 +135,7 @@ Private helpers:
 | `peek(offset)`      | the character `offset` places ahead, or `'\0'` past the end      |
 | `read_newline()`    | moves past one line break and counts the line                    |
 | `read_name()`       | reads a name, then checks the keyword table                      |
+| `read_number()`     | finds the end of a decimal numeral, then converts it             |
 | `error(msg, near)`  | records a `SyntaxError` on the current line and returns it       |
 
 `take` builds the token before moving forward, which is how every token gets the line it starts on.
@@ -192,7 +197,7 @@ The `near` part says where the error is, and is passed in already formatted:
 - `near_char(byte)` quotes a single byte: `'@'` for printable ASCII (space to `~`), and the
   decimal value otherwise, as in `'<\128>'`. It checks the range by hand rather than calling
   `std::isprint`, for the same locale reason as `is_letter`.
-- For a name, number or string, it is the text read so far in quotes (added with those tokens).
+- `near_text(text)` quotes the text read so far, for a name, number or string: `'1e+'`.
 
 Inside the lexer, `error(message, near)` builds the `SyntaxError` with the chunk name, the current
 line and the caller's `origin`, and returns it as a `std::unexpected`, so a lexing function
@@ -206,8 +211,36 @@ return error("unfinished string", near_eof);
 returns that same error on every call: lexing is over. Like Lua, the lexer never tries to recover
 and find more errors. (Reporting all errors is a possible later mode, stage 15 of the roadmap.)
 
-For now the only error is the temporary "not supported yet" for digits and quotes. Unfinished
-strings, malformed numbers and bad escapes come with their parts.
+The errors so far are `malformed number` (an exponent without digits) and the temporary "not
+supported yet" for quotes. Unfinished strings and bad escapes come with their parts.
+
+## Numbers
+
+`read_number()` handles decimal numerals in two steps.
+
+**1. Find where the numeral ends.** The shape is
+
+```
+digits [ '.' digits ] [ ('e' | 'E') [ '+' | '-' ] digits ]
+```
+
+with at least one digit before or after the point: `3`, `3.0`, `.5`, `5.`, `314.16e-2`. The
+lexer notes whether it saw a `.` or an exponent, because that decides the type. An exponent with
+no digits after it (`1e`, `1e+`) is the error `malformed number near '1e+'`.
+
+**2. Convert the text** with `std::from_chars`, which ignores the locale, never allocates, and
+reports problems through an error code rather than an exception:
+
+- **No point and no exponent** means an integer. If it fits in `std::int64_t` the token is an
+  `Integer`. If it does not (`9223372036854775808` and up), Lua reads it as a float instead, so
+  conversion falls through to the next step.
+- **Otherwise** the token is a `Float`. A value too large is infinity (`1e400`) and a value too
+  small is 0 (`1e-400`). That is not an error in Lua. `from_chars` reports those cases as
+  `errc::result_out_of_range`, but libc++ still stores infinity or 0, so that code is accepted.
+  Tests pin this down in case a library ever behaves differently.
+
+Numerals have no sign: `-5` is `Minus` then `Integer 5`. The parser turns that into a negation.
+This is why `-9223372036854775808` is minus a *float*: the integer part alone is too large.
 
 ## Line counting
 
@@ -217,6 +250,11 @@ character. So `\r\n` is one line, but `\n\n` and `\r\r` are two.
 
 ## Not handled yet
 
-In plan order: comments, numbers, strings, long strings and long comments. Until then, `-` is
-always `Minus` (no `--` comments), `[` is always `LBracket` (no `[[` strings), and a digit or a
-quote returns the temporary "not supported yet" error.
+In plan order: comments (part 5), hex numbers and malformed numbers (part 7), strings, long
+strings and long comments. Until then:
+
+- `-` is always `Minus` (no `--` comments) and `[` is always `LBracket` (no `[[` strings).
+- A quote returns the temporary "not supported yet" error.
+- Numbers stop where a decimal numeral stops, so `0x10` is `Integer 0` then `Name x10`, and `3x`
+  or `1.2.3` are split into several tokens. In Lua those are hex or malformed numbers. Part 7
+  reads numerals greedily, like Lua, and fixes this.

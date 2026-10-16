@@ -35,4 +35,8 @@ inline constexpr std::string_view near_eof = "<eof>";
 // is printable ASCII, as in `'@'`, otherwise its decimal value, as in `'<\128>'`.
 std::string near_char(unsigned char c);
 
+// The `near` text for a name, number or string (L10.2): the text read so far,
+// in quotes, as in `'1e+'`.
+std::string near_text(std::string_view text);
+
 } // namespace lua2
