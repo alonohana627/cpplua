@@ -5,6 +5,7 @@ Each stage ends with green tests before the next starts.
 1. **Skeleton + tests** (done): CMake + Ninja presets, clang++ with libc++, C++26, Catch2 v3 via FetchContent, public headers in `include/lua2/`, the embeddable `lua2::lua2` library in `lib/`, the `lua2` executable in `src/`, CTest.
 2. **Lexer**: source text to tokens (names, keywords, numbers incl. hex floats, long strings and comments, escapes), with line numbers for errors.
 3. **Parser + AST**: recursive descent with Lua's operator precedence; statements, blocks, functions; syntax errors that match Lua's wording.
+   - **AST viewer**: `lua2 --ast file.lua` prints the tree as indented text, and `lua2 --ast=dot file.lua` writes Graphviz DOT to render as a graph (`dot -Tsvg`). Built with the parser so every parser test can show its tree.
 4. **Values**: nil, boolean, integer vs float (5.4 integer subtype), strings; arithmetic and comparison rules, string/number coercion.
 5. **Interpreter**: tree-walking evaluator first (simple to test), locals and scopes, control flow, `goto`, varargs, multiple returns.
 6. **Tables**: array part + hash part, `#` border, `next`/`pairs`.

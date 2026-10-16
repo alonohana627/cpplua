@@ -3,7 +3,9 @@
 #include <algorithm>
 #include <charconv>
 #include <cstdint>
+#include <optional>
 #include <string>
+#include <string_view>
 #include <system_error>
 
 #include "syntax_error.hpp"
@@ -20,6 +22,75 @@ constexpr bool is_letter(char c) {
 
 constexpr bool is_digit(char c) {
     return c >= '0' && c <= '9';
+}
+
+constexpr bool is_hex_digit(char c) {
+    return is_digit(c) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+}
+
+// The value of a hex digit; only call it when is_hex_digit(c) is true.
+constexpr unsigned hex_value(char c) {
+    if (is_digit(c)) {
+        return static_cast<unsigned>(c - '0');
+    }
+    if (c >= 'a' && c <= 'f') {
+        return static_cast<unsigned>(c - 'a' + 10);
+    }
+    return static_cast<unsigned>(c - 'A' + 10);
+}
+
+constexpr bool has_hex_prefix(std::string_view text) {
+    return text.starts_with("0x") || text.starts_with("0X");
+}
+
+// Converts a whole numeral to an integer, or returns nothing when the text is
+// not an integer numeral (it has a point or an exponent, or is malformed) or
+// is a decimal too large for 64 bits.
+std::optional<std::int64_t> to_integer(std::string_view text) {
+    if (has_hex_prefix(text)) {
+        // Hex: at least one hex digit, and nothing else (L5.5). The value
+        // wraps around modulo 2^64 (L5.8): unsigned arithmetic wraps by
+        // definition, and the conversion to signed keeps the bits.
+        const std::string_view digits = text.substr(2);
+        if (digits.empty() || !std::ranges::all_of(digits, is_hex_digit)) {
+            return std::nullopt;
+        }
+        std::uint64_t value = 0;
+        for (const char c : digits) {
+            value = (value * 16) + hex_value(c);
+        }
+        return static_cast<std::int64_t>(value);
+    }
+    // Decimal: from_chars must use the whole text. On overflow it reports
+    // errc::result_out_of_range, and the numeral becomes a float (L5.7).
+    std::int64_t value = 0;
+    const auto [end, ec] = std::from_chars(text.data(), text.data() + text.size(), value);
+    if (ec != std::errc{} || end != text.data() + text.size()) {
+        return std::nullopt;
+    }
+    return value;
+}
+
+// Converts a whole numeral to a float, or returns nothing when it is
+// malformed. Hex floats use from_chars' hex format, which expects the digits
+// without the 0x prefix.
+std::optional<double> to_float(std::string_view text) {
+    const bool hex = has_hex_prefix(text);
+    const std::string_view digits = hex ? text.substr(2) : text;
+    const auto format = hex ? std::chars_format::hex : std::chars_format::general;
+
+    // Too large or too small is not an error in Lua (L5.9): 1e400 is
+    // infinity and 1e-400 is 0. from_chars reports those as
+    // errc::result_out_of_range, and libc++ still stores inf or 0 in `value`
+    // (the tests pin this down), so that code is accepted too.
+    double value = 0.0;
+    const auto [end, ec] =
+        std::from_chars(digits.data(), digits.data() + digits.size(), value, format);
+    if ((ec != std::errc{} && ec != std::errc::result_out_of_range) ||
+        end != digits.data() + digits.size()) {
+        return std::nullopt;
+    }
+    return value;
 }
 
 } // namespace
@@ -186,64 +257,47 @@ Token Lexer::read_name() {
 
 // @TODO: make more efficient
 std::expected<Token, SyntaxError> Lexer::read_number() {
-    // Step 1: find where the numeral ends (L5.4):
-    //   digits [ '.' digits ] [ ('e' | 'E') [ '+' | '-' ] digits ]
-    // with at least one digit before or after the '.'. The caller has
-    // already checked that we start at a digit, or at '.' before a digit.
+    // Step 1: read greedily, exactly like Lua's llex.c (L5.2). Take every
+    // character that could belong to a numeral, without checking the shape
+    // yet. The caller has checked that we start at a digit, or at '.'
+    // before a digit.
     const std::size_t start = pos_;
-    bool is_float = false;
-
-    while (is_digit(peek(0))) {
-        ++pos_;
+    char exponent_lower = 'e'; // decimal exponents are e/E
+    char exponent_upper = 'E';
+    if (peek(0) == '0' && (peek(1) == 'x' || peek(1) == 'X')) {
+        pos_ += 2;
+        exponent_lower = 'p'; // hex exponents are p/P
+        exponent_upper = 'P';
     }
-    if (peek(0) == '.') {
-        is_float = true;
-        ++pos_;
-        while (is_digit(peek(0))) {
-            ++pos_;
+    for (;;) {
+        const char c = peek(0);
+        if (c == exponent_lower || c == exponent_upper) {
+            ++pos_; // the exponent letter, then an optional sign
+            if (peek(0) == '+' || peek(0) == '-') {
+                ++pos_;
+            }
+        } else if (is_hex_digit(c) || c == '.') {
+            ++pos_; // hex digits even in a decimal numeral: `3a` is read whole
+        } else {
+            break;
         }
     }
-    if (peek(0) == 'e' || peek(0) == 'E') {
-        is_float = true;
+    // A letter touching the numeral is read too, so that `3x` and `0xg` fail
+    // as one malformed number instead of splitting into a number and a name.
+    if (is_letter(peek(0))) {
         ++pos_;
-        if (peek(0) == '+' || peek(0) == '-') {
-            ++pos_;
-        }
-        // The exponent needs at least one digit: `1e` and `1e+` are errors.
-        if (!is_digit(peek(0))) {
-            return error("malformed number", near_text(source_.substr(start, pos_ - start)));
-        }
-        while (is_digit(peek(0))) {
-            ++pos_;
-        }
     }
     const std::string_view text = source_.substr(start, pos_ - start);
-    const char* const first = text.data();
-    const char* const last = text.data() + text.size();
 
-    // Step 2: convert the text. std::from_chars never depends on the locale,
-    // never allocates, and reports problems through an error code.
-
-    // No '.' and no exponent: an integer, if it fits in 64 bits (L5.6, L5.7).
-    if (!is_float) {
-        std::int64_t integer = 0;
-        if (std::from_chars(first, last, integer).ec == std::errc{}) {
-            return Token{.kind = TokenKind::Integer, .line = line_, .value = integer};
-        }
-        // Too large for an integer: Lua reads it as a float instead (L5.7).
+    // Step 2: validate and convert. An integer first (L5.6-L5.8), then a
+    // float (L5.6, L5.9); if neither accepts the whole text, it is malformed.
+    if (const auto integer = to_integer(text)) {
+        return Token{.kind = TokenKind::Integer, .line = line_, .value = *integer};
     }
-
-    // A float (L5.6, L5.9). Too large or too small is not an error in Lua:
-    // 1e400 is infinity and 1e-400 is 0. from_chars reports those as
-    // errc::result_out_of_range, and libc++ still stores inf or 0 in `number`
-    // (the tests pin this down), so that code is accepted too.
-    double number = 0.0;
-    const auto [end, ec] = std::from_chars(first, last, number);
-    if ((ec != std::errc{} && ec != std::errc::result_out_of_range) || end != last) {
-        // Step 1 only accepts well-formed numerals, so this cannot happen.
-        return error("malformed number", near_text(text));
+    if (const auto number = to_float(text)) {
+        return Token{.kind = TokenKind::Float, .line = line_, .value = *number};
     }
-    return Token{.kind = TokenKind::Float, .line = line_, .value = number};
+    return error("malformed number", near_text(text));
 }
 
 } // namespace lua2

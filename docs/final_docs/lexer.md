@@ -4,9 +4,9 @@ How the lexer works today. This page describes the code as it is, and is updated
 grows. The rules it implements are in [../spec/lexical.md](../spec/lexical.md), and the remaining
 work is in [../plan/lexer.md](../plan/lexer.md).
 
-**Status:** parts 0 to 4 and 6 of the plan: operators, whitespace, line counting, names,
-keywords, stray characters, the error type and decimal numbers. Comments (part 5), hex numbers,
-strings and long brackets are not lexed yet.
+**Status:** parts 0 to 4, 6 and 7 of the plan: operators, whitespace, line counting, names,
+keywords, stray characters, the error type, and all numbers (decimal, hex, malformed). Comments
+(part 5), strings and long brackets are not lexed yet.
 
 ## Where it lives
 
@@ -135,7 +135,7 @@ Private helpers:
 | `peek(offset)`      | the character `offset` places ahead, or `'\0'` past the end      |
 | `read_newline()`    | moves past one line break and counts the line                    |
 | `read_name()`       | reads a name, then checks the keyword table                      |
-| `read_number()`     | finds the end of a decimal numeral, then converts it             |
+| `read_number()`     | reads a numeral greedily, then validates and converts it         |
 | `error(msg, near)`  | records a `SyntaxError` on the current line and returns it       |
 
 `take` builds the token before moving forward, which is how every token gets the line it starts on.
@@ -211,33 +211,49 @@ return error("unfinished string", near_eof);
 returns that same error on every call: lexing is over. Like Lua, the lexer never tries to recover
 and find more errors. (Reporting all errors is a possible later mode, stage 15 of the roadmap.)
 
-The errors so far are `malformed number` (an exponent without digits) and the temporary "not
-supported yet" for quotes. Unfinished strings and bad escapes come with their parts.
+The errors so far are `malformed number` and the temporary "not supported yet" for quotes.
+Unfinished strings and bad escapes come with their parts.
 
 ## Numbers
 
-`read_number()` handles decimal numerals in two steps.
+`read_number()` handles decimal and hex numerals in two steps, the same way Lua's own `llex.c`
+does: **read greedily first, validate second.**
 
-**1. Find where the numeral ends.** The shape is
+**1. Read greedily.** Take every character that *could* belong to a numeral, without checking
+the shape yet:
 
-```
-digits [ '.' digits ] [ ('e' | 'E') [ '+' | '-' ] digits ]
-```
+- If the numeral starts with `0x` or `0X`, it is hex: take the prefix, and the exponent letters
+  are `p`/`P`. Otherwise the exponent letters are `e`/`E`.
+- Then repeat: an exponent letter (and a `+` or `-` right after it), a hex digit, or a `.`.
+  Hex digits are taken even in a decimal numeral, so `3a` is read as one piece.
+- Finally, if a letter (or `_`) touches the numeral, take that one too.
 
-with at least one digit before or after the point: `3`, `3.0`, `.5`, `5.`, `314.16e-2`. The
-lexer notes whether it saw a `.` or an exponent, because that decides the type. An exponent with
-no digits after it (`1e`, `1e+`) is the error `malformed number near '1e+'`.
+So `3x`, `3..2`, `1.2.3` and `0xg` are each read as **one** piece, and then fail as one
+malformed number instead of quietly splitting into a number and something else. A `-` belongs to
+the numeral only right after an exponent letter, so `1e-5` is one number but `1-5` is three
+tokens.
 
-**2. Convert the text** with `std::from_chars`, which ignores the locale, never allocates, and
-reports problems through an error code rather than an exception:
+**2. Validate and convert.** Two helpers, `to_integer` and `to_float`, each either accept the
+**whole** text or return nothing (`std::optional`):
 
-- **No point and no exponent** means an integer. If it fits in `std::int64_t` the token is an
-  `Integer`. If it does not (`9223372036854775808` and up), Lua reads it as a float instead, so
-  conversion falls through to the next step.
-- **Otherwise** the token is a `Float`. A value too large is infinity (`1e400`) and a value too
-  small is 0 (`1e-400`). That is not an error in Lua. `from_chars` reports those cases as
-  `errc::result_out_of_range`, but libc++ still stores infinity or 0, so that code is accepted.
-  Tests pin this down in case a library ever behaves differently.
+- `to_integer` handles:
+  - **Hex** (`0xff`): at least one hex digit and nothing else. The value is built in a
+    `std::uint64_t`, which wraps around modulo 2^64, then converted to `std::int64_t`, which keeps
+    the bits: `0xffffffffffffffff` is `-1`.
+  - **Decimal** (`345`): `std::from_chars` must use the whole text. A decimal integer too large
+    for 64 bits fails here, so it becomes a float, as Lua says.
+- `to_float` uses `std::from_chars`, in hex format (without the `0x`) or general format:
+  `0xA23p-4` is 162.1875 and `314.16e-2` is 3.1416. A value too large is infinity (`1e400`), and
+  a value too small is 0 (`1e-400`). That is not an error in Lua. `from_chars` reports those
+  cases as `errc::result_out_of_range`, but libc++ still stores infinity or 0, so that code is
+  accepted. Tests pin this down in case a library ever behaves differently.
+
+`read_number()` tries `to_integer`, then `to_float`. If neither accepts the text, the result is
+`malformed number near '<text>'`. `std::from_chars` ignores the locale, never allocates, and
+reports problems as an error code rather than an exception.
+
+An integer is a numeral with no point and no exponent that fits; anything else that converts is a
+`Float`. In hex, `e` is a digit, so `0x1e` is the integer 30.
 
 Numerals have no sign: `-5` is `Minus` then `Integer 5`. The parser turns that into a negation.
 This is why `-9223372036854775808` is minus a *float*: the integer part alone is too large.
@@ -250,11 +266,7 @@ character. So `\r\n` is one line, but `\n\n` and `\r\r` are two.
 
 ## Not handled yet
 
-In plan order: comments (part 5), hex numbers and malformed numbers (part 7), strings, long
-strings and long comments. Until then:
+In plan order: comments (part 5), strings, long strings and long comments. Until then:
 
 - `-` is always `Minus` (no `--` comments) and `[` is always `LBracket` (no `[[` strings).
 - A quote returns the temporary "not supported yet" error.
-- Numbers stop where a decimal numeral stops, so `0x10` is `Integer 0` then `Name x10`, and `3x`
-  or `1.2.3` are split into several tokens. In Lua those are hex or malformed numbers. Part 7
-  reads numerals greedily, like Lua, and fixes this.

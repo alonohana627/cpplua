@@ -488,3 +488,104 @@ TEST_CASE("L5.3 an exponent without digits is a malformed number", "[lexer][numb
     REQUIRE_FALSE(result.has_value());
     CHECK(result.error().message == "input:1: malformed number near " + std::string(near));
 }
+
+// ---- Part 7: hex numbers and malformed numbers ----
+
+TEST_CASE("L5.5 hex integers", "[lexer][number]") {
+    const auto [source, value] = GENERATE(values<IntegerCase>({
+        {.source = "0x0", .value = 0},
+        {.source = "0xff", .value = 255},
+        {.source = "0XFF", .value = 255},
+        {.source = "0xA", .value = 10},
+        {.source = "0xBEBADA", .value = 0xBEBADA},
+        {.source = "0x1e", .value = 30}, // in hex, e is a digit, not an exponent
+        {.source = "0x00000010", .value = 16},
+        {.source = "0x7fffffffffffffff", .value = INT64_MAX},
+    }));
+    CAPTURE(source);
+
+    const auto token = only_token(source);
+
+    CHECK(token.kind == TokenKind::Integer);
+    CHECK(token.value == lua2::TokenValue{value});
+}
+
+TEST_CASE("L5.8 hex integers wrap around modulo 2^64", "[lexer][number]") {
+    const auto [source, value] = GENERATE(values<IntegerCase>({
+        {.source = "0xffffffffffffffff", .value = -1},
+        {.source = "0x8000000000000000", .value = INT64_MIN},
+        {.source = "0x10000000000000000", .value = 0},
+        {.source = "0x1ffffffffffffffff", .value = -1},
+        {.source = "0x10000000000000001", .value = 1},
+    }));
+    CAPTURE(source);
+
+    const auto token = only_token(source);
+
+    CHECK(token.kind == TokenKind::Integer);
+    CHECK(token.value == lua2::TokenValue{value});
+}
+
+TEST_CASE("L5.5 hex floats", "[lexer][number]") {
+    const auto [source, value] = GENERATE(values<FloatCase>({
+        {.source = "0x0.1E", .value = 0.1171875},
+        {.source = "0xA23p-4", .value = 162.1875},
+        {.source = "0X1.921FB54442D18P+1", .value = 3.141592653589793},
+        {.source = "0x.8", .value = 0.5},
+        {.source = "0x8.", .value = 8.0},
+        {.source = "0x1p4", .value = 16.0},
+        {.source = "0x1P-1", .value = 0.5},
+        {.source = "0x1p+1", .value = 2.0},
+        {.source = "0x10p0", .value = 16.0},
+    }));
+    CAPTURE(source);
+
+    const auto token = only_token(source);
+
+    CHECK(token.kind == TokenKind::Float);
+    CHECK(token.value == lua2::TokenValue{value});
+}
+
+TEST_CASE("L5.9 hex floats out of range are infinity", "[lexer][number]") {
+    CHECK(only_token("0x1p99999").value ==
+          lua2::TokenValue{std::numeric_limits<double>::infinity()});
+}
+
+TEST_CASE("L5.2 L5.3 malformed numbers", "[lexer][number]") {
+    const auto [source, near] = GENERATE(values<std::pair<std::string_view, std::string_view>>({
+        {"3x", "'3x'"},           // a letter touching the number
+        {"3..2", "'3..2'"},       // read whole, then rejected
+        {"1.2.3", "'1.2.3'"},     // two points
+        {"3a", "'3a'"},           // hex digits are read even in a decimal number
+        {"08z", "'08z'"},         //
+        {"2_", "'2_'"},           // '_' counts as a letter
+        {"1.5e2.3", "'1.5e2.3'"}, // a point after the exponent
+        {"0x", "'0x'"},           // no hex digits
+        {"0X", "'0X'"},           //
+        {"0xg", "'0xg'"},         // not a hex digit
+        {"0x.p1", "'0x.p1'"},     // a point but no digits
+        {"0xp1", "'0xp1'"},       // an exponent but no digits
+        {"0x1p", "'0x1p'"},       // exponent without digits
+        {"0x1.2.3", "'0x1.2.3'"}, // two points in hex
+        {"00x1", "'00x'"},        // only a single leading 0 starts hex
+    }));
+    CAPTURE(source);
+
+    Lexer lexer{source, "input"};
+    const auto result = lexer.next();
+
+    REQUIRE_FALSE(result.has_value());
+    CHECK(result.error().message == "input:1: malformed number near " + std::string(near));
+}
+
+TEST_CASE("L5.2 the number ends at the first character that cannot belong", "[lexer][number]") {
+    CHECK(kinds("0x10+1") == std::vector{TokenKind::Integer, TokenKind::Plus, TokenKind::Integer,
+                                         TokenKind::EndOfStream});
+    CHECK(kinds("0x1p4*2") == std::vector{TokenKind::Float, TokenKind::Star, TokenKind::Integer,
+                                          TokenKind::EndOfStream});
+    CHECK(kinds("1e5-2") == // '-' only belongs to a number right after the exponent letter
+          std::vector{TokenKind::Float, TokenKind::Minus, TokenKind::Integer,
+                      TokenKind::EndOfStream});
+    CHECK(kinds("0xff-1") == std::vector{TokenKind::Integer, TokenKind::Minus, TokenKind::Integer,
+                                         TokenKind::EndOfStream});
+}
