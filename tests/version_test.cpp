@@ -2,6 +2,6 @@
 
 #include <lua2/version.hpp>
 
-TEST_CASE("version banner names Lua 5.4") {
-  REQUIRE(lua2::version().starts_with("Lua 5.4"));
+TEST_CASE("version banner carries the project version") {
+  REQUIRE(lua2::version() == "lua2 " LUA2_VERSION);
 }

@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
-project(lua2 VERSION 0.1.0 LANGUAGES CXX)
+# Pre-release: bump by 0.0.1 per step. The release becomes 5.4.
+project(lua2 VERSION 0.0.1 LANGUAGES CXX)
 
 # C++26 (clang spells it -std=c++2c), no compiler extensions.
 set(CMAKE_CXX_STANDARD 26)
@@ -26,6 +27,8 @@ target_include_directories(lua2_lib
   PUBLIC  include
   PRIVATE lib)
 target_link_libraries(lua2_lib PRIVATE lua2_warnings)
+# The single source of the version string is project() above.
+target_compile_definitions(lua2_lib PRIVATE LUA2_VERSION="${PROJECT_VERSION}")
 
 # The command-line front end, built on the public API only.
 add_executable(lua2 src/main.cpp)
@@ -45,6 +48,7 @@ if(BUILD_TESTING)
     tests/version_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
+  target_compile_definitions(lua2_tests PRIVATE LUA2_VERSION="${PROJECT_VERSION}")
 
   include(Catch)
   catch_discover_tests(lua2_tests)
