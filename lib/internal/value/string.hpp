@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <expected>
+#include <span>
 #include <string_view>
 #include <vector>
 
@@ -79,7 +80,7 @@ private:
     mutable bool has_hash_;
 };
 
-// Owns every string, until the garbage collector (stage 9) takes its place:
+// Owns every string, until the garbage collector (stage 5) takes its place:
 // strings live as long as their Heap, and the Heap frees them all when it is
 // destroyed. Short strings are interned: making "abc" twice gives the same
 // String both times (V10.2). Like Lua's string table (lstring.c), they are
@@ -105,6 +106,12 @@ public:
     // before, a new one otherwise.
     const String* new_string(std::string_view bytes);
 
+    // A string holding `parts` one after the other, as Lua's luaV_concat
+    // builds them: a short result is put together in a buffer on the stack
+    // and interned; a long one is written straight into the new string. No
+    // other allocation either way.
+    const String* new_string(std::span<const std::string_view> parts);
+
     [[nodiscard]] std::uint32_t seed() const { return seed_; }
 
     // How many strings the Heap owns, and how many are interned.
@@ -113,7 +120,11 @@ public:
     [[nodiscard]] std::size_t short_string_count() const { return short_count_; }
 
 private:
-    String* allocate(std::string_view bytes, std::uint32_t hash, bool is_short);
+    // A new string of `length` bytes, with its '\0' written; the caller
+    // writes the bytes (through bytes_of()).
+    String* allocate(std::size_t length, std::uint32_t hash, bool is_short);
+    static char* bytes_of(String* s);
+    const String* intern(std::string_view bytes);
     void grow_buckets();
 
     std::uint32_t seed_;
@@ -131,5 +142,12 @@ inline Value Value::string(const String* s) {
 // #s (V9.3, V9.4): a string's length in bytes. Tables join in stage 6; any
 // other value is `attempt to get length of a X value`.
 std::expected<Value, RuntimeError> length(Value value);
+
+// a .. b .. c (V9.1, V9.2): the values joined into one string, numbers
+// written as in V6. `values` holds every operand of a chain of .., in order
+// (Lua concatenates a whole chain at once). Anything but strings and numbers
+// is `attempt to concatenate a X value`, naming the operand Lua's
+// luaV_concat would. A single value is returned as it is.
+std::expected<Value, RuntimeError> concatenate(Heap& heap, std::span<const Value> values);
 
 } // namespace lua2

@@ -78,6 +78,7 @@ if(BUILD_TESTING)
     tests/compare_test.cpp
     tests/string_test.cpp
     tests/convert_test.cpp
+    tests/coerce_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
   # Tests may include internal headers from lib/internal/ to test internals directly.

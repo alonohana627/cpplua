@@ -9,8 +9,9 @@ in [../learn/values.md](../learn/values.md), and the remaining work in
 a string, and knows its Lua type and its truthiness; numbers convert between integer and
 float; the arithmetic, bitwise and comparison operators work with Lua's rules and error
 messages; strings are interned like Lua's and have a length; numbers convert to text like
-Lua's `tostring`, and strings convert to numbers like Lua's `tonumber`. Still to come: the
-coercions that use both directions (part 8) and the conformance sweep (part 9).
+Lua's `tostring`, and strings convert to numbers like Lua's `tonumber`; strings take part in
+arithmetic as Lua's string library makes them, and `..` joins strings and numbers. Still to
+come: the conformance sweep (part 9).
 
 ## Where it lives
 
@@ -37,6 +38,7 @@ coercions that use both directions (part 8) and the conformance sweep (part 9).
 | `tests/compare_test.cpp`         | comparison tests, tagged `[value][compare]`          |
 | `tests/string_test.cpp`          | string tests, tagged `[value][string]`               |
 | `tests/convert_test.cpp`         | conversion tests, tagged `[value][convert]`          |
+| `tests/coerce_test.cpp`          | string arithmetic and `..`, tagged `[value][coerce]` |
 | `tests/value_printer.hpp`        | shows a `Value` in Catch2 failure messages           |
 | `tests/value_test.cpp`           | tests, tagged `[value]`                              |
 
@@ -182,7 +184,7 @@ for division by zero: `nil // 0` complains about `nil`. The message is built by
 operand twice, as Lua does.
 
 `RuntimeError` is only a message for now. Where the error happened is added by the interpreter
-(stage 5), and catching it with `pcall` is stage 10.
+(the VM, stage 5), and catching it with `pcall` is stage 9.
 
 ### The integer versions
 
@@ -347,7 +349,7 @@ is computed the first time `hash()` is called, like Lua's `luaS_hashlongstr`: un
 - **Long strings** are made anew each time, and not hashed yet.
 
 **Ownership.** Every string is on the Heap's `objects_` list, newest first, and `~Heap()` frees
-them all. Until the garbage collector (stage 9) takes the Heap's place, a string lives as long
+them all. Until the garbage collector (stage 5) takes the Heap's place, a string lives as long
 as its Heap. Values only point at strings; they never own them.
 
 **The seed.** `Heap()` picks a random seed with `std::random_device`, so hashes, and later the
@@ -393,7 +395,7 @@ exponent at `1e14` and below `0.0001`, the smallest and largest doubles, 2^53 an
 ## Strings to numbers
 
 `string_to_number(text)` in `convert.hpp` is the number a string holds, or nothing (V5): what
-`"10" + 1` (part 8) and `tonumber("10")` (stage 11) will use. It follows Lua's `luaO_str2num`:
+`"10" + 1` (part 8) and `tonumber("10")` (stage 10) will use. It follows Lua's `luaO_str2num`:
 
 1. Trim spaces at both ends: space, `\t`, `\n`, `\v`, `\f`, `\r` (Lua's `lisspace`). Nothing left
    is no number (V5.1).
@@ -415,3 +417,52 @@ convert (V5.5). The result keeps the subtype it read as (V5.6): `"10"` is an int
 
 The tests use `math.lua`'s `tonumber` cases without a base (about 80 strings, valid and not),
 and check that numbers read back from their own text.
+## Strings in arithmetic
+
+In Lua 5.4, the core arithmetic only works on numbers. `"10" + 1` works because the string
+library gives strings metamethods (`__add` and friends, in `lstrlib.c`) that convert both
+operands and try again. lua2 has no metamethods yet, so the arithmetic functions do the same
+directly, in `not_numbers()` in `arith.cpp`, reached when an operand is not a number:
+
+- If neither operand is a string, it is the core's error:
+  `attempt to perform arithmetic on a nil value` (V3.12).
+- Otherwise, as the string library does: convert each operand (a number stays, a string goes
+  through `string_to_number()`), and run the **same operation again** on the two numbers. Every
+  number rule applies, so `"1" // "0"` is `attempt to divide by zero`, and `"10" + 1` is the
+  integer `11`.
+- If an operand does not convert, the error is the string library's (`trymt`):
+  `attempt to add a 'string' with a 'nil'`, with the metamethod's name (`add`, `sub`, `mul`,
+  `div`, `mod`, `pow`, `idiv`, `unm`) and both operands' type names, in order. Unary minus
+  passes its operand twice, as Lua calls `__unm` with it twice: `-"x"` is
+  `attempt to unm a 'string' with a 'string'`.
+
+When metatables arrive, this becomes the string metatable's methods, and the messages stay the
+same.
+
+## Concatenation
+
+`concatenate(heap, values)` in `string.hpp` is a whole chain `a .. b .. c` at once (V9.1),
+because Lua's `luaV_concat` joins a chain in one go: one string at the end, not one per `..`.
+
+1. One value is returned as it is.
+2. **Errors** (V9.2): if any operand is neither a string nor a number, the error is
+   `attempt to concatenate a X value`. Lua joins from the right and stops at the first pair it
+   cannot join, so it names the rightmost such operand, except that when that operand is last
+   and its left neighbor is wrong too, it names the neighbor (`luaG_concaterror` names the left
+   one of the pair). The tests go through the cases.
+3. Numbers become text with `number_text()` (V6), strings give their bytes: `1 .. 2` is
+   `"12"`, `1.0 .. ""` is `"1.0"`. For chains of up to 8 operands the pieces live in arrays on
+   the stack; longer chains allocate for them.
+4. `heap.new_string(parts)` makes the result like `luaV_concat`: a short result (up to 40
+   bytes) is put together in a buffer on the stack and interned, so it is the same `String` as
+   any equal short string; a long result is allocated once at its final size and the pieces
+   are copied straight into it.
+
+The Heap's string making is split to allow that: `allocate(length, ...)` makes a string of a
+given length (with its `\0`) for the caller to fill, `bytes_of()` gives the place to write, and
+`intern()` finds or makes a short string.
+
+### Memory checked
+
+The concatenation and string arithmetic were run under AddressSanitizer with 3,000 chains of
+up to 20 mixed operands, short and long results, with no errors.

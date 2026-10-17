@@ -155,7 +155,7 @@ What it says:
   slower in three runs out of three.
 - These are loops over arrays, not an interpreter. They say how values should be stored where
   there are many of them (the stack, table arrays), which arrives in stages 5 and 6. They will
-  be measured again there and in the VM (stage 13).
+  be measured again there in the VM (stage 5).
 - An earlier version of this benchmark ran `s = s + 1`, and the compiler turned some of those
   loops into a single multiplication. Micro-benchmarks measure the compiler as much as the
   design.
@@ -233,7 +233,7 @@ flexible array members in the standard (`char bytes[]` is a compiler extension),
 portable form allocates `sizeof(String) + length + 1` bytes and finds the bytes just past the
 header.
 
-**Who owns strings before there is a garbage collector?** The garbage collector is stage 9.
+**Who owns strings before there is a garbage collector?** The garbage collector is stage 5, together with the VM.
 Until then the simplest correct owner is a `Heap` (later the GC) that records every object it
 creates and frees them all when it is destroyed. Values hold plain `String*` pointers, never
 owning ones. That is what the GC will want too: it, not the values, decides when an object
@@ -256,8 +256,8 @@ the test suite depends on it. C++ offers the same format without `printf`:
 
 ## 7. When an operation fails
 
-`1 // 0` and `nil + 1` are runtime errors. The interpreter (stage 5) will run Lua code that runs
-these operations, and `pcall` (stage 10) must be able to catch the error and continue. Two ways
+`1 // 0` and `nil + 1` are runtime errors. The VM (stage 5) will run Lua code that runs
+these operations, and `pcall` (stage 9) must be able to catch the error and continue. Two ways
 to carry the error out of an operation:
 
 - **Return it**: every operation returns `std::expected<Value, RuntimeError>`, the same style as
@@ -275,7 +275,7 @@ Measured (4 million additions, then 4 million integer divisions, error path neve
 No difference worth deciding on. So it is a design question: `std::expected` keeps every error
 path visible in the code and matches the rest of lua2; exceptions make deep interpreter code
 shorter and map directly onto `pcall`. Stage 4 only needs errors to come out of single
-operations, and the roadmap already puts the full answer in stage 10.
+operations, and the roadmap already puts the full answer in stage 9.
 
 ## 8. What this stage builds
 

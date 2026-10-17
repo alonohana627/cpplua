@@ -13,8 +13,8 @@ namespace lua2 {
 // Lua's arithmetic operators (docs/spec/values.md, V3). Each one works on
 // two numbers: integers give an integer result (V3.2) except for / and ^,
 // which always work in floats (V3.3); a float operand makes the operation a
-// float one (V3.4). Anything that is not a number is an error (V3.12).
-// Strings that look like numbers join in part 8.
+// float one (V3.4). Strings that look like numbers take part, the way Lua's
+// string library makes them (V3.11); anything else is an error (V3.12).
 
 using ArithResult = std::expected<Value, RuntimeError>;
 
