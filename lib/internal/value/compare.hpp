@@ -7,7 +7,7 @@
 #include "value/number.hpp"
 #include "value/value.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // Lua's comparison operators (docs/spec/values.md, V7 and V8). Metamethods
 // join in stage 7.
@@ -88,4 +88,4 @@ constexpr bool float_less_equal_int(double f, std::int64_t i) {
     return f < 0;
 }
 
-} // namespace lua2
+} // namespace cpplua

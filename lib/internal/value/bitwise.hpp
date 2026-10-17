@@ -5,7 +5,7 @@
 #include "value/arith.hpp"
 #include "value/value.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // Lua's bitwise operators (docs/spec/values.md, V4). Both operands are
 // converted to integers, only when they are numbers with an exact integer
@@ -64,4 +64,4 @@ constexpr std::int64_t int_shift_right(std::int64_t x, std::int64_t y) {
     return int_shift_left(x, int_negate(y));
 }
 
-} // namespace lua2
+} // namespace cpplua

@@ -7,17 +7,17 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/generators/catch_generators.hpp>
 
-#include <lua2/debug.hpp>
-#include <lua2/source_file.hpp>
+#include <cpplua/debug.hpp>
+#include <cpplua/source_file.hpp>
 
 #include "lexer/lexer.hpp"
 
 // Runs against the official Lua test suite in tests/fixtures/. CMake passes
-// its location as LUA2_FIXTURES_DIR.
+// its location as CPPLUA_FIXTURES_DIR.
 
 namespace {
 
-const std::filesystem::path suite = LUA2_FIXTURES_DIR "/lua-5.4.9-tests";
+const std::filesystem::path suite = CPPLUA_FIXTURES_DIR "/lua-5.4.9-tests";
 
 std::vector<std::filesystem::path> lua_files() {
     std::vector<std::filesystem::path> files;
@@ -60,7 +60,7 @@ TEST_CASE("every file of the Lua 5.4.9 test suite lexes", "[conformance]") {
         const std::string name = path.filename().string();
         CAPTURE(name);
         const std::string source = read_bytes(path);
-        lua2::Lexer lexer{source, name};
+        cpplua::Lexer lexer{source, name};
 
         int last_line = 0;
         for (;;) {
@@ -68,7 +68,7 @@ TEST_CASE("every file of the Lua 5.4.9 test suite lexes", "[conformance]") {
             if (!token) {
                 FAIL(token.error().message);
             }
-            if (token->kind == lua2::TokenKind::EndOfStream) {
+            if (token->kind == cpplua::TokenKind::EndOfStream) {
                 last_line = token->line;
                 break;
             }
@@ -84,7 +84,7 @@ namespace {
 // main.lua start with a '#' line, which only the file loader skips.
 std::string parsed_tree(const std::filesystem::path& path) {
     const std::string source = read_bytes(path);
-    const auto tree = lua2::ast_dump(lua2::skip_file_prefix(source), path.filename().string());
+    const auto tree = cpplua::ast_dump(cpplua::skip_file_prefix(source), path.filename().string());
     if (!tree) {
         FAIL(tree.error());
     }
@@ -110,7 +110,7 @@ TEST_CASE("every file of the Lua 5.4.9 test suite compiles", "[conformance][vm]"
         const std::string name = path.filename().string();
         CAPTURE(name);
         const std::string source = read_bytes(path);
-        const auto listing = lua2::bytecode_dump(lua2::skip_file_prefix(source), name);
+        const auto listing = cpplua::bytecode_dump(cpplua::skip_file_prefix(source), name);
         REQUIRE(listing.has_value());
         CHECK(listing->starts_with("\nmain <" + name + ":0,0>"));
     }
@@ -188,10 +188,10 @@ TEST_CASE("errors.lua: 100 levels of nesting load, 500 do not", "[conformance]")
     }));
     CAPTURE(rep);
 
-    const auto ok = lua2::ast_dump(repeated(init, rep, close, repc, 100));
+    const auto ok = cpplua::ast_dump(repeated(init, rep, close, repc, 100));
     CHECK(ok.has_value());
 
-    const auto too_deep = lua2::ast_dump(repeated(init, rep, close, repc, 500));
+    const auto too_deep = cpplua::ast_dump(repeated(init, rep, close, repc, 500));
     REQUIRE_FALSE(too_deep.has_value());
     CHECK((too_deep.error().contains("too many") || too_deep.error().contains("overflow")));
 }

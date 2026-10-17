@@ -1,7 +1,7 @@
 ---@meta
 
 -- The base library's functions are implemented in C++ in lib/std/base.cpp.
--- This file is a reference only (for readers and lua-language-server); lua2 never runs it.
+-- This file is a reference only (for readers and lua-language-server); cpplua never runs it.
 
 ---A global variable holding the global environment. Lua itself does not use it;
 ---changing its value does not change any environment.
@@ -108,7 +108,7 @@ function pairs(t) end
 function pcall(f, ...) end
 
 ---Writes its arguments to the standard output, converted with `tostring`, separated by tabs
----and followed by a newline. In lua2 the text goes through the interpreter's output function.
+---and followed by a newline. In cpplua the text goes through the interpreter's output function.
 ---@param ... any
 function print(...) end
 

@@ -10,7 +10,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <lua2/interpreter.hpp>
+#include <cpplua/interpreter.hpp>
 
 // The standard library (stage 9) against the rules of docs/spec/stdlib.md.
 // The my_lua programs in tests/fixtures/my_lua/stdlib/ check most of the
@@ -19,7 +19,7 @@
 
 namespace {
 
-std::string run(lua2::Interpreter& interpreter, std::string_view source) {
+std::string run(cpplua::Interpreter& interpreter, std::string_view source) {
     const auto results = interpreter.run(source, "input");
     if (!results) {
         return results.error();
@@ -35,7 +35,7 @@ std::string run(lua2::Interpreter& interpreter, std::string_view source) {
 }
 
 std::string run(std::string_view source) {
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     return run(interpreter, source);
 }
 
@@ -49,7 +49,7 @@ constexpr bool text_mode_newlines = false;
 
 // A fresh empty folder under the system's temporary folder.
 std::filesystem::path temp_folder(std::string_view name) {
-    auto folder = std::filesystem::temp_directory_path() / "lua2_stdlib_test" / name;
+    auto folder = std::filesystem::temp_directory_path() / "cpplua_stdlib_test" / name;
     std::filesystem::remove_all(folder);
     std::filesystem::create_directories(folder);
     return folder;
@@ -85,7 +85,7 @@ TEST_CASE("S1.2 the reference files in std/ declare exactly the C++ functions", 
     std::set<std::string> declared;
     const std::regex function_line{R"(^function ([A-Za-z_][\w.:]*)\()"};
     const std::regex field_line{R"(^([A-Za-z_][\w.]*) = )"};
-    for (const auto& entry : std::filesystem::directory_iterator{LUA2_SOURCE_DIR "/std"}) {
+    for (const auto& entry : std::filesystem::directory_iterator{CPPLUA_SOURCE_DIR "/std"}) {
         if (entry.path().extension() != ".lua") {
             continue;
         }
@@ -145,7 +145,7 @@ TEST_CASE("S4.1 math.random gives the real Lua's numbers for a seed", "[stdlib]"
 TEST_CASE("S6.1 files: write, read back by every format, seek, lines", "[stdlib]") {
     const auto folder = temp_folder("io");
     const std::string path = lua_string(folder / "data.txt");
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     CHECK(run(interpreter, "local f = assert(io.open(" + path +
                                ", 'w')) f:write('12 3.5 0x10\\n', 'line two\\n', 42, ' ', 1.5, "
                                "'\\nlast') return f:close()") == "true");
@@ -176,7 +176,7 @@ TEST_CASE("S6.1 files: write, read back by every format, seek, lines", "[stdlib]
 
 TEST_CASE("S6.2 the standard streams write through the interpreter's output", "[stdlib]") {
     std::string out;
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     interpreter.set_output([&out](std::string_view text) { out += text; });
     CHECK(run(interpreter, "io.write('a', 1, 2.0, '\\n') io.stdout:write('b') "
                            "return io.type(io.stdout), io.stdout:close()") ==
@@ -187,7 +187,7 @@ TEST_CASE("S6.2 the standard streams write through the interpreter's output", "[
 TEST_CASE("S6.3 io.input and io.output change the default files", "[stdlib]") {
     const auto folder = temp_folder("default");
     const std::string path = lua_string(folder / "out.txt");
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     CHECK(run(interpreter,
               std::format("local old = io.output() io.output({0}) io.write('x', 'y') "
                           "io.close() io.output(old) io.input({0}) local s = io.read('a') "
@@ -213,7 +213,7 @@ TEST_CASE("S7.2 os.remove, os.rename and os.getenv", "[stdlib]") {
     CHECK(run(std::format("return os.rename({0}, {1}), io.open({0}) == nil, os.remove({1})", a,
                           b)) == "true,true,true");
     CHECK(run("return os.remove(" + b + ")").ends_with("b.txt: No such file or directory,2"));
-    CHECK(run("return os.getenv('LUA2_SURELY_NOT_SET_VARIABLE')") == "nil");
+    CHECK(run("return os.getenv('CPPLUA_SURELY_NOT_SET_VARIABLE')") == "nil");
     CHECK(run("local name = os.tmpname() local f = io.open(name) local ok = f ~= nil "
               "f:close() return ok, os.remove(name)") == "true,true");
 }
@@ -269,7 +269,7 @@ TEST_CASE("S9.1 require loads Lua modules once, from package.path", "[stdlib]") 
     write_file(folder / "pkg" / "init.lua", "return 'package init'\n");
     write_file(folder / "nothing.lua", "loaded_nothing = true\n");
     write_file(folder / "broken.lua", "return +\n");
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     const std::string dir = folder.generic_string();
     run(interpreter, "package.path = '" + dir + "/?.lua;" + dir + "/?/init.lua'");
     CHECK(run(interpreter, "local m = require('counter') return m.name, m.file, count") ==
@@ -288,7 +288,7 @@ TEST_CASE("S9.1 require loads Lua modules once, from package.path", "[stdlib]") 
               "return require('virtual')") == "virtual:preload:,:preload:");
 }
 
-TEST_CASE("S9.2 lua2 loads no C libraries", "[stdlib]") {
+TEST_CASE("S9.2 cpplua loads no C libraries", "[stdlib]") {
     CHECK(run("return package.loadlib('x.dll', 'f')") ==
           "nil,dynamic libraries not enabled; check your Lua installation,absent");
     const auto folder = temp_folder("clib");
@@ -305,7 +305,7 @@ TEST_CASE("S9.2 lua2 loads no C libraries", "[stdlib]") {
 
 TEST_CASE("S10.1 warn writes only when switched on", "[stdlib]") {
     std::string out;
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     interpreter.set_error_output([&out](std::string_view text) { out += text; });
     run(interpreter, "warn('not shown') warn('@on') warn('shown ', 'in ', 'parts') warn('@off') "
                      "warn('hidden')");

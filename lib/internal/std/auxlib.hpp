@@ -10,7 +10,7 @@
 #include "vm/execute.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 class Table;
 
@@ -150,4 +150,4 @@ struct FunctionName {
 [[nodiscard]] std::string traceback(const State& state, std::optional<std::string_view> message,
                                     int level);
 
-} // namespace lua2
+} // namespace cpplua

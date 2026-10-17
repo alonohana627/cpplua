@@ -2,7 +2,7 @@
 
 #include "gc/heap.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // The libraries of the standard library (docs/final_docs/stdlib.md), all in
 // C++. Each open_ function makes its library a global and a loaded module
@@ -20,4 +20,4 @@ void open_debug(Heap& heap);
 
 void open_libraries(Heap& heap);
 
-} // namespace lua2
+} // namespace cpplua

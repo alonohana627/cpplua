@@ -23,7 +23,7 @@
 #include "vm/proto.hpp"
 #include "vm/run.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 const Proto& frame_proto(const State& state, const CallInfo* frame) {
     return *std::bit_cast<const LuaClosure*>(state.stack_values[frame->func])->proto;
@@ -476,7 +476,7 @@ std::optional<std::string> global_function_name(const State& state, Value functi
     // pushglobalfuncname: findfield over the loaded modules, two levels
     // deep, "_G." dropped. Lua takes the first name its traversal finds,
     // so a function with two names (math.atan and math.atan2) gets either;
-    // lua2 takes the shortest, then the first in order, every time.
+    // cpplua takes the shortest, then the first in order, every time.
     std::optional<std::string> best;
     const auto consider = [&best](std::string name) {
         if (name.starts_with("_G.")) {
@@ -568,4 +568,4 @@ std::string traceback(const State& state, std::optional<std::string_view> messag
     return out;
 }
 
-} // namespace lua2
+} // namespace cpplua

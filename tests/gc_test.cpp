@@ -19,10 +19,10 @@
 // run under GC stress ([my_lua][gc]); these tests check the collector's own
 // promises directly.
 
-using lua2::GcMode;
-using lua2::GcStress;
-using lua2::Heap;
-using lua2::Value;
+using cpplua::GcMode;
+using cpplua::GcStress;
+using cpplua::Heap;
+using cpplua::Value;
 
 namespace {
 
@@ -30,17 +30,17 @@ constexpr std::uint32_t test_seed = 1;
 
 // Runs a chunk and returns its first result as text, or the error.
 std::string first_result(Heap& heap, std::string_view source) {
-    const auto results = lua2::run(heap.main_thread(), source, "test");
+    const auto results = cpplua::run(heap.main_thread(), source, "test");
     if (!results) {
         return results.error();
     }
-    return results->empty() ? std::string{"(none)"} : lua2::display_text(results->front());
+    return results->empty() ? std::string{"(none)"} : cpplua::display_text(results->front());
 }
 
 } // namespace
 
 TEST_CASE("the pool hands out distinct 16-byte aligned blocks and reuses freed ones", "[gc]") {
-    lua2::Pool pool;
+    cpplua::Pool pool;
     void* a = pool.allocate(24);
     void* b = pool.allocate(24);
     void* big = pool.allocate(5000); // past the pooled sizes: from operator new
@@ -63,7 +63,7 @@ TEST_CASE("E9.1 unreachable strings are collected, reachable ones are not", "[gc
     for (int i = 0; i < 1000; ++i) {
         heap.new_string("garbage " + std::to_string(i)); // anchored nowhere
     }
-    const lua2::String* kept = heap.new_string("kept on the stack");
+    const cpplua::String* kept = heap.new_string("kept on the stack");
     heap.main_thread().push(Value::string(kept));
     CHECK(heap.string_count() == before + 1001);
 
@@ -89,7 +89,7 @@ TEST_CASE("E9.1 the string table forgets dead strings and shrinks", "[gc]") {
     heap.collect();
     CHECK(heap.short_string_count() == own);
     // New strings still intern correctly after the table shrank.
-    const lua2::String* a = heap.new_string("again");
+    const cpplua::String* a = heap.new_string("again");
     CHECK(heap.new_string("again") == a);
 }
 
@@ -106,7 +106,7 @@ TEST_CASE("E9.1 closures, upvalues and protos die with the last reference", "[gc
 
 TEST_CASE("E9.2 fixed objects survive every collection", "[gc]") {
     Heap heap{test_seed};
-    const lua2::String* fixed = heap.new_string("a fixed string");
+    const cpplua::String* fixed = heap.new_string("a fixed string");
     heap.fix(fixed);
     heap.collect();
     heap.collect();

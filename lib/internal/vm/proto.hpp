@@ -10,7 +10,7 @@
 #include "value/value.hpp"
 #include "vm/opcodes.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // What the compiler makes of one function (Lua's Proto): its code and what
 // the code refers to. Running it needs a closure (vm/function.hpp), which
@@ -69,4 +69,4 @@ std::string list_proto(const Proto& proto);
 // file.lua, "=stdin" is stdin, and source text is [string "first line..."].
 std::string chunk_id(std::string_view source);
 
-} // namespace lua2
+} // namespace cpplua

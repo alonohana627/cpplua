@@ -8,7 +8,7 @@
 
 #include "value/convert.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -339,4 +339,4 @@ std::string chunk_id(std::string_view source) {
     return out;
 }
 
-} // namespace lua2
+} // namespace cpplua

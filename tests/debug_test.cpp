@@ -2,9 +2,9 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <lua2/debug.hpp>
+#include <cpplua/debug.hpp>
 
-using lua2::token_dump;
+using cpplua::token_dump;
 
 TEST_CASE("token_dump lists one token per line", "[debug]") {
     const auto dump = token_dump("local x = 1");
@@ -49,21 +49,21 @@ TEST_CASE("token_dump returns the lexer's error", "[debug]") {
 }
 
 TEST_CASE("ast_dump prints the tree", "[debug]") {
-    const auto dump = lua2::ast_dump("-- nothing yet");
+    const auto dump = cpplua::ast_dump("-- nothing yet");
 
     REQUIRE(dump.has_value());
     CHECK(*dump == "Chunk\n");
 }
 
 TEST_CASE("ast_dump returns the parser's error", "[debug]") {
-    const auto dump = lua2::ast_dump("x", "test.lua");
+    const auto dump = cpplua::ast_dump("x", "test.lua");
 
     REQUIRE_FALSE(dump.has_value());
     CHECK(dump.error() == "test.lua:1: syntax error near <eof>");
 }
 
 TEST_CASE("ast_dot_dump draws the tree as a DOT graph", "[debug]") {
-    const auto dump = lua2::ast_dot_dump(R"(return 1, "a\\b")");
+    const auto dump = cpplua::ast_dot_dump(R"(return 1, "a\\b")");
 
     REQUIRE(dump.has_value());
     CHECK(*dump == "digraph ast {\n"
@@ -81,7 +81,7 @@ TEST_CASE("ast_dot_dump draws the tree as a DOT graph", "[debug]") {
 }
 
 TEST_CASE("ast_dot_dump returns the parser's error", "[debug]") {
-    const auto dump = lua2::ast_dot_dump("x", "test.lua");
+    const auto dump = cpplua::ast_dot_dump("x", "test.lua");
 
     REQUIRE_FALSE(dump.has_value());
     CHECK(dump.error() == "test.lua:1: syntax error near <eof>");

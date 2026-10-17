@@ -8,7 +8,7 @@
 #include "gc/object.hpp"
 #include "value/value.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 class Table;
 
@@ -80,4 +80,4 @@ inline Value Value::userdata(const Userdata* u) {
     return Value{Tag::Userdata, std::bit_cast<std::uint64_t>(u)};
 }
 
-} // namespace lua2
+} // namespace cpplua

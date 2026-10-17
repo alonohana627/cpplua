@@ -12,8 +12,8 @@
 #include "value/value.hpp"
 #include "value_printer.hpp"
 
-using lua2::Heap;
-using lua2::Value;
+using cpplua::Heap;
+using cpplua::Value;
 using namespace std::string_view_literals;
 
 namespace {
@@ -22,13 +22,13 @@ namespace {
 constexpr std::uint32_t test_seed = 12345;
 
 bool lt(Value a, Value b) {
-    const auto result = lua2::less_than(a, b);
+    const auto result = cpplua::less_than(a, b);
     REQUIRE(result.has_value());
     return *result;
 }
 
 bool le(Value a, Value b) {
-    const auto result = lua2::less_equal(a, b);
+    const auto result = cpplua::less_equal(a, b);
     REQUIRE(result.has_value());
     return *result;
 }
@@ -65,11 +65,11 @@ TEST_CASE("V10.2 short strings are interned, long ones are not", "[value][string
     // The heap's own strings ("__index" and the other metamethod names).
     const std::size_t own = heap.string_count();
     const std::size_t own_short = heap.short_string_count();
-    const std::string short_bytes(lua2::max_short_length, 'x');
-    const std::string long_bytes(lua2::max_short_length + 1, 'x');
+    const std::string short_bytes(cpplua::max_short_length, 'x');
+    const std::string long_bytes(cpplua::max_short_length + 1, 'x');
 
     const auto* a = heap.new_string(short_bytes);
-    const std::string copy(lua2::max_short_length, 'x'); // other memory, same bytes
+    const std::string copy(cpplua::max_short_length, 'x'); // other memory, same bytes
     const auto* b = heap.new_string(copy);
     CHECK(a == b);
     CHECK(a->is_short());
@@ -93,7 +93,7 @@ TEST_CASE("V10.2 interning survives the table growing", "[value][string]") {
     const std::size_t own = heap.string_count(); // the heap's own strings
     // Far more strings than the 128 first buckets, so the table doubles
     // several times.
-    std::vector<const lua2::String*> made;
+    std::vector<const cpplua::String*> made;
     made.reserve(5000);
     for (int n = 0; n < 5000; ++n) {
         made.push_back(heap.new_string(std::to_string(n)));
@@ -106,14 +106,14 @@ TEST_CASE("V10.2 interning survives the table growing", "[value][string]") {
 }
 
 TEST_CASE("V10.3 Lua's hash function", "[value][string]") {
-    STATIC_REQUIRE(lua2::string_hash("", 0) == 0);
+    STATIC_REQUIRE(cpplua::string_hash("", 0) == 0);
     // seed ^ length, then one step for the single byte 'a' (97).
-    STATIC_REQUIRE(lua2::string_hash("a", 0) == (1U ^ ((1U << 5U) + (1U >> 2U) + 97U)));
+    STATIC_REQUIRE(cpplua::string_hash("a", 0) == (1U ^ ((1U << 5U) + (1U >> 2U) + 97U)));
 
     for (const std::string_view s : {""sv, "a"sv, "hello"sv, "a\0b\xff"sv, "name"sv}) {
         CAPTURE(s);
-        CHECK(lua2::string_hash(s, test_seed) == reference_hash(s, test_seed));
-        CHECK(lua2::string_hash(s, 0xdeadbeef) == reference_hash(s, 0xdeadbeef));
+        CHECK(cpplua::string_hash(s, test_seed) == reference_hash(s, test_seed));
+        CHECK(cpplua::string_hash(s, 0xdeadbeef) == reference_hash(s, 0xdeadbeef));
     }
 
     Heap heap{test_seed};
@@ -133,15 +133,15 @@ TEST_CASE("V10.3 the seed changes the hashes", "[value][string]") {
 TEST_CASE("V1.1 strings are values of type string", "[value][string]") {
     Heap heap{test_seed};
     const Value s = Value::string(heap.new_string("hi"));
-    CHECK(s.type() == lua2::Type::String);
+    CHECK(s.type() == cpplua::Type::String);
     CHECK(s.is_string());
-    CHECK(s.tag() == lua2::Tag::ShortString);
+    CHECK(s.tag() == cpplua::Tag::ShortString);
     CHECK(s.is_truthy());
     CHECK(s.as_string()->view() == "hi");
-    CHECK(Value::string(heap.new_string(std::string(50, 'a'))).tag() == lua2::Tag::LongString);
+    CHECK(Value::string(heap.new_string(std::string(50, 'a'))).tag() == cpplua::Tag::LongString);
     // Even "" is truthy.
     CHECK(Value::string(heap.new_string("")).is_truthy());
-    CHECK(lua2::debug_text(Value::string(heap.new_string("a\n"))) == "\"a\\n\"");
+    CHECK(cpplua::debug_text(Value::string(heap.new_string("a\n"))) == "\"a\\n\"");
     // A string rebuilt from its parts is the same string.
     CHECK(Value::from_parts(s.tag(), s.payload()).as_string() == s.as_string());
 }
@@ -149,18 +149,18 @@ TEST_CASE("V1.1 strings are values of type string", "[value][string]") {
 TEST_CASE("V7.4 strings are equal when their bytes are", "[value][string]") {
     Heap heap{test_seed};
     const auto str = [&](std::string_view bytes) { return Value::string(heap.new_string(bytes)); };
-    CHECK(lua2::equals(str("abc"), str("abc")));
-    CHECK_FALSE(lua2::equals(str("abc"), str("abd")));
-    CHECK_FALSE(lua2::equals(str("a"), str("a\0"sv)));
+    CHECK(cpplua::equals(str("abc"), str("abc")));
+    CHECK_FALSE(cpplua::equals(str("abc"), str("abd")));
+    CHECK_FALSE(cpplua::equals(str("a"), str("a\0"sv)));
 
     // Long strings are separate objects, compared by their bytes.
     const std::string long_bytes(60, 'q');
-    CHECK(lua2::equals(str(long_bytes), str(long_bytes)));
-    CHECK_FALSE(lua2::equals(str(long_bytes), str(long_bytes + "r")));
-    CHECK_FALSE(lua2::equals(str(std::string(41, 'a')), str(std::string(40, 'a'))));
+    CHECK(cpplua::equals(str(long_bytes), str(long_bytes)));
+    CHECK_FALSE(cpplua::equals(str(long_bytes), str(long_bytes + "r")));
+    CHECK_FALSE(cpplua::equals(str(std::string(41, 'a')), str(std::string(40, 'a'))));
 
     // V7.1: strings never equal numbers.
-    CHECK_FALSE(lua2::equals(str("1"), Value::integer(1)));
+    CHECK_FALSE(cpplua::equals(str("1"), Value::integer(1)));
 }
 
 TEST_CASE("V8.4 strings order byte by byte", "[value][string]") {
@@ -186,16 +186,16 @@ TEST_CASE("V8.4 strings order byte by byte", "[value][string]") {
 TEST_CASE("V8.5 strings and numbers do not order", "[value][string]") {
     Heap heap{test_seed};
     const Value two = Value::string(heap.new_string("2"));
-    const auto result = lua2::less_than(Value::integer(1), two);
+    const auto result = cpplua::less_than(Value::integer(1), two);
     REQUIRE_FALSE(result.has_value());
     CHECK(result.error().message == "attempt to compare number with string");
-    CHECK(lua2::less_equal(two, two).has_value());
+    CHECK(cpplua::less_equal(two, two).has_value());
 }
 
 TEST_CASE("V9.3 the length of a string is its byte count", "[value][string]") {
     Heap heap{test_seed};
     const auto len = [&](std::string_view bytes) {
-        const auto result = lua2::length(Value::string(heap.new_string(bytes)));
+        const auto result = cpplua::length(Value::string(heap.new_string(bytes)));
         REQUIRE(result.has_value());
         return result->as_integer();
     };
@@ -206,14 +206,14 @@ TEST_CASE("V9.3 the length of a string is its byte count", "[value][string]") {
 }
 
 TEST_CASE("V9.4 other values have no length (yet)", "[value][string]") {
-    CHECK(lua2::length(Value::nil()).error().message == "attempt to get length of a nil value");
-    CHECK(lua2::length(Value::integer(3)).error().message ==
+    CHECK(cpplua::length(Value::nil()).error().message == "attempt to get length of a nil value");
+    CHECK(cpplua::length(Value::integer(3)).error().message ==
           "attempt to get length of a number value");
 }
 
 TEST_CASE("V4.3 bitwise operations do not convert strings", "[value][string]") {
     Heap heap{test_seed};
-    const auto result = lua2::bit_and(Value::string(heap.new_string("3")), Value::integer(1));
+    const auto result = cpplua::bit_and(Value::string(heap.new_string("3")), Value::integer(1));
     REQUIRE_FALSE(result.has_value());
     CHECK(result.error().message == "attempt to perform bitwise operation on a string value");
 }

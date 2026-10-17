@@ -1,7 +1,7 @@
 ---@meta
 
 -- The string library's functions are implemented in C++ in lib/std/string.cpp.
--- This file is a reference only (for readers and lua-language-server); lua2 never runs it.
+-- This file is a reference only (for readers and lua-language-server); cpplua never runs it.
 
 ---The string library. Strings have it as their metatable's `__index`,
 ---so `s:upper()` means `string.upper(s)`. Indices may be negative (counting from the end).
@@ -22,7 +22,7 @@ function string.byte(s, i, j) end
 function string.char(...) end
 
 ---Returns a binary chunk of Lua function `f`, for `load` to load again. It is in Lua 5.4's own
----format, byte for byte, so luac output loads in lua2 and lua2's dumps load in Lua 5.4. With
+---format, byte for byte, so luac output loads in cpplua and cpplua's dumps load in Lua 5.4. With
 ---`strip` true, the debug information (lines, local and upvalue names, source) is left out.
 ---The upvalues are not saved: the loaded function gets fresh ones. A C++ function cannot be
 ---dumped ("unable to dump given function").

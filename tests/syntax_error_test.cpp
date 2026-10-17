@@ -4,8 +4,8 @@
 
 #include "syntax_error.hpp"
 
-using lua2::make_syntax_error;
-using lua2::near_char;
+using cpplua::make_syntax_error;
+using cpplua::near_char;
 
 TEST_CASE("L10.1 a syntax error reads chunk:line: message near token", "[syntax-error]") {
     const auto error = make_syntax_error("input", 3, "unexpected symbol", "'@'");
@@ -15,7 +15,7 @@ TEST_CASE("L10.1 a syntax error reads chunk:line: message near token", "[syntax-
 }
 
 TEST_CASE("L10.2 end of input is shown as <eof> without quotes", "[syntax-error]") {
-    const auto error = make_syntax_error("test.lua", 12, "unfinished string", lua2::near_eof);
+    const auto error = make_syntax_error("test.lua", 12, "unfinished string", cpplua::near_eof);
 
     CHECK(error.message == "test.lua:12: unfinished string near <eof>");
 }
@@ -29,8 +29,8 @@ TEST_CASE("a syntax error records the C++ location that created it", "[syntax-er
 }
 
 TEST_CASE("L10.2 text read so far is shown in quotes", "[syntax-error]") {
-    CHECK(lua2::near_text("1e+") == "'1e+'");
-    CHECK(lua2::near_text("") == "''");
+    CHECK(cpplua::near_text("1e+") == "'1e+'");
+    CHECK(cpplua::near_text("") == "''");
 }
 
 TEST_CASE("L10.2 a printable byte is shown in quotes", "[syntax-error]") {

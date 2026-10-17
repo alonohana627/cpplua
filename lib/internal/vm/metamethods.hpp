@@ -6,7 +6,7 @@
 
 #include "value/value.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 class Heap;
 class Table;
@@ -74,4 +74,4 @@ Value metafield(Heap& heap, Value v, std::string_view name);
 // when it is a string, else the type's name (M3.7).
 std::string_view object_type_name(const Heap& heap, Value v);
 
-} // namespace lua2
+} // namespace cpplua

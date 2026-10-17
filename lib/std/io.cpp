@@ -33,7 +33,7 @@
 #include "vm/function.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -48,7 +48,7 @@ enum class Closer : std::uint8_t { Closed, File, Standard };
 enum class Standard : std::uint8_t { None, Input, Output, Error };
 
 struct Stream {
-    std::unique_ptr<std::filebuf> file; // a file lua2 opened
+    std::unique_ptr<std::filebuf> file; // a file cpplua opened
     std::streambuf* buffer = nullptr;   // where reads and writes go
     Standard standard = Standard::None;
     Closer closer = Closer::Closed;
@@ -265,7 +265,7 @@ std::streambuf* read_buffer(const Stream& s) {
 
 // Reads a stream's characters (getc, ungetc). A file opened in text mode
 // on Windows reads "\r\n" as "\n", as the C library's text files do there
-// (lua2 opens every file in binary mode, so positions are the file's
+// (cpplua opens every file in binary mode, so positions are the file's
 // bytes, as ftell gives them).
 class Reader {
 public:
@@ -633,7 +633,7 @@ int io_tmpfile(State& state) {
     const auto stamp = std::bit_cast<std::uintptr_t>(s);
     constexpr auto mode = std::ios::in | std::ios::out | std::ios::trunc | std::ios::binary;
     for (int attempt = 0; attempt < 100; ++attempt) {
-        const auto path = folder / std::format("lua2_{:x}_{:x}.tmp", stamp, ++counter);
+        const auto path = folder / std::format("cpplua_{:x}_{:x}.tmp", stamp, ++counter);
         if (std::filesystem::exists(path, ec)) {
             continue;
         }
@@ -944,4 +944,4 @@ void open_io(Heap& heap) {
     standard_file(heap, *library, Standard::Error, std::cerr.rdbuf(), nullptr, "stderr");
 }
 
-} // namespace lua2
+} // namespace cpplua

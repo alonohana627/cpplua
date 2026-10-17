@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+
+# cpplua::cpplua, the static library with include/cpplua/ on its include
+# path. It is built with clang and libc++: link it from the same toolchain.
+include(${CMAKE_CURRENT_LIST_DIR}/cppluaTargets.cmake)
+
+check_required_components(cpplua)

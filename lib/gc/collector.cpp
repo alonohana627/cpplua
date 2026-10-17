@@ -19,7 +19,7 @@
 #include "vm/proto.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -1095,9 +1095,9 @@ void Heap::set_stress(GcStress stress) {
     }
 }
 
-} // namespace lua2
+} // namespace cpplua
 
-namespace lua2 {
+namespace cpplua {
 
 // ---- Finalizers ----
 
@@ -1271,4 +1271,4 @@ void Heap::close() {
     call_all_pending_finalizers();
 }
 
-} // namespace lua2
+} // namespace cpplua

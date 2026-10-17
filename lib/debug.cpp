@@ -3,7 +3,7 @@
 #include <string>
 #include <variant>
 
-#include <lua2/debug.hpp>
+#include <cpplua/debug.hpp>
 
 #include "gc/heap.hpp"
 #include "lexer/lexer.hpp"
@@ -14,7 +14,7 @@
 #include "vm/compiler.hpp"
 #include "vm/proto.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -92,4 +92,4 @@ std::expected<std::string, std::string> bytecode_dump(std::string_view source,
     return list_proto(**proto);
 }
 
-} // namespace lua2
+} // namespace cpplua

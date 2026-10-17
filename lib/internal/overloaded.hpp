@@ -1,6 +1,6 @@
 #pragma once
 
-namespace lua2 {
+namespace cpplua {
 
 // Builds one callable out of several lambdas, for std::visit:
 //
@@ -16,4 +16,4 @@ struct Overloaded : Lambdas... { // NOLINT(misc-multiple-inheritance): the point
     using Lambdas::operator()...;
 };
 
-} // namespace lua2
+} // namespace cpplua

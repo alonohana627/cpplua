@@ -434,7 +434,7 @@ main <os_time_date.lua:0,0> (467 instructions)
 	431	[56]	GETTABUP 	3 0 9	; _ENV "print"
 	432	[56]	GETTABUP 	4 0 0	; _ENV "os"
 	433	[56]	GETFIELD 	4 4 54	; "getenv"
-	434	[56]	LOADK    	5 55	; "LUA2_SURELY_UNDEFINED_VARIABLE_12345"
+	434	[56]	LOADK    	5 55	; "CPPLUA_SURELY_UNDEFINED_VARIABLE_12345"
 	435	[56]	CALL     	4 2 2	; 1 in 1 out
 	436	[56]	GETTABUP 	5 0 28	; _ENV "pcall"
 	437	[56]	GETTABUP 	6 0 0	; _ENV "os"
@@ -524,7 +524,7 @@ constants (57):
 	52	S	"difftime"
 	53	S	"clock"
 	54	S	"getenv"
-	55	S	"LUA2_SURELY_UNDEFINED_VARIABLE_12345"
+	55	S	"CPPLUA_SURELY_UNDEFINED_VARIABLE_12345"
 	56	I	2000
 locals (3):
 	0	base	11	468

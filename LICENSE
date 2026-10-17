@@ -23,7 +23,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -------------------------------------------------------------------------
 
-lua2 is a reimplementation of Lua, and the reference sources vendored in
+cpplua is a reimplementation of Lua, and the reference sources vendored in
 original_lua_src/ are Lua itself, distributed under the same license:
 
 Copyright (C) 1994-2026 Lua.org, PUC-Rio.

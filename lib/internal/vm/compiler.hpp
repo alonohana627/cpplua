@@ -8,7 +8,7 @@
 #include "syntax_error.hpp"
 #include "vm/proto.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // Compiles a parsed chunk to bytecode (docs/plan/vm.md): the prototype of
 // its main function, with every function inside it.
@@ -27,4 +27,4 @@ namespace lua2 {
 std::expected<Proto*, SyntaxError> compile(Heap& heap, const Ast& ast, std::string_view source,
                                            std::string_view chunk_name);
 
-} // namespace lua2
+} // namespace cpplua

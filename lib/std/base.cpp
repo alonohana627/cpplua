@@ -22,7 +22,7 @@
 #include "vm/run.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -709,4 +709,4 @@ void open_base(Heap& heap) {
           Value::string(heap.new_string("Lua 5.4")));
 }
 
-} // namespace lua2
+} // namespace cpplua

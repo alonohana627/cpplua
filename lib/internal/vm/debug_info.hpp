@@ -5,7 +5,7 @@
 
 #include "vm/proto.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // What runtime error messages say about where a value came from (E8.2),
 // found by looking at the bytecode the way Lua's ldebug.c does.
@@ -47,4 +47,4 @@ std::string format_name(NameInfo found);
 // (funcnamefromcode), or "".
 std::string called_info(const Proto& proto, int pc);
 
-} // namespace lua2
+} // namespace cpplua

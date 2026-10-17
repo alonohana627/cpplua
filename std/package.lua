@@ -1,10 +1,10 @@
 ---@meta
 
 -- The package library's functions are implemented in C++ in lib/std/package.cpp.
--- This file is a reference only (for readers and lua-language-server); lua2 never runs it.
+-- This file is a reference only (for readers and lua-language-server); cpplua never runs it.
 
----The package library: loading modules with `require`. lua2 is built without dynamic
----libraries; C++ code adds functions through lua2's C++ API instead.
+---The package library: loading modules with `require`. cpplua is built without dynamic
+---libraries; C++ code adds functions through cpplua's C++ API instead.
 ---@class packagelib
 package = {}
 
@@ -14,7 +14,7 @@ package = {}
 package.path = ""
 
 ---The path `require` would use to search for a C loader. Starts from LUA_CPATH_5_4 or
----LUA_CPATH, or the default. lua2 cannot load what it finds there.
+---LUA_CPATH, or the default. cpplua cannot load what it finds there.
 ---@type string
 package.cpath = ""
 
@@ -34,13 +34,13 @@ package.loaded = {}
 package.preload = {}
 
 ---The searchers `require` tries in order: the preload searcher, the Lua searcher (package.path),
----the C searcher and the all-in-one searcher (package.cpath). In lua2 a C searcher that finds
+---the C searcher and the all-in-one searcher (package.cpath). In cpplua a C searcher that finds
 ---a file raises an error saying that dynamic libraries are not enabled.
 ---@type function[]
 package.searchers = {}
 
 ---Would dynamically link the C library `libname` and return its function `funcname`.
----lua2 has no dynamic libraries: it always returns nil, the message
+---cpplua has no dynamic libraries: it always returns nil, the message
 ---"dynamic libraries not enabled; check your Lua installation" and "absent".
 ---@param libname string
 ---@param funcname string

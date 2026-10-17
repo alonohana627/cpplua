@@ -8,7 +8,7 @@
 #include "numeral.hpp"
 #include "value/locale.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -125,4 +125,4 @@ std::optional<NumberText> number_text(Value value) {
     return std::nullopt;
 }
 
-} // namespace lua2
+} // namespace cpplua

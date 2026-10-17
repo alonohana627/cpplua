@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-namespace lua2 {
+namespace cpplua {
 
 // Memory for the collector's objects (docs/plan/vm.md: size-class pages,
 // measured 1.9 to 3.2 times faster than malloc with a list of objects).
@@ -49,4 +49,4 @@ private:
     std::byte* page_end_ = nullptr;
 };
 
-} // namespace lua2
+} // namespace cpplua

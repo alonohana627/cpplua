@@ -1,6 +1,6 @@
-#include <lua2/source_file.hpp>
+#include <cpplua/source_file.hpp>
 
-namespace lua2 {
+namespace cpplua {
 
 std::string_view skip_file_prefix(std::string_view contents) {
     constexpr std::string_view bom = "\xEF\xBB\xBF";
@@ -16,4 +16,4 @@ std::string_view skip_file_prefix(std::string_view contents) {
     return contents;
 }
 
-} // namespace lua2
+} // namespace cpplua

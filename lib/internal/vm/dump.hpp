@@ -6,7 +6,7 @@
 
 #include "vm/proto.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 class Heap;
 class LuaClosure;
@@ -24,4 +24,4 @@ std::string dump(const Proto& main, bool strip);
 std::expected<LuaClosure*, std::string> undump(Heap& heap, std::string_view bytes,
                                                std::string_view source_name);
 
-} // namespace lua2
+} // namespace cpplua

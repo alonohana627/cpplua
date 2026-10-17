@@ -8,7 +8,7 @@
 #include "value/convert.hpp"
 #include "value/string.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -147,4 +147,4 @@ double float_power(double a, double b) {
     return b == 2 ? a * a : std::pow(a, b);
 }
 
-} // namespace lua2
+} // namespace cpplua

@@ -7,7 +7,7 @@
 #include "value/locale.hpp"
 #include "value/string.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -34,7 +34,7 @@ RuntimeError order_error(Value a, Value b) {
 // "C" locale (std::string_view compares through std::char_traits<char>,
 // which compares chars as unsigned char, like memcmp). In another locale
 // they order as strcoll orders them (P4.1), piece by piece between the
-// '\0's they may hold (Lua's strings, like lua2's, end with one).
+// '\0's they may hold (Lua's strings, like cpplua's, end with one).
 int compare_strings(Value a, Value b) {
     const std::string_view x = a.as_string()->view();
     const std::string_view y = b.as_string()->view();
@@ -144,4 +144,4 @@ CompareResult less_equal(Value a, Value b) {
     return std::unexpected(order_error(a, b));
 }
 
-} // namespace lua2
+} // namespace cpplua

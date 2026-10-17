@@ -14,7 +14,7 @@
 #include "value/value.hpp"
 #include "vm/metamethods.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 struct Proto;     // vm/proto.hpp
 class LuaClosure; // vm/function.hpp
@@ -516,4 +516,4 @@ private:
     std::size_t cycles_ = 0;
 };
 
-} // namespace lua2
+} // namespace cpplua

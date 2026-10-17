@@ -9,7 +9,7 @@
 #include "text_format.hpp"
 #include "value/string.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 void Value::wrong_access(std::string_view wanted, std::source_location caller) const {
     // Only C stdio writes of plain text: this runs when something is already
@@ -19,7 +19,7 @@ void Value::wrong_access(std::string_view wanted, std::source_location caller) c
     };
     std::array<char, 16> line{};
     const auto [end, error] = std::to_chars(line.data(), line.data() + line.size(), caller.line());
-    write("lua2 internal error: ");
+    write("cpplua internal error: ");
     write(caller.file_name());
     write(":");
     write(std::string_view{line.data(), end});
@@ -71,4 +71,4 @@ std::string debug_text(Value value) {
     return "?"; // not reached: every Tag is handled above
 }
 
-} // namespace lua2
+} // namespace cpplua

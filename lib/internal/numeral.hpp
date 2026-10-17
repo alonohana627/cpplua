@@ -4,7 +4,7 @@
 #include <optional>
 #include <string_view>
 
-namespace lua2 {
+namespace cpplua {
 
 // Reading the value of a numeral (docs/spec/lexical.md, L5), shared by the
 // lexer and by the conversion of strings to numbers (docs/spec/values.md,
@@ -38,4 +38,4 @@ std::optional<std::int64_t> integer_numeral(std::string_view text, bool negative
 // when the text is not exactly such a numeral.
 std::optional<double> float_numeral(std::string_view text);
 
-} // namespace lua2
+} // namespace cpplua

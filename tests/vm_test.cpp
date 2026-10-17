@@ -5,8 +5,8 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <lua2/debug.hpp>
-#include <lua2/interpreter.hpp>
+#include <cpplua/debug.hpp>
+#include <cpplua/interpreter.hpp>
 
 // The VM (stage 5) against the rules of docs/spec/execution.md. Most
 // behavior is covered by the my_lua programs, whose results come from the
@@ -17,7 +17,7 @@ namespace {
 // Runs a chunk named "input" and returns its results joined with commas, or
 // the error message.
 std::string run(std::string_view source) {
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     const auto results = interpreter.run(source, "input");
     if (!results) {
         return results.error();
@@ -44,7 +44,7 @@ TEST_CASE("E1.1 a chunk is a vararg function returning its results", "[vm]") {
 }
 
 TEST_CASE("E1.3 running a chunk again starts with fresh locals", "[vm]") {
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     const std::string_view source = "local n = 0 n = n + 1 return n";
     CHECK(interpreter.run(source, "input")->front() == "1");
     CHECK(interpreter.run(source, "input")->front() == "1");
@@ -197,8 +197,8 @@ TEST_CASE("syntax errors stop before running", "[vm]") {
     CHECK(run("return +") == "input:1: unexpected symbol near '+'");
 }
 
-TEST_CASE("lua2 --bytecode lists like luac -l -l", "[vm][compiler]") {
-    const auto listing = lua2::bytecode_dump("local x <const> = 2 return x * 3", "k.lua");
+TEST_CASE("cpplua --bytecode lists like luac -l -l", "[vm][compiler]") {
+    const auto listing = cpplua::bytecode_dump("local x <const> = 2 return x * 3", "k.lua");
     REQUIRE(listing.has_value());
     // The constant is folded: x takes no register and 2 * 3 is 6.
     CHECK(*listing == "\n"

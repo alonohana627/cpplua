@@ -13,7 +13,7 @@
 #include "parser/scopes.hpp"
 #include "syntax_error.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // Turns Lua source text into an Ast (docs/spec/grammar.md).
 //
@@ -243,4 +243,4 @@ private:
     std::expected<void, SyntaxError> check_assignable(ExprId target);
 };
 
-} // namespace lua2
+} // namespace cpplua

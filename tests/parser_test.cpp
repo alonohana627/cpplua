@@ -15,7 +15,7 @@
 #include "parser/parser.hpp"
 #include "text_format.hpp"
 
-using lua2::Parser;
+using cpplua::Parser;
 
 namespace {
 
@@ -26,7 +26,7 @@ std::string ast_of(std::string_view source) {
     if (!ast) {
         FAIL("unexpected parse error: " << ast.error().message);
     }
-    return lua2::print_ast(*ast);
+    return cpplua::print_ast(*ast);
 }
 
 // Parses `source`, which must fail, and returns the error message.
@@ -94,8 +94,8 @@ TEST_CASE("G9.1 the error records where in the parser it was made", "[parser]") 
 // ---- 'X' expected names (G9.3) ----
 
 TEST_CASE("G9.3 how token kinds are named in 'X expected' messages", "[parser]") {
-    using lua2::expected_text;
-    using lua2::TokenKind;
+    using cpplua::expected_text;
+    using cpplua::TokenKind;
 
     CHECK(expected_text(TokenKind::EndOfStream) == "<eof>");
     CHECK(expected_text(TokenKind::Name) == "<name>");
@@ -111,14 +111,14 @@ TEST_CASE("G9.3 how token kinds are named in 'X expected' messages", "[parser]")
 // ---- The arena (lib/internal/parser/ast.hpp) ----
 
 TEST_CASE("ExprId and StatId are different types", "[parser][ast]") {
-    STATIC_CHECK_FALSE(std::is_convertible_v<lua2::ExprId, lua2::StatId>);
-    STATIC_CHECK_FALSE(std::is_convertible_v<lua2::StatId, lua2::ExprId>);
-    STATIC_CHECK(sizeof(lua2::StatId) == 4);
+    STATIC_CHECK_FALSE(std::is_convertible_v<cpplua::ExprId, cpplua::StatId>);
+    STATIC_CHECK_FALSE(std::is_convertible_v<cpplua::StatId, cpplua::ExprId>);
+    STATIC_CHECK(sizeof(cpplua::StatId) == 4);
 }
 
 TEST_CASE("statement lists are stored back to back", "[parser][ast]") {
-    using lua2::StatId;
-    lua2::Ast ast;
+    using cpplua::StatId;
+    cpplua::Ast ast;
 
     const std::array first{StatId{.index = 7}, StatId{.index = 8}};
     const std::array second{StatId{.index = 9}};
@@ -126,11 +126,11 @@ TEST_CASE("statement lists are stored back to back", "[parser][ast]") {
     const auto second_range = ast.add_statement_list(second);
     const auto empty_range = ast.add_statement_list({});
 
-    CHECK(first_range == lua2::IdRange<StatId>{.first = 0, .count = 2});
-    CHECK(second_range == lua2::IdRange<StatId>{.first = 2, .count = 1});
+    CHECK(first_range == cpplua::IdRange<StatId>{.first = 0, .count = 2});
+    CHECK(second_range == cpplua::IdRange<StatId>{.first = 2, .count = 1});
     CHECK(empty_range.count == 0);
 
-    const auto read_back = ast.statements(lua2::Block{.statements = first_range});
+    const auto read_back = ast.statements(cpplua::Block{.statements = first_range});
     REQUIRE(read_back.size() == 2);
     CHECK(read_back[0] == StatId{.index = 7});
     CHECK(read_back[1] == StatId{.index = 8});
@@ -203,24 +203,24 @@ TEST_CASE("G4.1 nodes record their line", "[parser][ast]") {
     REQUIRE(statements.size() == 1);
     CHECK(ast->line(statements[0]) == 2);
 
-    const auto& node = std::get<lua2::ReturnStat>(ast->statement(statements[0]));
+    const auto& node = std::get<cpplua::ReturnStat>(ast->statement(statements[0]));
     const auto values = ast->expressions(node.values);
     REQUIRE(values.size() == 2);
     CHECK(ast->line(values[0]) == 3);
     CHECK(ast->line(values[1]) == 5);
-    CHECK(std::get<lua2::IntegerExpr>(ast->expression(values[0])).value == 1);
-    CHECK(ast->text(std::get<lua2::StringExpr>(ast->expression(values[1])).text) == "x");
+    CHECK(std::get<cpplua::IntegerExpr>(ast->expression(values[0])).value == 1);
+    CHECK(ast->text(std::get<cpplua::StringExpr>(ast->expression(values[1])).text) == "x");
 }
 
 TEST_CASE("string values are stored once in the shared text buffer", "[parser][ast]") {
-    lua2::Ast ast;
+    cpplua::Ast ast;
     const auto first = ast.add_text("hello");
     const auto second = ast.add_text("");
     const auto third = ast.add_text("world");
 
-    CHECK(first == lua2::TextRange{.first = 0, .length = 5});
+    CHECK(first == cpplua::TextRange{.first = 0, .length = 5});
     CHECK(second.length == 0);
-    CHECK(third == lua2::TextRange{.first = 5, .length = 5});
+    CHECK(third == cpplua::TextRange{.first = 5, .length = 5});
     CHECK(ast.text(first) == "hello");
     CHECK(ast.text(third) == "world");
 }
@@ -229,11 +229,11 @@ TEST_CASE("string values are stored once in the shared text buffer", "[parser][a
 
 namespace {
 
-std::string grouped_list(const lua2::Ast& ast, lua2::IdRange<lua2::ExprId> list);
+std::string grouped_list(const cpplua::Ast& ast, cpplua::IdRange<cpplua::ExprId> list);
 
 // Parses `source` and returns its single statement, failing the test on an
 // error or on any other number of statements.
-lua2::Stat only_statement(std::string_view source, lua2::Ast& ast) {
+cpplua::Stat only_statement(std::string_view source, cpplua::Ast& ast) {
     Parser parser{source, "input"};
     auto parsed = parser.parse_chunk();
     if (!parsed) {
@@ -249,55 +249,55 @@ lua2::Stat only_statement(std::string_view source, lua2::Ast& ast) {
 // visible on one line: "1 + 2 * 3" becomes "(1 + (2 * 3))". Indexing shows as
 // object{key} and Lua's own parentheses as [ ], so they cannot be confused
 // with the grouping.
-std::string grouped(const lua2::Ast& ast, lua2::ExprId id) {
+std::string grouped(const cpplua::Ast& ast, cpplua::ExprId id) {
     return std::visit(
-        lua2::Overloaded{
-            [](const lua2::NilExpr&) -> std::string { return "nil"; },
-            [](const lua2::TrueExpr&) -> std::string { return "true"; },
-            [](const lua2::FalseExpr&) -> std::string { return "false"; },
-            [](const lua2::VarargExpr&) -> std::string { return "..."; },
-            [](const lua2::IntegerExpr& node) { return std::to_string(node.value); },
-            [](const lua2::FloatExpr& node) { return lua2::format_float(node.value); },
-            [&](const lua2::StringExpr& node) {
+        cpplua::Overloaded{
+            [](const cpplua::NilExpr&) -> std::string { return "nil"; },
+            [](const cpplua::TrueExpr&) -> std::string { return "true"; },
+            [](const cpplua::FalseExpr&) -> std::string { return "false"; },
+            [](const cpplua::VarargExpr&) -> std::string { return "..."; },
+            [](const cpplua::IntegerExpr& node) { return std::to_string(node.value); },
+            [](const cpplua::FloatExpr& node) { return cpplua::format_float(node.value); },
+            [&](const cpplua::StringExpr& node) {
                 return "'" + std::string(ast.text(node.text)) + "'";
             },
-            [&](const lua2::UnaryExpr& node) {
-                const auto op = lua2::operator_text(node.op);
+            [&](const cpplua::UnaryExpr& node) {
+                const auto op = cpplua::operator_text(node.op);
                 const std::string_view separator = op == "not" ? " " : "";
                 return "(" + std::string(op) + separator + grouped(ast, node.operand) + ")";
             },
-            [&](const lua2::BinaryExpr& node) {
+            [&](const cpplua::BinaryExpr& node) {
                 return "(" + grouped(ast, node.left) + " " +
-                       std::string(lua2::operator_text(node.op)) + " " + grouped(ast, node.right) +
-                       ")";
+                       std::string(cpplua::operator_text(node.op)) + " " +
+                       grouped(ast, node.right) + ")";
             },
-            [&](const lua2::NameExpr& node) { return std::string(ast.text(node.name)); },
+            [&](const cpplua::NameExpr& node) { return std::string(ast.text(node.name)); },
             // Lua's own parentheses are shown as [ ] to tell them from the grouping.
-            [&](const lua2::ParenExpr& node) { return "[" + grouped(ast, node.inner) + "]"; },
-            [&](const lua2::IndexExpr& node) {
+            [&](const cpplua::ParenExpr& node) { return "[" + grouped(ast, node.inner) + "]"; },
+            [&](const cpplua::IndexExpr& node) {
                 return grouped(ast, node.object) + "{" + grouped(ast, node.key) + "}";
             },
-            [&](const lua2::CallExpr& node) {
+            [&](const cpplua::CallExpr& node) {
                 return grouped(ast, node.function) + "(" + grouped_list(ast, node.arguments) + ")";
             },
-            [&](const lua2::MethodCallExpr& node) {
+            [&](const cpplua::MethodCallExpr& node) {
                 return grouped(ast, node.object) + ":" + std::string(ast.text(node.method)) + "(" +
                        grouped_list(ast, node.arguments) + ")";
             },
-            [](const lua2::FunctionExpr&) -> std::string { return "function"; },
+            [](const cpplua::FunctionExpr&) -> std::string { return "function"; },
             // Tables as {item, name=value, [key]=value}.
-            [&](const lua2::TableExpr& node) {
+            [&](const cpplua::TableExpr& node) {
                 std::string out = "{";
                 for (const auto& field : ast.fields(node.fields)) {
                     out += out.size() == 1 ? "" : ", ";
                     switch (field.kind) {
-                    case lua2::TableField::Kind::Positional: break;
-                    case lua2::TableField::Kind::Named:
+                    case cpplua::TableField::Kind::Positional: break;
+                    case cpplua::TableField::Kind::Named:
                         out += std::string(ast.text(
-                                   std::get<lua2::StringExpr>(ast.expression(field.key)).text)) +
+                                   std::get<cpplua::StringExpr>(ast.expression(field.key)).text)) +
                                "=";
                         break;
-                    case lua2::TableField::Kind::Keyed:
+                    case cpplua::TableField::Kind::Keyed:
                         out += "[" + grouped(ast, field.key) + "]=";
                         break;
                     }
@@ -309,7 +309,7 @@ std::string grouped(const lua2::Ast& ast, lua2::ExprId id) {
         ast.expression(id));
 }
 
-std::string grouped_list(const lua2::Ast& ast, lua2::IdRange<lua2::ExprId> list) {
+std::string grouped_list(const cpplua::Ast& ast, cpplua::IdRange<cpplua::ExprId> list) {
     std::string out;
     for (const auto id : ast.expressions(list)) {
         out += out.empty() ? "" : ", ";
@@ -328,7 +328,7 @@ std::string group(std::string_view expression) {
     }
     const auto statement = ast->statements(ast->root())[0];
     const auto values =
-        ast->expressions(std::get<lua2::ReturnStat>(ast->statement(statement)).values);
+        ast->expressions(std::get<cpplua::ReturnStat>(ast->statement(statement)).values);
     return grouped(*ast, values[0]);
 }
 
@@ -443,7 +443,7 @@ TEST_CASE("G7.8 an operator node records its operator's line", "[parser][operato
 
     const auto statement = ast->statements(ast->root())[0];
     const auto values =
-        ast->expressions(std::get<lua2::ReturnStat>(ast->statement(statement)).values);
+        ast->expressions(std::get<cpplua::ReturnStat>(ast->statement(statement)).values);
     CHECK(ast->line(values[0]) == 2);
 }
 
@@ -867,9 +867,9 @@ TEST_CASE("G3.1 if statements", "[parser][control]") {
 }
 
 TEST_CASE("G3.1 an empty else is kept, a missing one is not", "[parser][control]") {
-    lua2::Ast ast;
-    CHECK(std::get<lua2::IfStat>(only_statement("if a then else end", ast)).has_else);
-    CHECK_FALSE(std::get<lua2::IfStat>(only_statement("if a then end", ast)).has_else);
+    cpplua::Ast ast;
+    CHECK(std::get<cpplua::IfStat>(only_statement("if a then else end", ast)).has_else);
+    CHECK_FALSE(std::get<cpplua::IfStat>(only_statement("if a then end", ast)).has_else);
 }
 
 TEST_CASE("G3.10 numeric for", "[parser][control]") {
@@ -889,10 +889,10 @@ TEST_CASE("G3.10 numeric for", "[parser][control]") {
                                                      "        Call\n"
                                                      "          Name f\n"
                                                      "          Name i (local 3)\n");
-    lua2::Ast ast;
+    cpplua::Ast ast;
     CHECK_FALSE(
-        std::get<lua2::NumericForStat>(only_statement("for i = 1, 2 do end", ast)).has_step);
-    CHECK(std::get<lua2::NumericForStat>(only_statement("for i = 1, 2, 3 do end", ast)).has_step);
+        std::get<cpplua::NumericForStat>(only_statement("for i = 1, 2 do end", ast)).has_step);
+    CHECK(std::get<cpplua::NumericForStat>(only_statement("for i = 1, 2, 3 do end", ast)).has_step);
 }
 
 TEST_CASE("G3.1 generic for", "[parser][control]") {
@@ -1129,10 +1129,10 @@ TEST_CASE("G5.2 a function records where it starts and ends", "[parser][function
     REQUIRE(ast.has_value());
 
     const auto statement = ast->statements(ast->root())[0];
-    const auto& local = std::get<lua2::LocalStat>(ast->statement(statement));
+    const auto& local = std::get<cpplua::LocalStat>(ast->statement(statement));
     const auto value = ast->expressions(local.values)[0];
     const auto& function =
-        ast->function(std::get<lua2::FunctionExpr>(ast->expression(value)).function);
+        ast->function(std::get<cpplua::FunctionExpr>(ast->expression(value)).function);
 
     CHECK(function.line == 2);
     CHECK(function.end_line == 4);
@@ -1367,7 +1367,7 @@ namespace {
 
 // Parses `source` and returns the resolution of the first name in its
 // return statement's first value (which must be a NameExpr).
-lua2::NameExpr returned_name(std::string_view source, lua2::Ast& ast) {
+cpplua::NameExpr returned_name(std::string_view source, cpplua::Ast& ast) {
     Parser parser{source, "input"};
     auto parsed = parser.parse_chunk();
     if (!parsed) {
@@ -1375,24 +1375,24 @@ lua2::NameExpr returned_name(std::string_view source, lua2::Ast& ast) {
     }
     ast = std::move(*parsed);
     const auto statements = ast.statements(ast.root());
-    const auto& ret = std::get<lua2::ReturnStat>(ast.statement(statements.back()));
-    return std::get<lua2::NameExpr>(ast.expression(ast.expressions(ret.values)[0]));
+    const auto& ret = std::get<cpplua::ReturnStat>(ast.statement(statements.back()));
+    return std::get<cpplua::NameExpr>(ast.expression(ast.expressions(ret.values)[0]));
 }
 
-using Kind = lua2::VariableRef::Kind;
+using Kind = cpplua::VariableRef::Kind;
 
-lua2::VariableRef local(std::uint32_t slot) {
+cpplua::VariableRef local(std::uint32_t slot) {
     return {.kind = Kind::Local, .index = slot};
 }
 
-lua2::VariableRef upvalue(std::uint32_t index) {
+cpplua::VariableRef upvalue(std::uint32_t index) {
     return {.kind = Kind::Upvalue, .index = index};
 }
 
 } // namespace
 
 TEST_CASE("G5.6 locals get their slot", "[parser][resolve]") {
-    lua2::Ast ast;
+    cpplua::Ast ast;
     CHECK(returned_name("local a return a", ast).variable == local(0));
     CHECK(returned_name("local a, b return b", ast).variable == local(1));
     // An inner declaration shadows an outer one, and takes the next slot.
@@ -1419,7 +1419,7 @@ TEST_CASE("G5.6 for loops reserve hidden slots first", "[parser][resolve]") {
 }
 
 TEST_CASE("G5.6 globals go through _ENV", "[parser][resolve]") {
-    lua2::Ast ast;
+    cpplua::Ast ast;
     // In the main chunk, _ENV is upvalue 0.
     const auto global = returned_name("return x", ast);
     CHECK(global.variable.kind == Kind::Global);
@@ -1459,13 +1459,13 @@ TEST_CASE("G5.6 upvalues chain through every function in between", "[parser][res
     const auto ast = parser.parse_chunk();
     REQUIRE(ast.has_value());
 
-    const auto& ret = std::get<lua2::ReturnStat>(ast->statement(ast->statements(ast->root())[1]));
+    const auto& ret = std::get<cpplua::ReturnStat>(ast->statement(ast->statements(ast->root())[1]));
     const auto& middle = ast->function(
-        std::get<lua2::FunctionExpr>(ast->expression(ast->expressions(ret.values)[0])).function);
+        std::get<cpplua::FunctionExpr>(ast->expression(ast->expressions(ret.values)[0])).function);
     const auto& middle_ret =
-        std::get<lua2::ReturnStat>(ast->statement(ast->statements(middle.body)[0]));
+        std::get<cpplua::ReturnStat>(ast->statement(ast->statements(middle.body)[0]));
     const auto& inner = ast->function(
-        std::get<lua2::FunctionExpr>(ast->expression(ast->expressions(middle_ret.values)[0]))
+        std::get<cpplua::FunctionExpr>(ast->expression(ast->expressions(middle_ret.values)[0]))
             .function);
 
     // The middle function captures the main chunk's local 0...
@@ -1542,25 +1542,25 @@ TEST_CASE("the DOT graph links each node to its parent", "[parser][ast]") {
     //         Name y         n5
     //       Values           n6
     //         Integer 1      n7
-    CHECK(lua2::print_ast_dot(*ast) == "digraph ast {\n"
-                                       "  ordering=out;\n"
-                                       "  node [shape=box, fontname=\"monospace\"];\n"
-                                       "  n0 [label=\"Chunk\"];\n"
-                                       "  n1 [label=\"Do\"];\n"
-                                       "  n0 -> n1;\n"
-                                       "  n2 [label=\"Local x\"];\n"
-                                       "  n1 -> n2;\n"
-                                       "  n3 [label=\"Assign\"];\n"
-                                       "  n0 -> n3;\n"
-                                       "  n4 [label=\"Targets\"];\n"
-                                       "  n3 -> n4;\n"
-                                       "  n5 [label=\"Name y\"];\n"
-                                       "  n4 -> n5;\n"
-                                       "  n6 [label=\"Values\"];\n"
-                                       "  n3 -> n6;\n"
-                                       "  n7 [label=\"Integer 1\"];\n"
-                                       "  n6 -> n7;\n"
-                                       "}\n");
+    CHECK(cpplua::print_ast_dot(*ast) == "digraph ast {\n"
+                                         "  ordering=out;\n"
+                                         "  node [shape=box, fontname=\"monospace\"];\n"
+                                         "  n0 [label=\"Chunk\"];\n"
+                                         "  n1 [label=\"Do\"];\n"
+                                         "  n0 -> n1;\n"
+                                         "  n2 [label=\"Local x\"];\n"
+                                         "  n1 -> n2;\n"
+                                         "  n3 [label=\"Assign\"];\n"
+                                         "  n0 -> n3;\n"
+                                         "  n4 [label=\"Targets\"];\n"
+                                         "  n3 -> n4;\n"
+                                         "  n5 [label=\"Name y\"];\n"
+                                         "  n4 -> n5;\n"
+                                         "  n6 [label=\"Values\"];\n"
+                                         "  n3 -> n6;\n"
+                                         "  n7 [label=\"Integer 1\"];\n"
+                                         "  n6 -> n7;\n"
+                                         "}\n");
 }
 
 TEST_CASE("the DOT graph has one node per printed line", "[parser][ast]") {
@@ -1568,8 +1568,8 @@ TEST_CASE("the DOT graph has one node per printed line", "[parser][ast]") {
     const auto ast = parser.parse_chunk();
     REQUIRE(ast.has_value());
 
-    const std::string text = lua2::print_ast(*ast);
-    const std::string dot = lua2::print_ast_dot(*ast);
+    const std::string text = cpplua::print_ast(*ast);
+    const std::string dot = cpplua::print_ast_dot(*ast);
     const auto occurrences = [](std::string_view haystack, std::string_view needle) {
         std::size_t count = 0;
         for (auto at = haystack.find(needle); at != std::string_view::npos;

@@ -8,7 +8,7 @@
 #include "value/number.hpp"
 #include "value/value.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // Lua's arithmetic operators (docs/spec/values.md, V3). Each one works on
 // two numbers: integers give an integer result (V3.2) except for / and ^,
@@ -97,4 +97,4 @@ double float_modulo(double a, double b);
 // a ^ b on floats (V3.10). Like Lua's luai_numpow, b == 2 is a * a.
 double float_power(double a, double b);
 
-} // namespace lua2
+} // namespace cpplua

@@ -1,7 +1,7 @@
 ---@meta
 
 -- The os library's functions are implemented in C++ in lib/std/os.cpp.
--- This file is a reference only (for readers and lua-language-server); lua2 never runs it.
+-- This file is a reference only (for readers and lua-language-server); cpplua never runs it.
 
 ---The os library: access to the operating system.
 ---@class oslib

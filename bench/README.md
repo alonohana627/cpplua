@@ -2,7 +2,7 @@
 
 Lua programs that time the VM and the garbage collector (docs/plan/vm.md), then tables,
 metatables and errors (stages 6 to 8), then the standard library (stage 9, `lib_*.lua`). Each
-returns its result, so lua2 and the reference Lua can run the same file and must print the same.
+returns its result, so cpplua and the reference Lua can run the same file and must print the same.
 
 | File                | What it stresses                                         |
 | ------------------- | -------------------------------------------------------- |
@@ -25,16 +25,16 @@ returns its result, so lua2 and the reference Lua can run the same file and must
 Run them with the runner, built with the project:
 
 ```sh
-./build/release/lua2_bench bench ./build/release/lua2 ./build/release/lua_ref
+./build/release/cpplua_bench bench ./build/release/cpplua ./build/release/lua_ref
 ```
 
 It prints the best of 5 wall-clock runs for each interpreter and the ratio
-(lua2 time / reference time; below 1 means lua2 is faster). Use the release build. The latest
+(cpplua time / reference time; below 1 means cpplua is faster). Use the release build. The latest
 results, and where the time goes, are in `docs/final_docs/vm.md` ("Benchmarks").
 
 To compare generational collection, run each program by hand:
 
 ```sh
-./build/release/lua2 --generational bench/strings.lua
+./build/release/cpplua --generational bench/strings.lua
 ./build/release/lua_ref -e "collectgarbage('generational')" bench/strings.lua
 ```

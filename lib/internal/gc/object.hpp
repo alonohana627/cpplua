@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace lua2 {
+namespace cpplua {
 
 // What kind of object a collectable object is (Lua's variant tags for
 // collectable types).
@@ -118,4 +118,4 @@ inline GcObject* mutable_object(const GcObject* o) {
     return const_cast<GcObject*>(o); // NOLINT(cppcoreguidelines-pro-type-const-cast)
 }
 
-} // namespace lua2
+} // namespace cpplua

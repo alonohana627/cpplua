@@ -15,7 +15,7 @@
 #include "vm/execute.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -310,4 +310,4 @@ void open_utf8(Heap& heap) {
                  Value::string(heap.new_string(pattern)));
 }
 
-} // namespace lua2
+} // namespace cpplua

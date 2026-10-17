@@ -9,7 +9,7 @@
 
 #include "parser/ast.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // Tracks what is visible where while the parser runs: the functions being
 // parsed, their blocks, their local variables, labels and pending gotos.
@@ -158,4 +158,4 @@ private:
     std::vector<Goto> gotos_;         // pending gotos and breaks
 };
 
-} // namespace lua2
+} // namespace cpplua

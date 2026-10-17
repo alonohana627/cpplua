@@ -1,5 +1,5 @@
 # The reference Lua (docs/plan/vm.md, part 0): the real Lua 5.4.9, built from
-# its source, to measure lua2 against and to compare results and bytecode.
+# its source, to measure cpplua against and to compare results and bytecode.
 #
 #   lua_ref    the `lua` interpreter
 #   luac_ref   the `luac` compiler (`luac_ref -l -l -p file.lua` lists bytecode)
@@ -9,7 +9,7 @@
 # reference, so Git ignores it; when it is missing, configuring downloads the
 # archive, checks its SHA-256 and extracts it there. If that cannot be done
 # (no network, a wrong checksum), the reference is skipped with a warning and
-# lua2 itself builds as usual.
+# cpplua itself builds as usual.
 
 set(LUA_REF_VERSION 5.4.9)
 set(LUA_REF_URL https://www.lua.org/ftp/lua-${LUA_REF_VERSION}.tar.gz)
@@ -18,7 +18,7 @@ set(LUA_REF_DIR ${PROJECT_SOURCE_DIR}/original_lua_src)
 set(LUA_SOURCE_DIR ${LUA_REF_DIR}/src)
 
 # Gets original_lua_src/ if it is not there. Sets LUA_REF_AVAILABLE.
-function(lua2_fetch_reference_lua)
+function(cpplua_fetch_reference_lua)
   set(LUA_REF_AVAILABLE TRUE PARENT_SCOPE)
   if(EXISTS ${LUA_SOURCE_DIR}/lua.c)
     return()
@@ -61,7 +61,7 @@ function(lua2_fetch_reference_lua)
   set(LUA_REF_AVAILABLE TRUE PARENT_SCOPE)
 endfunction()
 
-lua2_fetch_reference_lua()
+cpplua_fetch_reference_lua()
 if(NOT LUA_REF_AVAILABLE)
   return()
 endif()

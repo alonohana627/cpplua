@@ -1,4 +1,4 @@
-// The public C++ API (include/lua2/api.hpp, include/lua2/interpreter.hpp)
+// The public C++ API (include/cpplua/api.hpp, include/cpplua/interpreter.hpp)
 // on top of the internals: Context is a view of a thread's stack, Ref an
 // entry in the heap's table of references, bound functions C++ closures
 // whose upvalue is a userdata holding the std::function, and classes
@@ -12,8 +12,8 @@
 #include <string>
 #include <utility>
 
-#include <lua2/api.hpp>
-#include <lua2/interpreter.hpp>
+#include <cpplua/api.hpp>
+#include <cpplua/interpreter.hpp>
 
 #include "gc/heap.hpp"
 #include "std/auxlib.hpp"
@@ -28,7 +28,7 @@
 #include "vm/run.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -248,7 +248,7 @@ std::optional<std::int64_t> Context::to_integer(int n) const {
         }
         v = *number;
     }
-    return lua2::to_integer(v);
+    return cpplua::to_integer(v);
 }
 
 std::optional<std::string_view> Context::to_string(int n) {
@@ -355,7 +355,7 @@ int Context::raise(std::string_view message) {
 
 int Context::arg_error(int n, std::string_view extra) {
     failed_ = true;
-    return lua2::arg_error(*state_, n, extra);
+    return cpplua::arg_error(*state_, n, extra);
 }
 
 int Context::type_error(int n, std::string_view expected) {
@@ -663,4 +663,4 @@ State& Interpreter::main_thread() {
     return heap_->main_thread();
 }
 
-} // namespace lua2
+} // namespace cpplua

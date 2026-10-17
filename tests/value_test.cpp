@@ -11,9 +11,9 @@
 #include "value/value.hpp"
 #include "value_printer.hpp"
 
-using lua2::Tag;
-using lua2::Type;
-using lua2::Value;
+using cpplua::Tag;
+using cpplua::Type;
+using cpplua::Value;
 
 namespace {
 
@@ -34,14 +34,14 @@ TEST_CASE("V1.1 a value holds 8 bytes and a tag", "[value]") {
 }
 
 TEST_CASE("V1.2 type names are Lua's", "[value]") {
-    STATIC_REQUIRE(lua2::type_name(Type::Nil) == "nil");
-    STATIC_REQUIRE(lua2::type_name(Type::Boolean) == "boolean");
-    STATIC_REQUIRE(lua2::type_name(Type::Number) == "number");
-    STATIC_REQUIRE(lua2::type_name(Type::String) == "string");
-    STATIC_REQUIRE(lua2::type_name(Type::Table) == "table");
-    STATIC_REQUIRE(lua2::type_name(Type::Function) == "function");
-    STATIC_REQUIRE(lua2::type_name(Type::Userdata) == "userdata");
-    STATIC_REQUIRE(lua2::type_name(Type::Thread) == "thread");
+    STATIC_REQUIRE(cpplua::type_name(Type::Nil) == "nil");
+    STATIC_REQUIRE(cpplua::type_name(Type::Boolean) == "boolean");
+    STATIC_REQUIRE(cpplua::type_name(Type::Number) == "number");
+    STATIC_REQUIRE(cpplua::type_name(Type::String) == "string");
+    STATIC_REQUIRE(cpplua::type_name(Type::Table) == "table");
+    STATIC_REQUIRE(cpplua::type_name(Type::Function) == "function");
+    STATIC_REQUIRE(cpplua::type_name(Type::Userdata) == "userdata");
+    STATIC_REQUIRE(cpplua::type_name(Type::Thread) == "thread");
 }
 
 TEST_CASE("V1.1 each value has its type", "[value]") {
@@ -105,29 +105,29 @@ TEST_CASE("V1.5 nil has one value and booleans two", "[value]") {
 }
 
 TEST_CASE("debug_text shows each value and its subtype", "[value]") {
-    CHECK(lua2::debug_text(Value::nil()) == "nil");
-    CHECK(lua2::debug_text(Value::boolean(true)) == "true");
-    CHECK(lua2::debug_text(Value::boolean(false)) == "false");
-    CHECK(lua2::debug_text(Value::integer(-42)) == "-42");
-    CHECK(lua2::debug_text(Value::integer(min_integer)) == "-9223372036854775808");
-    CHECK(lua2::debug_text(Value::number(1.0)) == "1.0");
-    CHECK(lua2::debug_text(Value::number(0.5)) == "0.5");
-    CHECK(lua2::debug_text(Value::number(-inf)) == "-inf");
+    CHECK(cpplua::debug_text(Value::nil()) == "nil");
+    CHECK(cpplua::debug_text(Value::boolean(true)) == "true");
+    CHECK(cpplua::debug_text(Value::boolean(false)) == "false");
+    CHECK(cpplua::debug_text(Value::integer(-42)) == "-42");
+    CHECK(cpplua::debug_text(Value::integer(min_integer)) == "-9223372036854775808");
+    CHECK(cpplua::debug_text(Value::number(1.0)) == "1.0");
+    CHECK(cpplua::debug_text(Value::number(0.5)) == "0.5");
+    CHECK(cpplua::debug_text(Value::number(-inf)) == "-inf");
 }
 
 TEST_CASE("tag names", "[value]") {
-    CHECK(lua2::tag_name(Tag::Nil) == "nil");
-    CHECK(lua2::tag_name(Tag::False) == "false");
-    CHECK(lua2::tag_name(Tag::True) == "true");
-    CHECK(lua2::tag_name(Tag::Integer) == "integer");
-    CHECK(lua2::tag_name(Tag::Float) == "float");
+    CHECK(cpplua::tag_name(Tag::Nil) == "nil");
+    CHECK(cpplua::tag_name(Tag::False) == "false");
+    CHECK(cpplua::tag_name(Tag::True) == "true");
+    CHECK(cpplua::tag_name(Tag::Integer) == "integer");
+    CHECK(cpplua::tag_name(Tag::Float) == "float");
 }
 
 // ---- Part 1: integer and float conversions ----
 
-using lua2::float_to_int;
-using lua2::int_to_float;
-using lua2::Rounding;
+using cpplua::float_to_int;
+using cpplua::int_to_float;
+using cpplua::Rounding;
 
 namespace {
 
@@ -154,23 +154,23 @@ TEST_CASE("V2.3 integer to float is exact up to 2^53, rounded beyond", "[value]"
 }
 
 TEST_CASE("floor_float rounds toward minus infinity", "[value]") {
-    STATIC_REQUIRE(lua2::floor_float(3.5) == 3.0);
-    STATIC_REQUIRE(lua2::floor_float(-3.5) == -4.0);
-    STATIC_REQUIRE(lua2::floor_float(-3.0) == -3.0);
-    STATIC_REQUIRE(lua2::floor_float(0.25) == 0.0);
-    STATIC_REQUIRE(lua2::floor_float(-0.25) == -1.0);
-    STATIC_REQUIRE(lua2::floor_float(4503599627370495.5) == 4503599627370495.0);
-    STATIC_REQUIRE(lua2::floor_float(-4503599627370495.5) == -4503599627370496.0);
-    STATIC_REQUIRE(lua2::floor_float(1e300) == 1e300);
-    STATIC_REQUIRE(lua2::floor_float(-inf) == -inf);
-    CHECK(std::isnan(lua2::floor_float(std::nan(""))));
-    CHECK(std::signbit(lua2::floor_float(-0.0)));
-    CHECK_FALSE(std::signbit(lua2::floor_float(0.0)));
-    CHECK_FALSE(std::signbit(lua2::floor_float(0.5)));
+    STATIC_REQUIRE(cpplua::floor_float(3.5) == 3.0);
+    STATIC_REQUIRE(cpplua::floor_float(-3.5) == -4.0);
+    STATIC_REQUIRE(cpplua::floor_float(-3.0) == -3.0);
+    STATIC_REQUIRE(cpplua::floor_float(0.25) == 0.0);
+    STATIC_REQUIRE(cpplua::floor_float(-0.25) == -1.0);
+    STATIC_REQUIRE(cpplua::floor_float(4503599627370495.5) == 4503599627370495.0);
+    STATIC_REQUIRE(cpplua::floor_float(-4503599627370495.5) == -4503599627370496.0);
+    STATIC_REQUIRE(cpplua::floor_float(1e300) == 1e300);
+    STATIC_REQUIRE(cpplua::floor_float(-inf) == -inf);
+    CHECK(std::isnan(cpplua::floor_float(std::nan(""))));
+    CHECK(std::signbit(cpplua::floor_float(-0.0)));
+    CHECK_FALSE(std::signbit(cpplua::floor_float(0.0)));
+    CHECK_FALSE(std::signbit(cpplua::floor_float(0.5)));
     // The same as std::floor on many values.
     for (int eighths = -8000; eighths <= 8000; ++eighths) {
         const double f = eighths * 0.125;
-        CHECK(lua2::floor_float(f) == std::floor(f));
+        CHECK(cpplua::floor_float(f) == std::floor(f));
     }
 }
 
@@ -214,15 +214,15 @@ TEST_CASE("V2.4 floor and ceil conversions round first", "[value]") {
 }
 
 TEST_CASE("V2.3 V2.4 numbers as floats or integers", "[value]") {
-    STATIC_REQUIRE(lua2::to_float(Value::integer(2)) == 2.0);
-    STATIC_REQUIRE(lua2::to_float(Value::number(2.5)) == 2.5);
-    STATIC_REQUIRE(lua2::to_integer(Value::integer(2)) == 2);
-    STATIC_REQUIRE(lua2::to_integer(Value::number(2.0)) == 2);
-    STATIC_REQUIRE(lua2::to_integer(Value::number(2.5)) == std::nullopt);
-    STATIC_REQUIRE(lua2::to_integer(Value::number(2.5), Rounding::Floor) == 2);
+    STATIC_REQUIRE(cpplua::to_float(Value::integer(2)) == 2.0);
+    STATIC_REQUIRE(cpplua::to_float(Value::number(2.5)) == 2.5);
+    STATIC_REQUIRE(cpplua::to_integer(Value::integer(2)) == 2);
+    STATIC_REQUIRE(cpplua::to_integer(Value::number(2.0)) == 2);
+    STATIC_REQUIRE(cpplua::to_integer(Value::number(2.5)) == std::nullopt);
+    STATIC_REQUIRE(cpplua::to_integer(Value::number(2.5), Rounding::Floor) == 2);
 
     // Values that are not numbers have no number.
     const auto other = GENERATE(Value::nil(), Value::boolean(false), Value::boolean(true));
-    CHECK(lua2::to_float(other) == std::nullopt);
-    CHECK(lua2::to_integer(other) == std::nullopt);
+    CHECK(cpplua::to_float(other) == std::nullopt);
+    CHECK(cpplua::to_integer(other) == std::nullopt);
 }

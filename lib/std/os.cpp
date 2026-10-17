@@ -31,7 +31,7 @@
 #include "vm/execute.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -423,4 +423,4 @@ void open_os(Heap& heap) {
     open_library(heap, "os", os_functions);
 }
 
-} // namespace lua2
+} // namespace cpplua

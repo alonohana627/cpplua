@@ -26,7 +26,7 @@
 #include "vm/function.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -506,4 +506,4 @@ void open_math(Heap& heap) {
     }
 }
 
-} // namespace lua2
+} // namespace cpplua

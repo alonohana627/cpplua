@@ -22,7 +22,7 @@ setmetatable(a, mt2)
 print(getmetatable(a) == mt2, getmetatable(b) == mt)
 
 -- Non-table values: strings have a metatable only with the string library,
--- which lua2 does not have, so only check numbers, booleans and nil.
+-- which cpplua does not have, so only check numbers, booleans and nil.
 print(getmetatable(1), getmetatable(true), getmetatable(nil))
 
 -- __metatable protects the metatable.

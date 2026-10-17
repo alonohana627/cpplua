@@ -14,7 +14,7 @@
 #include "vm/proto.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -458,4 +458,4 @@ void Heap::free_object(GcObject* o) {
     }
 }
 
-} // namespace lua2
+} // namespace cpplua

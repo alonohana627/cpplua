@@ -53,6 +53,6 @@ print(pcall(os.difftime))
 
 -- clock, time, getenv.
 print(math.type(os.clock()), os.clock() >= 0, math.type(os.time()))
-print(os.getenv("LUA2_SURELY_UNDEFINED_VARIABLE_12345"), pcall(os.getenv))
+print(os.getenv("CPPLUA_SURELY_UNDEFINED_VARIABLE_12345"), pcall(os.getenv))
 
 return os.date("!%Y", 0), os.time({year = 2000, month = 1, day = 2, hour = 0}) - os.time({year = 2000, month = 1, day = 1, hour = 0})

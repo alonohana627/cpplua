@@ -9,9 +9,9 @@
 #include <utility>
 #include <vector>
 
-#include <lua2/api.hpp>
+#include <cpplua/api.hpp>
 
-namespace lua2 {
+namespace cpplua {
 
 class Heap;
 
@@ -117,4 +117,4 @@ private:
     std::unique_ptr<Heap> heap_;
 };
 
-} // namespace lua2
+} // namespace cpplua

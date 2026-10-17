@@ -8,7 +8,7 @@
 #include "value/value.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // Running chunks (E1): the steps between source text and results.
 
@@ -22,7 +22,7 @@ std::expected<void, std::string> load(State& state, std::string_view source,
 
 // lua_load with Lua's own chunk name: "@path" for a file, "=name" for a
 // name shown as it is, or else the text itself ([string "..."]); `mode` is
-// load's: "b", "t" or "bt". lua2 loads no binary chunks.
+// load's: "b", "t" or "bt". cpplua loads no binary chunks.
 std::expected<void, std::string> load_chunk(State& state, std::string_view source,
                                             std::string_view source_name, std::string_view mode);
 
@@ -38,7 +38,7 @@ int traceback_handler(State& state);
 // How run_text reports an error.
 enum class ErrorReport : std::uint8_t {
     Message,   // the message only, as a .runerror file has it
-    Traceback, // the message and a stack traceback, as `lua2 file.lua` prints it (R2.5)
+    Traceback, // the message and a stack traceback, as `cpplua file.lua` prints it (R2.5)
 };
 
 // Loads and runs a chunk with no arguments, in protected mode, the way the
@@ -62,4 +62,4 @@ std::expected<std::vector<Value>, std::string> run(State& state, std::string_vie
 // address as the C library's %p writes it.
 std::string display_text(Value value);
 
-} // namespace lua2
+} // namespace cpplua

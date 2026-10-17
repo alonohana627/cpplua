@@ -1,2 +1,5 @@
 # Keep the official Lua test files byte for byte (no line-ending conversion).
 tests/fixtures/** -text
+
+# Shell scripts run under bash, also on Windows.
+*.sh text eol=lf

@@ -1,6 +1,6 @@
 -- Constructs that exercise the compiler's choices (stage 5). This program
 -- does not run yet (it uses tables and globals); its golden file is the
--- bytecode the real luac makes of it, which lua2 must match exactly.
+-- bytecode the real luac makes of it, which cpplua must match exactly.
 local K <const> = 10            -- a compile-time constant: no register
 local S <const> = "name"
 local F <const> = 2.5

@@ -1,0 +1,14 @@
+# `cpack --config CPackLibConfig.cmake`: the library-only package, libcpplua
+# (cmake/Install.cmake). Everything as in the full package, except that only
+# the lib component goes in.
+include("@PROJECT_BINARY_DIR@/CPackConfig.cmake")
+
+set(CPACK_PACKAGE_NAME libcpplua)
+set(CPACK_PACKAGE_FILE_NAME libcpplua-@CPPLUA_VERSION_STRING@-@CPPLUA_PACKAGE_SYSTEM@)
+set(CPACK_INSTALL_CMAKE_PROJECTS "@PROJECT_BINARY_DIR@;cpplua;lib;/")
+
+set(CPACK_DEBIAN_PACKAGE_NAME libcpplua-dev)
+set(CPACK_DEBIAN_PACKAGE_SECTION libdevel)
+unset(CPACK_DEBIAN_PACKAGE_PROVIDES)
+set(CPACK_DEBIAN_PACKAGE_CONFLICTS cpplua)
+unset(CPACK_DEBIAN_PACKAGE_REPLACES)

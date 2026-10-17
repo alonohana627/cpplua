@@ -3,7 +3,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <lua2/interpreter.hpp>
+#include <cpplua/interpreter.hpp>
 
 // Metatables (stage 7) against the rules of docs/spec/metatables.md. The
 // my_lua programs meta_*.lua, close_*.lua and gc_*.lua cover most of the
@@ -12,7 +12,7 @@
 namespace {
 
 std::string run(std::string_view source) {
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     const auto results = interpreter.run(source, "input");
     if (!results) {
         return results.error();

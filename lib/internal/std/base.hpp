@@ -3,7 +3,7 @@
 #include "gc/heap.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // The standard library so far (docs/final_docs/stdlib.md): the base
 // library's functions that tables, metatables and errors need (stages 6 to
@@ -20,4 +20,4 @@ void open_base(Heap& heap);
 int base_next(State& state);
 int base_ipairs_step(State& state);
 
-} // namespace lua2
+} // namespace cpplua

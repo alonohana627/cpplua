@@ -618,7 +618,7 @@ Chunk
         Index
           Name os
           String "getenv"
-        String "LUA2_SURELY_UNDEFINED_VARIABLE_12345"
+        String "CPPLUA_SURELY_UNDEFINED_VARIABLE_12345"
       Call
         Name pcall
         Index

@@ -7,7 +7,7 @@
 #include <variant>
 #include <vector>
 
-namespace lua2 {
+namespace cpplua {
 
 // Every kind of token the lexer can produce. Later parts add names, numbers,
 // strings, keywords and operators (see docs/spec/lexical.md, L11).
@@ -159,4 +159,4 @@ struct Token {
 // symbols quoted ('end', '=='), and the rest in angle brackets (<eof>, <name>).
 std::string expected_text(TokenKind kind);
 
-} // namespace lua2
+} // namespace cpplua

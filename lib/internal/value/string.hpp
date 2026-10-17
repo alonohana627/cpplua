@@ -11,7 +11,7 @@
 #include "runtime_error.hpp"
 #include "value/value.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 class Heap; // gc/heap.hpp
 
@@ -98,4 +98,4 @@ std::expected<Value, RuntimeError> length(Value value);
 // luaV_concat would. A single value is returned as it is.
 std::expected<Value, RuntimeError> concatenate(Heap& heap, std::span<const Value> values);
 
-} // namespace lua2
+} // namespace cpplua

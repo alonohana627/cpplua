@@ -4,7 +4,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <lua2/interpreter.hpp>
+#include <cpplua/interpreter.hpp>
 
 #include "gc/heap.hpp"
 #include "value/table.hpp"
@@ -19,7 +19,7 @@ namespace {
 // Runs a chunk named "input" and returns its results joined with commas, or
 // the error message.
 std::string run(std::string_view source) {
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     const auto results = interpreter.run(source, "input");
     if (!results) {
         return results.error();
@@ -34,15 +34,15 @@ std::string run(std::string_view source) {
     return out;
 }
 
-using lua2::Value;
+using cpplua::Value;
 
 } // namespace
 
 // ---- The Table class ----
 
 TEST_CASE("T1.1 a table stores and removes entries of every key type", "[table]") {
-    lua2::Heap heap{1};
-    lua2::Table* t = heap.new_table();
+    cpplua::Heap heap{1};
+    cpplua::Table* t = heap.new_table();
     const Value s = Value::string(heap.new_string("name"));
     t->set(heap, Value::integer(1), Value::integer(10));
     t->set(heap, s, Value::integer(20));
@@ -59,28 +59,28 @@ TEST_CASE("T1.1 a table stores and removes entries of every key type", "[table]"
 }
 
 TEST_CASE("T1.3 a float key with an integral value is the integer key", "[table]") {
-    lua2::Heap heap{1};
-    lua2::Table* t = heap.new_table();
+    cpplua::Heap heap{1};
+    cpplua::Table* t = heap.new_table();
     t->set(heap, Value::number(3.0), Value::integer(1));
     CHECK(t->get(Value::integer(3)).value().identical(Value::integer(1)));
     Value key;
     Value value;
-    REQUIRE(t->next_entry(key, value) == lua2::Table::NextResult::Found);
+    REQUIRE(t->next_entry(key, value) == cpplua::Table::NextResult::Found);
     CHECK(key.identical(Value::integer(3))); // stored as an integer
 }
 
 TEST_CASE("T1.4 nil and NaN cannot be keys", "[table]") {
-    CHECK(std::string{lua2::Table::check_key(Value::nil())} == "table index is nil");
-    CHECK(std::string{lua2::Table::check_key(Value::number(0.0 / 0.0))} == "table index is NaN");
-    CHECK(lua2::Table::check_key(Value::integer(1)) == nullptr);
+    CHECK(std::string{cpplua::Table::check_key(Value::nil())} == "table index is nil");
+    CHECK(std::string{cpplua::Table::check_key(Value::number(0.0 / 0.0))} == "table index is NaN");
+    CHECK(cpplua::Table::check_key(Value::integer(1)) == nullptr);
     CHECK(run("local t = {} t[nil] = 1") == "input:1: table index is nil");
     CHECK(run("local t = {} t[0/0] = 1") == "input:1: table index is NaN");
     CHECK(run("local t = {} return t[nil], t[0/0]") == "nil,nil");
 }
 
 TEST_CASE("T6.2 the array part grows with sequences and the hash part with the rest", "[table]") {
-    lua2::Heap heap{1};
-    lua2::Table* t = heap.new_table();
+    cpplua::Heap heap{1};
+    cpplua::Table* t = heap.new_table();
     for (std::int64_t i = 1; i <= 100; ++i) {
         t->set_int(heap, i, Value::integer(i * i));
     }
@@ -91,7 +91,7 @@ TEST_CASE("T6.2 the array part grows with sequences and the hash part with the r
         CHECK(t->get_int(i).value().identical(Value::integer(i * i)));
     }
     // Sparse keys go to the hash part.
-    lua2::Table* sparse = heap.new_table();
+    cpplua::Table* sparse = heap.new_table();
     sparse->set_int(heap, 1000000, Value::integer(1));
     sparse->set_int(heap, -5, Value::integer(2));
     CHECK(sparse->real_array_size() == 0);
@@ -100,8 +100,8 @@ TEST_CASE("T6.2 the array part grows with sequences and the hash part with the r
 }
 
 TEST_CASE("T4.1 next visits every entry once, the array part first", "[table]") {
-    lua2::Heap heap{1};
-    lua2::Table* t = heap.new_table();
+    cpplua::Heap heap{1};
+    cpplua::Table* t = heap.new_table();
     for (std::int64_t i = 1; i <= 5; ++i) {
         t->set_int(heap, i, Value::integer(i));
     }
@@ -111,7 +111,7 @@ TEST_CASE("T4.1 next visits every entry once, the array part first", "[table]") 
     Value value;
     std::int64_t sum = 0;
     int count = 0;
-    while (t->next_entry(key, value) == lua2::Table::NextResult::Found) {
+    while (t->next_entry(key, value) == cpplua::Table::NextResult::Found) {
         if (count < 5) {
             CHECK(key.identical(Value::integer(count + 1)));
         }
@@ -121,7 +121,7 @@ TEST_CASE("T4.1 next visits every entry once, the array part first", "[table]") 
     CHECK(count == 7);
     CHECK(sum == 28);
     Value absent = Value::string(heap.new_string("absent"));
-    CHECK(t->next_entry(absent, value) == lua2::Table::NextResult::InvalidKey);
+    CHECK(t->next_entry(absent, value) == cpplua::Table::NextResult::InvalidKey);
 }
 
 // ---- In Lua ----
@@ -201,7 +201,7 @@ TEST_CASE("T5.1 raw functions ignore metamethods", "[table]") {
 }
 
 TEST_CASE("T6.1 unreachable tables are collected", "[table][gc]") {
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     REQUIRE(
         interpreter.run("for i = 1, 1000 do local t = {i, i * 2, name = 'x' .. i} end", "input"));
     interpreter.collect();

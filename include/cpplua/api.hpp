@@ -5,7 +5,7 @@
 // function sees when Lua calls it (Context), Lua values that C++ keeps (Ref),
 // automatic conversion between C++ and Lua values (Converter), and C++
 // classes as Lua types (Class). Everything here works through the
-// interpreter's stack, as Lua's own C API does, without exposing lua2's
+// interpreter's stack, as Lua's own C API does, without exposing cpplua's
 // internals.
 
 #include <concepts>
@@ -22,9 +22,9 @@
 #include <type_traits>
 #include <utility>
 
-#include <lua2/type.hpp>
+#include <cpplua/type.hpp>
 
-namespace lua2 {
+namespace cpplua {
 
 class State; // an interpreter's thread (internal)
 class Heap;  // an interpreter (internal)
@@ -43,7 +43,7 @@ inline constexpr char class_tag = 0;
 //
 // When Lua calls a C++ function, the function gets a Context: its arguments,
 // numbered from 1, and a place to push its results. A raw C++ function has
-// the signature `int f(lua2::Context&)` and returns how many results it
+// the signature `int f(cpplua::Context&)` and returns how many results it
 // pushed, or what error() returns. Functions with any other signature are
 // converted automatically (Converter, below).
 //
@@ -785,4 +785,4 @@ private:
     }
 };
 
-} // namespace lua2
+} // namespace cpplua

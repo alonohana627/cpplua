@@ -5,7 +5,7 @@
 
 #include "value/value.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // Conversions between the two number subtypes (docs/spec/values.md, V2).
 
@@ -91,4 +91,4 @@ constexpr std::optional<std::int64_t> to_integer(Value value, Rounding rounding 
     return std::nullopt;
 }
 
-} // namespace lua2
+} // namespace cpplua

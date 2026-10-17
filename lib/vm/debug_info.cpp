@@ -10,7 +10,7 @@
 #include "vm/metamethods.hpp"
 #include "vm/opcodes.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -249,4 +249,4 @@ std::string called_info(const Proto& proto, int pc) {
     return format_name(called_name(proto, pc));
 }
 
-} // namespace lua2
+} // namespace cpplua

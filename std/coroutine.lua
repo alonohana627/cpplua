@@ -2,7 +2,7 @@
 
 -- The coroutine library's functions are implemented in C++ in lib/std/coroutine.cpp, and the
 -- coroutines themselves in the VM (lib/vm/execute.cpp). This file is a reference only (for
--- readers and lua-language-server); lua2 never runs it.
+-- readers and lua-language-server); cpplua never runs it.
 
 ---The coroutine library. A coroutine is a function that can stop (yield) and later go on
 ---(resume) where it stopped; its value has type "thread".

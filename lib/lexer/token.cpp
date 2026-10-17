@@ -4,7 +4,7 @@
 #include <format>
 #include <string>
 
-namespace lua2 {
+namespace cpplua {
 
 std::string_view token_kind_name(TokenKind kind) {
     // No default case: if a TokenKind is added and not named here, the
@@ -138,4 +138,4 @@ std::string expected_text(TokenKind kind) {
     return std::format("'{}'", symbol_spelling(kind));
 }
 
-} // namespace lua2
+} // namespace cpplua

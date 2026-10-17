@@ -15,10 +15,10 @@ InsertBraces: true
 InsertNewlineAtEOF: true
 SeparateDefinitionBlocks: Always
 FixNamespaceComments: true
-# Our own headers <lua2/...> after the standard library, third party in between.
+# Our own headers <cpplua/...> after the standard library, third party in between.
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex: '^<lua2/'
+  - Regex: '^<cpplua/'
     Priority: 3
   - Regex: '^<[a-z_]+>$'
     Priority: 1

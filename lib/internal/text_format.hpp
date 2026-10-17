@@ -3,7 +3,7 @@
 #include <string>
 #include <string_view>
 
-namespace lua2 {
+namespace cpplua {
 
 // Small formatting helpers shared by the debug views (token dump, AST
 // printer).
@@ -16,4 +16,4 @@ std::string quoted(std::string_view bytes);
 // with ".0" added when it would look like an integer (1000.0, 0.5, inf).
 std::string format_float(double value);
 
-} // namespace lua2
+} // namespace cpplua

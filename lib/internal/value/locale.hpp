@@ -1,6 +1,6 @@
 #pragma once
 
-namespace lua2 {
+namespace cpplua {
 
 // What the C library's locale changes in Lua's values (P4 in
 // docs/spec/conformance.md): string order (LC_COLLATE, through strcoll) and
@@ -20,4 +20,4 @@ void refresh_locale();
 // The locale's decimal point (lua_getlocaledecpoint): '.' in "C".
 [[nodiscard]] char locale_decimal_point();
 
-} // namespace lua2
+} // namespace cpplua

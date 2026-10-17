@@ -1,9 +1,9 @@
-#include <lua2/version.hpp>
+#include <cpplua/version.hpp>
 
-namespace lua2 {
+namespace cpplua {
 
 std::string_view version() {
-    return "lua2 " LUA2_VERSION;
+    return "cpplua " CPPLUA_VERSION;
 }
 
-} // namespace lua2
+} // namespace cpplua

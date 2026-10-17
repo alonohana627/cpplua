@@ -1,11 +1,11 @@
 ---@meta
 
 -- The io library's functions are implemented in C++ in lib/std/io.cpp.
--- This file is a reference only (for readers and lua-language-server); lua2 never runs it.
+-- This file is a reference only (for readers and lua-language-server); cpplua never runs it.
 
 ---The io library. Functions that fail return nil (fail), an error message and an error code.
 ---Writes to the standard output and error go through the interpreter's output functions,
----so a program embedding lua2 can capture them.
+---so a program embedding cpplua can capture them.
 ---@class iolib
 io = {}
 
@@ -65,7 +65,7 @@ function io.open(filename, mode) end
 ---@return file*
 function io.output(file) end
 
----In Lua, starts the program `prog` with a pipe to it. lua2's io library uses only the C++
+---In Lua, starts the program `prog` with a pipe to it. cpplua's io library uses only the C++
 ---standard library, which cannot do that: after checking its arguments it raises
 ---"'popen' not supported", as a Lua built without popen does.
 ---@param prog string

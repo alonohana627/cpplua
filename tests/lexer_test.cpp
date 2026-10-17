@@ -11,13 +11,13 @@
 
 #include "lexer/lexer.hpp"
 
-using lua2::Lexer;
-using lua2::TokenKind;
+using cpplua::Lexer;
+using cpplua::TokenKind;
 
 namespace {
 
 // Returns the next token, failing the test if the lexer returned an error.
-lua2::Token next_token(Lexer& lexer) {
+cpplua::Token next_token(Lexer& lexer) {
     auto result = lexer.next();
     if (!result) {
         FAIL("unexpected lexer error: " << result.error().message);
@@ -79,7 +79,7 @@ TEST_CASE("L1.2 EndOfStream repeats after the end", "[lexer]") {
 }
 
 TEST_CASE("Token equality compares kind, line and value", "[lexer]") {
-    using lua2::Token;
+    using cpplua::Token;
     const Token a{.kind = TokenKind::EndOfStream, .line = 1, .value = {}};
 
     CHECK(a == Token{.kind = TokenKind::EndOfStream, .line = 1, .value = {}});
@@ -268,9 +268,10 @@ TEST_CASE("L4.1 two names lexed in a row keep their own text", "[lexer]") {
     const auto first = next_token(lexer);
     const auto second = next_token(lexer);
 
-    CHECK(first == lua2::Token{.kind = TokenKind::Name, .line = 1, .value = std::string("first")});
+    CHECK(first ==
+          cpplua::Token{.kind = TokenKind::Name, .line = 1, .value = std::string("first")});
     CHECK(second ==
-          lua2::Token{.kind = TokenKind::Name, .line = 1, .value = std::string("second")});
+          cpplua::Token{.kind = TokenKind::Name, .line = 1, .value = std::string("second")});
 }
 
 // ---- Part 4: errors and stray characters ----
@@ -292,7 +293,7 @@ TEST_CASE("L9.1 a stray byte is an Other token holding that byte", "[lexer]") {
 
     CHECK(token.kind == TokenKind::Other);
     CHECK(token.line == 1);
-    CHECK(token.value == lua2::TokenValue{source});
+    CHECK(token.value == cpplua::TokenValue{source});
     CHECK(next_token(lexer).kind == TokenKind::EndOfStream);
 }
 
@@ -347,7 +348,7 @@ TEST_CASE("L10.1 lexing stops at the first error", "[lexer]") {
 namespace {
 
 // Lexes `source`, which must be exactly one token, and returns that token.
-lua2::Token only_token(std::string_view source) {
+cpplua::Token only_token(std::string_view source) {
     Lexer lexer{source};
     auto token = next_token(lexer);
     CHECK(next_token(lexer).kind == TokenKind::EndOfStream);
@@ -379,7 +380,7 @@ TEST_CASE("L5.4 L5.6 decimal integers", "[lexer][number]") {
     const auto token = only_token(source);
 
     CHECK(token.kind == TokenKind::Integer);
-    CHECK(token.value == lua2::TokenValue{value});
+    CHECK(token.value == cpplua::TokenValue{value});
 }
 
 TEST_CASE("L5.4 L5.6 decimal floats", "[lexer][number]") {
@@ -400,7 +401,7 @@ TEST_CASE("L5.4 L5.6 decimal floats", "[lexer][number]") {
     const auto token = only_token(source);
 
     CHECK(token.kind == TokenKind::Float);
-    CHECK(token.value == lua2::TokenValue{value}); // exact: same rounding as the C++ literal
+    CHECK(token.value == cpplua::TokenValue{value}); // exact: same rounding as the C++ literal
 }
 
 TEST_CASE("L5.6 a point or an exponent makes a float", "[lexer][number]") {
@@ -408,33 +409,34 @@ TEST_CASE("L5.6 a point or an exponent makes a float", "[lexer][number]") {
     CHECK(only_token("1.").kind == TokenKind::Float);
     CHECK(only_token("1.0").kind == TokenKind::Float);
     CHECK(only_token("1e0").kind == TokenKind::Float);
-    CHECK(only_token("1e2").value == lua2::TokenValue{100.0});
+    CHECK(only_token("1e2").value == cpplua::TokenValue{100.0});
 }
 
 TEST_CASE("L5.7 a decimal integer too large for 64 bits becomes a float", "[lexer][number]") {
     const auto max_plus_one = only_token("9223372036854775808");
     CHECK(max_plus_one.kind == TokenKind::Float);
-    CHECK(max_plus_one.value == lua2::TokenValue{9223372036854775808.0});
+    CHECK(max_plus_one.value == cpplua::TokenValue{9223372036854775808.0});
 
     const auto huge = only_token("100000000000000000000");
     CHECK(huge.kind == TokenKind::Float);
-    CHECK(huge.value == lua2::TokenValue{1e20});
+    CHECK(huge.value == cpplua::TokenValue{1e20});
 }
 
 TEST_CASE("L5.9 floats too large are infinity, too small are zero", "[lexer][number]") {
-    CHECK(only_token("1e400").value == lua2::TokenValue{std::numeric_limits<double>::infinity()});
-    CHECK(only_token("1.8e308").value == lua2::TokenValue{std::numeric_limits<double>::infinity()});
-    CHECK(only_token("1e-400").value == lua2::TokenValue{0.0});
+    CHECK(only_token("1e400").value == cpplua::TokenValue{std::numeric_limits<double>::infinity()});
+    CHECK(only_token("1.8e308").value ==
+          cpplua::TokenValue{std::numeric_limits<double>::infinity()});
+    CHECK(only_token("1e-400").value == cpplua::TokenValue{0.0});
 
     // 400 zeros after the point, with no exponent, still underflows to 0.
     const std::string tiny = "0." + std::string(400, '0') + "1";
-    CHECK(only_token(tiny).value == lua2::TokenValue{0.0});
+    CHECK(only_token(tiny).value == cpplua::TokenValue{0.0});
 
     // The largest double and the smallest subnormal are still in range.
     CHECK(only_token("1.7976931348623157e308").value ==
-          lua2::TokenValue{std::numeric_limits<double>::max()});
+          cpplua::TokenValue{std::numeric_limits<double>::max()});
     CHECK(only_token("4.9e-324").value ==
-          lua2::TokenValue{std::numeric_limits<double>::denorm_min()});
+          cpplua::TokenValue{std::numeric_limits<double>::denorm_min()});
 }
 
 TEST_CASE("L5.10 numerals have no sign", "[lexer][number]") {
@@ -505,7 +507,7 @@ TEST_CASE("L5.5 hex integers", "[lexer][number]") {
     const auto token = only_token(source);
 
     CHECK(token.kind == TokenKind::Integer);
-    CHECK(token.value == lua2::TokenValue{value});
+    CHECK(token.value == cpplua::TokenValue{value});
 }
 
 TEST_CASE("L5.8 hex integers wrap around modulo 2^64", "[lexer][number]") {
@@ -521,7 +523,7 @@ TEST_CASE("L5.8 hex integers wrap around modulo 2^64", "[lexer][number]") {
     const auto token = only_token(source);
 
     CHECK(token.kind == TokenKind::Integer);
-    CHECK(token.value == lua2::TokenValue{value});
+    CHECK(token.value == cpplua::TokenValue{value});
 }
 
 TEST_CASE("L5.5 hex floats", "[lexer][number]") {
@@ -541,12 +543,12 @@ TEST_CASE("L5.5 hex floats", "[lexer][number]") {
     const auto token = only_token(source);
 
     CHECK(token.kind == TokenKind::Float);
-    CHECK(token.value == lua2::TokenValue{value});
+    CHECK(token.value == cpplua::TokenValue{value});
 }
 
 TEST_CASE("L5.9 hex floats out of range are infinity", "[lexer][number]") {
     CHECK(only_token("0x1p99999").value ==
-          lua2::TokenValue{std::numeric_limits<double>::infinity()});
+          cpplua::TokenValue{std::numeric_limits<double>::infinity()});
 }
 
 TEST_CASE("L5.2 L5.3 malformed numbers", "[lexer][number]") {
@@ -707,7 +709,7 @@ TEST_CASE("L7.3 a backslash before a line break is one newline", "[lexer][string
     const auto string = next_token(lexer);
     const auto name = next_token(lexer);
 
-    CHECK(string.value == lua2::TokenValue{std::string("a\nb")});
+    CHECK(string.value == cpplua::TokenValue{std::string("a\nb")});
     CHECK(string.line == 1); // the line the string starts on
     CHECK(name.line == 2);   // the escaped line break was counted
 }
@@ -817,7 +819,7 @@ TEST_CASE("L7.3 \\z counts the lines it skips", "[lexer][string]") {
     const auto string = next_token(lexer);
     const auto name = next_token(lexer);
 
-    CHECK(string.value == lua2::TokenValue{std::string("ab")});
+    CHECK(string.value == cpplua::TokenValue{std::string("ab")});
     CHECK(string.line == 1);
     CHECK(name.line == 3);
 }
@@ -918,7 +920,7 @@ TEST_CASE("L7.10 every line break inside becomes \\n", "[lexer][long]") {
     const auto string = next_token(lexer);
     const auto name = next_token(lexer);
 
-    CHECK(string.value == lua2::TokenValue{std::string("a\nb")});
+    CHECK(string.value == cpplua::TokenValue{std::string("a\nb")});
     CHECK(string.line == 1); // the line the string starts on
     CHECK(name.line == 2);
 }
@@ -1046,8 +1048,8 @@ TEST_CASE("a token records its offset and length in the source", "[lexer]") {
 }
 
 TEST_CASE("token equality ignores the offset and length", "[lexer]") {
-    lua2::Token a{.kind = TokenKind::Name, .line = 1, .value = std::string("x")};
-    lua2::Token b = a;
+    cpplua::Token a{.kind = TokenKind::Name, .line = 1, .value = std::string("x")};
+    cpplua::Token b = a;
     b.offset = 10;
     b.length = 1;
 

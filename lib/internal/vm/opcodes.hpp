@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string_view>
 
-namespace lua2 {
+namespace cpplua {
 
 // The VM's instructions (docs/plan/vm.md, part 0): Lua 5.4's format and
 // opcodes, from its lopcodes.h. One instruction is one 32-bit word:
@@ -386,4 +386,4 @@ constexpr const OpInfo& op_info(OpCode op) {
     return op_infos.at(static_cast<std::size_t>(op));
 }
 
-} // namespace lua2
+} // namespace cpplua

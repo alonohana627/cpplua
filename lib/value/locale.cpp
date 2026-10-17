@@ -4,7 +4,7 @@
 #include <clocale>
 #include <cstring>
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -45,4 +45,4 @@ char locale_decimal_point() {
     return decimal_point.load(std::memory_order_relaxed);
 }
 
-} // namespace lua2
+} // namespace cpplua

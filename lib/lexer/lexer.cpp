@@ -16,7 +16,7 @@
 #include "numeral.hpp"
 #include "syntax_error.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -567,4 +567,4 @@ std::unexpected<SyntaxError> Lexer::escape_error(std::string_view message, std::
     return error(message, near_text(near), origin);
 }
 
-} // namespace lua2
+} // namespace cpplua

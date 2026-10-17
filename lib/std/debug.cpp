@@ -26,7 +26,7 @@
 #include "vm/run.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -658,4 +658,4 @@ void open_debug(Heap& heap) {
     open_library(heap, "debug", debug_functions);
 }
 
-} // namespace lua2
+} // namespace cpplua

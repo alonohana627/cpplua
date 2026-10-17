@@ -4,7 +4,7 @@
 #include <string>
 #include <string_view>
 
-namespace lua2 {
+namespace cpplua {
 
 // A lexical or syntax error. It is returned (inside std::expected), never
 // thrown. The lexer produces it now, and the parser will too, which is why it
@@ -40,4 +40,4 @@ std::string near_char(unsigned char c);
 // in quotes, as in `'1e+'`.
 std::string near_text(std::string_view text);
 
-} // namespace lua2
+} // namespace cpplua

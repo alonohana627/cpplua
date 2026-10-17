@@ -8,7 +8,7 @@
 #include <variant>
 #include <vector>
 
-namespace lua2 {
+namespace cpplua {
 
 // The abstract syntax tree, stored as an arena (see docs/ROADMAP.md,
 // "Decisions"): every node lives in a std::vector owned by one Ast, and nodes
@@ -541,4 +541,4 @@ private:
     std::string text_;
 };
 
-} // namespace lua2
+} // namespace cpplua

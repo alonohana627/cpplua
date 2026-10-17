@@ -2,7 +2,7 @@
 
 #include <format>
 
-namespace lua2 {
+namespace cpplua {
 
 SyntaxError make_syntax_error(std::string_view chunk, int line, std::string_view message,
                               std::string_view near, std::source_location origin) {
@@ -28,4 +28,4 @@ std::string near_text(std::string_view text) {
     return std::format("'{}'", text);
 }
 
-} // namespace lua2
+} // namespace cpplua

@@ -1,6 +1,6 @@
 // The package library and require: a port of Lua 5.4.9's loadlib.c
 // (docs/final_docs/stdlib.md). Modules written in Lua load as in Lua.
-// lua2 loads no C libraries (C++ code adds its functions through the
+// cpplua loads no C libraries (C++ code adds its functions through the
 // C++ API instead), so the C searchers answer as a Lua built without
 // dynamic libraries does.
 
@@ -32,7 +32,7 @@
 #include "vm/run.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -347,7 +347,7 @@ std::string program_directory() {
 
 // setpath: package[field] from the environment (LUA_PATH_5_4, then
 // LUA_PATH), where ";;" stands for the default; else the default, as also
-// when `no_environment` (registry.LUA_NOENV, lua2 -E).
+// when `no_environment` (registry.LUA_NOENV, cpplua -E).
 std::string initial_path(std::string_view variable, std::string_view fallback,
                          bool no_environment) {
     // NOLINTBEGIN(concurrency-mt-unsafe): read once, when the library opens
@@ -426,4 +426,4 @@ void open_package(Heap& heap) {
     set(heap.globals(), "require", Value::c_closure(require_closure));
 }
 
-} // namespace lua2
+} // namespace cpplua

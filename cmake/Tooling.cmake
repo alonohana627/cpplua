@@ -4,9 +4,9 @@
 #   cmake --build --preset debug --target format-check  fail if any file is unformatted
 #   cmake --build --preset debug --target tidy          clang-tidy + Clang Static Analyzer, in parallel
 #
-# Or set LUA2_CLANG_TIDY=ON to run clang-tidy on every compile (slower builds).
+# Or set CPPLUA_CLANG_TIDY=ON to run clang-tidy on every compile (slower builds).
 
-file(GLOB_RECURSE LUA2_SOURCES CONFIGURE_DEPENDS
+file(GLOB_RECURSE CPPLUA_SOURCES CONFIGURE_DEPENDS
   ${PROJECT_SOURCE_DIR}/include/*.hpp
   ${PROJECT_SOURCE_DIR}/lib/*.hpp
   ${PROJECT_SOURCE_DIR}/lib/*.cpp
@@ -19,11 +19,11 @@ file(GLOB_RECURSE LUA2_SOURCES CONFIGURE_DEPENDS
 find_program(CLANG_FORMAT clang-format)
 if(CLANG_FORMAT)
   add_custom_target(format
-    COMMAND ${CLANG_FORMAT} -i ${LUA2_SOURCES}
+    COMMAND ${CLANG_FORMAT} -i ${CPPLUA_SOURCES}
     COMMENT "clang-format: rewriting sources"
     VERBATIM)
   add_custom_target(format-check
-    COMMAND ${CLANG_FORMAT} --dry-run --Werror ${LUA2_SOURCES}
+    COMMAND ${CLANG_FORMAT} --dry-run --Werror ${CPPLUA_SOURCES}
     COMMENT "clang-format: checking sources"
     VERBATIM)
 endif()
@@ -45,9 +45,9 @@ if(CLANG_TIDY AND RUN_CLANG_TIDY AND Python3_FOUND)
     VERBATIM)
 endif()
 
-option(LUA2_CLANG_TIDY "Run clang-tidy as part of every compile" OFF)
-if(LUA2_CLANG_TIDY AND CLANG_TIDY)
-  foreach(target IN ITEMS lua2_lib lua2 lua2_tests)
+option(CPPLUA_CLANG_TIDY "Run clang-tidy as part of every compile" OFF)
+if(CPPLUA_CLANG_TIDY AND CLANG_TIDY)
+  foreach(target IN ITEMS cpplua_lib cpplua cpplua_tests)
     if(TARGET ${target})
       set_target_properties(${target} PROPERTIES CXX_CLANG_TIDY ${CLANG_TIDY})
     endif()

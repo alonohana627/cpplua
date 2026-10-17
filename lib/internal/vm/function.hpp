@@ -9,7 +9,7 @@
 #include "value/value.hpp"
 #include "vm/proto.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // A variable of an enclosing function that a closure uses (E7, Lua's UpVal).
 //
@@ -162,4 +162,4 @@ inline Value Value::closure(const LuaClosure* f) {
     return Value{Tag::LuaClosure, std::bit_cast<std::uint64_t>(f)};
 }
 
-} // namespace lua2
+} // namespace cpplua

@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string_view>
 
-namespace lua2 {
+namespace cpplua {
 
 // The eight types of Lua (V1.1), in the order of Lua's LUA_T* constants.
 enum class Type : std::uint8_t {
@@ -33,4 +33,4 @@ constexpr std::string_view type_name(Type type) {
     return "?"; // not reached: every Type is handled above
 }
 
-} // namespace lua2
+} // namespace cpplua

@@ -2,9 +2,9 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <lua2/source_file.hpp>
+#include <cpplua/source_file.hpp>
 
-using lua2::skip_file_prefix;
+using cpplua::skip_file_prefix;
 
 TEST_CASE("a file without a prefix is lexed whole", "[source_file]") {
     CHECK(skip_file_prefix("").empty());

@@ -1,4 +1,4 @@
-# lua2
+# cpplua
 
 A Lua 5.4 interpreter written from scratch in C++26, built step by step.
 The plan is in [docs/ROADMAP.md](docs/ROADMAP.md); background reading for each step is in [docs/learn/](docs/learn/), and the exact rules we implement are in [docs/spec/](docs/spec/). To call C++ from Lua and Lua from C++ (functions, classes, callbacks), see [docs/how_to_put_cpp_functions_and_classes_into_lua.md](docs/how_to_put_cpp_functions_and_classes_into_lua.md).
@@ -14,15 +14,15 @@ Catch2 is downloaded by CMake on first configure.
 
 ## Layout
 
-| Folder          | Contents                                                     |
-| --------------- | ------------------------------------------------------------ |
-| `include/lua2/` | Public headers, the embedding API (`#include <lua2/...>`)    |
-| `lib/`          | The embeddable interpreter library (`lua2::lua2`), `.cpp` only |
-| `lib/internal/` | The library's private headers, not visible to embedders      |
-| `src/`          | The `lua2` binary that runs Lua, built on `lib/`             |
-| `tests/`        | Catch2 tests                                                 |
-| `bench/`        | Benchmark programs and their runner (`bench/README.md`)      |
-| `std/`          | The standard library's reference: every function as an empty Lua function with its documentation (the code is C++, in `lib/std/`) |
+| Folder              | Contents                                                           |
+| ------------------- | ------------------------------------------------------------------ |
+| `include/cpplua/`   | Public headers, the embedding API (`#include <cpplua/...>`)        |
+| `lib/`              | The embeddable interpreter library (`cpplua::cpplua`), `.cpp` only |
+| `lib/internal/`     | The library's private headers, not visible to embedders            |
+| `src/`              | The `cpplua` binary that runs Lua, built on `lib/`                 |
+| `tests/`            | Catch2 tests                                                       |
+| `bench/`            | Benchmark programs and their runner (`bench/README.md`)            |
+| `std/`              | The standard library's reference: every function as an empty Lua function with its documentation (the code is C++, in `lib/std/`) |
 | `original_lua_src/` | The original Lua 5.4.9 distribution from lua.org, unchanged, built as the reference Lua. Not in Git: configuring downloads it when missing |
 
 ## Build
@@ -30,39 +30,94 @@ Catch2 is downloaded by CMake on first configure.
 ```sh
 cmake --preset debug             # configure (once, or after editing CMake files)
 cmake --build --preset debug     # build
-./build/debug/lua2               # run
+./build/debug/cpplua             # run
 ```
 
 Use `release` instead of `debug` for an optimized build, and `asan` for a debug build with
 AddressSanitizer (it gives the programs an 8 MB stack, since sanitized frames are larger).
 
+## Install
+
+cpplua installs as two parts: the `cpplua` interpreter, and the library for embedding
+(`libcpplua.a`, `include/cpplua/`, a CMake package and a pkg-config file). A program that
+embeds cpplua must be built with clang, libc++ and C++26, like cpplua itself.
+
+From a release build:
+
+```sh
+cmake --install build/release --prefix <dir>                  # everything
+cmake --install build/release --prefix <dir> --component lib  # the library only
+```
+
+Packages, made in the build folder (`.zip` on Windows, `.tar.gz` and `.deb` on Linux):
+
+```sh
+cd build/release
+cpack                                # cpplua-<version>-<system>: everything
+cpack --config CPackLibConfig.cmake  # libcpplua-<version>-<system>: the library only
+sudo apt install ./cpplua_*.deb      # Linux: the interpreter and the library, under /usr
+sudo apt install ./libcpplua-dev_*.deb   # Linux: the library only
+```
+
+Using the library from CMake, once installed (add `<dir>` to `CMAKE_PREFIX_PATH`):
+
+```cmake
+find_package(cpplua 5.4 CONFIG REQUIRED)
+target_link_libraries(my_program PRIVATE cpplua::cpplua)
+```
+
+Or without installing, from the source (cpplua then builds only the library and the
+interpreter, no tests):
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(cpplua GIT_REPOSITORY https://github.com/alonohana627/cpplua.git GIT_TAG v5.4.9-beta)
+FetchContent_MakeAvailable(cpplua)
+target_link_libraries(my_program PRIVATE cpplua::cpplua)
+```
+
+Without CMake: `clang++ -std=c++2c -stdlib=libc++ main.cpp $(pkg-config --cflags --libs cpplua)`.
+`tests/install/` is such a program, and CI builds it against every kind of install.
+
+## CI
+
+`.github/workflows/ci.yml` builds a release on Windows (MSYS2 CLANG64) and Ubuntu (x86-64,
+clang and libc++ from apt.llvm.org), runs every test, and checks every install above
+(`.github/scripts/verify_install.sh`); the packages are kept as the run's artifacts. Pushing a
+tag `v<version>` (such as `v5.4.9-beta`) also publishes them as a GitHub release. To check the
+installs locally, after a release build:
+
+```sh
+.github/scripts/verify_install.sh build/release
+```
+
 ## Run
 
-`lua2` is the real `lua` program (a port of `lua.c`), with the same options
+`cpplua` is the real `lua` program (a port of `lua.c`), with the same options
 ([docs/final_docs/standalone.md](docs/final_docs/standalone.md)):
 
 ```sh
-./build/debug/lua2 file.lua a b         # run a file, with arg[1] = "a", arg[2] = "b"
-./build/debug/lua2                      # the interactive loop (Ctrl-C stops running code)
-./build/debug/lua2 -e "print(1+1)"      # run a string (-e and -l may repeat, in order)
-./build/debug/lua2 -l mod file.lua      # require "mod" into the global mod first (-l m=mod: into m)
-./build/debug/lua2 -i file.lua          # run a file, then the interactive loop
-./build/debug/lua2 -v                   # print the version (also --version)
-./build/debug/lua2 -E file.lua          # ignore LUA_INIT, LUA_PATH and LUA_CPATH
-./build/debug/lua2 -W file.lua          # turn warnings on
-./build/debug/lua2 - < file.lua         # run the standard input
-./build/debug/lua2 file.luac            # binary chunks load too (string.dump, luac_ref -o)
-./build/debug/lua2 --incremental file.lua    # the incremental collector (generational is the default)
+./build/debug/cpplua file.lua a b       # run a file, with arg[1] = "a", arg[2] = "b"
+./build/debug/cpplua                    # the interactive loop (Ctrl-C stops running code)
+./build/debug/cpplua -e "print(1+1)"    # run a string (-e and -l may repeat, in order)
+./build/debug/cpplua -l mod file.lua    # require "mod" into the global mod first (-l m=mod: into m)
+./build/debug/cpplua -i file.lua        # run a file, then the interactive loop
+./build/debug/cpplua -v                 # print the version (also --version)
+./build/debug/cpplua -E file.lua        # ignore LUA_INIT, LUA_PATH and LUA_CPATH
+./build/debug/cpplua -W file.lua        # turn warnings on
+./build/debug/cpplua - < file.lua       # run the standard input
+./build/debug/cpplua file.luac          # binary chunks load too (string.dump, luac_ref -o)
+./build/debug/cpplua --incremental file.lua  # the incremental collector (generational is the default)
 ```
 
-lua2's own debug views come first on the command line:
+cpplua's own debug views come first on the command line:
 
 ```sh
-./build/debug/lua2 --tokens file.lua    # print every token of a file (lexer debugging)
-./build/debug/lua2 --ast file.lua       # print the syntax tree of a file (parser debugging)
-./build/debug/lua2 --ast=dot file.lua > tree.dot   # the tree as a Graphviz graph
+./build/debug/cpplua --tokens file.lua  # print every token of a file (lexer debugging)
+./build/debug/cpplua --ast file.lua     # print the syntax tree of a file (parser debugging)
+./build/debug/cpplua --ast=dot file.lua > tree.dot # the tree as a Graphviz graph
 dot -Tsvg tree.dot -o tree.svg          # draw it (needs Graphviz: pacman -S mingw-w64-clang-x86_64-graphviz)
-./build/debug/lua2 --bytecode file.lua  # the compiled bytecode, listed like `luac -l -l`
+./build/debug/cpplua --bytecode file.lua # the compiled bytecode, listed like `luac -l -l`
 ```
 
 The whole language runs, with tables, metatables, `<close>`, finalizers, weak tables and
@@ -72,43 +127,43 @@ coroutines, and the whole standard library: the base library, `require` and `pac
 suite ([docs/final_docs/conformance.md](docs/final_docs/conformance.md)). The Lua files in `std/` describe every
 library function for readers and editors: point lua-language-server at them
 (`"workspace.library": ["std"]`) for completion and hover help. An uncaught error goes to stderr as
-`lua2: file.lua:3: message` followed by a stack traceback, as the real `lua` prints it.
+`cpplua: file.lua:3: message` followed by a stack traceback, as the real `lua` prints it.
 
 ## Test
 
 ```sh
 ctest --preset debug                         # run all tests
-./build/debug/lua2_tests                     # run Catch2 directly
-./build/debug/lua2_tests "[some-tag]"        # run tests with a tag
-./build/debug/lua2_tests "[conformance]"     # every file of the official suite lexes, parses and compiles
+./build/debug/cpplua_tests                   # run Catch2 directly
+./build/debug/cpplua_tests "[some-tag]"      # run tests with a tag
+./build/debug/cpplua_tests "[conformance]"   # every file of the official suite lexes, parses and compiles
 ctest --preset debug -R lua_5_4_test_suite   # the official Lua 5.4.9 test suite, whole (all.lua)
-cd tests/fixtures/lua-5.4.9-tests && ../../../build/release/lua2 -e "_port=true" all.lua   # by hand
+cd tests/fixtures/lua-5.4.9-tests && ../../../build/release/cpplua -e "_port=true" all.lua # by hand
 cmake --preset asan && cmake --build --preset asan && ctest --preset asan   # under AddressSanitizer
 ```
 
 Lua programs used as tests live in `tests/fixtures/`: the official Lua 5.4.9 suite (unchanged
 from lua.org; `_port=true` skips its Unix-only parts), and
-`my_lua/`, where every Lua program written while developing lua2 is kept with its expected
+`my_lua/`, where every Lua program written while developing cpplua is kept with its expected
 `--ast` output, and optionally its `--ast=dot` and `--bytecode` output and what running it
 returns or the error it stops with (see `tests/fixtures/my_lua/README.md`).
 
 ```sh
-./build/debug/lua2_tests "[vm]"              # the compiler and the VM
-./build/debug/lua2_tests "[gc]"              # the garbage collector (and GC stress runs)
-./build/debug/lua2_tests "[table]"           # tables (docs/spec/tables.md)
-./build/debug/lua2_tests "[meta]"            # metatables, <close>, finalizers, weak tables
-./build/debug/lua2_tests "[error]"           # error, pcall, xpcall, tracebacks
-./build/debug/lua2_tests "[stdlib]"          # the standard library, and std/*.lua against it
-./build/debug/lua2_api_tests                 # the public C++ API, with the embedding guide's examples
-./build/debug/lua2_tests "[my_lua]"          # the my_lua programs: parse, compile, run, stress
+./build/debug/cpplua_tests "[vm]"            # the compiler and the VM
+./build/debug/cpplua_tests "[gc]"            # the garbage collector (and GC stress runs)
+./build/debug/cpplua_tests "[table]"         # tables (docs/spec/tables.md)
+./build/debug/cpplua_tests "[meta]"          # metatables, <close>, finalizers, weak tables
+./build/debug/cpplua_tests "[error]"         # error, pcall, xpcall, tracebacks
+./build/debug/cpplua_tests "[stdlib]"        # the standard library, and std/*.lua against it
+./build/debug/cpplua_api_tests               # the public C++ API, with the embedding guide's examples
+./build/debug/cpplua_tests "[my_lua]"        # the my_lua programs: parse, compile, run, stress
 ```
 
 ## Benchmark
 
 ```sh
 cmake --build --preset release
-./build/release/lua2_bench bench ./build/release/lua2                          # lua2 alone
-./build/release/lua2_bench bench ./build/release/lua2 ./build/release/lua_ref  # against real Lua
+./build/release/cpplua_bench bench ./build/release/cpplua                      # cpplua alone
+./build/release/cpplua_bench bench ./build/release/cpplua ./build/release/lua_ref # against real Lua
 ```
 
 The runner prints the best of 5 runs of each program in `bench/` and the ratio to the
@@ -117,14 +172,14 @@ reference (results in `docs/final_docs/vm.md`). The reference is the real Lua 5.
 (the compiler, for bytecode listings). The folder is only a reference, so Git ignores it; when
 it is missing, `cmake --preset ...` downloads `lua-5.4.9.tar.gz` from lua.org, checks its
 SHA-256 and extracts it there. Without a network (or with a wrong checksum) it warns and builds
-lua2 without them.
+cpplua without them.
 
 ```sh
 ./build/release/lua_ref file.lua            # run a file with the real Lua
-./build/release/lua_ref -e "print(dofile('file.lua'))"   # print what it returns, like lua2 does
+./build/release/lua_ref -e "print(dofile('file.lua'))"   # print what it returns, like cpplua does
 ./build/release/luac_ref -l -l -p file.lua  # the real Lua's bytecode for a file
-./build/release/luac_ref -o file.luac file.lua   # a binary chunk, which lua2 runs too
-cmake --preset release -DLUA2_REFERENCE_LUA=OFF   # build without them (and never download)
+./build/release/luac_ref -o file.luac file.lua   # a binary chunk, which cpplua runs too
+cmake --preset release -DCPPLUA_REFERENCE_LUA=OFF   # build without them (and never download)
 rm -rf original_lua_src && cmake --preset release # download a fresh copy
 ```
 
@@ -132,7 +187,7 @@ The VM's dispatch is a build option: tail calls between instruction functions (t
 fastest, needs clang) or a `switch` in a loop:
 
 ```sh
-cmake --preset release -B build/release-switch -DLUA2_DISPATCH=switch
+cmake --preset release -B build/release-switch -DCPPLUA_DISPATCH=switch
 cmake --build build/release-switch
 ```
 
@@ -155,7 +210,7 @@ Checks are in `.clang-tidy` (tests add exceptions in `tests/.clang-tidy`).
 To run clang-tidy on every compile instead:
 
 ```sh
-cmake --preset debug -DLUA2_CLANG_TIDY=ON
+cmake --preset debug -DCPPLUA_CLANG_TIDY=ON
 ```
 
 Editors using clangd pick up the same checks through `.clangd`.
@@ -172,5 +227,6 @@ ctest --preset asan        # after building the asan preset, for changes to memo
 
 ## Version
 
-The version lives in `project(... VERSION ...)` in `CMakeLists.txt`.
-It goes up by 0.0.1 per roadmap step until the release, which becomes 5.4.
+The version lives in `project(... VERSION ...)` in `CMakeLists.txt`, which follows the Lua
+version cpplua implements (5.4.9), and `CPPLUA_VERSION_SUFFIX` next to it (`beta` until
+installing is verified by hand; empty for the release).

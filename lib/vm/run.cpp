@@ -8,7 +8,7 @@
 #include <iterator>
 #include <string>
 
-#include <lua2/source_file.hpp>
+#include <cpplua/source_file.hpp>
 
 #include "gc/heap.hpp"
 #include "parser/parser.hpp"
@@ -23,7 +23,7 @@
 #include "vm/metamethods.hpp"
 #include "vm/proto.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 std::expected<void, std::string> load(State& state, std::string_view source,
                                       std::string_view chunk_name) {
@@ -39,7 +39,7 @@ std::expected<void, std::string> load_chunk(State& state, std::string_view sourc
                                            binary ? "binary" : "text", mode));
     }
     Heap& heap = state.heap();
-    if (binary) { // lua2's binary chunks are Lua 5.4's (luaU_undump)
+    if (binary) { // cpplua's binary chunks are Lua 5.4's (luaU_undump)
         auto closure = undump(heap, source, source_name);
         if (!closure) {
             return std::unexpected(std::move(closure.error()));
@@ -225,4 +225,4 @@ std::string display_text(Value value) {
     return "?";
 }
 
-} // namespace lua2
+} // namespace cpplua

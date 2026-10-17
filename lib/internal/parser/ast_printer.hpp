@@ -4,7 +4,7 @@
 
 #include "parser/ast.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // Prints the tree as indented text, one node per line, two spaces per level:
 //
@@ -12,7 +12,7 @@ namespace lua2 {
 //     Return
 //       Integer 1
 //
-// Used by `lua2 --ast` and by the parser tests, which compare this text.
+// Used by `cpplua --ast` and by the parser tests, which compare this text.
 std::string print_ast(const Ast& ast);
 
 // The same tree as a Graphviz DOT graph: one box per line of print_ast(),
@@ -26,7 +26,7 @@ std::string print_ast(const Ast& ast);
 //     ...
 //   }
 //
-// Used by `lua2 --ast=dot`; render it with `dot -Tsvg tree.dot -o tree.svg`.
+// Used by `cpplua --ast=dot`; render it with `dot -Tsvg tree.dot -o tree.svg`.
 std::string print_ast_dot(const Ast& ast);
 
-} // namespace lua2
+} // namespace cpplua

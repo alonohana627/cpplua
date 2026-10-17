@@ -33,7 +33,7 @@
 #include "vm/run.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -1725,4 +1725,4 @@ void open_string(Heap& heap) {
     heap.set_type_metatable(Type::String, mt);
 }
 
-} // namespace lua2
+} // namespace cpplua

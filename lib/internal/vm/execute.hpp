@@ -6,7 +6,7 @@
 
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // What a C++ function returns to raise an error (lua_error): the error
 // object is in State::error_value. Any other result is how many values it
@@ -130,4 +130,4 @@ Status equal_values(State& thread, Value a, Value b, bool& result);
 // #v with __len (lua_len, M3.6).
 Status length_value(State& thread, Value v, Value& result);
 
-} // namespace lua2
+} // namespace cpplua

@@ -1,9 +1,9 @@
 // Binary chunks: a port of Lua 5.4.9's ldump.c and lundump.c
-// (docs/final_docs/dump.md). lua2's bytecode is Lua's, so its binary
+// (docs/final_docs/dump.md). cpplua's bytecode is Lua's, so its binary
 // chunks are Lua 5.4's: string.dump's output loads in the real Lua, and
-// luac's output loads in lua2.
+// luac's output loads in cpplua.
 //
-// The one difference inside: lua2 keeps every instruction's absolute line,
+// The one difference inside: cpplua keeps every instruction's absolute line,
 // where Lua keeps a byte per instruction (the change from the line before)
 // and an absolute line every 128 instructions or after a big jump
 // (lcode.c's savelineinfo). Dumping makes Lua's encoding from the lines;
@@ -29,7 +29,7 @@
 #include "vm/function.hpp"
 #include "vm/proto.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -605,4 +605,4 @@ std::expected<LuaClosure*, std::string> undump(Heap& heap, std::string_view byte
     return closure;
 }
 
-} // namespace lua2
+} // namespace cpplua

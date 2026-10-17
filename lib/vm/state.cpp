@@ -7,7 +7,7 @@
 #include "vm/execute.hpp"
 #include "vm/function.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 State::State(Heap& heap) : stack_last(basic_stack_size), top(1), heap_(&heap) {
     // Lua's stack_init: a small stack, all nil, and the bottom frame, whose
@@ -202,4 +202,4 @@ void State::close_upvalues(std::uint32_t level) {
     }
 }
 
-} // namespace lua2
+} // namespace cpplua

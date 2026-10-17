@@ -10,7 +10,7 @@
 #include "value/value.hpp"
 #include "value_printer.hpp"
 
-using lua2::Value;
+using cpplua::Value;
 
 namespace {
 
@@ -35,18 +35,18 @@ Value nan() {
 }
 
 bool lt(Value a, Value b) {
-    const auto result = lua2::less_than(a, b);
+    const auto result = cpplua::less_than(a, b);
     REQUIRE(result.has_value());
     return *result;
 }
 
 bool le(Value a, Value b) {
-    const auto result = lua2::less_equal(a, b);
+    const auto result = cpplua::less_equal(a, b);
     REQUIRE(result.has_value());
     return *result;
 }
 
-std::string error_of(const lua2::CompareResult& result) {
+std::string error_of(const cpplua::CompareResult& result) {
     REQUIRE_FALSE(result.has_value());
     return result.error().message;
 }
@@ -58,47 +58,47 @@ std::string error_of(const lua2::CompareResult& result) {
 // floats that cannot represent every integer).
 
 TEST_CASE("V7.1 values of different types are never equal", "[value][compare]") {
-    CHECK_FALSE(lua2::equals(Value::nil(), Value::boolean(false)));
-    CHECK_FALSE(lua2::equals(i(0), Value::boolean(false)));
-    CHECK_FALSE(lua2::equals(i(1), Value::boolean(true)));
-    CHECK_FALSE(lua2::equals(Value::nil(), i(0)));
+    CHECK_FALSE(cpplua::equals(Value::nil(), Value::boolean(false)));
+    CHECK_FALSE(cpplua::equals(i(0), Value::boolean(false)));
+    CHECK_FALSE(cpplua::equals(i(1), Value::boolean(true)));
+    CHECK_FALSE(cpplua::equals(Value::nil(), i(0)));
 }
 
 TEST_CASE("V7.2 numbers are equal by value, exactly", "[value][compare]") {
-    CHECK(lua2::equals(i(1), f(1.0)));
-    CHECK(lua2::equals(f(1.0), i(1)));
-    CHECK(lua2::equals(i(0), f(-0.0)));
-    CHECK(lua2::equals(f(0.0), f(-0.0)));
-    CHECK_FALSE(lua2::equals(i(1), f(1.5)));
-    CHECK_FALSE(lua2::equals(i(2), i(3)));
+    CHECK(cpplua::equals(i(1), f(1.0)));
+    CHECK(cpplua::equals(f(1.0), i(1)));
+    CHECK(cpplua::equals(i(0), f(-0.0)));
+    CHECK(cpplua::equals(f(0.0), f(-0.0)));
+    CHECK_FALSE(cpplua::equals(i(1), f(1.5)));
+    CHECK_FALSE(cpplua::equals(i(2), i(3)));
 
-    CHECK(lua2::equals(f(two_to_53), i(int_two_to_53)));
-    CHECK(lua2::equals(f(two_to_53 - 1.0), f(static_cast<double>(int_two_to_53) - 1.0)));
-    CHECK_FALSE(lua2::equals(f(two_to_53 - 1.0), i(int_two_to_53)));
+    CHECK(cpplua::equals(f(two_to_53), i(int_two_to_53)));
+    CHECK(cpplua::equals(f(two_to_53 - 1.0), f(static_cast<double>(int_two_to_53) - 1.0)));
+    CHECK_FALSE(cpplua::equals(f(two_to_53 - 1.0), i(int_two_to_53)));
     // 2^53 + 1 has no float: the float rounds, the integer does not.
-    CHECK_FALSE(lua2::equals(f(two_to_53 + 1.0), i(int_two_to_53 + 1)));
+    CHECK_FALSE(cpplua::equals(f(two_to_53 + 1.0), i(int_two_to_53 + 1)));
     // maxint + 0.0 rounds up to 2^63.
-    CHECK_FALSE(lua2::equals(i(maxint), f(static_cast<double>(maxint))));
-    CHECK(lua2::equals(f(static_cast<double>(maxint)), f(two_to_63)));
-    CHECK(lua2::equals(f(static_cast<double>(minint)), i(minint)));
-    CHECK(lua2::equals(f(-two_to_63), i(minint)));
-    CHECK_FALSE(lua2::equals(f(two_to_63), i(minint)));
-    CHECK_FALSE(lua2::equals(f(inf), i(maxint)));
+    CHECK_FALSE(cpplua::equals(i(maxint), f(static_cast<double>(maxint))));
+    CHECK(cpplua::equals(f(static_cast<double>(maxint)), f(two_to_63)));
+    CHECK(cpplua::equals(f(static_cast<double>(minint)), i(minint)));
+    CHECK(cpplua::equals(f(-two_to_63), i(minint)));
+    CHECK_FALSE(cpplua::equals(f(two_to_63), i(minint)));
+    CHECK_FALSE(cpplua::equals(f(inf), i(maxint)));
 }
 
 TEST_CASE("V7.3 nan equals nothing, not even itself", "[value][compare]") {
     const Value n = nan();
-    CHECK_FALSE(lua2::equals(n, n));
-    CHECK_FALSE(lua2::equals(n, nan()));
-    CHECK_FALSE(lua2::equals(n, i(0)));
-    CHECK_FALSE(lua2::equals(i(0), n));
+    CHECK_FALSE(cpplua::equals(n, n));
+    CHECK_FALSE(cpplua::equals(n, nan()));
+    CHECK_FALSE(cpplua::equals(n, i(0)));
+    CHECK_FALSE(cpplua::equals(i(0), n));
 }
 
 TEST_CASE("V7.5 nil and booleans compare by value", "[value][compare]") {
-    CHECK(lua2::equals(Value::nil(), Value::nil()));
-    CHECK(lua2::equals(Value::boolean(true), Value::boolean(true)));
-    CHECK(lua2::equals(Value::boolean(false), Value::boolean(false)));
-    CHECK_FALSE(lua2::equals(Value::boolean(true), Value::boolean(false)));
+    CHECK(cpplua::equals(Value::nil(), Value::nil()));
+    CHECK(cpplua::equals(Value::boolean(true), Value::boolean(true)));
+    CHECK(cpplua::equals(Value::boolean(false), Value::boolean(false)));
+    CHECK_FALSE(cpplua::equals(Value::boolean(true), Value::boolean(false)));
 }
 
 TEST_CASE("V8.2 integers and floats are ordered by value", "[value][compare]") {
@@ -172,10 +172,10 @@ TEST_CASE("V8.2 the exact helpers agree with integer comparison", "[value][compa
                 const auto fl = static_cast<double>(base + df);
                 const auto as_int = static_cast<std::int64_t>(fl);
                 CAPTURE(a, as_int);
-                CHECK(lua2::int_less_float(a, fl) == (a < as_int));
-                CHECK(lua2::int_less_equal_float(a, fl) == (a <= as_int));
-                CHECK(lua2::float_less_int(fl, a) == (as_int < a));
-                CHECK(lua2::float_less_equal_int(fl, a) == (as_int <= a));
+                CHECK(cpplua::int_less_float(a, fl) == (a < as_int));
+                CHECK(cpplua::int_less_equal_float(a, fl) == (a <= as_int));
+                CHECK(cpplua::float_less_int(fl, a) == (as_int < a));
+                CHECK(cpplua::float_less_equal_int(fl, a) == (as_int <= a));
             }
         }
     }
@@ -194,17 +194,18 @@ TEST_CASE("V8.3 every comparison with nan is false", "[value][compare]") {
     // Also beyond 2^53, where the integer path is taken.
     CHECK_FALSE(lt(i(maxint), n));
     CHECK_FALSE(le(n, i(minint)));
-    CHECK_FALSE(lua2::int_less_float(maxint, std::nan("")));
-    CHECK_FALSE(lua2::float_less_equal_int(std::nan(""), minint));
+    CHECK_FALSE(cpplua::int_less_float(maxint, std::nan("")));
+    CHECK_FALSE(cpplua::float_less_equal_int(std::nan(""), minint));
 }
 
 TEST_CASE("V8.6 other values cannot be ordered", "[value][compare]") {
-    CHECK(error_of(lua2::less_than(Value::nil(), Value::nil())) ==
+    CHECK(error_of(cpplua::less_than(Value::nil(), Value::nil())) ==
           "attempt to compare two nil values");
-    CHECK(error_of(lua2::less_than(Value::boolean(true), Value::boolean(false))) ==
+    CHECK(error_of(cpplua::less_than(Value::boolean(true), Value::boolean(false))) ==
           "attempt to compare two boolean values");
-    CHECK(error_of(lua2::less_than(i(1), Value::nil())) == "attempt to compare number with nil");
-    CHECK(error_of(lua2::less_equal(Value::nil(), f(1.0))) == "attempt to compare nil with number");
+    CHECK(error_of(cpplua::less_than(i(1), Value::nil())) == "attempt to compare number with nil");
+    CHECK(error_of(cpplua::less_equal(Value::nil(), f(1.0))) ==
+          "attempt to compare nil with number");
     // `1 > nil` is `nil < 1`: the operands swap.
-    CHECK(error_of(lua2::less_than(Value::nil(), i(1))) == "attempt to compare nil with number");
+    CHECK(error_of(cpplua::less_than(Value::nil(), i(1))) == "attempt to compare nil with number");
 }

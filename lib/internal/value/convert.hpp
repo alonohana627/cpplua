@@ -8,7 +8,7 @@
 
 #include "value/value.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // Conversions between numbers and strings (docs/spec/values.md, V5 and V6).
 
@@ -46,4 +46,4 @@ std::optional<NumberText> number_text(Value value);
 // numbers here.
 std::optional<Value> string_to_number(std::string_view text);
 
-} // namespace lua2
+} // namespace cpplua

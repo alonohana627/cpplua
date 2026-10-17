@@ -2,7 +2,7 @@
 
 #include <format>
 
-namespace lua2 {
+namespace cpplua {
 
 std::string quoted(std::string_view bytes) {
     std::string out = "\"";
@@ -37,4 +37,4 @@ std::string format_float(double value) {
     return text;
 }
 
-} // namespace lua2
+} // namespace cpplua

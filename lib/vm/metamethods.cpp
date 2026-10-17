@@ -6,7 +6,7 @@
 #include "value/table.hpp"
 #include "value/userdata.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 Table* metatable_of(const Heap& heap, Value v) {
     if (v.is_table()) {
@@ -62,4 +62,4 @@ std::string_view object_type_name(const Heap& heap, Value v) {
     return type_name(v.type());
 }
 
-} // namespace lua2
+} // namespace cpplua

@@ -6,7 +6,7 @@
 #include <limits>
 #include <system_error>
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -73,4 +73,4 @@ std::optional<double> float_numeral(std::string_view text) {
     return value;
 }
 
-} // namespace lua2
+} // namespace cpplua

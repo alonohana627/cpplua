@@ -8,7 +8,7 @@
 #include "value/string.hpp"
 #include "value/value.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 class Heap;
 
@@ -258,4 +258,4 @@ inline Value Value::table(const Table* t) {
     return Value{Tag::Table, std::bit_cast<std::uint64_t>(t)};
 }
 
-} // namespace lua2
+} // namespace cpplua

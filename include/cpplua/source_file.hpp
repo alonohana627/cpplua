@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-namespace lua2 {
+namespace cpplua {
 
 // What Lua's file loader (luaL_loadfilex in lauxlib.c, `skipcomment`) drops
 // from the start of a file before the lexer sees it:
@@ -18,4 +18,4 @@ namespace lua2 {
 // Returns the part of `contents` to lex, a view into it.
 std::string_view skip_file_prefix(std::string_view contents);
 
-} // namespace lua2
+} // namespace cpplua

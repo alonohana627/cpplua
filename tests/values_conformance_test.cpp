@@ -23,7 +23,7 @@
 // where it comes from. The rest of those files needs the VM and the standard
 // library, and runs in the conformance stage.
 
-using lua2::Value;
+using cpplua::Value;
 using namespace std::string_view_literals;
 
 namespace {
@@ -42,7 +42,7 @@ Value fv(double v) {
 }
 
 // The result of an operation, failing the test on an error.
-Value ok(const lua2::ArithResult& result) {
+Value ok(const cpplua::ArithResult& result) {
     if (!result) {
         FAIL("unexpected error: " << result.error().message);
     }
@@ -51,16 +51,16 @@ Value ok(const lua2::ArithResult& result) {
 
 // Lua's == on two results.
 bool eq(Value a, Value b) {
-    return lua2::equals(a, b);
+    return cpplua::equals(a, b);
 }
 
 // math.lua's same_number: equal, and the same subtype.
 bool same_number(Value a, Value b) {
-    return lua2::equals(a, b) && a.is_integer() == b.is_integer() && a.is_float() == b.is_float();
+    return cpplua::equals(a, b) && a.is_integer() == b.is_integer() && a.is_float() == b.is_float();
 }
 
 bool lt(Value a, Value b) {
-    const auto result = lua2::less_than(a, b);
+    const auto result = cpplua::less_than(a, b);
     if (!result) {
         FAIL("unexpected error: " << result.error().message);
     }
@@ -68,7 +68,7 @@ bool lt(Value a, Value b) {
 }
 
 bool le(Value a, Value b) {
-    const auto result = lua2::less_equal(a, b);
+    const auto result = cpplua::less_equal(a, b);
     if (!result) {
         FAIL("unexpected error: " << result.error().message);
     }
@@ -81,29 +81,29 @@ bool is_nan(Value v) {
 
 // 2^n as a float, as Lua's 2^n.
 Value two_to(int n) {
-    return ok(lua2::power(iv(2), iv(n)));
+    return ok(cpplua::power(iv(2), iv(n)));
 }
 
 } // namespace
 
 TEST_CASE("math.lua: integers and floats in this build", "[value][conformance]") {
     // (1 << intbits) == 0, minint == 1 << (intbits - 1), maxint == minint - 1
-    CHECK(eq(ok(lua2::shift_left(iv(1), iv(intbits))), iv(0)));
-    CHECK(eq(iv(minint), ok(lua2::shift_left(iv(1), iv(intbits - 1)))));
-    CHECK(eq(iv(maxint), ok(lua2::subtract(iv(minint), iv(1)))));
+    CHECK(eq(ok(cpplua::shift_left(iv(1), iv(intbits))), iv(0)));
+    CHECK(eq(iv(minint), ok(cpplua::shift_left(iv(1), iv(intbits - 1)))));
+    CHECK(eq(iv(maxint), ok(cpplua::subtract(iv(minint), iv(1)))));
 
     // The float mantissa has 53 bits: 2^53 + 1.0 rounds back to 2^53.
     const Value x = two_to(floatbits);
-    CHECK(lt(ok(lua2::subtract(x, fv(1.0))), x));
-    CHECK(eq(x, ok(lua2::add(x, fv(1.0)))));
+    CHECK(lt(ok(cpplua::subtract(x, fv(1.0))), x));
+    CHECK(eq(x, ok(cpplua::add(x, fv(1.0)))));
 
     // isNaN(0/0) and not isNaN(1/0)
-    CHECK(is_nan(ok(lua2::divide(iv(0), iv(0)))));
-    CHECK_FALSE(is_nan(ok(lua2::divide(iv(1), iv(0)))));
+    CHECK(is_nan(ok(cpplua::divide(iv(0), iv(0)))));
+    CHECK_FALSE(is_nan(ok(cpplua::divide(iv(1), iv(0)))));
 }
 
 TEST_CASE("math.lua: basic float notation and numeric strings", "[value][conformance]") {
-    lua2::Heap heap{1};
+    cpplua::Heap heap{1};
     const auto str = [&](std::string_view bytes) { return Value::string(heap.new_string(bytes)); };
     // 0e12 == 0 and .0 == 0 and 0. == 0 and .2e2 == 20 and 2.E-1 == 0.2
     constexpr auto notations = std::to_array<std::pair<std::string_view, double>>({
@@ -115,7 +115,7 @@ TEST_CASE("math.lua: basic float notation and numeric strings", "[value][conform
     });
     for (const auto [text, value] : notations) {
         CAPTURE(text);
-        const auto number = lua2::string_to_number(text);
+        const auto number = cpplua::string_to_number(text);
         REQUIRE(number.has_value());
         CHECK(eq(number.value_or(Value{}), fv(value)));
     }
@@ -124,42 +124,42 @@ TEST_CASE("math.lua: basic float notation and numeric strings", "[value][conform
     const Value a = str("2");
     const Value b = str(" 3e0 ");
     const Value c = str(" 10  ");
-    CHECK(eq(ok(lua2::add(a, b)), iv(5)));
-    CHECK(eq(ok(lua2::negate(b)), iv(-3)));
-    CHECK(eq(ok(lua2::add(b, str("2"))), iv(5)));
-    CHECK(eq(ok(lua2::subtract(str("10"), c)), iv(0)));
-    CHECK(eq(ok(lua2::negate(c)), ok(lua2::negate(str("  10 ")))));
-    CHECK(eq(ok(lua2::modulo(c, a)), iv(0)));
-    CHECK(eq(ok(lua2::power(a, b)), iv(8)));
+    CHECK(eq(ok(cpplua::add(a, b)), iv(5)));
+    CHECK(eq(ok(cpplua::negate(b)), iv(-3)));
+    CHECK(eq(ok(cpplua::add(b, str("2"))), iv(5)));
+    CHECK(eq(ok(cpplua::subtract(str("10"), c)), iv(0)));
+    CHECK(eq(ok(cpplua::negate(c)), ok(cpplua::negate(str("  10 ")))));
+    CHECK(eq(ok(cpplua::modulo(c, a)), iv(0)));
+    CHECK(eq(ok(cpplua::power(a, b)), iv(8)));
     // The strings themselves are untouched.
-    CHECK(lua2::equals(a, str("2")));
-    CHECK(lua2::equals(b, str(" 3e0 ")));
+    CHECK(cpplua::equals(a, str("2")));
+    CHECK(cpplua::equals(b, str(" 3e0 ")));
     // a = 0; a == -a and 0 == -0
-    CHECK(eq(iv(0), ok(lua2::negate(iv(0)))));
+    CHECK(eq(iv(0), ok(cpplua::negate(iv(0)))));
 
     // "2" + 1 == 3, "2 " + 1 == 3, " -2 " + 1 == -1, " -0xa " + 1 == -9
-    CHECK(eq(ok(lua2::add(str("2"), iv(1))), iv(3)));
-    CHECK(eq(ok(lua2::add(str("2 "), iv(1))), iv(3)));
-    CHECK(eq(ok(lua2::add(str(" -2 "), iv(1))), iv(-1)));
-    CHECK(eq(ok(lua2::add(str(" -0xa "), iv(1))), iv(-9)));
+    CHECK(eq(ok(cpplua::add(str("2"), iv(1))), iv(3)));
+    CHECK(eq(ok(cpplua::add(str("2 "), iv(1))), iv(3)));
+    CHECK(eq(ok(cpplua::add(str(" -2 "), iv(1))), iv(-1)));
+    CHECK(eq(ok(cpplua::add(str(" -0xa "), iv(1))), iv(-9)));
 
     // implicit conversions: '10' * '20' == 200 and so on
     const Value ten = str("10");
     const Value twenty = str("20");
-    CHECK(eq(ok(lua2::multiply(ten, twenty)), iv(200)));
-    CHECK(eq(ok(lua2::add(ten, twenty)), iv(30)));
-    CHECK(eq(ok(lua2::subtract(ten, twenty)), iv(-10)));
-    CHECK(eq(ok(lua2::divide(ten, twenty)), fv(0.5)));
-    CHECK(eq(ok(lua2::negate(twenty)), iv(-20)));
+    CHECK(eq(ok(cpplua::multiply(ten, twenty)), iv(200)));
+    CHECK(eq(ok(cpplua::add(ten, twenty)), iv(30)));
+    CHECK(eq(ok(cpplua::subtract(ten, twenty)), iv(-10)));
+    CHECK(eq(ok(cpplua::divide(ten, twenty)), fv(0.5)));
+    CHECK(eq(ok(cpplua::negate(twenty)), iv(-20)));
 }
 
 TEST_CASE("math.lua: integer arithmetic", "[value][conformance]") {
-    CHECK(lt(iv(minint), ok(lua2::add(iv(minint), iv(1)))));
-    CHECK(lt(ok(lua2::subtract(iv(maxint), iv(1))), iv(maxint)));
-    CHECK(eq(ok(lua2::subtract(iv(0), iv(minint))), iv(minint)));
-    CHECK(eq(ok(lua2::multiply(iv(minint), iv(minint))), iv(0)));
-    CHECK(
-        eq(ok(lua2::multiply(ok(lua2::multiply(iv(maxint), iv(maxint))), iv(maxint))), iv(maxint)));
+    CHECK(lt(iv(minint), ok(cpplua::add(iv(minint), iv(1)))));
+    CHECK(lt(ok(cpplua::subtract(iv(maxint), iv(1))), iv(maxint)));
+    CHECK(eq(ok(cpplua::subtract(iv(0), iv(minint))), iv(minint)));
+    CHECK(eq(ok(cpplua::multiply(iv(minint), iv(minint))), iv(0)));
+    CHECK(eq(ok(cpplua::multiply(ok(cpplua::multiply(iv(maxint), iv(maxint))), iv(maxint))),
+             iv(maxint)));
 }
 
 TEST_CASE("math.lua: floor division", "[value][conformance]") {
@@ -172,63 +172,63 @@ TEST_CASE("math.lua: floor division", "[value][conformance]") {
                     const Value x = float_i ? fv(static_cast<double>(i)) : iv(i);
                     const Value y = float_j ? fv(static_cast<double>(j)) : iv(j);
                     CAPTURE(i, j, float_i, float_j);
-                    CHECK(eq(ok(lua2::floor_divide(x, y)), fv(expected)));
+                    CHECK(eq(ok(cpplua::floor_divide(x, y)), fv(expected)));
                 }
             }
         }
     }
 
     const Value inf = fv(std::numeric_limits<double>::infinity());
-    CHECK(eq(ok(lua2::floor_divide(iv(1), fv(0.0))), inf));
-    CHECK(eq(ok(lua2::floor_divide(iv(-1), fv(0.0))), ok(lua2::negate(inf))));
-    CHECK(same_number(ok(lua2::floor_divide(fv(3.5), fv(1.5))), fv(2.0)));
-    CHECK(same_number(ok(lua2::floor_divide(fv(3.5), fv(-1.5))), fv(-3.0)));
-    CHECK(eq(ok(lua2::floor_divide(fv(1.0), iv(0))), inf));
-    CHECK(same_number(ok(lua2::floor_divide(fv(3.5), iv(1))), fv(3.0)));
-    CHECK(same_number(ok(lua2::floor_divide(fv(3.5), iv(-1))), fv(-4.0)));
+    CHECK(eq(ok(cpplua::floor_divide(iv(1), fv(0.0))), inf));
+    CHECK(eq(ok(cpplua::floor_divide(iv(-1), fv(0.0))), ok(cpplua::negate(inf))));
+    CHECK(same_number(ok(cpplua::floor_divide(fv(3.5), fv(1.5))), fv(2.0)));
+    CHECK(same_number(ok(cpplua::floor_divide(fv(3.5), fv(-1.5))), fv(-3.0)));
+    CHECK(eq(ok(cpplua::floor_divide(fv(1.0), iv(0))), inf));
+    CHECK(same_number(ok(cpplua::floor_divide(fv(3.5), iv(1))), fv(3.0)));
+    CHECK(same_number(ok(cpplua::floor_divide(fv(3.5), iv(-1))), fv(-4.0)));
 
-    CHECK(eq(ok(lua2::floor_divide(iv(maxint), iv(maxint))), iv(1)));
-    CHECK(eq(ok(lua2::floor_divide(iv(maxint), iv(1))), iv(maxint)));
-    CHECK(eq(ok(lua2::floor_divide(iv(maxint - 1), iv(maxint))), iv(0)));
-    CHECK(eq(ok(lua2::floor_divide(iv(maxint), iv(maxint - 1))), iv(1)));
-    CHECK(eq(ok(lua2::floor_divide(iv(minint), iv(minint))), iv(1)));
-    CHECK(eq(ok(lua2::floor_divide(iv(minint + 1), iv(minint))), iv(0)));
-    CHECK(eq(ok(lua2::floor_divide(iv(minint), iv(minint + 1))), iv(1)));
-    CHECK(eq(ok(lua2::floor_divide(iv(minint), iv(1))), iv(minint)));
-    CHECK(eq(ok(lua2::floor_divide(iv(minint), iv(-1))), ok(lua2::negate(iv(minint)))));
-    CHECK(eq(ok(lua2::floor_divide(iv(minint), iv(-2))), two_to(intbits - 2)));
-    CHECK(eq(ok(lua2::floor_divide(iv(maxint), iv(-1))), iv(-maxint)));
+    CHECK(eq(ok(cpplua::floor_divide(iv(maxint), iv(maxint))), iv(1)));
+    CHECK(eq(ok(cpplua::floor_divide(iv(maxint), iv(1))), iv(maxint)));
+    CHECK(eq(ok(cpplua::floor_divide(iv(maxint - 1), iv(maxint))), iv(0)));
+    CHECK(eq(ok(cpplua::floor_divide(iv(maxint), iv(maxint - 1))), iv(1)));
+    CHECK(eq(ok(cpplua::floor_divide(iv(minint), iv(minint))), iv(1)));
+    CHECK(eq(ok(cpplua::floor_divide(iv(minint + 1), iv(minint))), iv(0)));
+    CHECK(eq(ok(cpplua::floor_divide(iv(minint), iv(minint + 1))), iv(1)));
+    CHECK(eq(ok(cpplua::floor_divide(iv(minint), iv(1))), iv(minint)));
+    CHECK(eq(ok(cpplua::floor_divide(iv(minint), iv(-1))), ok(cpplua::negate(iv(minint)))));
+    CHECK(eq(ok(cpplua::floor_divide(iv(minint), iv(-2))), two_to(intbits - 2)));
+    CHECK(eq(ok(cpplua::floor_divide(iv(maxint), iv(-1))), iv(-maxint)));
 }
 
 TEST_CASE("math.lua: the mod operator", "[value][conformance]") {
-    CHECK(same_number(ok(lua2::modulo(iv(-4), iv(3))), iv(2)));
-    CHECK(same_number(ok(lua2::modulo(iv(4), iv(-3))), iv(-2)));
-    CHECK(same_number(ok(lua2::modulo(fv(-4.0), iv(3))), fv(2.0)));
-    CHECK(same_number(ok(lua2::modulo(iv(4), fv(-3.0))), fv(-2.0)));
-    CHECK(same_number(ok(lua2::modulo(iv(4), iv(-5))), iv(-1)));
-    CHECK(same_number(ok(lua2::modulo(iv(4), fv(-5.0))), fv(-1.0)));
-    CHECK(same_number(ok(lua2::modulo(iv(4), iv(5))), iv(4)));
-    CHECK(same_number(ok(lua2::modulo(iv(4), fv(5.0))), fv(4.0)));
-    CHECK(same_number(ok(lua2::modulo(iv(-4), iv(-5))), iv(-4)));
-    CHECK(same_number(ok(lua2::modulo(iv(-4), fv(-5.0))), fv(-4.0)));
-    CHECK(same_number(ok(lua2::modulo(iv(-4), iv(5))), iv(1)));
-    CHECK(same_number(ok(lua2::modulo(iv(-4), fv(5.0))), fv(1.0)));
-    CHECK(same_number(ok(lua2::modulo(fv(4.25), iv(4))), fv(0.25)));
-    CHECK(same_number(ok(lua2::modulo(fv(10.0), iv(2))), fv(0.0)));
-    CHECK(same_number(ok(lua2::modulo(fv(-10.0), iv(2))), fv(0.0)));
-    CHECK(same_number(ok(lua2::modulo(fv(-10.0), iv(-2))), fv(0.0)));
+    CHECK(same_number(ok(cpplua::modulo(iv(-4), iv(3))), iv(2)));
+    CHECK(same_number(ok(cpplua::modulo(iv(4), iv(-3))), iv(-2)));
+    CHECK(same_number(ok(cpplua::modulo(fv(-4.0), iv(3))), fv(2.0)));
+    CHECK(same_number(ok(cpplua::modulo(iv(4), fv(-3.0))), fv(-2.0)));
+    CHECK(same_number(ok(cpplua::modulo(iv(4), iv(-5))), iv(-1)));
+    CHECK(same_number(ok(cpplua::modulo(iv(4), fv(-5.0))), fv(-1.0)));
+    CHECK(same_number(ok(cpplua::modulo(iv(4), iv(5))), iv(4)));
+    CHECK(same_number(ok(cpplua::modulo(iv(4), fv(5.0))), fv(4.0)));
+    CHECK(same_number(ok(cpplua::modulo(iv(-4), iv(-5))), iv(-4)));
+    CHECK(same_number(ok(cpplua::modulo(iv(-4), fv(-5.0))), fv(-4.0)));
+    CHECK(same_number(ok(cpplua::modulo(iv(-4), iv(5))), iv(1)));
+    CHECK(same_number(ok(cpplua::modulo(iv(-4), fv(5.0))), fv(1.0)));
+    CHECK(same_number(ok(cpplua::modulo(fv(4.25), iv(4))), fv(0.25)));
+    CHECK(same_number(ok(cpplua::modulo(fv(10.0), iv(2))), fv(0.0)));
+    CHECK(same_number(ok(cpplua::modulo(fv(-10.0), iv(2))), fv(0.0)));
+    CHECK(same_number(ok(cpplua::modulo(fv(-10.0), iv(-2))), fv(0.0)));
     // math.pi - math.pi % 1 == 3, math.pi - math.pi % 0.001 == 3.141
     const Value pi = fv(std::numbers::pi);
-    CHECK(eq(ok(lua2::subtract(pi, ok(lua2::modulo(pi, iv(1))))), iv(3)));
-    CHECK(eq(ok(lua2::subtract(pi, ok(lua2::modulo(pi, fv(0.001))))), fv(3.141)));
+    CHECK(eq(ok(cpplua::subtract(pi, ok(cpplua::modulo(pi, iv(1))))), iv(3)));
+    CHECK(eq(ok(cpplua::subtract(pi, ok(cpplua::modulo(pi, fv(0.001))))), fv(3.141)));
 
     // Integer and float modulo agree.
     for (std::int64_t i = -10; i <= 10; ++i) {
         for (std::int64_t j = -10; j <= 10; ++j) {
             if (j != 0) {
                 CAPTURE(i, j);
-                CHECK(eq(ok(lua2::modulo(fv(static_cast<double>(i)), iv(j))),
-                         ok(lua2::modulo(iv(i), iv(j)))));
+                CHECK(eq(ok(cpplua::modulo(fv(static_cast<double>(i)), iv(j))),
+                         ok(cpplua::modulo(iv(i), iv(j)))));
             }
         }
     }
@@ -236,8 +236,8 @@ TEST_CASE("math.lua: the mod operator", "[value][conformance]") {
         for (std::int64_t j = -10; j <= 10; ++j) {
             if (j != 0) {
                 CAPTURE(i, j);
-                CHECK(eq(ok(lua2::modulo(two_to(i), iv(j))),
-                         ok(lua2::modulo(ok(lua2::shift_left(iv(1), iv(i))), iv(j)))));
+                CHECK(eq(ok(cpplua::modulo(two_to(i), iv(j))),
+                         ok(cpplua::modulo(ok(cpplua::shift_left(iv(1), iv(i))), iv(j)))));
             }
         }
     }
@@ -246,58 +246,58 @@ TEST_CASE("math.lua: the mod operator", "[value][conformance]") {
     // the same with 2^i up to the largest float.
     for (int i = 10; i < 63; ++i) {
         CAPTURE(i);
-        CHECK(eq(ok(lua2::modulo(ok(lua2::shift_left(iv(1), iv(i))), iv(3))), iv((i % 2) + 1)));
+        CHECK(eq(ok(cpplua::modulo(ok(cpplua::shift_left(iv(1), iv(i))), iv(3))), iv((i % 2) + 1)));
     }
     for (int i = 10; i < 1024; ++i) {
         CAPTURE(i);
-        CHECK(eq(ok(lua2::modulo(two_to(i), iv(3))), iv((i % 2) + 1)));
+        CHECK(eq(ok(cpplua::modulo(two_to(i), iv(3))), iv((i % 2) + 1)));
     }
 
-    CHECK(same_number(ok(lua2::modulo(iv(minint), iv(minint))), iv(0)));
-    CHECK(same_number(ok(lua2::modulo(iv(maxint), iv(maxint))), iv(0)));
-    CHECK(eq(ok(lua2::modulo(iv(minint + 1), iv(minint))), iv(minint + 1)));
-    CHECK(eq(ok(lua2::modulo(iv(maxint - 1), iv(maxint))), iv(maxint - 1)));
-    CHECK(eq(ok(lua2::modulo(iv(minint), iv(maxint))), iv(maxint - 1)));
-    CHECK(eq(ok(lua2::modulo(iv(minint), iv(-1))), iv(0)));
-    CHECK(eq(ok(lua2::modulo(iv(minint), iv(-2))), iv(0)));
-    CHECK(eq(ok(lua2::modulo(iv(maxint), iv(-2))), iv(-1)));
+    CHECK(same_number(ok(cpplua::modulo(iv(minint), iv(minint))), iv(0)));
+    CHECK(same_number(ok(cpplua::modulo(iv(maxint), iv(maxint))), iv(0)));
+    CHECK(eq(ok(cpplua::modulo(iv(minint + 1), iv(minint))), iv(minint + 1)));
+    CHECK(eq(ok(cpplua::modulo(iv(maxint - 1), iv(maxint))), iv(maxint - 1)));
+    CHECK(eq(ok(cpplua::modulo(iv(minint), iv(maxint))), iv(maxint - 1)));
+    CHECK(eq(ok(cpplua::modulo(iv(minint), iv(-1))), iv(0)));
+    CHECK(eq(ok(cpplua::modulo(iv(minint), iv(-2))), iv(0)));
+    CHECK(eq(ok(cpplua::modulo(iv(maxint), iv(-2))), iv(-1)));
 
     // The non-portable section (the Windows C library got fmod wrong once).
     const double huge = std::numeric_limits<double>::infinity();
-    CHECK(is_nan(ok(lua2::modulo(fv(0.0), iv(0)))));
-    CHECK(is_nan(ok(lua2::modulo(fv(1.3), iv(0)))));
-    CHECK(is_nan(ok(lua2::modulo(fv(huge), iv(1)))));
-    CHECK(is_nan(ok(lua2::modulo(fv(huge), fv(1e30)))));
-    CHECK(is_nan(ok(lua2::modulo(fv(-huge), fv(1e30)))));
-    CHECK(is_nan(ok(lua2::modulo(fv(-huge), fv(-1e30)))));
-    CHECK(eq(ok(lua2::modulo(iv(1), fv(huge))), iv(1)));
-    CHECK(eq(ok(lua2::modulo(fv(1e30), fv(huge))), fv(1e30)));
-    CHECK(eq(ok(lua2::modulo(fv(1e30), fv(-huge))), fv(-huge)));
-    CHECK(eq(ok(lua2::modulo(iv(-1), fv(huge))), fv(huge)));
-    CHECK(eq(ok(lua2::modulo(iv(-1), fv(-huge))), iv(-1)));
+    CHECK(is_nan(ok(cpplua::modulo(fv(0.0), iv(0)))));
+    CHECK(is_nan(ok(cpplua::modulo(fv(1.3), iv(0)))));
+    CHECK(is_nan(ok(cpplua::modulo(fv(huge), iv(1)))));
+    CHECK(is_nan(ok(cpplua::modulo(fv(huge), fv(1e30)))));
+    CHECK(is_nan(ok(cpplua::modulo(fv(-huge), fv(1e30)))));
+    CHECK(is_nan(ok(cpplua::modulo(fv(-huge), fv(-1e30)))));
+    CHECK(eq(ok(cpplua::modulo(iv(1), fv(huge))), iv(1)));
+    CHECK(eq(ok(cpplua::modulo(fv(1e30), fv(huge))), fv(1e30)));
+    CHECK(eq(ok(cpplua::modulo(fv(1e30), fv(-huge))), fv(-huge)));
+    CHECK(eq(ok(cpplua::modulo(iv(-1), fv(huge))), fv(huge)));
+    CHECK(eq(ok(cpplua::modulo(iv(-1), fv(-huge))), iv(-1)));
 }
 
 TEST_CASE("math.lua: order between floats and integers", "[value][conformance]") {
     // The floatbits < intbits branch of math.lua.
     const Value fmax = two_to(floatbits);
-    const Value ifmax = ok(lua2::bit_or(fmax, iv(0)));
-    CHECK(lt(fmax, ok(lua2::add(ifmax, iv(1)))));
-    CHECK(lt(ok(lua2::subtract(fmax, iv(1))), ifmax));
-    CHECK_FALSE(le(fmax, ok(lua2::subtract(ifmax, iv(1)))));
+    const Value ifmax = ok(cpplua::bit_or(fmax, iv(0)));
+    CHECK(lt(fmax, ok(cpplua::add(ifmax, iv(1)))));
+    CHECK(lt(ok(cpplua::subtract(fmax, iv(1))), ifmax));
+    CHECK_FALSE(le(fmax, ok(cpplua::subtract(ifmax, iv(1)))));
     CHECK(lt(iv(maxint), two_to(intbits)));
-    CHECK(lt(ok(lua2::negate(two_to(intbits))), iv(minint)));
+    CHECK(lt(ok(cpplua::negate(two_to(intbits))), iv(minint)));
     CHECK(le(iv(maxint), two_to(intbits)));
-    CHECK(le(ok(lua2::negate(two_to(intbits))), iv(minint)));
+    CHECK(le(ok(cpplua::negate(two_to(intbits))), iv(minint)));
 
     // Equality across the border.
-    CHECK(eq(two_to(floatbits), ok(lua2::shift_left(iv(1), iv(floatbits)))));
-    CHECK_FALSE(eq(ok(lua2::add(two_to(floatbits), fv(1.0))),
-                   ok(lua2::add(ok(lua2::shift_left(iv(1), iv(floatbits))), iv(1)))));
-    CHECK(eq(ok(lua2::add(iv(minint), fv(0.0))), iv(minint)));
-    CHECK(eq(ok(lua2::add(iv(minint), fv(0.0))), ok(lua2::negate(two_to(intbits - 1)))));
+    CHECK(eq(two_to(floatbits), ok(cpplua::shift_left(iv(1), iv(floatbits)))));
+    CHECK_FALSE(eq(ok(cpplua::add(two_to(floatbits), fv(1.0))),
+                   ok(cpplua::add(ok(cpplua::shift_left(iv(1), iv(floatbits))), iv(1)))));
+    CHECK(eq(ok(cpplua::add(iv(minint), fv(0.0))), iv(minint)));
+    CHECK(eq(ok(cpplua::add(iv(minint), fv(0.0))), ok(cpplua::negate(two_to(intbits - 1)))));
 
     // NaN is not ordered against anything.
-    const Value nan = ok(lua2::divide(iv(0), iv(0)));
+    const Value nan = ok(cpplua::divide(iv(0), iv(0)));
     CHECK_FALSE(lt(nan, iv(0)));
     CHECK_FALSE(lt(iv(minint), nan)); // not (NaN > minint)
     CHECK_FALSE(le(nan, iv(-9)));
@@ -311,76 +311,76 @@ TEST_CASE("math.lua: order between floats and integers", "[value][conformance]")
 
 TEST_CASE("math.lua: floats to integers", "[value][conformance]") {
     // f2i(x) is x | x.
-    const auto f2i = [](Value x) { return lua2::bit_or(x, x); };
+    const auto f2i = [](Value x) { return cpplua::bit_or(x, x); };
     const std::string no_integer = "number has no integer representation";
     const double huge = std::numeric_limits<double>::infinity();
     CHECK(f2i(fv(huge)).error().message == no_integer);
     CHECK(f2i(fv(-huge)).error().message == no_integer);
-    CHECK(f2i(ok(lua2::divide(iv(0), iv(0)))).error().message == no_integer);
+    CHECK(f2i(ok(cpplua::divide(iv(0), iv(0)))).error().message == no_integer);
     // checkcompt: 2.3 >> 0, 2.0^63 & 1, 1 | 2.0^63, 2.3 ~ 0.0
-    CHECK(lua2::shift_right(fv(2.3), iv(0)).error().message == no_integer);
-    CHECK(lua2::bit_and(two_to(intbits - 1), iv(1)).error().message == no_integer);
-    CHECK(lua2::bit_or(iv(1), two_to(intbits - 1)).error().message == no_integer);
-    CHECK(lua2::bit_xor(fv(2.3), fv(0.0)).error().message == no_integer);
+    CHECK(cpplua::shift_right(fv(2.3), iv(0)).error().message == no_integer);
+    CHECK(cpplua::bit_and(two_to(intbits - 1), iv(1)).error().message == no_integer);
+    CHECK(cpplua::bit_or(iv(1), two_to(intbits - 1)).error().message == no_integer);
+    CHECK(cpplua::bit_xor(fv(2.3), fv(0.0)).error().message == no_integer);
 
     // The floatbits < intbits branch.
-    CHECK(eq(ok(lua2::add(iv(maxint), fv(1.0))), ok(lua2::add(iv(maxint), fv(0.0)))));
-    CHECK(eq(ok(lua2::subtract(iv(minint), fv(1.0))), ok(lua2::add(iv(minint), fv(0.0)))));
-    CHECK(f2i(ok(lua2::add(iv(maxint), fv(0.0)))).error().message == no_integer);
-    CHECK(eq(ok(f2i(two_to(intbits - 2))), ok(lua2::shift_left(iv(1), iv(intbits - 2)))));
-    CHECK(eq(ok(f2i(ok(lua2::negate(two_to(intbits - 2))))),
-             ok(lua2::negate(ok(lua2::shift_left(iv(1), iv(intbits - 2)))))));
-    CHECK(eq(ok(lua2::floor_divide(ok(lua2::add(two_to(floatbits - 1), fv(1.0))), iv(1))),
-             ok(lua2::add(ok(lua2::shift_left(iv(1), iv(floatbits - 1))), iv(1)))));
+    CHECK(eq(ok(cpplua::add(iv(maxint), fv(1.0))), ok(cpplua::add(iv(maxint), fv(0.0)))));
+    CHECK(eq(ok(cpplua::subtract(iv(minint), fv(1.0))), ok(cpplua::add(iv(minint), fv(0.0)))));
+    CHECK(f2i(ok(cpplua::add(iv(maxint), fv(0.0)))).error().message == no_integer);
+    CHECK(eq(ok(f2i(two_to(intbits - 2))), ok(cpplua::shift_left(iv(1), iv(intbits - 2)))));
+    CHECK(eq(ok(f2i(ok(cpplua::negate(two_to(intbits - 2))))),
+             ok(cpplua::negate(ok(cpplua::shift_left(iv(1), iv(intbits - 2)))))));
+    CHECK(eq(ok(cpplua::floor_divide(ok(cpplua::add(two_to(floatbits - 1), fv(1.0))), iv(1))),
+             ok(cpplua::add(ok(cpplua::shift_left(iv(1), iv(floatbits - 1))), iv(1)))));
     // The largest integer a float holds, and the next one.
     // maxint - (1 << (intbits - floatbits)) + 1, that is 2^63 - 2^11.
     constexpr std::int64_t mf = maxint - 2048 + 1;
-    CHECK(eq(ok(f2i(ok(lua2::add(iv(mf), fv(0.0))))), iv(mf)));
+    CHECK(eq(ok(f2i(ok(cpplua::add(iv(mf), fv(0.0))))), iv(mf)));
     // mf + 1 has no float: it rounds to another integer (f2i(mf + 0.0) ~= mf).
-    CHECK_FALSE(eq(ok(f2i(ok(lua2::add(iv(mf + 1), fv(0.0))))), iv(mf + 1)));
+    CHECK_FALSE(eq(ok(f2i(ok(cpplua::add(iv(mf + 1), fv(0.0))))), iv(mf + 1)));
     // minint converts at any precision.
-    CHECK(eq(ok(f2i(ok(lua2::add(iv(minint), fv(0.0))))), iv(minint)));
+    CHECK(eq(ok(f2i(ok(cpplua::add(iv(minint), fv(0.0))))), iv(minint)));
 }
 
 TEST_CASE("math.lua: -0 and NaN", "[value][conformance]") {
     const Value mz = fv(-0.0);
     const Value z = fv(0.0);
     CHECK(eq(mz, z));
-    CHECK(lt(ok(lua2::divide(iv(1), mz)), iv(0)));
-    CHECK(lt(iv(0), ok(lua2::divide(iv(1), z))));
-    const Value inf = ok(lua2::add(ok(lua2::multiply(fv(1e308), iv(10))), iv(1)));
-    CHECK(eq(ok(lua2::divide(iv(-1), inf)), ok(lua2::divide(iv(1), inf))));
+    CHECK(lt(ok(cpplua::divide(iv(1), mz)), iv(0)));
+    CHECK(lt(iv(0), ok(cpplua::divide(iv(1), z))));
+    const Value inf = ok(cpplua::add(ok(cpplua::multiply(fv(1e308), iv(10))), iv(1)));
+    CHECK(eq(ok(cpplua::divide(iv(-1), inf)), ok(cpplua::divide(iv(1), inf))));
 
-    const Value nan = ok(lua2::subtract(inf, inf));
+    const Value nan = ok(cpplua::subtract(inf, inf));
     CHECK_FALSE(eq(nan, nan));
     CHECK_FALSE(lt(nan, nan));
     CHECK_FALSE(le(nan, nan));
     CHECK_FALSE(lt(iv(0), nan));
     CHECK_FALSE(lt(nan, iv(0)));
-    const Value nan1 = ok(lua2::divide(iv(0), iv(0)));
+    const Value nan1 = ok(cpplua::divide(iv(0), iv(0)));
     CHECK_FALSE(eq(nan, nan1));
     CHECK_FALSE(le(nan, nan1));
     CHECK_FALSE(le(nan1, nan));
 
     // A string with the bytes of 0.0 is not 0.
-    lua2::Heap heap{1};
+    cpplua::Heap heap{1};
     const Value zeros = Value::string(heap.new_string("\0\0\0\0\0\0\0\0"sv));
     CHECK_FALSE(eq(iv(0), zeros));
 }
 
 TEST_CASE("math.lua: tonumber and tostring", "[value][conformance]") {
     const auto number = [](std::string_view s) {
-        return lua2::string_to_number(s).value_or(Value{});
+        return cpplua::string_to_number(s).value_or(Value{});
     };
     const auto text = [](Value v) {
-        return std::string{lua2::number_text(v).value_or(lua2::NumberText{}).view()};
+        return std::string{cpplua::number_text(v).value_or(cpplua::NumberText{}).view()};
     };
     // tonumber(tostring(maxint)) and minint, the same subtype.
     CHECK(same_number(number(text(iv(maxint))), iv(maxint)));
     CHECK(same_number(number(text(iv(minint))), iv(minint)));
     // Overflow by one in the last digit: a float.
-    CHECK(same_number(number("9223372036854775808"), ok(lua2::add(iv(maxint), fv(1.0)))));
-    CHECK(same_number(number("-9223372036854775809"), ok(lua2::subtract(iv(minint), fv(1.0)))));
+    CHECK(same_number(number("9223372036854775808"), ok(cpplua::add(iv(maxint), fv(1.0)))));
+    CHECK(same_number(number("-9223372036854775809"), ok(cpplua::subtract(iv(minint), fv(1.0)))));
     // Large numbers, and hex wrapping around.
     CHECK(same_number(number("1" + std::string(30, '0')), fv(1e30)));
     CHECK(same_number(number("-1" + std::string(30, '0')), fv(-1e30)));
@@ -391,7 +391,7 @@ TEST_CASE("math.lua: tonumber and tostring", "[value][conformance]") {
 }
 
 TEST_CASE("strings.lua: string comparisons", "[value][conformance]") {
-    lua2::Heap heap{1};
+    cpplua::Heap heap{1};
     const auto str = [&](std::string_view bytes) { return Value::string(heap.new_string(bytes)); };
     CHECK(lt(str("alo"), str("alo1")));
     CHECK(lt(str(""), str("a")));
@@ -412,11 +412,11 @@ TEST_CASE("strings.lua: string comparisons", "[value][conformance]") {
 }
 
 TEST_CASE("strings.lua: numbers in concatenation", "[value][conformance]") {
-    lua2::Heap heap{1};
+    cpplua::Heap heap{1};
     const auto str = [&](std::string_view bytes) { return Value::string(heap.new_string(bytes)); };
     const auto join = [&](Value a, Value b) {
         const std::array values{a, b};
-        const auto joined = lua2::concatenate(heap, values);
+        const auto joined = cpplua::concatenate(heap, values);
         return joined && joined->is_string() ? std::string{joined->as_string()->view()}
                                              : std::string{"(error)"};
     };

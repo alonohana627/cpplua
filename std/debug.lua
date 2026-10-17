@@ -2,7 +2,7 @@
 
 -- The debug library's functions are implemented in C++ in lib/std/debug.cpp, and the hooks run
 -- in the VM (lib/vm/execute.cpp). This file is a reference only (for readers and
--- lua-language-server); lua2 never runs it.
+-- lua-language-server); cpplua never runs it.
 
 ---The debug library: Lua 5.4's whole debug interface. Use it for debugging and introspection
 ---only; it can break assumptions that ordinary code relies on (local variables, upvalues,
@@ -94,7 +94,7 @@ function debug.setuservalue(udata, value, n) end
 ---Sets `hook` as the hook of the thread (default: the running one); no arguments turn it off.
 ---`mask` holds "c" (called on each call, also "tail call"), "r" (on each return) and "l" (on
 ---each new line); a `count` above 0 also calls it every `count` instructions. The hook gets the
----event name and, for "line", the line. In lua2 the hooks are Lua functions kept in the
+---event name and, for "line", the line. In cpplua the hooks are Lua functions kept in the
 ---registry's _HOOKKEY table (weak in its keys, the threads); they cost nothing while no thread
 ---has one; no hook runs inside a hook, and a hook function cannot yield.
 ---@overload fun()
@@ -139,7 +139,7 @@ function debug.setupvalue(f, up, value) end
 ---@return any
 function debug.traceback(message, level) end
 
----Deprecated in Lua 5.4: changes nothing and returns 200, lua2's limit of nested C++ calls.
+---Deprecated in Lua 5.4: changes nothing and returns 200, cpplua's limit of nested C++ calls.
 ---@param limit integer
 ---@return integer
 function debug.setcstacklimit(limit) end

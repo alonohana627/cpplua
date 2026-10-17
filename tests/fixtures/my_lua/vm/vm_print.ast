@@ -74,7 +74,7 @@ Chunk
       Name print
       Call
         Name greet
-        String "lua2"
+        String "cpplua"
       Call
         Name greet
         String "you"

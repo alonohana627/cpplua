@@ -42,7 +42,7 @@ main <vm_print.lua:0,0> (117 instructions)
 	39	[14]	SETTABUP 	0 9 1	; _ENV "greet"
 	40	[15]	GETTABUP 	1 0 0	; _ENV "print"
 	41	[15]	GETTABUP 	2 0 9	; _ENV "greet"
-	42	[15]	LOADK    	3 10	; "lua2"
+	42	[15]	LOADK    	3 10	; "cpplua"
 	43	[15]	CALL     	2 2 2	; 1 in 1 out
 	44	[15]	GETTABUP 	3 0 9	; _ENV "greet"
 	45	[15]	LOADK    	4 11	; "you"
@@ -129,7 +129,7 @@ constants (24):
 	7	I	0
 	8	S	"count"
 	9	S	"greet"
-	10	S	"lua2"
+	10	S	"cpplua"
 	11	S	"you"
 	12	S	"undefined_global"
 	13	N	nil

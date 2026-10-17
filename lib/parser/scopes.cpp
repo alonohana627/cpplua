@@ -5,7 +5,7 @@
 #include <ranges>
 #include <utility>
 
-namespace lua2 {
+namespace cpplua {
 
 // ---- Functions ----
 
@@ -248,4 +248,4 @@ void Scopes::add_break(int line) {
     gotos_.push_back(pending);
 }
 
-} // namespace lua2
+} // namespace cpplua

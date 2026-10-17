@@ -25,7 +25,7 @@
 #include "vm/run.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -612,4 +612,4 @@ void open_table(Heap& heap) {
     open_library(heap, "table", table_functions);
 }
 
-} // namespace lua2
+} // namespace cpplua

@@ -9,7 +9,7 @@
 #include <variant>
 #include <vector>
 
-namespace lua2 {
+namespace cpplua {
 
 Parser::Parser(std::string_view source, std::string_view chunk_name)
     : source_(source), lexer_(source, chunk_name), scopes_(ast_) {}
@@ -1447,4 +1447,4 @@ std::string Parser::near_current() const {
     return near_text(text);
 }
 
-} // namespace lua2
+} // namespace cpplua

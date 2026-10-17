@@ -4,7 +4,7 @@
 
 #include "value/number.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -56,4 +56,4 @@ ArithResult bit_not(Value a) {
     return on_integers(a, a, [](std::int64_t x, std::int64_t /*same*/) { return int_not(x); });
 }
 
-} // namespace lua2
+} // namespace cpplua

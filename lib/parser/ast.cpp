@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <utility>
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -136,4 +136,4 @@ std::string_view operator_text(BinaryOp op) {
     return "?"; // only reachable with an invalid enum value
 }
 
-} // namespace lua2
+} // namespace cpplua

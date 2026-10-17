@@ -7,9 +7,9 @@
 #include <string_view>
 #include <type_traits>
 
-#include <lua2/type.hpp>
+#include <cpplua/type.hpp>
 
-namespace lua2 {
+namespace cpplua {
 
 class String;     // value/string.hpp
 class LuaClosure; // vm/function.hpp
@@ -302,7 +302,7 @@ public:
 private:
     constexpr Value(Tag tag, std::uint64_t payload) : tag_(tag), payload_(payload) {}
 
-    // Reports a wrong accessor call (a bug in lua2, never in the Lua program)
+    // Reports a wrong accessor call (a bug in cpplua, never in the Lua program)
     // and stops the program.
     [[noreturn]] void wrong_access(std::string_view wanted, std::source_location caller) const;
 
@@ -324,4 +324,4 @@ std::string_view tag_name(Tag tag);
 // to strings is part 6.
 std::string debug_text(Value value);
 
-} // namespace lua2
+} // namespace cpplua

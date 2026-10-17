@@ -7,7 +7,7 @@
 //   VM's state passed in registers ([[clang::musttail]] with the
 //   preserve_none calling convention, measured fastest in
 //   docs/learn/vm_gc.md);
-// - a switch in a loop, for compilers without those (or LUA2_DISPATCH=switch).
+// - a switch in a loop, for compilers without those (or CPPLUA_DISPATCH=switch).
 //
 // The hot paths are inline in the bodies; everything rare (errors,
 // metamethods, stack growth, collection) is in the cold functions below, out
@@ -50,14 +50,14 @@
 #include "vm/proto.hpp"
 
 // NOLINTBEGIN(cppcoreguidelines-macro-usage): a choice for the preprocessor
-#if defined(LUA2_DISPATCH_SWITCH) || !defined(__clang__)
-#define LUA2_TAIL_CALLS 0
+#if defined(CPPLUA_DISPATCH_SWITCH) || !defined(__clang__)
+#define CPPLUA_TAIL_CALLS 0
 #else
-#define LUA2_TAIL_CALLS 1
+#define CPPLUA_TAIL_CALLS 1
 #endif
 // NOLINTEND(cppcoreguidelines-macro-usage)
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -994,7 +994,7 @@ Status call_c(State* state, std::uint32_t func, std::uint32_t top, int wanted) {
     move_results(state, func, n, wanted);
     state->ci = ci->previous;
     // What the function allocated may call for a collection step: Lua's
-    // API functions check after each allocation (luaC_checkGC), lua2
+    // API functions check after each allocation (luaC_checkGC), cpplua
     // here, with the results anchored below the top.
     if (state->heap().wants_step()) [[unlikely]] {
         collect_step(state);
@@ -1418,7 +1418,7 @@ bool uses_top(Instruction i) {
 
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
 
-#define LUA2_OPCODE_LIST(X)                                                                        \
+#define CPPLUA_OPCODE_LIST(X)                                                                      \
     X(Move)                                                                                        \
     X(LoadI)                                                                                       \
     X(LoadF)                                                                                       \
@@ -1507,12 +1507,12 @@ bool uses_top(Instruction i) {
 // (VM_COLD_HANDLER for the rare ones, VM_WARM_HANDLER for paths a program
 // may take all the time, such as method lookups through __index: those stay
 // with the hot code instead of the program's cold section).
-#define LUA2_WARM_LIST(X)                                                                          \
+#define CPPLUA_WARM_LIST(X)                                                                        \
     X(CallOther)                                                                                   \
     X(ForIterator)                                                                                 \
     X(Index)                                                                                       \
     X(NewIndex)
-#define LUA2_COLD_LIST(X)                                                                          \
+#define CPPLUA_COLD_LIST(X)                                                                        \
     X(GrowAndRetry)                                                                                \
     X(SetUpvalBarrier)                                                                             \
     X(TableBarrier)                                                                                \
@@ -1524,33 +1524,33 @@ bool uses_top(Instruction i) {
     X(Compare)                                                                                     \
     X(ReturnClose)
 
-#if LUA2_TAIL_CALLS
+#if CPPLUA_TAIL_CALLS
 
 // Every instruction is a function taking the VM's state; preserve_none
 // passes all of it in registers and saves none, so jumping from one
 // instruction to the next is a plain indirect jump. No handler may turn a
 // loop into a call to memset (LOADNIL): calls need a stack frame.
-#define LUA2_HANDLER_CC __attribute__((preserve_none))
-#define LUA2_HANDLER_DEFINITION __attribute__((preserve_none, no_builtin("memset")))
+#define CPPLUA_HANDLER_CC __attribute__((preserve_none))
+#define CPPLUA_HANDLER_DEFINITION __attribute__((preserve_none, no_builtin("memset")))
 #define VM_PARAMS                                                                                  \
     [[maybe_unused]] State *state, [[maybe_unused]] const Instruction *pc,                         \
         [[maybe_unused]] Tag *tags, [[maybe_unused]] std::uint64_t *vals,                          \
         [[maybe_unused]] const Value *k, [[maybe_unused]] Instruction i
 
-using Handler = LUA2_HANDLER_CC Status (*)(State*, const Instruction*, Tag*, std::uint64_t*,
-                                           const Value*, Instruction);
+using Handler = CPPLUA_HANDLER_CC Status (*)(State*, const Instruction*, Tag*, std::uint64_t*,
+                                             const Value*, Instruction);
 
-#define LUA2_DECLARE_HANDLER(name) LUA2_HANDLER_CC Status op_##name(VM_PARAMS);
-LUA2_OPCODE_LIST(LUA2_DECLARE_HANDLER)
-#undef LUA2_DECLARE_HANDLER
-#define LUA2_DECLARE_COLD(name) [[gnu::cold]] LUA2_HANDLER_CC Status cold_##name(VM_PARAMS);
-LUA2_COLD_LIST(LUA2_DECLARE_COLD)
-#undef LUA2_DECLARE_COLD
-#define LUA2_DECLARE_WARM(name) LUA2_HANDLER_CC Status cold_##name(VM_PARAMS);
-LUA2_WARM_LIST(LUA2_DECLARE_WARM)
-#undef LUA2_DECLARE_WARM
+#define CPPLUA_DECLARE_HANDLER(name) CPPLUA_HANDLER_CC Status op_##name(VM_PARAMS);
+CPPLUA_OPCODE_LIST(CPPLUA_DECLARE_HANDLER)
+#undef CPPLUA_DECLARE_HANDLER
+#define CPPLUA_DECLARE_COLD(name) [[gnu::cold]] CPPLUA_HANDLER_CC Status cold_##name(VM_PARAMS);
+CPPLUA_COLD_LIST(CPPLUA_DECLARE_COLD)
+#undef CPPLUA_DECLARE_COLD
+#define CPPLUA_DECLARE_WARM(name) CPPLUA_HANDLER_CC Status cold_##name(VM_PARAMS);
+CPPLUA_WARM_LIST(CPPLUA_DECLARE_WARM)
+#undef CPPLUA_DECLARE_WARM
 
-LUA2_HANDLER_CC Status op_invalid(VM_PARAMS) {
+CPPLUA_HANDLER_CC Status op_invalid(VM_PARAMS) {
     return raise(state, pc, "invalid instruction");
 }
 
@@ -1558,9 +1558,9 @@ LUA2_HANDLER_CC Status op_invalid(VM_PARAMS) {
 constexpr std::array<Handler, 128> plain_handlers = [] {
     std::array<Handler, 128> table{};
     table.fill(&op_invalid);
-#define LUA2_TABLE_ENTRY(name) table[static_cast<std::size_t>(OpCode::name)] = &op_##name;
-    LUA2_OPCODE_LIST(LUA2_TABLE_ENTRY)
-#undef LUA2_TABLE_ENTRY
+#define CPPLUA_TABLE_ENTRY(name) table[static_cast<std::size_t>(OpCode::name)] = &op_##name;
+    CPPLUA_OPCODE_LIST(CPPLUA_TABLE_ENTRY)
+#undef CPPLUA_TABLE_ENTRY
     return table;
 }();
 
@@ -1576,7 +1576,7 @@ Handler handler_for(std::size_t op) {
     return std::atomic_ref<Handler>(handlers[op]).load(std::memory_order_relaxed);
 }
 
-LUA2_HANDLER_CC Status op_hooked(VM_PARAMS);
+CPPLUA_HANDLER_CC Status op_hooked(VM_PARAMS);
 
 void install_hook_dispatch(bool on) {
     for (std::size_t op = 0; op < handlers.size(); ++op) {
@@ -1585,11 +1585,11 @@ void install_hook_dispatch(bool on) {
     }
 }
 
-#define VM_HANDLER(name) LUA2_HANDLER_DEFINITION Status op_##name(VM_PARAMS)
+#define VM_HANDLER(name) CPPLUA_HANDLER_DEFINITION Status op_##name(VM_PARAMS)
 #define VM_COLD_HANDLER(name)                                                                      \
-    [[gnu::noinline, gnu::cold]] LUA2_HANDLER_DEFINITION Status cold_##name(VM_PARAMS)
+    [[gnu::noinline, gnu::cold]] CPPLUA_HANDLER_DEFINITION Status cold_##name(VM_PARAMS)
 #define VM_WARM_HANDLER(name)                                                                      \
-    [[gnu::noinline]] LUA2_HANDLER_DEFINITION Status cold_##name(VM_PARAMS)
+    [[gnu::noinline]] CPPLUA_HANDLER_DEFINITION Status cold_##name(VM_PARAMS)
 #define VM_COLD(name) [[clang::musttail]] return cold_##name(state, pc, tags, vals, k, i)
 #define VM_NEXT()                                                                                  \
     do {                                                                                           \
@@ -1613,7 +1613,7 @@ void install_hook_dispatch(bool on) {
 
 // Every instruction while hooks are on: the hooks of the running thread,
 // if it has any, then the instruction itself.
-LUA2_HANDLER_DEFINITION Status op_hooked(VM_PARAMS) {
+CPPLUA_HANDLER_DEFINITION Status op_hooked(VM_PARAMS) {
     if (state->hook_mask != 0 || state->pending_call_hook != 0 ||
         interrupt_requested.load(std::memory_order_relaxed)) [[unlikely]] {
         const std::uint32_t base = base_index(state, tags);
@@ -1690,9 +1690,9 @@ Status execute(State* state) {
 
 #endif
 
-#undef LUA2_OPCODE_LIST
-#undef LUA2_COLD_LIST
-#undef LUA2_WARM_LIST
+#undef CPPLUA_OPCODE_LIST
+#undef CPPLUA_COLD_LIST
+#undef CPPLUA_WARM_LIST
 
 // NOLINTEND(cppcoreguidelines-macro-usage)
 
@@ -2290,4 +2290,4 @@ void close_variables_protected(State& thread, std::uint32_t level) {
     thread.c_calls = c_calls;
 }
 
-} // namespace lua2
+} // namespace cpplua

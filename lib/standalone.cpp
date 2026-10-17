@@ -1,5 +1,5 @@
 // The stand-alone interpreter: a port of Lua 5.4.9's lua.c
-// (docs/final_docs/standalone.md). `lua2 file.lua args`, the options -e,
+// (docs/final_docs/standalone.md). `cpplua file.lua args`, the options -e,
 // -l, -i, -v, -E and -W, the `arg` table, LUA_INIT, and the interactive
 // loop, as the real `lua` has them.
 
@@ -13,7 +13,7 @@
 #include <string>
 #include <string_view>
 
-#include <lua2/standalone.hpp>
+#include <cpplua/standalone.hpp>
 
 #ifdef _WIN32
 #include <io.h>
@@ -21,7 +21,7 @@
 #include <unistd.h>
 #endif
 
-#include <lua2/version.hpp>
+#include <cpplua/version.hpp>
 
 #include "gc/heap.hpp"
 #include "std/auxlib.hpp"
@@ -31,14 +31,14 @@
 #include "vm/run.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
 // NOLINTBEGIN(misc-const-correctness): the CFunction signature
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables): argv[0], as Lua's
-const char* progname = "lua2";
+const char* progname = "cpplua";
 
 // lua_writestringerror and l_message
 void error_message(std::string_view text) {
@@ -475,4 +475,4 @@ int run_standalone(std::span<char* const> argv, bool generational) {
     return ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
-} // namespace lua2
+} // namespace cpplua

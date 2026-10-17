@@ -10,7 +10,7 @@
 
 #include "text_format.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -421,4 +421,4 @@ std::string print_ast_dot(const Ast& ast) {
     return out;
 }
 
-} // namespace lua2
+} // namespace cpplua

@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace lua2 {
+namespace cpplua {
 
 // An error raised while Lua code runs, such as `attempt to divide by zero`.
 // Like SyntaxError, it is returned inside std::expected, never thrown
@@ -13,4 +13,4 @@ struct RuntimeError {
     std::string message;
 };
 
-} // namespace lua2
+} // namespace cpplua

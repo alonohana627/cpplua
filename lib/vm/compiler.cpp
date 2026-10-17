@@ -1,5 +1,5 @@
 // The compiler: Lua 5.4's lcode.c, and the code-generating half of
-// lparser.c, ported to walk lua2's syntax tree. Function names in the
+// lparser.c, ported to walk cpplua's syntax tree. Function names in the
 // comments are Lua's, so the two can be read side by side. The parser has
 // already checked everything Lua checks while parsing (names, gotos, const
 // assignments, limits on locals and nesting), so only the code-size limits
@@ -27,7 +27,7 @@
 #include "value/number.hpp"
 #include "vm/opcodes.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -2819,4 +2819,4 @@ std::expected<Proto*, SyntaxError> compile(Heap& heap, const Ast& ast, std::stri
     return compiler.compile_main();
 }
 
-} // namespace lua2
+} // namespace cpplua

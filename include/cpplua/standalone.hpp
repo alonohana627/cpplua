@@ -2,7 +2,7 @@
 
 #include <span>
 
-namespace lua2 {
+namespace cpplua {
 
 // The stand-alone interpreter, as the real `lua` program (lua.c): runs
 // `argv` (argv[0] the program's name) and returns the exit status. Options
@@ -13,4 +13,4 @@ namespace lua2 {
 // unless `generational` is false.
 int run_standalone(std::span<char* const> argv, bool generational = true);
 
-} // namespace lua2
+} // namespace cpplua

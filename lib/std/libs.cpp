@@ -2,7 +2,7 @@
 
 #include "std/base.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 void open_libraries(Heap& heap) {
     // In luaL_openlibs's order (linit.c).
@@ -18,4 +18,4 @@ void open_libraries(Heap& heap) {
     open_debug(heap);
 }
 
-} // namespace lua2
+} // namespace cpplua

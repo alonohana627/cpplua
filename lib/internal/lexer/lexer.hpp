@@ -11,7 +11,7 @@
 #include "lexer/token.hpp"
 #include "syntax_error.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 // Turns Lua source text into tokens, one at a time.
 //
@@ -124,4 +124,4 @@ private:
     std::optional<SyntaxError> failed_;
 };
 
-} // namespace lua2
+} // namespace cpplua

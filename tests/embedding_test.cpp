@@ -1,7 +1,7 @@
 // The examples of docs/how_to_put_cpp_functions_and_classes_into_lua.md,
 // compiled and run, so the document cannot drift from the code: if you
 // change one, change the other. This file uses only the public headers
-// (include/lua2): it is built into its own test program, without lua2's
+// (include/cpplua): it is built into its own test program, without cpplua's
 // internal headers on the include path.
 
 #include <cstdint>
@@ -14,7 +14,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <lua2/interpreter.hpp>
+#include <cpplua/interpreter.hpp>
 
 namespace {
 
@@ -74,13 +74,13 @@ private:
 
 // ==== The binding ====
 
-void bind_car(lua2::Interpreter& lua) {
+void bind_car(cpplua::Interpreter& lua) {
     lua.new_class<Car>("Car")
         .constructor<std::string, double>() // Car.new(model, fuel)
         .method("accelerate",
-                [](lua2::Context& ctx, Car& car, double delta) {
+                [](cpplua::Context& ctx, Car& car, double delta) {
                     if (!car.accelerate(delta)) { // out of fuel: call the car's on_empty
-                        const lua2::Ref on_empty = ctx.field(1, "on_empty");
+                        const cpplua::Ref on_empty = ctx.field(1, "on_empty");
                         if (on_empty.is_function()) {
                             if (auto called = on_empty.call(ctx.ref(1)); !called) {
                                 ctx.raise(called.error()); // the callback's error goes on up
@@ -91,7 +91,7 @@ void bind_car(lua2::Interpreter& lua) {
                 })
         .method("brake", &Car::brake)
         .method("refuel",
-                [](lua2::Context& ctx, Car& car, double litres) {
+                [](cpplua::Context& ctx, Car& car, double litres) {
                     if (litres <= 0) {
                         ctx.arg_error(2, "litres must be positive");
                         return;
@@ -113,14 +113,14 @@ void bind_car(lua2::Interpreter& lua) {
 // An interpreter with the examples' functions, and print captured.
 struct Lua {
     std::string output; // before lua: finalizers may still print while it closes
-    lua2::Interpreter lua;
+    cpplua::Interpreter lua;
 
     Lua() {
         lua.set_output([this](std::string_view text) { output += text; });
         lua.set_function("add", [](double a, double b) { return a + b; });
         lua.set_function("greet", [](const std::string& name) { return "Hello, " + name + "!"; });
         lua.set_function("divmod",
-                         [](lua2::Context& ctx, std::int64_t a,
+                         [](cpplua::Context& ctx, std::int64_t a,
                             std::int64_t b) -> std::tuple<std::int64_t, std::int64_t> {
                              if (b == 0) {
                                  ctx.error("division by zero");
@@ -212,7 +212,7 @@ TEST_CASE("embedding: values and calls from C++", "[embedding]") {
                 .empty());
     CHECK(lua.lua.call<double>("double_it", 21) == 42.0);
     CHECK(lua.lua.get("result").as<std::string>() == "50.0hi");
-    const lua2::Ref config = lua.lua.get("config");
+    const cpplua::Ref config = lua.lua.get("config");
     CHECK(config.get<std::string>("name") == "test");
     CHECK(config.get<int>("size") == 3);
     REQUIRE(config.set("size", 4));
@@ -227,14 +227,15 @@ TEST_CASE("embedding: values and calls from C++", "[embedding]") {
 
 TEST_CASE("embedding: C++ keeps Lua functions", "[embedding]") {
     Lua lua;
-    std::vector<lua2::Ref> handlers;
-    lua.lua.set_function("on_tick", [&handlers](lua2::Ref f) { handlers.push_back(std::move(f)); });
+    std::vector<cpplua::Ref> handlers;
+    lua.lua.set_function("on_tick",
+                         [&handlers](cpplua::Ref f) { handlers.push_back(std::move(f)); });
     REQUIRE(lua.run("ticks = 0 on_tick(function(n) ticks = ticks + n end) "
                     "on_tick(function(n) print('tick', n) end)")
                 .empty());
     lua.lua.collect(); // the Refs keep both functions alive
     for (int n = 1; n <= 2; ++n) {
-        for (const lua2::Ref& handler : handlers) {
+        for (const cpplua::Ref& handler : handlers) {
             REQUIRE(handler.call(n));
         }
     }
@@ -259,11 +260,11 @@ TEST_CASE("embedding: raw functions and C++ pointers", "[embedding]") {
     Lua lua;
     int counter = 0;
     // A raw function: it pushes its results itself and returns how many.
-    lua.lua.set_function("get_counter", [&counter](lua2::Context& ctx) {
+    lua.lua.set_function("get_counter", [&counter](cpplua::Context& ctx) {
         ctx.push_pointer(&counter); // a light userdata: the address, nothing more
         return 1;
     });
-    lua.lua.set_function("bump", [](lua2::Context& ctx) {
+    lua.lua.set_function("bump", [](cpplua::Context& ctx) {
         auto* c = static_cast<int*>(ctx.to_pointer(1));
         if (c == nullptr) {
             return ctx.type_error(1, "counter");

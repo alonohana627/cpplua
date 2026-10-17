@@ -3,7 +3,7 @@
 #include <new>
 #include <utility>
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -63,4 +63,4 @@ void* Pool::refill(std::size_t size_class) {
     return block;
 }
 
-} // namespace lua2
+} // namespace cpplua

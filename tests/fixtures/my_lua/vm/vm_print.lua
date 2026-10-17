@@ -12,7 +12,7 @@ bump(1) bump(10)
 print("count", count, _ENV.count, _ENV["count"])
 
 function greet(name) return "hi " .. name end
-print(greet("lua2"), greet "you")
+print(greet("cpplua"), greet "you")
 
 print(undefined_global, undefined_global == nil)
 count = nil

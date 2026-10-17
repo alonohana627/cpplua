@@ -18,7 +18,7 @@
 #include "gc/heap.hpp"
 #include "value/number.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -615,4 +615,4 @@ void Table::release(Heap& heap) {
     set_limit_is_size(true);
 }
 
-} // namespace lua2
+} // namespace cpplua

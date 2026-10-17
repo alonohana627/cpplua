@@ -8,6 +8,6 @@
 
 // Catch2 prints values with debug_text when a check fails.
 template <>
-struct Catch::StringMaker<lua2::Value> {
-    static std::string convert(lua2::Value value) { return lua2::debug_text(value); }
+struct Catch::StringMaker<cpplua::Value> {
+    static std::string convert(cpplua::Value value) { return cpplua::debug_text(value); }
 };

@@ -7,7 +7,7 @@
 #include "gc/heap.hpp"
 #include "value/convert.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -75,4 +75,4 @@ std::expected<Value, RuntimeError> length(Value value) {
     return std::unexpected(RuntimeError{std::move(message)});
 }
 
-} // namespace lua2
+} // namespace cpplua

@@ -3,7 +3,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <lua2/interpreter.hpp>
+#include <cpplua/interpreter.hpp>
 
 // Errors (stage 8) against the rules of docs/spec/errors.md. The my_lua
 // programs error_*.lua and err_*.lua cover most of the behavior with the
@@ -14,7 +14,7 @@
 namespace {
 
 std::string run(std::string_view source) {
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     const auto results = interpreter.run(source, "input");
     if (!results) {
         return results.error();
@@ -29,9 +29,9 @@ std::string run(std::string_view source) {
     return out;
 }
 
-// The error text `lua2 input` would print, with its traceback.
+// The error text `cpplua input` would print, with its traceback.
 std::string run_with_traceback(std::string_view source) {
-    lua2::Interpreter interpreter;
+    cpplua::Interpreter interpreter;
     const auto results = interpreter.run(source, "input", true);
     return results ? std::string{"(no error)"} : results.error();
 }

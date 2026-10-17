@@ -1,7 +1,7 @@
 ---@meta
 
 -- The utf8 library's functions are implemented in C++ in lib/std/utf8.cpp.
--- This file is a reference only (for readers and lua-language-server); lua2 never runs it.
+-- This file is a reference only (for readers and lua-language-server); cpplua never runs it.
 
 ---The utf8 library: basic support for UTF-8. Functions that take a `lax` flag accept
 ---code points up to 2^31 - 1 and surrogates when it is true; otherwise only valid UTF-8.

@@ -10,23 +10,23 @@
 #include "value/convert.hpp"
 #include "value/value.hpp"
 
-using lua2::Value;
+using cpplua::Value;
 
 namespace {
 
 std::string text(std::int64_t i) {
-    return std::string{lua2::integer_text(i).view()};
+    return std::string{cpplua::integer_text(i).view()};
 }
 
 std::string text(double f) {
-    return std::string{lua2::float_text(f).view()};
+    return std::string{cpplua::float_text(f).view()};
 }
 
 // The number a string holds, shown with its subtype ("16", "16.0"), or
 // "(none)".
 std::string number(std::string_view s) {
-    const auto value = lua2::string_to_number(s);
-    return value ? lua2::debug_text(*value) : std::string{"(none)"};
+    const auto value = cpplua::string_to_number(s);
+    return value ? cpplua::debug_text(*value) : std::string{"(none)"};
 }
 
 } // namespace
@@ -86,7 +86,7 @@ TEST_CASE("V6.3 infinities and nan", "[value][convert]") {
 
 TEST_CASE("V6.1 V6.2 the text of a number value", "[value][convert]") {
     const auto text_of = [](Value value) {
-        const auto number = lua2::number_text(value);
+        const auto number = cpplua::number_text(value);
         return number ? std::string{number->view()} : std::string{"(none)"};
     };
     CHECK(text_of(Value::integer(3)) == "3");
@@ -199,11 +199,11 @@ TEST_CASE("V5.5 a zero byte inside is never a number", "[value][convert]") {
 }
 
 TEST_CASE("V5.6 the number keeps the subtype it read as", "[value][convert]") {
-    CHECK(lua2::string_to_number("10").value_or(Value{}).is_integer());
-    CHECK(lua2::string_to_number("10.0").value_or(Value{}).is_float());
-    CHECK(lua2::string_to_number("1e1").value_or(Value{}).is_float());
-    CHECK(lua2::string_to_number("0x10").value_or(Value{}).is_integer());
-    CHECK(lua2::string_to_number("0x10p0").value_or(Value{}).is_float());
+    CHECK(cpplua::string_to_number("10").value_or(Value{}).is_integer());
+    CHECK(cpplua::string_to_number("10.0").value_or(Value{}).is_float());
+    CHECK(cpplua::string_to_number("1e1").value_or(Value{}).is_float());
+    CHECK(cpplua::string_to_number("0x10").value_or(Value{}).is_integer());
+    CHECK(cpplua::string_to_number("0x10p0").value_or(Value{}).is_float());
 }
 
 TEST_CASE("V5 numbers read back from their own text", "[value][convert]") {
@@ -217,9 +217,9 @@ TEST_CASE("V5 numbers read back from their own text", "[value][convert]") {
         std::numeric_limits<std::int64_t>::min(),
     };
     for (const std::int64_t i : integers) {
-        CHECK(number(lua2::integer_text(i).view()) == text(i));
+        CHECK(number(cpplua::integer_text(i).view()) == text(i));
     }
     for (const double f : {0.0, -0.0, 0.5, 1e100, -1203.0, 1e-5}) {
-        CHECK(number(lua2::float_text(f).view()) == text(f));
+        CHECK(number(cpplua::float_text(f).view()) == text(f));
     }
 }

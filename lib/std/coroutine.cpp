@@ -16,7 +16,7 @@
 #include "vm/function.hpp"
 #include "vm/state.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 namespace {
 
@@ -227,4 +227,4 @@ void open_coroutine(Heap& heap) {
     open_library(heap, "coroutine", coroutine_functions);
 }
 
-} // namespace lua2
+} // namespace cpplua

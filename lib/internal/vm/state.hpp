@@ -10,7 +10,7 @@
 #include "value/value.hpp"
 #include "vm/opcodes.hpp"
 
-namespace lua2 {
+namespace cpplua {
 
 struct Upvalue;
 class State;
@@ -281,4 +281,4 @@ inline bool is_yieldable(const State& thread) {
     return thread.non_yieldable == 0;
 }
 
-} // namespace lua2
+} // namespace cpplua
