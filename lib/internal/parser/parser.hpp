@@ -15,6 +15,10 @@
 
 namespace cpplua {
 
+// The "near" part of a syntax error for `token` of `source`: <eof>, or the
+// token as written, in quotes (G9.2).
+std::string near_token(const Token& token, std::string_view source);
+
 // Turns Lua source text into an Ast (docs/spec/grammar.md).
 //
 // A recursive-descent parser, like Lua's lparser.c: one function per grammar
@@ -196,9 +200,18 @@ private:
 
     // Adds a node to the tree with the line of the last token read, which
     // is where the node ends.
+    // A new expression node. Its first token is its leftmost child's for an
+    // operator, index or call, else the token just read (a name, a
+    // literal); the others give `start`.
     ExprId add_expression(Expr expr, int line) {
-        return ast_.add_expression(expr, line, previous_line_);
+        return ast_.add_expression(expr, line, previous_line_, first_offset(expr));
     }
+
+    ExprId add_expression(Expr expr, int line, std::uint32_t start) {
+        return ast_.add_expression(expr, line, previous_line_, start);
+    }
+
+    [[nodiscard]] std::uint32_t first_offset(const Expr& expr) const;
 
     StatId add_statement(Stat stat, int line) {
         return ast_.add_statement(stat, line, previous_line_);
@@ -206,9 +219,10 @@ private:
 
     std::string_view source_;
     Lexer lexer_;
-    Token current_;                  // the token being looked at
-    std::optional<Token> lookahead_; // the next one, once peek() has read it
-    int previous_line_ = 1;          // the line of the token before current_ (Lua's lastline)
+    Token current_;                     // the token being looked at
+    std::optional<Token> lookahead_;    // the next one, once peek() has read it
+    int previous_line_ = 1;             // the line of the token before current_ (Lua's lastline)
+    std::uint32_t previous_offset_ = 0; // where that token starts in the source
     Ast ast_;
 
     // What is visible where: functions, blocks, locals, labels, gotos.

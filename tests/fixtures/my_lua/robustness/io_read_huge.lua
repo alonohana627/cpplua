@@ -1,6 +1,7 @@
 -- A size no memory can hold is the catchable error "not enough memory",
 -- never a C++ exception that ends the program (issues #5 and #7): a huge
 -- count, and a negative one, which reads as a huge size.
+-- not under AddressSanitizer (it stops the process at an allocation that big)
 local f = io.tmpfile()
 f:write("abc")
 f:seek("set")

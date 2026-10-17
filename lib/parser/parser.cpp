@@ -1008,6 +1008,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_subexpression(int limit) {
     ExprId left;
     if (const auto unary = unary_operator(current_.kind)) {
         const int line = current_.line;
+        const std::uint32_t start = current_.offset;
         if (auto moved = advance(); !moved) {
             return std::unexpected(std::move(moved.error()));
         }
@@ -1015,7 +1016,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_subexpression(int limit) {
         if (!operand) {
             return std::unexpected(std::move(operand.error()));
         }
-        left = add_expression(UnaryExpr{.op = *unary, .operand = *operand}, line);
+        left = add_expression(UnaryExpr{.op = *unary, .operand = *operand}, line, start);
     } else {
         auto simple = parse_simple_expression();
         if (!simple) {
@@ -1047,6 +1048,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_subexpression(int limit) {
 
 std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
     const int line = current_.line;
+    const std::uint32_t start = current_.offset;
     Expr expression;
     switch (current_.kind) {
     case TokenKind::Nil: expression = NilExpr{}; break;
@@ -1077,7 +1079,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
         if (!function) {
             return std::unexpected(std::move(function.error()));
         }
-        return add_expression(FunctionExpr{.function = *function}, line);
+        return add_expression(FunctionExpr{.function = *function}, line, start);
     }
     default:
         // Names and '(' start a suffixed expression; anything else is
@@ -1173,6 +1175,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_suffixed_expression() {
 
 std::expected<ExprId, SyntaxError> Parser::parse_primary_expression() {
     const int line = current_.line;
+    const std::uint32_t start = current_.offset;
     switch (current_.kind) {
     case TokenKind::Name: {
         auto name = expect_name();
@@ -1192,7 +1195,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_primary_expression() {
         if (auto closed = expect_match(TokenKind::RParen, TokenKind::LParen, line); !closed) {
             return std::unexpected(std::move(closed.error()));
         }
-        return add_expression(ParenExpr{.inner = *inner}, line);
+        return add_expression(ParenExpr{.inner = *inner}, line, start);
     }
     default: return error("unexpected symbol"); // G4.7
     }
@@ -1234,6 +1237,7 @@ std::expected<IdRange<ExprId>, SyntaxError> Parser::parse_call_arguments() {
 
 std::expected<ExprId, SyntaxError> Parser::parse_table() {
     const int line = current_.line;
+    const std::uint32_t start = current_.offset;
     if (auto moved = advance(); !moved) { // '{'
         return std::unexpected(std::move(moved.error()));
     }
@@ -1267,7 +1271,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_table() {
     if (auto closed = expect_match(TokenKind::RBrace, TokenKind::LBrace, line); !closed) {
         return std::unexpected(std::move(closed.error()));
     }
-    return add_expression(TableExpr{.fields = ast_.add_field_list(fields)}, line);
+    return add_expression(TableExpr{.fields = ast_.add_field_list(fields)}, line, start);
 }
 
 std::expected<TableField, SyntaxError> Parser::parse_table_field() {
@@ -1382,6 +1386,7 @@ bool Parser::block_follow() const noexcept {
 
 std::expected<void, SyntaxError> Parser::advance() {
     previous_line_ = current_.end_line;
+    previous_offset_ = current_.offset;
     if (lookahead_) {
         current_ = std::move(*lookahead_);
         lookahead_.reset();
@@ -1447,15 +1452,35 @@ std::unexpected<SyntaxError> Parser::error_expected(TokenKind kind,
     return error(std::format("{} expected", expected_text(kind)), origin);
 }
 
+std::uint32_t Parser::first_offset(const Expr& expr) const {
+    if (const auto* b = std::get_if<BinaryExpr>(&expr)) {
+        return ast_.offset(b->left);
+    }
+    if (const auto* x = std::get_if<IndexExpr>(&expr)) {
+        return ast_.offset(x->object);
+    }
+    if (const auto* c = std::get_if<CallExpr>(&expr)) {
+        return ast_.offset(c->function);
+    }
+    if (const auto* m = std::get_if<MethodCallExpr>(&expr)) {
+        return ast_.offset(m->object);
+    }
+    return previous_offset_;
+}
+
 std::string Parser::near_current() const {
+    return near_token(current_, source_);
+}
+
+std::string near_token(const Token& token, std::string_view source) {
     // G9.2: <eof> at the end, and otherwise the token as written, in quotes.
-    if (current_.kind == TokenKind::EndOfStream) {
+    if (token.kind == TokenKind::EndOfStream) {
         return std::string{near_eof};
     }
-    const std::string_view text = source_.substr(current_.offset, current_.length);
+    const std::string_view text = source.substr(token.offset, token.length);
     // A stray byte shows as '@', or as its value when unprintable: '<\200>';
     // a NUL byte not at all (Lua's lexerror tests `if (token)`).
-    if (current_.kind == TokenKind::Other) {
+    if (token.kind == TokenKind::Other) {
         if (text.front() == '\0') {
             return "";
         }
@@ -1464,10 +1489,10 @@ std::string Parser::near_current() const {
     // A short string is the exception: like Lua, show its value after escapes,
     // between its own quotes ("\65" shows as '"A"'). A long string keeps its
     // text as written, brackets included.
-    if (current_.kind == TokenKind::String && (text.front() == '"' || text.front() == '\'')) {
+    if (token.kind == TokenKind::String && (text.front() == '"' || text.front() == '\'')) {
         const char quote = text.front();
         return near_text(
-            std::format("{}{}{}", quote, *std::get_if<std::string>(&current_.value), quote));
+            std::format("{}{}{}", quote, *std::get_if<std::string>(&token.value), quote));
     }
     return near_text(text);
 }

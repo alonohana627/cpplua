@@ -25,9 +25,10 @@ IdRange<Id> append(std::vector<T>& lists, std::span<const T> items) {
 
 } // namespace
 
-ExprId Ast::add_expression(Expr expr, int line, int end_line) {
+ExprId Ast::add_expression(Expr expr, int line, int end_line, std::uint32_t offset) {
     expression_lines_.push_back(line);
     expression_end_lines_.push_back(std::max(line, end_line));
+    expression_offsets_.push_back(offset);
     return push<ExprId>(expressions_, expr);
 }
 

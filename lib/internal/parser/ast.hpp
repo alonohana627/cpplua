@@ -472,13 +472,18 @@ public:
     // its arguments), and the line of its last token, which the compiler
     // needs to give each instruction Lua's line (stage 5).
 
-    ExprId add_expression(Expr expr, int line, int end_line = 0);
+    // `offset`: where the expression's first token starts in the source.
+    ExprId add_expression(Expr expr, int line, int end_line = 0, std::uint32_t offset = 0);
 
     [[nodiscard]] const Expr& expression(ExprId id) const { return expressions_[id.index]; }
 
     [[nodiscard]] int line(ExprId id) const { return expression_lines_[id.index]; }
 
     [[nodiscard]] int end_line(ExprId id) const { return expression_end_lines_[id.index]; }
+
+    // Where the expression's first token starts in the source, for the
+    // "near" part of the compiler's errors.
+    [[nodiscard]] std::uint32_t offset(ExprId id) const { return expression_offsets_[id.index]; }
 
     StatId add_statement(Stat stat, int line, int end_line = 0);
 
@@ -528,6 +533,7 @@ private:
     std::vector<Expr> expressions_;
     std::vector<int> expression_lines_;
     std::vector<int> expression_end_lines_;
+    std::vector<std::uint32_t> expression_offsets_;
     std::vector<Stat> statements_;
     std::vector<int> statement_lines_;
     std::vector<int> statement_end_lines_;

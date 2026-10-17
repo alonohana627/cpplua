@@ -21,7 +21,9 @@
 #include <variant>
 #include <vector>
 
+#include "lexer/lexer.hpp"
 #include "overloaded.hpp"
+#include "parser/parser.hpp"
 #include "value/arith.hpp"
 #include "value/bitwise.hpp"
 #include "value/compare.hpp"
@@ -297,20 +299,33 @@ bool raw_equal(Value a, Value b) {
 
 class Compiler {
 public:
-    Compiler(Heap& heap, const Ast& ast, std::string_view source, std::string_view chunk_name)
-        : heap_(heap), ast_(ast), chunk_name_(chunk_name), source_(heap.new_string(source)),
-          env_name_(heap.new_string("_ENV")), break_name_(heap.new_string("break")),
-          for_state_name_(heap.new_string("(for state)")) {}
+    Compiler(Heap& heap, const Ast& ast, std::string_view source, std::string_view chunk_name,
+             std::string_view text)
+        : heap_(heap), ast_(ast), chunk_name_(chunk_name), source_text_(text),
+          source_(heap.new_string(source)), env_name_(heap.new_string("_ENV")),
+          break_name_(heap.new_string("break")), for_state_name_(heap.new_string("(for state)")) {}
 
     std::expected<Proto*, SyntaxError> compile_main();
 
 private:
     // ---- Errors ----
 
+    // A limit the compiler checks ("too many registers", "too many
+    // upvalues", ...): Lua raises it while parsing, near the token it is at;
+    // the compiler shows the first token of the expression it is compiling.
     void error(std::string_view message) {
         if (!error_) {
-            error_ = make_syntax_error(chunk_name_, last_line_, message, "");
+            error_ = make_syntax_error(chunk_name_, last_line_, message, near_text());
         }
+    }
+
+    [[nodiscard]] std::string near_text() const {
+        if (!near_offset_ || *near_offset_ >= source_text_.size()) {
+            return {};
+        }
+        Lexer lexer{source_text_.substr(*near_offset_), chunk_name_};
+        const auto token = lexer.next();
+        return token ? near_token(*token, source_text_.substr(*near_offset_)) : std::string{};
     }
 
     // A limit Lua's memory functions check (luaM_growvector), whose error
@@ -530,7 +545,9 @@ private:
     const Ast& ast_;
     // NOLINTEND(cppcoreguidelines-avoid-const-or-ref-data-members)
     std::string_view chunk_name_;
+    std::string_view source_text_;
     const String* source_;
+    std::optional<std::uint32_t> near_offset_; // the expression being compiled, for error()
     const String* env_name_;
     const String* break_name_;
     const String* for_state_name_;
@@ -2252,6 +2269,7 @@ int Compiler::explist(IdRange<ExprId> list, ExpDesc& v) {
     const auto expressions = ast_.expressions(list);
     expr(expressions[0], v);
     for (std::size_t i = 1; i < expressions.size(); ++i) {
+        near_offset_ = ast_.offset(expressions[i]); // Lua is past the ',' here
         exp2nextreg(v);
         expr(expressions[i], v);
     }
@@ -2349,6 +2367,7 @@ void Compiler::constructor(const TableExpr& table, ExpDesc& t, int end_line) {
 
 void Compiler::expr(ExprId id, ExpDesc& v) {
     // subexpr and simpleexp, one tree node at a time.
+    near_offset_ = ast_.offset(id);
     const int line = ast_.line(id);
     const int end_line = ast_.end_line(id);
     std::visit(Overloaded{
@@ -2895,8 +2914,8 @@ std::expected<Proto*, SyntaxError> Compiler::compile_main() {
 } // namespace
 
 std::expected<Proto*, SyntaxError> compile(Heap& heap, const Ast& ast, std::string_view source,
-                                           std::string_view chunk_name) {
-    Compiler compiler{heap, ast, source, chunk_name};
+                                           std::string_view chunk_name, std::string_view text) {
+    Compiler compiler{heap, ast, source, chunk_name, text};
     return compiler.compile_main();
 }
 

@@ -61,7 +61,7 @@ std::expected<void, std::string> load_chunk(State& state, std::string_view sourc
     if (!ast) {
         return std::unexpected(std::move(ast.error().message));
     }
-    auto proto = compile(heap, *ast, source_name, chunk_name);
+    auto proto = compile(heap, *ast, source_name, chunk_name, source);
     if (!proto) {
         return std::unexpected(std::move(proto.error().message));
     }
