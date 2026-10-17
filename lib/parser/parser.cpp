@@ -61,9 +61,11 @@ std::expected<Block, SyntaxError> Parser::parse_scoped_block(bool is_loop) {
 }
 
 std::expected<Block, SyntaxError> Parser::parse_block() {
-    // The statements are collected here first, then stored in the Ast in one
-    // go, so they sit next to each other (see Ast::add_statement_list).
-    std::vector<StatId> statements;
+    // The statements are collected on statement_stack_ first (above what
+    // the enclosing blocks have there), then stored in the Ast in one go, so
+    // they sit next to each other (see Ast::add_statement_list). One stack
+    // for all blocks spares an allocation per block.
+    const std::size_t first_statement = statement_stack_.size();
 
     // Labels are registered with the scopes only once the statements right
     // after them are known: Lua's labelstat() first skips any ';' and further
@@ -100,7 +102,7 @@ std::expected<Block, SyntaxError> Parser::parse_block() {
         if (!*statement) { // an empty statement ';' adds nothing
             continue;
         }
-        statements.push_back(**statement);
+        statement_stack_.push_back(**statement);
         if (const auto* label = std::get_if<LabelStat>(&ast_.statement(**statement))) {
             pending_labels.emplace_back(label->name, ast_.line(**statement));
         }
@@ -117,9 +119,12 @@ std::expected<Block, SyntaxError> Parser::parse_block() {
         if (!statement) {
             return std::unexpected(std::move(statement.error()));
         }
-        statements.push_back(*statement);
+        statement_stack_.push_back(*statement);
     }
-    return Block{.statements = ast_.add_statement_list(statements)};
+    const auto statements =
+        ast_.add_statement_list(std::span{statement_stack_}.subspan(first_statement));
+    statement_stack_.resize(first_statement);
+    return Block{.statements = statements};
 }
 
 std::expected<StatId, SyntaxError> Parser::parse_return() {
@@ -250,16 +255,18 @@ std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
 
     // An assignment: `var { ',' var } '=' explist`.
     if (check(TokenKind::Assign) || check(TokenKind::Comma)) {
-        std::vector<ExprId> targets{*first};
+        // (on expression_stack_, as in parse_expression_list)
+        const std::size_t first_target = expression_stack_.size();
+        expression_stack_.push_back(*first);
         DepthLevels levels{depth_};
         for (;;) {
             // Like Lua, each target is checked once the token after it is
             // read, so the error points there: `f() = 1` is "syntax error
             // near '='" (G3.9).
-            if (!is_variable(ast_.expression(targets.back()))) {
+            if (!is_variable(ast_.expression(expression_stack_.back()))) {
                 return error("syntax error");
             }
-            if (auto assignable = check_assignable(targets.back()); !assignable) {
+            if (auto assignable = check_assignable(expression_stack_.back()); !assignable) {
                 return std::unexpected(std::move(assignable.error()));
             }
             auto comma = accept(TokenKind::Comma);
@@ -273,11 +280,14 @@ std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
             if (!target) {
                 return std::unexpected(std::move(target.error()));
             }
-            targets.push_back(*target);
+            expression_stack_.push_back(*target);
             if (!levels.enter()) {
                 return semantic_error("C stack overflow");
             }
         }
+        const auto targets =
+            ast_.add_expression_list(std::span{expression_stack_}.subspan(first_target));
+        expression_stack_.resize(first_target);
         if (auto assign = expect(TokenKind::Assign); !assign) {
             return std::unexpected(std::move(assign.error()));
         }
@@ -285,8 +295,7 @@ std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
         if (!values) {
             return std::unexpected(std::move(values.error()));
         }
-        return add_statement(
-            AssignStat{.targets = ast_.add_expression_list(targets), .values = *values}, line);
+        return add_statement(AssignStat{.targets = targets, .values = *values}, line);
     }
 
     // Otherwise it must be a call; `x` or `a.b` alone does nothing, so Lua
@@ -876,20 +885,24 @@ std::expected<Block, SyntaxError> Parser::parse_for_body(int line, std::size_t v
 }
 
 std::expected<IdRange<ExprId>, SyntaxError> Parser::parse_expression_list() {
-    std::vector<ExprId> expressions;
+    // The expressions gather on expression_stack_, above any list being
+    // read around this one, so a list costs no allocation of its own.
+    const std::size_t first = expression_stack_.size();
     for (;;) {
         auto expression = parse_expression();
         if (!expression) {
             return std::unexpected(std::move(expression.error()));
         }
-        expressions.push_back(*expression);
+        expression_stack_.push_back(*expression);
 
         auto comma = accept(TokenKind::Comma);
         if (!comma) {
             return std::unexpected(std::move(comma.error()));
         }
         if (!*comma) {
-            return ast_.add_expression_list(expressions);
+            const auto list = ast_.add_expression_list(std::span{expression_stack_}.subspan(first));
+            expression_stack_.resize(first);
+            return list;
         }
     }
 }

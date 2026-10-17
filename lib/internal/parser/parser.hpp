@@ -213,6 +213,11 @@ private:
 
     // What is visible where: functions, blocks, locals, labels, gotos.
     Scopes scopes_;
+    // Where lists of expressions and the statements of blocks gather while
+    // they are read, nested ones above the outer ones (no allocation per
+    // list or block).
+    std::vector<ExprId> expression_stack_;
+    std::vector<StatId> statement_stack_;
 
     // For each function being parsed, innermost last: whether it is vararg,
     // so '...' can be checked (G4.12). The main chunk is vararg (G2.4).
