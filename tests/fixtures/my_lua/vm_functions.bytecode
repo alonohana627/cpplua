@@ -1,0 +1,406 @@
+
+main <vm_functions.lua:0,0> (125 instructions)
+0+ params, 36 slots, 1 upvalue, 14 locals, 1 constant, 14 functions
+	1	[1]	VARARGPREP	0
+	2	[10]	CLOSURE  	0 0
+	3	[17]	CLOSURE  	1 1
+	4	[19]	CLOSURE  	2 2
+	5	[20]	CLOSURE  	3 3
+	6	[21]	CLOSURE  	4 4
+	7	[23]	CLOSURE  	5 5
+	8	[27]	CLOSURE  	6 6
+	9	[28]	CLOSURE  	7 7
+	10	[34]	CLOSURE  	8 8
+	11	[36]	CLOSURE  	9 9
+	12	[42]	CLOSURE  	10 10
+	13	[49]	CLOSURE  	11 11
+	14	[53]	CLOSURE  	12 12
+	15	[57]	CLOSURE  	13 13
+	16	[59]	MOVE     	14 1
+	17	[59]	LOADI    	15 3
+	18	[59]	MOVE     	16 5
+	19	[59]	MOVE     	17 2
+	20	[59]	CALL     	17 1 0	; 0 in all out
+	21	[59]	CALL     	16 0 0	; all in all out
+	22	[59]	CALL     	14 0 2	; all in 1 out
+	23	[59]	MOVE     	15 1
+	24	[59]	LOADI    	16 3
+	25	[59]	MOVE     	17 5
+	26	[59]	MOVE     	18 2
+	27	[59]	CALL     	18 1 2	; 0 in 1 out
+	28	[59]	LOADI    	19 4
+	29	[59]	CALL     	17 3 0	; 2 in all out
+	30	[59]	CALL     	15 0 2	; all in 1 out
+	31	[59]	MOVE     	16 1
+	32	[59]	LOADI    	17 3
+	33	[59]	MOVE     	18 5
+	34	[59]	MOVE     	19 3
+	35	[59]	CALL     	19 1 0	; 0 in all out
+	36	[59]	CALL     	18 0 0	; all in all out
+	37	[59]	CALL     	16 0 2	; all in 1 out
+	38	[60]	MOVE     	17 1
+	39	[60]	LOADI    	18 3
+	40	[60]	MOVE     	19 5
+	41	[60]	MOVE     	20 4
+	42	[60]	LOADI    	21 7
+	43	[60]	LOADI    	22 8
+	44	[60]	CALL     	20 3 0	; 2 in all out
+	45	[60]	CALL     	19 0 0	; all in all out
+	46	[60]	CALL     	17 0 2	; all in 1 out
+	47	[60]	MOVE     	18 6
+	48	[60]	LOADI    	19 1
+	49	[60]	LOADI    	20 2
+	50	[60]	CALL     	18 3 2	; 2 in 1 out
+	51	[60]	MOVE     	19 6
+	52	[60]	MOVE     	20 2
+	53	[60]	CALL     	20 1 0	; 0 in all out
+	54	[60]	CALL     	19 0 2	; all in 1 out
+	55	[60]	MOVE     	20 6
+	56	[60]	CALL     	20 1 2	; 0 in 1 out
+	57	[60]	MOVE     	21 1
+	58	[60]	LOADI    	22 2
+	59	[60]	MOVE     	23 7
+	60	[60]	LOADI    	24 1
+	61	[60]	LOADI    	25 2
+	62	[60]	LOADI    	26 3
+	63	[60]	CALL     	23 4 0	; 3 in all out
+	64	[60]	CALL     	21 0 2	; all in 1 out
+	65	[61]	MOVE     	22 1
+	66	[61]	LOADI    	23 2
+	67	[61]	MOVE     	24 4
+	68	[61]	CALL     	24 1 0	; 0 in all out
+	69	[61]	CALL     	22 0 2	; all in 1 out
+	70	[61]	MOVE     	23 1
+	71	[61]	LOADI    	24 2
+	72	[61]	MOVE     	25 4
+	73	[61]	LOADNIL  	26 1	; 2 out
+	74	[61]	CALL     	25 3 0	; 2 in all out
+	75	[61]	CALL     	23 0 2	; all in 1 out
+	76	[61]	MOVE     	24 8
+	77	[61]	LOADK    	25 0	; 100000
+	78	[61]	LOADI    	26 0
+	79	[61]	CALL     	24 3 2	; 2 in 1 out
+	80	[61]	MOVE     	25 9
+	81	[61]	LOADI    	26 20
+	82	[61]	CALL     	25 2 2	; 1 in 1 out
+	83	[62]	MOVE     	26 1
+	84	[62]	LOADI    	27 5
+	85	[62]	MOVE     	28 10
+	86	[62]	LOADI    	29 5
+	87	[62]	LOADI    	30 6
+	88	[62]	LOADI    	31 7
+	89	[62]	CALL     	28 4 0	; 3 in all out
+	90	[62]	CALL     	26 0 2	; all in 1 out
+	91	[62]	MOVE     	27 1
+	92	[62]	LOADI    	28 7
+	93	[62]	MOVE     	29 11
+	94	[62]	CALL     	29 1 0	; 0 in all out
+	95	[62]	CALL     	27 0 2	; all in 1 out
+	96	[62]	MOVE     	28 1
+	97	[62]	LOADI    	29 2
+	98	[62]	MOVE     	30 4
+	99	[62]	MOVE     	31 4
+	100	[62]	MOVE     	32 4
+	101	[62]	LOADI    	33 1
+	102	[62]	LOADI    	34 2
+	103	[62]	CALL     	32 3 0	; 2 in all out
+	104	[62]	CALL     	31 0 0	; all in all out
+	105	[62]	CALL     	30 0 0	; all in all out
+	106	[62]	CALL     	28 0 2	; all in 1 out
+	107	[63]	MOVE     	29 1
+	108	[63]	LOADI    	30 3
+	109	[63]	MOVE     	31 12
+	110	[63]	LOADI    	32 9
+	111	[63]	LOADI    	33 8
+	112	[63]	LOADI    	34 7
+	113	[63]	LOADI    	35 6
+	114	[63]	CALL     	31 5 0	; 4 in all out
+	115	[63]	CALL     	29 0 2	; all in 1 out
+	116	[63]	MOVE     	30 1
+	117	[63]	LOADI    	31 4
+	118	[63]	MOVE     	32 13
+	119	[63]	LOADI    	33 1
+	120	[63]	LOADI    	34 2
+	121	[63]	LOADI    	35 3
+	122	[63]	CALL     	32 4 0	; 3 in all out
+	123	[63]	CALL     	30 0 0	; all in all out
+	124	[63]	RETURN   	14 0 1k	; all out
+	125	[63]	RETURN   	14 1 1k	; 0 out
+constants (1):
+	0	I	100000
+locals (14):
+	0	show	3	126
+	1	list	4	126
+	2	three	5	126
+	3	none	6	126
+	4	id	7	126
+	5	pick	8	126
+	6	sum	9	126
+	7	rest	10	126
+	8	loop	11	126
+	9	fact	12	126
+	10	vararg_positions	13	126
+	11	adjust	14	126
+	12	forward	15	126
+	13	many	16	126
+upvalues (1):
+	0	_ENV	1	0
+
+function <vm_functions.lua:5,10> (14 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 6 constants, 0 functions
+	1	[6]	EQK      	0 0 0	; nil
+	2	[6]	JMP      	2	; to 5
+	3	[6]	LOADK    	1 1	; "nil"
+	4	[6]	RETURN1  	1
+	5	[7]	EQK      	0 2 0	; true
+	6	[7]	JMP      	2	; to 9
+	7	[7]	LOADK    	1 3	; "true"
+	8	[7]	RETURN1  	1
+	9	[8]	EQK      	0 4 0	; false
+	10	[8]	JMP      	2	; to 13
+	11	[8]	LOADK    	1 5	; "false"
+	12	[8]	RETURN1  	1
+	13	[9]	RETURN1  	0
+	14	[10]	RETURN0  	
+constants (6):
+	0	N	nil
+	1	S	"nil"
+	2	B	true
+	3	S	"true"
+	4	B	false
+	5	S	"false"
+locals (1):
+	0	v	1	15
+upvalues (0):
+
+function <vm_functions.lua:13,17> (23 instructions)
+2+ params, 7 slots, 2 upvalues, 2 locals, 2 constants, 0 functions
+	1	[13]	VARARGPREP	2
+	2	[14]	EQI      	0 0 0
+	3	[14]	JMP      	2	; to 6
+	4	[14]	LOADK    	2 0	; ""
+	5	[14]	RETURN   	2 2 3	; 1 out
+	6	[15]	EQI      	0 1 0
+	7	[15]	JMP      	4	; to 12
+	8	[15]	GETUPVAL 	2 0	; show
+	9	[15]	MOVE     	3 1
+	10	[15]	TAILCALL 	2 2 3	; 1 in
+	11	[15]	RETURN   	2 0 3	; all out
+	12	[16]	GETUPVAL 	2 0	; show
+	13	[16]	MOVE     	3 1
+	14	[16]	CALL     	2 2 2	; 1 in 1 out
+	15	[16]	LOADK    	3 1	; ","
+	16	[16]	GETUPVAL 	4 1	; list
+	17	[16]	ADDI     	5 0 -1
+	18	[16]	MMBINI   	0 1 7 0	; __sub
+	19	[16]	VARARG   	6 0	; all out
+	20	[16]	CALL     	4 0 2	; all in 1 out
+	21	[16]	CONCAT   	2 3
+	22	[16]	RETURN   	2 2 3	; 1 out
+	23	[17]	RETURN   	2 1 3	; 0 out
+constants (2):
+	0	S	""
+	1	S	","
+locals (2):
+	0	n	1	24
+	1	first	1	24
+upvalues (2):
+	0	show	1	0
+	1	list	1	1
+
+function <vm_functions.lua:19,19> (5 instructions)
+0 params, 3 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[19]	LOADI    	0 1
+	2	[19]	LOADI    	1 2
+	3	[19]	LOADI    	2 3
+	4	[19]	RETURN   	0 4 0	; 3 out
+	5	[19]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <vm_functions.lua:20,20> (1 instruction)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[20]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <vm_functions.lua:21,21> (4 instructions)
+0+ params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[21]	VARARGPREP	0
+	2	[21]	VARARG   	0 0	; all out
+	3	[21]	RETURN   	0 0 1	; all out
+	4	[21]	RETURN   	0 1 1	; 0 out
+constants (0):
+locals (0):
+upvalues (0):
+
+function <vm_functions.lua:23,23> (5 instructions)
+3 params, 6 slots, 0 upvalues, 3 locals, 0 constants, 0 functions
+	1	[23]	MOVE     	3 0
+	2	[23]	MOVE     	4 1
+	3	[23]	MOVE     	5 2
+	4	[23]	RETURN   	3 4 0	; 3 out
+	5	[23]	RETURN0  	
+constants (0):
+locals (3):
+	0	a	1	6
+	1	b	1	6
+	2	c	1	6
+upvalues (0):
+
+function <vm_functions.lua:24,27> (22 instructions)
+0+ params, 6 slots, 0 upvalues, 4 locals, 0 constants, 0 functions
+	1	[24]	VARARGPREP	0
+	2	[25]	VARARG   	0 5	; 4 out
+	3	[26]	TESTSET  	4 0 1
+	4	[26]	JMP      	1	; to 6
+	5	[26]	LOADI    	4 0
+	6	[26]	TESTSET  	5 1 1
+	7	[26]	JMP      	1	; to 9
+	8	[26]	LOADI    	5 0
+	9	[26]	ADD      	4 4 5
+	10	[26]	MMBIN    	4 5 6	; __add
+	11	[26]	TESTSET  	5 2 1
+	12	[26]	JMP      	1	; to 14
+	13	[26]	LOADI    	5 0
+	14	[26]	ADD      	4 4 5
+	15	[26]	MMBIN    	4 5 6	; __add
+	16	[26]	TESTSET  	5 3 1
+	17	[26]	JMP      	1	; to 19
+	18	[26]	LOADI    	5 0
+	19	[26]	ADD      	4 4 5
+	20	[26]	MMBIN    	4 5 6	; __add
+	21	[26]	RETURN   	4 2 1	; 1 out
+	22	[27]	RETURN   	4 1 1	; 0 out
+constants (0):
+locals (4):
+	0	a	3	23
+	1	b	3	23
+	2	c	3	23
+	3	d	3	23
+upvalues (0):
+
+function <vm_functions.lua:28,28> (4 instructions)
+1+ param, 2 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[28]	VARARGPREP	1
+	2	[28]	VARARG   	1 0	; all out
+	3	[28]	RETURN   	1 0 2	; all out
+	4	[28]	RETURN   	1 1 2	; 0 out
+constants (0):
+locals (1):
+	0	first	1	5
+upvalues (0):
+
+function <vm_functions.lua:31,34> (11 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 0 constants, 0 functions
+	1	[32]	EQI      	0 0 0
+	2	[32]	JMP      	1	; to 4
+	3	[32]	RETURN1  	1
+	4	[33]	GETUPVAL 	2 0	; loop
+	5	[33]	ADDI     	3 0 -1
+	6	[33]	MMBINI   	0 1 7 0	; __sub
+	7	[33]	ADDI     	4 1 1
+	8	[33]	MMBINI   	1 1 6 0	; __add
+	9	[33]	TAILCALL 	2 3 0	; 2 in
+	10	[33]	RETURN   	2 0 0	; all out
+	11	[34]	RETURN0  	
+constants (0):
+locals (2):
+	0	n	1	12
+	1	acc	1	12
+upvalues (1):
+	0	loop	1	8
+
+function <vm_functions.lua:36,36> (12 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[36]	LEI      	0 1 0
+	2	[36]	JMP      	2	; to 5
+	3	[36]	LOADI    	1 1
+	4	[36]	RETURN1  	1
+	5	[36]	GETUPVAL 	1 0	; fact
+	6	[36]	ADDI     	2 0 -1
+	7	[36]	MMBINI   	0 1 7 0	; __sub
+	8	[36]	CALL     	1 2 2	; 1 in 1 out
+	9	[36]	MUL      	1 0 1
+	10	[36]	MMBIN    	0 1 8	; __mul
+	11	[36]	RETURN1  	1
+	12	[36]	RETURN0  	
+constants (0):
+locals (1):
+	0	n	1	13
+upvalues (1):
+	0	fact	1	9
+
+function <vm_functions.lua:38,42> (9 instructions)
+0+ params, 7 slots, 0 upvalues, 3 locals, 0 constants, 0 functions
+	1	[38]	VARARGPREP	0
+	2	[39]	VARARG   	0 3	; 2 out
+	3	[40]	VARARG   	2 2	; 1 out
+	4	[41]	MOVE     	3 0
+	5	[41]	MOVE     	4 1
+	6	[41]	MOVE     	5 2
+	7	[41]	VARARG   	6 0	; all out
+	8	[41]	RETURN   	3 0 1	; all out
+	9	[42]	RETURN   	3 1 1	; 0 out
+constants (0):
+locals (3):
+	0	a	3	10
+	1	b	3	10
+	2	x	4	10
+upvalues (0):
+
+function <vm_functions.lua:44,49> (16 instructions)
+0 params, 14 slots, 1 upvalue, 7 locals, 0 constants, 0 functions
+	1	[45]	GETUPVAL 	0 0	; three
+	2	[45]	CALL     	0 1 5	; 0 in 4 out
+	3	[46]	GETUPVAL 	4 0	; three
+	4	[46]	CALL     	4 1 2	; 0 in 1 out
+	5	[46]	LOADI    	5 10
+	6	[47]	GETUPVAL 	6 0	; three
+	7	[47]	CALL     	6 1 2	; 0 in 1 out
+	8	[48]	MOVE     	7 0
+	9	[48]	MOVE     	8 1
+	10	[48]	MOVE     	9 2
+	11	[48]	MOVE     	10 3
+	12	[48]	MOVE     	11 4
+	13	[48]	MOVE     	12 5
+	14	[48]	MOVE     	13 6
+	15	[48]	RETURN   	7 8 0	; 7 out
+	16	[49]	RETURN0  	
+constants (0):
+locals (7):
+	0	a	3	17
+	1	b	3	17
+	2	c	3	17
+	3	d	3	17
+	4	e	6	17
+	5	f	6	17
+	6	g	8	17
+upvalues (1):
+	0	three	1	2
+
+function <vm_functions.lua:53,53> (6 instructions)
+0+ params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[53]	VARARGPREP	0
+	2	[53]	GETUPVAL 	0 0	; pick
+	3	[53]	VARARG   	1 0	; all out
+	4	[53]	TAILCALL 	0 0 1	; -1 in
+	5	[53]	RETURN   	0 0 1	; all out
+	6	[53]	RETURN   	0 1 1	; 0 out
+constants (0):
+locals (0):
+upvalues (1):
+	0	pick	1	5
+
+function <vm_functions.lua:55,57> (5 instructions)
+0+ params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[55]	VARARGPREP	0
+	2	[56]	VARARG   	0 2	; 1 out
+	3	[56]	VARARG   	1 0	; all out
+	4	[56]	RETURN   	0 0 1	; all out
+	5	[57]	RETURN   	0 1 1	; 0 out
+constants (0):
+locals (0):
+upvalues (0):

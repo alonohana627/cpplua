@@ -40,6 +40,9 @@ std::string_view tag_name(Tag tag) {
     case Tag::Float: return "float";
     case Tag::ShortString: return "short string";
     case Tag::LongString: return "long string";
+    case Tag::CFunction: return "C++ function";
+    case Tag::LuaClosure: return "Lua function";
+    case Tag::Table: return "table";
     }
     return "?"; // not reached: every Tag is handled above
 }
@@ -53,6 +56,9 @@ std::string debug_text(Value value) {
     case Tag::Float: return format_float(value.as_float());
     case Tag::ShortString:
     case Tag::LongString: return quoted(value.as_string()->view());
+    case Tag::CFunction:
+    case Tag::LuaClosure:
+    case Tag::Table: return std::format("{}: 0x{:x}", type_name(value.type()), value.payload());
     }
     return "?"; // not reached: every Tag is handled above
 }

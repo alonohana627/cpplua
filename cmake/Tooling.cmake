@@ -13,7 +13,8 @@ file(GLOB_RECURSE LUA2_SOURCES CONFIGURE_DEPENDS
   ${PROJECT_SOURCE_DIR}/src/*.hpp
   ${PROJECT_SOURCE_DIR}/src/*.cpp
   ${PROJECT_SOURCE_DIR}/tests/*.hpp
-  ${PROJECT_SOURCE_DIR}/tests/*.cpp)
+  ${PROJECT_SOURCE_DIR}/tests/*.cpp
+  ${PROJECT_SOURCE_DIR}/bench/*.cpp)
 
 find_program(CLANG_FORMAT clang-format)
 if(CLANG_FORMAT)
@@ -32,13 +33,14 @@ find_program(RUN_CLANG_TIDY run-clang-tidy)
 find_package(Python3 COMPONENTS Interpreter)
 if(CLANG_TIDY AND RUN_CLANG_TIDY AND Python3_FOUND)
   # run-clang-tidy reads compile_commands.json and checks one file per core.
-  # The regex skips fetched dependencies (Catch2 under _deps/).
+  # The regex skips fetched dependencies (Catch2 under _deps/) and the original
+  # Lua source (original_lua_src/), which are not our code.
   add_custom_target(tidy
     COMMAND ${Python3_EXECUTABLE} ${RUN_CLANG_TIDY}
       -p ${PROJECT_BINARY_DIR}
       -clang-tidy-binary ${CLANG_TIDY}
       -quiet
-      "^(?!.*_deps)"
+      "^(?!.*(_deps|original_lua_src))"
     COMMENT "clang-tidy: linting and analyzing"
     VERBATIM)
 endif()

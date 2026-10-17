@@ -1,0 +1,169 @@
+
+main <vm_barrier.lua:0,0> (47 instructions)
+0+ params, 13 slots, 1 upvalue, 16 locals, 2 constants, 2 functions
+	1	[1]	VARARGPREP	0
+	2	[8]	CLOSURE  	0 0
+	3	[10]	MOVE     	1 0
+	4	[10]	CALL     	1 1 3	; 0 in 2 out
+	5	[11]	LOADI    	3 0
+	6	[12]	LOADI    	4 1
+	7	[12]	LOADI    	5 2000
+	8	[12]	LOADI    	6 1
+	9	[12]	FORPREP  	4 16	; exit to 27
+	10	[13]	MOVE     	8 1
+	11	[13]	LOADK    	9 0	; "value "
+	12	[13]	MOVE     	10 7
+	13	[13]	CONCAT   	9 2
+	14	[13]	CALL     	8 2 1	; 1 in 0 out
+	15	[14]	LOADK    	8 1	; "junk "
+	16	[14]	MOVE     	9 7
+	17	[14]	CONCAT   	8 2
+	18	[15]	MOVE     	9 2
+	19	[15]	CALL     	9 1 2	; 0 in 1 out
+	20	[15]	LEN      	9 9
+	21	[15]	ADD      	9 3 9
+	22	[15]	MMBIN    	3 9 6	; __add
+	23	[15]	LEN      	10 8
+	24	[15]	ADD      	3 9 10
+	25	[15]	MMBIN    	9 10 6	; __add
+	26	[12]	FORLOOP  	4 17	; to 10
+	27	[27]	CLOSURE  	4 1
+	28	[28]	MOVE     	5 4
+	29	[28]	LOADI    	6 50
+	30	[28]	CALL     	5 2 2	; 1 in 1 out
+	31	[29]	LOADI    	6 0
+	32	[30]	LOADI    	7 1
+	33	[30]	LOADI    	8 200
+	34	[30]	LOADI    	9 1
+	35	[30]	FORPREP  	7 5	; exit to 42
+	36	[30]	MOVE     	11 5
+	37	[30]	MOVE     	12 10
+	38	[30]	CALL     	11 2 2	; 1 in 1 out
+	39	[30]	ADD      	6 6 11
+	40	[30]	MMBIN    	6 11 6	; __add
+	41	[30]	FORLOOP  	7 6	; to 36
+	42	[32]	MOVE     	7 3
+	43	[32]	MOVE     	8 2
+	44	[32]	CALL     	8 1 2	; 0 in 1 out
+	45	[32]	MOVE     	9 6
+	46	[32]	RETURN   	7 4 1k	; 3 out
+	47	[32]	RETURN   	7 1 1k	; 0 out
+constants (2):
+	0	S	"value "
+	1	S	"junk "
+locals (16):
+	0	box	3	48
+	1	set	5	48
+	2	get	5	48
+	3	total	6	48
+	4	(for state)	9	27
+	5	(for state)	9	27
+	6	(for state)	9	27
+	7	i	10	26
+	8	junk	18	26
+	9	chain	28	48
+	10	all	31	48
+	11	sum	32	48
+	12	(for state)	35	42
+	13	(for state)	35	42
+	14	(for state)	35	42
+	15	i	36	41
+upvalues (1):
+	0	_ENV	1	0
+
+function <vm_barrier.lua:5,8> (5 instructions)
+0 params, 3 slots, 0 upvalues, 1 local, 1 constant, 2 functions
+	1	[6]	LOADK    	0 0	; "init"
+	2	[7]	CLOSURE  	1 0
+	3	[7]	CLOSURE  	2 1
+	4	[7]	RETURN   	1 3 0k	; 2 out
+	5	[8]	RETURN   	1 1 0k	; 0 out
+constants (1):
+	0	S	"init"
+locals (1):
+	0	v	2	6
+upvalues (0):
+
+function <vm_barrier.lua:7,7> (2 instructions)
+1 param, 2 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[7]	SETUPVAL 	0 0	; v
+	2	[7]	RETURN0  	
+constants (0):
+locals (1):
+	0	x	1	3
+upvalues (1):
+	0	v	1	0
+
+function <vm_barrier.lua:7,7> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[7]	GETUPVAL 	0 0	; v
+	2	[7]	RETURN1  	0
+	3	[7]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	v	1	0
+
+function <vm_barrier.lua:19,27> (13 instructions)
+1 param, 5 slots, 2 upvalues, 4 locals, 0 constants, 2 functions
+	1	[20]	EQI      	0 0 0
+	2	[20]	JMP      	2	; to 5
+	3	[20]	CLOSURE  	1 0
+	4	[20]	RETURN   	1 2 0k	; 1 out
+	5	[21]	GETUPVAL 	1 0	; box
+	6	[21]	CALL     	1 1 3	; 0 in 2 out
+	7	[22]	GETUPVAL 	3 1	; chain
+	8	[22]	ADDI     	4 0 -1
+	9	[22]	MMBINI   	0 1 7 0	; __sub
+	10	[22]	CALL     	3 2 2	; 1 in 1 out
+	11	[26]	CLOSURE  	4 1
+	12	[26]	RETURN   	4 2 0k	; 1 out
+	13	[27]	RETURN   	4 1 0k	; 0 out
+constants (0):
+locals (4):
+	0	n	1	14
+	1	s	7	14
+	2	g	7	14
+	3	rest	11	14
+upvalues (2):
+	0	box	1	0
+	1	chain	1	4
+
+function <vm_barrier.lua:20,20> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[20]	LOADI    	0 0
+	2	[20]	RETURN1  	0
+	3	[20]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <vm_barrier.lua:23,26> (17 instructions)
+1 param, 6 slots, 4 upvalues, 1 local, 2 constants, 0 functions
+	1	[24]	GETUPVAL 	1 0	; s
+	2	[24]	LOADK    	2 0	; "v"
+	3	[24]	MOVE     	3 0
+	4	[24]	LOADK    	4 1	; "."
+	5	[24]	GETUPVAL 	5 1	; n
+	6	[24]	CONCAT   	2 4
+	7	[24]	CALL     	1 2 1	; 1 in 0 out
+	8	[25]	GETUPVAL 	1 2	; g
+	9	[25]	CALL     	1 1 2	; 0 in 1 out
+	10	[25]	LEN      	1 1
+	11	[25]	GETUPVAL 	2 3	; rest
+	12	[25]	MOVE     	3 0
+	13	[25]	CALL     	2 2 2	; 1 in 1 out
+	14	[25]	ADD      	1 1 2
+	15	[25]	MMBIN    	1 2 6	; __add
+	16	[25]	RETURN1  	1
+	17	[26]	RETURN0  	
+constants (2):
+	0	S	"v"
+	1	S	"."
+locals (1):
+	0	i	1	18
+upvalues (4):
+	0	s	1	1
+	1	n	1	0
+	2	g	1	2
+	3	rest	1	3

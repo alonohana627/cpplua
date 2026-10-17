@@ -1,0 +1,8 @@
+Chunk
+  Local s, n
+    String "10"
+    Integer 5
+  Return
+    Binary <
+      Name s (local 0)
+      Name n (local 1)

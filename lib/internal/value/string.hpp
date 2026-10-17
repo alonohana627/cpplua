@@ -6,12 +6,14 @@
 #include <expected>
 #include <span>
 #include <string_view>
-#include <vector>
 
+#include "gc/object.hpp"
 #include "runtime_error.hpp"
 #include "value/value.hpp"
 
 namespace lua2 {
+
+class Heap; // gc/heap.hpp
 
 // Strings of up to this many bytes are short: the Heap keeps one copy of each
 // (V10.2). Lua's LUAI_MAXSHORTLEN.
@@ -28,13 +30,14 @@ constexpr std::uint32_t string_hash(std::string_view bytes, std::uint32_t seed) 
 }
 
 // An immutable Lua string (V10.1): any bytes, '\0' included. Only a Heap
-// makes strings, and it owns them; values refer to them by pointer.
+// (gc/heap.hpp) makes strings, and the collector frees them once nothing
+// refers to them; values refer to them by pointer.
 //
 // The header and the bytes are one allocation: the bytes follow the header
 // in memory, then a '\0' so that C functions can read them too. This is how
 // Lua lays out its strings: one allocation per string, and the bytes next to
 // the length.
-class String {
+class String : public GcObject {
 public:
     String(const String&) = delete;
     String& operator=(const String&) = delete;
@@ -44,11 +47,12 @@ public:
 
     [[nodiscard]] std::size_t length() const { return length_; }
 
-    [[nodiscard]] bool is_short() const { return is_short_; }
+    // Short strings are interned (V10.2); long ones are not.
+    [[nodiscard]] bool is_short() const { return type == ObjectType::ShortString; }
 
     // The bytes, followed in memory by a '\0'.
     [[nodiscard]] const char* data() const {
-        // The bytes start right after the header (see Heap::new_string).
+        // The bytes start right after the header (see Heap::allocate_string).
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
         return reinterpret_cast<const char*>(this + 1);
     }
@@ -70,68 +74,12 @@ private:
     friend class Heap;
 
     String(std::size_t length, std::uint32_t hash, bool is_short)
-        : length_(length), hash_(hash), is_short_(is_short), has_hash_(is_short) {}
+        : length_(length), hash_(hash), has_hash_(is_short) {}
 
-    String* next_object_ = nullptr;    // every string of the Heap, to free them
     String* next_in_bucket_ = nullptr; // short strings with the same bucket
     std::size_t length_;
     mutable std::uint32_t hash_;
-    bool is_short_;
     mutable bool has_hash_;
-};
-
-// Owns every string, until the garbage collector (stage 5) takes its place:
-// strings live as long as their Heap, and the Heap frees them all when it is
-// destroyed. Short strings are interned: making "abc" twice gives the same
-// String both times (V10.2). Like Lua's string table (lstring.c), they are
-// found through an array of buckets, each a chain of strings, which doubles
-// when it holds as many strings as buckets.
-class Heap {
-public:
-    // A seed chosen at random, different each run, as in Lua: the hashes,
-    // and so the order of `pairs`, change from run to run.
-    static std::uint32_t random_seed();
-
-    // `seed` decides every string hash; fix it to get the same hashes every
-    // run (tests, debugging).
-    explicit Heap(std::uint32_t seed = random_seed());
-
-    Heap(const Heap&) = delete;
-    Heap& operator=(const Heap&) = delete;
-    Heap(Heap&&) = delete;
-    Heap& operator=(Heap&&) = delete;
-    ~Heap();
-
-    // A string holding `bytes`: the existing one for a short string made
-    // before, a new one otherwise.
-    const String* new_string(std::string_view bytes);
-
-    // A string holding `parts` one after the other, as Lua's luaV_concat
-    // builds them: a short result is put together in a buffer on the stack
-    // and interned; a long one is written straight into the new string. No
-    // other allocation either way.
-    const String* new_string(std::span<const std::string_view> parts);
-
-    [[nodiscard]] std::uint32_t seed() const { return seed_; }
-
-    // How many strings the Heap owns, and how many are interned.
-    [[nodiscard]] std::size_t string_count() const { return string_count_; }
-
-    [[nodiscard]] std::size_t short_string_count() const { return short_count_; }
-
-private:
-    // A new string of `length` bytes, with its '\0' written; the caller
-    // writes the bytes (through bytes_of()).
-    String* allocate(std::size_t length, std::uint32_t hash, bool is_short);
-    static char* bytes_of(String* s);
-    const String* intern(std::string_view bytes);
-    void grow_buckets();
-
-    std::uint32_t seed_;
-    String* objects_ = nullptr;    // every string, newest first
-    std::vector<String*> buckets_; // short strings by hash; a power of two long
-    std::size_t string_count_ = 0;
-    std::size_t short_count_ = 0;
 };
 
 inline Value Value::string(const String* s) {

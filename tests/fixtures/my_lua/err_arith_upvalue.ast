@@ -1,0 +1,11 @@
+Chunk
+  Local up
+  LocalFunction f
+    Function() [upvalues: up]
+      Return
+        Binary *
+          Name up (upvalue 0)
+          Integer 2
+  Return
+    Call
+      Name f (local 1)

@@ -9,6 +9,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include "gc/heap.hpp"
 #include "value/arith.hpp"
 #include "value/bitwise.hpp"
 #include "value/compare.hpp"

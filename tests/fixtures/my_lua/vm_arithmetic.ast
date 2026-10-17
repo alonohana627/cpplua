@@ -1,0 +1,325 @@
+Chunk
+  Local i, f, s
+    Integer 7
+    Float 2.5
+    String "10"
+  Local maxint
+    Integer 9223372036854775807
+  Local minint
+    Binary -
+      Unary -
+        Integer 9223372036854775807
+      Integer 1
+  Local inf
+    Binary /
+      Integer 1
+      Integer 0
+  LocalFunction values
+    Function(...)
+      Return
+        Vararg
+  Return
+    Binary +
+      Name i (local 0)
+      Integer 1
+    Binary +
+      Name i (local 0)
+      Integer 1000
+    Binary +
+      Name i (local 0)
+      Name f (local 1)
+    Binary -
+      Name i (local 0)
+      Integer 1
+    Binary -
+      Integer 1
+      Name i (local 0)
+    Binary -
+      Integer 1000
+      Name i (local 0)
+    Binary *
+      Name i (local 0)
+      Integer 3
+    Binary *
+      Name f (local 1)
+      Integer 2
+    Binary *
+      Name i (local 0)
+      Name f (local 1)
+    Binary /
+      Name i (local 0)
+      Integer 2
+    Binary //
+      Name i (local 0)
+      Integer 2
+    Binary //
+      Unary -
+        Name i (local 0)
+      Integer 2
+    Binary //
+      Name i (local 0)
+      Unary -
+        Integer 2
+    Binary //
+      Float 7.5
+      Integer 2
+    Binary %
+      Name i (local 0)
+      Integer 3
+    Binary %
+      Unary -
+        Name i (local 0)
+      Integer 3
+    Binary %
+      Name i (local 0)
+      Unary -
+        Integer 3
+    Binary %
+      Float 5.5
+      Integer 2
+    Binary %
+      Unary -
+        Float 5.5
+      Integer 2
+    Binary ^
+      Integer 2
+      Integer 10
+    Binary ^
+      Name i (local 0)
+      Float 0.5
+    Binary ^
+      Name i (local 0)
+      Unary -
+        Integer 1
+    Unary -
+      Name i (local 0)
+    Unary -
+      Name f (local 1)
+    Unary -
+      Unary -
+        Name i (local 0)
+    Unary -
+      Name maxint (local 3)
+    Unary -
+      Name minint (local 4)
+    Binary &
+      Name i (local 0)
+      Integer 3
+    Binary |
+      Name i (local 0)
+      Integer 8
+    Binary ~
+      Name i (local 0)
+      Integer 5
+    Unary ~
+      Name i (local 0)
+    Binary &
+      Integer 3
+      Float 2.0
+    Binary |
+      Float 1.0
+      Integer 2
+    Binary &
+      Name i (local 0)
+      Float 6.0
+    Binary <<
+      Name i (local 0)
+      Integer 2
+    Binary >>
+      Name i (local 0)
+      Integer 1
+    Binary <<
+      Integer 1
+      Integer 63
+    Binary <<
+      Integer 1
+      Integer 64
+    Binary >>
+      Unary -
+        Integer 1
+      Integer 1
+    Binary <<
+      Name i (local 0)
+      Unary -
+        Integer 1
+    Binary <<
+      Integer 3
+      Name i (local 0)
+    Binary >>
+      Name i (local 0)
+      Unary -
+        Integer 2
+    Binary +
+      Name s (local 2)
+      Integer 1
+    Binary *
+      Name s (local 2)
+      Integer 2
+    Binary +
+      String "0x10"
+      Integer 0
+    Binary +
+      String "1e2"
+      Integer 0
+    Binary //
+      Name s (local 2)
+      Integer 3
+    Unary -
+      Name s (local 2)
+    Binary -
+      Name s (local 2)
+      String "3.5"
+    Binary <
+      Name i (local 0)
+      Integer 10
+    Binary <=
+      Name i (local 0)
+      Integer 7
+    Binary >
+      Name i (local 0)
+      Integer 7
+    Binary >=
+      Name i (local 0)
+      Integer 8
+    Binary <
+      Name f (local 1)
+      Name i (local 0)
+    Binary <
+      Name i (local 0)
+      Name f (local 1)
+    Binary <
+      Integer 1
+      Float 1.5
+    Binary <
+      Name i (local 0)
+      Name inf (local 5)
+    Binary <
+      Unary -
+        Name inf (local 5)
+      Name minint (local 4)
+    Binary <
+      Binary ^
+        Integer 2
+        Integer 53
+      Binary +
+        Binary ^
+          Integer 2
+          Integer 53
+        Integer 1
+    Binary <
+      Name maxint (local 3)
+      Binary ^
+        Integer 2
+        Integer 63
+    Binary ==
+      Binary +
+        Name maxint (local 3)
+        Float 0.0
+      Binary ^
+        Integer 2
+        Integer 63
+    Binary ==
+      Name minint (local 4)
+      Unary -
+        Binary ^
+          Integer 2
+          Integer 63
+    Binary <
+      String "a"
+      String "b"
+    Binary <
+      String "abc"
+      String "abd"
+    Binary <
+      String ""
+      String "a"
+    Binary <
+      String "Z"
+      String "a"
+    Binary <
+      String "a\x00b"
+      String "a\x00c"
+    Binary ==
+      Name i (local 0)
+      Integer 7
+    Binary ==
+      Name i (local 0)
+      Float 7.0
+    Binary ==
+      Name f (local 1)
+      Float 2.5
+    Binary ==
+      Name s (local 2)
+      String "10"
+    Binary ==
+      Name s (local 2)
+      Integer 10
+    Binary ~=
+      Name i (local 0)
+      Integer 8
+    Binary ==
+      Nil
+      False
+    Binary ==
+      Integer 0
+      Unary -
+        Integer 0
+    Binary ==
+      Binary +
+        Name maxint (local 3)
+        Integer 1
+      Name minint (local 4)
+    Binary ==
+      Binary -
+        Name minint (local 4)
+        Integer 1
+      Name maxint (local 3)
+    Binary *
+      Name maxint (local 3)
+      Integer 2
+    Binary //
+      Name minint (local 4)
+      Unary -
+        Integer 1
+    Binary %
+      Name minint (local 4)
+      Unary -
+        Integer 1
+    Binary +
+      Float 0.1
+      Float 0.2
+    Binary *
+      Float 1e+300
+      Float 1e+10
+    Binary *
+      Unary -
+        Float 1e+300
+      Float 1e+10
+    Binary //
+      Integer 3
+      Float 0.0
+    Binary //
+      Unary -
+        Integer 3
+      Float 0.0
+    Unary -
+      Float 0.0
+    Binary *
+      Float 0.0
+      Unary -
+        Integer 1
+    Binary %
+      Integer 5
+      Name inf (local 5)
+    Binary %
+      Unary -
+        Integer 5
+      Name inf (local 5)
+    Binary +
+      Integer 9007199254740993
+      Float 0.0
+    Call
+      Name values (local 6)
+      Integer 1
+      Integer 2
+      Integer 3

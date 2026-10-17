@@ -196,10 +196,21 @@ private:
     // quoted, or <eof>.
     [[nodiscard]] std::string near_current() const;
 
+    // Adds a node to the tree with the line of the last token read, which
+    // is where the node ends.
+    ExprId add_expression(Expr expr, int line) {
+        return ast_.add_expression(expr, line, previous_line_);
+    }
+
+    StatId add_statement(Stat stat, int line) {
+        return ast_.add_statement(stat, line, previous_line_);
+    }
+
     std::string_view source_;
     Lexer lexer_;
     Token current_;                  // the token being looked at
     std::optional<Token> lookahead_; // the next one, once peek() has read it
+    int previous_line_ = 1;          // the line of the token before current_ (Lua's lastline)
     Ast ast_;
 
     // What is visible where: functions, blocks, locals, labels, gotos.

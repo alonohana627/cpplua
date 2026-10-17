@@ -103,6 +103,19 @@ TEST_CASE("every file of the Lua 5.4.9 test suite parses", "[conformance]") {
     }
 }
 
+TEST_CASE("every file of the Lua 5.4.9 test suite compiles", "[conformance][vm]") {
+    // Stage 5's compiler on real programs. (Its listings were compared with
+    // the real luac's, file by file; see docs/final_docs/vm.md.)
+    for (const auto& path : lua_files()) {
+        const std::string name = path.filename().string();
+        CAPTURE(name);
+        const std::string source = read_bytes(path);
+        const auto listing = lua2::bytecode_dump(lua2::skip_file_prefix(source), name);
+        REQUIRE(listing.has_value());
+        CHECK(listing->starts_with("\nmain <" + name + ":0,0>"));
+    }
+}
+
 TEST_CASE("spot checks of the test suite's trees", "[conformance]") {
     // all.lua: the '#!../lua' line is skipped, line 6 is the first statement.
     CHECK(parsed_tree(suite / "all.lua")

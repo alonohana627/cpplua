@@ -142,6 +142,11 @@ struct Token {
     std::uint32_t offset = 0;
     std::uint32_t length = 0;
 
+    // The line the token ends on: after a long string, its closing line.
+    // Lua counts a token as read on that line (lastline), which decides the
+    // lines of the instructions compiled after it.
+    int end_line = 1;
+
     // Two tokens are equal when they mean the same thing: kind, line and
     // value. Where they sit in the source does not count, so tests can write
     // the expected token without computing offsets.

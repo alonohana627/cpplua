@@ -1,0 +1,7 @@
+Chunk
+  Local s
+    String "x"
+  Return
+    Binary <
+      Integer 1
+      Name s (local 0)

@@ -1,0 +1,511 @@
+
+main <vm_closures.lua:0,0> (152 instructions)
+0+ params, 39 slots, 1 upvalue, 40 locals, 4 constants, 16 functions
+	1	[1]	VARARGPREP	0
+	2	[9]	CLOSURE  	0 0
+	3	[15]	CLOSURE  	1 1
+	4	[24]	CLOSURE  	2 2
+	5	[25]	MOVE     	3 2
+	6	[25]	CALL     	3 1 3	; 0 in 2 out
+	7	[26]	MOVE     	5 3
+	8	[26]	CALL     	5 1 1	; 0 in 0 out
+	9	[26]	MOVE     	5 3
+	10	[26]	LOADI    	6 10
+	11	[26]	CALL     	5 2 1	; 1 in 0 out
+	12	[27]	MOVE     	5 4
+	13	[27]	CALL     	5 1 2	; 0 in 1 out
+	14	[30]	LOADNIL  	6 2	; 3 out
+	15	[31]	LOADI    	9 1
+	16	[31]	LOADI    	10 3
+	17	[31]	LOADI    	11 1
+	18	[31]	FORPREP  	9 11	; exit to 31
+	19	[32]	CLOSURE  	13 3
+	20	[33]	EQI      	12 1 0
+	21	[33]	JMP      	2	; to 24
+	22	[33]	MOVE     	6 13
+	23	[33]	JMP      	5	; to 29
+	24	[33]	EQI      	12 2 0
+	25	[33]	JMP      	2	; to 28
+	26	[33]	MOVE     	7 13
+	27	[33]	JMP      	1	; to 29
+	28	[33]	MOVE     	8 13
+	29	[33]	CLOSE    	12
+	30	[31]	FORLOOP  	9 12	; to 19
+	31	[37]	LOADNIL  	9 1	; 2 out
+	32	[38]	LOADI    	11 0
+	33	[39]	LTI      	11 2 0
+	34	[39]	JMP      	13	; to 48
+	35	[40]	ADDI     	11 11 1
+	36	[40]	MMBINI   	11 1 6 0	; __add
+	37	[41]	MULK     	12 11 0	; 100
+	38	[41]	MMBINK   	11 0 8 0	; __mul 100
+	39	[42]	EQI      	11 1 0
+	40	[42]	JMP      	3	; to 44
+	41	[42]	CLOSURE  	13 4
+	42	[42]	MOVE     	9 13
+	43	[42]	JMP      	2	; to 46
+	44	[42]	CLOSURE  	13 5
+	45	[42]	MOVE     	10 13
+	46	[42]	CLOSE    	12
+	47	[42]	JMP      	-15	; to 33
+	48	[56]	CLOSURE  	12 6
+	49	[57]	MOVE     	13 12
+	50	[57]	CALL     	13 1 3	; 0 in 2 out
+	51	[58]	MOVE     	15 13
+	52	[58]	CALL     	15 1 1	; 0 in 0 out
+	53	[58]	MOVE     	15 13
+	54	[58]	CALL     	15 1 1	; 0 in 0 out
+	55	[61]	LOADNIL  	15 1	; 2 out
+	56	[62]	LOADI    	17 1
+	57	[62]	LOADI    	18 10
+	58	[62]	LOADI    	19 1
+	59	[62]	FORPREP  	17 11	; exit to 72
+	60	[63]	MOVE     	21 20
+	61	[64]	EQI      	20 1 0
+	62	[64]	JMP      	2	; to 65
+	63	[64]	CLOSURE  	22 7
+	64	[64]	MOVE     	15 22
+	65	[65]	EQI      	20 2 0
+	66	[65]	JMP      	3	; to 70
+	67	[65]	CLOSURE  	22 8
+	68	[65]	MOVE     	16 22
+	69	[65]	JMP      	2	; to 72
+	70	[65]	CLOSE    	21
+	71	[62]	FORLOOP  	17 12	; to 60
+	72	[66]	CLOSE    	17
+	73	[67]	LOADNIL  	17 1	; 2 out
+	74	[68]	LOADI    	19 0
+	75	[70]	ADDI     	19 19 1
+	76	[70]	MMBINI   	19 1 6 0	; __add
+	77	[72]	MOVE     	20 19
+	78	[73]	EQI      	19 1 0
+	79	[73]	JMP      	3	; to 83
+	80	[73]	CLOSURE  	21 9
+	81	[73]	MOVE     	17 21
+	82	[73]	JMP      	2	; to 85
+	83	[73]	CLOSURE  	21 10
+	84	[73]	MOVE     	18 21
+	85	[73]	CLOSE    	20
+	86	[75]	LTI      	19 2 0
+	87	[75]	JMP      	1	; to 89
+	88	[75]	JMP      	-14	; to 75
+	89	[78]	CLOSURE  	20 11
+	90	[81]	LOADK    	21 1	; "a"
+	91	[82]	CLOSURE  	22 12
+	92	[83]	CLOSURE  	23 13
+	93	[84]	MOVE     	24 22
+	94	[84]	LOADK    	25 2	; "b"
+	95	[84]	CALL     	24 2 1	; 1 in 0 out
+	96	[85]	MOVE     	24 23
+	97	[85]	CALL     	24 1 2	; 0 in 1 out
+	98	[86]	LOADK    	21 3	; "c"
+	99	[89]	CLOSURE  	25 14
+	100	[90]	MOVE     	26 25
+	101	[90]	LOADI    	27 5
+	102	[90]	CALL     	26 2 2	; 1 in 1 out
+	103	[91]	CLOSURE  	27 15
+	104	[93]	MOVE     	28 5
+	105	[93]	MOVE     	29 1
+	106	[93]	LOADI    	30 3
+	107	[93]	MOVE     	31 6
+	108	[93]	CALL     	31 1 2	; 0 in 1 out
+	109	[93]	MOVE     	32 7
+	110	[93]	CALL     	32 1 2	; 0 in 1 out
+	111	[93]	MOVE     	33 8
+	112	[93]	CALL     	33 1 0	; 0 in all out
+	113	[93]	CALL     	29 0 2	; all in 1 out
+	114	[93]	MOVE     	30 1
+	115	[93]	LOADI    	31 2
+	116	[93]	MOVE     	32 9
+	117	[93]	CALL     	32 1 2	; 0 in 1 out
+	118	[93]	MOVE     	33 10
+	119	[93]	CALL     	33 1 0	; 0 in all out
+	120	[93]	CALL     	30 0 2	; all in 1 out
+	121	[93]	MOVE     	31 1
+	122	[93]	LOADI    	32 2
+	123	[93]	MOVE     	33 13
+	124	[93]	CALL     	33 1 2	; 0 in 1 out
+	125	[93]	MOVE     	34 14
+	126	[93]	CALL     	34 1 0	; 0 in all out
+	127	[93]	CALL     	31 0 2	; all in 1 out
+	128	[94]	MOVE     	32 1
+	129	[94]	LOADI    	33 2
+	130	[94]	MOVE     	34 15
+	131	[94]	CALL     	34 1 2	; 0 in 1 out
+	132	[94]	MOVE     	35 16
+	133	[94]	CALL     	35 1 0	; 0 in all out
+	134	[94]	CALL     	32 0 2	; all in 1 out
+	135	[94]	MOVE     	33 1
+	136	[94]	LOADI    	34 2
+	137	[94]	MOVE     	35 17
+	138	[94]	CALL     	35 1 2	; 0 in 1 out
+	139	[94]	MOVE     	36 18
+	140	[94]	CALL     	36 1 0	; 0 in all out
+	141	[94]	CALL     	33 0 2	; all in 1 out
+	142	[94]	MOVE     	34 20
+	143	[94]	LOADI    	35 15
+	144	[94]	CALL     	34 2 2	; 1 in 1 out
+	145	[94]	MOVE     	35 24
+	146	[94]	MOVE     	36 23
+	147	[94]	CALL     	36 1 2	; 0 in 1 out
+	148	[94]	MOVE     	37 27
+	149	[94]	LOADI    	38 10
+	150	[94]	CALL     	37 2 0	; 1 in all out
+	151	[94]	RETURN   	28 0 1k	; all out
+	152	[94]	RETURN   	28 1 1k	; 0 out
+constants (4):
+	0	I	100
+	1	S	"a"
+	2	S	"b"
+	3	S	"c"
+locals (40):
+	0	show	3	153
+	1	list	4	153
+	2	counter	5	153
+	3	inc	7	153
+	4	get	7	153
+	5	shared	14	153
+	6	f1	15	153
+	7	f2	15	153
+	8	f3	15	153
+	9	(for state)	18	31
+	10	(for state)	18	31
+	11	(for state)	18	31
+	12	i	19	29
+	13	f	20	29
+	14	w1	32	153
+	15	w2	32	153
+	16	k	33	153
+	17	captured	39	46
+	18	outer	49	153
+	19	deep	51	153
+	20	peek	51	153
+	21	b1	56	153
+	22	b2	56	153
+	23	(for state)	59	72
+	24	(for state)	59	72
+	25	(for state)	59	72
+	26	i	60	71
+	27	v	61	70
+	28	g1	74	153
+	29	g2	74	153
+	30	round	75	153
+	31	r	78	85
+	32	fib	90	153
+	33	value	91	153
+	34	set	92	153
+	35	read	93	153
+	36	after_set	98	153
+	37	make_adder	100	153
+	38	add5	103	153
+	39	tail	104	153
+upvalues (1):
+	0	_ENV	1	0
+
+function <vm_closures.lua:4,9> (14 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 6 constants, 0 functions
+	1	[5]	EQK      	0 0 0	; nil
+	2	[5]	JMP      	2	; to 5
+	3	[5]	LOADK    	1 1	; "nil"
+	4	[5]	RETURN1  	1
+	5	[6]	EQK      	0 2 0	; true
+	6	[6]	JMP      	2	; to 9
+	7	[6]	LOADK    	1 3	; "true"
+	8	[6]	RETURN1  	1
+	9	[7]	EQK      	0 4 0	; false
+	10	[7]	JMP      	2	; to 13
+	11	[7]	LOADK    	1 5	; "false"
+	12	[7]	RETURN1  	1
+	13	[8]	RETURN1  	0
+	14	[9]	RETURN0  	
+constants (6):
+	0	N	nil
+	1	S	"nil"
+	2	B	true
+	3	S	"true"
+	4	B	false
+	5	S	"false"
+locals (1):
+	0	v	1	15
+upvalues (0):
+
+function <vm_closures.lua:11,15> (23 instructions)
+2+ params, 7 slots, 2 upvalues, 2 locals, 2 constants, 0 functions
+	1	[11]	VARARGPREP	2
+	2	[12]	EQI      	0 0 0
+	3	[12]	JMP      	2	; to 6
+	4	[12]	LOADK    	2 0	; ""
+	5	[12]	RETURN   	2 2 3	; 1 out
+	6	[13]	EQI      	0 1 0
+	7	[13]	JMP      	4	; to 12
+	8	[13]	GETUPVAL 	2 0	; show
+	9	[13]	MOVE     	3 1
+	10	[13]	TAILCALL 	2 2 3	; 1 in
+	11	[13]	RETURN   	2 0 3	; all out
+	12	[14]	GETUPVAL 	2 0	; show
+	13	[14]	MOVE     	3 1
+	14	[14]	CALL     	2 2 2	; 1 in 1 out
+	15	[14]	LOADK    	3 1	; ","
+	16	[14]	GETUPVAL 	4 1	; list
+	17	[14]	ADDI     	5 0 -1
+	18	[14]	MMBINI   	0 1 7 0	; __sub
+	19	[14]	VARARG   	6 0	; all out
+	20	[14]	CALL     	4 0 2	; all in 1 out
+	21	[14]	CONCAT   	2 3
+	22	[14]	RETURN   	2 2 3	; 1 out
+	23	[15]	RETURN   	2 1 3	; 0 out
+constants (2):
+	0	S	""
+	1	S	","
+locals (2):
+	0	n	1	24
+	1	first	1	24
+upvalues (2):
+	0	show	1	0
+	1	list	1	1
+
+function <vm_closures.lua:19,24> (7 instructions)
+0 params, 5 slots, 0 upvalues, 3 locals, 0 constants, 2 functions
+	1	[20]	LOADI    	0 0
+	2	[21]	CLOSURE  	1 0
+	3	[22]	CLOSURE  	2 1
+	4	[23]	MOVE     	3 1
+	5	[23]	MOVE     	4 2
+	6	[23]	RETURN   	3 3 0k	; 2 out
+	7	[24]	RETURN   	3 1 0k	; 0 out
+constants (0):
+locals (3):
+	0	n	2	8
+	1	inc	3	8
+	2	get	4	8
+upvalues (0):
+
+function <vm_closures.lua:21,21> (10 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[21]	GETUPVAL 	1 0	; n
+	2	[21]	TESTSET  	2 0 1
+	3	[21]	JMP      	1	; to 5
+	4	[21]	LOADI    	2 1
+	5	[21]	ADD      	1 1 2
+	6	[21]	MMBIN    	1 2 6	; __add
+	7	[21]	SETUPVAL 	1 0	; n
+	8	[21]	GETUPVAL 	1 0	; n
+	9	[21]	RETURN1  	1
+	10	[21]	RETURN0  	
+constants (0):
+locals (1):
+	0	step	1	11
+upvalues (1):
+	0	n	1	0
+
+function <vm_closures.lua:22,22> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[22]	GETUPVAL 	0 0	; n
+	2	[22]	RETURN1  	0
+	3	[22]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	n	1	0
+
+function <vm_closures.lua:32,32> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[32]	GETUPVAL 	0 0	; i
+	2	[32]	RETURN1  	0
+	3	[32]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	i	1	12
+
+function <vm_closures.lua:42,42> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[42]	GETUPVAL 	0 0	; captured
+	2	[42]	RETURN1  	0
+	3	[42]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	captured	1	12
+
+function <vm_closures.lua:42,42> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[42]	GETUPVAL 	0 0	; captured
+	2	[42]	RETURN1  	0
+	3	[42]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	captured	1	12
+
+function <vm_closures.lua:46,56> (7 instructions)
+0 params, 4 slots, 0 upvalues, 2 locals, 0 constants, 2 functions
+	1	[47]	LOADI    	0 1
+	2	[54]	CLOSURE  	1 0
+	3	[55]	MOVE     	2 1
+	4	[55]	CALL     	2 1 2	; 0 in 1 out
+	5	[55]	CLOSURE  	3 1
+	6	[55]	RETURN   	2 3 0k	; 2 out
+	7	[56]	RETURN   	2 1 0k	; 0 out
+constants (0):
+locals (2):
+	0	x	2	8
+	1	middle	3	8
+upvalues (0):
+
+function <vm_closures.lua:48,54> (3 instructions)
+0 params, 2 slots, 1 upvalue, 1 local, 0 constants, 1 function
+	1	[52]	CLOSURE  	0 0
+	2	[53]	RETURN1  	0
+	3	[54]	RETURN0  	
+constants (0):
+locals (1):
+	0	inner	2	4
+upvalues (1):
+	0	x	1	0
+
+function <vm_closures.lua:49,52> (7 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[50]	GETUPVAL 	0 0	; x
+	2	[50]	MULK     	0 0 0	; 2
+	3	[50]	MMBINK   	0 0 8 0	; __mul 2
+	4	[50]	SETUPVAL 	0 0	; x
+	5	[51]	GETUPVAL 	0 0	; x
+	6	[51]	RETURN1  	0
+	7	[52]	RETURN0  	
+constants (1):
+	0	I	2
+locals (0):
+upvalues (1):
+	0	x	0	0
+
+function <vm_closures.lua:55,55> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[55]	GETUPVAL 	0 0	; x
+	2	[55]	RETURN1  	0
+	3	[55]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	x	1	0
+
+function <vm_closures.lua:64,64> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[64]	GETUPVAL 	0 0	; v
+	2	[64]	RETURN1  	0
+	3	[64]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	v	1	21
+
+function <vm_closures.lua:65,65> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[65]	GETUPVAL 	0 0	; v
+	2	[65]	RETURN1  	0
+	3	[65]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	v	1	21
+
+function <vm_closures.lua:73,73> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[73]	GETUPVAL 	0 0	; r
+	2	[73]	RETURN1  	0
+	3	[73]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	r	1	20
+
+function <vm_closures.lua:73,73> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[73]	GETUPVAL 	0 0	; r
+	2	[73]	RETURN1  	0
+	3	[73]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	r	1	20
+
+function <vm_closures.lua:78,78> (15 instructions)
+1 param, 4 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[78]	LTI      	0 2 0
+	2	[78]	JMP      	1	; to 4
+	3	[78]	RETURN1  	0
+	4	[78]	GETUPVAL 	1 0	; fib
+	5	[78]	ADDI     	2 0 -1
+	6	[78]	MMBINI   	0 1 7 0	; __sub
+	7	[78]	CALL     	1 2 2	; 1 in 1 out
+	8	[78]	GETUPVAL 	2 0	; fib
+	9	[78]	ADDI     	3 0 -2
+	10	[78]	MMBINI   	0 2 7 0	; __sub
+	11	[78]	CALL     	2 2 2	; 1 in 1 out
+	12	[78]	ADD      	1 1 2
+	13	[78]	MMBIN    	1 2 6	; __add
+	14	[78]	RETURN1  	1
+	15	[78]	RETURN0  	
+constants (0):
+locals (1):
+	0	n	1	16
+upvalues (1):
+	0	fib	1	20
+
+function <vm_closures.lua:82,82> (2 instructions)
+1 param, 2 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[82]	SETUPVAL 	0 0	; value
+	2	[82]	RETURN0  	
+constants (0):
+locals (1):
+	0	v	1	3
+upvalues (1):
+	0	value	1	21
+
+function <vm_closures.lua:83,83> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[83]	GETUPVAL 	0 0	; value
+	2	[83]	RETURN1  	0
+	3	[83]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	value	1	21
+
+function <vm_closures.lua:89,89> (3 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 0 constants, 1 function
+	1	[89]	CLOSURE  	1 0
+	2	[89]	RETURN   	1 2 0k	; 1 out
+	3	[89]	RETURN   	1 1 0k	; 0 out
+constants (0):
+locals (1):
+	0	x	1	4
+upvalues (0):
+
+function <vm_closures.lua:89,89> (7 instructions)
+0+ params, 2 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[89]	VARARGPREP	0
+	2	[89]	VARARG   	0 2	; 1 out
+	3	[89]	GETUPVAL 	1 0	; x
+	4	[89]	ADD      	1 1 0
+	5	[89]	MMBIN    	1 0 6	; __add
+	6	[89]	RETURN   	1 2 1	; 1 out
+	7	[89]	RETURN   	1 1 1	; 0 out
+constants (0):
+locals (1):
+	0	y	3	8
+upvalues (1):
+	0	x	1	0
+
+function <vm_closures.lua:91,91> (5 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[91]	GETUPVAL 	1 0	; add5
+	2	[91]	MOVE     	2 0
+	3	[91]	TAILCALL 	1 2 0	; 1 in
+	4	[91]	RETURN   	1 0 0	; all out
+	5	[91]	RETURN0  	
+constants (0):
+locals (1):
+	0	n	1	6
+upvalues (1):
+	0	add5	1	26

@@ -143,7 +143,7 @@ The text of a number, used by concatenation (V9) and later by `tostring` and `pr
 - **V7.3** `nan` is not equal to anything, itself included.
 - **V7.4** Strings are equal when they have the same bytes.
 - **V7.5** Booleans and nil compare by value. Tables, functions, userdata and threads compare
-  by identity (with `__eq` for tables and userdata, stage 8).
+  by identity (with `__eq` for tables and userdata, stage 7).
 - **V7.6** `~=` is the negation of `==`.
 
 ## V8. Order
@@ -158,7 +158,7 @@ The text of a number, used by concatenation (V9) and later by `tostring` and `pr
   another is smaller: `"a" < "b"`, `"Z" < "a"`, `"" < "a"`, `"a" < "a\0"`. **(impl: Lua uses
   `strcoll`, which in the default C locale is this byte order; we always use byte order)**
 - **V8.5** Strings and numbers never convert for order: `1 < "2"` is an error.
-- **V8.6** Anything else is an error (until metamethods, stage 8):
+- **V8.6** Anything else is an error (until metamethods, stage 7):
   `attempt to compare two X values` when both have the same type name, otherwise
   `attempt to compare X with Y`. The order is the one of the `<` or `<=` actually performed
   (V8.1), so `1 > nil` is `attempt to compare nil with number`. **(impl: `luaG_ordererror`)**

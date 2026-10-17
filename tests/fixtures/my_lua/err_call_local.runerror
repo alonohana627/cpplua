@@ -1,0 +1,1 @@
+err_call_local.lua:3: attempt to call a nil value (local 'f')

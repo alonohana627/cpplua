@@ -9,7 +9,17 @@
 
 namespace lua2 {
 
-class String; // value/string.hpp
+class String;     // value/string.hpp
+class LuaClosure; // vm/function.hpp
+class Table;      // value/table.hpp
+class State;      // vm/state.hpp
+struct GcObject;  // gc/object.hpp
+
+// A function written in C++ that Lua can call (Lua's lua_CFunction): its
+// arguments are on the thread's stack above its frame's function slot, up to
+// the top; it pushes its results and returns how many there are. (Errors
+// from C++ functions come with stage 8.)
+using CFunction = int (*)(State& state);
 
 // The eight types of Lua (V1.1), in the order of Lua's LUA_T* constants.
 // Stage 4 makes values of the first four; the others come with their stages.
@@ -50,9 +60,15 @@ enum class Tag : std::uint8_t {
     True,
     Integer,
     Float,
+    CFunction, // a function written in C++ (Lua's light C function): not collectable
     ShortString,
     LongString,
+    LuaClosure, // a function written in Lua
+    Table,      // a table; only the globals table exists until stage 6
 };
+
+// Tags from here on hold a pointer to an object the collector manages.
+inline constexpr Tag first_collectable_tag = Tag::ShortString;
 
 // One Lua value: a tag and an 8-byte payload (docs/plan/values.md, part 0).
 //
@@ -90,6 +106,17 @@ public:
     // The value refers to the string; the Heap owns it.
     static Value string(const String* s);
 
+    // A Lua function (vm/function.hpp, where this is defined).
+    static Value closure(const LuaClosure* f);
+
+    // A C++ function.
+    static Value c_function(CFunction f) {
+        return Value{Tag::CFunction, std::bit_cast<std::uint64_t>(f)};
+    }
+
+    // A table (value/table.hpp, where this is defined).
+    static Value table(const Table* t);
+
     // Rebuilds a value from what tag() and payload() returned. For the
     // containers that store tags and payloads apart.
     static constexpr Value from_parts(Tag tag, std::uint64_t payload) {
@@ -99,6 +126,10 @@ public:
     [[nodiscard]] constexpr Tag tag() const { return tag_; }
 
     [[nodiscard]] constexpr std::uint64_t payload() const { return payload_; }
+
+    // Where the payload is, so the VM can load it as the type it needs (a
+    // double straight into a float register) from a constant.
+    [[nodiscard]] const std::uint64_t* payload_address() const { return &payload_; }
 
     // The type as Lua sees it (V1.1): integers and floats are both numbers.
     [[nodiscard]] constexpr Type type() const {
@@ -110,6 +141,9 @@ public:
         case Tag::Float: return Type::Number;
         case Tag::ShortString:
         case Tag::LongString: return Type::String;
+        case Tag::CFunction:
+        case Tag::LuaClosure: return Type::Function;
+        case Tag::Table: return Type::Table;
         }
         return Type::Nil; // not reached: every Tag is handled above
     }
@@ -131,6 +165,19 @@ public:
     [[nodiscard]] constexpr bool is_string() const {
         return tag_ == Tag::ShortString || tag_ == Tag::LongString;
     }
+
+    [[nodiscard]] constexpr bool is_closure() const { return tag_ == Tag::LuaClosure; }
+
+    [[nodiscard]] constexpr bool is_function() const {
+        return tag_ == Tag::LuaClosure || tag_ == Tag::CFunction;
+    }
+
+    [[nodiscard]] constexpr bool is_c_function() const { return tag_ == Tag::CFunction; }
+
+    [[nodiscard]] constexpr bool is_table() const { return tag_ == Tag::Table; }
+
+    // Whether the payload points to an object the collector manages.
+    [[nodiscard]] constexpr bool is_collectable() const { return tag_ >= first_collectable_tag; }
 
     // Only nil and false are falsy (V1.4).
     [[nodiscard]] constexpr bool is_falsy() const { return tag_ == Tag::Nil || tag_ == Tag::False; }
@@ -170,6 +217,39 @@ public:
             wrong_access("string", caller);
         }
         return std::bit_cast<const String*>(payload_);
+    }
+
+    [[nodiscard]] const LuaClosure*
+    as_closure(std::source_location caller = std::source_location::current()) const {
+        if (!is_closure()) [[unlikely]] {
+            wrong_access("function", caller);
+        }
+        return std::bit_cast<const LuaClosure*>(payload_);
+    }
+
+    [[nodiscard]] CFunction
+    as_c_function(std::source_location caller = std::source_location::current()) const {
+        if (!is_c_function()) [[unlikely]] {
+            wrong_access("C++ function", caller);
+        }
+        return std::bit_cast<CFunction>(payload_);
+    }
+
+    [[nodiscard]] const Table*
+    as_table(std::source_location caller = std::source_location::current()) const {
+        if (!is_table()) [[unlikely]] {
+            wrong_access("table", caller);
+        }
+        return std::bit_cast<const Table*>(payload_);
+    }
+
+    // The collectable object a value refers to, for the collector.
+    [[nodiscard]] GcObject*
+    as_object(std::source_location caller = std::source_location::current()) const {
+        if (!is_collectable()) [[unlikely]] {
+            wrong_access("object", caller);
+        }
+        return std::bit_cast<GcObject*>(payload_);
     }
 
     // Same tag and same payload bits. This is *not* Lua's == (part 4): 1 and

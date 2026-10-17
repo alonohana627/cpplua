@@ -5,6 +5,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include "gc/heap.hpp"
 #include "value/arith.hpp"
 #include "value/string.hpp"
 #include "value/value.hpp"

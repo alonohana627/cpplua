@@ -1,0 +1,7 @@
+Chunk
+  Local x
+    Integer 1
+  CallStatement
+    Call
+      Name undefined_function
+      Name x (local 0)

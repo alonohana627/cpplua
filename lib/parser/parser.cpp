@@ -19,6 +19,7 @@ std::expected<Ast, SyntaxError> Parser::parse_chunk() {
     if (auto loaded = advance(); !loaded) {
         return std::unexpected(std::move(loaded.error()));
     }
+    previous_line_ = 1; // as Lua's lastline before any token
 
     // chunk ::= block <eof> (G2.1). The chunk is a function too (G2.4), with
     // _ENV as its upvalue.
@@ -42,7 +43,7 @@ std::expected<Ast, SyntaxError> Parser::parse_chunk() {
     main.is_vararg = true;
     main.upvalues = ast_.add_upvalue_list(*upvalues);
     main.body = *block;
-    main.end_line = current_.line;
+    main.end_line = previous_line_; // the last token, where Lua's final RETURN goes
     ast_.set_main_function(ast_.add_function(main));
     return std::move(ast_);
 }
@@ -141,7 +142,7 @@ std::expected<StatId, SyntaxError> Parser::parse_return() {
     if (auto semicolon = accept(TokenKind::Semicolon); !semicolon) {
         return std::unexpected(std::move(semicolon.error()));
     }
-    return ast_.add_statement(ReturnStat{.values = values}, line);
+    return add_statement(ReturnStat{.values = values}, line);
 }
 
 namespace {
@@ -284,7 +285,7 @@ std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
         if (!values) {
             return std::unexpected(std::move(values.error()));
         }
-        return ast_.add_statement(
+        return add_statement(
             AssignStat{.targets = ast_.add_expression_list(targets), .values = *values}, line);
     }
 
@@ -293,7 +294,7 @@ std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
     if (!is_call(ast_.expression(*first))) {
         return error("syntax error");
     }
-    return ast_.add_statement(CallStat{.call = *first}, line);
+    return add_statement(CallStat{.call = *first}, line);
 }
 
 std::expected<StatId, SyntaxError> Parser::parse_local() {
@@ -354,8 +355,8 @@ std::expected<StatId, SyntaxError> Parser::parse_local() {
     // The new locals become visible only now, after the values: in
     // `local x = x`, the right side means the outer x (G3.13).
     scopes_.activate(names.size());
-    return ast_.add_statement(LocalStat{.names = ast_.add_local_name_list(names), .values = values},
-                              line);
+    return add_statement(LocalStat{.names = ast_.add_local_name_list(names), .values = values},
+                         line);
 }
 
 std::expected<void, SyntaxError> Parser::declare_local(TextRange name,
@@ -462,6 +463,7 @@ std::expected<FunctionId, SyntaxError> Parser::parse_function_body(int line, boo
                     return std::unexpected(std::move(moved.error()));
                 }
                 function.is_vararg = true;
+                function.vararg_line = previous_line_;
                 break; // '...' must be last
             } else {
                 return error("<name> or '...' expected"); // G5.4
@@ -534,8 +536,8 @@ std::expected<StatId, SyntaxError> Parser::parse_function_statement() {
         if (!field) {
             return std::unexpected(std::move(field.error()));
         }
-        const ExprId key = ast_.add_expression(StringExpr{.text = *field}, key_line);
-        target = ast_.add_expression(IndexExpr{.object = target, .key = key}, field_line);
+        const ExprId key = add_expression(StringExpr{.text = *field}, key_line);
+        target = add_expression(IndexExpr{.object = target, .key = key}, field_line);
         if (is_method) {
             break; // the method name is the last part
         }
@@ -550,7 +552,7 @@ std::expected<StatId, SyntaxError> Parser::parse_function_statement() {
     if (auto assignable = check_assignable(target); !assignable) {
         return std::unexpected(std::move(assignable.error()));
     }
-    return ast_.add_statement(
+    return add_statement(
         FunctionStat{.target = target, .function = *function, .is_method = is_method}, line);
 }
 
@@ -572,7 +574,7 @@ std::expected<StatId, SyntaxError> Parser::parse_local_function(int line) {
     if (!function) {
         return std::unexpected(std::move(function.error()));
     }
-    return ast_.add_statement(LocalFunctionStat{.name = *name, .function = *function}, line);
+    return add_statement(LocalFunctionStat{.name = *name, .function = *function}, line);
 }
 
 // ---- goto, labels and break ----
@@ -585,7 +587,7 @@ std::expected<StatId, SyntaxError> Parser::parse_jump() {
     }
     if (keyword == TokenKind::Break) {
         scopes_.add_break(line); // resolved when the enclosing loop ends (G8.6)
-        return ast_.add_statement(BreakStat{}, line);
+        return add_statement(BreakStat{}, line);
     }
 
     const int name_line = current_.line;
@@ -595,14 +597,14 @@ std::expected<StatId, SyntaxError> Parser::parse_jump() {
     }
     if (keyword == TokenKind::Goto) {
         scopes_.add_goto(*name, name_line); // resolved now, or when its label appears (G8.2)
-        return ast_.add_statement(GotoStat{.label = *name}, line);
+        return add_statement(GotoStat{.label = *name}, line);
     }
     // ::Name:: (G3.4). parse_block() registers the label with the scopes,
     // once it has seen what follows it.
     if (auto closed = expect(TokenKind::DoubleColon); !closed) {
         return std::unexpected(std::move(closed.error()));
     }
-    return ast_.add_statement(LabelStat{.name = *name}, line);
+    return add_statement(LabelStat{.name = *name}, line);
 }
 
 // ---- Control flow ----
@@ -623,7 +625,7 @@ std::expected<StatId, SyntaxError> Parser::parse_do() {
     if (auto closed = expect_match(TokenKind::End, TokenKind::Do, line); !closed) {
         return std::unexpected(std::move(closed.error()));
     }
-    return ast_.add_statement(DoStat{.body = *body}, line);
+    return add_statement(DoStat{.body = *body}, line);
 }
 
 std::expected<StatId, SyntaxError> Parser::parse_while() {
@@ -648,7 +650,7 @@ std::expected<StatId, SyntaxError> Parser::parse_while() {
         return std::unexpected(std::move(closed.error()));
     }
     scopes_.close_block();
-    return ast_.add_statement(WhileStat{.condition = *condition, .body = *body}, line);
+    return add_statement(WhileStat{.condition = *condition, .body = *body}, line);
 }
 
 std::expected<StatId, SyntaxError> Parser::parse_repeat() {
@@ -674,7 +676,7 @@ std::expected<StatId, SyntaxError> Parser::parse_repeat() {
     }
     scopes_.close_block();
     scopes_.close_block();
-    return ast_.add_statement(RepeatStat{.body = *body, .condition = *condition}, line);
+    return add_statement(RepeatStat{.body = *body, .condition = *condition}, line);
 }
 
 std::expected<StatId, SyntaxError> Parser::parse_if() {
@@ -691,6 +693,7 @@ std::expected<StatId, SyntaxError> Parser::parse_if() {
         if (!condition) {
             return std::unexpected(std::move(condition.error()));
         }
+        const int then_line = current_.line;
         if (auto then = expect(TokenKind::Then); !then) {
             return std::unexpected(std::move(then.error()));
         }
@@ -698,7 +701,7 @@ std::expected<StatId, SyntaxError> Parser::parse_if() {
         if (!body) {
             return std::unexpected(std::move(body.error()));
         }
-        clauses.push_back(IfClause{.condition = *condition, .body = *body});
+        clauses.push_back(IfClause{.condition = *condition, .body = *body, .then_line = then_line});
     } while (check(TokenKind::ElseIf));
 
     IfStat statement; // no else until one is read
@@ -718,7 +721,7 @@ std::expected<StatId, SyntaxError> Parser::parse_if() {
     if (auto closed = expect_match(TokenKind::End, TokenKind::If, line); !closed) {
         return std::unexpected(std::move(closed.error()));
     }
-    return ast_.add_statement(statement, line);
+    return add_statement(statement, line);
 }
 
 std::expected<StatId, SyntaxError> Parser::parse_for() {
@@ -796,7 +799,7 @@ std::expected<StatId, SyntaxError> Parser::parse_numeric_for(TextRange variable,
         return std::unexpected(std::move(body.error()));
     }
     statement.body = *body;
-    return ast_.add_statement(statement, line);
+    return add_statement(statement, line);
 }
 
 std::expected<StatId, SyntaxError> Parser::parse_generic_for(TextRange first_name, int line) {
@@ -837,7 +840,7 @@ std::expected<StatId, SyntaxError> Parser::parse_generic_for(TextRange first_nam
     if (!body) {
         return std::unexpected(std::move(body.error()));
     }
-    return ast_.add_statement(
+    return add_statement(
         GenericForStat{.names = ast_.add_local_name_list(names), .values = *values, .body = *body},
         line);
 }
@@ -985,7 +988,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_subexpression(int limit) {
         if (!operand) {
             return std::unexpected(std::move(operand.error()));
         }
-        left = ast_.add_expression(UnaryExpr{.op = *unary, .operand = *operand}, line);
+        left = add_expression(UnaryExpr{.op = *unary, .operand = *operand}, line);
     } else {
         auto simple = parse_simple_expression();
         if (!simple) {
@@ -1011,7 +1014,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_subexpression(int limit) {
         if (!right) {
             return std::unexpected(std::move(right.error()));
         }
-        left = ast_.add_expression(BinaryExpr{.op = *binary, .left = left, .right = *right}, line);
+        left = add_expression(BinaryExpr{.op = *binary, .left = left, .right = *right}, line);
     }
 }
 
@@ -1045,7 +1048,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
         if (!function) {
             return std::unexpected(std::move(function.error()));
         }
-        return ast_.add_expression(FunctionExpr{.function = *function}, line);
+        return add_expression(FunctionExpr{.function = *function}, line);
     }
     default:
         // Names and '(' start a suffixed expression; anything else is
@@ -1055,11 +1058,10 @@ std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
     if (auto moved = advance(); !moved) {
         return std::unexpected(std::move(moved.error()));
     }
-    return ast_.add_expression(expression, line);
+    return add_expression(expression, line);
 }
 
 std::expected<ExprId, SyntaxError> Parser::parse_suffixed_expression() {
-    const int line = current_.line; // a call records the line its expression starts on
     auto primary = parse_primary_expression();
     if (!primary) {
         return primary;
@@ -1078,8 +1080,8 @@ std::expected<ExprId, SyntaxError> Parser::parse_suffixed_expression() {
             if (!name) {
                 return std::unexpected(std::move(name.error()));
             }
-            const ExprId key = ast_.add_expression(StringExpr{.text = *name}, name_line);
-            expression = ast_.add_expression(IndexExpr{.object = expression, .key = key}, dot_line);
+            const ExprId key = add_expression(StringExpr{.text = *name}, name_line);
+            expression = add_expression(IndexExpr{.object = expression, .key = key}, dot_line);
             break;
         }
         case TokenKind::LBracket: { // [exp]
@@ -1094,8 +1096,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_suffixed_expression() {
             if (auto closed = expect(TokenKind::RBracket); !closed) {
                 return std::unexpected(std::move(closed.error()));
             }
-            expression =
-                ast_.add_expression(IndexExpr{.object = expression, .key = *key}, bracket_line);
+            expression = add_expression(IndexExpr{.object = expression, .key = *key}, bracket_line);
             break;
         }
         case TokenKind::Colon: { // :name args
@@ -1106,24 +1107,34 @@ std::expected<ExprId, SyntaxError> Parser::parse_suffixed_expression() {
             if (!method) {
                 return std::unexpected(std::move(method.error()));
             }
+            const int method_line = previous_line_;
+            // A call records the line of its arguments (where their first
+            // token ends), as Lua's funcargs.
+            const int line = current_.end_line;
             auto arguments = parse_call_arguments();
             if (!arguments) {
                 return std::unexpected(std::move(arguments.error()));
             }
-            expression = ast_.add_expression(
-                MethodCallExpr{.object = expression, .method = *method, .arguments = *arguments},
+            expression = add_expression(
+                MethodCallExpr{
+                    .object = expression,
+                    .method = *method,
+                    .arguments = *arguments,
+                    .method_line = method_line,
+                },
                 line);
             break;
         }
         case TokenKind::LParen:
         case TokenKind::LBrace:
         case TokenKind::String: { // args
+            const int line = current_.end_line;
             auto arguments = parse_call_arguments();
             if (!arguments) {
                 return std::unexpected(std::move(arguments.error()));
             }
-            expression = ast_.add_expression(
-                CallExpr{.function = expression, .arguments = *arguments}, line);
+            expression =
+                add_expression(CallExpr{.function = expression, .arguments = *arguments}, line);
             break;
         }
         default: return expression;
@@ -1152,7 +1163,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_primary_expression() {
         if (auto closed = expect_match(TokenKind::RParen, TokenKind::LParen, line); !closed) {
             return std::unexpected(std::move(closed.error()));
         }
-        return ast_.add_expression(ParenExpr{.inner = *inner}, line);
+        return add_expression(ParenExpr{.inner = *inner}, line);
     }
     default: return error("unexpected symbol"); // G4.7
     }
@@ -1227,7 +1238,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_table() {
     if (auto closed = expect_match(TokenKind::RBrace, TokenKind::LBrace, line); !closed) {
         return std::unexpected(std::move(closed.error()));
     }
-    return ast_.add_expression(TableExpr{.fields = ast_.add_field_list(fields)}, line);
+    return add_expression(TableExpr{.fields = ast_.add_field_list(fields)}, line);
 }
 
 std::expected<TableField, SyntaxError> Parser::parse_table_field() {
@@ -1245,7 +1256,7 @@ std::expected<TableField, SyntaxError> Parser::parse_table_field() {
             if (!name) {
                 return std::unexpected(std::move(name.error()));
             }
-            const ExprId key = ast_.add_expression(StringExpr{.text = *name}, line);
+            const ExprId key = add_expression(StringExpr{.text = *name}, line);
             if (auto moved = advance(); !moved) { // '='
                 return std::unexpected(std::move(moved.error()));
             }
@@ -1304,8 +1315,8 @@ std::expected<ExprId, SyntaxError> Parser::make_name(TextRange name, int line) {
         }
         environment = *env;
     }
-    return ast_.add_expression(
-        NameExpr{.name = name, .variable = *variable, .environment = environment}, line);
+    return add_expression(NameExpr{.name = name, .variable = *variable, .environment = environment},
+                          line);
 }
 
 std::unexpected<SyntaxError> Parser::upvalue_limit_error(int function_line) const {
@@ -1354,6 +1365,7 @@ bool Parser::block_follow() const noexcept {
 // ---- Moving through tokens ----
 
 std::expected<void, SyntaxError> Parser::advance() {
+    previous_line_ = current_.end_line;
     if (lookahead_) {
         current_ = std::move(*lookahead_);
         lookahead_.reset();

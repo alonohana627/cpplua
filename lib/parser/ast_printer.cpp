@@ -149,7 +149,7 @@ private:
         }
         text += ')';
         std::string upvalues;
-        for (const Upvalue& upvalue : ast_.upvalues(node.upvalues)) {
+        for (const UpvalueDesc& upvalue : ast_.upvalues(node.upvalues)) {
             upvalues += upvalues.empty() ? "" : ", ";
             upvalues += ast_.text(upvalue.name);
         }

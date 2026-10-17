@@ -12,39 +12,60 @@ the finished code works will be recorded in [../final_docs/vm.md](../final_docs/
 
 Finishing the last part completes the stage and bumps the version to 0.0.5.
 
-## Decisions to make in part 0
+## Status: done (0.0.5)
 
-- **Scope of the stage.** Calls need closures, and the collector must trace closures and
-  upvalues, so building them separately later would mean redoing the call path and the
-  collector. **Recommended: closures and upvalues move into this stage.** Roadmap stage 7
-  ("Closures + upvalues") then disappears: compile-time `<const>` constants join this stage's
-  compiler, and `<close>` joins metatables (stage 8), since closing calls `__close`. Tables stay
-  in stage 6; until then `_ENV` is `nil` and global access fails exactly as in Lua (E8.4). This
-  changes the roadmap, so it is your call.
-- **Instruction format.** **Recommended: Lua 5.4's**: 32-bit instructions (7-bit opcode, 8-bit
-  `A`, `B`, `C`, the `k` bit, 17-bit `Bx`, 25-bit `sJ`) and its opcode set, including the
-  specialized forms (`ADDI`, `ADDK`, `EQK`, `LTI`, `RETURN1`, ...). Dense (four instructions
-  per 16 bytes of cache), and the compiler can learn from `lcode.c`, which is tuned for exactly
-  this set. Our own numbering; no binary compatibility with `luac` (as the roadmap says).
-- **Dispatch.** Measured in the learn page, section 4: **recommended: tail calls between
-  handlers with `[[clang::musttail]]` and `preserve_none`**, the fastest (4.09 ns per loop
-  iteration, against 4.32 for computed goto and 4.46 for `switch`). Every instruction body is
-  written once, and the dispatch around the bodies is a build option (`LUA2_DISPATCH=tailcall|goto|switch`),
-  so it is measured again in the real VM (part 11), and a compiler without `preserve_none` can
-  still build lua2.
-- **Registers.** **Decided in stage 4: split** tags and payloads; measured again here, faster in
-  every dispatch style (5 to 15%).
-- **Where the compiler starts.** Lua compiles while parsing, in one pass. We have a tree.
-  **Recommended: compile from the AST**, a separate pass: the parser stays as it is, and the
+After part 0, the user asked for the rest of the stage in one go (2026-10-17: "Finish all the
+GC and VM", "faster than real Lua"), so parts 1 to 12 were built together rather than one at a
+time. Everything in them is in, with these differences from the plan:
+
+- **The compiler is a port of `lcode.c` and the code half of `lparser.c`**, as planned, and goes
+  further than planned: its listings match the real `luac` on the whole official test suite, so
+  the golden `.bytecode` files are `luac`'s own output.
+- **Line information stays one `int` per instruction** (part 8 planned Lua's compact form): it is
+  only read on errors, and the compiler gets the same lines either way.
+- **Dispatch:** tail calls with `preserve_none` and a `switch` loop, both from one set of bodies
+  (`handlers.inc`); computed goto was not built, since the measurements already ranked it
+  between the two. Slow paths moved to cold handlers so hot ones need no stack frame (part 11).
+- **Speed:** every benchmark runs in 0.45 to 0.88 of the real Lua's time (the table is in
+  [../final_docs/vm.md](../final_docs/vm.md)).
+- **Errors** found two facts about Lua 5.4.9 the spec had wrong (now fixed in
+  [../spec/execution.md](../spec/execution.md)): `for` converts numeric strings, and its error is
+  `bad 'for' limit (number expected, got X)`.
+
+## Decisions (settled in part 0)
+
+The plan was approved on 2026-10-17, so its recommendations are the decisions:
+
+- **Scope of the stage: closures and upvalues are in it.** Calls need closures, and the
+  collector must trace closures and upvalues; building them later would mean redoing the call
+  path and the collector. The old roadmap stage 7 ("Closures + upvalues") is gone:
+  compile-time `<const>` constants join this stage's compiler, and `<close>` joins metatables
+  (now stage 7), since closing calls `__close`. Tables stay in stage 6; until then `_ENV` is
+  `nil` and global access fails exactly as in Lua (E8.4). *Changed after the stage, at the
+  user's request (2026-10-17): `print` came early, so `_ENV` is now a globals table with string
+  keys only, and the VM calls C++ functions (E8.4 rewritten).*
+- **Instruction format: Lua 5.4's.** 32-bit instructions (7-bit opcode, 8-bit `A`, `B`, `C`, the
+  `k` bit, 17-bit `Bx`, 25-bit `Ax` and `sJ`) and its 83 opcodes in its order, including the
+  specialized forms (`ADDI`, `ADDK`, `EQK`, `LTI`, `RETURN1`, ...). Dense (four instructions per
+  16 bytes of cache), and the compiler can learn from `lcode.c`, which is tuned for exactly this
+  set. No binary compatibility with `luac` (as the roadmap says).
+- **Dispatch: tail calls between handlers with `[[clang::musttail]]` and `preserve_none`**, the
+  fastest measured (4.09 ns per loop iteration, against 4.32 for computed goto and 4.46 for
+  `switch`). Every instruction body is written once, and the dispatch around the bodies is a
+  build option (`LUA2_DISPATCH=tailcall|goto|switch`), so it is measured again in the real VM
+  (part 11), and a compiler without `preserve_none` can still build lua2.
+- **Registers: split** tags and payloads (decided in stage 4, measured again here: faster in
+  every dispatch style, by 5 to 15%).
+- **The compiler works from the AST**, a separate pass: the parser stays as it is, and the
   compiler can look at a whole expression before choosing instructions. It follows `lcode.c`'s
   techniques (expression descriptors, jump lists, constant folding, register reuse).
-- **Calls.** **Recommended: like Lua**: `CallInfo` frames, no C++ recursion for Lua-to-Lua
-  calls, arguments in place, Lua 5.4's vararg layout, tail calls that reuse the frame.
-- **Errors inside the VM.** The hot path must not pay for errors. **Recommended:** handlers
-  test for the error case inline and jump to one shared, out-of-line error exit; the VM returns
-  a status (`std::expected`) to its C++ caller. No exceptions in the loop. `pcall` (stage 9)
-  catches at a `CallInfo` boundary.
-- **The collector.** **Recommended:**
+- **Calls like Lua's:** `CallInfo` frames, no C++ recursion for Lua-to-Lua calls, arguments in
+  place, Lua 5.4's vararg layout, tail calls that reuse the frame.
+- **Errors inside the VM** cost nothing on the hot path: handlers test for the error case
+  inline and jump to one shared, out-of-line error exit; the VM returns a status
+  (`std::expected`) to its C++ caller. No exceptions in the loop. `pcall` (stage 8) catches at
+  a `CallInfo` boundary.
+- **The collector:**
   - **non-moving** (E9.3), like Lua;
   - **size-class pages** for small objects (measured 1.9 to 3.2 times faster than `malloc` plus a
     list), the system allocator for large ones;
@@ -56,11 +77,11 @@ Finishing the last part completes the stage and bumps the version to 0.0.5.
   - Lua's pacing (debt, pause, step multiplier);
   - a **stress mode** that collects at every allocation, used by the tests, which is the only
     reliable way to find a missing root or barrier.
-- **Measuring against Lua.** **Recommended:** build the real Lua 5.4.9 from its source as a
-  reference (`lua_ref`), fetched by CMake from lua.org with a pinned SHA-256, behind an option
-  (`LUA2_REFERENCE_LUA`, on by default). Benchmarks run the same programs on both; tests can
-  compare outputs. This downloads the source tarball once, at configure time.
-
+- **Measuring against Lua:** the real Lua 5.4.9, built from its source as a reference
+  (`lua_ref`), fetched by CMake from lua.org with a pinned SHA-256, behind the option
+  `LUA2_REFERENCE_LUA`. Benchmarks run the same programs on both; tests can compare outputs.
+  The option is off until the download (`lua-5.4.9.tar.gz`, 373,429 bytes, from
+  `https://www.lua.org/ftp/`) is approved.
 ## Where the code goes
 
 ```
@@ -97,7 +118,8 @@ bench/                           benchmark programs and the runner
 - Settle the decisions above.
 - The reference Lua (`lua_ref`), the `asan` preset, and the benchmark runner.
 - Instruction encoding and decoding (`opcodes.hpp`), with `static_assert` tests; `Proto`.
-- `lua2 --bytecode` listing.
+- The listing of a proto, in `luac -l -l`'s style; `lua2 --bytecode` itself comes with the
+  compiler (part 2), and the listing is matched to the real `luac` once the reference build is on.
 - **Rules**: none yet; this is the ground the rest stands on.
 
 ### Part 1: The collector's core
@@ -181,7 +203,8 @@ bench/                           benchmark programs and the runner
 ### Part 12: Running files
 
 - `lua2 file.lua` runs a chunk (with what it returns printed, until `print` exists in the
-  standard library); the official test suite's files still parse; bump the version to 0.0.5.
+  standard library; `print` now exists, see the scope note above); the official test suite's
+  files still parse; bump the version to 0.0.5.
   The stage is done.
 
 ## How we work through a part

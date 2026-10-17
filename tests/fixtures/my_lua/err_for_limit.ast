@@ -1,0 +1,7 @@
+Chunk
+  Local limit
+    String "ten"
+  NumericFor i
+    Integer 1
+    Name limit (local 0)
+    Body

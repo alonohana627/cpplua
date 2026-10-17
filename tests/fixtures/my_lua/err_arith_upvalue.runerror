@@ -1,0 +1,1 @@
+err_arith_upvalue.lua:4: attempt to perform arithmetic on a nil value (upvalue 'up')

@@ -1,0 +1,9 @@
+Chunk
+  Local flag
+    True
+  Return
+    Binary ..
+      String "a"
+      Binary ..
+        Name flag (local 0)
+        String "b"

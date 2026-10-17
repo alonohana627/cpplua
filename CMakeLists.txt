@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 # Pre-release: bump by 0.0.1 per step. The release becomes 5.4.
-project(lua2 VERSION 0.0.4 LANGUAGES CXX)
+project(lua2 VERSION 0.0.5 LANGUAGES CXX)
 
 # C++26 (clang spells it -std=c++2c), no compiler extensions.
 set(CMAKE_CXX_STANDARD 26)
@@ -39,6 +39,18 @@ add_library(lua2_lib
   lib/value/compare.cpp
   lib/value/convert.cpp
   lib/value/string.cpp
+  lib/gc/pool.cpp
+  lib/gc/heap.cpp
+  lib/gc/collector.cpp
+  lib/vm/proto.cpp
+  lib/vm/state.cpp
+  lib/vm/compiler.cpp
+  lib/vm/debug_info.cpp
+  lib/vm/execute.cpp
+  lib/vm/run.cpp
+  lib/value/table.cpp
+  lib/std/base.cpp
+  lib/interpreter.cpp
 )
 add_library(lua2::lua2 ALIAS lua2_lib)
 target_include_directories(lua2_lib
@@ -47,6 +59,15 @@ target_include_directories(lua2_lib
 target_link_libraries(lua2_lib PRIVATE lua2_warnings)
 # The single source of the version string is project() above.
 target_compile_definitions(lua2_lib PRIVATE LUA2_VERSION="${PROJECT_VERSION}")
+
+# How the VM goes from one instruction to the next (lib/vm/execute.cpp):
+# tail calls between instruction functions (clang only, the fastest), or a
+# switch in a loop.
+set(LUA2_DISPATCH "tailcall" CACHE STRING "VM dispatch: tailcall or switch")
+set_property(CACHE LUA2_DISPATCH PROPERTY STRINGS tailcall switch)
+if(LUA2_DISPATCH STREQUAL "switch")
+  target_compile_definitions(lua2_lib PRIVATE LUA2_DISPATCH_SWITCH)
+endif()
 
 # The command-line front end, built on the public API only.
 add_executable(lua2 src/main.cpp)
@@ -80,6 +101,9 @@ if(BUILD_TESTING)
     tests/convert_test.cpp
     tests/coerce_test.cpp
     tests/values_conformance_test.cpp
+    tests/opcodes_test.cpp
+    tests/gc_test.cpp
+    tests/vm_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
   # Tests may include internal headers from lib/internal/ to test internals directly.
@@ -90,6 +114,17 @@ if(BUILD_TESTING)
 
   include(Catch)
   catch_discover_tests(lua2_tests)
+endif()
+
+# The benchmark runner (bench/README.md).
+add_executable(lua2_bench bench/runner.cpp)
+target_link_libraries(lua2_bench PRIVATE lua2_warnings)
+
+# The real Lua, from original_lua_src/, to measure and compare against
+# (cmake/ReferenceLua.cmake).
+option(LUA2_REFERENCE_LUA "Build the reference Lua 5.4.9 (lua_ref, luac_ref)" ON)
+if(LUA2_REFERENCE_LUA)
+  include(cmake/ReferenceLua.cmake)
 endif()
 
 # format / format-check / tidy targets. Last, so it can see our targets.

@@ -1,0 +1,7 @@
+Chunk
+  Local half
+    Float 1.5
+  Return
+    Binary |
+      Name half (local 0)
+      Integer 1

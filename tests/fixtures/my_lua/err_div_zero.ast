@@ -1,0 +1,7 @@
+Chunk
+  Local zero
+    Integer 0
+  Return
+    Binary //
+      Integer 7
+      Name zero (local 0)

@@ -130,7 +130,7 @@ return) and keeps running in the same loop. Returning pops it. The C++ stack doe
 Lua recursion, so:
 
 - deep Lua recursion is limited by the Lua stack (about a million slots), not by the C++ stack;
-- coroutines (stage 11) can switch between Lua stacks without unwinding C++ frames;
+- coroutines (stage 10) can switch between Lua stacks without unwinding C++ frames;
 - a runtime error unwinds by popping `CallInfo`s, not C++ frames.
 
 **Arguments are not copied.** The caller puts the function and its arguments in consecutive
@@ -234,3 +234,21 @@ Putting the measurements together, a fast VM and collector for lua2:
   **generational** next, with write barriers in the VM from the start;
 - **measurement against the real Lua** on the same programs, all along, so "fast" means
   something.
+
+## 9. What the real VM taught
+
+Built (stage 5), the design held up, and three lessons came out of measuring it against the
+real Lua ([../final_docs/vm.md](../final_docs/vm.md) has the numbers):
+
+- **Load a value as the type it is used as.** The first version loaded every payload into an
+  integer register and moved floats across to the float unit. Float code was 1.2 times slower
+  than Lua: the move sits on every chain of dependent operations (`x = x + y * 0.5`). Testing
+  both tags at once and loading floats straight into float registers made it 0.87 times Lua's
+  time.
+- **A hot handler must not need a stack frame.** Any call in a handler, even on a path that
+  never runs, can make the compiler set up a frame on entry, paid on every instruction. Moving
+  the rare paths into separate handlers reached by a tail call (with the same arguments, so no
+  frame) took the frame out of every hot handler.
+- **Tail calls beat a `switch` in the real VM too**, most of all where many different
+  instructions alternate: 17% less time on the integer loop, 12% on varargs, 5% on recursive
+  calls.

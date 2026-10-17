@@ -1,0 +1,7 @@
+Chunk
+  Local s
+    String "3"
+  Return
+    Binary &
+      Name s (local 0)
+      Integer 1

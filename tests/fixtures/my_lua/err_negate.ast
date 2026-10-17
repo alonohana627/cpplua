@@ -1,0 +1,6 @@
+Chunk
+  LocalFunction f
+    Function()
+  Return
+    Unary -
+      Name f (local 0)

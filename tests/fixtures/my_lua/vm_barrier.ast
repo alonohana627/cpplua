@@ -1,0 +1,111 @@
+Chunk
+  LocalFunction box
+    Function()
+      Local v
+        String "init"
+      Return
+        Function(x) [upvalues: v]
+          Assign
+            Targets
+              Name v (upvalue 0)
+            Values
+              Name x (local 0)
+        Function() [upvalues: v]
+          Return
+            Name v (upvalue 0)
+  Local set, get
+    Call
+      Name box (local 0)
+  Local total
+    Integer 0
+  NumericFor i
+    Integer 1
+    Integer 2000
+    Body
+      CallStatement
+        Call
+          Name set (local 1)
+          Binary ..
+            String "value "
+            Name i (local 7)
+      Local junk
+        Binary ..
+          String "junk "
+          Name i (local 7)
+      Assign
+        Targets
+          Name total (local 3)
+        Values
+          Binary +
+            Binary +
+              Name total (local 3)
+              Unary #
+                Call
+                  Name get (local 2)
+            Unary #
+              Name junk (local 8)
+  LocalFunction chain
+    Function(n) [upvalues: box, chain]
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              Function()
+                Return
+                  Integer 0
+      Local s, g
+        Call
+          Name box (upvalue 0)
+      Local rest
+        Call
+          Name chain (upvalue 1)
+          Binary -
+            Name n (local 0)
+            Integer 1
+      Return
+        Function(i) [upvalues: s, n, g, rest]
+          CallStatement
+            Call
+              Name s (upvalue 0)
+              Binary ..
+                String "v"
+                Binary ..
+                  Name i (local 0)
+                  Binary ..
+                    String "."
+                    Name n (upvalue 1)
+          Return
+            Binary +
+              Unary #
+                Call
+                  Name g (upvalue 2)
+              Call
+                Name rest (upvalue 3)
+                Name i (local 0)
+  Local all
+    Call
+      Name chain (local 4)
+      Integer 50
+  Local sum
+    Integer 0
+  NumericFor i
+    Integer 1
+    Integer 200
+    Body
+      Assign
+        Targets
+          Name sum (local 6)
+        Values
+          Binary +
+            Name sum (local 6)
+            Call
+              Name all (local 5)
+              Name i (local 10)
+  Return
+    Name total (local 3)
+    Call
+      Name get (local 2)
+    Name sum (local 6)

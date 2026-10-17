@@ -1,0 +1,1 @@
+err_bitwise_string.lua:3: attempt to perform bitwise operation on a string value (local 's')

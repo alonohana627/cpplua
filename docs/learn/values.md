@@ -257,7 +257,7 @@ the test suite depends on it. C++ offers the same format without `printf`:
 ## 7. When an operation fails
 
 `1 // 0` and `nil + 1` are runtime errors. The VM (stage 5) will run Lua code that runs
-these operations, and `pcall` (stage 9) must be able to catch the error and continue. Two ways
+these operations, and `pcall` (stage 8) must be able to catch the error and continue. Two ways
 to carry the error out of an operation:
 
 - **Return it**: every operation returns `std::expected<Value, RuntimeError>`, the same style as
@@ -275,7 +275,7 @@ Measured (4 million additions, then 4 million integer divisions, error path neve
 No difference worth deciding on. So it is a design question: `std::expected` keeps every error
 path visible in the code and matches the rest of lua2; exceptions make deep interpreter code
 shorter and map directly onto `pcall`. Stage 4 only needs errors to come out of single
-operations, and the roadmap already puts the full answer in stage 9.
+operations, and the roadmap already puts the full answer in stage 8.
 
 ## 8. What this stage builds
 

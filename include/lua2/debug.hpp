@@ -32,4 +32,11 @@ std::expected<std::string, std::string> ast_dump(std::string_view source,
 std::expected<std::string, std::string> ast_dot_dump(std::string_view source,
                                                      std::string_view chunk_name = "?");
 
+// Parses and compiles `source` and lists its bytecode in the style of
+// `luac -l -l` (see `lua2 --bytecode`): every function's instructions, with
+// their source lines, constants, locals and upvalues. Returns the error
+// message instead if the source does not compile.
+std::expected<std::string, std::string> bytecode_dump(std::string_view source,
+                                                      std::string_view chunk_name = "?");
+
 } // namespace lua2

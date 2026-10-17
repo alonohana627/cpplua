@@ -1,0 +1,1 @@
+err_concat.lua:3: attempt to concatenate a boolean value (local 'flag')

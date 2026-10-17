@@ -1,0 +1,8 @@
+Chunk
+  Local x
+  Local y
+    Integer 2
+  Return
+    Binary +
+      Name y (local 1)
+      Name x (local 0)

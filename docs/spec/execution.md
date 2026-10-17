@@ -69,16 +69,19 @@ Every rule has an id like `E5.3`. Tests should name the rule they check, for exa
 - **E5.4** An integer loop runs a precomputed number of times, so it never overflows: `for i =
   math.maxinteger - 1, math.maxinteger do` runs twice and stops. A float limit is clipped to the
   integer range with floor (positive step) or ceil (negative step). **(impl: `forlimit`)**
-- **E5.5** A step of zero is an error: `'for' step is zero`. Non-numeric values are errors:
-  `'for' initial value must be a number`, `'for' limit must be a number`,
-  `'for' step must be a number`. **(impl)** Strings are not converted. **(impl)**
+- **E5.5** A step of zero is an error: `'for' step is zero`. A value that is not a number is
+  an error: `bad 'for' initial value (number expected, got string)`, and the same with `limit`
+  and `step`. **(impl: `luaG_forerror` in Lua 5.4.9)** Numeric strings are converted, as in
+  arithmetic: `for i = "1", 3` runs three times, with float values, since a string is not an
+  integer. **(impl: `forprep` uses `luaV_tointeger` and `tonumber`, which convert strings;
+  checked against the real Lua 5.4.9)**
 - **E5.6** The loop variable is a fresh local in each iteration: changing it does not change
   the iteration, and closures capture each iteration's own variable.
 - **E5.7** A generic `for` evaluates its expression list once, adjusted to four values (E3.1):
   the iterator function, the state, the initial control value, and a closing value. Each
   iteration calls `f(state, control)`; if the first result is `nil` the loop ends, otherwise
   the results are assigned to the loop variables and the first becomes the next control value.
-  **(The closing value is to-be-closed, stage 8.)**
+  **(The closing value is to-be-closed, stage 7.)**
 - **E5.8** `break` leaves the innermost loop. `goto` jumps to a visible label (G8).
 
 ## E6. Functions and calls
@@ -89,7 +92,7 @@ Every rule has an id like `E5.3`. Tests should name the rule they check, for exa
   to the parameters (E3.1), and runs the body with them as fresh locals. Extra arguments go to
   `...` in a vararg function, and are dropped otherwise.
 - **E6.3** Calling a value that is not a function is an error: `attempt to call a X value`, with
-  variable information (E8.2). **(Tables and userdata with `__call`: stage 8.)**
+  variable information (E8.2). **(Tables and userdata with `__call`: stage 7.)**
 - **E6.4** `return` ends the function with the values of its expression list; a function that
   ends without `return` returns no values.
 - **E6.5** `return f(args)` is a **tail call**: the caller's frame is reused, so there is no
@@ -98,9 +101,10 @@ Every rule has an id like `E5.3`. Tests should name the rule they check, for exa
   tail call.
 - **E6.6** `...` in a vararg function gives the extra arguments (E3.2). `select('#', ...)` and
   friends come with the standard library.
-- **E6.7** Deep recursion that exhausts the Lua stack is the error `stack overflow`; the stack
-  holds about a million values. **(impl: `LUAI_MAXSTACK` = 1,000,000; the message continues
-  with details that are checked against the source when this is built)**
+- **E6.7** Deep recursion that exhausts the Lua stack is the error `stack overflow`, at the
+  call that would pass the limit (`test.lua:3: stack overflow`); the stack holds about a million
+  values. **(impl: `LUAI_MAXSTACK` = 1,000,000; `luaD_growstack` raises the bare message, and
+  the position is the calling instruction's)**
 - **E6.8** A method call `obj:m(args)` evaluates `obj` once and passes it as the first argument
   (G4.9).
 
@@ -116,7 +120,7 @@ Every rule has an id like `E5.3`. Tests should name the rule they check, for exa
 
 ## E8. Runtime errors
 
-- **E8.1** A runtime error stops the program unless caught (`pcall`, stage 9). Its message
+- **E8.1** A runtime error stops the program unless caught (`pcall`, stage 8). Its message
   starts with the position of the instruction that raised it: `chunkname:line: message`, as in
   `test.lua:3: attempt to perform arithmetic on a nil value (local 'x')`.
 - **E8.2** When the faulty value came from a named place, the message says which, in
@@ -125,9 +129,11 @@ Every rule has an id like `E5.3`. Tests should name the rule they check, for exa
   work backwards from the instruction to find where the value came from)**
 - **E8.3** Errors from operators use the messages of [values.md](values.md) (V3.12, V4.5, V8.6,
   V9.2, V9.4), with E8.1 and E8.2 added.
-- **E8.4** Until tables exist (stage 6), the main chunk's `_ENV` is `nil`, so reading or
-  writing a global is the error `attempt to index a nil value (upvalue '_ENV')`, as real Lua
-  says for a `nil` `_ENV`.
+- **E8.4** Until tables exist (stage 6), the main chunk's `_ENV` is the globals table, the
+  only table there is, and it takes only string keys: globals, `_ENV.name` and `_ENV["name"]`
+  work as in Lua; any other key is the error `table keys other than strings are not supported
+  yet`, and a table constructor is `tables are not supported yet`. The globals table starts
+  with one function of the standard library, `print` (stage 9 brings the rest).
 
 ## E9. Garbage collection
 
@@ -151,7 +157,7 @@ Every rule has an id like `E5.3`. Tests should name the rule they check, for exa
   **(impl: the defaults are `LUAI_GCPAUSE`, `LUAI_GCMUL`, `LUAI_GCSTEPSIZE`, `LUAI_GENMINORMUL`
   and `LUAI_GENMAJORMUL`, checked against the source when built)**
 - **E9.6** A program controls the collector through `collectgarbage` (standard library, stage
-  10): `"collect"` (a full cycle), `"step"`, `"stop"`, `"restart"`, `"isrunning"`, `"count"`
+  9): `"collect"` (a full cycle), `"step"`, `"stop"`, `"restart"`, `"isrunning"`, `"count"`
   (memory in use, in KB), `"incremental"` and `"generational"` (switch mode and set its
   parameters, returning the previous mode). Until the library exists, the same controls are a
   C++ interface of the collector.

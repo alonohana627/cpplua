@@ -1,0 +1,487 @@
+Chunk
+  LocalFunction show
+    Function(v)
+      If
+        If
+          Binary ==
+            Name v (local 0)
+            Nil
+          Then
+            Return
+              String "nil"
+      If
+        If
+          Binary ==
+            Name v (local 0)
+            True
+          Then
+            Return
+              String "true"
+      If
+        If
+          Binary ==
+            Name v (local 0)
+            False
+          Then
+            Return
+              String "false"
+      Return
+        Name v (local 0)
+  LocalFunction list
+    Function(n, first, ...) [upvalues: show, list]
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              String ""
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 1
+          Then
+            Return
+              Call
+                Name show (upvalue 0)
+                Name first (local 1)
+      Return
+        Binary ..
+          Call
+            Name show (upvalue 0)
+            Name first (local 1)
+          Binary ..
+            String ","
+            Call
+              Name list (upvalue 1)
+              Binary -
+                Name n (local 0)
+                Integer 1
+              Vararg
+  LocalFunction classify
+    Function(n)
+      If
+        If
+          Binary <
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              String "negative"
+        ElseIf
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              String "zero"
+        ElseIf
+          Binary <
+            Name n (local 0)
+            Integer 10
+          Then
+            Return
+              String "small"
+        Else
+          Return
+            String "large"
+  LocalFunction sum_while
+    Function(n)
+      Local s, k
+        Integer 0
+        Integer 1
+      While
+        Binary <=
+          Name k (local 2)
+          Name n (local 0)
+        Body
+          Assign
+            Targets
+              Name s (local 1)
+            Values
+              Binary +
+                Name s (local 1)
+                Name k (local 2)
+          Assign
+            Targets
+              Name k (local 2)
+            Values
+              Binary +
+                Name k (local 2)
+                Integer 1
+      Return
+        Name s (local 1)
+  LocalFunction count_repeat
+    Function(n)
+      Local k
+        Integer 0
+      Repeat
+        Body
+          Local twice
+            Binary *
+              Name k (local 1)
+              Integer 2
+          Assign
+            Targets
+              Name k (local 1)
+            Values
+              Binary +
+                Name k (local 1)
+                Integer 1
+        Until
+          Binary >=
+            Name twice (local 2)
+            Name n (local 0)
+      Return
+        Name k (local 1)
+  LocalFunction loops
+    Function()
+      Local up, down, by3, floats, clipped, empty, wide
+        Integer 0
+        Integer 0
+        Integer 0
+        Float 0.0
+        Integer 0
+        Integer 0
+        Integer 0
+      NumericFor v
+        Integer 1
+        Integer 10
+        Body
+          Assign
+            Targets
+              Name up (local 0)
+            Values
+              Binary +
+                Name up (local 0)
+                Name v (local 10)
+      NumericFor v
+        Integer 10
+        Integer 1
+        Unary -
+          Integer 1
+        Body
+          Assign
+            Targets
+              Name down (local 1)
+            Values
+              Binary +
+                Binary *
+                  Name down (local 1)
+                  Integer 2
+                Name v (local 10)
+      NumericFor v
+        Integer 1
+        Integer 20
+        Integer 3
+        Body
+          Assign
+            Targets
+              Name by3 (local 2)
+            Values
+              Binary +
+                Name by3 (local 2)
+                Name v (local 10)
+      NumericFor v
+        Float 0.5
+        Float 2.0
+        Float 0.25
+        Body
+          Assign
+            Targets
+              Name floats (local 3)
+            Values
+              Binary +
+                Name floats (local 3)
+                Name v (local 10)
+      NumericFor v
+        Integer 1
+        Float 3.7
+        Body
+          Assign
+            Targets
+              Name clipped (local 4)
+            Values
+              Binary +
+                Name clipped (local 4)
+                Name v (local 10)
+      NumericFor v
+        Integer 5
+        Integer 1
+        Body
+          Assign
+            Targets
+              Name empty (local 5)
+            Values
+              Binary +
+                Name empty (local 5)
+                Integer 1
+      NumericFor v
+        Integer 9223372036854775806
+        Integer 9223372036854775807
+        Body
+          Assign
+            Targets
+              Name wide (local 6)
+            Values
+              Binary +
+                Name wide (local 6)
+                Integer 1
+      Local last
+      NumericFor v
+        Integer 1
+        Integer 3
+        Body
+          Assign
+            Targets
+              Name v (local 11)
+            Values
+              Binary *
+                Name v (local 11)
+                Integer 10
+          Assign
+            Targets
+              Name last (local 7)
+            Values
+              Name v (local 11)
+      Local huge
+        Integer 0
+      NumericFor v
+        Integer 1
+        Binary /
+          Integer 1
+          Integer 0
+        Body
+          Assign
+            Targets
+              Name huge (local 8)
+            Values
+              Binary +
+                Name huge (local 8)
+                Integer 1
+          If
+            If
+              Binary ==
+                Name huge (local 8)
+                Integer 3
+              Then
+                Break
+      Local strings
+        Integer 0
+      NumericFor v
+        String "1"
+        String "3"
+        Body
+          Assign
+            Targets
+              Name strings (local 9)
+            Values
+              Binary +
+                Name strings (local 9)
+                Name v (local 13)
+      Return
+        Name up (local 0)
+        Name down (local 1)
+        Name by3 (local 2)
+        Name floats (local 3)
+        Name clipped (local 4)
+        Name empty (local 5)
+        Name wide (local 6)
+        Name last (local 7)
+        Name huge (local 8)
+        Name strings (local 9)
+  LocalFunction jumps
+    Function()
+      Local found
+      NumericFor x
+        Integer 1
+        Integer 100
+        Body
+          If
+            If
+              Binary >
+                Binary *
+                  Name x (local 4)
+                  Name x (local 4)
+                Integer 50
+              Then
+                Assign
+                  Targets
+                    Name found (local 0)
+                  Values
+                    Name x (local 4)
+                Break
+      Local n
+        Integer 0
+      Label again
+      Assign
+        Targets
+          Name n (local 1)
+        Values
+          Binary +
+            Name n (local 1)
+            Integer 1
+      If
+        If
+          Binary <
+            Name n (local 1)
+            Integer 5
+          Then
+            Goto again
+      Local odd
+        Integer 0
+      NumericFor k
+        Integer 1
+        Integer 10
+        Body
+          If
+            If
+              Binary ==
+                Binary %
+                  Name k (local 6)
+                  Integer 2
+                Integer 0
+              Then
+                Goto continue
+          Assign
+            Targets
+              Name odd (local 2)
+            Values
+              Binary +
+                Name odd (local 2)
+                Name k (local 6)
+          Label continue
+      Local nested
+        Integer 0
+      NumericFor a
+        Integer 1
+        Integer 3
+        Body
+          NumericFor b
+            Integer 1
+            Integer 3
+            Body
+              If
+                If
+                  Binary >
+                    Name b (local 11)
+                    Name a (local 7)
+                  Then
+                    Break
+              Assign
+                Targets
+                  Name nested (local 3)
+                Values
+                  Binary +
+                    Name nested (local 3)
+                    Integer 1
+      Local w
+        Integer 0
+      While
+        True
+        Body
+          Assign
+            Targets
+              Name w (local 4)
+            Values
+              Binary +
+                Name w (local 4)
+                Integer 1
+          If
+            If
+              Binary >=
+                Name w (local 4)
+                Integer 4
+              Then
+                Break
+      Return
+        Name found (local 0)
+        Name n (local 1)
+        Name odd (local 2)
+        Name nested (local 3)
+        Name w (local 4)
+  LocalFunction logic
+    Function(x, y)
+      Return
+        Binary and
+          Name x (local 0)
+          Name y (local 1)
+        Binary or
+          Name x (local 0)
+          Name y (local 1)
+        Unary not
+          Name x (local 0)
+        Binary and
+          Name x (local 0)
+          Nil
+        Binary or
+          Nil
+          False
+        Binary or
+          False
+          Nil
+        Paren
+          Binary or
+            Binary and
+              Name x (local 0)
+              Integer 1
+            Integer 2
+        Paren
+          Binary or
+            Binary and
+              Name y (local 1)
+              Integer 1
+            Integer 2
+        Binary or
+          Binary and
+            Binary ==
+              Name x (local 0)
+              Name y (local 1)
+            String "same"
+          String "different"
+  Return
+    Call
+      Name classify (local 2)
+      Unary -
+        Integer 5
+    Call
+      Name classify (local 2)
+      Integer 0
+    Call
+      Name classify (local 2)
+      Integer 3
+    Call
+      Name classify (local 2)
+      Integer 42
+    Call
+      Name sum_while (local 3)
+      Integer 100
+    Call
+      Name count_repeat (local 4)
+      Integer 7
+    Call
+      Name list (local 1)
+      Integer 10
+      Call
+        Name loops (local 5)
+    Call
+      Name list (local 1)
+      Integer 5
+      Call
+        Name jumps (local 6)
+    Call
+      Name list (local 1)
+      Integer 9
+      Call
+        Name logic (local 7)
+        Integer 1
+        False
+    Call
+      Name list (local 1)
+      Integer 9
+      Call
+        Name logic (local 7)
+        Nil
+        String "y"

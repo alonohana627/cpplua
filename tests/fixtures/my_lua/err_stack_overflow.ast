@@ -1,0 +1,15 @@
+Chunk
+  LocalFunction down
+    Function(n) [upvalues: down]
+      Return
+        Binary +
+          Integer 1
+          Call
+            Name down (upvalue 0)
+            Binary +
+              Name n (local 0)
+              Integer 1
+  Return
+    Call
+      Name down (local 0)
+      Integer 1

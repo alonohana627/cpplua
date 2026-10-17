@@ -1,0 +1,5 @@
+Chunk
+  Local f
+  CallStatement
+    Call
+      Name f (local 0)

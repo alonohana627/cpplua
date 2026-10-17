@@ -25,7 +25,7 @@ the official `math.lua` and `strings.lua` that need no VM.
 | `lib/value/bitwise.cpp`          | its implementation                                   |
 | `lib/internal/value/compare.hpp` | `==`, `<`, `<=`, and the exact integer/float comparisons |
 | `lib/value/compare.cpp`          | its implementation                                   |
-| `lib/internal/value/string.hpp`  | `String`, the `Heap` that owns strings, the hash, `length()` |
+| `lib/internal/value/string.hpp`  | `String`, the hash, `length()` (the `Heap` that makes strings is in `gc/heap.hpp` since stage 5) |
 | `lib/value/string.cpp`           | its implementation                                   |
 | `lib/internal/value/convert.hpp` | conversions between numbers and text                 |
 | `lib/value/convert.cpp`          | its implementation                                   |
@@ -184,7 +184,7 @@ for division by zero: `nil // 0` complains about `nil`. The message is built by
 operand twice, as Lua does.
 
 `RuntimeError` is only a message for now. Where the error happened is added by the interpreter
-(the VM, stage 5), and catching it with `pcall` is stage 9.
+(the VM, stage 5), and catching it with `pcall` is stage 8.
 
 ### The integer versions
 
@@ -273,13 +273,13 @@ interpreter.
   pointer comparison. Long strings compare their bytes. A short and a long string have
   different tags and lengths, so they are never equal.
 
-Metamethods (`__eq`) come with tables, in stage 8.
+Metamethods (`__eq`) come in stage 7.
 
 **`less_than(a, b)` and `less_equal(a, b)`** return `CompareResult`, a
 `std::expected<bool, RuntimeError>`. Two numbers compare by value, and two strings byte by byte
 as unsigned bytes (V8.4, through `std::string_view::compare`, which compares like `memcmp`); a
 string is never ordered against a number (V8.5). Anything else is an error (V8.6), until
-metamethods (stage 8):
+metamethods (stage 7):
 
 - `attempt to compare two X values` when both type names are the same,
 - `attempt to compare X with Y` otherwise.
@@ -307,8 +307,10 @@ The tests use `math.lua`'s border cases (2^53, 2^63, `minint`), check every comp
 where every float is a whole number.
 ## Strings
 
-`string.hpp` has the `String` class, the `Heap` that makes and owns strings, Lua's hash, and
-`length()`.
+`string.hpp` has the `String` class, Lua's hash, and `length()`. The `Heap` that makes strings
+was here in stage 4; in stage 5 it became the garbage collector's heap (`gc/heap.hpp`, see
+[vm.md](vm.md)), strings became collectable objects, and the sections below describe them as
+they were in stage 4, except where noted.
 
 ### `String`
 
@@ -348,9 +350,10 @@ is computed the first time `hash()` is called, like Lua's `luaS_hashlongstr`: un
   bucket count is a power of two, so a mask finds the bucket instead of a division.
 - **Long strings** are made anew each time, and not hashed yet.
 
-**Ownership.** Every string is on the Heap's `objects_` list, newest first, and `~Heap()` frees
-them all. Until the garbage collector (stage 5) takes the Heap's place, a string lives as long
-as its Heap. Values only point at strings; they never own them.
+**Ownership.** In stage 4 every string was on the Heap's `objects_` list and lived as long as
+its Heap. Since stage 5 the collector owns them: a string dies when nothing reachable refers to
+it, and the string table forgets it ([vm.md](vm.md)). Values only point at strings; they never
+own them.
 
 **The seed.** `Heap()` picks a random seed with `std::random_device`, so hashes, and later the
 order of `pairs`, change from run to run, as in Lua. `Heap(seed)` fixes it; the tests do that.
@@ -395,7 +398,7 @@ exponent at `1e14` and below `0.0001`, the smallest and largest doubles, 2^53 an
 ## Strings to numbers
 
 `string_to_number(text)` in `convert.hpp` is the number a string holds, or nothing (V5): what
-`"10" + 1` (part 8) and `tonumber("10")` (stage 10) will use. It follows Lua's `luaO_str2num`:
+`"10" + 1` (part 8) and `tonumber("10")` (stage 9) will use. It follows Lua's `luaO_str2num`:
 
 1. Trim spaces at both ends: space, `\t`, `\n`, `\v`, `\f`, `\r` (Lua's `lisspace`). Nothing left
    is no number (V5.1).

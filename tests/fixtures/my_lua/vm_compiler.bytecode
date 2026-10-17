@@ -1,0 +1,390 @@
+
+main <vm_compiler.lua:0,0> (228 instructions)
+0+ params, 57 slots, 1 upvalue, 29 locals, 22 constants, 6 functions
+	1	[1]	VARARGPREP	0
+	2	[8]	LOADI    	0 1
+	3	[8]	LOADI    	1 2
+	4	[8]	LOADNIL  	2 2	; 3 out
+	5	[11]	NEWTABLE 	5 3 5	; 5
+	6	[11]	EXTRAARG 	0
+	7	[11]	LOADI    	6 1
+	8	[11]	LOADI    	7 2
+	9	[11]	LOADI    	8 3
+	10	[11]	LOADI    	9 21
+	11	[11]	SETFIELD 	5 0 9	; "n"
+	12	[11]	LOADK    	9 1	; "name"
+	13	[11]	SETI     	5 10 9
+	14	[11]	LOADK    	9 3	; 2.5
+	15	[11]	SETFIELD 	5 2 9	; "key with spaces"
+	16	[11]	MOVE     	9 0
+	17	[11]	MOVE     	10 1
+	18	[11]	SETLIST  	5 5 0
+	19	[12]	NEWTABLE 	6 0 55	; 55
+	20	[12]	EXTRAARG 	0
+	21	[13]	LOADI    	7 1
+	22	[13]	LOADI    	8 2
+	23	[13]	LOADI    	9 3
+	24	[13]	LOADI    	10 4
+	25	[13]	LOADI    	11 5
+	26	[13]	LOADI    	12 6
+	27	[13]	LOADI    	13 7
+	28	[13]	LOADI    	14 8
+	29	[13]	LOADI    	15 9
+	30	[13]	LOADI    	16 10
+	31	[13]	LOADI    	17 11
+	32	[13]	LOADI    	18 12
+	33	[13]	LOADI    	19 13
+	34	[13]	LOADI    	20 14
+	35	[13]	LOADI    	21 15
+	36	[13]	LOADI    	22 16
+	37	[13]	LOADI    	23 17
+	38	[13]	LOADI    	24 18
+	39	[13]	LOADI    	25 19
+	40	[13]	LOADI    	26 20
+	41	[14]	LOADI    	27 21
+	42	[14]	LOADI    	28 22
+	43	[14]	LOADI    	29 23
+	44	[14]	LOADI    	30 24
+	45	[14]	LOADI    	31 25
+	46	[14]	LOADI    	32 26
+	47	[14]	LOADI    	33 27
+	48	[14]	LOADI    	34 28
+	49	[14]	LOADI    	35 29
+	50	[14]	LOADI    	36 30
+	51	[14]	LOADI    	37 31
+	52	[14]	LOADI    	38 32
+	53	[14]	LOADI    	39 33
+	54	[14]	LOADI    	40 34
+	55	[14]	LOADI    	41 35
+	56	[14]	LOADI    	42 36
+	57	[14]	LOADI    	43 37
+	58	[14]	LOADI    	44 38
+	59	[14]	LOADI    	45 39
+	60	[14]	LOADI    	46 40
+	61	[15]	LOADI    	47 41
+	62	[15]	LOADI    	48 42
+	63	[15]	LOADI    	49 43
+	64	[15]	LOADI    	50 44
+	65	[15]	LOADI    	51 45
+	66	[15]	LOADI    	52 46
+	67	[15]	LOADI    	53 47
+	68	[15]	LOADI    	54 48
+	69	[15]	LOADI    	55 49
+	70	[15]	LOADI    	56 50
+	71	[15]	SETLIST  	6 50 0
+	72	[15]	LOADI    	7 51
+	73	[15]	LOADI    	8 52
+	74	[15]	LOADI    	9 53
+	75	[15]	LOADI    	10 54
+	76	[15]	LOADI    	11 55
+	77	[15]	VARARG   	12 0	; all out
+	78	[16]	SETLIST  	6 0 50
+	79	[18]	ADDI     	7 0 10
+	80	[18]	MMBINI   	0 10 6 0	; __add
+	81	[18]	LOADI    	8 10
+	82	[18]	SUB      	8 8 0
+	83	[18]	MMBIN    	8 0 7	; __sub
+	84	[18]	MULK     	9 0 3	; 2.5
+	85	[18]	MMBINK   	0 3 8 1	; __mul 2.5 flip
+	86	[18]	SETTABLE 	5 0 9
+	87	[18]	SETI     	5 1 8
+	88	[18]	SETFIELD 	5 4 7	; "x"
+	89	[19]	MOVE     	7 0
+	90	[19]	MOVE     	8 0
+	91	[19]	GETTABLE 	0 5 0
+	92	[19]	SETTABLE 	5 7 8
+	93	[20]	GETTABUP 	7 0 5	; _ENV "print"
+	94	[20]	GETFIELD 	8 5 0	; "n"
+	95	[20]	LEN      	9 6
+	96	[20]	GETTABLE 	9 6 9
+	97	[20]	LOADK    	10 1	; "name"
+	98	[20]	LOADI    	11 10
+	99	[20]	CONCAT   	10 2
+	100	[20]	LOADI    	11 7
+	101	[20]	LOADI    	12 -10
+	102	[20]	GTI      	0 10 1
+	103	[20]	JMP      	1	; to 105
+	104	[20]	LFALSESKIP	13
+	105	[20]	LOADTRUE 	13
+	106	[20]	LEI      	0 3 1
+	107	[20]	JMP      	1	; to 109
+	108	[20]	LFALSESKIP	14
+	109	[20]	LOADTRUE 	14
+	110	[20]	GTI      	0 3 1
+	111	[20]	JMP      	1	; to 113
+	112	[20]	LFALSESKIP	15
+	113	[20]	LOADTRUE 	15
+	114	[20]	EQK      	0 6 1	; "s"
+	115	[20]	JMP      	1	; to 117
+	116	[20]	LFALSESKIP	16
+	117	[20]	LOADTRUE 	16
+	118	[20]	CALL     	7 10 1	; 9 in 0 out
+	119	[21]	GETTABUP 	7 0 5	; _ENV "print"
+	120	[21]	LOADI    	8 2
+	121	[21]	IDIVK    	8 8 7	; 0
+	122	[21]	MMBINK   	8 7 12 0	; __idiv 0
+	123	[21]	LOADI    	9 1
+	124	[21]	IDIVK    	9 9 8	; 0.0
+	125	[21]	MMBINK   	9 8 12 0	; __idiv 0.0
+	126	[21]	LOADI    	10 -2
+	127	[21]	LOADK    	11 9	; 4611686018427387904
+	128	[21]	LOADK    	12 10	; 0.5
+	129	[21]	LOADI    	13 1
+	130	[21]	LOADI    	14 -6
+	131	[21]	LOADTRUE 	15
+	132	[21]	LOADK    	16 1	; "name"
+	133	[21]	LEN      	16 16
+	134	[21]	CALL     	7 10 1	; 9 in 0 out
+	135	[23]	NEWTABLE 	7 1 0	; 0
+	136	[23]	EXTRAARG 	0
+	137	[23]	SETFIELD 	7 11 12k	; "value" 1
+	138	[24]	CLOSURE  	8 0
+	139	[24]	SETFIELD 	7 13 8	; "method"
+	140	[25]	CLOSURE  	8 1
+	141	[25]	SETFIELD 	7 14 8	; "other"
+	142	[26]	SELF     	8 7 14k	; "other"
+	143	[26]	LOADI    	10 10
+	144	[26]	CALL     	8 3 2	; 2 in 1 out
+	145	[31]	CLOSURE  	9 2
+	146	[33]	LOADI    	10 1
+	147	[33]	LOADI    	11 10
+	148	[33]	LOADI    	12 1
+	149	[33]	FORPREP  	10 6	; exit to 157
+	150	[34]	MOVE     	14 13
+	151	[35]	CLOSURE  	15 3
+	152	[35]	SETTABLE 	5 13 15
+	153	[36]	EQI      	13 5 1
+	154	[36]	JMP      	2	; to 157
+	155	[36]	CLOSE    	14
+	156	[33]	FORLOOP  	10 7	; to 150
+	157	[37]	CLOSE    	10
+	158	[39]	GETTABUP 	10 0 15	; _ENV "pairs"
+	159	[39]	MOVE     	11 5
+	160	[39]	CALL     	10 2 5	; 1 in 4 out
+	161	[39]	TFORPREP 	10 10	; to 172
+	162	[40]	GETTABUP 	16 0 16	; _ENV "type"
+	163	[40]	MOVE     	17 15
+	164	[40]	CALL     	16 2 2	; 1 in 1 out
+	165	[40]	EQK      	16 17 0	; "function"
+	166	[40]	JMP      	1	; to 168
+	167	[40]	JMP      	4	; to 172
+	168	[41]	GETTABUP 	16 0 5	; _ENV "print"
+	169	[41]	MOVE     	17 14
+	170	[41]	MOVE     	18 15
+	171	[41]	CALL     	16 3 1	; 2 in 0 out
+	172	[39]	TFORCALL 	10 2
+	173	[39]	TFORLOOP 	10 12	; to 162
+	174	[43]	CLOSE    	10
+	175	[46]	LOADNIL  	10 0	; 1 out
+	176	[46]	TBC      	10
+	177	[47]	LOADI    	11 1
+	178	[49]	MOVE     	12 11
+	179	[50]	ADDI     	11 11 1
+	180	[50]	MMBINI   	11 1 6 0	; __add
+	181	[51]	CLOSURE  	13 4
+	182	[52]	GTI      	12 3 0
+	183	[52]	JMP      	2	; to 186
+	184	[52]	CLOSE    	12
+	185	[52]	JMP      	2	; to 188
+	186	[52]	CLOSE    	12
+	187	[52]	JMP      	-10	; to 178
+	188	[52]	CLOSE    	10
+	189	[58]	CLOSURE  	10 5
+	190	[60]	LOADK    	11 18	; "a"
+	191	[60]	LOADK    	12 19	; "b"
+	192	[60]	MOVE     	13 0
+	193	[60]	LOADK    	14 20	; "c"
+	194	[60]	MOVE     	15 1
+	195	[60]	CONCAT   	11 5
+	196	[61]	TEST     	0 0
+	197	[61]	JMP      	2	; to 200
+	198	[61]	TESTSET  	12 1 1
+	199	[61]	JMP      	1	; to 201
+	200	[61]	MOVE     	12 2
+	201	[62]	GTI      	0 1 0
+	202	[62]	JMP      	2	; to 205
+	203	[62]	GEI      	1 2 1
+	204	[62]	JMP      	3	; to 208
+	205	[62]	EQ       	0 1 0
+	206	[62]	JMP      	1	; to 208
+	207	[62]	LFALSESKIP	13
+	208	[62]	LOADTRUE 	13
+	209	[63]	LTI      	0 100 0
+	210	[63]	JMP      	5	; to 216
+	211	[63]	TEST     	12 1
+	212	[63]	JMP      	3	; to 216
+	213	[63]	MULK     	0 0 21	; 2
+	214	[63]	MMBINK   	0 21 8 0	; __mul 2
+	215	[63]	JMP      	-7	; to 209
+	216	[64]	MOVE     	14 9
+	217	[64]	MOVE     	15 10
+	218	[64]	LOADI    	16 1
+	219	[64]	LOADI    	17 2
+	220	[64]	LOADI    	18 3
+	221	[64]	CALL     	15 4 2	; 3 in 1 out
+	222	[64]	MOVE     	16 11
+	223	[64]	MOVE     	17 13
+	224	[64]	MOVE     	18 8
+	225	[64]	MOVE     	19 5
+	226	[64]	MOVE     	20 6
+	227	[64]	RETURN   	14 8 1k	; 7 out
+	228	[64]	RETURN   	14 1 1k	; 0 out
+constants (22):
+	0	S	"n"
+	1	S	"name"
+	2	S	"key with spaces"
+	3	F	2.5
+	4	S	"x"
+	5	S	"print"
+	6	S	"s"
+	7	I	0
+	8	F	0.0
+	9	I	4611686018427387904
+	10	F	0.5
+	11	S	"value"
+	12	I	1
+	13	S	"method"
+	14	S	"other"
+	15	S	"pairs"
+	16	S	"type"
+	17	S	"function"
+	18	S	"a"
+	19	S	"b"
+	20	S	"c"
+	21	I	2
+locals (29):
+	0	x	5	229
+	1	y	5	229
+	2	z	5	229
+	3	a	5	229
+	4	b	5	229
+	5	t	19	229
+	6	big	79	229
+	7	obj	138	229
+	8	r	145	229
+	9	counter	146	229
+	10	(for state)	149	157
+	11	(for state)	149	157
+	12	(for state)	149	157
+	13	i	150	156
+	14	captured	151	155
+	15	(for state)	161	174
+	16	(for state)	161	174
+	17	(for state)	161	174
+	18	(for state)	161	174
+	19	k	162	172
+	20	v	162	172
+	21	h	176	188
+	22	u	178	188
+	23	w	179	184
+	24	f	182	184
+	25	vararg	190	229
+	26	s	196	229
+	27	cond	201	229
+	28	cmp	209	229
+upvalues (1):
+	0	_ENV	1	0
+
+function <vm_compiler.lua:24,24> (5 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[24]	GETFIELD 	2 0 0	; "value"
+	2	[24]	ADD      	2 2 1
+	3	[24]	MMBIN    	2 1 6	; __add
+	4	[24]	RETURN1  	2
+	5	[24]	RETURN0  	
+constants (1):
+	0	S	"value"
+locals (2):
+	0	self	1	6
+	1	n	1	6
+upvalues (0):
+
+function <vm_compiler.lua:25,25> (7 instructions)
+2 params, 5 slots, 0 upvalues, 2 locals, 2 constants, 0 functions
+	1	[25]	SELF     	2 0 0k	; "method"
+	2	[25]	MOVE     	4 1
+	3	[25]	CALL     	2 3 2	; 2 in 1 out
+	4	[25]	MULK     	2 2 1	; 2
+	5	[25]	MMBINK   	2 1 8 0	; __mul 2
+	6	[25]	RETURN1  	2
+	7	[25]	RETURN0  	
+constants (2):
+	0	S	"method"
+	1	I	2
+locals (2):
+	0	self	1	8
+	1	n	1	8
+upvalues (0):
+
+function <vm_compiler.lua:28,31> (4 instructions)
+0 params, 2 slots, 0 upvalues, 1 local, 0 constants, 1 function
+	1	[29]	LOADI    	0 0
+	2	[30]	CLOSURE  	1 0
+	3	[30]	RETURN   	1 2 0k	; 1 out
+	4	[31]	RETURN   	1 1 0k	; 0 out
+constants (0):
+locals (1):
+	0	n	2	5
+upvalues (0):
+
+function <vm_compiler.lua:30,30> (10 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[30]	GETUPVAL 	1 0	; n
+	2	[30]	TESTSET  	2 0 1
+	3	[30]	JMP      	1	; to 5
+	4	[30]	LOADI    	2 1
+	5	[30]	ADD      	1 1 2
+	6	[30]	MMBIN    	1 2 6	; __add
+	7	[30]	SETUPVAL 	1 0	; n
+	8	[30]	GETUPVAL 	1 0	; n
+	9	[30]	RETURN1  	1
+	10	[30]	RETURN0  	
+constants (0):
+locals (1):
+	0	step	1	11
+upvalues (1):
+	0	n	1	0
+
+function <vm_compiler.lua:35,35> (5 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[35]	GETUPVAL 	0 0	; captured
+	2	[35]	ADDI     	0 0 10
+	3	[35]	MMBINI   	0 10 6 0	; __add
+	4	[35]	RETURN1  	0
+	5	[35]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	captured	1	14
+
+function <vm_compiler.lua:51,51> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[51]	GETUPVAL 	0 0	; w
+	2	[51]	RETURN1  	0
+	3	[51]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	w	1	12
+
+function <vm_compiler.lua:55,58> (11 instructions)
+0+ params, 6 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[55]	VARARGPREP	0
+	2	[56]	VARARG   	0 3	; 2 out
+	3	[57]	GETTABUP 	2 0 0	; _ENV "select"
+	4	[57]	LOADK    	3 1	; "#"
+	5	[57]	VARARG   	4 0	; all out
+	6	[57]	CALL     	2 0 2	; all in 1 out
+	7	[57]	MOVE     	3 0
+	8	[57]	MOVE     	4 1
+	9	[57]	VARARG   	5 0	; all out
+	10	[57]	RETURN   	2 0 1	; all out
+	11	[58]	RETURN   	2 1 1	; 0 out
+constants (2):
+	0	S	"select"
+	1	S	"#"
+locals (2):
+	0	first	3	12
+	1	second	3	12
+upvalues (1):
+	0	_ENV	0	0

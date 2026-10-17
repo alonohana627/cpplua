@@ -82,6 +82,7 @@ std::expected<Token, SyntaxError> Lexer::next() {
         // after skipping whitespace and comments, and pos_ is now its end.
         token->offset = static_cast<std::uint32_t>(token_start_);
         token->length = static_cast<std::uint32_t>(pos_ - token_start_);
+        token->end_line = line_; // past a multi-line string, its last line
     }
     return token;
 }

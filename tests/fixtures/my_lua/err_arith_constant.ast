@@ -1,0 +1,7 @@
+Chunk
+  Local n
+    Integer 1
+  Return
+    Binary +
+      Name n (local 0)
+      String "one"

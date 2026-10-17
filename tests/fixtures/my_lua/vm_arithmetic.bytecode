@@ -1,0 +1,328 @@
+
+main <vm_arithmetic.lua:0,0> (270 instructions)
+0+ params, 101 slots, 1 upvalue, 7 locals, 34 constants, 1 function
+	1	[1]	VARARGPREP	0
+	2	[5]	LOADI    	0 7
+	3	[5]	LOADK    	1 0	; 2.5
+	4	[5]	LOADK    	2 1	; "10"
+	5	[6]	LOADK    	3 2	; 9223372036854775807
+	6	[7]	LOADK    	4 3	; -9223372036854775808
+	7	[8]	LOADI    	5 1
+	8	[8]	DIVK     	5 5 4	; 0
+	9	[8]	MMBINK   	5 4 11 0	; __div 0
+	10	[12]	CLOSURE  	6 0
+	11	[16]	ADDI     	7 0 1
+	12	[16]	MMBINI   	0 1 6 0	; __add
+	13	[16]	ADDK     	8 0 5	; 1000
+	14	[16]	MMBINK   	0 5 6 0	; __add 1000
+	15	[16]	ADD      	9 0 1
+	16	[16]	MMBIN    	0 1 6	; __add
+	17	[16]	ADDI     	10 0 -1
+	18	[16]	MMBINI   	0 1 7 0	; __sub
+	19	[16]	LOADI    	11 1
+	20	[16]	SUB      	11 11 0
+	21	[16]	MMBIN    	11 0 7	; __sub
+	22	[16]	LOADI    	12 1000
+	23	[16]	SUB      	12 12 0
+	24	[16]	MMBIN    	12 0 7	; __sub
+	25	[16]	MULK     	13 0 6	; 3
+	26	[16]	MMBINK   	0 6 8 0	; __mul 3
+	27	[16]	MULK     	14 1 7	; 2
+	28	[16]	MMBINK   	1 7 8 0	; __mul 2
+	29	[16]	MUL      	15 0 1
+	30	[16]	MMBIN    	0 1 8	; __mul
+	31	[18]	DIVK     	16 0 7	; 2
+	32	[18]	MMBINK   	0 7 11 0	; __div 2
+	33	[18]	IDIVK    	17 0 7	; 2
+	34	[18]	MMBINK   	0 7 12 0	; __idiv 2
+	35	[18]	UNM      	18 0
+	36	[18]	IDIVK    	18 18 7	; 2
+	37	[18]	MMBINK   	18 7 12 0	; __idiv 2
+	38	[18]	IDIVK    	19 0 8	; -2
+	39	[18]	MMBINK   	0 8 12 0	; __idiv -2
+	40	[18]	LOADF    	20 3
+	41	[18]	MODK     	21 0 6	; 3
+	42	[18]	MMBINK   	0 6 9 0	; __mod 3
+	43	[18]	UNM      	22 0
+	44	[18]	MODK     	22 22 6	; 3
+	45	[18]	MMBINK   	22 6 9 0	; __mod 3
+	46	[18]	MODK     	23 0 9	; -3
+	47	[18]	MMBINK   	0 9 9 0	; __mod -3
+	48	[18]	LOADK    	24 10	; 1.5
+	49	[18]	LOADK    	25 11	; 0.5
+	50	[20]	LOADF    	26 1024
+	51	[20]	POWK     	27 0 11	; 0.5
+	52	[20]	MMBINK   	0 11 10 0	; __pow 0.5
+	53	[20]	POWK     	28 0 12	; -1
+	54	[20]	MMBINK   	0 12 10 0	; __pow -1
+	55	[22]	UNM      	29 0
+	56	[22]	UNM      	30 1
+	57	[22]	UNM      	31 0
+	58	[22]	UNM      	31 31
+	59	[22]	UNM      	32 3
+	60	[22]	UNM      	33 4
+	61	[24]	BANDK    	34 0 6	; 3
+	62	[24]	MMBINK   	0 6 13 0	; __band 3
+	63	[24]	BORK     	35 0 13	; 8
+	64	[24]	MMBINK   	0 13 14 0	; __bor 8
+	65	[24]	BXORK    	36 0 14	; 5
+	66	[24]	MMBINK   	0 14 15 0	; __bxor 5
+	67	[24]	BNOT     	37 0
+	68	[24]	LOADI    	38 2
+	69	[24]	LOADI    	39 3
+	70	[24]	LOADF    	40 6
+	71	[24]	BAND     	40 0 40
+	72	[24]	MMBIN    	0 40 13	; __band
+	73	[25]	SHRI     	41 0 -2
+	74	[25]	MMBINI   	0 2 16 0	; __shl
+	75	[25]	SHRI     	42 0 1
+	76	[25]	MMBINI   	0 1 17 0	; __shr
+	77	[25]	LOADK    	43 3	; -9223372036854775808
+	78	[25]	LOADI    	44 0
+	79	[25]	LOADK    	45 2	; 9223372036854775807
+	80	[25]	SHRI     	46 0 1
+	81	[25]	MMBINI   	0 -1 16 0	; __shl
+	82	[25]	SHLI     	47 0 3
+	83	[25]	MMBINI   	0 3 16 1	; __shl flip
+	84	[25]	SHRI     	48 0 -2
+	85	[25]	MMBINI   	0 -2 17 0	; __shr
+	86	[27]	ADDI     	49 2 1
+	87	[27]	MMBINI   	2 1 6 0	; __add
+	88	[27]	MULK     	50 2 7	; 2
+	89	[27]	MMBINK   	2 7 8 0	; __mul 2
+	90	[27]	LOADK    	51 15	; "0x10"
+	91	[27]	ADDI     	51 51 0
+	92	[27]	MMBINI   	51 0 6 0	; __add
+	93	[27]	LOADK    	52 16	; "1e2"
+	94	[27]	ADDI     	52 52 0
+	95	[27]	MMBINI   	52 0 6 0	; __add
+	96	[27]	IDIVK    	53 2 6	; 3
+	97	[27]	MMBINK   	2 6 12 0	; __idiv 3
+	98	[27]	UNM      	54 2
+	99	[27]	LOADK    	55 17	; "3.5"
+	100	[27]	SUB      	55 2 55
+	101	[27]	MMBIN    	2 55 7	; __sub
+	102	[29]	LTI      	0 10 1
+	103	[29]	JMP      	1	; to 105
+	104	[29]	LFALSESKIP	56
+	105	[29]	LOADTRUE 	56
+	106	[29]	LEI      	0 7 1
+	107	[29]	JMP      	1	; to 109
+	108	[29]	LFALSESKIP	57
+	109	[29]	LOADTRUE 	57
+	110	[29]	GTI      	0 7 1
+	111	[29]	JMP      	1	; to 113
+	112	[29]	LFALSESKIP	58
+	113	[29]	LOADTRUE 	58
+	114	[29]	GEI      	0 8 1
+	115	[29]	JMP      	1	; to 117
+	116	[29]	LFALSESKIP	59
+	117	[29]	LOADTRUE 	59
+	118	[29]	LT       	1 0 1
+	119	[29]	JMP      	1	; to 121
+	120	[29]	LFALSESKIP	60
+	121	[29]	LOADTRUE 	60
+	122	[29]	LT       	0 1 1
+	123	[29]	JMP      	1	; to 125
+	124	[29]	LFALSESKIP	61
+	125	[29]	LOADTRUE 	61
+	126	[29]	LOADK    	62 10	; 1.5
+	127	[29]	GTI      	62 1 1
+	128	[29]	JMP      	1	; to 130
+	129	[29]	LFALSESKIP	62
+	130	[29]	LOADTRUE 	62
+	131	[29]	LT       	0 5 1
+	132	[29]	JMP      	1	; to 134
+	133	[29]	LFALSESKIP	63
+	134	[29]	LOADTRUE 	63
+	135	[29]	UNM      	64 5
+	136	[29]	LT       	64 4 1
+	137	[29]	JMP      	1	; to 139
+	138	[29]	LFALSESKIP	64
+	139	[29]	LOADTRUE 	64
+	140	[30]	LOADK    	65 18	; 9.007199254741e+15
+	141	[30]	LOADK    	66 18	; 9.007199254741e+15
+	142	[30]	LT       	65 66 1
+	143	[30]	JMP      	1	; to 145
+	144	[30]	LFALSESKIP	65
+	145	[30]	LOADTRUE 	65
+	146	[30]	LOADK    	66 19	; 9.2233720368548e+18
+	147	[30]	LT       	3 66 1
+	148	[30]	JMP      	1	; to 150
+	149	[30]	LFALSESKIP	66
+	150	[30]	LOADTRUE 	66
+	151	[30]	ADDK     	67 3 20	; 0.0
+	152	[30]	MMBINK   	3 20 6 0	; __add 0.0
+	153	[30]	EQK      	67 19 1	; 9.2233720368548e+18
+	154	[30]	JMP      	1	; to 156
+	155	[30]	LFALSESKIP	67
+	156	[30]	LOADTRUE 	67
+	157	[30]	EQK      	4 21 1	; -9.2233720368548e+18
+	158	[30]	JMP      	1	; to 160
+	159	[30]	LFALSESKIP	68
+	160	[30]	LOADTRUE 	68
+	161	[31]	LOADK    	69 22	; "a"
+	162	[31]	LOADK    	70 23	; "b"
+	163	[31]	LT       	69 70 1
+	164	[31]	JMP      	1	; to 166
+	165	[31]	LFALSESKIP	69
+	166	[31]	LOADTRUE 	69
+	167	[31]	LOADK    	70 24	; "abc"
+	168	[31]	LOADK    	71 25	; "abd"
+	169	[31]	LT       	70 71 1
+	170	[31]	JMP      	1	; to 172
+	171	[31]	LFALSESKIP	70
+	172	[31]	LOADTRUE 	70
+	173	[31]	LOADK    	71 26	; ""
+	174	[31]	LOADK    	72 22	; "a"
+	175	[31]	LT       	71 72 1
+	176	[31]	JMP      	1	; to 178
+	177	[31]	LFALSESKIP	71
+	178	[31]	LOADTRUE 	71
+	179	[31]	LOADK    	72 27	; "Z"
+	180	[31]	LOADK    	73 22	; "a"
+	181	[31]	LT       	72 73 1
+	182	[31]	JMP      	1	; to 184
+	183	[31]	LFALSESKIP	72
+	184	[31]	LOADTRUE 	72
+	185	[31]	LOADK    	73 28	; "a\000b"
+	186	[31]	LOADK    	74 29	; "a\000c"
+	187	[31]	LT       	73 74 1
+	188	[31]	JMP      	1	; to 190
+	189	[31]	LFALSESKIP	73
+	190	[31]	LOADTRUE 	73
+	191	[32]	EQI      	0 7 1
+	192	[32]	JMP      	1	; to 194
+	193	[32]	LFALSESKIP	74
+	194	[32]	LOADTRUE 	74
+	195	[32]	EQI      	0 7 1
+	196	[32]	JMP      	1	; to 198
+	197	[32]	LFALSESKIP	75
+	198	[32]	LOADTRUE 	75
+	199	[32]	EQK      	1 0 1	; 2.5
+	200	[32]	JMP      	1	; to 202
+	201	[32]	LFALSESKIP	76
+	202	[32]	LOADTRUE 	76
+	203	[32]	EQK      	2 1 1	; "10"
+	204	[32]	JMP      	1	; to 206
+	205	[32]	LFALSESKIP	77
+	206	[32]	LOADTRUE 	77
+	207	[32]	EQI      	2 10 1
+	208	[32]	JMP      	1	; to 210
+	209	[32]	LFALSESKIP	78
+	210	[32]	LOADTRUE 	78
+	211	[32]	EQI      	0 8 0
+	212	[32]	JMP      	1	; to 214
+	213	[32]	LFALSESKIP	79
+	214	[32]	LOADTRUE 	79
+	215	[32]	LOADFALSE	80
+	216	[32]	EQK      	80 30 1	; nil
+	217	[32]	JMP      	1	; to 219
+	218	[32]	LFALSESKIP	80
+	219	[32]	LOADTRUE 	80
+	220	[32]	LOADI    	81 0
+	221	[32]	EQI      	81 0 1
+	222	[32]	JMP      	1	; to 224
+	223	[32]	LFALSESKIP	81
+	224	[32]	LOADTRUE 	81
+	225	[34]	ADDI     	82 3 1
+	226	[34]	MMBINI   	3 1 6 0	; __add
+	227	[34]	EQ       	82 4 1
+	228	[34]	JMP      	1	; to 230
+	229	[34]	LFALSESKIP	82
+	230	[34]	LOADTRUE 	82
+	231	[34]	ADDI     	83 4 -1
+	232	[34]	MMBINI   	4 1 7 0	; __sub
+	233	[34]	EQ       	83 3 1
+	234	[34]	JMP      	1	; to 236
+	235	[34]	LFALSESKIP	83
+	236	[34]	LOADTRUE 	83
+	237	[34]	MULK     	84 3 7	; 2
+	238	[34]	MMBINK   	3 7 8 0	; __mul 2
+	239	[34]	IDIVK    	85 4 12	; -1
+	240	[34]	MMBINK   	4 12 12 0	; __idiv -1
+	241	[34]	MODK     	86 4 12	; -1
+	242	[34]	MMBINK   	4 12 9 0	; __mod -1
+	243	[35]	LOADK    	87 31	; 0.3
+	244	[35]	LOADK    	88 32	; inf
+	245	[35]	LOADK    	89 33	; -inf
+	246	[35]	LOADI    	90 3
+	247	[35]	IDIVK    	90 90 20	; 0.0
+	248	[35]	MMBINK   	90 20 12 0	; __idiv 0.0
+	249	[35]	LOADI    	91 -3
+	250	[35]	IDIVK    	91 91 20	; 0.0
+	251	[35]	MMBINK   	91 20 12 0	; __idiv 0.0
+	252	[35]	LOADF    	92 0
+	253	[35]	UNM      	92 92
+	254	[35]	LOADI    	93 -1
+	255	[35]	MULK     	93 93 20	; 0.0
+	256	[35]	MMBINK   	93 20 8 1	; __mul 0.0 flip
+	257	[36]	LOADI    	94 5
+	258	[36]	MOD      	94 94 5
+	259	[36]	MMBIN    	94 5 9	; __mod
+	260	[36]	LOADI    	95 -5
+	261	[36]	MOD      	95 95 5
+	262	[36]	MMBIN    	95 5 9	; __mod
+	263	[36]	LOADK    	96 18	; 9.007199254741e+15
+	264	[37]	MOVE     	97 6
+	265	[37]	LOADI    	98 1
+	266	[37]	LOADI    	99 2
+	267	[37]	LOADI    	100 3
+	268	[37]	CALL     	97 4 0	; 3 in all out
+	269	[37]	RETURN   	7 0 1	; all out
+	270	[37]	RETURN   	7 1 1	; 0 out
+constants (34):
+	0	F	2.5
+	1	S	"10"
+	2	I	9223372036854775807
+	3	I	-9223372036854775808
+	4	I	0
+	5	I	1000
+	6	I	3
+	7	I	2
+	8	I	-2
+	9	I	-3
+	10	F	1.5
+	11	F	0.5
+	12	I	-1
+	13	I	8
+	14	I	5
+	15	S	"0x10"
+	16	S	"1e2"
+	17	S	"3.5"
+	18	F	9.007199254741e+15
+	19	F	9.2233720368548e+18
+	20	F	0.0
+	21	F	-9.2233720368548e+18
+	22	S	"a"
+	23	S	"b"
+	24	S	"abc"
+	25	S	"abd"
+	26	S	""
+	27	S	"Z"
+	28	S	"a\000b"
+	29	S	"a\000c"
+	30	N	nil
+	31	F	0.3
+	32	F	inf
+	33	F	-inf
+locals (7):
+	0	i	5	271
+	1	f	5	271
+	2	s	5	271
+	3	maxint	6	271
+	4	minint	7	271
+	5	inf	10	271
+	6	values	11	271
+upvalues (1):
+	0	_ENV	1	0
+
+function <vm_arithmetic.lua:10,12> (4 instructions)
+0+ params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[10]	VARARGPREP	0
+	2	[11]	VARARG   	0 0	; all out
+	3	[11]	RETURN   	0 0 1	; all out
+	4	[12]	RETURN   	0 1 1	; 0 out
+constants (0):
+locals (0):
+upvalues (0):

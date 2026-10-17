@@ -1,0 +1,159 @@
+Chunk
+  LocalFunction cons
+    Function(head, tail)
+      Return
+        Function(want_head) [upvalues: head, tail]
+          If
+            If
+              Name want_head (local 0)
+              Then
+                Return
+                  Name head (upvalue 0)
+          Return
+            Name tail (upvalue 1)
+  Local list
+    Nil
+  NumericFor i
+    Integer 1
+    Integer 1000
+    Body
+      Assign
+        Targets
+          Name list (local 1)
+        Values
+          Call
+            Name cons (local 0)
+            Binary ..
+              String "item"
+              Name i (local 5)
+            Name list (local 1)
+  Local junk
+    Integer 0
+  NumericFor i
+    Integer 1
+    Integer 5000
+    Body
+      Local s
+        Binary ..
+          String "temporary "
+          Binary ..
+            Name i (local 6)
+            Binary ..
+              String " "
+              Binary *
+                Name i (local 6)
+                Integer 2
+      Local f
+        Function() [upvalues: s]
+          Return
+            Name s (upvalue 0)
+      Assign
+        Targets
+          Name junk (local 2)
+        Values
+          Binary +
+            Name junk (local 2)
+            Unary #
+              Call
+                Name f (local 8)
+  Local count, total
+    Integer 0
+    Integer 0
+  Local node
+    Name list (local 1)
+  While
+    Name node (local 5)
+    Body
+      Assign
+        Targets
+          Name count (local 3)
+        Values
+          Binary +
+            Name count (local 3)
+            Integer 1
+      Assign
+        Targets
+          Name total (local 4)
+        Values
+          Binary +
+            Name total (local 4)
+            Unary #
+              Call
+                Name node (local 5)
+                True
+      Assign
+        Targets
+          Name node (local 5)
+        Values
+          Call
+            Name node (local 5)
+            False
+  LocalFunction deep
+    Function(n) [upvalues: deep]
+      Local mine
+        Binary *
+          Name n (local 0)
+          Integer 3
+      LocalFunction get
+        Function() [upvalues: mine]
+          Return
+            Name mine (upvalue 0)
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              Call
+                Name get (local 2)
+      Local below
+        Call
+          Name deep (upvalue 0)
+          Binary -
+            Name n (local 0)
+            Integer 1
+      Return
+        Binary -
+          Binary +
+            Name below (local 3)
+            Call
+              Name get (local 2)
+          Binary *
+            Name mine (local 1)
+            Integer 2
+  Local s
+    String ""
+  NumericFor i
+    Integer 1
+    Integer 300
+    Body
+      Assign
+        Targets
+          Name s (local 7)
+        Values
+          Binary ..
+            Name s (local 7)
+            Paren
+              Binary %
+                Name i (local 11)
+                Integer 10
+  Return
+    Name count (local 3)
+    Name total (local 4)
+    Name junk (local 2)
+    Call
+      Name deep (local 6)
+      Integer 3000
+    Unary #
+      Name s (local 7)
+    Call
+      Name list (local 1)
+      True
+    Call
+      Call
+        Call
+          Name list (local 1)
+          False
+        False
+      True

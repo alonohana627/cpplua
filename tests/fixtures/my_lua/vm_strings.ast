@@ -1,0 +1,122 @@
+Chunk
+  LocalFunction repeat_string
+    Function(s, n)
+      Local out
+        String ""
+      NumericFor _
+        Integer 1
+        Name n (local 1)
+        Body
+          Assign
+            Targets
+              Name out (local 2)
+            Values
+              Binary ..
+                Name out (local 2)
+                Name s (local 0)
+      Return
+        Name out (local 2)
+  Local i, f
+    Integer 42
+    Float 0.5
+  Local long
+    Call
+      Name repeat_string (local 0)
+      String "0123456789"
+      Integer 10
+  Local short
+    Call
+      Name repeat_string (local 0)
+      String "ab"
+      Integer 20
+  Local zeros
+    String "a\x00b\x00c"
+  Return
+    Binary ..
+      String "x"
+      Binary ..
+        Name i (local 1)
+        Binary ..
+          String "y"
+          Binary ..
+            Name f (local 2)
+            String "z"
+    Binary ..
+      Integer 1
+      Integer 2
+    Binary ..
+      Float 1.0
+      String ""
+    Binary ..
+      Unary -
+        Float 0.0
+      String ""
+    Binary ..
+      Binary ^
+        Integer 2
+        Integer 63
+      String ""
+    Binary ..
+      Binary -
+        Unary -
+          Integer 9223372036854775807
+        Integer 1
+      String ""
+    Binary ..
+      Float 1e+100
+      String ""
+    Binary ..
+      Float 0.1
+      String ""
+    Binary ..
+      Binary /
+        Integer 1
+        Integer 3
+      String ""
+    Binary ..
+      Paren
+        Binary /
+          Integer 1
+          Integer 0
+      String ""
+    Binary ..
+      Unary -
+        Paren
+          Binary /
+            Integer 1
+            Integer 0
+      String ""
+    Unary #
+      Name long (local 3)
+    Unary #
+      Name short (local 4)
+    Unary #
+      Name zeros (local 5)
+    Unary #
+      String ""
+    Unary #
+      Paren
+        Binary ..
+          Name long (local 3)
+          Name short (local 4)
+    Binary ==
+      Name long (local 3)
+      Call
+        Name repeat_string (local 0)
+        String "0123456789"
+        Integer 10
+    Binary ==
+      Name short (local 4)
+      String "abababababababababababababababababababab"
+    Binary ..
+      Name zeros (local 5)
+      String "!"
+    String "multi\nline"
+    String "long\nbracket"
+    String "with ]] inside"
+    String "ABCDE"
+    Binary ..
+      String "\xDF\xBF\xEF\xBF\xBF"
+      String ""
+    Unary #
+      String "\xF4\x8F\xBF\xBF"

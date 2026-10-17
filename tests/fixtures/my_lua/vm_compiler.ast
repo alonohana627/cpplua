@@ -1,0 +1,428 @@
+Chunk
+  Local K <const>
+    Integer 10
+  Local S <const>
+    String "name"
+  Local F <const>
+    Float 2.5
+  Local N <const>
+    Binary +
+      Binary *
+        Name K (local 0)
+        Integer 2
+      Integer 1
+  Local x, y, z
+    Integer 1
+    Integer 2
+  Local a
+  Local b
+  Local t
+    Table
+      Item
+        Integer 1
+      Item
+        Integer 2
+      Item
+        Integer 3
+      Field n
+        Name N (local 3)
+      Field
+        Name K (local 0)
+        Name S (local 1)
+      Field
+        String "key with spaces"
+        Name F (local 2)
+      Item
+        Name x (local 4)
+      Item
+        Name y (local 5)
+  Local big
+    Table
+      Item
+        Integer 1
+      Item
+        Integer 2
+      Item
+        Integer 3
+      Item
+        Integer 4
+      Item
+        Integer 5
+      Item
+        Integer 6
+      Item
+        Integer 7
+      Item
+        Integer 8
+      Item
+        Integer 9
+      Item
+        Integer 10
+      Item
+        Integer 11
+      Item
+        Integer 12
+      Item
+        Integer 13
+      Item
+        Integer 14
+      Item
+        Integer 15
+      Item
+        Integer 16
+      Item
+        Integer 17
+      Item
+        Integer 18
+      Item
+        Integer 19
+      Item
+        Integer 20
+      Item
+        Integer 21
+      Item
+        Integer 22
+      Item
+        Integer 23
+      Item
+        Integer 24
+      Item
+        Integer 25
+      Item
+        Integer 26
+      Item
+        Integer 27
+      Item
+        Integer 28
+      Item
+        Integer 29
+      Item
+        Integer 30
+      Item
+        Integer 31
+      Item
+        Integer 32
+      Item
+        Integer 33
+      Item
+        Integer 34
+      Item
+        Integer 35
+      Item
+        Integer 36
+      Item
+        Integer 37
+      Item
+        Integer 38
+      Item
+        Integer 39
+      Item
+        Integer 40
+      Item
+        Integer 41
+      Item
+        Integer 42
+      Item
+        Integer 43
+      Item
+        Integer 44
+      Item
+        Integer 45
+      Item
+        Integer 46
+      Item
+        Integer 47
+      Item
+        Integer 48
+      Item
+        Integer 49
+      Item
+        Integer 50
+      Item
+        Integer 51
+      Item
+        Integer 52
+      Item
+        Integer 53
+      Item
+        Integer 54
+      Item
+        Integer 55
+      Item
+        Vararg
+  Assign
+    Targets
+      Index
+        Name t (local 9)
+        String "x"
+      Index
+        Name t (local 9)
+        Integer 1
+      Index
+        Name t (local 9)
+        Name x (local 4)
+    Values
+      Binary +
+        Name x (local 4)
+        Name K (local 0)
+      Binary -
+        Name K (local 0)
+        Name x (local 4)
+      Binary *
+        Name F (local 2)
+        Name x (local 4)
+  Assign
+    Targets
+      Index
+        Name t (local 9)
+        Name x (local 4)
+      Name x (local 4)
+    Values
+      Name x (local 4)
+      Index
+        Name t (local 9)
+        Name x (local 4)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 9)
+        String "n"
+      Index
+        Name big (local 10)
+        Unary #
+          Name big (local 10)
+      Binary ..
+        Name S (local 1)
+        Name K (local 0)
+      Binary //
+        Name N (local 3)
+        Integer 3
+      Unary -
+        Name K (local 0)
+      Binary <
+        Name K (local 0)
+        Name x (local 4)
+      Binary <=
+        Name x (local 4)
+        Integer 3
+      Binary <
+        Integer 3
+        Name x (local 4)
+      Binary ==
+        Name x (local 4)
+        String "s"
+  CallStatement
+    Call
+      Name print
+      Binary //
+        Integer 2
+        Integer 0
+      Binary //
+        Integer 1
+        Float 0.0
+      Binary %
+        Integer 7
+        Unary -
+          Integer 3
+      Binary <<
+        Integer 1
+        Integer 62
+      Binary ^
+        Integer 2
+        Unary -
+          Integer 1
+      Unary -
+        Paren
+          Unary -
+            Integer 1
+      Unary ~
+        Integer 5
+      Unary not
+        Nil
+      Unary #
+        Name S (local 1)
+  Local obj
+    Table
+      Field value
+        Integer 1
+  FunctionStatement
+    Index
+      Name obj (local 11)
+      String "method"
+    Function(self, n)
+      Return
+        Binary +
+          Index
+            Name self (local 0)
+            String "value"
+          Name n (local 1)
+  FunctionStatement (method)
+    Index
+      Name obj (local 11)
+      String "other"
+    Function(self, n)
+      Return
+        Binary *
+          MethodCall method
+            Name self (local 0)
+            Name n (local 1)
+          Integer 2
+  Local r
+    MethodCall other
+      Name obj (local 11)
+      Name K (local 0)
+  LocalFunction counter
+    Function()
+      Local n
+        Integer 0
+      Return
+        Function(step) [upvalues: n]
+          Assign
+            Targets
+              Name n (upvalue 0)
+            Values
+              Binary +
+                Name n (upvalue 0)
+                Paren
+                  Binary or
+                    Name step (local 0)
+                    Integer 1
+          Return
+            Name n (upvalue 0)
+  NumericFor i
+    Integer 1
+    Name K (local 0)
+    Body
+      Local captured
+        Name i (local 17)
+      Assign
+        Targets
+          Index
+            Name t (local 9)
+            Name i (local 17)
+        Values
+          Function() [upvalues: captured, K]
+            Return
+              Binary +
+                Name captured (upvalue 0)
+                Name K (upvalue 1)
+      If
+        If
+          Binary ==
+            Name i (local 17)
+            Integer 5
+          Then
+            Break
+  GenericFor k, v
+    In
+      Call
+        Name pairs
+        Name t (local 9)
+    Body
+      If
+        If
+          Binary ==
+            Call
+              Name type
+              Name v (local 19)
+            String "function"
+          Then
+            Goto continue
+      CallStatement
+        Call
+          Name print
+          Name k (local 18)
+          Name v (local 19)
+      Label continue
+  Do
+    Local h <close>
+      Nil
+    Local u
+      Integer 1
+    Repeat
+      Body
+        Local w
+          Name u (local 15)
+        Assign
+          Targets
+            Name u (local 15)
+          Values
+            Binary +
+              Name u (local 15)
+              Integer 1
+        Local f
+          Function() [upvalues: w]
+            Return
+              Name w (upvalue 0)
+      Until
+        Binary >
+          Name w (local 16)
+          Integer 3
+  LocalFunction vararg
+    Function(...) [upvalues: _ENV]
+      Local first, second
+        Vararg
+      Return
+        Call
+          Name select
+          String "#"
+          Vararg
+        Name first (local 0)
+        Name second (local 1)
+        Vararg
+  Local s
+    Binary ..
+      String "a"
+      Binary ..
+        String "b"
+        Binary ..
+          Name x (local 4)
+          Binary ..
+            String "c"
+            Name y (local 5)
+  Local cond
+    Binary or
+      Binary and
+        Name x (local 4)
+        Name y (local 5)
+      Name z (local 6)
+  Local cmp
+    Binary or
+      Binary and
+        Binary >
+          Name x (local 4)
+          Integer 1
+        Binary >=
+          Name y (local 5)
+          Integer 2
+      Binary ~=
+        Name x (local 4)
+        Name y (local 5)
+  While
+    Binary and
+      Binary <
+        Name x (local 4)
+        Integer 100
+      Unary not
+        Name cond (local 16)
+    Body
+      Assign
+        Targets
+          Name x (local 4)
+        Values
+          Binary *
+            Name x (local 4)
+            Integer 2
+  Return
+    Name counter (local 13)
+    Call
+      Name vararg (local 14)
+      Integer 1
+      Integer 2
+      Integer 3
+    Name s (local 15)
+    Name cmp (local 17)
+    Name r (local 12)
+    Name t (local 9)
+    Name big (local 10)

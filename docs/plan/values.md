@@ -41,7 +41,7 @@ Finishing part 9 completes the stage and bumps the version to 0.0.4.
 - **How operations report errors** (`1 // 0`, `nil + 1`). Options, measured in section 7:
   return `std::expected<Value, RuntimeError>`, or throw. The cost was the same.
   **Recommended: `std::expected`** for now, like the lexer and parser. The full answer, with
-  `pcall`, is roadmap stage 9, and this stage only needs errors out of single operations.
+  `pcall`, is roadmap stage 8, and this stage only needs errors out of single operations.
 - **Who owns strings.** **Recommended: like Lua.** A `Heap` creates every string and frees them
   all when it is destroyed, and values hold plain `String*`. The garbage collector (stage 5)
   later takes the `Heap`'s place. No `std::shared_ptr`: it doubles the pointer, adds a

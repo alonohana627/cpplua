@@ -44,7 +44,7 @@ public:
     // Ends the current function and returns its upvalues. Fails if a goto or
     // break in it was never resolved: "no visible label 'x' for <goto> at
     // line N" or "break outside loop at line N" (G8.2, G8.6).
-    std::expected<std::vector<Upvalue>, std::string> close_function();
+    std::expected<std::vector<UpvalueDesc>, std::string> close_function();
 
     // The line of the current function, 0 for the main chunk.
     [[nodiscard]] int function_line() const { return functions_.back().line; }
@@ -136,7 +136,7 @@ private:
         std::size_t active = 0;     // how many of its locals are visible
         std::size_t first_label;
         std::vector<Block> blocks;
-        std::vector<Upvalue> upvalues; // in order of first use
+        std::vector<UpvalueDesc> upvalues; // in order of first use
     };
 
     [[nodiscard]] bool same_name(TextRange a, TextRange b) const;

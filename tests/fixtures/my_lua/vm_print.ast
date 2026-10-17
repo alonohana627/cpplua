@@ -1,0 +1,162 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      String "hello"
+      Integer 1
+      Float 2.5
+      Unary -
+        Float 0.0
+      Float 1e+100
+      Binary ^
+        Integer 2
+        Integer 63
+      Nil
+      True
+      False
+  CallStatement
+    Call
+      Name print
+  CallStatement
+    Call
+      Name print
+      String ""
+  CallStatement
+    Call
+      Name print
+      Integer 1
+      Nil
+      Integer 3
+  Assign
+    Targets
+      Name count
+    Values
+      Integer 0
+  LocalFunction bump
+    Function(by) [upvalues: _ENV]
+      Assign
+        Targets
+          Name count
+        Values
+          Binary +
+            Name count
+            Name by (local 0)
+      Return
+        Name count
+  CallStatement
+    Call
+      Name bump (local 0)
+      Integer 1
+  CallStatement
+    Call
+      Name bump (local 0)
+      Integer 10
+  CallStatement
+    Call
+      Name print
+      String "count"
+      Name count
+      Index
+        Name _ENV (upvalue 0)
+        String "count"
+      Index
+        Name _ENV (upvalue 0)
+        String "count"
+  FunctionStatement
+    Name greet
+    Function(name)
+      Return
+        Binary ..
+          String "hi "
+          Name name (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name greet
+        String "lua2"
+      Call
+        Name greet
+        String "you"
+  CallStatement
+    Call
+      Name print
+      Name undefined_global
+      Binary ==
+        Name undefined_global
+        Nil
+  Assign
+    Targets
+      Name count
+    Values
+      Nil
+  CallStatement
+    Call
+      Name print
+      Name count
+  NumericFor i
+    Integer 1
+    Integer 100
+    Body
+      Assign
+        Targets
+          Index
+            Name _ENV (upvalue 0)
+            Binary ..
+              String "g"
+              Name i (local 4)
+        Values
+          Binary ..
+            String "value "
+            Name i (local 4)
+  CallStatement
+    Call
+      Name print
+      Name g1
+      Name g50
+      Name g100
+      Name g101
+  Local total
+    Integer 0
+  NumericFor i
+    Integer 1
+    Integer 2000
+    Body
+      Assign
+        Targets
+          Name latest
+        Values
+          Binary ..
+            String "item "
+            Name i (local 5)
+      Assign
+        Targets
+          Name total (local 1)
+        Values
+          Binary +
+            Name total (local 1)
+            Unary #
+              Name latest
+  CallStatement
+    Call
+      Name print
+      Name latest
+      Name total (local 1)
+  Local p
+    Name print
+  CallStatement
+    Call
+      Name p (local 2)
+      String "print through a local"
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name print
+        Name p (local 2)
+      Binary ~=
+        Name print
+        Name greet
+  Return
+    String "done"
+    Name count

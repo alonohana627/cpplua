@@ -10,7 +10,7 @@
 namespace lua2 {
 
 // Lua's comparison operators (docs/spec/values.md, V7 and V8). Metamethods
-// join in stage 8.
+// join in stage 7.
 
 // a == b (V7). Values of different types are never equal; numbers are equal
 // when their mathematical values are, whatever their subtypes, and nan is

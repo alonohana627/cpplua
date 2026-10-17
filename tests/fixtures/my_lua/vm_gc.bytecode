@@ -1,0 +1,200 @@
+
+main <vm_gc.lua:0,0> (83 instructions)
+0+ params, 16 slots, 1 upvalue, 22 locals, 6 constants, 3 functions
+	1	[1]	VARARGPREP	0
+	2	[13]	CLOSURE  	0 0
+	3	[15]	LOADNIL  	1 0	; 1 out
+	4	[16]	LOADI    	2 1
+	5	[16]	LOADI    	3 1000
+	6	[16]	LOADI    	4 1
+	7	[16]	FORPREP  	2 7	; exit to 16
+	8	[17]	MOVE     	6 0
+	9	[17]	LOADK    	7 0	; "item"
+	10	[17]	MOVE     	8 5
+	11	[17]	CONCAT   	7 2
+	12	[17]	MOVE     	8 1
+	13	[17]	CALL     	6 3 2	; 2 in 1 out
+	14	[17]	MOVE     	1 6
+	15	[16]	FORLOOP  	2 8	; to 8
+	16	[21]	LOADI    	2 0
+	17	[22]	LOADI    	3 1
+	18	[22]	LOADI    	4 5000
+	19	[22]	LOADI    	5 1
+	20	[22]	FORPREP  	3 13	; exit to 35
+	21	[23]	LOADK    	7 1	; "temporary "
+	22	[23]	MOVE     	8 6
+	23	[23]	LOADK    	9 2	; " "
+	24	[23]	MULK     	10 6 3	; 2
+	25	[23]	MMBINK   	6 3 8 0	; __mul 2
+	26	[23]	CONCAT   	7 4
+	27	[24]	CLOSURE  	8 1
+	28	[25]	MOVE     	9 8
+	29	[25]	CALL     	9 1 2	; 0 in 1 out
+	30	[25]	LEN      	9 9
+	31	[25]	ADD      	2 2 9
+	32	[25]	MMBIN    	2 9 6	; __add
+	33	[25]	CLOSE    	7
+	34	[22]	FORLOOP  	3 14	; to 21
+	35	[29]	LOADI    	3 0
+	36	[29]	LOADI    	4 0
+	37	[30]	MOVE     	5 1
+	38	[31]	TEST     	5 0
+	39	[31]	JMP      	13	; to 53
+	40	[32]	ADDI     	3 3 1
+	41	[32]	MMBINI   	3 1 6 0	; __add
+	42	[33]	MOVE     	6 5
+	43	[33]	LOADTRUE 	7
+	44	[33]	CALL     	6 2 2	; 1 in 1 out
+	45	[33]	LEN      	6 6
+	46	[33]	ADD      	4 4 6
+	47	[33]	MMBIN    	4 6 6	; __add
+	48	[34]	MOVE     	6 5
+	49	[34]	LOADFALSE	7
+	50	[34]	CALL     	6 2 2	; 1 in 1 out
+	51	[34]	MOVE     	5 6
+	52	[34]	JMP      	-15	; to 38
+	53	[46]	CLOSURE  	6 2
+	54	[49]	LOADK    	7 4	; ""
+	55	[50]	LOADI    	8 1
+	56	[50]	LOADI    	9 300
+	57	[50]	LOADI    	10 1
+	58	[50]	FORPREP  	8 5	; exit to 65
+	59	[50]	MOVE     	12 7
+	60	[50]	MODK     	13 11 5	; 10
+	61	[50]	MMBINK   	11 5 9 0	; __mod 10
+	62	[50]	CONCAT   	12 2
+	63	[50]	MOVE     	7 12
+	64	[50]	FORLOOP  	8 6	; to 59
+	65	[52]	MOVE     	8 3
+	66	[52]	MOVE     	9 4
+	67	[52]	MOVE     	10 2
+	68	[52]	MOVE     	11 6
+	69	[52]	LOADI    	12 3000
+	70	[52]	CALL     	11 2 2	; 1 in 1 out
+	71	[52]	LEN      	12 7
+	72	[52]	MOVE     	13 1
+	73	[52]	LOADTRUE 	14
+	74	[52]	CALL     	13 2 2	; 1 in 1 out
+	75	[52]	MOVE     	14 1
+	76	[52]	LOADFALSE	15
+	77	[52]	CALL     	14 2 2	; 1 in 1 out
+	78	[52]	LOADFALSE	15
+	79	[52]	CALL     	14 2 2	; 1 in 1 out
+	80	[52]	LOADTRUE 	15
+	81	[52]	CALL     	14 2 0	; 1 in all out
+	82	[52]	RETURN   	8 0 1k	; all out
+	83	[52]	RETURN   	8 1 1k	; 0 out
+constants (6):
+	0	S	"item"
+	1	S	"temporary "
+	2	S	" "
+	3	I	2
+	4	S	""
+	5	I	10
+locals (22):
+	0	cons	3	84
+	1	list	4	84
+	2	(for state)	7	16
+	3	(for state)	7	16
+	4	(for state)	7	16
+	5	i	8	15
+	6	junk	17	84
+	7	(for state)	20	35
+	8	(for state)	20	35
+	9	(for state)	20	35
+	10	i	21	34
+	11	s	27	33
+	12	f	28	33
+	13	count	37	84
+	14	total	37	84
+	15	node	38	84
+	16	deep	54	84
+	17	s	55	84
+	18	(for state)	58	65
+	19	(for state)	58	65
+	20	(for state)	58	65
+	21	i	59	64
+upvalues (1):
+	0	_ENV	1	0
+
+function <vm_gc.lua:8,13> (3 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 1 function
+	1	[12]	CLOSURE  	2 0
+	2	[12]	RETURN   	2 2 0k	; 1 out
+	3	[13]	RETURN   	2 1 0k	; 0 out
+constants (0):
+locals (2):
+	0	head	1	4
+	1	tail	1	4
+upvalues (0):
+
+function <vm_gc.lua:9,12> (7 instructions)
+1 param, 2 slots, 2 upvalues, 1 local, 0 constants, 0 functions
+	1	[10]	TEST     	0 0
+	2	[10]	JMP      	2	; to 5
+	3	[10]	GETUPVAL 	1 0	; head
+	4	[10]	RETURN1  	1
+	5	[11]	GETUPVAL 	1 1	; tail
+	6	[11]	RETURN1  	1
+	7	[12]	RETURN0  	
+constants (0):
+locals (1):
+	0	want_head	1	8
+upvalues (2):
+	0	head	1	0
+	1	tail	1	1
+
+function <vm_gc.lua:24,24> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[24]	GETUPVAL 	0 0	; s
+	2	[24]	RETURN1  	0
+	3	[24]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	s	1	7
+
+function <vm_gc.lua:40,46> (22 instructions)
+1 param, 6 slots, 1 upvalue, 4 locals, 2 constants, 1 function
+	1	[41]	MULK     	1 0 0	; 3
+	2	[41]	MMBINK   	0 0 8 0	; __mul 3
+	3	[42]	CLOSURE  	2 0
+	4	[43]	EQI      	0 0 0
+	5	[43]	JMP      	3	; to 9
+	6	[43]	MOVE     	3 2
+	7	[43]	TAILCALL 	3 1 0k	; 0 in
+	8	[43]	RETURN   	3 0 0k	; all out
+	9	[44]	GETUPVAL 	3 0	; deep
+	10	[44]	ADDI     	4 0 -1
+	11	[44]	MMBINI   	0 1 7 0	; __sub
+	12	[44]	CALL     	3 2 2	; 1 in 1 out
+	13	[45]	MOVE     	4 2
+	14	[45]	CALL     	4 1 2	; 0 in 1 out
+	15	[45]	ADD      	4 3 4
+	16	[45]	MMBIN    	3 4 6	; __add
+	17	[45]	MULK     	5 1 1	; 2
+	18	[45]	MMBINK   	1 1 8 0	; __mul 2
+	19	[45]	SUB      	4 4 5
+	20	[45]	MMBIN    	4 5 7	; __sub
+	21	[45]	RETURN   	4 2 0k	; 1 out
+	22	[46]	RETURN   	4 1 0k	; 0 out
+constants (2):
+	0	I	3
+	1	I	2
+locals (4):
+	0	n	1	23
+	1	mine	3	23
+	2	get	4	23
+	3	below	13	23
+upvalues (1):
+	0	deep	1	6
+
+function <vm_gc.lua:42,42> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[42]	GETUPVAL 	0 0	; mine
+	2	[42]	RETURN1  	0
+	3	[42]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	mine	1	1

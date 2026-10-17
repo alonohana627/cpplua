@@ -1,5 +1,6 @@
 #include "parser/ast.hpp"
 
+#include <algorithm>
 #include <utility>
 
 namespace lua2 {
@@ -24,13 +25,15 @@ IdRange<Id> append(std::vector<T>& lists, std::span<const T> items) {
 
 } // namespace
 
-ExprId Ast::add_expression(Expr expr, int line) {
+ExprId Ast::add_expression(Expr expr, int line, int end_line) {
     expression_lines_.push_back(line);
+    expression_end_lines_.push_back(std::max(line, end_line));
     return push<ExprId>(expressions_, expr);
 }
 
-StatId Ast::add_statement(Stat stat, int line) {
+StatId Ast::add_statement(Stat stat, int line, int end_line) {
     statement_lines_.push_back(line);
+    statement_end_lines_.push_back(std::max(line, end_line));
     return push<StatId>(statements_, stat);
 }
 
@@ -70,11 +73,11 @@ std::span<const IfClause> Ast::if_clauses(IdRange<IfClauseId> range) const {
     return std::span{if_clause_lists_}.subspan(range.first, range.count);
 }
 
-IdRange<UpvalueId> Ast::add_upvalue_list(std::span<const Upvalue> upvalues) {
+IdRange<UpvalueId> Ast::add_upvalue_list(std::span<const UpvalueDesc> upvalues) {
     return append<UpvalueId>(upvalue_lists_, upvalues);
 }
 
-std::span<const Upvalue> Ast::upvalues(IdRange<UpvalueId> range) const {
+std::span<const UpvalueDesc> Ast::upvalues(IdRange<UpvalueId> range) const {
     return std::span{upvalue_lists_}.subspan(range.first, range.count);
 }
 

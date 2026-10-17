@@ -1,0 +1,6 @@
+Chunk
+  Local n
+    Integer 5
+  Return
+    Unary #
+      Name n (local 0)

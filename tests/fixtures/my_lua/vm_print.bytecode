@@ -1,0 +1,188 @@
+
+main <vm_print.lua:0,0> (117 instructions)
+0+ params, 10 slots, 1 upvalue, 11 locals, 24 constants, 2 functions
+	1	[1]	VARARGPREP	0
+	2	[4]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[4]	LOADK    	1 1	; "hello"
+	4	[4]	LOADI    	2 1
+	5	[4]	LOADK    	3 2	; 2.5
+	6	[4]	LOADF    	4 0
+	7	[4]	UNM      	4 4
+	8	[4]	LOADK    	5 3	; 1e+100
+	9	[4]	LOADK    	6 4	; 9.2233720368548e+18
+	10	[4]	LOADNIL  	7 0	; 1 out
+	11	[4]	LOADTRUE 	8
+	12	[4]	LOADFALSE	9
+	13	[4]	CALL     	0 10 1	; 9 in 0 out
+	14	[5]	GETTABUP 	0 0 0	; _ENV "print"
+	15	[5]	CALL     	0 1 1	; 0 in 0 out
+	16	[6]	GETTABUP 	0 0 0	; _ENV "print"
+	17	[6]	LOADK    	1 5	; ""
+	18	[6]	CALL     	0 2 1	; 1 in 0 out
+	19	[7]	GETTABUP 	0 0 0	; _ENV "print"
+	20	[7]	LOADI    	1 1
+	21	[7]	LOADNIL  	2 0	; 1 out
+	22	[7]	LOADI    	3 3
+	23	[7]	CALL     	0 4 1	; 3 in 0 out
+	24	[9]	SETTABUP 	0 6 7k	; _ENV "count" 0
+	25	[10]	CLOSURE  	0 0
+	26	[11]	MOVE     	1 0
+	27	[11]	LOADI    	2 1
+	28	[11]	CALL     	1 2 1	; 1 in 0 out
+	29	[11]	MOVE     	1 0
+	30	[11]	LOADI    	2 10
+	31	[11]	CALL     	1 2 1	; 1 in 0 out
+	32	[12]	GETTABUP 	1 0 0	; _ENV "print"
+	33	[12]	LOADK    	2 8	; "count"
+	34	[12]	GETTABUP 	3 0 8	; _ENV "count"
+	35	[12]	GETTABUP 	4 0 8	; _ENV "count"
+	36	[12]	GETTABUP 	5 0 8	; _ENV "count"
+	37	[12]	CALL     	1 5 1	; 4 in 0 out
+	38	[14]	CLOSURE  	1 1
+	39	[14]	SETTABUP 	0 9 1	; _ENV "greet"
+	40	[15]	GETTABUP 	1 0 0	; _ENV "print"
+	41	[15]	GETTABUP 	2 0 9	; _ENV "greet"
+	42	[15]	LOADK    	3 10	; "lua2"
+	43	[15]	CALL     	2 2 2	; 1 in 1 out
+	44	[15]	GETTABUP 	3 0 9	; _ENV "greet"
+	45	[15]	LOADK    	4 11	; "you"
+	46	[15]	CALL     	3 2 0	; 1 in all out
+	47	[15]	CALL     	1 0 1	; all in 0 out
+	48	[17]	GETTABUP 	1 0 0	; _ENV "print"
+	49	[17]	GETTABUP 	2 0 12	; _ENV "undefined_global"
+	50	[17]	GETTABUP 	3 0 12	; _ENV "undefined_global"
+	51	[17]	EQK      	3 13 1	; nil
+	52	[17]	JMP      	1	; to 54
+	53	[17]	LFALSESKIP	3
+	54	[17]	LOADTRUE 	3
+	55	[17]	CALL     	1 3 1	; 2 in 0 out
+	56	[18]	SETTABUP 	0 8 13k	; _ENV "count" nil
+	57	[19]	GETTABUP 	1 0 0	; _ENV "print"
+	58	[19]	GETTABUP 	2 0 8	; _ENV "count"
+	59	[19]	CALL     	1 2 1	; 1 in 0 out
+	60	[22]	LOADI    	1 1
+	61	[22]	LOADI    	2 100
+	62	[22]	LOADI    	3 1
+	63	[22]	FORPREP  	1 8	; exit to 73
+	64	[23]	LOADK    	5 14	; "g"
+	65	[23]	MOVE     	6 4
+	66	[23]	CONCAT   	5 2
+	67	[23]	GETUPVAL 	6 0	; _ENV
+	68	[23]	LOADK    	7 15	; "value "
+	69	[23]	MOVE     	8 4
+	70	[23]	CONCAT   	7 2
+	71	[23]	SETTABLE 	6 5 7
+	72	[22]	FORLOOP  	1 9	; to 64
+	73	[25]	GETTABUP 	1 0 0	; _ENV "print"
+	74	[25]	GETTABUP 	2 0 16	; _ENV "g1"
+	75	[25]	GETTABUP 	3 0 17	; _ENV "g50"
+	76	[25]	GETTABUP 	4 0 18	; _ENV "g100"
+	77	[25]	GETTABUP 	5 0 19	; _ENV "g101"
+	78	[25]	CALL     	1 5 1	; 4 in 0 out
+	79	[28]	LOADI    	1 0
+	80	[29]	LOADI    	2 1
+	81	[29]	LOADI    	3 2000
+	82	[29]	LOADI    	4 1
+	83	[29]	FORPREP  	2 8	; exit to 93
+	84	[30]	LOADK    	6 21	; "item "
+	85	[30]	MOVE     	7 5
+	86	[30]	CONCAT   	6 2
+	87	[30]	SETTABUP 	0 20 6	; _ENV "latest"
+	88	[31]	GETTABUP 	6 0 20	; _ENV "latest"
+	89	[31]	LEN      	6 6
+	90	[31]	ADD      	1 1 6
+	91	[31]	MMBIN    	1 6 6	; __add
+	92	[29]	FORLOOP  	2 9	; to 84
+	93	[33]	GETTABUP 	2 0 0	; _ENV "print"
+	94	[33]	GETTABUP 	3 0 20	; _ENV "latest"
+	95	[33]	MOVE     	4 1
+	96	[33]	CALL     	2 3 1	; 2 in 0 out
+	97	[35]	GETTABUP 	2 0 0	; _ENV "print"
+	98	[36]	MOVE     	3 2
+	99	[36]	LOADK    	4 22	; "print through a local"
+	100	[36]	CALL     	3 2 1	; 1 in 0 out
+	101	[37]	GETTABUP 	3 0 0	; _ENV "print"
+	102	[37]	GETTABUP 	4 0 0	; _ENV "print"
+	103	[37]	EQ       	4 2 1
+	104	[37]	JMP      	1	; to 106
+	105	[37]	LFALSESKIP	4
+	106	[37]	LOADTRUE 	4
+	107	[37]	GETTABUP 	5 0 0	; _ENV "print"
+	108	[37]	GETTABUP 	6 0 9	; _ENV "greet"
+	109	[37]	EQ       	5 6 0
+	110	[37]	JMP      	1	; to 112
+	111	[37]	LFALSESKIP	5
+	112	[37]	LOADTRUE 	5
+	113	[37]	CALL     	3 3 1	; 2 in 0 out
+	114	[38]	LOADK    	3 23	; "done"
+	115	[38]	GETTABUP 	4 0 8	; _ENV "count"
+	116	[38]	RETURN   	3 3 1	; 2 out
+	117	[38]	RETURN   	3 1 1	; 0 out
+constants (24):
+	0	S	"print"
+	1	S	"hello"
+	2	F	2.5
+	3	F	1e+100
+	4	F	9.2233720368548e+18
+	5	S	""
+	6	S	"count"
+	7	I	0
+	8	S	"count"
+	9	S	"greet"
+	10	S	"lua2"
+	11	S	"you"
+	12	S	"undefined_global"
+	13	N	nil
+	14	S	"g"
+	15	S	"value "
+	16	S	"g1"
+	17	S	"g50"
+	18	S	"g100"
+	19	S	"g101"
+	20	S	"latest"
+	21	S	"item "
+	22	S	"print through a local"
+	23	S	"done"
+locals (11):
+	0	bump	26	118
+	1	(for state)	63	73
+	2	(for state)	63	73
+	3	(for state)	63	73
+	4	i	64	72
+	5	total	80	118
+	6	(for state)	83	93
+	7	(for state)	83	93
+	8	(for state)	83	93
+	9	i	84	92
+	10	p	98	118
+upvalues (1):
+	0	_ENV	1	0
+
+function <vm_print.lua:10,10> (7 instructions)
+1 param, 2 slots, 1 upvalue, 1 local, 1 constant, 0 functions
+	1	[10]	GETTABUP 	1 0 0	; _ENV "count"
+	2	[10]	ADD      	1 1 0
+	3	[10]	MMBIN    	1 0 6	; __add
+	4	[10]	SETTABUP 	0 0 1	; _ENV "count"
+	5	[10]	GETTABUP 	1 0 0	; _ENV "count"
+	6	[10]	RETURN1  	1
+	7	[10]	RETURN0  	
+constants (1):
+	0	S	"count"
+locals (1):
+	0	by	1	8
+upvalues (1):
+	0	_ENV	0	0
+
+function <vm_print.lua:14,14> (5 instructions)
+1 param, 3 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[14]	LOADK    	1 0	; "hi "
+	2	[14]	MOVE     	2 0
+	3	[14]	CONCAT   	1 2
+	4	[14]	RETURN1  	1
+	5	[14]	RETURN0  	
+constants (1):
+	0	S	"hi "
+locals (1):
+	0	name	1	6
+upvalues (0):

@@ -1,0 +1,493 @@
+
+main <vm_control.lua:0,0> (53 instructions)
+0+ params, 22 slots, 1 upvalue, 8 locals, 1 constant, 8 functions
+	1	[1]	VARARGPREP	0
+	2	[11]	CLOSURE  	0 0
+	3	[18]	CLOSURE  	1 1
+	4	[30]	CLOSURE  	2 2
+	5	[39]	CLOSURE  	3 3
+	6	[48]	CLOSURE  	4 4
+	7	[66]	CLOSURE  	5 5
+	8	[99]	CLOSURE  	6 6
+	9	[104]	CLOSURE  	7 7
+	10	[106]	MOVE     	8 2
+	11	[106]	LOADI    	9 -5
+	12	[106]	CALL     	8 2 2	; 1 in 1 out
+	13	[106]	MOVE     	9 2
+	14	[106]	LOADI    	10 0
+	15	[106]	CALL     	9 2 2	; 1 in 1 out
+	16	[106]	MOVE     	10 2
+	17	[106]	LOADI    	11 3
+	18	[106]	CALL     	10 2 2	; 1 in 1 out
+	19	[106]	MOVE     	11 2
+	20	[106]	LOADI    	12 42
+	21	[106]	CALL     	11 2 2	; 1 in 1 out
+	22	[107]	MOVE     	12 3
+	23	[107]	LOADI    	13 100
+	24	[107]	CALL     	12 2 2	; 1 in 1 out
+	25	[107]	MOVE     	13 4
+	26	[107]	LOADI    	14 7
+	27	[107]	CALL     	13 2 2	; 1 in 1 out
+	28	[107]	MOVE     	14 1
+	29	[107]	LOADI    	15 10
+	30	[107]	MOVE     	16 5
+	31	[107]	CALL     	16 1 0	; 0 in all out
+	32	[107]	CALL     	14 0 2	; all in 1 out
+	33	[107]	MOVE     	15 1
+	34	[107]	LOADI    	16 5
+	35	[107]	MOVE     	17 6
+	36	[107]	CALL     	17 1 0	; 0 in all out
+	37	[107]	CALL     	15 0 2	; all in 1 out
+	38	[108]	MOVE     	16 1
+	39	[108]	LOADI    	17 9
+	40	[108]	MOVE     	18 7
+	41	[108]	LOADI    	19 1
+	42	[108]	LOADFALSE	20
+	43	[108]	CALL     	18 3 0	; 2 in all out
+	44	[108]	CALL     	16 0 2	; all in 1 out
+	45	[108]	MOVE     	17 1
+	46	[108]	LOADI    	18 9
+	47	[108]	MOVE     	19 7
+	48	[108]	LOADNIL  	20 0	; 1 out
+	49	[108]	LOADK    	21 0	; "y"
+	50	[108]	CALL     	19 3 0	; 2 in all out
+	51	[108]	CALL     	17 0 0	; all in all out
+	52	[108]	RETURN   	8 0 1k	; all out
+	53	[108]	RETURN   	8 1 1k	; 0 out
+constants (1):
+	0	S	"y"
+locals (8):
+	0	show	3	54
+	1	list	4	54
+	2	classify	5	54
+	3	sum_while	6	54
+	4	count_repeat	7	54
+	5	loops	8	54
+	6	jumps	9	54
+	7	logic	10	54
+upvalues (1):
+	0	_ENV	1	0
+
+function <vm_control.lua:6,11> (14 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 6 constants, 0 functions
+	1	[7]	EQK      	0 0 0	; nil
+	2	[7]	JMP      	2	; to 5
+	3	[7]	LOADK    	1 1	; "nil"
+	4	[7]	RETURN1  	1
+	5	[8]	EQK      	0 2 0	; true
+	6	[8]	JMP      	2	; to 9
+	7	[8]	LOADK    	1 3	; "true"
+	8	[8]	RETURN1  	1
+	9	[9]	EQK      	0 4 0	; false
+	10	[9]	JMP      	2	; to 13
+	11	[9]	LOADK    	1 5	; "false"
+	12	[9]	RETURN1  	1
+	13	[10]	RETURN1  	0
+	14	[11]	RETURN0  	
+constants (6):
+	0	N	nil
+	1	S	"nil"
+	2	B	true
+	3	S	"true"
+	4	B	false
+	5	S	"false"
+locals (1):
+	0	v	1	15
+upvalues (0):
+
+function <vm_control.lua:14,18> (23 instructions)
+2+ params, 7 slots, 2 upvalues, 2 locals, 2 constants, 0 functions
+	1	[14]	VARARGPREP	2
+	2	[15]	EQI      	0 0 0
+	3	[15]	JMP      	2	; to 6
+	4	[15]	LOADK    	2 0	; ""
+	5	[15]	RETURN   	2 2 3	; 1 out
+	6	[16]	EQI      	0 1 0
+	7	[16]	JMP      	4	; to 12
+	8	[16]	GETUPVAL 	2 0	; show
+	9	[16]	MOVE     	3 1
+	10	[16]	TAILCALL 	2 2 3	; 1 in
+	11	[16]	RETURN   	2 0 3	; all out
+	12	[17]	GETUPVAL 	2 0	; show
+	13	[17]	MOVE     	3 1
+	14	[17]	CALL     	2 2 2	; 1 in 1 out
+	15	[17]	LOADK    	3 1	; ","
+	16	[17]	GETUPVAL 	4 1	; list
+	17	[17]	ADDI     	5 0 -1
+	18	[17]	MMBINI   	0 1 7 0	; __sub
+	19	[17]	VARARG   	6 0	; all out
+	20	[17]	CALL     	4 0 2	; all in 1 out
+	21	[17]	CONCAT   	2 3
+	22	[17]	RETURN   	2 2 3	; 1 out
+	23	[18]	RETURN   	2 1 3	; 0 out
+constants (2):
+	0	S	""
+	1	S	","
+locals (2):
+	0	n	1	24
+	1	first	1	24
+upvalues (2):
+	0	show	1	0
+	1	list	1	1
+
+function <vm_control.lua:20,30> (18 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 4 constants, 0 functions
+	1	[21]	LTI      	0 0 0
+	2	[21]	JMP      	3	; to 6
+	3	[22]	LOADK    	1 0	; "negative"
+	4	[22]	RETURN1  	1
+	5	[22]	JMP      	12	; to 18
+	6	[23]	EQI      	0 0 0
+	7	[23]	JMP      	3	; to 11
+	8	[24]	LOADK    	1 1	; "zero"
+	9	[24]	RETURN1  	1
+	10	[24]	JMP      	7	; to 18
+	11	[25]	LTI      	0 10 0
+	12	[25]	JMP      	3	; to 16
+	13	[26]	LOADK    	1 2	; "small"
+	14	[26]	RETURN1  	1
+	15	[26]	JMP      	2	; to 18
+	16	[28]	LOADK    	1 3	; "large"
+	17	[28]	RETURN1  	1
+	18	[30]	RETURN0  	
+constants (4):
+	0	S	"negative"
+	1	S	"zero"
+	2	S	"small"
+	3	S	"large"
+locals (1):
+	0	n	1	19
+upvalues (0):
+
+function <vm_control.lua:32,39> (11 instructions)
+1 param, 3 slots, 0 upvalues, 3 locals, 0 constants, 0 functions
+	1	[33]	LOADI    	1 0
+	2	[33]	LOADI    	2 1
+	3	[34]	LE       	2 0 0
+	4	[34]	JMP      	5	; to 10
+	5	[35]	ADD      	1 1 2
+	6	[35]	MMBIN    	1 2 6	; __add
+	7	[36]	ADDI     	2 2 1
+	8	[36]	MMBINI   	2 1 6 0	; __add
+	9	[36]	JMP      	-7	; to 3
+	10	[38]	RETURN1  	1
+	11	[39]	RETURN0  	
+constants (0):
+locals (3):
+	0	n	1	12
+	1	s	3	12
+	2	k	3	12
+upvalues (0):
+
+function <vm_control.lua:41,48> (9 instructions)
+1 param, 3 slots, 0 upvalues, 3 locals, 1 constant, 0 functions
+	1	[42]	LOADI    	1 0
+	2	[44]	MULK     	2 1 0	; 2
+	3	[44]	MMBINK   	1 0 8 0	; __mul 2
+	4	[45]	ADDI     	1 1 1
+	5	[45]	MMBINI   	1 1 6 0	; __add
+	6	[46]	LE       	0 2 0
+	7	[46]	JMP      	-6	; to 2
+	8	[47]	RETURN1  	1
+	9	[48]	RETURN0  	
+constants (1):
+	0	I	2
+locals (3):
+	0	n	1	10
+	1	k	2	10
+	2	twice	4	8
+upvalues (0):
+
+function <vm_control.lua:50,66> (99 instructions)
+0 params, 20 slots, 0 upvalues, 50 locals, 10 constants, 0 functions
+	1	[51]	LOADI    	0 0
+	2	[51]	LOADI    	1 0
+	3	[51]	LOADI    	2 0
+	4	[51]	LOADF    	3 0
+	5	[51]	LOADI    	4 0
+	6	[51]	LOADI    	5 0
+	7	[51]	LOADI    	6 0
+	8	[52]	LOADI    	7 1
+	9	[52]	LOADI    	8 10
+	10	[52]	LOADI    	9 1
+	11	[52]	FORPREP  	7 2	; exit to 15
+	12	[52]	ADD      	0 0 10
+	13	[52]	MMBIN    	0 10 6	; __add
+	14	[52]	FORLOOP  	7 3	; to 12
+	15	[53]	LOADI    	7 10
+	16	[53]	LOADI    	8 1
+	17	[53]	LOADI    	9 -1
+	18	[53]	FORPREP  	7 4	; exit to 24
+	19	[53]	MULK     	11 1 0	; 2
+	20	[53]	MMBINK   	1 0 8 0	; __mul 2
+	21	[53]	ADD      	1 11 10
+	22	[53]	MMBIN    	11 10 6	; __add
+	23	[53]	FORLOOP  	7 5	; to 19
+	24	[54]	LOADI    	7 1
+	25	[54]	LOADI    	8 20
+	26	[54]	LOADI    	9 3
+	27	[54]	FORPREP  	7 2	; exit to 31
+	28	[54]	ADD      	2 2 10
+	29	[54]	MMBIN    	2 10 6	; __add
+	30	[54]	FORLOOP  	7 3	; to 28
+	31	[55]	LOADK    	7 1	; 0.5
+	32	[55]	LOADF    	8 2
+	33	[55]	LOADK    	9 2	; 0.25
+	34	[55]	FORPREP  	7 2	; exit to 38
+	35	[55]	ADD      	3 3 10
+	36	[55]	MMBIN    	3 10 6	; __add
+	37	[55]	FORLOOP  	7 3	; to 35
+	38	[56]	LOADI    	7 1
+	39	[56]	LOADK    	8 3	; 3.7
+	40	[56]	LOADI    	9 1
+	41	[56]	FORPREP  	7 2	; exit to 45
+	42	[56]	ADD      	4 4 10
+	43	[56]	MMBIN    	4 10 6	; __add
+	44	[56]	FORLOOP  	7 3	; to 42
+	45	[57]	LOADI    	7 5
+	46	[57]	LOADI    	8 1
+	47	[57]	LOADI    	9 1
+	48	[57]	FORPREP  	7 2	; exit to 52
+	49	[57]	ADDI     	5 5 1
+	50	[57]	MMBINI   	5 1 6 0	; __add
+	51	[57]	FORLOOP  	7 3	; to 49
+	52	[58]	LOADK    	7 4	; 9223372036854775806
+	53	[58]	LOADK    	8 5	; 9223372036854775807
+	54	[58]	LOADI    	9 1
+	55	[58]	FORPREP  	7 2	; exit to 59
+	56	[58]	ADDI     	6 6 1
+	57	[58]	MMBINI   	6 1 6 0	; __add
+	58	[58]	FORLOOP  	7 3	; to 56
+	59	[59]	LOADNIL  	7 0	; 1 out
+	60	[60]	LOADI    	8 1
+	61	[60]	LOADI    	9 3
+	62	[60]	LOADI    	10 1
+	63	[60]	FORPREP  	8 3	; exit to 68
+	64	[60]	MULK     	11 11 6	; 10
+	65	[60]	MMBINK   	11 6 8 0	; __mul 10
+	66	[60]	MOVE     	7 11
+	67	[60]	FORLOOP  	8 4	; to 64
+	68	[61]	LOADI    	8 0
+	69	[62]	LOADI    	9 1
+	70	[62]	LOADI    	10 1
+	71	[62]	DIVK     	10 10 7	; 0
+	72	[62]	MMBINK   	10 7 11 0	; __div 0
+	73	[62]	LOADI    	11 1
+	74	[62]	FORPREP  	9 4	; exit to 80
+	75	[62]	ADDI     	8 8 1
+	76	[62]	MMBINI   	8 1 6 0	; __add
+	77	[62]	EQI      	8 3 1
+	78	[62]	JMP      	1	; to 80
+	79	[62]	FORLOOP  	9 5	; to 75
+	80	[63]	LOADI    	9 0
+	81	[64]	LOADK    	10 8	; "1"
+	82	[64]	LOADK    	11 9	; "3"
+	83	[64]	LOADI    	12 1
+	84	[64]	FORPREP  	10 2	; exit to 88
+	85	[64]	ADD      	9 9 13
+	86	[64]	MMBIN    	9 13 6	; __add
+	87	[64]	FORLOOP  	10 3	; to 85
+	88	[65]	MOVE     	10 0
+	89	[65]	MOVE     	11 1
+	90	[65]	MOVE     	12 2
+	91	[65]	MOVE     	13 3
+	92	[65]	MOVE     	14 4
+	93	[65]	MOVE     	15 5
+	94	[65]	MOVE     	16 6
+	95	[65]	MOVE     	17 7
+	96	[65]	MOVE     	18 8
+	97	[65]	MOVE     	19 9
+	98	[65]	RETURN   	10 11 0	; 10 out
+	99	[66]	RETURN0  	
+constants (10):
+	0	I	2
+	1	F	0.5
+	2	F	0.25
+	3	F	3.7
+	4	I	9223372036854775806
+	5	I	9223372036854775807
+	6	I	10
+	7	I	0
+	8	S	"1"
+	9	S	"3"
+locals (50):
+	0	up	8	100
+	1	down	8	100
+	2	by3	8	100
+	3	floats	8	100
+	4	clipped	8	100
+	5	empty	8	100
+	6	wide	8	100
+	7	(for state)	11	15
+	8	(for state)	11	15
+	9	(for state)	11	15
+	10	v	12	14
+	11	(for state)	18	24
+	12	(for state)	18	24
+	13	(for state)	18	24
+	14	v	19	23
+	15	(for state)	27	31
+	16	(for state)	27	31
+	17	(for state)	27	31
+	18	v	28	30
+	19	(for state)	34	38
+	20	(for state)	34	38
+	21	(for state)	34	38
+	22	v	35	37
+	23	(for state)	41	45
+	24	(for state)	41	45
+	25	(for state)	41	45
+	26	v	42	44
+	27	(for state)	48	52
+	28	(for state)	48	52
+	29	(for state)	48	52
+	30	v	49	51
+	31	(for state)	55	59
+	32	(for state)	55	59
+	33	(for state)	55	59
+	34	v	56	58
+	35	last	60	100
+	36	(for state)	63	68
+	37	(for state)	63	68
+	38	(for state)	63	68
+	39	v	64	67
+	40	huge	69	100
+	41	(for state)	74	80
+	42	(for state)	74	80
+	43	(for state)	74	80
+	44	v	75	79
+	45	strings	81	100
+	46	(for state)	84	88
+	47	(for state)	84	88
+	48	(for state)	84	88
+	49	v	85	87
+upvalues (0):
+
+function <vm_control.lua:68,99> (59 instructions)
+0 params, 12 slots, 0 upvalues, 21 locals, 1 constant, 0 functions
+	1	[69]	LOADNIL  	0 0	; 1 out
+	2	[70]	LOADI    	1 1
+	3	[70]	LOADI    	2 100
+	4	[70]	LOADI    	3 1
+	5	[70]	FORPREP  	1 6	; exit to 13
+	6	[71]	MUL      	5 4 4
+	7	[71]	MMBIN    	4 4 8	; __mul
+	8	[71]	GTI      	5 50 0
+	9	[71]	JMP      	2	; to 12
+	10	[72]	MOVE     	0 4
+	11	[73]	JMP      	1	; to 13
+	12	[70]	FORLOOP  	1 7	; to 6
+	13	[76]	LOADI    	1 0
+	14	[78]	ADDI     	1 1 1
+	15	[78]	MMBINI   	1 1 6 0	; __add
+	16	[79]	LTI      	1 5 0
+	17	[79]	JMP      	1	; to 19
+	18	[79]	JMP      	-5	; to 14
+	19	[80]	LOADI    	2 0
+	20	[81]	LOADI    	3 1
+	21	[81]	LOADI    	4 10
+	22	[81]	LOADI    	5 1
+	23	[81]	FORPREP  	3 7	; exit to 32
+	24	[82]	MODK     	7 6 0	; 2
+	25	[82]	MMBINK   	6 0 9 0	; __mod 2
+	26	[82]	EQI      	7 0 0
+	27	[82]	JMP      	1	; to 29
+	28	[82]	JMP      	2	; to 31
+	29	[83]	ADD      	2 2 6
+	30	[83]	MMBIN    	2 6 6	; __add
+	31	[81]	FORLOOP  	3 8	; to 24
+	32	[86]	LOADI    	3 0
+	33	[87]	LOADI    	4 1
+	34	[87]	LOADI    	5 3
+	35	[87]	LOADI    	6 1
+	36	[87]	FORPREP  	4 9	; exit to 47
+	37	[88]	LOADI    	8 1
+	38	[88]	LOADI    	9 3
+	39	[88]	LOADI    	10 1
+	40	[88]	FORPREP  	8 4	; exit to 46
+	41	[89]	LT       	7 11 1
+	42	[89]	JMP      	3	; to 46
+	43	[90]	ADDI     	3 3 1
+	44	[90]	MMBINI   	3 1 6 0	; __add
+	45	[88]	FORLOOP  	8 5	; to 41
+	46	[87]	FORLOOP  	4 10	; to 37
+	47	[93]	LOADI    	4 0
+	48	[95]	ADDI     	4 4 1
+	49	[95]	MMBINI   	4 1 6 0	; __add
+	50	[96]	GEI      	4 4 1
+	51	[96]	JMP      	1	; to 53
+	52	[96]	JMP      	-5	; to 48
+	53	[98]	MOVE     	5 0
+	54	[98]	MOVE     	6 1
+	55	[98]	MOVE     	7 2
+	56	[98]	MOVE     	8 3
+	57	[98]	MOVE     	9 4
+	58	[98]	RETURN   	5 6 0	; 5 out
+	59	[99]	RETURN0  	
+constants (1):
+	0	I	2
+locals (21):
+	0	found	2	60
+	1	(for state)	5	13
+	2	(for state)	5	13
+	3	(for state)	5	13
+	4	x	6	12
+	5	n	14	60
+	6	odd	20	60
+	7	(for state)	23	32
+	8	(for state)	23	32
+	9	(for state)	23	32
+	10	k	24	31
+	11	nested	33	60
+	12	(for state)	36	47
+	13	(for state)	36	47
+	14	(for state)	36	47
+	15	a	37	46
+	16	(for state)	40	46
+	17	(for state)	40	46
+	18	(for state)	40	46
+	19	b	41	45
+	20	w	48	60
+upvalues (0):
+
+function <vm_control.lua:101,104> (32 instructions)
+2 params, 11 slots, 0 upvalues, 2 locals, 2 constants, 0 functions
+	1	[102]	TESTSET  	2 0 0
+	2	[102]	JMP      	1	; to 4
+	3	[102]	MOVE     	2 1
+	4	[102]	TESTSET  	3 0 1
+	5	[102]	JMP      	1	; to 7
+	6	[102]	MOVE     	3 1
+	7	[102]	NOT      	4 0
+	8	[102]	TESTSET  	5 0 0
+	9	[102]	JMP      	1	; to 11
+	10	[102]	LOADNIL  	5 0	; 1 out
+	11	[102]	LOADFALSE	6
+	12	[102]	LOADNIL  	7 0	; 1 out
+	13	[103]	TEST     	0 0
+	14	[103]	JMP      	3	; to 18
+	15	[103]	LOADI    	8 1
+	16	[103]	TEST     	8 1
+	17	[103]	JMP      	1	; to 19
+	18	[103]	LOADI    	8 2
+	19	[103]	TEST     	1 0
+	20	[103]	JMP      	3	; to 24
+	21	[103]	LOADI    	9 1
+	22	[103]	TEST     	9 1
+	23	[103]	JMP      	1	; to 25
+	24	[103]	LOADI    	9 2
+	25	[103]	EQ       	0 1 0
+	26	[103]	JMP      	3	; to 30
+	27	[103]	LOADK    	10 0	; "same"
+	28	[103]	TEST     	10 1
+	29	[103]	JMP      	1	; to 31
+	30	[103]	LOADK    	10 1	; "different"
+	31	[103]	RETURN   	2 10 0	; 9 out
+	32	[104]	RETURN0  	
+constants (2):
+	0	S	"same"
+	1	S	"different"
+locals (2):
+	0	x	1	33
+	1	y	1	33
+upvalues (0):

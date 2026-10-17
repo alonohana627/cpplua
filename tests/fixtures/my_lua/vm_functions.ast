@@ -1,0 +1,299 @@
+Chunk
+  LocalFunction show
+    Function(v)
+      If
+        If
+          Binary ==
+            Name v (local 0)
+            Nil
+          Then
+            Return
+              String "nil"
+      If
+        If
+          Binary ==
+            Name v (local 0)
+            True
+          Then
+            Return
+              String "true"
+      If
+        If
+          Binary ==
+            Name v (local 0)
+            False
+          Then
+            Return
+              String "false"
+      Return
+        Name v (local 0)
+  LocalFunction list
+    Function(n, first, ...) [upvalues: show, list]
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              String ""
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 1
+          Then
+            Return
+              Call
+                Name show (upvalue 0)
+                Name first (local 1)
+      Return
+        Binary ..
+          Call
+            Name show (upvalue 0)
+            Name first (local 1)
+          Binary ..
+            String ","
+            Call
+              Name list (upvalue 1)
+              Binary -
+                Name n (local 0)
+                Integer 1
+              Vararg
+  LocalFunction three
+    Function()
+      Return
+        Integer 1
+        Integer 2
+        Integer 3
+  LocalFunction none
+    Function()
+  LocalFunction id
+    Function(...)
+      Return
+        Vararg
+  LocalFunction pick
+    Function(a, b, c)
+      Return
+        Name a (local 0)
+        Name b (local 1)
+        Name c (local 2)
+  LocalFunction sum
+    Function(...)
+      Local a, b, c, d
+        Vararg
+      Return
+        Binary +
+          Binary +
+            Binary +
+              Paren
+                Binary or
+                  Name a (local 0)
+                  Integer 0
+              Paren
+                Binary or
+                  Name b (local 1)
+                  Integer 0
+            Paren
+              Binary or
+                Name c (local 2)
+                Integer 0
+          Paren
+            Binary or
+              Name d (local 3)
+              Integer 0
+  LocalFunction rest
+    Function(first, ...)
+      Return
+        Vararg
+  LocalFunction loop
+    Function(n, acc) [upvalues: loop]
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              Name acc (local 1)
+      Return
+        Call
+          Name loop (upvalue 0)
+          Binary -
+            Name n (local 0)
+            Integer 1
+          Binary +
+            Name acc (local 1)
+            Integer 1
+  LocalFunction fact
+    Function(n) [upvalues: fact]
+      If
+        If
+          Binary <=
+            Name n (local 0)
+            Integer 1
+          Then
+            Return
+              Integer 1
+      Return
+        Binary *
+          Name n (local 0)
+          Call
+            Name fact (upvalue 0)
+            Binary -
+              Name n (local 0)
+              Integer 1
+  LocalFunction vararg_positions
+    Function(...)
+      Local a, b
+        Vararg
+      Local x
+        Paren
+          Vararg
+      Return
+        Name a (local 0)
+        Name b (local 1)
+        Name x (local 2)
+        Vararg
+  LocalFunction adjust
+    Function() [upvalues: three]
+      Local a, b, c, d
+        Call
+          Name three (upvalue 0)
+      Local e, f
+        Call
+          Name three (upvalue 0)
+        Integer 10
+      Local g
+        Paren
+          Call
+            Name three (upvalue 0)
+      Return
+        Name a (local 0)
+        Name b (local 1)
+        Name c (local 2)
+        Name d (local 3)
+        Name e (local 4)
+        Name f (local 5)
+        Name g (local 6)
+  LocalFunction forward
+    Function(...) [upvalues: pick]
+      Return
+        Call
+          Name pick (upvalue 0)
+          Vararg
+  LocalFunction many
+    Function(...)
+      Return
+        Vararg
+        Vararg
+  Return
+    Call
+      Name list (local 1)
+      Integer 3
+      Call
+        Name pick (local 5)
+        Call
+          Name three (local 2)
+    Call
+      Name list (local 1)
+      Integer 3
+      Call
+        Name pick (local 5)
+        Call
+          Name three (local 2)
+        Integer 4
+    Call
+      Name list (local 1)
+      Integer 3
+      Call
+        Name pick (local 5)
+        Call
+          Name none (local 3)
+    Call
+      Name list (local 1)
+      Integer 3
+      Call
+        Name pick (local 5)
+        Call
+          Name id (local 4)
+          Integer 7
+          Integer 8
+    Call
+      Name sum (local 6)
+      Integer 1
+      Integer 2
+    Call
+      Name sum (local 6)
+      Call
+        Name three (local 2)
+    Call
+      Name sum (local 6)
+    Call
+      Name list (local 1)
+      Integer 2
+      Call
+        Name rest (local 7)
+        Integer 1
+        Integer 2
+        Integer 3
+    Call
+      Name list (local 1)
+      Integer 2
+      Call
+        Name id (local 4)
+    Call
+      Name list (local 1)
+      Integer 2
+      Call
+        Name id (local 4)
+        Nil
+        Nil
+    Call
+      Name loop (local 8)
+      Integer 100000
+      Integer 0
+    Call
+      Name fact (local 9)
+      Integer 20
+    Call
+      Name list (local 1)
+      Integer 5
+      Call
+        Name vararg_positions (local 10)
+        Integer 5
+        Integer 6
+        Integer 7
+    Call
+      Name list (local 1)
+      Integer 7
+      Call
+        Name adjust (local 11)
+    Call
+      Name list (local 1)
+      Integer 2
+      Call
+        Name id (local 4)
+        Call
+          Name id (local 4)
+          Call
+            Name id (local 4)
+            Integer 1
+            Integer 2
+    Call
+      Name list (local 1)
+      Integer 3
+      Call
+        Name forward (local 12)
+        Integer 9
+        Integer 8
+        Integer 7
+        Integer 6
+    Call
+      Name list (local 1)
+      Integer 4
+      Call
+        Name many (local 13)
+        Integer 1
+        Integer 2
+        Integer 3

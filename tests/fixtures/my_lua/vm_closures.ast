@@ -1,0 +1,401 @@
+Chunk
+  LocalFunction show
+    Function(v)
+      If
+        If
+          Binary ==
+            Name v (local 0)
+            Nil
+          Then
+            Return
+              String "nil"
+      If
+        If
+          Binary ==
+            Name v (local 0)
+            True
+          Then
+            Return
+              String "true"
+      If
+        If
+          Binary ==
+            Name v (local 0)
+            False
+          Then
+            Return
+              String "false"
+      Return
+        Name v (local 0)
+  LocalFunction list
+    Function(n, first, ...) [upvalues: show, list]
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              String ""
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 1
+          Then
+            Return
+              Call
+                Name show (upvalue 0)
+                Name first (local 1)
+      Return
+        Binary ..
+          Call
+            Name show (upvalue 0)
+            Name first (local 1)
+          Binary ..
+            String ","
+            Call
+              Name list (upvalue 1)
+              Binary -
+                Name n (local 0)
+                Integer 1
+              Vararg
+  LocalFunction counter
+    Function()
+      Local n
+        Integer 0
+      LocalFunction inc
+        Function(step) [upvalues: n]
+          Assign
+            Targets
+              Name n (upvalue 0)
+            Values
+              Binary +
+                Name n (upvalue 0)
+                Paren
+                  Binary or
+                    Name step (local 0)
+                    Integer 1
+          Return
+            Name n (upvalue 0)
+      LocalFunction get
+        Function() [upvalues: n]
+          Return
+            Name n (upvalue 0)
+      Return
+        Name inc (local 1)
+        Name get (local 2)
+  Local inc, get
+    Call
+      Name counter (local 2)
+  CallStatement
+    Call
+      Name inc (local 3)
+  CallStatement
+    Call
+      Name inc (local 3)
+      Integer 10
+  Local shared
+    Call
+      Name get (local 4)
+  Local f1, f2, f3
+  NumericFor i
+    Integer 1
+    Integer 3
+    Body
+      LocalFunction f
+        Function() [upvalues: i]
+          Return
+            Name i (upvalue 0)
+      If
+        If
+          Binary ==
+            Name i (local 12)
+            Integer 1
+          Then
+            Assign
+              Targets
+                Name f1 (local 6)
+              Values
+                Name f (local 13)
+        ElseIf
+          Binary ==
+            Name i (local 12)
+            Integer 2
+          Then
+            Assign
+              Targets
+                Name f2 (local 7)
+              Values
+                Name f (local 13)
+        Else
+          Assign
+            Targets
+              Name f3 (local 8)
+            Values
+              Name f (local 13)
+  Local w1, w2
+  Local k
+    Integer 0
+  While
+    Binary <
+      Name k (local 11)
+      Integer 2
+    Body
+      Assign
+        Targets
+          Name k (local 11)
+        Values
+          Binary +
+            Name k (local 11)
+            Integer 1
+      Local captured
+        Binary *
+          Name k (local 11)
+          Integer 100
+      If
+        If
+          Binary ==
+            Name k (local 11)
+            Integer 1
+          Then
+            Assign
+              Targets
+                Name w1 (local 9)
+              Values
+                Function() [upvalues: captured]
+                  Return
+                    Name captured (upvalue 0)
+        Else
+          Assign
+            Targets
+              Name w2 (local 10)
+            Values
+              Function() [upvalues: captured]
+                Return
+                  Name captured (upvalue 0)
+  LocalFunction outer
+    Function()
+      Local x
+        Integer 1
+      LocalFunction middle
+        Function() [upvalues: x]
+          LocalFunction inner
+            Function() [upvalues: x]
+              Assign
+                Targets
+                  Name x (upvalue 0)
+                Values
+                  Binary *
+                    Name x (upvalue 0)
+                    Integer 2
+              Return
+                Name x (upvalue 0)
+          Return
+            Name inner (local 0)
+      Return
+        Call
+          Name middle (local 1)
+        Function() [upvalues: x]
+          Return
+            Name x (upvalue 0)
+  Local deep, peek
+    Call
+      Name outer (local 12)
+  CallStatement
+    Call
+      Name deep (local 13)
+  CallStatement
+    Call
+      Name deep (local 13)
+  Local b1, b2
+  NumericFor i
+    Integer 1
+    Integer 10
+    Body
+      Local v
+        Name i (local 20)
+      If
+        If
+          Binary ==
+            Name i (local 20)
+            Integer 1
+          Then
+            Assign
+              Targets
+                Name b1 (local 15)
+              Values
+                Function() [upvalues: v]
+                  Return
+                    Name v (upvalue 0)
+      If
+        If
+          Binary ==
+            Name i (local 20)
+            Integer 2
+          Then
+            Assign
+              Targets
+                Name b2 (local 16)
+              Values
+                Function() [upvalues: v]
+                  Return
+                    Name v (upvalue 0)
+            Break
+  Local g1, g2
+  Local round
+    Integer 0
+  Label top
+  Assign
+    Targets
+      Name round (local 19)
+    Values
+      Binary +
+        Name round (local 19)
+        Integer 1
+  Do
+    Local r
+      Name round (local 19)
+    If
+      If
+        Binary ==
+          Name round (local 19)
+          Integer 1
+        Then
+          Assign
+            Targets
+              Name g1 (local 17)
+            Values
+              Function() [upvalues: r]
+                Return
+                  Name r (upvalue 0)
+      Else
+        Assign
+          Targets
+            Name g2 (local 18)
+          Values
+            Function() [upvalues: r]
+              Return
+                Name r (upvalue 0)
+  If
+    If
+      Binary <
+        Name round (local 19)
+        Integer 2
+      Then
+        Goto top
+  LocalFunction fib
+    Function(n) [upvalues: fib]
+      If
+        If
+          Binary <
+            Name n (local 0)
+            Integer 2
+          Then
+            Return
+              Name n (local 0)
+      Return
+        Binary +
+          Call
+            Name fib (upvalue 0)
+            Binary -
+              Name n (local 0)
+              Integer 1
+          Call
+            Name fib (upvalue 0)
+            Binary -
+              Name n (local 0)
+              Integer 2
+  Local value
+    String "a"
+  LocalFunction set
+    Function(v) [upvalues: value]
+      Assign
+        Targets
+          Name value (upvalue 0)
+        Values
+          Name v (local 0)
+  LocalFunction read
+    Function() [upvalues: value]
+      Return
+        Name value (upvalue 0)
+  CallStatement
+    Call
+      Name set (local 22)
+      String "b"
+  Local after_set
+    Call
+      Name read (local 23)
+  Assign
+    Targets
+      Name value (local 21)
+    Values
+      String "c"
+  LocalFunction make_adder
+    Function(x)
+      Return
+        Function(...) [upvalues: x]
+          Local y
+            Vararg
+          Return
+            Binary +
+              Name x (upvalue 0)
+              Name y (local 0)
+  Local add5
+    Call
+      Name make_adder (local 25)
+      Integer 5
+  LocalFunction tail
+    Function(n) [upvalues: add5]
+      Return
+        Call
+          Name add5 (upvalue 0)
+          Name n (local 0)
+  Return
+    Name shared (local 5)
+    Call
+      Name list (local 1)
+      Integer 3
+      Call
+        Name f1 (local 6)
+      Call
+        Name f2 (local 7)
+      Call
+        Name f3 (local 8)
+    Call
+      Name list (local 1)
+      Integer 2
+      Call
+        Name w1 (local 9)
+      Call
+        Name w2 (local 10)
+    Call
+      Name list (local 1)
+      Integer 2
+      Call
+        Name deep (local 13)
+      Call
+        Name peek (local 14)
+    Call
+      Name list (local 1)
+      Integer 2
+      Call
+        Name b1 (local 15)
+      Call
+        Name b2 (local 16)
+    Call
+      Name list (local 1)
+      Integer 2
+      Call
+        Name g1 (local 17)
+      Call
+        Name g2 (local 18)
+    Call
+      Name fib (local 20)
+      Integer 15
+    Name after_set (local 24)
+    Call
+      Name read (local 23)
+    Call
+      Name tail (local 27)
+      Integer 10

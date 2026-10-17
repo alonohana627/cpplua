@@ -217,6 +217,7 @@ struct MethodCallExpr {
     ExprId object;
     TextRange method;
     IdRange<ExprId> arguments;
+    int method_line = 0; // where the method name is
 
     bool operator==(const MethodCallExpr&) const = default;
 };
@@ -337,6 +338,7 @@ struct RepeatStat {
 struct IfClause {
     ExprId condition;
     Block body;
+    int then_line = 0; // where `then` is (its test is compiled there)
 
     bool operator==(const IfClause&) const = default;
 };
@@ -422,23 +424,24 @@ using Stat = std::variant<ReturnStat, CallStat, AssignStat, LocalStat, DoStat, W
 // expressions, function statements and local functions.
 // A local of an enclosing function that a function uses, captured when the
 // closure is created (G5.6).
-struct Upvalue {
+struct UpvalueDesc {
     TextRange name;
     // Where the enclosing function holds it: its local slot `index`, or (when
     // it is itself an upvalue there) its upvalue `index`.
     bool from_parent_local = false;
     std::uint32_t index = 0;
 
-    bool operator==(const Upvalue&) const = default;
+    bool operator==(const UpvalueDesc&) const = default;
 };
 
 struct Function {
     IdRange<LocalNameId> parameters; // in order; `self` first for methods
     bool is_vararg = false;          // the parameter list ends with `...`
+    int vararg_line = 0;             // where that `...` is
     IdRange<UpvalueId> upvalues;     // in order of first use; the main chunk's is _ENV
     Block body;
     int line = 0;     // where `function` is
-    int end_line = 0; // where the closing `end` is
+    int end_line = 0; // where the closing `end` is; for the main chunk, its last token
 
     bool operator==(const Function&) const = default;
 };
@@ -461,20 +464,27 @@ public:
     [[nodiscard]] const Block& root() const { return function(main_).body; }
 
     // ---- Nodes ----
-    // Every node records the line it starts on, kept in a parallel vector
-    // (structure of arrays) so the node variants stay small.
+    // Every node records its line, kept in a parallel vector (structure of
+    // arrays) so the node variants stay small: the line it starts on (for a
+    // binary or unary operator, the operator's line; for a call, the line of
+    // its arguments), and the line of its last token, which the compiler
+    // needs to give each instruction Lua's line (stage 5).
 
-    ExprId add_expression(Expr expr, int line);
+    ExprId add_expression(Expr expr, int line, int end_line = 0);
 
     [[nodiscard]] const Expr& expression(ExprId id) const { return expressions_[id.index]; }
 
     [[nodiscard]] int line(ExprId id) const { return expression_lines_[id.index]; }
 
-    StatId add_statement(Stat stat, int line);
+    [[nodiscard]] int end_line(ExprId id) const { return expression_end_lines_[id.index]; }
+
+    StatId add_statement(Stat stat, int line, int end_line = 0);
 
     [[nodiscard]] const Stat& statement(StatId id) const { return statements_[id.index]; }
 
     [[nodiscard]] int line(StatId id) const { return statement_lines_[id.index]; }
+
+    [[nodiscard]] int end_line(StatId id) const { return statement_end_lines_[id.index]; }
 
     // Function bodies record their own lines (Function::line, end_line).
     FunctionId add_function(const Function& function);
@@ -492,7 +502,7 @@ public:
     IdRange<FieldId> add_field_list(std::span<const TableField> fields);
     IdRange<LocalNameId> add_local_name_list(std::span<const LocalName> names);
     IdRange<IfClauseId> add_if_clause_list(std::span<const IfClause> clauses);
-    IdRange<UpvalueId> add_upvalue_list(std::span<const Upvalue> upvalues);
+    IdRange<UpvalueId> add_upvalue_list(std::span<const UpvalueDesc> upvalues);
 
     // The statements of a block, in order.
     [[nodiscard]] std::span<const StatId> statements(const Block& block) const;
@@ -500,7 +510,7 @@ public:
     [[nodiscard]] std::span<const TableField> fields(IdRange<FieldId> range) const;
     [[nodiscard]] std::span<const LocalName> local_names(IdRange<LocalNameId> range) const;
     [[nodiscard]] std::span<const IfClause> if_clauses(IdRange<IfClauseId> range) const;
-    [[nodiscard]] std::span<const Upvalue> upvalues(IdRange<UpvalueId> range) const;
+    [[nodiscard]] std::span<const UpvalueDesc> upvalues(IdRange<UpvalueId> range) const;
 
     // ---- Text ----
 
@@ -515,8 +525,10 @@ private:
 
     std::vector<Expr> expressions_;
     std::vector<int> expression_lines_;
+    std::vector<int> expression_end_lines_;
     std::vector<Stat> statements_;
     std::vector<int> statement_lines_;
+    std::vector<int> statement_end_lines_;
     std::vector<Function> functions_;
 
     std::vector<StatId> statement_lists_;
@@ -524,7 +536,7 @@ private:
     std::vector<TableField> field_lists_; // fields are small, so stored directly
     std::vector<LocalName> local_name_lists_;
     std::vector<IfClause> if_clause_lists_;
-    std::vector<Upvalue> upvalue_lists_;
+    std::vector<UpvalueDesc> upvalue_lists_;
 
     std::string text_;
 };
