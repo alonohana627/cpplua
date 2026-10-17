@@ -1,0 +1,24 @@
+3:integer	3:integer	2.5:float	2.0:float
+2:integer	2:integer	2.0:float
+1:integer	-1.5:float	7:integer	7.0:float
+-9223372036854775808:integer	9223372036854775807:integer
+9.2233720368548e+18:float	-0.0:float	0:integer
+false	attempt to compare string with number
+false	attempt to compare string with number
+10	string	9	10
+b	table	true
+false	bad argument #1 to 'math.max' (value expected)
+false	bad argument #1 to 'math.min' (value expected)
+false	attempt to compare number with string
+false	attempt to compare number with nil
+9223372036854775807	-9223372036854775808	true
+true	true
+-2	-9223372036854775808	0
+true	true
+integer	float	inf	-inf
+true	false	false	true	true
+true	false	true
+false	bad argument #1 to 'math.ult' (number has no integer representation)
+false	bad argument #2 to 'math.ult' (number expected, got no value)
+true
+5	4.5

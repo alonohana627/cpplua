@@ -1,0 +1,15 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "z"
+        Integer 36
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "10"
+        Integer 99

@@ -1,0 +1,12 @@
+Chunk
+  Local s
+    String "x"
+  CallStatement
+    Call
+      Name print
+      MethodCall rep
+        Name s (local 0)
+        Integer 3
+  CallStatement
+    MethodCall bad
+      Name s (local 0)

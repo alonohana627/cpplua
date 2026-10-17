@@ -1,0 +1,332 @@
+Chunk
+  Local s
+    String "Hello, Lua"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Integer 1
+        Integer 5
+      Call
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Integer 8
+      Call
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Unary -
+          Integer 3
+      Call
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Unary -
+          Integer 3
+        Unary -
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Integer 0
+      Binary ==
+        Call
+          Index
+            Name string
+            String "sub"
+          Name s (local 0)
+          Integer 1
+          Integer 0
+        String ""
+      Binary ==
+        Call
+          Index
+            Name string
+            String "sub"
+          Name s (local 0)
+          Integer 5
+          Integer 3
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Unary -
+          Integer 100
+        Integer 2
+      Call
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Integer 8
+        Integer 100
+      Binary ==
+        Call
+          Index
+            Name string
+            String "sub"
+          Name s (local 0)
+          Integer 11
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Unary -
+          Integer 1
+        Unary -
+          Integer 1
+      Call
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Integer 10
+        Integer 10
+      Binary ==
+        Call
+          Index
+            Name string
+            String "sub"
+          Name s (local 0)
+          Integer 0
+          Integer 0
+        String ""
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name string
+            String "sub"
+          Name s (local 0)
+          Index
+            Name math
+            String "mininteger"
+          Index
+            Name math
+            String "maxinteger"
+        Name s (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name string
+            String "sub"
+          Name s (local 0)
+          Index
+            Name math
+            String "maxinteger"
+        String ""
+      Binary ==
+        Call
+          Index
+            Name string
+            String "sub"
+          Name s (local 0)
+          Integer 2
+          Index
+            Name math
+            String "mininteger"
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Float 2.0
+        Float 3.0
+      Call
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        String "2"
+        String "4"
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name string
+            String "sub"
+          String ""
+          Integer 1
+          Integer 1
+        String ""
+      Binary ==
+        Call
+          Index
+            Name string
+            String "sub"
+          String ""
+          Unary -
+            Integer 1
+        String ""
+      Call
+        Index
+          Name string
+          String "sub"
+        String "x"
+        Integer 1
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "sub"
+        Integer 12345
+        Integer 2
+        Integer 4
+      Call
+        Index
+          Name string
+          String "sub"
+        Float 1.25
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Float 1.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "sub"
+        Name s (local 0)
+        Integer 1
+        String "z"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "sub"
+        Nil
+        Integer 1
+  Local suffixes
+    Table
+  NumericFor i
+    Unary -
+      Integer 1
+    Unary -
+      Integer 4
+    Unary -
+      Integer 1
+    Body
+      Assign
+        Targets
+          Index
+            Name suffixes (local 1)
+            Binary +
+              Unary #
+                Name suffixes (local 1)
+              Integer 1
+        Values
+          MethodCall sub
+            Paren
+              String "abcd"
+            Name i (local 5)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name suffixes (local 1)
+        String " "
+  Local prefixes
+    Table
+  NumericFor j
+    Integer 0
+    Integer 4
+    Body
+      Assign
+        Targets
+          Index
+            Name prefixes (local 2)
+            Binary +
+              Unary #
+                Name prefixes (local 2)
+              Integer 1
+        Values
+          Binary ..
+            String "["
+            Binary ..
+              MethodCall sub
+                Paren
+                  String "abcd"
+                Integer 1
+                Name j (local 6)
+              String "]"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name prefixes (local 2)
+        String " "
+  Return
+    MethodCall sub
+      Name s (local 0)
+      Unary -
+        Integer 3
+    MethodCall sub
+      Name s (local 0)
+      Integer 1
+      Unary -
+        Integer 6

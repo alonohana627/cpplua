@@ -1,0 +1,34 @@
+0.93081217803956817 0.45178389935924312 0.54688311243421495 0.79358935263827257
+6 7 2 9 3 8 8 1 1 8
+5 18 14 13 17 10 13 8 15 10
+-7933623600649933385 5765449222390805676 -2033279040265587720
+-3 1 -3 -3 -2
+2814867048471451236 6475104936297666285 4306803256149516757
+1 1 1 1 1
+7 7 7 7
+true
+0	66 9 44 22 48 88	7965804023693400120
+1	30 34 45 87 94 60	8422983886538048126
+123456789	98 5 52 22 16 87	7689166158083375125
+-1	50 72 68 41 7 94	2553454962916548862
+9223372036854775807	58 78 74 24 88 58	2177171447631954701
+-9223372036854775808	50 53 83 68 58 62	-6407131486530548549
+3.0	10 74 68 52 72 51
+1,2	2 9 29 56 89 48	0.23904414453772493
+1,0	30 34 45 87 94 60
+0,1	40 77 10 6 47 35
+0	true	true	true	true
+true	integer	integer
+2	integer
+5	0
+-7	9
+false	bad argument #1 to 'math.random' (interval is empty)
+false	bad argument #1 to 'math.random' (interval is empty)
+false	bad argument #1 to 'math.random' (interval is empty)
+false	wrong number of arguments
+false	bad argument #1 to 'math.random' (number has no integer representation)
+false	bad argument #1 to 'math.random' (number expected, got string)
+false	bad argument #1 to 'math.randomseed' (number expected, got string)
+false	bad argument #1 to 'math.randomseed' (number has no integer representation)
+false	bad argument #2 to 'math.randomseed' (number expected, got table)
+842	310

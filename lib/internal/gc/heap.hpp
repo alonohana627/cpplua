@@ -182,6 +182,22 @@ public:
 
     void write_output(std::string_view text);
 
+    // Flushes the standard output when it is where output goes (io.flush).
+    void flush_output();
+
+    // Where warnings go (lua_writestringerror): stderr by default.
+    void set_error_output(std::function<void(std::string_view)> output) {
+        error_output_ = std::move(output);
+    }
+
+    void write_error(std::string_view text);
+
+    // Whether warn() shows warnings: off until "@on", as in the lua
+    // program (lauxlib's warnfoff).
+    [[nodiscard]] bool warnings_on() const { return warnings_on_; }
+
+    void set_warnings_on(bool on) { warnings_on_ = on; }
+
     // ---- Memory ----
 
     // Raw memory counted toward the collector's pacing, like Lua's luaM_
@@ -433,6 +449,8 @@ private:
     std::array<const String*, event_count> event_strings_{};
     const String* name_string_ = nullptr;
     std::function<void(std::string_view)> output_;
+    std::function<void(std::string_view)> error_output_;
+    bool warnings_on_ = false;
 
     // The object lists (Lua's allgc and fixedgc), newest first. In
     // generational mode, `survival`, `old1` and `really_old` point into

@@ -1,0 +1,36 @@
+integer	86400
+5184000
+31622400
+5415
+0
+-86400
+-86400
+0
+0
+2020	3	1	12	0	0	1	61	boolean
+false	field 'month' missing in date table
+false	field 'day' missing in date table
+false	field 'month' is not an integer
+false	field 'month' is not an integer
+false	bad argument #1 to 'os.time' (table expected, got number)
+1970-01-01 00:00:00
+1971-01-01 01:01:01
+2009-02-13 23:31:30
+Friday Fri February Feb 13 044 PM 09 %
+11 31 30 6 11
+01/01/70 00:00:00	02/29/00 09 09
+no specifiers	true
+1970	1	2	0	0	0	6	2	false
+2000	2	29	3	60
+string	table	string	integer
+false	bad argument #1 to 'os.date' (invalid conversion specifier '%Ez')
+false	bad argument #1 to 'os.date' (invalid conversion specifier '%')
+false	bad argument #1 to 'os.date' (invalid conversion specifier '%Q')
+false	bad argument #2 to 'os.date' (number has no integer representation)
+false	bad argument #2 to 'os.date' (number expected, got string)
+6.0	-6.0	0.0	float
+false	bad argument #2 to 'os.difftime' (number expected, got no value)
+false	bad argument #1 to 'os.difftime' (number expected, got no value)
+float	true	integer
+nil	false	bad argument #1 to 'os.getenv' (string expected, got no value)
+1970	86400

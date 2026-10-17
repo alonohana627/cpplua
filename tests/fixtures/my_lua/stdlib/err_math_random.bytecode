@@ -1,0 +1,31 @@
+
+main <err_math_random.lua:0,0> (20 instructions)
+0+ params, 4 slots, 1 upvalue, 0 locals, 4 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "math"
+	3	[2]	GETFIELD 	0 0 1	; "randomseed"
+	4	[2]	LOADI    	1 1
+	5	[2]	CALL     	0 2 1	; 1 in 0 out
+	6	[3]	GETTABUP 	0 0 2	; _ENV "print"
+	7	[3]	GETTABUP 	1 0 0	; _ENV "math"
+	8	[3]	GETFIELD 	1 1 3	; "random"
+	9	[3]	LOADI    	2 5
+	10	[3]	LOADI    	3 5
+	11	[3]	CALL     	1 3 0	; 2 in all out
+	12	[3]	CALL     	0 0 1	; all in 0 out
+	13	[4]	GETTABUP 	0 0 2	; _ENV "print"
+	14	[4]	GETTABUP 	1 0 0	; _ENV "math"
+	15	[4]	GETFIELD 	1 1 3	; "random"
+	16	[4]	LOADI    	2 2
+	17	[4]	LOADI    	3 1
+	18	[4]	CALL     	1 3 0	; 2 in all out
+	19	[4]	CALL     	0 0 1	; all in 0 out
+	20	[4]	RETURN   	0 1 1	; 0 out
+constants (4):
+	0	S	"math"
+	1	S	"randomseed"
+	2	S	"print"
+	3	S	"random"
+locals (0):
+upvalues (1):
+	0	_ENV	1	0

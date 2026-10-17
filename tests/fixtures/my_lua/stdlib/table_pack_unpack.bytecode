@@ -1,0 +1,395 @@
+
+main <table_pack_unpack.lua:0,0> (308 instructions)
+0+ params, 13 slots, 1 upvalue, 4 locals, 28 constants, 3 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	GETTABUP 	0 0 0	; _ENV "table"
+	3	[6]	GETFIELD 	0 0 1	; "pack"
+	4	[6]	LOADI    	1 1
+	5	[6]	LOADNIL  	2 0	; 1 out
+	6	[6]	LOADI    	3 3
+	7	[6]	LOADNIL  	4 0	; 1 out
+	8	[6]	CALL     	0 5 2	; 4 in 1 out
+	9	[7]	GETTABUP 	1 0 2	; _ENV "print"
+	10	[7]	GETFIELD 	2 0 3	; "n"
+	11	[7]	GETI     	3 0 1
+	12	[7]	GETI     	4 0 2
+	13	[7]	GETI     	5 0 3
+	14	[7]	GETI     	6 0 4
+	15	[7]	GETTABUP 	7 0 4	; _ENV "select"
+	16	[7]	LOADK    	8 5	; "#"
+	17	[7]	GETTABUP 	9 0 0	; _ENV "table"
+	18	[7]	GETFIELD 	9 9 6	; "unpack"
+	19	[7]	MOVE     	10 0
+	20	[7]	LOADI    	11 1
+	21	[7]	GETFIELD 	12 0 3	; "n"
+	22	[7]	CALL     	9 4 0	; 3 in all out
+	23	[7]	CALL     	7 0 0	; all in all out
+	24	[7]	CALL     	1 0 1	; all in 0 out
+	25	[8]	GETTABUP 	1 0 2	; _ENV "print"
+	26	[8]	GETTABUP 	2 0 0	; _ENV "table"
+	27	[8]	GETFIELD 	2 2 1	; "pack"
+	28	[8]	CALL     	2 1 2	; 0 in 1 out
+	29	[8]	GETFIELD 	2 2 3	; "n"
+	30	[8]	GETTABUP 	3 0 7	; _ENV "next"
+	31	[8]	GETTABUP 	4 0 0	; _ENV "table"
+	32	[8]	GETFIELD 	4 4 1	; "pack"
+	33	[8]	CALL     	4 1 2	; 0 in 1 out
+	34	[8]	LOADNIL  	5 0	; 1 out
+	35	[8]	CALL     	3 3 2	; 2 in 1 out
+	36	[8]	EQK      	3 3 1	; "n"
+	37	[8]	JMP      	1	; to 39
+	38	[8]	LFALSESKIP	3
+	39	[8]	LOADTRUE 	3
+	40	[8]	GETTABUP 	4 0 0	; _ENV "table"
+	41	[8]	GETFIELD 	4 4 1	; "pack"
+	42	[8]	LOADNIL  	5 0	; 1 out
+	43	[8]	CALL     	4 2 2	; 1 in 1 out
+	44	[8]	GETFIELD 	4 4 3	; "n"
+	45	[8]	CALL     	1 4 1	; 3 in 0 out
+	46	[9]	GETTABUP 	1 0 0	; _ENV "table"
+	47	[9]	GETFIELD 	1 1 1	; "pack"
+	48	[9]	LOADK    	2 8	; "a"
+	49	[9]	LOADK    	3 9	; "b"
+	50	[9]	CALL     	1 3 2	; 2 in 1 out
+	51	[10]	GETTABUP 	2 0 2	; _ENV "print"
+	52	[10]	GETFIELD 	3 1 3	; "n"
+	53	[10]	GETI     	4 1 1
+	54	[10]	GETI     	5 1 2
+	55	[10]	GETI     	6 1 3
+	56	[10]	CALL     	2 5 1	; 4 in 0 out
+	57	[12]	GETTABUP 	2 0 2	; _ENV "print"
+	58	[12]	GETTABUP 	3 0 0	; _ENV "table"
+	59	[12]	GETFIELD 	3 3 6	; "unpack"
+	60	[12]	NEWTABLE 	4 0 3	; 3
+	61	[12]	EXTRAARG 	0
+	62	[12]	LOADI    	5 1
+	63	[12]	LOADI    	6 2
+	64	[12]	LOADI    	7 3
+	65	[12]	SETLIST  	4 3 0
+	66	[12]	CALL     	3 2 0	; 1 in all out
+	67	[12]	CALL     	2 0 1	; all in 0 out
+	68	[13]	GETTABUP 	2 0 2	; _ENV "print"
+	69	[13]	GETTABUP 	3 0 0	; _ENV "table"
+	70	[13]	GETFIELD 	3 3 6	; "unpack"
+	71	[13]	NEWTABLE 	4 0 3	; 3
+	72	[13]	EXTRAARG 	0
+	73	[13]	LOADI    	5 1
+	74	[13]	LOADI    	6 2
+	75	[13]	LOADI    	7 3
+	76	[13]	SETLIST  	4 3 0
+	77	[13]	LOADI    	5 2
+	78	[13]	CALL     	3 3 0	; 2 in all out
+	79	[13]	CALL     	2 0 1	; all in 0 out
+	80	[14]	GETTABUP 	2 0 2	; _ENV "print"
+	81	[14]	GETTABUP 	3 0 0	; _ENV "table"
+	82	[14]	GETFIELD 	3 3 6	; "unpack"
+	83	[14]	NEWTABLE 	4 0 3	; 3
+	84	[14]	EXTRAARG 	0
+	85	[14]	LOADI    	5 1
+	86	[14]	LOADI    	6 2
+	87	[14]	LOADI    	7 3
+	88	[14]	SETLIST  	4 3 0
+	89	[14]	LOADI    	5 2
+	90	[14]	LOADI    	6 3
+	91	[14]	CALL     	3 4 0	; 3 in all out
+	92	[14]	CALL     	2 0 1	; all in 0 out
+	93	[15]	GETTABUP 	2 0 2	; _ENV "print"
+	94	[15]	GETTABUP 	3 0 0	; _ENV "table"
+	95	[15]	GETFIELD 	3 3 6	; "unpack"
+	96	[15]	NEWTABLE 	4 0 3	; 3
+	97	[15]	EXTRAARG 	0
+	98	[15]	LOADI    	5 1
+	99	[15]	LOADI    	6 2
+	100	[15]	LOADI    	7 3
+	101	[15]	SETLIST  	4 3 0
+	102	[15]	LOADI    	5 3
+	103	[15]	LOADI    	6 5
+	104	[15]	CALL     	3 4 0	; 3 in all out
+	105	[15]	CALL     	2 0 1	; all in 0 out
+	106	[16]	GETTABUP 	2 0 2	; _ENV "print"
+	107	[16]	GETTABUP 	3 0 0	; _ENV "table"
+	108	[16]	GETFIELD 	3 3 6	; "unpack"
+	109	[16]	NEWTABLE 	4 0 3	; 3
+	110	[16]	EXTRAARG 	0
+	111	[16]	LOADI    	5 1
+	112	[16]	LOADI    	6 2
+	113	[16]	LOADI    	7 3
+	114	[16]	SETLIST  	4 3 0
+	115	[16]	LOADI    	5 -1
+	116	[16]	LOADI    	6 1
+	117	[16]	CALL     	3 4 0	; 3 in all out
+	118	[16]	CALL     	2 0 1	; all in 0 out
+	119	[17]	GETTABUP 	2 0 2	; _ENV "print"
+	120	[17]	GETTABUP 	3 0 4	; _ENV "select"
+	121	[17]	LOADK    	4 5	; "#"
+	122	[17]	GETTABUP 	5 0 0	; _ENV "table"
+	123	[17]	GETFIELD 	5 5 6	; "unpack"
+	124	[17]	NEWTABLE 	6 0 3	; 3
+	125	[17]	EXTRAARG 	0
+	126	[17]	LOADI    	7 1
+	127	[17]	LOADI    	8 2
+	128	[17]	LOADI    	9 3
+	129	[17]	SETLIST  	6 3 0
+	130	[17]	LOADI    	7 3
+	131	[17]	LOADI    	8 2
+	132	[17]	CALL     	5 4 0	; 3 in all out
+	133	[17]	CALL     	3 0 2	; all in 1 out
+	134	[17]	GETTABUP 	4 0 4	; _ENV "select"
+	135	[17]	LOADK    	5 5	; "#"
+	136	[17]	GETTABUP 	6 0 0	; _ENV "table"
+	137	[17]	GETFIELD 	6 6 6	; "unpack"
+	138	[17]	NEWTABLE 	7 0 0	; 0
+	139	[17]	EXTRAARG 	0
+	140	[17]	CALL     	6 2 0	; 1 in all out
+	141	[17]	CALL     	4 0 0	; all in all out
+	142	[17]	CALL     	2 0 1	; all in 0 out
+	143	[18]	GETTABUP 	2 0 2	; _ENV "print"
+	144	[18]	GETTABUP 	3 0 0	; _ENV "table"
+	145	[18]	GETFIELD 	3 3 6	; "unpack"
+	146	[18]	NEWTABLE 	4 1 1	; 1
+	147	[18]	EXTRAARG 	0
+	148	[18]	SETI     	4 0 10k	; "zero"
+	149	[18]	LOADK    	5 11	; "one"
+	150	[18]	SETLIST  	4 1 0
+	151	[18]	LOADI    	5 0
+	152	[18]	CALL     	3 3 0	; 2 in all out
+	153	[18]	CALL     	2 0 1	; all in 0 out
+	154	[19]	GETTABUP 	2 0 2	; _ENV "print"
+	155	[19]	GETTABUP 	3 0 0	; _ENV "table"
+	156	[19]	GETFIELD 	3 3 6	; "unpack"
+	157	[19]	NEWTABLE 	4 0 3	; 3
+	158	[19]	EXTRAARG 	0
+	159	[19]	LOADI    	5 1
+	160	[19]	LOADI    	6 2
+	161	[19]	LOADI    	7 3
+	162	[19]	SETLIST  	4 3 0
+	163	[19]	LOADF    	5 2
+	164	[19]	LOADF    	6 3
+	165	[19]	CALL     	3 4 0	; 3 in all out
+	166	[19]	CALL     	2 0 1	; all in 0 out
+	167	[20]	GETTABUP 	2 0 2	; _ENV "print"
+	168	[20]	GETTABUP 	3 0 4	; _ENV "select"
+	169	[20]	LOADK    	4 5	; "#"
+	170	[20]	GETTABUP 	5 0 0	; _ENV "table"
+	171	[20]	GETFIELD 	5 5 6	; "unpack"
+	172	[20]	NEWTABLE 	6 0 0	; 0
+	173	[20]	EXTRAARG 	0
+	174	[20]	LOADI    	7 1
+	175	[20]	LOADI    	8 5
+	176	[20]	CALL     	5 4 0	; 3 in all out
+	177	[20]	CALL     	3 0 0	; all in all out
+	178	[20]	CALL     	2 0 1	; all in 0 out
+	179	[21]	GETTABUP 	2 0 2	; _ENV "print"
+	180	[21]	GETTABUP 	3 0 0	; _ENV "table"
+	181	[21]	GETFIELD 	3 3 6	; "unpack"
+	182	[21]	NEWTABLE 	4 0 1	; 1
+	183	[21]	EXTRAARG 	0
+	184	[21]	LOADK    	5 12	; "x"
+	185	[21]	SETLIST  	4 1 0
+	186	[21]	GETTABUP 	5 0 13	; _ENV "math"
+	187	[21]	GETFIELD 	5 5 14	; "maxinteger"
+	188	[21]	GETTABUP 	6 0 13	; _ENV "math"
+	189	[21]	GETFIELD 	6 6 14	; "maxinteger"
+	190	[21]	CALL     	3 4 0	; 3 in all out
+	191	[21]	CALL     	2 0 1	; all in 0 out
+	192	[22]	GETTABUP 	2 0 2	; _ENV "print"
+	193	[22]	GETTABUP 	3 0 4	; _ENV "select"
+	194	[22]	LOADK    	4 5	; "#"
+	195	[22]	GETTABUP 	5 0 0	; _ENV "table"
+	196	[22]	GETFIELD 	5 5 6	; "unpack"
+	197	[22]	NEWTABLE 	6 0 0	; 0
+	198	[22]	EXTRAARG 	0
+	199	[22]	GETTABUP 	7 0 13	; _ENV "math"
+	200	[22]	GETFIELD 	7 7 15	; "mininteger"
+	201	[22]	GETTABUP 	8 0 13	; _ENV "math"
+	202	[22]	GETFIELD 	8 8 15	; "mininteger"
+	203	[22]	ADDI     	8 8 2
+	204	[22]	MMBINI   	8 2 6 0	; __add
+	205	[22]	CALL     	5 4 0	; 3 in all out
+	206	[22]	CALL     	3 0 0	; all in all out
+	207	[22]	CALL     	2 0 1	; all in 0 out
+	208	[25]	GETTABUP 	2 0 16	; _ENV "setmetatable"
+	209	[25]	NEWTABLE 	3 0 0	; 0
+	210	[25]	EXTRAARG 	0
+	211	[25]	NEWTABLE 	4 2 0	; 0
+	212	[25]	EXTRAARG 	0
+	213	[26]	CLOSURE  	5 0
+	214	[26]	SETFIELD 	4 17 5	; "__index"
+	215	[27]	CLOSURE  	5 1
+	216	[27]	SETFIELD 	4 18 5	; "__len"
+	217	[25]	CALL     	2 3 2	; 2 in 1 out
+	218	[29]	GETTABUP 	3 0 2	; _ENV "print"
+	219	[29]	GETTABUP 	4 0 0	; _ENV "table"
+	220	[29]	GETFIELD 	4 4 6	; "unpack"
+	221	[29]	MOVE     	5 2
+	222	[29]	CALL     	4 2 0	; 1 in all out
+	223	[29]	CALL     	3 0 1	; all in 0 out
+	224	[30]	GETTABUP 	3 0 2	; _ENV "print"
+	225	[30]	GETTABUP 	4 0 0	; _ENV "table"
+	226	[30]	GETFIELD 	4 4 6	; "unpack"
+	227	[30]	MOVE     	5 2
+	228	[30]	LOADI    	6 5
+	229	[30]	LOADI    	7 6
+	230	[30]	CALL     	4 4 0	; 3 in all out
+	231	[30]	CALL     	3 0 1	; all in 0 out
+	232	[33]	CLOSURE  	3 2
+	233	[34]	GETTABUP 	4 0 2	; _ENV "print"
+	234	[34]	MOVE     	5 3
+	235	[34]	LOADNIL  	6 0	; 1 out
+	236	[34]	LOADFALSE	7
+	237	[34]	LOADNIL  	8 0	; 1 out
+	238	[34]	CALL     	5 4 0	; 3 in all out
+	239	[34]	CALL     	4 0 1	; all in 0 out
+	240	[35]	GETTABUP 	4 0 2	; _ENV "print"
+	241	[35]	GETTABUP 	5 0 19	; _ENV "select"
+	242	[35]	LOADK    	6 20	; "#"
+	243	[35]	MOVE     	7 3
+	244	[35]	LOADNIL  	8 2	; 3 out
+	245	[35]	CALL     	7 4 0	; 3 in all out
+	246	[35]	CALL     	5 0 0	; all in all out
+	247	[35]	CALL     	4 0 1	; all in 0 out
+	248	[38]	GETTABUP 	4 0 2	; _ENV "print"
+	249	[38]	GETTABUP 	5 0 21	; _ENV "unpack"
+	250	[38]	GETTABUP 	6 0 22	; _ENV "type"
+	251	[38]	GETTABUP 	7 0 0	; _ENV "table"
+	252	[38]	GETFIELD 	7 7 21	; "unpack"
+	253	[38]	CALL     	6 2 0	; 1 in all out
+	254	[38]	CALL     	4 0 1	; all in 0 out
+	255	[40]	GETTABUP 	4 0 2	; _ENV "print"
+	256	[40]	GETTABUP 	5 0 23	; _ENV "pcall"
+	257	[40]	GETTABUP 	6 0 0	; _ENV "table"
+	258	[40]	GETFIELD 	6 6 21	; "unpack"
+	259	[40]	NEWTABLE 	7 0 0	; 0
+	260	[40]	EXTRAARG 	0
+	261	[40]	LOADI    	8 1
+	262	[40]	LOADK    	9 24	; 100000000.0
+	263	[40]	CALL     	5 5 0	; 4 in all out
+	264	[40]	CALL     	4 0 1	; all in 0 out
+	265	[41]	GETTABUP 	4 0 2	; _ENV "print"
+	266	[41]	GETTABUP 	5 0 23	; _ENV "pcall"
+	267	[41]	GETTABUP 	6 0 0	; _ENV "table"
+	268	[41]	GETFIELD 	6 6 21	; "unpack"
+	269	[41]	NEWTABLE 	7 0 0	; 0
+	270	[41]	EXTRAARG 	0
+	271	[41]	GETTABUP 	8 0 13	; _ENV "math"
+	272	[41]	GETFIELD 	8 8 15	; "mininteger"
+	273	[41]	GETTABUP 	9 0 13	; _ENV "math"
+	274	[41]	GETFIELD 	9 9 14	; "maxinteger"
+	275	[41]	CALL     	5 5 0	; 4 in all out
+	276	[41]	CALL     	4 0 1	; all in 0 out
+	277	[42]	GETTABUP 	4 0 2	; _ENV "print"
+	278	[42]	GETTABUP 	5 0 23	; _ENV "pcall"
+	279	[42]	GETTABUP 	6 0 0	; _ENV "table"
+	280	[42]	GETFIELD 	6 6 21	; "unpack"
+	281	[42]	NEWTABLE 	7 0 0	; 0
+	282	[42]	EXTRAARG 	0
+	283	[42]	LOADK    	8 25	; 1.5
+	284	[42]	CALL     	5 4 0	; 3 in all out
+	285	[42]	CALL     	4 0 1	; all in 0 out
+	286	[43]	GETTABUP 	4 0 2	; _ENV "print"
+	287	[43]	GETTABUP 	5 0 23	; _ENV "pcall"
+	288	[43]	GETTABUP 	6 0 0	; _ENV "table"
+	289	[43]	GETFIELD 	6 6 21	; "unpack"
+	290	[43]	LOADNIL  	7 0	; 1 out
+	291	[43]	CALL     	5 3 0	; 2 in all out
+	292	[43]	CALL     	4 0 1	; all in 0 out
+	293	[44]	GETTABUP 	4 0 2	; _ENV "print"
+	294	[44]	GETTABUP 	5 0 23	; _ENV "pcall"
+	295	[44]	GETTABUP 	6 0 0	; _ENV "table"
+	296	[44]	GETFIELD 	6 6 21	; "unpack"
+	297	[44]	CALL     	5 2 0	; 1 in all out
+	298	[44]	CALL     	4 0 1	; all in 0 out
+	299	[46]	GETTABUP 	4 0 0	; _ENV "table"
+	300	[46]	GETFIELD 	4 4 21	; "unpack"
+	301	[46]	NEWTABLE 	5 0 2	; 2
+	302	[46]	EXTRAARG 	0
+	303	[46]	LOADK    	6 26	; "r1"
+	304	[46]	LOADK    	7 27	; "r2"
+	305	[46]	SETLIST  	5 2 0
+	306	[46]	TAILCALL 	4 2 1	; 1 in
+	307	[46]	RETURN   	4 0 1	; all out
+	308	[46]	RETURN   	4 1 1	; 0 out
+constants (28):
+	0	S	"table"
+	1	S	"pack"
+	2	S	"print"
+	3	S	"n"
+	4	S	"select"
+	5	S	"#"
+	6	S	"unpack"
+	7	S	"next"
+	8	S	"a"
+	9	S	"b"
+	10	S	"zero"
+	11	S	"one"
+	12	S	"x"
+	13	S	"math"
+	14	S	"maxinteger"
+	15	S	"mininteger"
+	16	S	"setmetatable"
+	17	S	"__index"
+	18	S	"__len"
+	19	S	"select"
+	20	S	"#"
+	21	S	"unpack"
+	22	S	"type"
+	23	S	"pcall"
+	24	F	100000000.0
+	25	F	1.5
+	26	S	"r1"
+	27	S	"r2"
+locals (4):
+	0	p	9	309
+	1	q	51	309
+	2	virtual	218	309
+	3	pass	233	309
+upvalues (1):
+	0	_ENV	1	0
+
+function <table_pack_unpack.lua:26,26> (4 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[26]	MUL      	2 1 1
+	2	[26]	MMBIN    	1 1 8	; __mul
+	3	[26]	RETURN1  	2
+	4	[26]	RETURN0  	
+constants (0):
+locals (2):
+	0	_	1	5
+	1	i	1	5
+upvalues (0):
+
+function <table_pack_unpack.lua:27,27> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[27]	LOADI    	0 4
+	2	[27]	RETURN1  	0
+	3	[27]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <table_pack_unpack.lua:33,33> (15 instructions)
+0+ params, 6 slots, 1 upvalue, 0 locals, 5 constants, 0 functions
+	1	[33]	VARARGPREP	0
+	2	[33]	GETTABUP 	0 0 0	; _ENV "table"
+	3	[33]	GETFIELD 	0 0 1	; "unpack"
+	4	[33]	GETTABUP 	1 0 0	; _ENV "table"
+	5	[33]	GETFIELD 	1 1 2	; "pack"
+	6	[33]	VARARG   	2 0	; all out
+	7	[33]	CALL     	1 0 2	; all in 1 out
+	8	[33]	LOADI    	2 1
+	9	[33]	GETTABUP 	3 0 3	; _ENV "select"
+	10	[33]	LOADK    	4 4	; "#"
+	11	[33]	VARARG   	5 0	; all out
+	12	[33]	CALL     	3 0 0	; all in all out
+	13	[33]	TAILCALL 	0 0 1	; -1 in
+	14	[33]	RETURN   	0 0 1	; all out
+	15	[33]	RETURN   	0 1 1	; 0 out
+constants (5):
+	0	S	"table"
+	1	S	"unpack"
+	2	S	"pack"
+	3	S	"select"
+	4	S	"#"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0

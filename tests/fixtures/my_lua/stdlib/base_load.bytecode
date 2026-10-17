@@ -1,0 +1,523 @@
+
+main <base_load.lua:0,0> (329 instructions)
+0+ params, 21 slots, 1 upvalue, 16 locals, 58 constants, 8 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	GETTABUP 	0 0 0	; _ENV "load"
+	3	[7]	LOADK    	1 1	; "return 1 + 2"
+	4	[7]	CALL     	0 2 2	; 1 in 1 out
+	5	[8]	GETTABUP 	1 0 2	; _ENV "print"
+	6	[8]	GETTABUP 	2 0 3	; _ENV "type"
+	7	[8]	MOVE     	3 0
+	8	[8]	CALL     	2 2 2	; 1 in 1 out
+	9	[8]	MOVE     	3 0
+	10	[8]	CALL     	3 1 0	; 0 in all out
+	11	[8]	CALL     	1 0 1	; all in 0 out
+	12	[9]	GETTABUP 	1 0 2	; _ENV "print"
+	13	[9]	GETTABUP 	2 0 0	; _ENV "load"
+	14	[9]	LOADK    	3 4	; "local a, b = ... return b, a"
+	15	[9]	CALL     	2 2 2	; 1 in 1 out
+	16	[9]	LOADI    	3 10
+	17	[9]	LOADI    	4 20
+	18	[9]	CALL     	2 3 0	; 2 in all out
+	19	[9]	CALL     	1 0 1	; all in 0 out
+	20	[10]	GETTABUP 	1 0 2	; _ENV "print"
+	21	[10]	GETTABUP 	2 0 0	; _ENV "load"
+	22	[10]	LOADK    	3 5	; "return select('#', ...)"
+	23	[10]	CALL     	2 2 2	; 1 in 1 out
+	24	[10]	LOADNIL  	3 2	; 3 out
+	25	[10]	CALL     	2 4 0	; 3 in all out
+	26	[10]	CALL     	1 0 1	; all in 0 out
+	27	[11]	GETTABUP 	1 0 2	; _ENV "print"
+	28	[11]	GETTABUP 	2 0 0	; _ENV "load"
+	29	[11]	LOADK    	3 6	; "x_from_load = 5"
+	30	[11]	CALL     	2 2 2	; 1 in 1 out
+	31	[11]	CALL     	2 1 2	; 0 in 1 out
+	32	[11]	GETTABUP 	3 0 7	; _ENV "x_from_load"
+	33	[11]	CALL     	1 3 1	; 2 in 0 out
+	34	[12]	GETTABUP 	1 0 2	; _ENV "print"
+	35	[12]	GETTABUP 	2 0 0	; _ENV "load"
+	36	[12]	LOADK    	3 8	; ""
+	37	[12]	CALL     	2 2 2	; 1 in 1 out
+	38	[12]	CALL     	2 1 0	; 0 in all out
+	39	[12]	CALL     	1 0 1	; all in 0 out
+	40	[15]	GETTABUP 	1 0 2	; _ENV "print"
+	41	[15]	GETTABUP 	2 0 0	; _ENV "load"
+	42	[15]	LOADK    	3 9	; "return +"
+	43	[15]	CALL     	2 2 0	; 1 in all out
+	44	[15]	CALL     	1 0 1	; all in 0 out
+	45	[16]	GETTABUP 	1 0 2	; _ENV "print"
+	46	[16]	GETTABUP 	2 0 0	; _ENV "load"
+	47	[16]	LOADK    	3 10	; "x ="
+	48	[16]	CALL     	2 2 0	; 1 in all out
+	49	[16]	CALL     	1 0 1	; all in 0 out
+	50	[17]	GETTABUP 	1 0 2	; _ENV "print"
+	51	[17]	GETTABUP 	2 0 0	; _ENV "load"
+	52	[17]	LOADK    	3 11	; "for"
+	53	[17]	CALL     	2 2 0	; 1 in all out
+	54	[17]	CALL     	1 0 1	; all in 0 out
+	55	[18]	GETTABUP 	1 0 2	; _ENV "print"
+	56	[18]	GETTABUP 	2 0 0	; _ENV "load"
+	57	[18]	LOADK    	3 12	; "return 'unfinished"
+	58	[18]	CALL     	2 2 0	; 1 in all out
+	59	[18]	CALL     	1 0 1	; all in 0 out
+	60	[19]	GETTABUP 	1 0 2	; _ENV "print"
+	61	[19]	GETTABUP 	2 0 0	; _ENV "load"
+	62	[19]	LOADK    	3 13	; "x = }"
+	63	[19]	LOADK    	4 14	; "=mychunk"
+	64	[19]	CALL     	2 3 0	; 2 in all out
+	65	[19]	CALL     	1 0 1	; all in 0 out
+	66	[20]	GETTABUP 	1 0 2	; _ENV "print"
+	67	[20]	GETTABUP 	2 0 0	; _ENV "load"
+	68	[20]	LOADK    	3 15	; "\n\nlocal = 1"
+	69	[20]	LOADK    	4 16	; "@virtual.lua"
+	70	[20]	CALL     	2 3 0	; 2 in all out
+	71	[20]	CALL     	1 0 1	; all in 0 out
+	72	[21]	GETTABUP 	1 0 2	; _ENV "print"
+	73	[21]	GETTABUP 	2 0 0	; _ENV "load"
+	74	[21]	LOADK    	3 17	; "return ) -- a long first line that is shortened in the chunk name"
+	75	[21]	LOADNIL  	4 0	; 1 out
+	76	[21]	CALL     	2 3 0	; 2 in all out
+	77	[21]	CALL     	1 0 1	; all in 0 out
+	78	[22]	GETTABUP 	1 0 2	; _ENV "print"
+	79	[22]	GETTABUP 	2 0 0	; _ENV "load"
+	80	[22]	LOADK    	3 18	; "a b\nc"
+	81	[22]	LOADK    	4 19	; "multi\nline"
+	82	[22]	CALL     	2 3 0	; 2 in all out
+	83	[22]	CALL     	1 0 1	; all in 0 out
+	84	[25]	GETTABUP 	1 0 2	; _ENV "print"
+	85	[25]	GETTABUP 	2 0 20	; _ENV "pcall"
+	86	[25]	GETTABUP 	3 0 0	; _ENV "load"
+	87	[25]	LOADK    	4 21	; "error('boom')"
+	88	[25]	LOADK    	5 22	; "=custom"
+	89	[25]	CALL     	3 3 0	; 2 in all out
+	90	[25]	CALL     	2 0 0	; all in all out
+	91	[25]	CALL     	1 0 1	; all in 0 out
+	92	[26]	GETTABUP 	1 0 2	; _ENV "print"
+	93	[26]	GETTABUP 	2 0 20	; _ENV "pcall"
+	94	[26]	GETTABUP 	3 0 0	; _ENV "load"
+	95	[26]	LOADK    	4 23	; "local t = nil; return t.x"
+	96	[26]	LOADK    	5 24	; "@fake.lua"
+	97	[26]	CALL     	3 3 0	; 2 in all out
+	98	[26]	CALL     	2 0 0	; all in all out
+	99	[26]	CALL     	1 0 1	; all in 0 out
+	100	[27]	GETTABUP 	1 0 2	; _ENV "print"
+	101	[27]	GETTABUP 	2 0 20	; _ENV "pcall"
+	102	[27]	GETTABUP 	3 0 0	; _ENV "load"
+	103	[27]	LOADK    	4 25	; "error('in string')"
+	104	[27]	CALL     	3 2 0	; 1 in all out
+	105	[27]	CALL     	2 0 0	; all in all out
+	106	[27]	CALL     	1 0 1	; all in 0 out
+	107	[28]	GETTABUP 	1 0 2	; _ENV "print"
+	108	[28]	GETTABUP 	2 0 20	; _ENV "pcall"
+	109	[28]	GETTABUP 	3 0 0	; _ENV "load"
+	110	[28]	LOADK    	4 26	; "return 1 < {}"
+	111	[28]	LOADK    	5 27	; "=(load)"
+	112	[28]	CALL     	3 3 0	; 2 in all out
+	113	[28]	CALL     	2 0 0	; all in all out
+	114	[28]	CALL     	1 0 1	; all in 0 out
+	115	[31]	GETTABUP 	1 0 2	; _ENV "print"
+	116	[31]	GETTABUP 	2 0 0	; _ENV "load"
+	117	[31]	LOADK    	3 28	; "return 1"
+	118	[31]	LOADK    	4 29	; "c"
+	119	[31]	LOADK    	5 30	; "t"
+	120	[31]	CALL     	2 4 2	; 3 in 1 out
+	121	[31]	CALL     	2 1 0	; 0 in all out
+	122	[31]	CALL     	1 0 1	; all in 0 out
+	123	[32]	GETTABUP 	1 0 2	; _ENV "print"
+	124	[32]	GETTABUP 	2 0 0	; _ENV "load"
+	125	[32]	LOADK    	3 28	; "return 1"
+	126	[32]	LOADK    	4 29	; "c"
+	127	[32]	LOADK    	5 31	; "b"
+	128	[32]	CALL     	2 4 0	; 3 in all out
+	129	[32]	CALL     	1 0 1	; all in 0 out
+	130	[33]	GETTABUP 	1 0 2	; _ENV "print"
+	131	[33]	GETTABUP 	2 0 0	; _ENV "load"
+	132	[33]	LOADK    	3 28	; "return 1"
+	133	[33]	LOADK    	4 29	; "c"
+	134	[33]	LOADK    	5 32	; "bt"
+	135	[33]	CALL     	2 4 2	; 3 in 1 out
+	136	[33]	CALL     	2 1 0	; 0 in all out
+	137	[33]	CALL     	1 0 1	; all in 0 out
+	138	[34]	GETTABUP 	1 0 2	; _ENV "print"
+	139	[34]	GETTABUP 	2 0 20	; _ENV "pcall"
+	140	[34]	GETTABUP 	3 0 0	; _ENV "load"
+	141	[34]	LOADK    	4 28	; "return 1"
+	142	[34]	LOADK    	5 29	; "c"
+	143	[34]	LOADK    	6 33	; "x"
+	144	[34]	CALL     	2 5 0	; 4 in all out
+	145	[34]	CALL     	1 0 1	; all in 0 out
+	146	[37]	NEWTABLE 	1 1 0	; 0
+	147	[37]	EXTRAARG 	0
+	148	[37]	SETFIELD 	1 34 35k	; "y" 7
+	149	[38]	GETTABUP 	2 0 0	; _ENV "load"
+	150	[38]	LOADK    	3 36	; "y = y * 2; z = 1; return y"
+	151	[38]	LOADK    	4 37	; "env"
+	152	[38]	LOADK    	5 30	; "t"
+	153	[38]	MOVE     	6 1
+	154	[38]	CALL     	2 5 2	; 4 in 1 out
+	155	[39]	GETTABUP 	3 0 2	; _ENV "print"
+	156	[39]	MOVE     	4 2
+	157	[39]	CALL     	4 1 2	; 0 in 1 out
+	158	[39]	GETFIELD 	5 1 34	; "y"
+	159	[39]	GETFIELD 	6 1 38	; "z"
+	160	[39]	GETTABUP 	7 0 34	; _ENV "y"
+	161	[39]	GETTABUP 	8 0 38	; _ENV "z"
+	162	[39]	CALL     	3 6 1	; 5 in 0 out
+	163	[40]	GETTABUP 	3 0 2	; _ENV "print"
+	164	[40]	GETTABUP 	4 0 0	; _ENV "load"
+	165	[40]	LOADK    	5 39	; "return print"
+	166	[40]	LOADK    	6 29	; "c"
+	167	[40]	LOADK    	7 30	; "t"
+	168	[40]	NEWTABLE 	8 0 0	; 0
+	169	[40]	EXTRAARG 	0
+	170	[40]	CALL     	4 5 2	; 4 in 1 out
+	171	[40]	CALL     	4 1 0	; 0 in all out
+	172	[40]	CALL     	3 0 1	; all in 0 out
+	173	[41]	GETTABUP 	3 0 2	; _ENV "print"
+	174	[41]	GETTABUP 	4 0 20	; _ENV "pcall"
+	175	[41]	GETTABUP 	5 0 0	; _ENV "load"
+	176	[41]	LOADK    	6 40	; "return print('x')"
+	177	[41]	LOADK    	7 29	; "c"
+	178	[41]	LOADK    	8 30	; "t"
+	179	[41]	NEWTABLE 	9 0 0	; 0
+	180	[41]	EXTRAARG 	0
+	181	[41]	CALL     	5 5 0	; 4 in all out
+	182	[41]	CALL     	4 0 0	; all in all out
+	183	[41]	CALL     	3 0 1	; all in 0 out
+	184	[42]	GETTABUP 	3 0 2	; _ENV "print"
+	185	[42]	GETTABUP 	4 0 0	; _ENV "load"
+	186	[42]	LOADK    	5 41	; "return _ENV"
+	187	[42]	LOADK    	6 29	; "c"
+	188	[42]	LOADK    	7 30	; "t"
+	189	[42]	MOVE     	8 1
+	190	[42]	CALL     	4 5 2	; 4 in 1 out
+	191	[42]	CALL     	4 1 2	; 0 in 1 out
+	192	[42]	EQ       	4 1 1
+	193	[42]	JMP      	1	; to 195
+	194	[42]	LFALSESKIP	4
+	195	[42]	LOADTRUE 	4
+	196	[42]	CALL     	3 2 1	; 1 in 0 out
+	197	[43]	GETTABUP 	3 0 0	; _ENV "load"
+	198	[43]	LOADK    	4 42	; "return x"
+	199	[43]	LOADK    	5 43	; "nilenv"
+	200	[43]	LOADK    	6 30	; "t"
+	201	[43]	LOADNIL  	7 0	; 1 out
+	202	[43]	CALL     	3 5 2	; 4 in 1 out
+	203	[44]	GETTABUP 	4 0 2	; _ENV "print"
+	204	[44]	GETTABUP 	5 0 20	; _ENV "pcall"
+	205	[44]	MOVE     	6 3
+	206	[44]	CALL     	5 2 0	; 1 in all out
+	207	[44]	CALL     	4 0 1	; all in 0 out
+	208	[47]	NEWTABLE 	4 0 5	; 5
+	209	[47]	EXTRAARG 	0
+	210	[47]	LOADK    	5 44	; "return "
+	211	[47]	LOADK    	6 45	; "1 "
+	212	[47]	LOADK    	7 46	; "+ "
+	213	[47]	LOADK    	8 47	; "41"
+	214	[47]	LOADNIL  	9 0	; 1 out
+	215	[47]	SETLIST  	4 5 0
+	216	[48]	LOADI    	5 0
+	217	[49]	GETTABUP 	6 0 0	; _ENV "load"
+	218	[49]	CLOSURE  	7 0
+	219	[49]	CALL     	6 2 2	; 1 in 1 out
+	220	[50]	GETTABUP 	7 0 2	; _ENV "print"
+	221	[50]	MOVE     	8 6
+	222	[50]	CALL     	8 1 0	; 0 in all out
+	223	[50]	CALL     	7 0 1	; all in 0 out
+	224	[51]	NEWTABLE 	7 0 3	; 3
+	225	[51]	EXTRAARG 	0
+	226	[51]	LOADK    	8 48	; "local a = 'abc'"
+	227	[51]	LOADK    	9 49	; " return a:upper(), #a"
+	228	[51]	LOADK    	10 8	; ""
+	229	[51]	SETLIST  	7 3 0
+	230	[52]	LOADI    	8 0
+	231	[53]	GETTABUP 	9 0 2	; _ENV "print"
+	232	[53]	GETTABUP 	10 0 0	; _ENV "load"
+	233	[53]	CLOSURE  	11 1
+	234	[53]	CALL     	10 2 2	; 1 in 1 out
+	235	[53]	CALL     	10 1 0	; 0 in all out
+	236	[53]	CALL     	9 0 1	; all in 0 out
+	237	[54]	LOADK    	9 50	; "return 'one char at a time'"
+	238	[55]	LOADI    	10 0
+	239	[56]	GETTABUP 	11 0 2	; _ENV "print"
+	240	[56]	GETTABUP 	12 0 0	; _ENV "load"
+	241	[56]	CLOSURE  	13 2
+	242	[56]	LOADK    	14 51	; "=reader"
+	243	[56]	CALL     	12 3 2	; 2 in 1 out
+	244	[56]	CALL     	12 1 0	; 0 in all out
+	245	[56]	CALL     	11 0 1	; all in 0 out
+	246	[57]	GETTABUP 	11 0 2	; _ENV "print"
+	247	[57]	GETTABUP 	12 0 3	; _ENV "type"
+	248	[57]	GETTABUP 	13 0 0	; _ENV "load"
+	249	[57]	CLOSURE  	14 3
+	250	[57]	CALL     	13 2 0	; 1 in all out
+	251	[57]	CALL     	12 0 0	; all in all out
+	252	[57]	CALL     	11 0 1	; all in 0 out
+	253	[58]	GETTABUP 	11 0 2	; _ENV "print"
+	254	[58]	GETTABUP 	12 0 20	; _ENV "pcall"
+	255	[58]	GETTABUP 	13 0 0	; _ENV "load"
+	256	[58]	CLOSURE  	14 4
+	257	[58]	CALL     	13 2 0	; 1 in all out
+	258	[58]	CALL     	12 0 0	; all in all out
+	259	[58]	CALL     	11 0 1	; all in 0 out
+	260	[59]	GETTABUP 	11 0 2	; _ENV "print"
+	261	[59]	GETTABUP 	12 0 20	; _ENV "pcall"
+	262	[59]	GETTABUP 	13 0 0	; _ENV "load"
+	263	[59]	CLOSURE  	14 5
+	264	[59]	CALL     	12 3 0	; 2 in all out
+	265	[59]	CALL     	11 0 1	; all in 0 out
+	266	[60]	GETTABUP 	11 0 2	; _ENV "print"
+	267	[60]	GETTABUP 	12 0 20	; _ENV "pcall"
+	268	[60]	GETTABUP 	13 0 0	; _ENV "load"
+	269	[60]	CLOSURE  	14 6
+	270	[60]	CALL     	12 3 0	; 2 in all out
+	271	[60]	CALL     	11 0 1	; all in 0 out
+	272	[61]	NEWTABLE 	11 0 2	; 2
+	273	[61]	EXTRAARG 	0
+	274	[61]	LOADK    	12 44	; "return "
+	275	[61]	LOADK    	13 52	; "1 +"
+	276	[61]	SETLIST  	11 2 0
+	277	[62]	LOADI    	12 0
+	278	[63]	GETTABUP 	13 0 2	; _ENV "print"
+	279	[63]	GETTABUP 	14 0 0	; _ENV "load"
+	280	[63]	CLOSURE  	15 7
+	281	[63]	LOADK    	16 53	; "=pieces"
+	282	[63]	CALL     	14 3 0	; 2 in all out
+	283	[63]	CALL     	13 0 1	; all in 0 out
+	284	[66]	GETTABUP 	13 0 2	; _ENV "print"
+	285	[66]	GETTABUP 	14 0 20	; _ENV "pcall"
+	286	[66]	GETTABUP 	15 0 0	; _ENV "load"
+	287	[66]	CALL     	14 2 0	; 1 in all out
+	288	[66]	CALL     	13 0 1	; all in 0 out
+	289	[67]	GETTABUP 	13 0 2	; _ENV "print"
+	290	[67]	GETTABUP 	14 0 20	; _ENV "pcall"
+	291	[67]	GETTABUP 	15 0 0	; _ENV "load"
+	292	[67]	LOADI    	16 42
+	293	[67]	CALL     	14 3 0	; 2 in all out
+	294	[67]	CALL     	13 0 1	; all in 0 out
+	295	[68]	GETTABUP 	13 0 2	; _ENV "print"
+	296	[68]	GETTABUP 	14 0 20	; _ENV "pcall"
+	297	[68]	GETTABUP 	15 0 0	; _ENV "load"
+	298	[68]	NEWTABLE 	16 0 0	; 0
+	299	[68]	EXTRAARG 	0
+	300	[68]	CALL     	14 3 0	; 2 in all out
+	301	[68]	CALL     	13 0 1	; all in 0 out
+	302	[71]	LOADK    	13 54	; "count_global = (count_global or 0) + 1 return count_global"
+	303	[72]	GETTABUP 	14 0 0	; _ENV "load"
+	304	[72]	MOVE     	15 13
+	305	[72]	CALL     	14 2 2	; 1 in 1 out
+	306	[72]	GETTABUP 	15 0 0	; _ENV "load"
+	307	[72]	MOVE     	16 13
+	308	[72]	CALL     	15 2 2	; 1 in 1 out
+	309	[73]	GETTABUP 	16 0 2	; _ENV "print"
+	310	[73]	MOVE     	17 14
+	311	[73]	CALL     	17 1 2	; 0 in 1 out
+	312	[73]	MOVE     	18 15
+	313	[73]	CALL     	18 1 2	; 0 in 1 out
+	314	[73]	MOVE     	19 14
+	315	[73]	CALL     	19 1 2	; 0 in 1 out
+	316	[73]	EQ       	14 15 1
+	317	[73]	JMP      	1	; to 319
+	318	[73]	LFALSESKIP	20
+	319	[73]	LOADTRUE 	20
+	320	[73]	CALL     	16 5 1	; 4 in 0 out
+	321	[75]	GETTABUP 	16 0 0	; _ENV "load"
+	322	[75]	LOADK    	17 55	; "return ..."
+	323	[75]	LOADK    	18 56	; "=v"
+	324	[75]	CALL     	16 3 2	; 2 in 1 out
+	325	[75]	LOADK    	17 57	; "a"
+	326	[75]	LOADK    	18 31	; "b"
+	327	[75]	TAILCALL 	16 3 1k	; 2 in
+	328	[75]	RETURN   	16 0 1k	; all out
+	329	[75]	RETURN   	16 1 1k	; 0 out
+constants (58):
+	0	S	"load"
+	1	S	"return 1 + 2"
+	2	S	"print"
+	3	S	"type"
+	4	S	"local a, b = ... return b, a"
+	5	S	"return select('#', ...)"
+	6	S	"x_from_load = 5"
+	7	S	"x_from_load"
+	8	S	""
+	9	S	"return +"
+	10	S	"x ="
+	11	S	"for"
+	12	S	"return 'unfinished"
+	13	S	"x = }"
+	14	S	"=mychunk"
+	15	S	"\n\nlocal = 1"
+	16	S	"@virtual.lua"
+	17	S	"return ) -- a long first line that is shortened in the chunk name"
+	18	S	"a b\nc"
+	19	S	"multi\nline"
+	20	S	"pcall"
+	21	S	"error('boom')"
+	22	S	"=custom"
+	23	S	"local t = nil; return t.x"
+	24	S	"@fake.lua"
+	25	S	"error('in string')"
+	26	S	"return 1 < {}"
+	27	S	"=(load)"
+	28	S	"return 1"
+	29	S	"c"
+	30	S	"t"
+	31	S	"b"
+	32	S	"bt"
+	33	S	"x"
+	34	S	"y"
+	35	I	7
+	36	S	"y = y * 2; z = 1; return y"
+	37	S	"env"
+	38	S	"z"
+	39	S	"return print"
+	40	S	"return print('x')"
+	41	S	"return _ENV"
+	42	S	"return x"
+	43	S	"nilenv"
+	44	S	"return "
+	45	S	"1 "
+	46	S	"+ "
+	47	S	"41"
+	48	S	"local a = 'abc'"
+	49	S	" return a:upper(), #a"
+	50	S	"return 'one char at a time'"
+	51	S	"=reader"
+	52	S	"1 +"
+	53	S	"=pieces"
+	54	S	"count_global = (count_global or 0) + 1 return count_global"
+	55	S	"return ..."
+	56	S	"=v"
+	57	S	"a"
+locals (16):
+	0	f	5	330
+	1	env	149	330
+	2	g	155	330
+	3	nil_env	203	330
+	4	pieces	216	330
+	5	i	217	330
+	6	reader	220	330
+	7	parts	230	330
+	8	j	231	330
+	9	one_char	238	330
+	10	k	239	330
+	11	syntax_pieces	277	330
+	12	m	278	330
+	13	counter_src	303	330
+	14	c1	309	330
+	15	c2	309	330
+upvalues (1):
+	0	_ENV	1	0
+
+function <base_load.lua:49,49> (9 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 0 constants, 0 functions
+	1	[49]	GETUPVAL 	0 0	; i
+	2	[49]	ADDI     	0 0 1
+	3	[49]	MMBINI   	0 1 6 0	; __add
+	4	[49]	SETUPVAL 	0 0	; i
+	5	[49]	GETUPVAL 	1 0	; i
+	6	[49]	GETUPVAL 	0 1	; pieces
+	7	[49]	GETTABLE 	0 0 1
+	8	[49]	RETURN1  	0
+	9	[49]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (2):
+	0	i	1	5
+	1	pieces	1	4
+
+function <base_load.lua:53,53> (9 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 0 constants, 0 functions
+	1	[53]	GETUPVAL 	0 0	; j
+	2	[53]	ADDI     	0 0 1
+	3	[53]	MMBINI   	0 1 6 0	; __add
+	4	[53]	SETUPVAL 	0 0	; j
+	5	[53]	GETUPVAL 	1 0	; j
+	6	[53]	GETUPVAL 	0 1	; parts
+	7	[53]	GETTABLE 	0 0 1
+	8	[53]	RETURN1  	0
+	9	[53]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (2):
+	0	j	1	8
+	1	parts	1	7
+
+function <base_load.lua:56,56> (11 instructions)
+0 params, 4 slots, 2 upvalues, 0 locals, 1 constant, 0 functions
+	1	[56]	GETUPVAL 	0 0	; k
+	2	[56]	ADDI     	0 0 1
+	3	[56]	MMBINI   	0 1 6 0	; __add
+	4	[56]	SETUPVAL 	0 0	; k
+	5	[56]	GETUPVAL 	0 1	; one_char
+	6	[56]	SELF     	0 0 0k	; "sub"
+	7	[56]	GETUPVAL 	2 0	; k
+	8	[56]	GETUPVAL 	3 0	; k
+	9	[56]	TAILCALL 	0 4 0	; 3 in
+	10	[56]	RETURN   	0 0 0	; all out
+	11	[56]	RETURN0  	
+constants (1):
+	0	S	"sub"
+locals (0):
+upvalues (2):
+	0	k	1	10
+	1	one_char	1	9
+
+function <base_load.lua:57,57> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[57]	LOADNIL  	0 0	; 1 out
+	2	[57]	RETURN1  	0
+	3	[57]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <base_load.lua:58,58> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[58]	LOADNIL  	0 0	; 1 out
+	2	[58]	RETURN1  	0
+	3	[58]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <base_load.lua:59,59> (4 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[59]	NEWTABLE 	0 0 0	; 0
+	2	[59]	EXTRAARG 	0
+	3	[59]	RETURN1  	0
+	4	[59]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <base_load.lua:60,60> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[60]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[60]	LOADK    	1 1	; "reader failed"
+	3	[60]	LOADI    	2 0
+	4	[60]	CALL     	0 3 1	; 2 in 0 out
+	5	[60]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"reader failed"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <base_load.lua:63,63> (9 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 0 constants, 0 functions
+	1	[63]	GETUPVAL 	0 0	; m
+	2	[63]	ADDI     	0 0 1
+	3	[63]	MMBINI   	0 1 6 0	; __add
+	4	[63]	SETUPVAL 	0 0	; m
+	5	[63]	GETUPVAL 	1 0	; m
+	6	[63]	GETUPVAL 	0 1	; syntax_pieces
+	7	[63]	GETTABLE 	0 0 1
+	8	[63]	RETURN1  	0
+	9	[63]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (2):
+	0	m	1	12
+	1	syntax_pieces	1	11

@@ -1,0 +1,315 @@
+Chunk
+  Local all
+    Table
+  NumericFor c
+    Integer 0
+    Integer 127
+    Body
+      Assign
+        Targets
+          Index
+            Name all (local 0)
+            Binary +
+              Unary #
+                Name all (local 0)
+              Integer 1
+        Values
+          Call
+            Index
+              Name string
+              String "char"
+            Name c (local 4)
+  Local ascii
+    Call
+      Index
+        Name table
+        String "concat"
+      Name all (local 0)
+  LocalFunction members
+    Function(class) [upvalues: ascii, _ENV]
+      Local count, shown
+        Integer 0
+        Table
+      GenericFor c
+        In
+          MethodCall gmatch
+            Name ascii (upvalue 0)
+            Name class (local 0)
+        Body
+          Assign
+            Targets
+              Name count (local 1)
+            Values
+              Binary +
+                Name count (local 1)
+                Integer 1
+          Local b
+            MethodCall byte
+              Name c (local 7)
+          If
+            If
+              Binary and
+                Binary >
+                  Name b (local 8)
+                  Integer 32
+                Binary <
+                  Name b (local 8)
+                  Integer 127
+              Then
+                Assign
+                  Targets
+                    Index
+                      Name shown (local 2)
+                      Binary +
+                        Unary #
+                          Name shown (local 2)
+                        Integer 1
+                  Values
+                    Name c (local 7)
+      Return
+        Name count (local 1)
+        Call
+          Index
+            Name table
+            String "concat"
+          Name shown (local 2)
+  GenericFor _, class
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            String "%a"
+          Item
+            String "%c"
+          Item
+            String "%d"
+          Item
+            String "%g"
+          Item
+            String "%l"
+          Item
+            String "%p"
+          Item
+            String "%s"
+          Item
+            String "%u"
+          Item
+            String "%w"
+          Item
+            String "%x"
+    Body
+      CallStatement
+        Call
+          Name print
+          Name class (local 8)
+          Call
+            Name members (local 2)
+            Name class (local 8)
+  GenericFor _, class
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            String "%A"
+          Item
+            String "%C"
+          Item
+            String "%D"
+          Item
+            String "%G"
+          Item
+            String "%L"
+          Item
+            String "%P"
+          Item
+            String "%S"
+          Item
+            String "%U"
+          Item
+            String "%W"
+          Item
+            String "%X"
+    Body
+      Local count
+        Call
+          Name members (local 2)
+          Name class (local 8)
+      CallStatement
+        Call
+          Name print
+          Name class (local 8)
+          Name count (local 9)
+          Binary +
+            Name count (local 9)
+            Call
+              Name members (local 2)
+              MethodCall lower
+                Name class (local 8)
+  Local spaces
+    Table
+  GenericFor c
+    In
+      MethodCall gmatch
+        Name ascii (local 1)
+        String "%s"
+    Body
+      Assign
+        Targets
+          Index
+            Name spaces (local 3)
+            Binary +
+              Unary #
+                Name spaces (local 3)
+              Integer 1
+        Values
+          MethodCall byte
+            Name c (local 8)
+  CallStatement
+    Call
+      Name print
+      String "spaces"
+      Call
+        Index
+          Name table
+          String "concat"
+        Name spaces (local 3)
+        String " "
+  Local controls
+    Table
+  GenericFor c
+    In
+      MethodCall gmatch
+        Name ascii (local 1)
+        String "[%c%s]"
+    Body
+      Assign
+        Targets
+          Index
+            Name controls (local 4)
+            Binary +
+              Unary #
+                Name controls (local 4)
+              Integer 1
+        Values
+          MethodCall byte
+            Name c (local 9)
+  CallStatement
+    Call
+      Name print
+      String "controls or spaces"
+      Unary #
+        Name controls (local 4)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name members (local 2)
+        String "."
+      Binary ==
+        MethodCall match
+          Paren
+            String "\x00\n"
+          String "^..$"
+        String "\x00\n"
+  Local magic
+    String "^$()%.[]*+-?"
+  Local escaped
+    Table
+  GenericFor c
+    In
+      MethodCall gmatch
+        Name magic (local 5)
+        String "."
+    Body
+      Assign
+        Targets
+          Index
+            Name escaped (local 6)
+            Binary +
+              Unary #
+                Name escaped (local 6)
+              Integer 1
+        Values
+          MethodCall find
+            Name magic (local 5)
+            Binary ..
+              String "%"
+              Name c (local 11)
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name escaped (local 6)
+        String " "
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "a.b"
+        String "%."
+      MethodCall match
+        Paren
+          String "50%"
+        String "%d+%%"
+      MethodCall match
+        Paren
+          String "x+y"
+        String "%+"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "snake_case99"
+        String "%w+"
+      MethodCall match
+        Paren
+          String "snake_case99"
+        String "[%w_]+"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "Hex: 0xDEADbeef!"
+        String "0x(%x+)"
+  CallStatement
+    Call
+      Name print
+      MethodCall gsub
+        Paren
+          String "MiXeD"
+        String "%u"
+        String "_"
+      MethodCall gsub
+        Paren
+          String "MiXeD"
+        String "%l"
+        String "_"
+  CallStatement
+    Call
+      Name print
+      MethodCall gsub
+        Paren
+          String "a1 b2\tc3\n"
+        String "%s"
+        String "."
+  CallStatement
+    Call
+      Name print
+      MethodCall gsub
+        Paren
+          String "{x=[1]}"
+        String "%p"
+        String ""
+  Return
+    Call
+      Name members (local 2)
+      String "[%d%u]"

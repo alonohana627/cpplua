@@ -1,0 +1,876 @@
+
+main <string_pack.lua:0,0> (736 instructions)
+0+ params, 10 slots, 1 upvalue, 1 local, 96 constants, 1 function
+	1	[1]	VARARGPREP	0
+	2	[10]	CLOSURE  	0 0
+	3	[12]	GETTABUP 	1 0 0	; _ENV "print"
+	4	[12]	MOVE     	2 0
+	5	[12]	GETTABUP 	3 0 1	; _ENV "string"
+	6	[12]	GETFIELD 	3 3 2	; "pack"
+	7	[12]	LOADK    	4 3	; "<i4"
+	8	[12]	LOADI    	5 1
+	9	[12]	CALL     	3 3 0	; 2 in all out
+	10	[12]	CALL     	2 0 2	; all in 1 out
+	11	[12]	MOVE     	3 0
+	12	[12]	GETTABUP 	4 0 1	; _ENV "string"
+	13	[12]	GETFIELD 	4 4 2	; "pack"
+	14	[12]	LOADK    	5 4	; ">i4"
+	15	[12]	LOADI    	6 1
+	16	[12]	CALL     	4 3 0	; 2 in all out
+	17	[12]	CALL     	3 0 2	; all in 1 out
+	18	[12]	MOVE     	4 0
+	19	[12]	GETTABUP 	5 0 1	; _ENV "string"
+	20	[12]	GETFIELD 	5 5 2	; "pack"
+	21	[12]	LOADK    	6 3	; "<i4"
+	22	[12]	LOADI    	7 -2
+	23	[12]	CALL     	5 3 0	; 2 in all out
+	24	[12]	CALL     	4 0 0	; all in all out
+	25	[12]	CALL     	1 0 1	; all in 0 out
+	26	[13]	GETTABUP 	1 0 0	; _ENV "print"
+	27	[13]	MOVE     	2 0
+	28	[13]	GETTABUP 	3 0 1	; _ENV "string"
+	29	[13]	GETFIELD 	3 3 2	; "pack"
+	30	[13]	LOADK    	4 5	; "<b"
+	31	[13]	LOADI    	5 -1
+	32	[13]	CALL     	3 3 0	; 2 in all out
+	33	[13]	CALL     	2 0 2	; all in 1 out
+	34	[13]	MOVE     	3 0
+	35	[13]	GETTABUP 	4 0 1	; _ENV "string"
+	36	[13]	GETFIELD 	4 4 2	; "pack"
+	37	[13]	LOADK    	5 6	; "<B"
+	38	[13]	LOADI    	6 255
+	39	[13]	CALL     	4 3 0	; 2 in all out
+	40	[13]	CALL     	3 0 2	; all in 1 out
+	41	[13]	MOVE     	4 0
+	42	[13]	GETTABUP 	5 0 1	; _ENV "string"
+	43	[13]	GETFIELD 	5 5 2	; "pack"
+	44	[13]	LOADK    	6 7	; "<h"
+	45	[13]	LOADI    	7 -2
+	46	[13]	CALL     	5 3 0	; 2 in all out
+	47	[13]	CALL     	4 0 0	; all in all out
+	48	[13]	CALL     	1 0 1	; all in 0 out
+	49	[14]	GETTABUP 	1 0 0	; _ENV "print"
+	50	[14]	MOVE     	2 0
+	51	[14]	GETTABUP 	3 0 1	; _ENV "string"
+	52	[14]	GETFIELD 	3 3 2	; "pack"
+	53	[14]	LOADK    	4 8	; ">H"
+	54	[14]	LOADI    	5 43981
+	55	[14]	CALL     	3 3 0	; 2 in all out
+	56	[14]	CALL     	2 0 2	; all in 1 out
+	57	[14]	MOVE     	3 0
+	58	[14]	GETTABUP 	4 0 1	; _ENV "string"
+	59	[14]	GETFIELD 	4 4 2	; "pack"
+	60	[14]	LOADK    	5 9	; "<I3"
+	61	[14]	LOADK    	6 10	; 1193046
+	62	[14]	CALL     	4 3 0	; 2 in all out
+	63	[14]	CALL     	3 0 2	; all in 1 out
+	64	[14]	MOVE     	4 0
+	65	[14]	GETTABUP 	5 0 1	; _ENV "string"
+	66	[14]	GETFIELD 	5 5 2	; "pack"
+	67	[14]	LOADK    	6 11	; ">i3"
+	68	[14]	LOADI    	7 -1
+	69	[14]	CALL     	5 3 0	; 2 in all out
+	70	[14]	CALL     	4 0 0	; all in all out
+	71	[14]	CALL     	1 0 1	; all in 0 out
+	72	[15]	GETTABUP 	1 0 0	; _ENV "print"
+	73	[15]	MOVE     	2 0
+	74	[15]	GETTABUP 	3 0 1	; _ENV "string"
+	75	[15]	GETFIELD 	3 3 2	; "pack"
+	76	[15]	LOADK    	4 12	; "<j"
+	77	[15]	LOADI    	5 1
+	78	[15]	CALL     	3 3 0	; 2 in all out
+	79	[15]	CALL     	2 0 2	; all in 1 out
+	80	[15]	MOVE     	3 0
+	81	[15]	GETTABUP 	4 0 1	; _ENV "string"
+	82	[15]	GETFIELD 	4 4 2	; "pack"
+	83	[15]	LOADK    	5 13	; ">J"
+	84	[15]	GETTABUP 	6 0 14	; _ENV "math"
+	85	[15]	GETFIELD 	6 6 15	; "mininteger"
+	86	[15]	CALL     	4 3 0	; 2 in all out
+	87	[15]	CALL     	3 0 0	; all in all out
+	88	[15]	CALL     	1 0 1	; all in 0 out
+	89	[16]	GETTABUP 	1 0 0	; _ENV "print"
+	90	[16]	MOVE     	2 0
+	91	[16]	GETTABUP 	3 0 1	; _ENV "string"
+	92	[16]	GETFIELD 	3 3 2	; "pack"
+	93	[16]	LOADK    	4 16	; "<i16"
+	94	[16]	LOADI    	5 -1
+	95	[16]	CALL     	3 3 0	; 2 in all out
+	96	[16]	CALL     	2 0 2	; all in 1 out
+	97	[16]	MOVE     	3 0
+	98	[16]	GETTABUP 	4 0 1	; _ENV "string"
+	99	[16]	GETFIELD 	4 4 2	; "pack"
+	100	[16]	LOADK    	5 17	; ">i16"
+	101	[16]	LOADI    	6 1
+	102	[16]	CALL     	4 3 0	; 2 in all out
+	103	[16]	CALL     	3 0 0	; all in all out
+	104	[16]	CALL     	1 0 1	; all in 0 out
+	105	[17]	GETTABUP 	1 0 0	; _ENV "print"
+	106	[17]	MOVE     	2 0
+	107	[17]	GETTABUP 	3 0 1	; _ENV "string"
+	108	[17]	GETFIELD 	3 3 2	; "pack"
+	109	[17]	LOADK    	4 18	; "<i1i2i4"
+	110	[17]	LOADI    	5 1
+	111	[17]	LOADI    	6 2
+	112	[17]	LOADI    	7 3
+	113	[17]	CALL     	3 5 0	; 4 in all out
+	114	[17]	CALL     	2 0 2	; all in 1 out
+	115	[17]	MOVE     	3 0
+	116	[17]	GETTABUP 	4 0 1	; _ENV "string"
+	117	[17]	GETFIELD 	4 4 2	; "pack"
+	118	[17]	LOADK    	5 19	; ">bBhH"
+	119	[17]	LOADI    	6 1
+	120	[17]	LOADI    	7 2
+	121	[17]	LOADI    	8 3
+	122	[17]	LOADI    	9 4
+	123	[17]	CALL     	4 6 0	; 5 in all out
+	124	[17]	CALL     	3 0 0	; all in all out
+	125	[17]	CALL     	1 0 1	; all in 0 out
+	126	[20]	GETTABUP 	1 0 0	; _ENV "print"
+	127	[20]	GETTABUP 	2 0 1	; _ENV "string"
+	128	[20]	GETFIELD 	2 2 20	; "unpack"
+	129	[20]	LOADK    	3 3	; "<i4"
+	130	[20]	GETTABUP 	4 0 1	; _ENV "string"
+	131	[20]	GETFIELD 	4 4 2	; "pack"
+	132	[20]	LOADK    	5 3	; "<i4"
+	133	[20]	LOADK    	6 21	; 123456
+	134	[20]	CALL     	4 3 0	; 2 in all out
+	135	[20]	CALL     	2 0 0	; all in all out
+	136	[20]	CALL     	1 0 1	; all in 0 out
+	137	[21]	GETTABUP 	1 0 0	; _ENV "print"
+	138	[21]	GETTABUP 	2 0 1	; _ENV "string"
+	139	[21]	GETFIELD 	2 2 20	; "unpack"
+	140	[21]	LOADK    	3 5	; "<b"
+	141	[21]	LOADK    	4 22	; "\255"
+	142	[21]	CALL     	2 3 2	; 2 in 1 out
+	143	[21]	GETTABUP 	3 0 1	; _ENV "string"
+	144	[21]	GETFIELD 	3 3 20	; "unpack"
+	145	[21]	LOADK    	4 6	; "<B"
+	146	[21]	LOADK    	5 22	; "\255"
+	147	[21]	CALL     	3 3 0	; 2 in all out
+	148	[21]	CALL     	1 0 1	; all in 0 out
+	149	[22]	GETTABUP 	1 0 0	; _ENV "print"
+	150	[22]	GETTABUP 	2 0 1	; _ENV "string"
+	151	[22]	GETFIELD 	2 2 20	; "unpack"
+	152	[22]	LOADK    	3 7	; "<h"
+	153	[22]	LOADK    	4 23	; "\254\255"
+	154	[22]	CALL     	2 3 2	; 2 in 1 out
+	155	[22]	GETTABUP 	3 0 1	; _ENV "string"
+	156	[22]	GETFIELD 	3 3 20	; "unpack"
+	157	[22]	LOADK    	4 8	; ">H"
+	158	[22]	LOADK    	5 24	; "\001\002"
+	159	[22]	CALL     	3 3 0	; 2 in all out
+	160	[22]	CALL     	1 0 1	; all in 0 out
+	161	[23]	GETTABUP 	1 0 0	; _ENV "print"
+	162	[23]	GETTABUP 	2 0 1	; _ENV "string"
+	163	[23]	GETFIELD 	2 2 20	; "unpack"
+	164	[23]	LOADK    	3 25	; "<i3"
+	165	[23]	LOADK    	4 26	; "\255\255\127"
+	166	[23]	CALL     	2 3 2	; 2 in 1 out
+	167	[23]	GETTABUP 	3 0 1	; _ENV "string"
+	168	[23]	GETFIELD 	3 3 20	; "unpack"
+	169	[23]	LOADK    	4 25	; "<i3"
+	170	[23]	LOADK    	5 27	; "\000\000\128"
+	171	[23]	CALL     	3 3 0	; 2 in all out
+	172	[23]	CALL     	1 0 1	; all in 0 out
+	173	[24]	GETTABUP 	1 0 0	; _ENV "print"
+	174	[24]	GETTABUP 	2 0 1	; _ENV "string"
+	175	[24]	GETFIELD 	2 2 20	; "unpack"
+	176	[24]	LOADK    	3 16	; "<i16"
+	177	[24]	GETTABUP 	4 0 1	; _ENV "string"
+	178	[24]	GETFIELD 	4 4 2	; "pack"
+	179	[24]	LOADK    	5 16	; "<i16"
+	180	[24]	LOADI    	6 -5
+	181	[24]	CALL     	4 3 0	; 2 in all out
+	182	[24]	CALL     	2 0 0	; all in all out
+	183	[24]	CALL     	1 0 1	; all in 0 out
+	184	[25]	GETTABUP 	1 0 0	; _ENV "print"
+	185	[25]	GETTABUP 	2 0 1	; _ENV "string"
+	186	[25]	GETFIELD 	2 2 20	; "unpack"
+	187	[25]	LOADK    	3 12	; "<j"
+	188	[25]	GETTABUP 	4 0 1	; _ENV "string"
+	189	[25]	GETFIELD 	4 4 2	; "pack"
+	190	[25]	LOADK    	5 12	; "<j"
+	191	[25]	GETTABUP 	6 0 14	; _ENV "math"
+	192	[25]	GETFIELD 	6 6 28	; "maxinteger"
+	193	[25]	CALL     	4 3 0	; 2 in all out
+	194	[25]	CALL     	2 0 2	; all in 1 out
+	195	[25]	GETTABUP 	3 0 14	; _ENV "math"
+	196	[25]	GETFIELD 	3 3 28	; "maxinteger"
+	197	[25]	EQ       	2 3 1
+	198	[25]	JMP      	1	; to 200
+	199	[25]	LFALSESKIP	2
+	200	[25]	LOADTRUE 	2
+	201	[25]	CALL     	1 2 1	; 1 in 0 out
+	202	[26]	GETTABUP 	1 0 0	; _ENV "print"
+	203	[26]	GETTABUP 	2 0 1	; _ENV "string"
+	204	[26]	GETFIELD 	2 2 20	; "unpack"
+	205	[26]	LOADK    	3 29	; "<i2i2"
+	206	[26]	LOADK    	4 30	; "\001\000\002\000"
+	207	[26]	CALL     	2 3 0	; 2 in all out
+	208	[26]	CALL     	1 0 1	; all in 0 out
+	209	[27]	GETTABUP 	1 0 0	; _ENV "print"
+	210	[27]	GETTABUP 	2 0 1	; _ENV "string"
+	211	[27]	GETFIELD 	2 2 20	; "unpack"
+	212	[27]	LOADK    	3 31	; "<i2"
+	213	[27]	LOADK    	4 32	; "\000\000\001\000"
+	214	[27]	LOADI    	5 3
+	215	[27]	CALL     	2 4 0	; 3 in all out
+	216	[27]	CALL     	1 0 1	; all in 0 out
+	217	[28]	GETTABUP 	1 0 0	; _ENV "print"
+	218	[28]	GETTABUP 	2 0 1	; _ENV "string"
+	219	[28]	GETFIELD 	2 2 20	; "unpack"
+	220	[28]	LOADK    	3 31	; "<i2"
+	221	[28]	LOADK    	4 32	; "\000\000\001\000"
+	222	[28]	LOADI    	5 -2
+	223	[28]	CALL     	2 4 0	; 3 in all out
+	224	[28]	CALL     	1 0 1	; all in 0 out
+	225	[29]	GETTABUP 	1 0 0	; _ENV "print"
+	226	[29]	GETTABUP 	2 0 1	; _ENV "string"
+	227	[29]	GETFIELD 	2 2 20	; "unpack"
+	228	[29]	LOADK    	3 33	; "<I8"
+	229	[29]	LOADK    	4 34	; "\255\255\255\255\255\255\255\255"
+	230	[29]	CALL     	2 3 0	; 2 in all out
+	231	[29]	CALL     	1 0 1	; all in 0 out
+	232	[32]	GETTABUP 	1 0 0	; _ENV "print"
+	233	[32]	MOVE     	2 0
+	234	[32]	GETTABUP 	3 0 1	; _ENV "string"
+	235	[32]	GETFIELD 	3 3 2	; "pack"
+	236	[32]	LOADK    	4 35	; "<d"
+	237	[32]	LOADK    	5 36	; 1.5
+	238	[32]	CALL     	3 3 0	; 2 in all out
+	239	[32]	CALL     	2 0 2	; all in 1 out
+	240	[32]	MOVE     	3 0
+	241	[32]	GETTABUP 	4 0 1	; _ENV "string"
+	242	[32]	GETFIELD 	4 4 2	; "pack"
+	243	[32]	LOADK    	5 37	; ">f"
+	244	[32]	LOADF    	6 -2
+	245	[32]	CALL     	4 3 0	; 2 in all out
+	246	[32]	CALL     	3 0 2	; all in 1 out
+	247	[32]	MOVE     	4 0
+	248	[32]	GETTABUP 	5 0 1	; _ENV "string"
+	249	[32]	GETFIELD 	5 5 2	; "pack"
+	250	[32]	LOADK    	6 38	; "<n"
+	251	[32]	LOADK    	7 39	; 0.5
+	252	[32]	CALL     	5 3 0	; 2 in all out
+	253	[32]	CALL     	4 0 0	; all in all out
+	254	[32]	CALL     	1 0 1	; all in 0 out
+	255	[33]	GETTABUP 	1 0 0	; _ENV "print"
+	256	[33]	GETTABUP 	2 0 1	; _ENV "string"
+	257	[33]	GETFIELD 	2 2 20	; "unpack"
+	258	[33]	LOADK    	3 35	; "<d"
+	259	[33]	GETTABUP 	4 0 1	; _ENV "string"
+	260	[33]	GETFIELD 	4 4 2	; "pack"
+	261	[33]	LOADK    	5 35	; "<d"
+	262	[33]	LOADK    	6 40	; 0.1
+	263	[33]	CALL     	4 3 0	; 2 in all out
+	264	[33]	CALL     	2 0 2	; all in 1 out
+	265	[33]	GETTABUP 	3 0 1	; _ENV "string"
+	266	[33]	GETFIELD 	3 3 20	; "unpack"
+	267	[33]	LOADK    	4 41	; "<f"
+	268	[33]	GETTABUP 	5 0 1	; _ENV "string"
+	269	[33]	GETFIELD 	5 5 2	; "pack"
+	270	[33]	LOADK    	6 41	; "<f"
+	271	[33]	LOADK    	7 42	; 0.25
+	272	[33]	CALL     	5 3 0	; 2 in all out
+	273	[33]	CALL     	3 0 0	; all in all out
+	274	[33]	CALL     	1 0 1	; all in 0 out
+	275	[34]	GETTABUP 	1 0 0	; _ENV "print"
+	276	[34]	GETTABUP 	2 0 1	; _ENV "string"
+	277	[34]	GETFIELD 	2 2 20	; "unpack"
+	278	[34]	LOADK    	3 41	; "<f"
+	279	[34]	GETTABUP 	4 0 1	; _ENV "string"
+	280	[34]	GETFIELD 	4 4 2	; "pack"
+	281	[34]	LOADK    	5 41	; "<f"
+	282	[34]	LOADK    	6 40	; 0.1
+	283	[34]	CALL     	4 3 0	; 2 in all out
+	284	[34]	CALL     	2 0 2	; all in 1 out
+	285	[34]	EQK      	2 40 1	; 0.1
+	286	[34]	JMP      	1	; to 288
+	287	[34]	LFALSESKIP	2
+	288	[34]	LOADTRUE 	2
+	289	[34]	GETTABUP 	3 0 1	; _ENV "string"
+	290	[34]	GETFIELD 	3 3 20	; "unpack"
+	291	[34]	LOADK    	4 35	; "<d"
+	292	[34]	GETTABUP 	5 0 1	; _ENV "string"
+	293	[34]	GETFIELD 	5 5 2	; "pack"
+	294	[34]	LOADK    	6 35	; "<d"
+	295	[34]	GETTABUP 	7 0 14	; _ENV "math"
+	296	[34]	GETFIELD 	7 7 43	; "huge"
+	297	[34]	CALL     	5 3 0	; 2 in all out
+	298	[34]	CALL     	3 0 0	; all in all out
+	299	[34]	CALL     	1 0 1	; all in 0 out
+	300	[35]	GETTABUP 	1 0 0	; _ENV "print"
+	301	[35]	GETTABUP 	2 0 14	; _ENV "math"
+	302	[35]	GETFIELD 	2 2 44	; "type"
+	303	[35]	GETTABUP 	3 0 1	; _ENV "string"
+	304	[35]	GETFIELD 	3 3 20	; "unpack"
+	305	[35]	LOADK    	4 35	; "<d"
+	306	[35]	GETTABUP 	5 0 1	; _ENV "string"
+	307	[35]	GETFIELD 	5 5 2	; "pack"
+	308	[35]	LOADK    	6 35	; "<d"
+	309	[35]	LOADI    	7 3
+	310	[35]	CALL     	5 3 0	; 2 in all out
+	311	[35]	CALL     	3 0 0	; all in all out
+	312	[35]	CALL     	2 0 2	; all in 1 out
+	313	[35]	GETTABUP 	3 0 1	; _ENV "string"
+	314	[35]	GETFIELD 	3 3 20	; "unpack"
+	315	[35]	LOADK    	4 38	; "<n"
+	316	[35]	GETTABUP 	5 0 1	; _ENV "string"
+	317	[35]	GETFIELD 	5 5 2	; "pack"
+	318	[35]	LOADK    	6 38	; "<n"
+	319	[35]	LOADF    	7 0
+	320	[35]	UNM      	7 7
+	321	[35]	CALL     	5 3 0	; 2 in all out
+	322	[35]	CALL     	3 0 0	; all in all out
+	323	[35]	CALL     	1 0 1	; all in 0 out
+	324	[38]	GETTABUP 	1 0 0	; _ENV "print"
+	325	[38]	MOVE     	2 0
+	326	[38]	GETTABUP 	3 0 1	; _ENV "string"
+	327	[38]	GETFIELD 	3 3 2	; "pack"
+	328	[38]	LOADK    	4 45	; "<s1"
+	329	[38]	LOADK    	5 46	; "abc"
+	330	[38]	CALL     	3 3 0	; 2 in all out
+	331	[38]	CALL     	2 0 2	; all in 1 out
+	332	[38]	MOVE     	3 0
+	333	[38]	GETTABUP 	4 0 1	; _ENV "string"
+	334	[38]	GETFIELD 	4 4 2	; "pack"
+	335	[38]	LOADK    	5 47	; ">s2"
+	336	[38]	LOADK    	6 46	; "abc"
+	337	[38]	CALL     	4 3 0	; 2 in all out
+	338	[38]	CALL     	3 0 2	; all in 1 out
+	339	[38]	MOVE     	4 0
+	340	[38]	GETTABUP 	5 0 1	; _ENV "string"
+	341	[38]	GETFIELD 	5 5 2	; "pack"
+	342	[38]	LOADK    	6 48	; "<s4"
+	343	[38]	LOADK    	7 49	; ""
+	344	[38]	CALL     	5 3 0	; 2 in all out
+	345	[38]	CALL     	4 0 0	; all in all out
+	346	[38]	CALL     	1 0 1	; all in 0 out
+	347	[39]	GETTABUP 	1 0 0	; _ENV "print"
+	348	[39]	MOVE     	2 0
+	349	[39]	GETTABUP 	3 0 1	; _ENV "string"
+	350	[39]	GETFIELD 	3 3 2	; "pack"
+	351	[39]	LOADK    	4 50	; "z"
+	352	[39]	LOADK    	5 51	; "hi"
+	353	[39]	CALL     	3 3 0	; 2 in all out
+	354	[39]	CALL     	2 0 2	; all in 1 out
+	355	[39]	MOVE     	3 0
+	356	[39]	GETTABUP 	4 0 1	; _ENV "string"
+	357	[39]	GETFIELD 	4 4 2	; "pack"
+	358	[39]	LOADK    	5 52	; "c5"
+	359	[39]	LOADK    	6 53	; "ab"
+	360	[39]	CALL     	4 3 0	; 2 in all out
+	361	[39]	CALL     	3 0 2	; all in 1 out
+	362	[39]	MOVE     	4 0
+	363	[39]	GETTABUP 	5 0 1	; _ENV "string"
+	364	[39]	GETFIELD 	5 5 2	; "pack"
+	365	[39]	LOADK    	6 54	; "c2"
+	366	[39]	LOADK    	7 53	; "ab"
+	367	[39]	CALL     	5 3 0	; 2 in all out
+	368	[39]	CALL     	4 0 0	; all in all out
+	369	[39]	CALL     	1 0 1	; all in 0 out
+	370	[40]	GETTABUP 	1 0 0	; _ENV "print"
+	371	[40]	GETTABUP 	2 0 1	; _ENV "string"
+	372	[40]	GETFIELD 	2 2 20	; "unpack"
+	373	[40]	LOADK    	3 45	; "<s1"
+	374	[40]	LOADK    	4 55	; "\003abcdef"
+	375	[40]	CALL     	2 3 0	; 2 in all out
+	376	[40]	CALL     	1 0 1	; all in 0 out
+	377	[41]	GETTABUP 	1 0 0	; _ENV "print"
+	378	[41]	GETTABUP 	2 0 1	; _ENV "string"
+	379	[41]	GETFIELD 	2 2 20	; "unpack"
+	380	[41]	LOADK    	3 50	; "z"
+	381	[41]	LOADK    	4 56	; "hello\000world\000"
+	382	[41]	CALL     	2 3 0	; 2 in all out
+	383	[41]	CALL     	1 0 1	; all in 0 out
+	384	[42]	GETTABUP 	1 0 0	; _ENV "print"
+	385	[42]	GETTABUP 	2 0 1	; _ENV "string"
+	386	[42]	GETFIELD 	2 2 20	; "unpack"
+	387	[42]	LOADK    	3 57	; "zz"
+	388	[42]	LOADK    	4 56	; "hello\000world\000"
+	389	[42]	CALL     	2 3 0	; 2 in all out
+	390	[42]	CALL     	1 0 1	; all in 0 out
+	391	[43]	GETTABUP 	1 0 0	; _ENV "print"
+	392	[43]	GETTABUP 	2 0 1	; _ENV "string"
+	393	[43]	GETFIELD 	2 2 20	; "unpack"
+	394	[43]	LOADK    	3 58	; "c3"
+	395	[43]	LOADK    	4 59	; "abcdef"
+	396	[43]	CALL     	2 3 0	; 2 in all out
+	397	[43]	CALL     	1 0 1	; all in 0 out
+	398	[44]	GETTABUP 	1 0 0	; _ENV "print"
+	399	[44]	GETTABUP 	2 0 1	; _ENV "string"
+	400	[44]	GETFIELD 	2 2 20	; "unpack"
+	401	[44]	LOADK    	3 60	; "<s1i2"
+	402	[44]	GETTABUP 	4 0 1	; _ENV "string"
+	403	[44]	GETFIELD 	4 4 2	; "pack"
+	404	[44]	LOADK    	5 60	; "<s1i2"
+	405	[44]	LOADK    	6 61	; "xy"
+	406	[44]	LOADI    	7 7
+	407	[44]	CALL     	4 4 0	; 3 in all out
+	408	[44]	CALL     	2 0 0	; all in all out
+	409	[44]	CALL     	1 0 1	; all in 0 out
+	410	[45]	GETTABUP 	1 0 0	; _ENV "print"
+	411	[45]	GETTABUP 	2 0 1	; _ENV "string"
+	412	[45]	GETFIELD 	2 2 20	; "unpack"
+	413	[45]	LOADK    	3 62	; "c0"
+	414	[45]	LOADK    	4 46	; "abc"
+	415	[45]	CALL     	2 3 2	; 2 in 1 out
+	416	[45]	EQK      	2 49 1	; ""
+	417	[45]	JMP      	1	; to 419
+	418	[45]	LFALSESKIP	2
+	419	[45]	LOADTRUE 	2
+	420	[45]	GETTABUP 	3 0 1	; _ENV "string"
+	421	[45]	GETFIELD 	3 3 20	; "unpack"
+	422	[45]	LOADK    	4 62	; "c0"
+	423	[45]	LOADK    	5 46	; "abc"
+	424	[45]	LOADI    	6 4
+	425	[45]	CALL     	3 4 2	; 3 in 1 out
+	426	[45]	EQK      	3 49 1	; ""
+	427	[45]	JMP      	1	; to 429
+	428	[45]	LFALSESKIP	3
+	429	[45]	LOADTRUE 	3
+	430	[45]	CALL     	1 3 1	; 2 in 0 out
+	431	[48]	GETTABUP 	1 0 0	; _ENV "print"
+	432	[48]	MOVE     	2 0
+	433	[48]	GETTABUP 	3 0 1	; _ENV "string"
+	434	[48]	GETFIELD 	3 3 2	; "pack"
+	435	[48]	LOADK    	4 63	; "<bxb"
+	436	[48]	LOADI    	5 1
+	437	[48]	LOADI    	6 2
+	438	[48]	CALL     	3 4 0	; 3 in all out
+	439	[48]	CALL     	2 0 2	; all in 1 out
+	440	[48]	MOVE     	3 0
+	441	[48]	GETTABUP 	4 0 1	; _ENV "string"
+	442	[48]	GETFIELD 	4 4 2	; "pack"
+	443	[48]	LOADK    	5 64	; "<bxxi2"
+	444	[48]	LOADI    	6 1
+	445	[48]	LOADI    	7 2
+	446	[48]	CALL     	4 4 0	; 3 in all out
+	447	[48]	CALL     	3 0 0	; all in all out
+	448	[48]	CALL     	1 0 1	; all in 0 out
+	449	[49]	GETTABUP 	1 0 0	; _ENV "print"
+	450	[49]	MOVE     	2 0
+	451	[49]	GETTABUP 	3 0 1	; _ENV "string"
+	452	[49]	GETFIELD 	3 3 2	; "pack"
+	453	[49]	LOADK    	4 65	; "<!4 b i4"
+	454	[49]	LOADI    	5 1
+	455	[49]	LOADI    	6 2
+	456	[49]	CALL     	3 4 0	; 3 in all out
+	457	[49]	CALL     	2 0 2	; all in 1 out
+	458	[49]	MOVE     	3 0
+	459	[49]	GETTABUP 	4 0 1	; _ENV "string"
+	460	[49]	GETFIELD 	4 4 2	; "pack"
+	461	[49]	LOADK    	5 66	; "<!2 b i4"
+	462	[49]	LOADI    	6 1
+	463	[49]	LOADI    	7 2
+	464	[49]	CALL     	4 4 0	; 3 in all out
+	465	[49]	CALL     	3 0 2	; all in 1 out
+	466	[49]	MOVE     	4 0
+	467	[49]	GETTABUP 	5 0 1	; _ENV "string"
+	468	[49]	GETFIELD 	5 5 2	; "pack"
+	469	[49]	LOADK    	6 67	; "<! b i8"
+	470	[49]	LOADI    	7 1
+	471	[49]	LOADI    	8 2
+	472	[49]	CALL     	5 4 0	; 3 in all out
+	473	[49]	CALL     	4 0 0	; all in all out
+	474	[49]	CALL     	1 0 1	; all in 0 out
+	475	[50]	GETTABUP 	1 0 0	; _ENV "print"
+	476	[50]	MOVE     	2 0
+	477	[50]	GETTABUP 	3 0 1	; _ENV "string"
+	478	[50]	GETFIELD 	3 3 2	; "pack"
+	479	[50]	LOADK    	4 68	; "<!8 b Xi8"
+	480	[50]	LOADI    	5 1
+	481	[50]	CALL     	3 3 0	; 2 in all out
+	482	[50]	CALL     	2 0 2	; all in 1 out
+	483	[50]	MOVE     	3 0
+	484	[50]	GETTABUP 	4 0 1	; _ENV "string"
+	485	[50]	GETFIELD 	4 4 2	; "pack"
+	486	[50]	LOADK    	5 69	; "<!4 b Xh b"
+	487	[50]	LOADI    	6 1
+	488	[50]	LOADI    	7 2
+	489	[50]	CALL     	4 4 0	; 3 in all out
+	490	[50]	CALL     	3 0 0	; all in all out
+	491	[50]	CALL     	1 0 1	; all in 0 out
+	492	[51]	GETTABUP 	1 0 0	; _ENV "print"
+	493	[51]	GETTABUP 	2 0 1	; _ENV "string"
+	494	[51]	GETFIELD 	2 2 20	; "unpack"
+	495	[51]	LOADK    	3 65	; "<!4 b i4"
+	496	[51]	GETTABUP 	4 0 1	; _ENV "string"
+	497	[51]	GETFIELD 	4 4 2	; "pack"
+	498	[51]	LOADK    	5 65	; "<!4 b i4"
+	499	[51]	LOADI    	6 -1
+	500	[51]	LOADI    	7 99
+	501	[51]	CALL     	4 4 0	; 3 in all out
+	502	[51]	CALL     	2 0 0	; all in all out
+	503	[51]	CALL     	1 0 1	; all in 0 out
+	504	[54]	GETTABUP 	1 0 0	; _ENV "print"
+	505	[54]	GETTABUP 	2 0 1	; _ENV "string"
+	506	[54]	GETFIELD 	2 2 70	; "packsize"
+	507	[54]	LOADK    	3 3	; "<i4"
+	508	[54]	CALL     	2 2 2	; 1 in 1 out
+	509	[54]	GETTABUP 	3 0 1	; _ENV "string"
+	510	[54]	GETFIELD 	3 3 70	; "packsize"
+	511	[54]	LOADK    	4 71	; "bhi4j"
+	512	[54]	CALL     	3 2 2	; 1 in 1 out
+	513	[54]	GETTABUP 	4 0 1	; _ENV "string"
+	514	[54]	GETFIELD 	4 4 70	; "packsize"
+	515	[54]	LOADK    	5 72	; "<!8 b i8"
+	516	[54]	CALL     	4 2 0	; 1 in all out
+	517	[54]	CALL     	1 0 1	; all in 0 out
+	518	[55]	GETTABUP 	1 0 0	; _ENV "print"
+	519	[55]	GETTABUP 	2 0 1	; _ENV "string"
+	520	[55]	GETFIELD 	2 2 70	; "packsize"
+	521	[55]	LOADK    	3 73	; "c10"
+	522	[55]	CALL     	2 2 2	; 1 in 1 out
+	523	[55]	GETTABUP 	3 0 1	; _ENV "string"
+	524	[55]	GETFIELD 	3 3 70	; "packsize"
+	525	[55]	LOADK    	4 74	; "i16"
+	526	[55]	CALL     	3 2 2	; 1 in 1 out
+	527	[55]	GETTABUP 	4 0 1	; _ENV "string"
+	528	[55]	GETFIELD 	4 4 70	; "packsize"
+	529	[55]	LOADK    	5 75	; "d"
+	530	[55]	CALL     	4 2 2	; 1 in 1 out
+	531	[55]	GETTABUP 	5 0 1	; _ENV "string"
+	532	[55]	GETFIELD 	5 5 70	; "packsize"
+	533	[55]	LOADK    	6 76	; "f"
+	534	[55]	CALL     	5 2 0	; 1 in all out
+	535	[55]	CALL     	1 0 1	; all in 0 out
+	536	[56]	GETTABUP 	1 0 0	; _ENV "print"
+	537	[56]	GETTABUP 	2 0 1	; _ENV "string"
+	538	[56]	GETFIELD 	2 2 70	; "packsize"
+	539	[56]	LOADK    	3 77	; "x"
+	540	[56]	CALL     	2 2 2	; 1 in 1 out
+	541	[56]	GETTABUP 	3 0 1	; _ENV "string"
+	542	[56]	GETFIELD 	3 3 70	; "packsize"
+	543	[56]	LOADK    	4 49	; ""
+	544	[56]	CALL     	3 2 2	; 1 in 1 out
+	545	[56]	GETTABUP 	4 0 1	; _ENV "string"
+	546	[56]	GETFIELD 	4 4 70	; "packsize"
+	547	[56]	LOADK    	5 78	; "<!4 b Xi4"
+	548	[56]	CALL     	4 2 2	; 1 in 1 out
+	549	[56]	GETTABUP 	5 0 1	; _ENV "string"
+	550	[56]	GETFIELD 	5 5 70	; "packsize"
+	551	[56]	LOADK    	6 79	; " < > = "
+	552	[56]	CALL     	5 2 0	; 1 in all out
+	553	[56]	CALL     	1 0 1	; all in 0 out
+	554	[59]	GETTABUP 	1 0 0	; _ENV "print"
+	555	[59]	GETTABUP 	2 0 80	; _ENV "pcall"
+	556	[59]	GETTABUP 	3 0 1	; _ENV "string"
+	557	[59]	GETFIELD 	3 3 2	; "pack"
+	558	[59]	LOADK    	4 5	; "<b"
+	559	[59]	LOADI    	5 128
+	560	[59]	CALL     	2 4 0	; 3 in all out
+	561	[59]	CALL     	1 0 1	; all in 0 out
+	562	[60]	GETTABUP 	1 0 0	; _ENV "print"
+	563	[60]	GETTABUP 	2 0 80	; _ENV "pcall"
+	564	[60]	GETTABUP 	3 0 1	; _ENV "string"
+	565	[60]	GETFIELD 	3 3 2	; "pack"
+	566	[60]	LOADK    	4 6	; "<B"
+	567	[60]	LOADI    	5 -1
+	568	[60]	CALL     	2 4 0	; 3 in all out
+	569	[60]	CALL     	1 0 1	; all in 0 out
+	570	[61]	GETTABUP 	1 0 0	; _ENV "print"
+	571	[61]	GETTABUP 	2 0 80	; _ENV "pcall"
+	572	[61]	GETTABUP 	3 0 1	; _ENV "string"
+	573	[61]	GETFIELD 	3 3 2	; "pack"
+	574	[61]	LOADK    	4 31	; "<i2"
+	575	[61]	LOADI    	5 40000
+	576	[61]	CALL     	2 4 0	; 3 in all out
+	577	[61]	CALL     	1 0 1	; all in 0 out
+	578	[62]	GETTABUP 	1 0 0	; _ENV "print"
+	579	[62]	GETTABUP 	2 0 80	; _ENV "pcall"
+	580	[62]	GETTABUP 	3 0 1	; _ENV "string"
+	581	[62]	GETFIELD 	3 3 2	; "pack"
+	582	[62]	LOADK    	4 81	; "<i17"
+	583	[62]	LOADI    	5 1
+	584	[62]	CALL     	2 4 0	; 3 in all out
+	585	[62]	CALL     	1 0 1	; all in 0 out
+	586	[63]	GETTABUP 	1 0 0	; _ENV "print"
+	587	[63]	GETTABUP 	2 0 80	; _ENV "pcall"
+	588	[63]	GETTABUP 	3 0 1	; _ENV "string"
+	589	[63]	GETFIELD 	3 3 2	; "pack"
+	590	[63]	LOADK    	4 82	; "<i0"
+	591	[63]	LOADI    	5 1
+	592	[63]	CALL     	2 4 0	; 3 in all out
+	593	[63]	CALL     	1 0 1	; all in 0 out
+	594	[64]	GETTABUP 	1 0 0	; _ENV "print"
+	595	[64]	GETTABUP 	2 0 80	; _ENV "pcall"
+	596	[64]	GETTABUP 	3 0 1	; _ENV "string"
+	597	[64]	GETFIELD 	3 3 2	; "pack"
+	598	[64]	LOADK    	4 45	; "<s1"
+	599	[64]	GETTABUP 	5 0 1	; _ENV "string"
+	600	[64]	GETFIELD 	5 5 83	; "rep"
+	601	[64]	LOADK    	6 77	; "x"
+	602	[64]	LOADI    	7 256
+	603	[64]	CALL     	5 3 0	; 2 in all out
+	604	[64]	CALL     	2 0 0	; all in all out
+	605	[64]	CALL     	1 0 1	; all in 0 out
+	606	[65]	GETTABUP 	1 0 0	; _ENV "print"
+	607	[65]	GETTABUP 	2 0 80	; _ENV "pcall"
+	608	[65]	GETTABUP 	3 0 1	; _ENV "string"
+	609	[65]	GETFIELD 	3 3 2	; "pack"
+	610	[65]	LOADK    	4 50	; "z"
+	611	[65]	LOADK    	5 84	; "a\000b"
+	612	[65]	CALL     	2 4 0	; 3 in all out
+	613	[65]	CALL     	1 0 1	; all in 0 out
+	614	[66]	GETTABUP 	1 0 0	; _ENV "print"
+	615	[66]	GETTABUP 	2 0 80	; _ENV "pcall"
+	616	[66]	GETTABUP 	3 0 1	; _ENV "string"
+	617	[66]	GETFIELD 	3 3 2	; "pack"
+	618	[66]	LOADK    	4 54	; "c2"
+	619	[66]	LOADK    	5 46	; "abc"
+	620	[66]	CALL     	2 4 0	; 3 in all out
+	621	[66]	CALL     	1 0 1	; all in 0 out
+	622	[67]	GETTABUP 	1 0 0	; _ENV "print"
+	623	[67]	GETTABUP 	2 0 80	; _ENV "pcall"
+	624	[67]	GETTABUP 	3 0 1	; _ENV "string"
+	625	[67]	GETFIELD 	3 3 2	; "pack"
+	626	[67]	LOADK    	4 3	; "<i4"
+	627	[67]	CALL     	2 3 0	; 2 in all out
+	628	[67]	CALL     	1 0 1	; all in 0 out
+	629	[68]	GETTABUP 	1 0 0	; _ENV "print"
+	630	[68]	GETTABUP 	2 0 80	; _ENV "pcall"
+	631	[68]	GETTABUP 	3 0 1	; _ENV "string"
+	632	[68]	GETFIELD 	3 3 2	; "pack"
+	633	[68]	LOADK    	4 3	; "<i4"
+	634	[68]	LOADK    	5 77	; "x"
+	635	[68]	CALL     	2 4 0	; 3 in all out
+	636	[68]	CALL     	1 0 1	; all in 0 out
+	637	[69]	GETTABUP 	1 0 0	; _ENV "print"
+	638	[69]	GETTABUP 	2 0 80	; _ENV "pcall"
+	639	[69]	GETTABUP 	3 0 1	; _ENV "string"
+	640	[69]	GETFIELD 	3 3 2	; "pack"
+	641	[69]	LOADK    	4 85	; "y"
+	642	[69]	LOADI    	5 1
+	643	[69]	CALL     	2 4 0	; 3 in all out
+	644	[69]	CALL     	1 0 1	; all in 0 out
+	645	[70]	GETTABUP 	1 0 0	; _ENV "print"
+	646	[70]	GETTABUP 	2 0 80	; _ENV "pcall"
+	647	[70]	GETTABUP 	3 0 1	; _ENV "string"
+	648	[70]	GETFIELD 	3 3 2	; "pack"
+	649	[70]	LOADK    	4 86	; "<!3 i4"
+	650	[70]	LOADI    	5 1
+	651	[70]	CALL     	2 4 0	; 3 in all out
+	652	[70]	CALL     	1 0 1	; all in 0 out
+	653	[71]	GETTABUP 	1 0 0	; _ENV "print"
+	654	[71]	GETTABUP 	2 0 80	; _ENV "pcall"
+	655	[71]	GETTABUP 	3 0 1	; _ENV "string"
+	656	[71]	GETFIELD 	3 3 70	; "packsize"
+	657	[71]	LOADK    	4 87	; "s"
+	658	[71]	CALL     	2 3 0	; 2 in all out
+	659	[71]	CALL     	1 0 1	; all in 0 out
+	660	[72]	GETTABUP 	1 0 0	; _ENV "print"
+	661	[72]	GETTABUP 	2 0 80	; _ENV "pcall"
+	662	[72]	GETTABUP 	3 0 1	; _ENV "string"
+	663	[72]	GETFIELD 	3 3 70	; "packsize"
+	664	[72]	LOADK    	4 50	; "z"
+	665	[72]	CALL     	2 3 0	; 2 in all out
+	666	[72]	CALL     	1 0 1	; all in 0 out
+	667	[73]	GETTABUP 	1 0 0	; _ENV "print"
+	668	[73]	GETTABUP 	2 0 80	; _ENV "pcall"
+	669	[73]	GETTABUP 	3 0 1	; _ENV "string"
+	670	[73]	GETFIELD 	3 3 20	; "unpack"
+	671	[73]	LOADK    	4 3	; "<i4"
+	672	[73]	LOADK    	5 46	; "abc"
+	673	[73]	CALL     	2 4 0	; 3 in all out
+	674	[73]	CALL     	1 0 1	; all in 0 out
+	675	[74]	GETTABUP 	1 0 0	; _ENV "print"
+	676	[74]	GETTABUP 	2 0 80	; _ENV "pcall"
+	677	[74]	GETTABUP 	3 0 1	; _ENV "string"
+	678	[74]	GETFIELD 	3 3 20	; "unpack"
+	679	[74]	LOADK    	4 50	; "z"
+	680	[74]	LOADK    	5 46	; "abc"
+	681	[74]	CALL     	2 4 0	; 3 in all out
+	682	[74]	CALL     	1 0 1	; all in 0 out
+	683	[75]	GETTABUP 	1 0 0	; _ENV "print"
+	684	[75]	GETTABUP 	2 0 80	; _ENV "pcall"
+	685	[75]	GETTABUP 	3 0 1	; _ENV "string"
+	686	[75]	GETFIELD 	3 3 20	; "unpack"
+	687	[75]	LOADK    	4 45	; "<s1"
+	688	[75]	LOADK    	5 88	; "\005ab"
+	689	[75]	CALL     	2 4 0	; 3 in all out
+	690	[75]	CALL     	1 0 1	; all in 0 out
+	691	[76]	GETTABUP 	1 0 0	; _ENV "print"
+	692	[76]	GETTABUP 	2 0 80	; _ENV "pcall"
+	693	[76]	GETTABUP 	3 0 1	; _ENV "string"
+	694	[76]	GETFIELD 	3 3 20	; "unpack"
+	695	[76]	LOADK    	4 3	; "<i4"
+	696	[76]	LOADK    	5 89	; "abcd"
+	697	[76]	LOADI    	6 10
+	698	[76]	CALL     	2 5 0	; 4 in all out
+	699	[76]	CALL     	1 0 1	; all in 0 out
+	700	[77]	GETTABUP 	1 0 0	; _ENV "print"
+	701	[77]	GETTABUP 	2 0 80	; _ENV "pcall"
+	702	[77]	GETTABUP 	3 0 1	; _ENV "string"
+	703	[77]	GETFIELD 	3 3 20	; "unpack"
+	704	[77]	LOADK    	4 90	; "<i9"
+	705	[77]	LOADK    	5 91	; "\000\000\000\000\000\000\000\000\001"
+	706	[77]	CALL     	2 4 0	; 3 in all out
+	707	[77]	CALL     	1 0 1	; all in 0 out
+	708	[78]	GETTABUP 	1 0 0	; _ENV "print"
+	709	[78]	GETTABUP 	2 0 80	; _ENV "pcall"
+	710	[78]	GETTABUP 	3 0 1	; _ENV "string"
+	711	[78]	GETFIELD 	3 3 2	; "pack"
+	712	[78]	LOADK    	4 92	; "c"
+	713	[78]	LOADK    	5 93	; "a"
+	714	[78]	CALL     	2 4 0	; 3 in all out
+	715	[78]	CALL     	1 0 1	; all in 0 out
+	716	[79]	GETTABUP 	1 0 0	; _ENV "print"
+	717	[79]	GETTABUP 	2 0 80	; _ENV "pcall"
+	718	[79]	GETTABUP 	3 0 1	; _ENV "string"
+	719	[79]	GETFIELD 	3 3 2	; "pack"
+	720	[79]	LOADK    	4 94	; "X"
+	721	[79]	LOADI    	5 1
+	722	[79]	CALL     	2 4 0	; 3 in all out
+	723	[79]	CALL     	1 0 1	; all in 0 out
+	724	[81]	GETTABUP 	1 0 1	; _ENV "string"
+	725	[81]	GETFIELD 	1 1 20	; "unpack"
+	726	[81]	LOADK    	2 95	; "<i2i2i2"
+	727	[81]	GETTABUP 	3 0 1	; _ENV "string"
+	728	[81]	GETFIELD 	3 3 2	; "pack"
+	729	[81]	LOADK    	4 95	; "<i2i2i2"
+	730	[81]	LOADI    	5 1
+	731	[81]	LOADI    	6 -1
+	732	[81]	LOADI    	7 300
+	733	[81]	CALL     	3 5 0	; 4 in all out
+	734	[81]	TAILCALL 	1 0 1	; -1 in
+	735	[81]	RETURN   	1 0 1	; all out
+	736	[81]	RETURN   	1 1 1	; 0 out
+constants (96):
+	0	S	"print"
+	1	S	"string"
+	2	S	"pack"
+	3	S	"<i4"
+	4	S	">i4"
+	5	S	"<b"
+	6	S	"<B"
+	7	S	"<h"
+	8	S	">H"
+	9	S	"<I3"
+	10	I	1193046
+	11	S	">i3"
+	12	S	"<j"
+	13	S	">J"
+	14	S	"math"
+	15	S	"mininteger"
+	16	S	"<i16"
+	17	S	">i16"
+	18	S	"<i1i2i4"
+	19	S	">bBhH"
+	20	S	"unpack"
+	21	I	123456
+	22	S	"\255"
+	23	S	"\254\255"
+	24	S	"\001\002"
+	25	S	"<i3"
+	26	S	"\255\255\127"
+	27	S	"\000\000\128"
+	28	S	"maxinteger"
+	29	S	"<i2i2"
+	30	S	"\001\000\002\000"
+	31	S	"<i2"
+	32	S	"\000\000\001\000"
+	33	S	"<I8"
+	34	S	"\255\255\255\255\255\255\255\255"
+	35	S	"<d"
+	36	F	1.5
+	37	S	">f"
+	38	S	"<n"
+	39	F	0.5
+	40	F	0.1
+	41	S	"<f"
+	42	F	0.25
+	43	S	"huge"
+	44	S	"type"
+	45	S	"<s1"
+	46	S	"abc"
+	47	S	">s2"
+	48	S	"<s4"
+	49	S	""
+	50	S	"z"
+	51	S	"hi"
+	52	S	"c5"
+	53	S	"ab"
+	54	S	"c2"
+	55	S	"\003abcdef"
+	56	S	"hello\000world\000"
+	57	S	"zz"
+	58	S	"c3"
+	59	S	"abcdef"
+	60	S	"<s1i2"
+	61	S	"xy"
+	62	S	"c0"
+	63	S	"<bxb"
+	64	S	"<bxxi2"
+	65	S	"<!4 b i4"
+	66	S	"<!2 b i4"
+	67	S	"<! b i8"
+	68	S	"<!8 b Xi8"
+	69	S	"<!4 b Xh b"
+	70	S	"packsize"
+	71	S	"bhi4j"
+	72	S	"<!8 b i8"
+	73	S	"c10"
+	74	S	"i16"
+	75	S	"d"
+	76	S	"f"
+	77	S	"x"
+	78	S	"<!4 b Xi4"
+	79	S	" < > = "
+	80	S	"pcall"
+	81	S	"<i17"
+	82	S	"<i0"
+	83	S	"rep"
+	84	S	"a\000b"
+	85	S	"y"
+	86	S	"<!3 i4"
+	87	S	"s"
+	88	S	"\005ab"
+	89	S	"abcd"
+	90	S	"<i9"
+	91	S	"\000\000\000\000\000\000\000\000\001"
+	92	S	"c"
+	93	S	"a"
+	94	S	"X"
+	95	S	"<i2i2i2"
+locals (1):
+	0	hex	3	737
+upvalues (1):
+	0	_ENV	1	0
+
+function <string_pack.lua:8,10> (6 instructions)
+1 param, 5 slots, 1 upvalue, 1 local, 2 constants, 1 function
+	1	[9]	SELF     	1 0 0k	; "gsub"
+	2	[9]	LOADK    	3 1	; "."
+	3	[9]	CLOSURE  	4 0
+	4	[9]	CALL     	1 4 2	; 3 in 1 out
+	5	[9]	RETURN1  	1
+	6	[10]	RETURN0  	
+constants (2):
+	0	S	"gsub"
+	1	S	"."
+locals (1):
+	0	s	1	7
+upvalues (1):
+	0	_ENV	0	0
+
+function <string_pack.lua:9,9> (8 instructions)
+1 param, 5 slots, 1 upvalue, 1 local, 4 constants, 0 functions
+	1	[9]	GETTABUP 	1 0 0	; _ENV "string"
+	2	[9]	GETFIELD 	1 1 1	; "format"
+	3	[9]	LOADK    	2 2	; "%02x"
+	4	[9]	SELF     	3 0 3k	; "byte"
+	5	[9]	CALL     	3 2 0	; 1 in all out
+	6	[9]	TAILCALL 	1 0 0	; -1 in
+	7	[9]	RETURN   	1 0 0	; all out
+	8	[9]	RETURN0  	
+constants (4):
+	0	S	"string"
+	1	S	"format"
+	2	S	"%02x"
+	3	S	"byte"
+locals (1):
+	0	c	1	9
+upvalues (1):
+	0	_ENV	0	0

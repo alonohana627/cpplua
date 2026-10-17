@@ -3,6 +3,7 @@
 #include <array>
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 #include <new>
 #include <random>
 #include <utility>
@@ -339,16 +340,31 @@ void Heap::set_metatable(Table* t, Table* mt) {
     }
 }
 
+void Heap::write_error(std::string_view text) {
+    if (error_output_) {
+        error_output_(text);
+        return;
+    }
+    std::cerr.write(text.data(), static_cast<std::streamsize>(text.size()));
+    std::cerr.flush();
+}
+
 void Heap::write_output(std::string_view text) {
     if (output_) {
         output_(text);
         return;
     }
-    // lua_writestring and lua_writeline: fwrite, and a flush at the end of
-    // each line.
-    std::fwrite(text.data(), 1, text.size(), stdout);
+    // lua_writestring and lua_writeline: a write, and a flush at the end
+    // of each line.
+    std::cout.write(text.data(), static_cast<std::streamsize>(text.size()));
     if (text.ends_with('\n')) {
-        std::fflush(stdout);
+        std::cout.flush();
+    }
+}
+
+void Heap::flush_output() {
+    if (!output_) {
+        std::cout.flush();
     }
 }
 

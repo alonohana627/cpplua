@@ -1,0 +1,509 @@
+Chunk
+  Local s
+    String "a\xC3\xA9\xE2\x82\xAC\xF0\x9F\x98\x80z"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 1
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 2
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 3
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 4
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 6
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 7
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Unary -
+          Integer 1
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Unary -
+          Integer 2
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Unary -
+          Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Unary -
+          Integer 6
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 2
+        Integer 4
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Unary -
+          Integer 1
+        Integer 7
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 1
+        Integer 12
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 0
+        Integer 1
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 0
+        Integer 3
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 0
+        Integer 6
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 0
+        Integer 9
+      Call
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 0
+        Integer 12
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "offset"
+        String ""
+        Integer 1
+      Call
+        Index
+          Name utf8
+          String "offset"
+        String ""
+        Unary -
+          Integer 1
+      Call
+        Index
+          Name utf8
+          String "offset"
+        String ""
+        Integer 0
+      Call
+        Index
+          Name utf8
+          String "offset"
+        String "abc"
+        Integer 4
+      Call
+        Index
+          Name utf8
+          String "offset"
+        String "abc"
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 1
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 1
+        Integer 13
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+        Integer 1
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "offset"
+        Name s (local 0)
+  Local out
+    Table
+  GenericFor pos, code
+    In
+      Call
+        Index
+          Name utf8
+          String "codes"
+        Name s (local 0)
+    Body
+      Assign
+        Targets
+          Index
+            Name out (local 1)
+            Binary +
+              Unary #
+                Name out (local 1)
+              Integer 1
+        Values
+          Binary ..
+            Name pos (local 6)
+            Binary ..
+              String ":"
+              Name code (local 7)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name out (local 1)
+        String " "
+  Local count
+    Integer 0
+  GenericFor _
+    In
+      Call
+        Index
+          Name utf8
+          String "codes"
+        String ""
+    Body
+      Assign
+        Targets
+          Name count (local 2)
+        Values
+          Binary +
+            Name count (local 2)
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Name count (local 2)
+  Local iter, state, init
+    Call
+      Index
+        Name utf8
+        String "codes"
+      String "hi"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Name iter (local 3)
+      Name state (local 4)
+      Name init (local 5)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name iter (local 3)
+        Name state (local 4)
+        Name init (local 5)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name iter (local 3)
+        Name state (local 4)
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name iter (local 3)
+        Name state (local 4)
+        Integer 2
+  Assign
+    Targets
+      Name out (local 1)
+    Values
+      Table
+  GenericFor pos, code
+    In
+      Call
+        Index
+          Name utf8
+          String "codes"
+        String "a\xED\xA0\x80b"
+        True
+    Body
+      Assign
+        Targets
+          Index
+            Name out (local 1)
+            Binary +
+              Unary #
+                Name out (local 1)
+              Integer 1
+        Values
+          Binary ..
+            Name pos (local 10)
+            Binary ..
+              String ":"
+              Name code (local 11)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name out (local 1)
+        String " "
+  LocalFunction collect
+    Function(str) [upvalues: _ENV]
+      Local got
+        Table
+      GenericFor _, code
+        In
+          Call
+            Index
+              Name utf8
+              String "codes"
+            Name str (local 0)
+        Body
+          Assign
+            Targets
+              Index
+                Name got (local 1)
+                Binary +
+                  Unary #
+                    Name got (local 1)
+                  Integer 1
+            Values
+              Name code (local 7)
+      Return
+        Call
+          Index
+            Name table
+            String "concat"
+          Name got (local 1)
+          String ","
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name collect (local 6)
+        String "ab\xFFcd"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name collect (local 6)
+        String "ab\xED\xA0\x80"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name collect (local 6)
+        String "\xE2\x82"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name collect (local 6)
+        String "ok\x80"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name collect (local 6)
+        String "fine"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "codes"
+  Local num_iter, num_state, num_init
+    Call
+      Index
+        Name utf8
+        String "codes"
+      Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Name num_iter (local 7)
+      Name num_state (local 8)
+      Call
+        Name type
+        Name num_state (local 8)
+      Name num_init (local 9)
+  Local rev
+    Table
+  Local n
+    Call
+      Index
+        Name utf8
+        String "len"
+      Name s (local 0)
+  NumericFor i
+    Name n (local 11)
+    Integer 1
+    Unary -
+      Integer 1
+    Body
+      Local first
+        Call
+          Index
+            Name utf8
+            String "offset"
+          Name s (local 0)
+          Name i (local 15)
+      Local after
+        Call
+          Index
+            Name utf8
+            String "offset"
+          Name s (local 0)
+          Binary +
+            Name i (local 15)
+            Integer 1
+      Assign
+        Targets
+          Index
+            Name rev (local 10)
+            Binary +
+              Unary #
+                Name rev (local 10)
+              Integer 1
+        Values
+          MethodCall sub
+            Name s (local 0)
+            Name first (local 16)
+            Binary -
+              Name after (local 17)
+              Integer 1
+  Local reversed
+    Call
+      Index
+        Name table
+        String "concat"
+      Name rev (local 10)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name reversed (local 12)
+      Call
+        Index
+          Name utf8
+          String "codepoint"
+        Name reversed (local 12)
+        Integer 1
+        Unary -
+          Integer 1
+  Return
+    Call
+      Index
+        Name utf8
+        String "offset"
+      Name s (local 0)
+      Integer 3
+    Call
+      Index
+        Name utf8
+        String "len"
+      Name s (local 0)

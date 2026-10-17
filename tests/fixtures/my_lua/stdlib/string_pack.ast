@@ -1,0 +1,917 @@
+Chunk
+  LocalFunction hex
+    Function(s) [upvalues: _ENV]
+      Return
+        Paren
+          MethodCall gsub
+            Name s (local 0)
+            String "."
+            Function(c) [upvalues: _ENV]
+              Return
+                Call
+                  Index
+                    Name string
+                    String "format"
+                  String "%02x"
+                  MethodCall byte
+                    Name c (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<i4"
+          Integer 1
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String ">i4"
+          Integer 1
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<i4"
+          Unary -
+            Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<b"
+          Unary -
+            Integer 1
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<B"
+          Integer 255
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<h"
+          Unary -
+            Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String ">H"
+          Integer 43981
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<I3"
+          Integer 1193046
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String ">i3"
+          Unary -
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<j"
+          Integer 1
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String ">J"
+          Index
+            Name math
+            String "mininteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<i16"
+          Unary -
+            Integer 1
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String ">i16"
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<i1i2i4"
+          Integer 1
+          Integer 2
+          Integer 3
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String ">bBhH"
+          Integer 1
+          Integer 2
+          Integer 3
+          Integer 4
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<i4"
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<i4"
+          Integer 123456
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<b"
+        String "\xFF"
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<B"
+        String "\xFF"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<h"
+        String "\xFE\xFF"
+      Call
+        Index
+          Name string
+          String "unpack"
+        String ">H"
+        String "\x01\x02"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<i3"
+        String "\xFF\xFF\x7F"
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<i3"
+        String "\x00\x00\x80"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<i16"
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<i16"
+          Unary -
+            Integer 5
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name string
+            String "unpack"
+          String "<j"
+          Call
+            Index
+              Name string
+              String "pack"
+            String "<j"
+            Index
+              Name math
+              String "maxinteger"
+        Index
+          Name math
+          String "maxinteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<i2i2"
+        String "\x01\x00\x02\x00"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<i2"
+        String "\x00\x00\x01\x00"
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<i2"
+        String "\x00\x00\x01\x00"
+        Unary -
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<I8"
+        String "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<d"
+          Float 1.5
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String ">f"
+          Unary -
+            Float 2.0
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<n"
+          Float 0.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<d"
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<d"
+          Float 0.1
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<f"
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<f"
+          Float 0.25
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name string
+            String "unpack"
+          String "<f"
+          Call
+            Index
+              Name string
+              String "pack"
+            String "<f"
+            Float 0.1
+        Float 0.1
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<d"
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<d"
+          Index
+            Name math
+            String "huge"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name string
+            String "unpack"
+          String "<d"
+          Call
+            Index
+              Name string
+              String "pack"
+            String "<d"
+            Integer 3
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<n"
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<n"
+          Unary -
+            Float 0.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<s1"
+          String "abc"
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String ">s2"
+          String "abc"
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<s4"
+          String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "z"
+          String "hi"
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "c5"
+          String "ab"
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "c2"
+          String "ab"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<s1"
+        String "\x03abcdef"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "z"
+        String "hello\x00world\x00"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "zz"
+        String "hello\x00world\x00"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "c3"
+        String "abcdef"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<s1i2"
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<s1i2"
+          String "xy"
+          Integer 7
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name string
+            String "unpack"
+          String "c0"
+          String "abc"
+        String ""
+      Binary ==
+        Call
+          Index
+            Name string
+            String "unpack"
+          String "c0"
+          String "abc"
+          Integer 4
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<bxb"
+          Integer 1
+          Integer 2
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<bxxi2"
+          Integer 1
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<!4 b i4"
+          Integer 1
+          Integer 2
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<!2 b i4"
+          Integer 1
+          Integer 2
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<! b i8"
+          Integer 1
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<!8 b Xi8"
+          Integer 1
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<!4 b Xh b"
+          Integer 1
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "<!4 b i4"
+        Call
+          Index
+            Name string
+            String "pack"
+          String "<!4 b i4"
+          Unary -
+            Integer 1
+          Integer 99
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "packsize"
+        String "<i4"
+      Call
+        Index
+          Name string
+          String "packsize"
+        String "bhi4j"
+      Call
+        Index
+          Name string
+          String "packsize"
+        String "<!8 b i8"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "packsize"
+        String "c10"
+      Call
+        Index
+          Name string
+          String "packsize"
+        String "i16"
+      Call
+        Index
+          Name string
+          String "packsize"
+        String "d"
+      Call
+        Index
+          Name string
+          String "packsize"
+        String "f"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "packsize"
+        String "x"
+      Call
+        Index
+          Name string
+          String "packsize"
+        String ""
+      Call
+        Index
+          Name string
+          String "packsize"
+        String "<!4 b Xi4"
+      Call
+        Index
+          Name string
+          String "packsize"
+        String " < > = "
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "<b"
+        Integer 128
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "<B"
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "<i2"
+        Integer 40000
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "<i17"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "<i0"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "<s1"
+        Call
+          Index
+            Name string
+            String "rep"
+          String "x"
+          Integer 256
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "z"
+        String "a\x00b"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "c2"
+        String "abc"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "<i4"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "<i4"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "y"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "<!3 i4"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "packsize"
+        String "s"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "packsize"
+        String "z"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "unpack"
+        String "<i4"
+        String "abc"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "unpack"
+        String "z"
+        String "abc"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "unpack"
+        String "<s1"
+        String "\x05ab"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "unpack"
+        String "<i4"
+        String "abcd"
+        Integer 10
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "unpack"
+        String "<i9"
+        String "\x00\x00\x00\x00\x00\x00\x00\x00\x01"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "c"
+        String "a"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "X"
+        Integer 1
+  Return
+    Call
+      Index
+        Name string
+        String "unpack"
+      String "<i2i2i2"
+      Call
+        Index
+          Name string
+          String "pack"
+        String "<i2i2i2"
+        Integer 1
+        Unary -
+          Integer 1
+        Integer 300

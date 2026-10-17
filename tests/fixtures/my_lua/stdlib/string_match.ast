@@ -1,0 +1,565 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "hello 123 world"
+        String "%d+"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "hello 123 world"
+        String "(%a+) (%d+)"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "hello"
+        String "()ll()"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "hello"
+        String "(h(el)(l))o"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "hello"
+        String "xyz"
+      Binary ==
+        Call
+          Index
+            Name string
+            String "match"
+          String ""
+          String ".*"
+        String ""
+      Binary ==
+        Call
+          Index
+            Name string
+            String "match"
+          String ""
+          String "x*"
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "hello"
+        String "l"
+        Unary -
+          Integer 2
+      Call
+        Index
+          Name string
+          String "match"
+        String "hello"
+        String "."
+        Unary -
+          Integer 1
+      Call
+        Index
+          Name string
+          String "match"
+        String "hello"
+        String "^h"
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "key=val"
+        String "^(%w+)=(%w*)$"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "key="
+        String "^(%w+)=(%w*)$"
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        Call
+          Index
+            Name string
+            String "match"
+          String "  padded  "
+          String "^%s*(.-)%s*$"
+        String "|"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "[[nested]]"
+        String "%[(%b[])%]"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "f(a(b)c)d"
+        String "%b()"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "THE (quick) fox"
+        String "%((%a+)%)"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        String "abc"
+        String "()"
+      Call
+        Index
+          Name string
+          String "match"
+        String "abc"
+        String "()"
+        Integer 4
+      Call
+        Index
+          Name string
+          String "match"
+        String "abc"
+        String "()"
+        Integer 10
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "match"
+        Integer 2024
+        String "^%d%d"
+      Call
+        Index
+          Name string
+          String "match"
+        String "x"
+        String "()x()"
+  Local words
+    Table
+  GenericFor w
+    In
+      Call
+        Index
+          Name string
+          String "gmatch"
+        String "one two  three"
+        String "%a+"
+    Body
+      Assign
+        Targets
+          Index
+            Name words (local 0)
+            Binary +
+              Unary #
+                Name words (local 0)
+              Integer 1
+        Values
+          Name w (local 5)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name words (local 0)
+      Call
+        Index
+          Name table
+          String "concat"
+        Name words (local 0)
+        String ","
+  Local pairs_found
+    Table
+  GenericFor k, v
+    In
+      Call
+        Index
+          Name string
+          String "gmatch"
+        String "a=1, b=2, c=3"
+        String "(%w+)=(%w+)"
+    Body
+      Assign
+        Targets
+          Index
+            Name pairs_found (local 1)
+            Binary +
+              Unary #
+                Name pairs_found (local 1)
+              Integer 1
+        Values
+          Binary ..
+            Name k (local 6)
+            Binary ..
+              String ":"
+              Name v (local 7)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name pairs_found (local 1)
+        String " "
+  Local positions
+    Table
+  GenericFor p
+    In
+      Call
+        Index
+          Name string
+          String "gmatch"
+        String "banana"
+        String "()a"
+    Body
+      Assign
+        Targets
+          Index
+            Name positions (local 2)
+            Binary +
+              Unary #
+                Name positions (local 2)
+              Integer 1
+        Values
+          Name p (local 7)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name positions (local 2)
+        String " "
+  Local empties
+    Table
+  GenericFor p
+    In
+      Call
+        Index
+          Name string
+          String "gmatch"
+        String "abc"
+        String "()"
+    Body
+      Assign
+        Targets
+          Index
+            Name empties (local 3)
+            Binary +
+              Unary #
+                Name empties (local 3)
+              Integer 1
+        Values
+          Name p (local 8)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name empties (local 3)
+        String " "
+  Local stars
+    Table
+  GenericFor m
+    In
+      Call
+        Index
+          Name string
+          String "gmatch"
+        String "aab"
+        String "a*"
+    Body
+      Assign
+        Targets
+          Index
+            Name stars (local 4)
+            Binary +
+              Unary #
+                Name stars (local 4)
+              Integer 1
+        Values
+          Binary ..
+            String "["
+            Binary ..
+              Name m (local 9)
+              String "]"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name stars (local 4)
+  Local anchored
+    Table
+  GenericFor m
+    In
+      Call
+        Index
+          Name string
+          String "gmatch"
+        String "aaa"
+        String "^a"
+    Body
+      Assign
+        Targets
+          Index
+            Name anchored (local 5)
+            Binary +
+              Unary #
+                Name anchored (local 5)
+              Integer 1
+        Values
+          Name m (local 10)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name anchored (local 5)
+  GenericFor m
+    In
+      Call
+        Index
+          Name string
+          String "gmatch"
+        String "^a^a"
+        String "^a"
+    Body
+      Assign
+        Targets
+          Index
+            Name anchored (local 5)
+            Binary +
+              Unary #
+                Name anchored (local 5)
+              Integer 1
+        Values
+          Name m (local 10)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name anchored (local 5)
+      Index
+        Name anchored (local 5)
+        Integer 1
+  Local from3
+    Table
+  GenericFor m
+    In
+      Call
+        Index
+          Name string
+          String "gmatch"
+        String "abcdef"
+        String "."
+        Integer 3
+    Body
+      Assign
+        Targets
+          Index
+            Name from3 (local 6)
+            Binary +
+              Unary #
+                Name from3 (local 6)
+              Integer 1
+        Values
+          Name m (local 11)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name from3 (local 6)
+  Local from_neg
+    Table
+  GenericFor m
+    In
+      Call
+        Index
+          Name string
+          String "gmatch"
+        String "abcdef"
+        String "."
+        Unary -
+          Integer 2
+    Body
+      Assign
+        Targets
+          Index
+            Name from_neg (local 7)
+            Binary +
+              Unary #
+                Name from_neg (local 7)
+              Integer 1
+        Values
+          Name m (local 12)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name from_neg (local 7)
+  Local past
+    Integer 0
+  GenericFor _
+    In
+      Call
+        Index
+          Name string
+          String "gmatch"
+        String "abc"
+        String "."
+        Integer 10
+    Body
+      Assign
+        Targets
+          Name past (local 8)
+        Values
+          Binary +
+            Name past (local 8)
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Name past (local 8)
+  Local it
+    Call
+      Index
+        Name string
+        String "gmatch"
+      String "x y"
+      String "%a"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name it (local 9)
+      Call
+        Name it (local 9)
+      Call
+        Name it (local 9)
+      Call
+        Name it (local 9)
+  Local lines
+    Table
+  GenericFor line
+    In
+      Call
+        Index
+          Name string
+          String "gmatch"
+        String "first\n\nthird\n"
+        String "([^\n]*)\n"
+    Body
+      Assign
+        Targets
+          Index
+            Name lines (local 10)
+            Binary +
+              Unary #
+                Name lines (local 10)
+              Integer 1
+        Values
+          Binary ..
+            String "<"
+            Binary ..
+              Name line (local 15)
+              String ">"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name lines (local 10)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "match"
+        String "abc"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "gmatch"
+        String "abc"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "match"
+        String "abc"
+        String "("
+        Integer 1
+  Return
+    Call
+      Index
+        Name string
+        String "match"
+      String "version 5.4.9"
+      String "(%d+)%.(%d+)%.(%d+)"

@@ -1,0 +1,440 @@
+Chunk
+  Local s
+    String "hello world, hello lua"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "hello"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "hello"
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "hello"
+        Unary -
+          Integer 9
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "hello"
+        Unary -
+          Integer 100
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "lua"
+        Integer 100
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "xyz"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "o"
+        Integer 0
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "o"
+        Integer 6
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "a"
+        Unary -
+          Integer 1
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "a"
+        Unary -
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String ""
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String ""
+        Integer 3
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String ""
+        Integer 4
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String ""
+        Integer 5
+      Call
+        Index
+          Name string
+          String "find"
+        String ""
+        String ""
+      Call
+        Index
+          Name string
+          String "find"
+        String ""
+        String ""
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String ""
+        Unary -
+          Integer 1
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String ""
+        Unary -
+          Integer 10
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "w%a+"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "(%a+), (%a+)"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "()ll()"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Name s (local 0)
+        String "l+"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "  trim  "
+        String "^%s*(.-)%s*$"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "key = value"
+        String "(%w+)%s*=%s*(%w+)"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "2024-01-15"
+        String "(%d+)-(%d+)-(%d+)"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String "^b"
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String "^a"
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String "c$"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String "b"
+        Integer 1
+        False
+      Call
+        Index
+          Name string
+          String "find"
+        String "a.c"
+        String "."
+        Integer 1
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "a.c"
+        String "."
+        Integer 1
+        True
+      Call
+        Index
+          Name string
+          String "find"
+        String "a+b"
+        String "+"
+        Integer 1
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "50% off"
+        String "%"
+        Integer 1
+        True
+      Call
+        Index
+          Name string
+          String "find"
+        String "(x)"
+        String "("
+        Integer 1
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "a.b.c"
+        String ".b."
+        Integer 1
+        True
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String "^a"
+        Integer 1
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "x[y]"
+        String "[y]"
+        Integer 1
+        True
+      Call
+        Index
+          Name string
+          String "find"
+        String "x[y]"
+        String "[y]"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "a\x00b"
+        String "\x00"
+        Integer 1
+        True
+      Call
+        Index
+          Name string
+          String "find"
+        String "a\x00b"
+        String "%z"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "aaa"
+        String "aa"
+        Integer 2
+        True
+      Call
+        Index
+          Name string
+          String "find"
+        String "aaa"
+        String "aaaa"
+        Integer 1
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        Integer 12345
+        Integer 34
+      Call
+        Index
+          Name string
+          String "find"
+        Float 1.5
+        String "."
+        Integer 1
+        True
+  CallStatement
+    Call
+      Name print
+      MethodCall find
+        Paren
+          String "find me"
+        String "me"
+      MethodCall find
+        Paren
+          String "find me"
+        String "%s"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "find"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "find"
+        String "abc"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "find"
+        String "abc"
+        String "b"
+        String "x"
+  Return
+    Call
+      Index
+        Name string
+        String "find"
+      String "the end"
+      String "(e)(n)(d)"

@@ -1,0 +1,20 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Call
+          Index
+            Name string
+            String "pack"
+          String "b"
+          Integer 127
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "pack"
+        String "b"
+        Integer 128

@@ -1,0 +1,29 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+        String "+"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Table
+          Item
+            Integer 1
+          Item
+            Table
+          Item
+            Integer 3
+        String "+"

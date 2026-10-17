@@ -13,7 +13,7 @@
 #include <lua2/source_file.hpp>
 
 #include "gc/heap.hpp"
-#include "std/base.hpp"
+#include "std/libs.hpp"
 #include "vm/run.hpp"
 
 // Golden-file tests over tests/fixtures/my_lua/ and its topic folders
@@ -66,8 +66,7 @@ std::string run_output(std::string_view source, std::string_view name, lua2::GcM
     std::string out;
     {
         lua2::Heap heap{1};
-        lua2::open_base(heap);
-        lua2::open_debug(heap);
+        lua2::open_libraries(heap);
         heap.set_output([&out](std::string_view text) { out += text; });
         heap.set_mode(mode);
         heap.set_stress(stress);

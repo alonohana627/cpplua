@@ -1,0 +1,421 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%d|%5d|%-5d|%05d|%+d|% d"
+        Integer 42
+        Integer 42
+        Integer 42
+        Integer 42
+        Integer 42
+        Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%i|%.3d|%8.3d|%-8.3d|%+.0d|%.0d"
+        Unary -
+          Integer 7
+        Integer 7
+        Integer 7
+        Integer 7
+        Integer 0
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%d %d"
+        Index
+          Name math
+          String "maxinteger"
+        Index
+          Name math
+          String "mininteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%d %d %d"
+        Float 3.0
+        Unary -
+          Float 0.0
+        Binary ^
+          Integer 2
+          Integer 53
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%u"
+        Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%c%c%c"
+        Integer 76
+        Integer 117
+        Integer 97
+      Call
+        Index
+          Name string
+          String "format"
+        String "[%5c]"
+        Integer 65
+      Call
+        Index
+          Name string
+          String "format"
+        String "[%-3c]"
+        Integer 66
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%x %X %#x %#X %08x %-6x|"
+        Integer 255
+        Integer 255
+        Integer 255
+        Integer 255
+        Integer 255
+        Integer 255
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%x"
+        Unary -
+          Integer 1
+      Call
+        Index
+          Name string
+          String "format"
+        String "%X"
+        Index
+          Name math
+          String "mininteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%o %#o %5o"
+        Integer 8
+        Integer 8
+        Integer 64
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%f|%.2f|%10.3f|%-10.1f|%+.1f|%010.2f"
+        Float 3.14159
+        Float 3.14159
+        Float 3.14159
+        Float 3.14159
+        Float 3.14159
+        Unary -
+          Float 3.14159
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%.0f %.0f %.0f %#.0f"
+        Float 0.5
+        Float 1.5
+        Float 2.5
+        Float 3.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%e|%.2e|%E|%12.3e|%-12.1E|"
+        Float 12345.678
+        Float 12345.678
+        Float 0.000123
+        Unary -
+          Float 1.5
+        Float 1e+100
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%g|%g|%g|%g|%g|%g"
+        Float 1.0
+        Float 0.1
+        Float 1e+20
+        Float 1e-05
+        Integer 123456789
+        Integer 100000
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%.3g|%.10g|%G|%G|%#g|%g"
+        Float 3.14159
+        Binary /
+          Integer 1
+          Integer 3
+        Float 1e-10
+        Float 1e+30
+        Float 1.0
+        Float 1e-04
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%f %e %g"
+        Integer 5
+        Integer 5
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%f %g %.1f"
+        Index
+          Name math
+          String "huge"
+        Unary -
+          Index
+            Name math
+            String "huge"
+        Binary /
+          Integer 1
+          Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%.3f"
+        Binary ^
+          Integer 2
+          Integer 63
+      Call
+        Index
+          Name string
+          String "format"
+        String "%.1f"
+        Unary -
+          Float 0.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%5.1f|%-8.3e|"
+        Float 9.99
+        Float 9.9995
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%a %a %a %a"
+        Float 1.0
+        Float 0.5
+        Float 2.0
+        Unary -
+          Float 0.75
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%A %a"
+        Float 255.5
+        Float 0.001
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%s|%10s|%-10s|%.2s|%5.1s|"
+        String "abc"
+        String "abc"
+        String "abc"
+        String "abc"
+        String "abc"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%s %s %s %s"
+        Integer 1
+        Float 1.5
+        True
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%s"
+        Call
+          Name setmetatable
+          Table
+          Table
+            Field __tostring
+              Function()
+                Return
+                  String "custom"
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name string
+            String "format"
+          String "%s and %s"
+          String "a\x00b"
+          String "c"
+        String "a\x00b and c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%.20s"
+        String "a long string that will be cut"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%5s|%-5s|"
+        String ""
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "100%%"
+      Call
+        Index
+          Name string
+          String "format"
+        String "no specifiers"
+      Call
+        Index
+          Name string
+          String "format"
+        String "%%d"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%d%%"
+        Integer 50
+      Call
+        Index
+          Name string
+          String "format"
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%d"
+        Integer 1
+        Integer 2
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%d %x %.1f"
+        String "10"
+        String "255"
+        String "2.25"
+  Return
+    Call
+      Index
+        Name string
+        String "format"
+      String "%5.2f|%-5d|%s"
+      Binary /
+        Integer 1
+        Integer 3
+      Integer 7
+      String "end"

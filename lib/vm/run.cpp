@@ -1,7 +1,14 @@
 #include "vm/run.hpp"
 
+#include <cerrno>
+#include <cstring>
 #include <format>
+#include <fstream>
+#include <iostream>
+#include <iterator>
 #include <string>
+
+#include <lua2/source_file.hpp>
 
 #include "gc/heap.hpp"
 #include "parser/parser.hpp"
@@ -13,19 +20,35 @@
 #include "vm/execute.hpp"
 #include "vm/function.hpp"
 #include "vm/metamethods.hpp"
+#include "vm/proto.hpp"
 
 namespace lua2 {
 
 std::expected<void, std::string> load(State& state, std::string_view source,
                                       std::string_view chunk_name) {
+    return load_chunk(state, source, "@" + std::string{chunk_name}, "bt");
+}
+
+std::expected<void, std::string> load_chunk(State& state, std::string_view source,
+                                            std::string_view source_name, std::string_view mode) {
+    // checkmode: a binary chunk starts with "Lua".
+    const bool binary = source.starts_with('');
+    if (!mode.contains(binary ? 'b' : 't')) {
+        return std::unexpected(std::format("attempt to load a {} chunk (mode is '{}')",
+                                           binary ? "binary" : "text", mode));
+    }
+    const std::string chunk_name = chunk_id(source_name);
+    if (binary) {
+        return std::unexpected(
+            std::format("{}: bad binary format (lua2 loads only source code)", chunk_name));
+    }
     Parser parser{source, chunk_name};
     auto ast = parser.parse_chunk();
     if (!ast) {
         return std::unexpected(std::move(ast.error().message));
     }
     Heap& heap = state.heap();
-    const std::string lua_source = "@" + std::string{chunk_name};
-    auto proto = compile(heap, *ast, lua_source, chunk_name);
+    auto proto = compile(heap, *ast, source_name, chunk_name);
     if (!proto) {
         return std::unexpected(std::move(proto.error().message));
     }
@@ -41,6 +64,21 @@ std::expected<void, std::string> load(State& state, std::string_view source,
     }
     state.push(Value::closure(closure));
     return {};
+}
+
+std::expected<std::string, std::string> read_chunk_file(const std::string& path) {
+    if (path.empty()) {
+        const std::string text{std::istreambuf_iterator<char>{std::cin},
+                               std::istreambuf_iterator<char>{}};
+        return std::string{skip_file_prefix(text)};
+    }
+    std::ifstream file{path, std::ios::binary};
+    if (!file) {
+        // NOLINTNEXTLINE(concurrency-mt-unsafe): the message of the open that failed
+        return std::unexpected(std::format("cannot open {}: {}", path, std::strerror(errno)));
+    }
+    const std::string text{std::istreambuf_iterator<char>{file}, std::istreambuf_iterator<char>{}};
+    return std::string{skip_file_prefix(text)};
 }
 
 namespace {

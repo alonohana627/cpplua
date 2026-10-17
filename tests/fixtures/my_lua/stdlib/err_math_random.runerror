@@ -1,0 +1,1 @@
+err_math_random.lua:4: bad argument #1 to 'random' (interval is empty)

@@ -1,0 +1,29 @@
+
+main <err_gsub_capture.lua:0,0> (16 instructions)
+0+ params, 5 slots, 1 upvalue, 0 locals, 6 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[3]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[3]	LOADK    	1 1	; "hello world"
+	4	[3]	SELF     	1 1 2k	; "gsub"
+	5	[3]	LOADK    	3 3	; "(%w+)"
+	6	[3]	LOADK    	4 4	; "<%1>"
+	7	[3]	CALL     	1 4 0	; 3 in all out
+	8	[3]	CALL     	0 0 1	; all in 0 out
+	9	[4]	GETTABUP 	0 0 0	; _ENV "print"
+	10	[4]	LOADK    	1 1	; "hello world"
+	11	[4]	SELF     	1 1 2k	; "gsub"
+	12	[4]	LOADK    	3 3	; "(%w+)"
+	13	[4]	LOADK    	4 5	; "<%2>"
+	14	[4]	CALL     	1 4 0	; 3 in all out
+	15	[4]	CALL     	0 0 1	; all in 0 out
+	16	[4]	RETURN   	0 1 1	; 0 out
+constants (6):
+	0	S	"print"
+	1	S	"hello world"
+	2	S	"gsub"
+	3	S	"(%w+)"
+	4	S	"<%1>"
+	5	S	"<%2>"
+locals (0):
+upvalues (1):
+	0	_ENV	1	0

@@ -1,0 +1,505 @@
+
+main <string_methods.lua:0,0> (300 instructions)
+0+ params, 10 slots, 1 upvalue, 2 locals, 56 constants, 11 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	LOADK    	0 0	; "hello"
+	3	[8]	GETTABUP 	1 0 1	; _ENV "print"
+	4	[8]	SELF     	2 0 2k	; "len"
+	5	[8]	CALL     	2 2 2	; 1 in 1 out
+	6	[8]	SELF     	3 0 3k	; "upper"
+	7	[8]	CALL     	3 2 2	; 1 in 1 out
+	8	[8]	SELF     	4 0 4k	; "rep"
+	9	[8]	LOADI    	6 2
+	10	[8]	LOADK    	7 5	; "-"
+	11	[8]	CALL     	4 4 2	; 3 in 1 out
+	12	[8]	SELF     	5 0 6k	; "sub"
+	13	[8]	LOADI    	7 2
+	14	[8]	LOADI    	8 3
+	15	[8]	CALL     	5 4 2	; 3 in 1 out
+	16	[8]	SELF     	6 0 7k	; "byte"
+	17	[8]	LOADI    	8 1
+	18	[8]	CALL     	6 3 2	; 2 in 1 out
+	19	[8]	SELF     	7 0 8k	; "find"
+	20	[8]	LOADK    	9 9	; "l"
+	21	[8]	CALL     	7 3 0	; 2 in all out
+	22	[8]	CALL     	1 0 1	; all in 0 out
+	23	[9]	GETTABUP 	1 0 1	; _ENV "print"
+	24	[9]	LOADK    	2 10	; "x"
+	25	[9]	SELF     	2 2 4k	; "rep"
+	26	[9]	LOADI    	4 3
+	27	[9]	CALL     	2 3 2	; 2 in 1 out
+	28	[9]	LOADK    	3 11	; "%d-%s"
+	29	[9]	SELF     	3 3 12k	; "format"
+	30	[9]	LOADI    	5 5
+	31	[9]	LOADK    	6 13	; "five"
+	32	[9]	CALL     	3 4 2	; 3 in 1 out
+	33	[9]	LOADK    	4 14	; "a,b"
+	34	[9]	SELF     	4 4 15k	; "gsub"
+	35	[9]	LOADK    	6 16	; ","
+	36	[9]	LOADK    	7 17	; ";"
+	37	[9]	CALL     	4 4 0	; 3 in all out
+	38	[9]	CALL     	1 0 1	; all in 0 out
+	39	[10]	GETTABUP 	1 0 1	; _ENV "print"
+	40	[10]	LOADK    	2 18	; "abc"
+	41	[10]	LEN      	2 2
+	42	[10]	LOADK    	3 19	; ""
+	43	[10]	LEN      	3 3
+	44	[10]	LEN      	4 0
+	45	[10]	LEN      	5 0
+	46	[10]	UNM      	5 5
+	47	[10]	CALL     	1 5 1	; 4 in 0 out
+	48	[11]	GETTABUP 	1 0 1	; _ENV "print"
+	49	[11]	LOADK    	2 18	; "abc"
+	50	[11]	SELF     	2 2 20k	; "reverse"
+	51	[11]	CALL     	2 2 2	; 1 in 1 out
+	52	[11]	SELF     	2 2 3k	; "upper"
+	53	[11]	CALL     	2 2 2	; 1 in 1 out
+	54	[11]	SELF     	3 0 2k	; "len"
+	55	[11]	CALL     	3 2 2	; 1 in 1 out
+	56	[11]	ADDI     	3 3 1
+	57	[11]	MMBINI   	3 1 6 0	; __add
+	58	[11]	CALL     	1 3 1	; 2 in 0 out
+	59	[14]	GETTABUP 	1 0 21	; _ENV "getmetatable"
+	60	[14]	LOADK    	2 19	; ""
+	61	[14]	CALL     	1 2 2	; 1 in 1 out
+	62	[15]	GETTABUP 	2 0 1	; _ENV "print"
+	63	[15]	GETTABUP 	3 0 22	; _ENV "type"
+	64	[15]	MOVE     	4 1
+	65	[15]	CALL     	3 2 2	; 1 in 1 out
+	66	[15]	GETFIELD 	4 1 23	; "__index"
+	67	[15]	GETTABUP 	5 0 24	; _ENV "string"
+	68	[15]	EQ       	4 5 1
+	69	[15]	JMP      	1	; to 71
+	70	[15]	LFALSESKIP	4
+	71	[15]	LOADTRUE 	4
+	72	[15]	GETTABUP 	5 0 21	; _ENV "getmetatable"
+	73	[15]	MOVE     	6 0
+	74	[15]	CALL     	5 2 2	; 1 in 1 out
+	75	[15]	EQ       	5 1 1
+	76	[15]	JMP      	1	; to 78
+	77	[15]	LFALSESKIP	5
+	78	[15]	LOADTRUE 	5
+	79	[15]	CALL     	2 4 1	; 3 in 0 out
+	80	[16]	GETTABUP 	2 0 24	; _ENV "string"
+	81	[16]	CLOSURE  	3 0
+	82	[16]	SETFIELD 	2 25 3	; "shout"
+	83	[17]	GETTABUP 	2 0 1	; _ENV "print"
+	84	[17]	SELF     	3 0 25k	; "shout"
+	85	[17]	CALL     	3 2 2	; 1 in 1 out
+	86	[17]	LOADK    	4 26	; "quiet"
+	87	[17]	SELF     	4 4 25k	; "shout"
+	88	[17]	CALL     	4 2 0	; 1 in all out
+	89	[17]	CALL     	2 0 1	; all in 0 out
+	90	[18]	GETTABUP 	2 0 24	; _ENV "string"
+	91	[18]	SETFIELD 	2 25 27k	; "shout" nil
+	92	[19]	GETTABUP 	2 0 1	; _ENV "print"
+	93	[19]	GETTABUP 	3 0 28	; _ENV "pcall"
+	94	[19]	CLOSURE  	4 1
+	95	[19]	CALL     	3 2 0	; 1 in all out
+	96	[19]	CALL     	2 0 1	; all in 0 out
+	97	[20]	GETTABUP 	2 0 1	; _ENV "print"
+	98	[20]	GETFIELD 	3 0 2	; "len"
+	99	[20]	GETTABUP 	4 0 24	; _ENV "string"
+	100	[20]	GETFIELD 	4 4 2	; "len"
+	101	[20]	EQ       	3 4 1
+	102	[20]	JMP      	1	; to 104
+	103	[20]	LFALSESKIP	3
+	104	[20]	LOADTRUE 	3
+	105	[20]	LOADK    	4 10	; "x"
+	106	[20]	GETFIELD 	4 4 29	; "nothing"
+	107	[20]	GETI     	5 0 1
+	108	[20]	CALL     	2 4 1	; 3 in 0 out
+	109	[23]	GETTABUP 	2 0 1	; _ENV "print"
+	110	[23]	LOADK    	3 30	; "10"
+	111	[23]	ADDI     	3 3 1
+	112	[23]	MMBINI   	3 1 6 0	; __add
+	113	[23]	LOADK    	4 30	; "10"
+	114	[23]	LOADK    	5 31	; "2"
+	115	[23]	MUL      	4 4 5
+	116	[23]	MMBIN    	4 5 8	; __mul
+	117	[23]	LOADK    	5 32	; "3.0"
+	118	[23]	ADDI     	5 5 1
+	119	[23]	MMBINI   	5 1 6 0	; __add
+	120	[23]	LOADK    	6 33	; "0x10"
+	121	[23]	ADDI     	6 6 0
+	122	[23]	MMBINI   	6 0 6 0	; __add
+	123	[23]	LOADK    	7 34	; "1e1"
+	124	[23]	ADDI     	7 7 0
+	125	[23]	MMBINI   	7 0 6 0	; __add
+	126	[23]	CALL     	2 6 1	; 5 in 0 out
+	127	[24]	GETTABUP 	2 0 1	; _ENV "print"
+	128	[24]	GETTABUP 	3 0 35	; _ENV "math"
+	129	[24]	GETFIELD 	3 3 22	; "type"
+	130	[24]	LOADK    	4 30	; "10"
+	131	[24]	ADDI     	4 4 1
+	132	[24]	MMBINI   	4 1 6 0	; __add
+	133	[24]	CALL     	3 2 2	; 1 in 1 out
+	134	[24]	GETTABUP 	4 0 35	; _ENV "math"
+	135	[24]	GETFIELD 	4 4 22	; "type"
+	136	[24]	LOADK    	5 30	; "10"
+	137	[24]	ADDK     	5 5 36	; 1.0
+	138	[24]	MMBINK   	5 36 6 0	; __add 1.0
+	139	[24]	CALL     	4 2 2	; 1 in 1 out
+	140	[24]	GETTABUP 	5 0 35	; _ENV "math"
+	141	[24]	GETFIELD 	5 5 22	; "type"
+	142	[24]	LOADK    	6 37	; "10.0"
+	143	[24]	ADDI     	6 6 1
+	144	[24]	MMBINI   	6 1 6 0	; __add
+	145	[24]	CALL     	5 2 0	; 1 in all out
+	146	[24]	CALL     	2 0 1	; all in 0 out
+	147	[25]	GETTABUP 	2 0 1	; _ENV "print"
+	148	[25]	LOADK    	3 38	; "7"
+	149	[25]	LOADK    	4 31	; "2"
+	150	[25]	IDIV     	3 3 4
+	151	[25]	MMBIN    	3 4 12	; __idiv
+	152	[25]	LOADK    	4 38	; "7"
+	153	[25]	LOADK    	5 39	; "3"
+	154	[25]	MOD      	4 4 5
+	155	[25]	MMBIN    	4 5 9	; __mod
+	156	[25]	LOADK    	5 31	; "2"
+	157	[25]	LOADK    	6 39	; "3"
+	158	[25]	POW      	5 5 6
+	159	[25]	MMBIN    	5 6 10	; __pow
+	160	[25]	LOADK    	6 38	; "7"
+	161	[25]	LOADK    	7 31	; "2"
+	162	[25]	DIV      	6 6 7
+	163	[25]	MMBIN    	6 7 11	; __div
+	164	[25]	LOADK    	7 39	; "3"
+	165	[25]	UNM      	7 7
+	166	[25]	LOADK    	8 40	; "3.5"
+	167	[25]	UNM      	8 8
+	168	[25]	CALL     	2 7 1	; 6 in 0 out
+	169	[26]	GETTABUP 	2 0 1	; _ENV "print"
+	170	[26]	LOADK    	3 41	; " 5 "
+	171	[26]	ADDI     	3 3 0
+	172	[26]	MMBINI   	3 0 6 0	; __add
+	173	[26]	LOADK    	4 42	; "\t5\n"
+	174	[26]	MULK     	4 4 43	; 2
+	175	[26]	MMBINK   	4 43 8 0	; __mul 2
+	176	[26]	LOADK    	5 44	; "-5"
+	177	[26]	LOADK    	6 44	; "-5"
+	178	[26]	SUB      	5 5 6
+	179	[26]	MMBIN    	5 6 7	; __sub
+	180	[26]	LOADK    	6 30	; "10"
+	181	[26]	LOADK    	7 45	; "0.0"
+	182	[26]	IDIV     	6 6 7
+	183	[26]	MMBIN    	6 7 12	; __idiv
+	184	[26]	CALL     	2 5 1	; 4 in 0 out
+	185	[27]	GETTABUP 	2 0 1	; _ENV "print"
+	186	[27]	LOADI    	3 10
+	187	[27]	LOADI    	4 20
+	188	[27]	CONCAT   	3 2
+	189	[27]	LOADK    	4 46	; 1.5
+	190	[27]	LOADK    	5 19	; ""
+	191	[27]	CONCAT   	4 2
+	192	[27]	LOADK    	5 10	; "x"
+	193	[27]	LOADI    	6 1
+	194	[27]	LOADI    	7 2
+	195	[27]	CONCAT   	5 3
+	196	[27]	CALL     	2 4 1	; 3 in 0 out
+	197	[31]	GETTABUP 	2 0 1	; _ENV "print"
+	198	[31]	GETTABUP 	3 0 28	; _ENV "pcall"
+	199	[31]	CLOSURE  	4 2
+	200	[31]	CALL     	3 2 0	; 1 in all out
+	201	[31]	CALL     	2 0 1	; all in 0 out
+	202	[32]	GETTABUP 	2 0 1	; _ENV "print"
+	203	[32]	GETTABUP 	3 0 28	; _ENV "pcall"
+	204	[32]	CLOSURE  	4 3
+	205	[32]	CALL     	3 2 0	; 1 in all out
+	206	[32]	CALL     	2 0 1	; all in 0 out
+	207	[33]	GETTABUP 	2 0 1	; _ENV "print"
+	208	[33]	GETTABUP 	3 0 28	; _ENV "pcall"
+	209	[33]	CLOSURE  	4 4
+	210	[33]	CALL     	3 2 0	; 1 in all out
+	211	[33]	CALL     	2 0 1	; all in 0 out
+	212	[36]	GETTABUP 	2 0 1	; _ENV "print"
+	213	[36]	LOADI    	3 10
+	214	[36]	EQK      	3 30 1	; "10"
+	215	[36]	JMP      	1	; to 217
+	216	[36]	LFALSESKIP	3
+	217	[36]	LOADTRUE 	3
+	218	[36]	GETTABUP 	4 0 28	; _ENV "pcall"
+	219	[36]	CLOSURE  	5 5
+	220	[36]	CALL     	4 2 0	; 1 in all out
+	221	[36]	CALL     	2 0 1	; all in 0 out
+	222	[37]	GETTABUP 	2 0 1	; _ENV "print"
+	223	[37]	LOADK    	3 47	; "10"
+	224	[37]	LOADK    	4 48	; "9"
+	225	[37]	LT       	3 4 1
+	226	[37]	JMP      	1	; to 228
+	227	[37]	LFALSESKIP	3
+	228	[37]	LOADTRUE 	3
+	229	[37]	LOADK    	4 49	; "a"
+	230	[37]	LOADK    	5 50	; "b"
+	231	[37]	LT       	4 5 1
+	232	[37]	JMP      	1	; to 234
+	233	[37]	LFALSESKIP	4
+	234	[37]	LOADTRUE 	4
+	235	[37]	LOADK    	5 19	; ""
+	236	[37]	LOADK    	6 49	; "a"
+	237	[37]	LT       	5 6 1
+	238	[37]	JMP      	1	; to 240
+	239	[37]	LFALSESKIP	5
+	240	[37]	LOADTRUE 	5
+	241	[37]	LOADK    	6 51	; "Z"
+	242	[37]	LOADK    	7 49	; "a"
+	243	[37]	LT       	6 7 1
+	244	[37]	JMP      	1	; to 246
+	245	[37]	LFALSESKIP	6
+	246	[37]	LOADTRUE 	6
+	247	[37]	CALL     	2 5 1	; 4 in 0 out
+	248	[40]	GETTABUP 	2 0 1	; _ENV "print"
+	249	[40]	GETTABUP 	3 0 28	; _ENV "pcall"
+	250	[40]	CLOSURE  	4 6
+	251	[40]	CALL     	3 2 0	; 1 in all out
+	252	[40]	CALL     	2 0 1	; all in 0 out
+	253	[41]	GETTABUP 	2 0 1	; _ENV "print"
+	254	[41]	GETTABUP 	3 0 28	; _ENV "pcall"
+	255	[41]	CLOSURE  	4 7
+	256	[41]	CALL     	3 2 0	; 1 in all out
+	257	[41]	CALL     	2 0 1	; all in 0 out
+	258	[42]	GETTABUP 	2 0 1	; _ENV "print"
+	259	[42]	GETTABUP 	3 0 28	; _ENV "pcall"
+	260	[42]	CLOSURE  	4 8
+	261	[42]	CALL     	3 2 0	; 1 in all out
+	262	[42]	CALL     	2 0 1	; all in 0 out
+	263	[43]	GETTABUP 	2 0 1	; _ENV "print"
+	264	[43]	GETTABUP 	3 0 28	; _ENV "pcall"
+	265	[43]	CLOSURE  	4 9
+	266	[43]	CALL     	3 2 0	; 1 in all out
+	267	[43]	CALL     	2 0 1	; all in 0 out
+	268	[44]	GETTABUP 	2 0 1	; _ENV "print"
+	269	[44]	GETTABUP 	3 0 28	; _ENV "pcall"
+	270	[44]	CLOSURE  	4 10
+	271	[44]	CALL     	3 2 0	; 1 in all out
+	272	[44]	CALL     	2 0 1	; all in 0 out
+	273	[47]	GETTABUP 	2 0 1	; _ENV "print"
+	274	[47]	GETTABUP 	3 0 52	; _ENV "tostring"
+	275	[47]	LOADI    	4 12345
+	276	[47]	CALL     	3 2 2	; 1 in 1 out
+	277	[47]	SELF     	3 3 20k	; "reverse"
+	278	[47]	CALL     	3 2 2	; 1 in 1 out
+	279	[47]	GETTABUP 	4 0 52	; _ENV "tostring"
+	280	[47]	LOADK    	5 53	; 3.5
+	281	[47]	CALL     	4 2 2	; 1 in 1 out
+	282	[47]	SELF     	4 4 2k	; "len"
+	283	[47]	CALL     	4 2 2	; 1 in 1 out
+	284	[47]	LOADF    	5 1024
+	285	[47]	LOADK    	6 19	; ""
+	286	[47]	CONCAT   	5 2
+	287	[47]	SELF     	5 5 6k	; "sub"
+	288	[47]	LOADI    	7 1
+	289	[47]	LOADI    	8 2
+	290	[47]	CALL     	5 4 0	; 3 in all out
+	291	[47]	CALL     	2 0 1	; all in 0 out
+	292	[49]	SELF     	2 0 54k	; "upper"
+	293	[49]	CALL     	2 2 2	; 1 in 1 out
+	294	[49]	LOADK    	3 47	; "10"
+	295	[49]	ADDI     	3 3 5
+	296	[49]	MMBINI   	3 5 6 0	; __add
+	297	[49]	MULK     	3 3 55	; 2
+	298	[49]	MMBINK   	3 55 8 0	; __mul 2
+	299	[49]	RETURN   	2 3 1k	; 2 out
+	300	[49]	RETURN   	2 1 1k	; 0 out
+constants (56):
+	0	S	"hello"
+	1	S	"print"
+	2	S	"len"
+	3	S	"upper"
+	4	S	"rep"
+	5	S	"-"
+	6	S	"sub"
+	7	S	"byte"
+	8	S	"find"
+	9	S	"l"
+	10	S	"x"
+	11	S	"%d-%s"
+	12	S	"format"
+	13	S	"five"
+	14	S	"a,b"
+	15	S	"gsub"
+	16	S	","
+	17	S	";"
+	18	S	"abc"
+	19	S	""
+	20	S	"reverse"
+	21	S	"getmetatable"
+	22	S	"type"
+	23	S	"__index"
+	24	S	"string"
+	25	S	"shout"
+	26	S	"quiet"
+	27	N	nil
+	28	S	"pcall"
+	29	S	"nothing"
+	30	S	"10"
+	31	S	"2"
+	32	S	"3.0"
+	33	S	"0x10"
+	34	S	"1e1"
+	35	S	"math"
+	36	F	1.0
+	37	S	"10.0"
+	38	S	"7"
+	39	S	"3"
+	40	S	"3.5"
+	41	S	" 5 "
+	42	S	"\t5\n"
+	43	I	2
+	44	S	"-5"
+	45	S	"0.0"
+	46	F	1.5
+	47	S	"10"
+	48	S	"9"
+	49	S	"a"
+	50	S	"b"
+	51	S	"Z"
+	52	S	"tostring"
+	53	F	3.5
+	54	S	"upper"
+	55	I	2
+locals (2):
+	0	s	3	301
+	1	mt	62	301
+upvalues (1):
+	0	_ENV	1	0
+
+function <string_methods.lua:16,16> (6 instructions)
+1 param, 3 slots, 0 upvalues, 1 local, 2 constants, 0 functions
+	1	[16]	SELF     	1 0 0k	; "upper"
+	2	[16]	CALL     	1 2 2	; 1 in 1 out
+	3	[16]	LOADK    	2 1	; "!"
+	4	[16]	CONCAT   	1 2
+	5	[16]	RETURN1  	1
+	6	[16]	RETURN0  	
+constants (2):
+	0	S	"upper"
+	1	S	"!"
+locals (1):
+	0	str	1	7
+upvalues (0):
+
+function <string_methods.lua:19,19> (5 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[19]	GETUPVAL 	0 0	; s
+	2	[19]	SELF     	0 0 0k	; "shout"
+	3	[19]	TAILCALL 	0 2 0	; 1 in
+	4	[19]	RETURN   	0 0 0	; all out
+	5	[19]	RETURN0  	
+constants (1):
+	0	S	"shout"
+locals (0):
+upvalues (1):
+	0	s	1	0
+
+function <string_methods.lua:31,31> (5 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 2 constants, 0 functions
+	1	[31]	LOADK    	0 0	; "3"
+	2	[31]	BORK     	0 0 1	; 0
+	3	[31]	MMBINK   	0 1 14 0	; __bor 0
+	4	[31]	RETURN1  	0
+	5	[31]	RETURN0  	
+constants (2):
+	0	S	"3"
+	1	I	0
+locals (0):
+upvalues (0):
+
+function <string_methods.lua:32,32> (5 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[32]	LOADK    	0 0	; "4"
+	2	[32]	SHLI     	0 0 1
+	3	[32]	MMBINI   	0 1 16 1	; __shl flip
+	4	[32]	RETURN1  	0
+	5	[32]	RETURN0  	
+constants (1):
+	0	S	"4"
+locals (0):
+upvalues (0):
+
+function <string_methods.lua:33,33> (4 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[33]	LOADK    	0 0	; "0"
+	2	[33]	BNOT     	0 0
+	3	[33]	RETURN1  	0
+	4	[33]	RETURN0  	
+constants (1):
+	0	S	"0"
+locals (0):
+upvalues (0):
+
+function <string_methods.lua:36,36> (7 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[36]	LOADK    	0 0	; "10"
+	2	[36]	LTI      	0 5 1
+	3	[36]	JMP      	1	; to 5
+	4	[36]	LFALSESKIP	0
+	5	[36]	LOADTRUE 	0
+	6	[36]	RETURN1  	0
+	7	[36]	RETURN0  	
+constants (1):
+	0	S	"10"
+locals (0):
+upvalues (0):
+
+function <string_methods.lua:40,40> (5 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[40]	LOADK    	0 0	; "abc"
+	2	[40]	ADDI     	0 0 1
+	3	[40]	MMBINI   	0 1 6 0	; __add
+	4	[40]	RETURN1  	0
+	5	[40]	RETURN0  	
+constants (1):
+	0	S	"abc"
+locals (0):
+upvalues (0):
+
+function <string_methods.lua:41,41> (5 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 2 constants, 0 functions
+	1	[41]	LOADK    	0 0	; "1.5"
+	2	[41]	BORK     	0 0 1	; 0
+	3	[41]	MMBINK   	0 1 14 0	; __bor 0
+	4	[41]	RETURN1  	0
+	5	[41]	RETURN0  	
+constants (2):
+	0	S	"1.5"
+	1	I	0
+locals (0):
+upvalues (0):
+
+function <string_methods.lua:42,42> (5 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 2 constants, 0 functions
+	1	[42]	LOADK    	0 0	; "10x"
+	2	[42]	MULK     	0 0 1	; 2
+	3	[42]	MMBINK   	0 1 8 0	; __mul 2
+	4	[42]	RETURN1  	0
+	5	[42]	RETURN0  	
+constants (2):
+	0	S	"10x"
+	1	I	2
+locals (0):
+upvalues (0):
+
+function <string_methods.lua:43,43> (6 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[43]	NEWTABLE 	0 0 0	; 0
+	2	[43]	EXTRAARG 	0
+	3	[43]	LOADK    	1 0	; "x"
+	4	[43]	CONCAT   	0 2
+	5	[43]	RETURN1  	0
+	6	[43]	RETURN0  	
+constants (1):
+	0	S	"x"
+locals (0):
+upvalues (0):
+
+function <string_methods.lua:44,44> (4 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[44]	LOADK    	0 0	; "x"
+	2	[44]	UNM      	0 0
+	3	[44]	RETURN1  	0
+	4	[44]	RETURN0  	
+constants (1):
+	0	S	"x"
+locals (0):
+upvalues (0):

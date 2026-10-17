@@ -1,0 +1,41 @@
+hell0 w0rld	2
+hell0 world	1
+hello world	0
+hello world	0
+<hello> <world>	2
+<hello> <world>	2
+world hello	1
+-a-b-c-	4
+aabbcc	3
+100%%	1
+%	1
+heo	1
+y	1
+Abc	Aaa	1
+abC	abc	0
+abc	3
+a;b;,c	2
+-a-c-	3
+Lua 5.4 $missing $unknown	4
+1 B c	3
+2 4 6	3
+AbC	3
+abc	3
+v1=k1 v2=k2	2
+1a2b3c4	4
+hel1.5l1.5o	2
+W (W) W	3
+Hello World	2
+|aaa |bbb	2
+aaa| bbb|	2
+THE END!	1
+false	invalid capture index %2
+false	invalid use of '%' in replacement string
+false	invalid use of '%' in replacement string
+false	invalid replacement value (a table)
+false	invalid replacement value (a table)
+false	bad argument #3 to 'string.gsub' (string/function/table expected, got boolean)
+false	bad argument #3 to 'string.gsub' (string/function/table expected, got no value)
+false	bad argument #4 to 'string.gsub' (number expected, got string)
+a42c	a1.5c	1
+one! two! three	2

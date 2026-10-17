@@ -1,0 +1,336 @@
+
+main <base_tostring.lua:0,0> (260 instructions)
+0+ params, 11 slots, 1 upvalue, 3 locals, 34 constants, 3 functions
+	1	[1]	VARARGPREP	0
+	2	[5]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[5]	GETTABUP 	1 0 1	; _ENV "tostring"
+	4	[5]	LOADI    	2 0
+	5	[5]	CALL     	1 2 2	; 1 in 1 out
+	6	[5]	GETTABUP 	2 0 1	; _ENV "tostring"
+	7	[5]	LOADI    	3 0
+	8	[5]	CALL     	2 2 2	; 1 in 1 out
+	9	[5]	GETTABUP 	3 0 1	; _ENV "tostring"
+	10	[5]	LOADI    	4 42
+	11	[5]	CALL     	3 2 2	; 1 in 1 out
+	12	[5]	GETTABUP 	4 0 1	; _ENV "tostring"
+	13	[5]	LOADI    	5 -42
+	14	[5]	CALL     	4 2 0	; 1 in all out
+	15	[5]	CALL     	0 0 1	; all in 0 out
+	16	[6]	GETTABUP 	0 0 0	; _ENV "print"
+	17	[6]	GETTABUP 	1 0 1	; _ENV "tostring"
+	18	[6]	LOADF    	2 0
+	19	[6]	CALL     	1 2 2	; 1 in 1 out
+	20	[6]	GETTABUP 	2 0 1	; _ENV "tostring"
+	21	[6]	LOADF    	3 0
+	22	[6]	UNM      	3 3
+	23	[6]	CALL     	2 2 2	; 1 in 1 out
+	24	[6]	GETTABUP 	3 0 1	; _ENV "tostring"
+	25	[6]	LOADF    	4 1
+	26	[6]	CALL     	3 2 2	; 1 in 1 out
+	27	[6]	GETTABUP 	4 0 1	; _ENV "tostring"
+	28	[6]	LOADK    	5 2	; -1.5
+	29	[6]	CALL     	4 2 0	; 1 in all out
+	30	[6]	CALL     	0 0 1	; all in 0 out
+	31	[7]	GETTABUP 	0 0 0	; _ENV "print"
+	32	[7]	GETTABUP 	1 0 1	; _ENV "tostring"
+	33	[7]	LOADK    	2 3	; 1e+100
+	34	[7]	CALL     	1 2 2	; 1 in 1 out
+	35	[7]	GETTABUP 	2 0 1	; _ENV "tostring"
+	36	[7]	LOADK    	3 4	; -1e+100
+	37	[7]	CALL     	2 2 2	; 1 in 1 out
+	38	[7]	GETTABUP 	3 0 1	; _ENV "tostring"
+	39	[7]	LOADK    	4 5	; 1e+15
+	40	[7]	CALL     	3 2 2	; 1 in 1 out
+	41	[7]	GETTABUP 	4 0 1	; _ENV "tostring"
+	42	[7]	LOADK    	5 6	; 1e+16
+	43	[7]	CALL     	4 2 0	; 1 in all out
+	44	[7]	CALL     	0 0 1	; all in 0 out
+	45	[8]	GETTABUP 	0 0 0	; _ENV "print"
+	46	[8]	GETTABUP 	1 0 1	; _ENV "tostring"
+	47	[8]	LOADK    	2 7	; 1.2345678901234e+14
+	48	[8]	CALL     	1 2 2	; 1 in 1 out
+	49	[8]	GETTABUP 	2 0 1	; _ENV "tostring"
+	50	[8]	LOADK    	3 8	; 1.2345678901235e+15
+	51	[8]	CALL     	2 2 0	; 1 in all out
+	52	[8]	CALL     	0 0 1	; all in 0 out
+	53	[9]	GETTABUP 	0 0 0	; _ENV "print"
+	54	[9]	GETTABUP 	1 0 1	; _ENV "tostring"
+	55	[9]	LOADK    	2 9	; 0.1
+	56	[9]	CALL     	1 2 2	; 1 in 1 out
+	57	[9]	GETTABUP 	2 0 1	; _ENV "tostring"
+	58	[9]	LOADK    	3 10	; 0.33333333333333
+	59	[9]	CALL     	2 2 2	; 1 in 1 out
+	60	[9]	GETTABUP 	3 0 1	; _ENV "tostring"
+	61	[9]	LOADK    	4 11	; 9.007199254741e+15
+	62	[9]	CALL     	3 2 2	; 1 in 1 out
+	63	[9]	GETTABUP 	4 0 1	; _ENV "tostring"
+	64	[9]	LOADK    	5 12	; 9.2233720368548e+18
+	65	[9]	CALL     	4 2 0	; 1 in all out
+	66	[9]	CALL     	0 0 1	; all in 0 out
+	67	[10]	GETTABUP 	0 0 0	; _ENV "print"
+	68	[10]	GETTABUP 	1 0 1	; _ENV "tostring"
+	69	[10]	LOADK    	2 13	; 1e-05
+	70	[10]	CALL     	1 2 2	; 1 in 1 out
+	71	[10]	GETTABUP 	2 0 1	; _ENV "tostring"
+	72	[10]	LOADK    	3 14	; 4.9406564584125e-324
+	73	[10]	CALL     	2 2 2	; 1 in 1 out
+	74	[10]	GETTABUP 	3 0 1	; _ENV "tostring"
+	75	[10]	LOADK    	4 15	; 1.7976931348623e+308
+	76	[10]	CALL     	3 2 0	; 1 in all out
+	77	[10]	CALL     	0 0 1	; all in 0 out
+	78	[11]	GETTABUP 	0 0 0	; _ENV "print"
+	79	[11]	GETTABUP 	1 0 1	; _ENV "tostring"
+	80	[11]	GETTABUP 	2 0 16	; _ENV "math"
+	81	[11]	GETFIELD 	2 2 17	; "huge"
+	82	[11]	CALL     	1 2 2	; 1 in 1 out
+	83	[11]	GETTABUP 	2 0 1	; _ENV "tostring"
+	84	[11]	GETTABUP 	3 0 16	; _ENV "math"
+	85	[11]	GETFIELD 	3 3 17	; "huge"
+	86	[11]	UNM      	3 3
+	87	[11]	CALL     	2 2 2	; 1 in 1 out
+	88	[11]	GETTABUP 	3 0 1	; _ENV "tostring"
+	89	[11]	LOADI    	4 1
+	90	[11]	DIVK     	4 4 18	; 0
+	91	[11]	MMBINK   	4 18 11 0	; __div 0
+	92	[11]	CALL     	3 2 2	; 1 in 1 out
+	93	[11]	GETTABUP 	4 0 1	; _ENV "tostring"
+	94	[11]	LOADI    	5 -1
+	95	[11]	DIVK     	5 5 18	; 0
+	96	[11]	MMBINK   	5 18 11 0	; __div 0
+	97	[11]	CALL     	4 2 0	; 1 in all out
+	98	[11]	CALL     	0 0 1	; all in 0 out
+	99	[12]	GETTABUP 	0 0 0	; _ENV "print"
+	100	[12]	GETTABUP 	1 0 1	; _ENV "tostring"
+	101	[12]	GETTABUP 	2 0 16	; _ENV "math"
+	102	[12]	GETFIELD 	2 2 19	; "maxinteger"
+	103	[12]	CALL     	1 2 2	; 1 in 1 out
+	104	[12]	GETTABUP 	2 0 1	; _ENV "tostring"
+	105	[12]	GETTABUP 	3 0 16	; _ENV "math"
+	106	[12]	GETFIELD 	3 3 20	; "mininteger"
+	107	[12]	CALL     	2 2 0	; 1 in all out
+	108	[12]	CALL     	0 0 1	; all in 0 out
+	109	[13]	GETTABUP 	0 0 0	; _ENV "print"
+	110	[13]	GETTABUP 	1 0 1	; _ENV "tostring"
+	111	[13]	GETTABUP 	2 0 16	; _ENV "math"
+	112	[13]	GETFIELD 	2 2 19	; "maxinteger"
+	113	[13]	ADDK     	2 2 21	; 0.0
+	114	[13]	MMBINK   	2 21 6 0	; __add 0.0
+	115	[13]	CALL     	1 2 2	; 1 in 1 out
+	116	[13]	GETTABUP 	2 0 1	; _ENV "tostring"
+	117	[13]	GETTABUP 	3 0 16	; _ENV "math"
+	118	[13]	GETFIELD 	3 3 20	; "mininteger"
+	119	[13]	ADDK     	3 3 21	; 0.0
+	120	[13]	MMBINK   	3 21 6 0	; __add 0.0
+	121	[13]	CALL     	2 2 0	; 1 in all out
+	122	[13]	CALL     	0 0 1	; all in 0 out
+	123	[14]	GETTABUP 	0 0 0	; _ENV "print"
+	124	[14]	GETTABUP 	1 0 1	; _ENV "tostring"
+	125	[14]	LOADF    	2 3
+	126	[14]	CALL     	1 2 2	; 1 in 1 out
+	127	[14]	GETTABUP 	2 0 1	; _ENV "tostring"
+	128	[14]	LOADI    	3 3
+	129	[14]	CALL     	2 2 2	; 1 in 1 out
+	130	[14]	GETTABUP 	3 0 1	; _ENV "tostring"
+	131	[14]	LOADF    	4 3
+	132	[14]	CALL     	3 2 2	; 1 in 1 out
+	133	[14]	GETTABUP 	4 0 1	; _ENV "tostring"
+	134	[14]	LOADF    	5 4
+	135	[14]	CALL     	4 2 0	; 1 in all out
+	136	[14]	CALL     	0 0 1	; all in 0 out
+	137	[15]	GETTABUP 	0 0 0	; _ENV "print"
+	138	[15]	GETTABUP 	1 0 1	; _ENV "tostring"
+	139	[15]	LOADTRUE 	2
+	140	[15]	CALL     	1 2 2	; 1 in 1 out
+	141	[15]	GETTABUP 	2 0 1	; _ENV "tostring"
+	142	[15]	LOADFALSE	3
+	143	[15]	CALL     	2 2 2	; 1 in 1 out
+	144	[15]	GETTABUP 	3 0 1	; _ENV "tostring"
+	145	[15]	LOADNIL  	4 0	; 1 out
+	146	[15]	CALL     	3 2 0	; 1 in all out
+	147	[15]	CALL     	0 0 1	; all in 0 out
+	148	[16]	GETTABUP 	0 0 0	; _ENV "print"
+	149	[16]	GETTABUP 	1 0 1	; _ENV "tostring"
+	150	[16]	LOADK    	2 22	; "text"
+	151	[16]	CALL     	1 2 2	; 1 in 1 out
+	152	[16]	GETTABUP 	2 0 1	; _ENV "tostring"
+	153	[16]	LOADK    	3 23	; ""
+	154	[16]	CALL     	2 2 2	; 1 in 1 out
+	155	[16]	GETTABUP 	3 0 1	; _ENV "tostring"
+	156	[16]	LOADI    	4 12345
+	157	[16]	CALL     	3 2 2	; 1 in 1 out
+	158	[16]	LEN      	3 3
+	159	[16]	CALL     	0 4 1	; 3 in 0 out
+	160	[19]	GETTABUP 	0 0 0	; _ENV "print"
+	161	[19]	GETTABUP 	1 0 1	; _ENV "tostring"
+	162	[19]	NEWTABLE 	2 0 0	; 0
+	163	[19]	EXTRAARG 	0
+	164	[19]	CALL     	1 2 2	; 1 in 1 out
+	165	[19]	SELF     	1 1 24k	; "sub"
+	166	[19]	LOADI    	3 1
+	167	[19]	LOADI    	4 7
+	168	[19]	CALL     	1 4 2	; 3 in 1 out
+	169	[19]	GETTABUP 	2 0 1	; _ENV "tostring"
+	170	[19]	GETTABUP 	3 0 0	; _ENV "print"
+	171	[19]	CALL     	2 2 2	; 1 in 1 out
+	172	[19]	SELF     	2 2 24k	; "sub"
+	173	[19]	LOADI    	4 1
+	174	[19]	LOADI    	5 10
+	175	[19]	CALL     	2 4 2	; 3 in 1 out
+	176	[19]	GETTABUP 	3 0 1	; _ENV "tostring"
+	177	[19]	CLOSURE  	4 0
+	178	[19]	CALL     	3 2 2	; 1 in 1 out
+	179	[19]	SELF     	3 3 24k	; "sub"
+	180	[19]	LOADI    	5 1
+	181	[19]	LOADI    	6 10
+	182	[19]	CALL     	3 4 0	; 3 in all out
+	183	[19]	CALL     	0 0 1	; all in 0 out
+	184	[22]	NEWTABLE 	0 1 0	; 0
+	185	[22]	EXTRAARG 	0
+	186	[22]	CLOSURE  	1 1
+	187	[22]	SETFIELD 	0 25 1	; "__tostring"
+	188	[23]	GETTABUP 	1 0 26	; _ENV "setmetatable"
+	189	[23]	NEWTABLE 	2 1 0	; 0
+	190	[23]	EXTRAARG 	0
+	191	[23]	SETFIELD 	2 27 28k	; "x" 3
+	192	[23]	MOVE     	3 0
+	193	[23]	CALL     	1 3 2	; 2 in 1 out
+	194	[24]	GETTABUP 	2 0 0	; _ENV "print"
+	195	[24]	GETTABUP 	3 0 1	; _ENV "tostring"
+	196	[24]	MOVE     	4 1
+	197	[24]	CALL     	3 2 2	; 1 in 1 out
+	198	[24]	MOVE     	4 1
+	199	[24]	CALL     	2 3 1	; 2 in 0 out
+	200	[25]	GETTABUP 	2 0 26	; _ENV "setmetatable"
+	201	[25]	NEWTABLE 	3 0 0	; 0
+	202	[25]	EXTRAARG 	0
+	203	[25]	NEWTABLE 	4 1 0	; 0
+	204	[25]	EXTRAARG 	0
+	205	[25]	SETFIELD 	4 29 30k	; "__name" "MyType"
+	206	[25]	CALL     	2 3 2	; 2 in 1 out
+	207	[26]	GETTABUP 	3 0 0	; _ENV "print"
+	208	[26]	GETTABUP 	4 0 1	; _ENV "tostring"
+	209	[26]	MOVE     	5 2
+	210	[26]	CALL     	4 2 2	; 1 in 1 out
+	211	[26]	SELF     	4 4 24k	; "sub"
+	212	[26]	LOADI    	6 1
+	213	[26]	LOADI    	7 8
+	214	[26]	CALL     	4 4 0	; 3 in all out
+	215	[26]	CALL     	3 0 1	; all in 0 out
+	216	[27]	GETTABUP 	3 0 0	; _ENV "print"
+	217	[27]	GETTABUP 	4 0 31	; _ENV "pcall"
+	218	[27]	GETTABUP 	5 0 1	; _ENV "tostring"
+	219	[27]	GETTABUP 	6 0 26	; _ENV "setmetatable"
+	220	[27]	NEWTABLE 	7 0 0	; 0
+	221	[27]	EXTRAARG 	0
+	222	[27]	NEWTABLE 	8 1 0	; 0
+	223	[27]	EXTRAARG 	0
+	224	[27]	CLOSURE  	9 2
+	225	[27]	SETFIELD 	8 25 9	; "__tostring"
+	226	[27]	CALL     	6 3 0	; 2 in all out
+	227	[27]	CALL     	4 0 0	; all in all out
+	228	[27]	CALL     	3 0 1	; all in 0 out
+	229	[28]	GETTABUP 	3 0 0	; _ENV "print"
+	230	[28]	GETTABUP 	4 0 31	; _ENV "pcall"
+	231	[28]	GETTABUP 	5 0 1	; _ENV "tostring"
+	232	[28]	CALL     	4 2 0	; 1 in all out
+	233	[28]	CALL     	3 0 1	; all in 0 out
+	234	[31]	GETTABUP 	3 0 0	; _ENV "print"
+	235	[31]	LOADI    	4 1
+	236	[31]	LOADK    	5 23	; ""
+	237	[31]	CONCAT   	4 2
+	238	[31]	LOADF    	5 1
+	239	[31]	LOADK    	6 23	; ""
+	240	[31]	CONCAT   	5 2
+	241	[31]	LOADF    	6 0
+	242	[31]	UNM      	6 6
+	243	[31]	LOADK    	7 23	; ""
+	244	[31]	CONCAT   	6 2
+	245	[31]	LOADK    	7 12	; 9.2233720368548e+18
+	246	[31]	LOADK    	8 23	; ""
+	247	[31]	CONCAT   	7 2
+	248	[31]	LOADI    	8 3
+	249	[31]	LOADK    	9 32	; "|"
+	250	[31]	LOADF    	10 5
+	251	[31]	CONCAT   	8 3
+	252	[31]	CALL     	3 6 1	; 5 in 0 out
+	253	[33]	GETTABUP 	3 0 1	; _ENV "tostring"
+	254	[33]	LOADK    	4 33	; inf
+	255	[33]	CALL     	3 2 2	; 1 in 1 out
+	256	[33]	GETTABUP 	4 0 1	; _ENV "tostring"
+	257	[33]	LOADF    	5 255
+	258	[33]	CALL     	4 2 0	; 1 in all out
+	259	[33]	RETURN   	3 0 1	; all out
+	260	[33]	RETURN   	3 1 1	; 0 out
+constants (34):
+	0	S	"print"
+	1	S	"tostring"
+	2	F	-1.5
+	3	F	1e+100
+	4	F	-1e+100
+	5	F	1e+15
+	6	F	1e+16
+	7	F	1.2345678901234e+14
+	8	F	1.2345678901235e+15
+	9	F	0.1
+	10	F	0.33333333333333
+	11	F	9.007199254741e+15
+	12	F	9.2233720368548e+18
+	13	F	1e-05
+	14	F	4.9406564584125e-324
+	15	F	1.7976931348623e+308
+	16	S	"math"
+	17	S	"huge"
+	18	I	0
+	19	S	"maxinteger"
+	20	S	"mininteger"
+	21	F	0.0
+	22	S	"text"
+	23	S	""
+	24	S	"sub"
+	25	S	"__tostring"
+	26	S	"setmetatable"
+	27	S	"x"
+	28	I	3
+	29	S	"__name"
+	30	S	"MyType"
+	31	S	"pcall"
+	32	S	"|"
+	33	F	inf
+locals (3):
+	0	mt	188	261
+	1	p	194	261
+	2	named	207	261
+upvalues (1):
+	0	_ENV	1	0
+
+function <base_tostring.lua:19,19> (1 instruction)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[19]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <base_tostring.lua:22,22> (6 instructions)
+1 param, 4 slots, 0 upvalues, 1 local, 3 constants, 0 functions
+	1	[22]	LOADK    	1 0	; "point("
+	2	[22]	GETFIELD 	2 0 1	; "x"
+	3	[22]	LOADK    	3 2	; ")"
+	4	[22]	CONCAT   	1 3
+	5	[22]	RETURN1  	1
+	6	[22]	RETURN0  	
+constants (3):
+	0	S	"point("
+	1	S	"x"
+	2	S	")"
+locals (1):
+	0	self	1	7
+upvalues (0):
+
+function <base_tostring.lua:27,27> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[27]	LOADI    	0 1
+	2	[27]	RETURN1  	0
+	3	[27]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):

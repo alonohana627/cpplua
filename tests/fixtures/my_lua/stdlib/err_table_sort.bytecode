@@ -1,0 +1,21 @@
+
+main <err_table_sort.lua:0,0> (11 instructions)
+0+ params, 3 slots, 1 upvalue, 1 local, 2 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[3]	NEWTABLE 	0 0 2	; 2
+	3	[3]	EXTRAARG 	0
+	4	[3]	LOADFALSE	1
+	5	[3]	LOADTRUE 	2
+	6	[3]	SETLIST  	0 2 0
+	7	[4]	GETTABUP 	1 0 0	; _ENV "table"
+	8	[4]	GETFIELD 	1 1 1	; "sort"
+	9	[4]	MOVE     	2 0
+	10	[4]	CALL     	1 2 1	; 1 in 0 out
+	11	[4]	RETURN   	1 1 1	; 0 out
+constants (2):
+	0	S	"table"
+	1	S	"sort"
+locals (1):
+	0	t	7	12
+upvalues (1):
+	0	_ENV	1	0

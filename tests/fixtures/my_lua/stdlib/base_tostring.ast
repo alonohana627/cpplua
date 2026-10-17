@@ -1,0 +1,317 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Integer 0
+      Call
+        Name tostring
+        Unary -
+          Integer 0
+      Call
+        Name tostring
+        Integer 42
+      Call
+        Name tostring
+        Unary -
+          Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Float 0.0
+      Call
+        Name tostring
+        Unary -
+          Float 0.0
+      Call
+        Name tostring
+        Float 1.0
+      Call
+        Name tostring
+        Unary -
+          Float 1.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Float 1e+100
+      Call
+        Name tostring
+        Unary -
+          Float 1e+100
+      Call
+        Name tostring
+        Float 1e+15
+      Call
+        Name tostring
+        Float 1e+16
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Float 123456789012345.0
+      Call
+        Name tostring
+        Float 1234567890123456.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Float 0.1
+      Call
+        Name tostring
+        Binary /
+          Integer 1
+          Integer 3
+      Call
+        Name tostring
+        Binary ^
+          Integer 2
+          Integer 53
+      Call
+        Name tostring
+        Binary ^
+          Integer 2
+          Integer 63
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Float 1e-05
+      Call
+        Name tostring
+        Float 5e-324
+      Call
+        Name tostring
+        Float 1.7976931348623157e+308
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Index
+          Name math
+          String "huge"
+      Call
+        Name tostring
+        Unary -
+          Index
+            Name math
+            String "huge"
+      Call
+        Name tostring
+        Binary /
+          Integer 1
+          Integer 0
+      Call
+        Name tostring
+        Binary /
+          Unary -
+            Integer 1
+          Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Index
+          Name math
+          String "maxinteger"
+      Call
+        Name tostring
+        Index
+          Name math
+          String "mininteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Binary +
+          Index
+            Name math
+            String "maxinteger"
+          Float 0.0
+      Call
+        Name tostring
+        Binary +
+          Index
+            Name math
+            String "mininteger"
+          Float 0.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Binary /
+          Integer 3
+          Integer 1
+      Call
+        Name tostring
+        Binary //
+          Integer 7
+          Integer 2
+      Call
+        Name tostring
+        Binary //
+          Float 7.0
+          Integer 2
+      Call
+        Name tostring
+        Binary ^
+          Integer 2
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        True
+      Call
+        Name tostring
+        False
+      Call
+        Name tostring
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        String "text"
+      Call
+        Name tostring
+        String ""
+      Unary #
+        Call
+          Name tostring
+          Integer 12345
+  CallStatement
+    Call
+      Name print
+      MethodCall sub
+        Call
+          Name tostring
+          Table
+        Integer 1
+        Integer 7
+      MethodCall sub
+        Call
+          Name tostring
+          Name print
+        Integer 1
+        Integer 10
+      MethodCall sub
+        Call
+          Name tostring
+          Function()
+        Integer 1
+        Integer 10
+  Local mt
+    Table
+      Field __tostring
+        Function(self)
+          Return
+            Binary ..
+              String "point("
+              Binary ..
+                Index
+                  Name self (local 0)
+                  String "x"
+                String ")"
+  Local p
+    Call
+      Name setmetatable
+      Table
+        Field x
+          Integer 3
+      Name mt (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Name p (local 1)
+      Name p (local 1)
+  Local named
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __name
+          String "MyType"
+  CallStatement
+    Call
+      Name print
+      MethodCall sub
+        Call
+          Name tostring
+          Name named (local 2)
+        Integer 1
+        Integer 8
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name tostring
+        Call
+          Name setmetatable
+          Table
+          Table
+            Field __tostring
+              Function()
+                Return
+                  Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name tostring
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        Integer 1
+        String ""
+      Binary ..
+        Float 1.0
+        String ""
+      Binary ..
+        Unary -
+          Float 0.0
+        String ""
+      Binary ..
+        Binary ^
+          Integer 2
+          Integer 63
+        String ""
+      Binary ..
+        Binary //
+          Integer 10
+          Integer 3
+        Binary ..
+          String "|"
+          Binary /
+            Integer 10
+            Integer 2
+  Return
+    Call
+      Name tostring
+      Binary *
+        Float 1e+300
+        Float 1e+10
+    Call
+      Name tostring
+      Binary //
+        Integer 255
+        Float 1.0

@@ -1,0 +1,411 @@
+Chunk
+  Local p
+    Call
+      Index
+        Name table
+        String "pack"
+      Integer 1
+      Nil
+      Integer 3
+      Nil
+  CallStatement
+    Call
+      Name print
+      Index
+        Name p (local 0)
+        String "n"
+      Index
+        Name p (local 0)
+        Integer 1
+      Index
+        Name p (local 0)
+        Integer 2
+      Index
+        Name p (local 0)
+        Integer 3
+      Index
+        Name p (local 0)
+        Integer 4
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name table
+            String "unpack"
+          Name p (local 0)
+          Integer 1
+          Index
+            Name p (local 0)
+            String "n"
+  CallStatement
+    Call
+      Name print
+      Index
+        Call
+          Index
+            Name table
+            String "pack"
+        String "n"
+      Binary ==
+        Call
+          Name next
+          Call
+            Index
+              Name table
+              String "pack"
+          Nil
+        String "n"
+      Index
+        Call
+          Index
+            Name table
+            String "pack"
+          Nil
+        String "n"
+  Local q
+    Call
+      Index
+        Name table
+        String "pack"
+      String "a"
+      String "b"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name q (local 1)
+        String "n"
+      Index
+        Name q (local 1)
+        Integer 1
+      Index
+        Name q (local 1)
+        Integer 2
+      Index
+        Name q (local 1)
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "unpack"
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+          Item
+            Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "unpack"
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+          Item
+            Integer 3
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "unpack"
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+          Item
+            Integer 3
+        Integer 2
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "unpack"
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+          Item
+            Integer 3
+        Integer 3
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "unpack"
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+          Item
+            Integer 3
+        Unary -
+          Integer 1
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name table
+            String "unpack"
+          Table
+            Item
+              Integer 1
+            Item
+              Integer 2
+            Item
+              Integer 3
+          Integer 3
+          Integer 2
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name table
+            String "unpack"
+          Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "unpack"
+        Table
+          Field
+            Integer 0
+            String "zero"
+          Item
+            String "one"
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "unpack"
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+          Item
+            Integer 3
+        Float 2.0
+        Float 3.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name table
+            String "unpack"
+          Table
+          Integer 1
+          Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "unpack"
+        Table
+          Item
+            String "x"
+        Index
+          Name math
+          String "maxinteger"
+        Index
+          Name math
+          String "maxinteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name table
+            String "unpack"
+          Table
+          Index
+            Name math
+            String "mininteger"
+          Binary +
+            Index
+              Name math
+              String "mininteger"
+            Integer 2
+  Local virtual
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(_, i)
+            Return
+              Binary *
+                Name i (local 1)
+                Name i (local 1)
+        Field __len
+          Function()
+            Return
+              Integer 4
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "unpack"
+        Name virtual (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "unpack"
+        Name virtual (local 2)
+        Integer 5
+        Integer 6
+  LocalFunction pass
+    Function(...) [upvalues: _ENV]
+      Return
+        Call
+          Index
+            Name table
+            String "unpack"
+          Call
+            Index
+              Name table
+              String "pack"
+            Vararg
+          Integer 1
+          Call
+            Name select
+            String "#"
+            Vararg
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pass (local 3)
+        Nil
+        False
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Name pass (local 3)
+          Nil
+          Nil
+          Nil
+  CallStatement
+    Call
+      Name print
+      Name unpack
+      Call
+        Name type
+        Index
+          Name table
+          String "unpack"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "unpack"
+        Table
+        Integer 1
+        Float 1e+08
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "unpack"
+        Table
+        Index
+          Name math
+          String "mininteger"
+        Index
+          Name math
+          String "maxinteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "unpack"
+        Table
+        Float 1.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "unpack"
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "unpack"
+  Return
+    Call
+      Index
+        Name table
+        String "unpack"
+      Table
+        Item
+          String "r1"
+        Item
+          String "r2"

@@ -22,6 +22,7 @@ Catch2 is downloaded by CMake on first configure.
 | `src/`          | The `lua2` binary that runs Lua, built on `lib/`             |
 | `tests/`        | Catch2 tests                                                 |
 | `bench/`        | Benchmark programs and their runner (`bench/README.md`)      |
+| `std/`          | The standard library's reference: every function as an empty Lua function with its documentation (the code is C++, in `lib/std/`) |
 | `original_lua_src/` | The original Lua 5.4.9 distribution from lua.org, unchanged, built as the reference Lua. Not in Git: configuring downloads it when missing |
 
 ## Build
@@ -48,12 +49,12 @@ dot -Tsvg tree.dot -o tree.svg          # draw it (needs Graphviz: pacman -S min
 ./build/debug/lua2 --bytecode file.lua  # the compiled bytecode, listed like `luac -l -l`
 ```
 
-The whole language runs, with tables, metatables, `<close>`, finalizers and weak tables. The
-standard library so far is the base library (`print`, `type`, `tostring`, `tonumber`, `pairs`,
-`ipairs`, `next`, `select`, `rawget`, `rawset`, `rawequal`, `rawlen`, `setmetatable`,
-`getmetatable`, `error`, `assert`, `pcall`, `xpcall`, `collectgarbage`) and `debug.traceback`;
-the `string`, `table`, `math`, `io` and `os` libraries come in stage 9
-([docs/final_docs/stdlib.md](docs/final_docs/stdlib.md)). An uncaught error goes to stderr as
+The whole language runs, with tables, metatables, `<close>`, finalizers and weak tables, and the
+standard library: the base library, `require` and `package`, `string`, `table`, `math`, `utf8`,
+`io`, `os` and `debug.traceback`, all written in C++; coroutines come in stage 10
+([docs/final_docs/stdlib.md](docs/final_docs/stdlib.md)). The Lua files in `std/` describe every
+library function for readers and editors: point lua-language-server at them
+(`"workspace.library": ["std"]`) for completion and hover help. An uncaught error goes to stderr as
 `lua2: file.lua:3: message` followed by a stack traceback, as the real `lua` prints it.
 
 ## Test
@@ -77,6 +78,7 @@ returns or the error it stops with (see `tests/fixtures/my_lua/README.md`).
 ./build/debug/lua2_tests "[table]"           # tables (docs/spec/tables.md)
 ./build/debug/lua2_tests "[meta]"            # metatables, <close>, finalizers, weak tables
 ./build/debug/lua2_tests "[error]"           # error, pcall, xpcall, tracebacks
+./build/debug/lua2_tests "[stdlib]"          # the standard library, and std/*.lua against it
 ./build/debug/lua2_api_tests                 # the public C++ API, with the embedding guide's examples
 ./build/debug/lua2_tests "[my_lua]"          # the my_lua programs: parse, compile, run, stress
 ```

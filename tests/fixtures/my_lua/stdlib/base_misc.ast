@@ -1,0 +1,346 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Name _VERSION
+      Call
+        Name type
+        Name _VERSION
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Index
+          Name _G
+          String "_G"
+        Name _G
+      Binary ==
+        Index
+          Name _G
+          String "print"
+        Name print
+      Binary ==
+        Index
+          Name _G
+          String "_VERSION"
+        Name _VERSION
+  Assign
+    Targets
+      Index
+        Name _G
+        String "new_global"
+    Values
+      String "set through _G"
+  CallStatement
+    Call
+      Name print
+      Name new_global
+  CallStatement
+    Call
+      Name warn
+      String "@off"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name warn
+        String "this warning is not shown"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name warn
+        String "several "
+        String "pieces "
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name warn
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name warn
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name warn
+        String "ok"
+        Nil
+  CallStatement
+    Call
+      Name warn
+      String "@on"
+  CallStatement
+    Call
+      Name warn
+      String "@off"
+  Local mt
+    Table
+  Local obj
+    Call
+      Name setmetatable
+      Table
+      Name mt (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Name getmetatable
+          Name obj (local 1)
+        Name mt (local 0)
+      Call
+        Name getmetatable
+        Table
+      Call
+        Name getmetatable
+        Integer 1
+  Assign
+    Targets
+      Index
+        Name mt (local 0)
+        String "__metatable"
+    Values
+      String "locked"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name getmetatable
+        Name obj (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name setmetatable
+        Name obj (local 1)
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name setmetatable
+        Name obj (local 1)
+        Nil
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Index
+          Call
+            Name getmetatable
+            String "abc"
+          String "__index"
+        Name string
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name setmetatable
+        Table
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name setmetatable
+        Table
+  CallStatement
+    Call
+      Name print
+      Binary ~=
+        Call
+          Name setmetatable
+          Call
+            Name setmetatable
+            Table
+            Table
+          Nil
+        Nil
+  Local seen
+    Table
+  GenericFor i, v
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            Integer 10
+          Item
+            Integer 20
+          Item
+            Nil
+          Item
+            Integer 40
+    Body
+      Assign
+        Targets
+          Index
+            Name seen (local 2)
+            Binary +
+              Unary #
+                Name seen (local 2)
+              Integer 1
+        Values
+          Binary ..
+            Name i (local 7)
+            Binary ..
+              String "="
+              Name v (local 8)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name seen (local 2)
+        String " "
+  Local virtual
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(_, i)
+            If
+              If
+                Binary <=
+                  Name i (local 1)
+                  Integer 3
+                Then
+                  Return
+                    Binary *
+                      Name i (local 1)
+                      Name i (local 1)
+  Assign
+    Targets
+      Name seen (local 2)
+    Values
+      Table
+  GenericFor i, v
+    In
+      Call
+        Name ipairs
+        Name virtual (local 3)
+    Body
+      Assign
+        Targets
+          Index
+            Name seen (local 2)
+            Binary +
+              Unary #
+                Name seen (local 2)
+              Integer 1
+        Values
+          Binary ..
+            Name i (local 8)
+            Binary ..
+              String "="
+              Name v (local 9)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name seen (local 2)
+        String " "
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name ipairs
+  Local arr
+    Table
+      Item
+        String "a"
+      Item
+        String "b"
+      Item
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name next
+        Name arr (local 4)
+      Call
+        Name next
+        Name arr (local 4)
+        Integer 1
+      Call
+        Name next
+        Name arr (local 4)
+        Integer 2
+      Call
+        Name next
+        Name arr (local 4)
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name next
+        Table
+      Call
+        Name pcall
+        Name next
+        Table
+        String "missing"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name assert
+        Integer 1
+        Integer 2
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Name assert
+          True
+          Nil
+          Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name assert
+        False
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name assert
+        Nil
+        String "custom message"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name assert
+  Return
+    Name _VERSION

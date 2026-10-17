@@ -1,0 +1,471 @@
+
+main <math_random.lua:0,0> (340 instructions)
+0+ params, 15 slots, 1 upvalue, 22 locals, 21 constants, 2 functions
+	1	[1]	VARARGPREP	0
+	2	[11]	CLOSURE  	0 0
+	3	[16]	CLOSURE  	1 1
+	4	[18]	GETTABUP 	2 0 0	; _ENV "math"
+	5	[18]	GETFIELD 	2 2 1	; "randomseed"
+	6	[18]	LOADI    	3 42
+	7	[18]	CALL     	2 2 1	; 1 in 0 out
+	8	[19]	GETTABUP 	2 0 2	; _ENV "print"
+	9	[19]	MOVE     	3 0
+	10	[19]	LOADI    	4 4
+	11	[19]	CALL     	3 2 0	; 1 in all out
+	12	[19]	CALL     	2 0 1	; all in 0 out
+	13	[20]	GETTABUP 	2 0 2	; _ENV "print"
+	14	[20]	MOVE     	3 1
+	15	[20]	LOADI    	4 10
+	16	[20]	LOADI    	5 10
+	17	[20]	CALL     	3 3 0	; 2 in all out
+	18	[20]	CALL     	2 0 1	; all in 0 out
+	19	[21]	GETTABUP 	2 0 2	; _ENV "print"
+	20	[21]	MOVE     	3 1
+	21	[21]	LOADI    	4 10
+	22	[21]	LOADI    	5 5
+	23	[21]	LOADI    	6 20
+	24	[21]	CALL     	3 4 0	; 3 in all out
+	25	[21]	CALL     	2 0 1	; all in 0 out
+	26	[22]	GETTABUP 	2 0 2	; _ENV "print"
+	27	[22]	MOVE     	3 1
+	28	[22]	LOADI    	4 3
+	29	[22]	LOADI    	5 0
+	30	[22]	CALL     	3 3 0	; 2 in all out
+	31	[22]	CALL     	2 0 1	; all in 0 out
+	32	[23]	GETTABUP 	2 0 2	; _ENV "print"
+	33	[23]	MOVE     	3 1
+	34	[23]	LOADI    	4 5
+	35	[23]	LOADI    	5 -3
+	36	[23]	LOADI    	6 3
+	37	[23]	CALL     	3 4 0	; 3 in all out
+	38	[23]	CALL     	2 0 1	; all in 0 out
+	39	[24]	GETTABUP 	2 0 2	; _ENV "print"
+	40	[24]	MOVE     	3 1
+	41	[24]	LOADI    	4 3
+	42	[24]	GETTABUP 	5 0 0	; _ENV "math"
+	43	[24]	GETFIELD 	5 5 3	; "mininteger"
+	44	[24]	GETTABUP 	6 0 0	; _ENV "math"
+	45	[24]	GETFIELD 	6 6 4	; "maxinteger"
+	46	[24]	CALL     	3 4 0	; 3 in all out
+	47	[24]	CALL     	2 0 1	; all in 0 out
+	48	[25]	GETTABUP 	2 0 2	; _ENV "print"
+	49	[25]	MOVE     	3 1
+	50	[25]	LOADI    	4 5
+	51	[25]	LOADI    	5 1
+	52	[25]	CALL     	3 3 0	; 2 in all out
+	53	[25]	CALL     	2 0 1	; all in 0 out
+	54	[26]	GETTABUP 	2 0 2	; _ENV "print"
+	55	[26]	MOVE     	3 1
+	56	[26]	LOADI    	4 4
+	57	[26]	LOADI    	5 7
+	58	[26]	LOADI    	6 7
+	59	[26]	CALL     	3 4 0	; 3 in all out
+	60	[26]	CALL     	2 0 1	; all in 0 out
+	61	[29]	GETTABUP 	2 0 0	; _ENV "math"
+	62	[29]	GETFIELD 	2 2 1	; "randomseed"
+	63	[29]	LOADI    	3 42
+	64	[29]	CALL     	2 2 1	; 1 in 0 out
+	65	[30]	MOVE     	2 0
+	66	[30]	LOADI    	3 4
+	67	[30]	CALL     	2 2 2	; 1 in 1 out
+	68	[31]	GETTABUP 	3 0 0	; _ENV "math"
+	69	[31]	GETFIELD 	3 3 1	; "randomseed"
+	70	[31]	LOADI    	4 42
+	71	[31]	CALL     	3 2 1	; 1 in 0 out
+	72	[32]	GETTABUP 	3 0 2	; _ENV "print"
+	73	[32]	MOVE     	4 0
+	74	[32]	LOADI    	5 4
+	75	[32]	CALL     	4 2 2	; 1 in 1 out
+	76	[32]	EQ       	2 4 1
+	77	[32]	JMP      	1	; to 79
+	78	[32]	LFALSESKIP	4
+	79	[32]	LOADTRUE 	4
+	80	[32]	CALL     	3 2 1	; 1 in 0 out
+	81	[35]	GETTABUP 	3 0 5	; _ENV "ipairs"
+	82	[35]	NEWTABLE 	4 0 6	; 6
+	83	[35]	EXTRAARG 	0
+	84	[35]	LOADI    	5 0
+	85	[35]	LOADI    	6 1
+	86	[35]	LOADK    	7 6	; 123456789
+	87	[35]	LOADI    	8 -1
+	88	[35]	GETTABUP 	9 0 0	; _ENV "math"
+	89	[35]	GETFIELD 	9 9 4	; "maxinteger"
+	90	[35]	GETTABUP 	10 0 0	; _ENV "math"
+	91	[35]	GETFIELD 	10 10 3	; "mininteger"
+	92	[35]	SETLIST  	4 6 0
+	93	[35]	CALL     	3 2 5	; 1 in 4 out
+	94	[35]	TFORPREP 	3 15	; to 110
+	95	[36]	GETTABUP 	9 0 0	; _ENV "math"
+	96	[36]	GETFIELD 	9 9 1	; "randomseed"
+	97	[36]	MOVE     	10 8
+	98	[36]	CALL     	9 2 1	; 1 in 0 out
+	99	[37]	GETTABUP 	9 0 2	; _ENV "print"
+	100	[37]	MOVE     	10 8
+	101	[37]	MOVE     	11 1
+	102	[37]	LOADI    	12 6
+	103	[37]	LOADI    	13 100
+	104	[37]	CALL     	11 3 2	; 2 in 1 out
+	105	[37]	MOVE     	12 1
+	106	[37]	LOADI    	13 1
+	107	[37]	LOADI    	14 0
+	108	[37]	CALL     	12 3 0	; 2 in all out
+	109	[37]	CALL     	9 0 1	; all in 0 out
+	110	[35]	TFORCALL 	3 2
+	111	[35]	TFORLOOP 	3 17	; to 95
+	112	[38]	CLOSE    	3
+	113	[39]	GETTABUP 	3 0 0	; _ENV "math"
+	114	[39]	GETFIELD 	3 3 1	; "randomseed"
+	115	[39]	LOADF    	4 3
+	116	[39]	CALL     	3 2 1	; 1 in 0 out
+	117	[40]	GETTABUP 	3 0 2	; _ENV "print"
+	118	[40]	LOADK    	4 7	; "3.0"
+	119	[40]	MOVE     	5 1
+	120	[40]	LOADI    	6 6
+	121	[40]	LOADI    	7 100
+	122	[40]	CALL     	5 3 0	; 2 in all out
+	123	[40]	CALL     	3 0 1	; all in 0 out
+	124	[41]	GETTABUP 	3 0 0	; _ENV "math"
+	125	[41]	GETFIELD 	3 3 1	; "randomseed"
+	126	[41]	LOADI    	4 1
+	127	[41]	LOADI    	5 2
+	128	[41]	CALL     	3 3 1	; 2 in 0 out
+	129	[42]	GETTABUP 	3 0 2	; _ENV "print"
+	130	[42]	LOADK    	4 8	; "1,2"
+	131	[42]	MOVE     	5 1
+	132	[42]	LOADI    	6 6
+	133	[42]	LOADI    	7 100
+	134	[42]	CALL     	5 3 2	; 2 in 1 out
+	135	[42]	MOVE     	6 0
+	136	[42]	LOADI    	7 1
+	137	[42]	CALL     	6 2 0	; 1 in all out
+	138	[42]	CALL     	3 0 1	; all in 0 out
+	139	[43]	GETTABUP 	3 0 0	; _ENV "math"
+	140	[43]	GETFIELD 	3 3 1	; "randomseed"
+	141	[43]	LOADI    	4 1
+	142	[43]	LOADI    	5 0
+	143	[43]	CALL     	3 3 1	; 2 in 0 out
+	144	[44]	GETTABUP 	3 0 2	; _ENV "print"
+	145	[44]	LOADK    	4 9	; "1,0"
+	146	[44]	MOVE     	5 1
+	147	[44]	LOADI    	6 6
+	148	[44]	LOADI    	7 100
+	149	[44]	CALL     	5 3 0	; 2 in all out
+	150	[44]	CALL     	3 0 1	; all in 0 out
+	151	[45]	GETTABUP 	3 0 0	; _ENV "math"
+	152	[45]	GETFIELD 	3 3 1	; "randomseed"
+	153	[45]	LOADI    	4 0
+	154	[45]	LOADI    	5 1
+	155	[45]	CALL     	3 3 1	; 2 in 0 out
+	156	[46]	GETTABUP 	3 0 2	; _ENV "print"
+	157	[46]	LOADK    	4 10	; "0,1"
+	158	[46]	MOVE     	5 1
+	159	[46]	LOADI    	6 6
+	160	[46]	LOADI    	7 100
+	161	[46]	CALL     	5 3 0	; 2 in all out
+	162	[46]	CALL     	3 0 1	; all in 0 out
+	163	[49]	GETTABUP 	3 0 0	; _ENV "math"
+	164	[49]	GETFIELD 	3 3 1	; "randomseed"
+	165	[49]	LOADI    	4 7
+	166	[49]	CALL     	3 2 1	; 1 in 0 out
+	167	[50]	NEWTABLE 	3 0 0	; 0
+	168	[50]	EXTRAARG 	0
+	169	[50]	LOADI    	4 0
+	170	[51]	LOADI    	5 1
+	171	[51]	LOADI    	6 1000
+	172	[51]	LOADI    	7 1
+	173	[51]	FORPREP  	5 12	; exit to 187
+	174	[52]	GETTABUP 	9 0 0	; _ENV "math"
+	175	[52]	GETFIELD 	9 9 11	; "random"
+	176	[52]	LOADI    	10 3
+	177	[52]	LOADI    	11 6
+	178	[52]	CALL     	9 3 2	; 2 in 1 out
+	179	[53]	LTI      	9 3 1
+	180	[53]	JMP      	2	; to 183
+	181	[53]	GTI      	9 6 0
+	182	[53]	JMP      	2	; to 185
+	183	[53]	ADDI     	4 4 1
+	184	[53]	MMBINI   	4 1 6 0	; __add
+	185	[54]	SETTABLE 	3 9 12k	; true
+	186	[51]	FORLOOP  	5 13	; to 174
+	187	[56]	GETTABUP 	5 0 2	; _ENV "print"
+	188	[56]	MOVE     	6 4
+	189	[56]	GETI     	7 3 3
+	190	[56]	GETI     	8 3 4
+	191	[56]	GETI     	9 3 5
+	192	[56]	GETI     	10 3 6
+	193	[56]	CALL     	5 6 1	; 5 in 0 out
+	194	[57]	LOADTRUE 	5
+	195	[58]	LOADI    	6 1
+	196	[58]	LOADI    	7 1000
+	197	[58]	LOADI    	8 1
+	198	[58]	FORPREP  	6 14	; exit to 214
+	199	[59]	GETTABUP 	10 0 0	; _ENV "math"
+	200	[59]	GETFIELD 	10 10 11	; "random"
+	201	[59]	CALL     	10 1 2	; 0 in 1 out
+	202	[60]	LTI      	10 0 1
+	203	[60]	JMP      	8	; to 212
+	204	[60]	GEI      	10 1 1
+	205	[60]	JMP      	6	; to 212
+	206	[60]	GETTABUP 	11 0 0	; _ENV "math"
+	207	[60]	GETFIELD 	11 11 13	; "type"
+	208	[60]	MOVE     	12 10
+	209	[60]	CALL     	11 2 2	; 1 in 1 out
+	210	[60]	EQK      	11 14 1	; "float"
+	211	[60]	JMP      	1	; to 213
+	212	[60]	LOADFALSE	5
+	213	[58]	FORLOOP  	6 15	; to 199
+	214	[62]	GETTABUP 	6 0 2	; _ENV "print"
+	215	[62]	MOVE     	7 5
+	216	[62]	GETTABUP 	8 0 0	; _ENV "math"
+	217	[62]	GETFIELD 	8 8 13	; "type"
+	218	[62]	GETTABUP 	9 0 0	; _ENV "math"
+	219	[62]	GETFIELD 	9 9 11	; "random"
+	220	[62]	LOADI    	10 5
+	221	[62]	CALL     	9 2 0	; 1 in all out
+	222	[62]	CALL     	8 0 2	; all in 1 out
+	223	[62]	GETTABUP 	9 0 0	; _ENV "math"
+	224	[62]	GETFIELD 	9 9 13	; "type"
+	225	[62]	GETTABUP 	10 0 0	; _ENV "math"
+	226	[62]	GETFIELD 	10 10 11	; "random"
+	227	[62]	LOADI    	11 0
+	228	[62]	CALL     	10 2 0	; 1 in all out
+	229	[62]	CALL     	9 0 0	; all in all out
+	230	[62]	CALL     	6 0 1	; all in 0 out
+	231	[66]	GETTABUP 	6 0 2	; _ENV "print"
+	232	[66]	GETTABUP 	7 0 15	; _ENV "select"
+	233	[66]	LOADK    	8 16	; "#"
+	234	[66]	GETTABUP 	9 0 0	; _ENV "math"
+	235	[66]	GETFIELD 	9 9 1	; "randomseed"
+	236	[66]	CALL     	9 1 0	; 0 in all out
+	237	[66]	CALL     	7 0 2	; all in 1 out
+	238	[66]	GETTABUP 	8 0 0	; _ENV "math"
+	239	[66]	GETFIELD 	8 8 13	; "type"
+	240	[66]	GETTABUP 	9 0 0	; _ENV "math"
+	241	[66]	GETFIELD 	9 9 1	; "randomseed"
+	242	[66]	CALL     	9 1 2	; 0 in 1 out
+	243	[66]	CALL     	8 2 0	; 1 in all out
+	244	[66]	CALL     	6 0 1	; all in 0 out
+	245	[67]	GETTABUP 	6 0 2	; _ENV "print"
+	246	[67]	GETTABUP 	7 0 0	; _ENV "math"
+	247	[67]	GETFIELD 	7 7 1	; "randomseed"
+	248	[67]	LOADI    	8 5
+	249	[67]	CALL     	7 2 0	; 1 in all out
+	250	[67]	CALL     	6 0 1	; all in 0 out
+	251	[68]	GETTABUP 	6 0 2	; _ENV "print"
+	252	[68]	GETTABUP 	7 0 0	; _ENV "math"
+	253	[68]	GETFIELD 	7 7 1	; "randomseed"
+	254	[68]	LOADI    	8 -7
+	255	[68]	LOADI    	9 9
+	256	[68]	CALL     	7 3 0	; 2 in all out
+	257	[68]	CALL     	6 0 1	; all in 0 out
+	258	[71]	GETTABUP 	6 0 2	; _ENV "print"
+	259	[71]	GETTABUP 	7 0 17	; _ENV "pcall"
+	260	[71]	GETTABUP 	8 0 0	; _ENV "math"
+	261	[71]	GETFIELD 	8 8 11	; "random"
+	262	[71]	LOADI    	9 0
+	263	[71]	LOADI    	10 -1
+	264	[71]	CALL     	7 4 0	; 3 in all out
+	265	[71]	CALL     	6 0 1	; all in 0 out
+	266	[72]	GETTABUP 	6 0 2	; _ENV "print"
+	267	[72]	GETTABUP 	7 0 17	; _ENV "pcall"
+	268	[72]	GETTABUP 	8 0 0	; _ENV "math"
+	269	[72]	GETFIELD 	8 8 11	; "random"
+	270	[72]	LOADI    	9 10
+	271	[72]	LOADI    	10 1
+	272	[72]	CALL     	7 4 0	; 3 in all out
+	273	[72]	CALL     	6 0 1	; all in 0 out
+	274	[73]	GETTABUP 	6 0 2	; _ENV "print"
+	275	[73]	GETTABUP 	7 0 17	; _ENV "pcall"
+	276	[73]	GETTABUP 	8 0 0	; _ENV "math"
+	277	[73]	GETFIELD 	8 8 11	; "random"
+	278	[73]	LOADI    	9 -5
+	279	[73]	CALL     	7 3 0	; 2 in all out
+	280	[73]	CALL     	6 0 1	; all in 0 out
+	281	[74]	GETTABUP 	6 0 2	; _ENV "print"
+	282	[74]	GETTABUP 	7 0 17	; _ENV "pcall"
+	283	[74]	GETTABUP 	8 0 0	; _ENV "math"
+	284	[74]	GETFIELD 	8 8 11	; "random"
+	285	[74]	LOADI    	9 1
+	286	[74]	LOADI    	10 2
+	287	[74]	LOADI    	11 3
+	288	[74]	CALL     	7 5 0	; 4 in all out
+	289	[74]	CALL     	6 0 1	; all in 0 out
+	290	[75]	GETTABUP 	6 0 2	; _ENV "print"
+	291	[75]	GETTABUP 	7 0 17	; _ENV "pcall"
+	292	[75]	GETTABUP 	8 0 0	; _ENV "math"
+	293	[75]	GETFIELD 	8 8 11	; "random"
+	294	[75]	LOADK    	9 18	; 1.5
+	295	[75]	CALL     	7 3 0	; 2 in all out
+	296	[75]	CALL     	6 0 1	; all in 0 out
+	297	[76]	GETTABUP 	6 0 2	; _ENV "print"
+	298	[76]	GETTABUP 	7 0 17	; _ENV "pcall"
+	299	[76]	GETTABUP 	8 0 0	; _ENV "math"
+	300	[76]	GETFIELD 	8 8 11	; "random"
+	301	[76]	LOADK    	9 19	; "x"
+	302	[76]	CALL     	7 3 0	; 2 in all out
+	303	[76]	CALL     	6 0 1	; all in 0 out
+	304	[77]	GETTABUP 	6 0 2	; _ENV "print"
+	305	[77]	GETTABUP 	7 0 17	; _ENV "pcall"
+	306	[77]	GETTABUP 	8 0 0	; _ENV "math"
+	307	[77]	GETFIELD 	8 8 1	; "randomseed"
+	308	[77]	LOADK    	9 19	; "x"
+	309	[77]	CALL     	7 3 0	; 2 in all out
+	310	[77]	CALL     	6 0 1	; all in 0 out
+	311	[78]	GETTABUP 	6 0 2	; _ENV "print"
+	312	[78]	GETTABUP 	7 0 17	; _ENV "pcall"
+	313	[78]	GETTABUP 	8 0 0	; _ENV "math"
+	314	[78]	GETFIELD 	8 8 1	; "randomseed"
+	315	[78]	LOADK    	9 20	; 3.5
+	316	[78]	CALL     	7 3 0	; 2 in all out
+	317	[78]	CALL     	6 0 1	; all in 0 out
+	318	[79]	GETTABUP 	6 0 2	; _ENV "print"
+	319	[79]	GETTABUP 	7 0 17	; _ENV "pcall"
+	320	[79]	GETTABUP 	8 0 0	; _ENV "math"
+	321	[79]	GETFIELD 	8 8 1	; "randomseed"
+	322	[79]	LOADI    	9 1
+	323	[79]	NEWTABLE 	10 0 0	; 0
+	324	[79]	EXTRAARG 	0
+	325	[79]	CALL     	7 4 0	; 3 in all out
+	326	[79]	CALL     	6 0 1	; all in 0 out
+	327	[81]	GETTABUP 	6 0 0	; _ENV "math"
+	328	[81]	GETFIELD 	6 6 1	; "randomseed"
+	329	[81]	LOADI    	7 2024
+	330	[81]	CALL     	6 2 1	; 1 in 0 out
+	331	[82]	GETTABUP 	6 0 0	; _ENV "math"
+	332	[82]	GETFIELD 	6 6 11	; "random"
+	333	[82]	LOADI    	7 1000
+	334	[82]	CALL     	6 2 2	; 1 in 1 out
+	335	[82]	GETTABUP 	7 0 0	; _ENV "math"
+	336	[82]	GETFIELD 	7 7 11	; "random"
+	337	[82]	LOADI    	8 1000
+	338	[82]	CALL     	7 2 0	; 1 in all out
+	339	[82]	RETURN   	6 0 1k	; all out
+	340	[82]	RETURN   	6 1 1k	; 0 out
+constants (21):
+	0	S	"math"
+	1	S	"randomseed"
+	2	S	"print"
+	3	S	"mininteger"
+	4	S	"maxinteger"
+	5	S	"ipairs"
+	6	I	123456789
+	7	S	"3.0"
+	8	S	"1,2"
+	9	S	"1,0"
+	10	S	"0,1"
+	11	S	"random"
+	12	B	true
+	13	S	"type"
+	14	S	"float"
+	15	S	"select"
+	16	S	"#"
+	17	S	"pcall"
+	18	F	1.5
+	19	S	"x"
+	20	F	3.5
+locals (22):
+	0	floats	3	341
+	1	ints	4	341
+	2	first	68	341
+	3	(for state)	94	112
+	4	(for state)	94	112
+	5	(for state)	94	112
+	6	(for state)	94	112
+	7	_	95	110
+	8	seed	95	110
+	9	seen	170	341
+	10	outside	170	341
+	11	(for state)	173	187
+	12	(for state)	173	187
+	13	(for state)	173	187
+	14	_	174	186
+	15	r	179	186
+	16	all_floats_ok	195	341
+	17	(for state)	198	214
+	18	(for state)	198	214
+	19	(for state)	198	214
+	20	_	199	213
+	21	r	202	213
+upvalues (1):
+	0	_ENV	1	0
+
+function <math_random.lua:7,11> (22 instructions)
+1 param, 9 slots, 1 upvalue, 6 locals, 8 constants, 0 functions
+	1	[8]	NEWTABLE 	1 0 0	; 0
+	2	[8]	EXTRAARG 	0
+	3	[9]	LOADI    	2 1
+	4	[9]	MOVE     	3 0
+	5	[9]	LOADI    	4 1
+	6	[9]	FORPREP  	2 8	; exit to 16
+	7	[9]	GETTABUP 	6 0 0	; _ENV "string"
+	8	[9]	GETFIELD 	6 6 1	; "format"
+	9	[9]	LOADK    	7 2	; "%.17g"
+	10	[9]	GETTABUP 	8 0 3	; _ENV "math"
+	11	[9]	GETFIELD 	8 8 4	; "random"
+	12	[9]	CALL     	8 1 0	; 0 in all out
+	13	[9]	CALL     	6 0 2	; all in 1 out
+	14	[9]	SETTABLE 	1 5 6
+	15	[9]	FORLOOP  	2 9	; to 7
+	16	[10]	GETTABUP 	2 0 5	; _ENV "table"
+	17	[10]	GETFIELD 	2 2 6	; "concat"
+	18	[10]	MOVE     	3 1
+	19	[10]	LOADK    	4 7	; " "
+	20	[10]	TAILCALL 	2 3 0	; 2 in
+	21	[10]	RETURN   	2 0 0	; all out
+	22	[11]	RETURN0  	
+constants (8):
+	0	S	"string"
+	1	S	"format"
+	2	S	"%.17g"
+	3	S	"math"
+	4	S	"random"
+	5	S	"table"
+	6	S	"concat"
+	7	S	" "
+locals (6):
+	0	n	1	23
+	1	out	3	23
+	2	(for state)	6	16
+	3	(for state)	6	16
+	4	(for state)	6	16
+	5	i	7	15
+upvalues (1):
+	0	_ENV	0	0
+
+function <math_random.lua:12,16> (20 instructions)
+1+ param, 8 slots, 1 upvalue, 6 locals, 5 constants, 0 functions
+	1	[12]	VARARGPREP	1
+	2	[13]	NEWTABLE 	1 0 0	; 0
+	3	[13]	EXTRAARG 	0
+	4	[14]	LOADI    	2 1
+	5	[14]	MOVE     	3 0
+	6	[14]	LOADI    	4 1
+	7	[14]	FORPREP  	2 5	; exit to 14
+	8	[14]	GETTABUP 	6 0 0	; _ENV "math"
+	9	[14]	GETFIELD 	6 6 1	; "random"
+	10	[14]	VARARG   	7 0	; all out
+	11	[14]	CALL     	6 0 2	; all in 1 out
+	12	[14]	SETTABLE 	1 5 6
+	13	[14]	FORLOOP  	2 6	; to 8
+	14	[15]	GETTABUP 	2 0 2	; _ENV "table"
+	15	[15]	GETFIELD 	2 2 3	; "concat"
+	16	[15]	MOVE     	3 1
+	17	[15]	LOADK    	4 4	; " "
+	18	[15]	TAILCALL 	2 3 2	; 2 in
+	19	[15]	RETURN   	2 0 2	; all out
+	20	[16]	RETURN   	2 1 2	; 0 out
+constants (5):
+	0	S	"math"
+	1	S	"random"
+	2	S	"table"
+	3	S	"concat"
+	4	S	" "
+locals (6):
+	0	n	1	21
+	1	out	4	21
+	2	(for state)	7	14
+	3	(for state)	7	14
+	4	(for state)	7	14
+	5	i	8	13
+upvalues (1):
+	0	_ENV	0	0

@@ -1,0 +1,498 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "len"
+        String ""
+      Call
+        Index
+          Name string
+          String "len"
+        String "abc"
+      Call
+        Index
+          Name string
+          String "len"
+        String "a\x00b"
+      Unary #
+        String "a\x00b\x00"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "len"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "len"
+        Integer 12
+      Call
+        Index
+          Name string
+          String "len"
+        Float 12.5
+      Call
+        Index
+          Name string
+          String "len"
+        Unary -
+          Float 0.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "byte"
+        String "A"
+      Call
+        Index
+          Name string
+          String "byte"
+        String "ABC"
+        Integer 2
+      Call
+        Index
+          Name string
+          String "byte"
+        String "ABC"
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "byte"
+        String "ABC"
+        Integer 1
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "byte"
+        String "ABC"
+        Integer 1
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "byte"
+        String "ABC"
+        Unary -
+          Integer 2
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "byte"
+        String "ABC"
+        Integer 0
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "byte"
+        String "ABC"
+        Integer 3
+        Integer 10
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name string
+            String "byte"
+          String "ABC"
+          Integer 4
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name string
+            String "byte"
+          String "ABC"
+          Integer 2
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name string
+            String "byte"
+          String ""
+      Call
+        Index
+          Name string
+          String "byte"
+        String "\x00\xFF"
+        Integer 1
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "byte"
+        String "abc"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "byte"
+        String "abc"
+        Float 1.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "char"
+        Integer 72
+        Integer 105
+      Binary ==
+        Call
+          Index
+            Name string
+            String "char"
+        String ""
+      Unary #
+        Call
+          Index
+            Name string
+            String "char"
+          Integer 0
+          Integer 0
+      Call
+        Index
+          Name string
+          String "char"
+        Float 65.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "char"
+        Call
+          Index
+            Name string
+            String "byte"
+          String "hello"
+          Integer 1
+          Unary -
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "char"
+        Integer 256
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "char"
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "char"
+        Integer 65
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "char"
+        Integer 65
+        String "66"
+      Call
+        Index
+          Name string
+          String "byte"
+        Call
+          Index
+            Name string
+            String "char"
+          Integer 255
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "lower"
+        String "Hello WORLD 123 _!"
+      Call
+        Index
+          Name string
+          String "upper"
+        String "Hello world 123 _!"
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name string
+            String "upper"
+          String "a\x00b"
+        String "A\x00B"
+      Unary #
+        Call
+          Index
+            Name string
+            String "upper"
+          String "a\x00b"
+      Call
+        Index
+          Name string
+          String "lower"
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "upper"
+        Integer 42
+      Call
+        Index
+          Name string
+          String "lower"
+        Float 1.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "rep"
+        String "ab"
+        Integer 3
+      Call
+        Index
+          Name string
+          String "rep"
+        String "ab"
+        Integer 3
+        String ","
+      Call
+        Index
+          Name string
+          String "rep"
+        String "x"
+        Integer 1
+        String "SEP"
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        String "["
+        Binary ..
+          Call
+            Index
+              Name string
+              String "rep"
+            String "ab"
+            Integer 0
+          String "]"
+      Binary ..
+        String "["
+        Binary ..
+          Call
+            Index
+              Name string
+              String "rep"
+            String "ab"
+            Unary -
+              Integer 5
+          String "]"
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        String "["
+        Binary ..
+          Call
+            Index
+              Name string
+              String "rep"
+            String ""
+            Integer 100
+          String "]"
+      Call
+        Index
+          Name string
+          String "rep"
+        String "-"
+        Integer 5
+        String ""
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name string
+            String "rep"
+          String "a"
+          Integer 2
+          String "\x00"
+        String "a\x00a"
+      Call
+        Index
+          Name string
+          String "rep"
+        Integer 5
+        Integer 3
+      Call
+        Index
+          Name string
+          String "rep"
+        String "x"
+        Float 3.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "rep"
+        String "x"
+        Float 1.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "rep"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Call
+          Index
+            Name string
+            String "rep"
+          String "abc"
+          Integer 1000
+          String "de"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "reverse"
+        String "abc"
+      Call
+        Index
+          Name string
+          String "reverse"
+        String ""
+      Call
+        Index
+          Name string
+          String "reverse"
+        String "a"
+      Call
+        Index
+          Name string
+          String "reverse"
+        Integer 123
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name string
+            String "reverse"
+          String "a\x00b"
+        String "b\x00a"
+      Call
+        Index
+          Name string
+          String "reverse"
+        Call
+          Index
+            Name string
+            String "reverse"
+          String "palindrome"
+  Return
+    Call
+      Index
+        Name string
+        String "char"
+      Integer 76
+      Integer 117
+      Integer 97
+    Call
+      Index
+        Name string
+        String "byte"
+      String "Lua"
+      Unary -
+        Integer 3
+      Unary -
+        Integer 1

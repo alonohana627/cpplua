@@ -1,0 +1,25 @@
+10	1.5	10	10
+16	16.0	100.0	0.5	5.0
+-7	7	nil	-16
+integer	float	float
+nil	nil	nil	nil	nil
+nil	nil	nil	nil
+9223372036854775807	9.2233720368548e+18
+-1	0
+nil	nil	true
+nil	10
+2	255	511
+255	255	1295	1295
+5	-5	nil
+nil	nil	nil	nil
+nil	nil	nil	36
+integer	9223372036854775807
+-9223372036854775808	0
+-255	35
+2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36
+false	bad argument #2 to 'tonumber' (base out of range)
+false	bad argument #2 to 'tonumber' (base out of range)
+false	bad argument #1 to 'tonumber' (string expected, got number)
+false	bad argument #2 to 'tonumber' (number expected, got string)
+false	bad argument #1 to 'tonumber' (value expected)
+35	0.1

@@ -1,0 +1,405 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+      Call
+        Name select
+        String "#"
+        Nil
+      Call
+        Name select
+        String "#"
+        Nil
+        Nil
+      Call
+        Name select
+        String "#"
+        Integer 1
+        Nil
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Integer 1
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Integer 2
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Integer 3
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Integer 4
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Unary -
+          Integer 1
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Unary -
+          Integer 3
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Float 2.0
+        String "a"
+        String "b"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name select
+        Unary -
+          Integer 4
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name select
+        Integer 0
+        String "a"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name select
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name select
+        Float 1.5
+        String "a"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name select
+  LocalFunction count
+    Function(...) [upvalues: _ENV]
+      Return
+        Call
+          Name select
+          String "#"
+          Vararg
+  CallStatement
+    Call
+      Name print
+      Call
+        Name count (local 0)
+      Call
+        Name count (local 0)
+        Nil
+      Call
+        Name count (local 0)
+        Integer 1
+        Integer 2
+        Nil
+      Call
+        Name count (local 0)
+        Call
+          Index
+            Name table
+            String "unpack"
+          Table
+            Item
+              Integer 1
+            Item
+              Nil
+            Item
+              Integer 3
+          Integer 1
+          Integer 3
+  Local eqmt
+    Table
+      Field __eq
+        Function()
+          Return
+            True
+  Local a, b
+    Call
+      Name setmetatable
+      Table
+      Name eqmt (local 1)
+    Call
+      Name setmetatable
+      Table
+      Name eqmt (local 1)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name a (local 2)
+        Name b (local 3)
+      Call
+        Name rawequal
+        Name a (local 2)
+        Name b (local 3)
+      Call
+        Name rawequal
+        Name a (local 2)
+        Name a (local 2)
+      Call
+        Name rawequal
+        Integer 1
+        Float 1.0
+      Call
+        Name rawequal
+        String "x"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name rawequal
+        Nil
+        Nil
+      Call
+        Name rawequal
+        Integer 1
+        String "1"
+      Call
+        Name pcall
+        Name rawequal
+        Integer 1
+  Local lenmt
+    Table
+      Field __len
+        Function()
+          Return
+            Integer 99
+  Local t
+    Call
+      Name setmetatable
+      Table
+        Item
+          Integer 1
+        Item
+          Integer 2
+        Item
+          Integer 3
+      Name lenmt (local 4)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name t (local 5)
+      Call
+        Name rawlen
+        Name t (local 5)
+      Call
+        Name rawlen
+        String "hello"
+      Call
+        Name rawlen
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name rawlen
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name rawlen
+  Local proxy
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(_, k) [upvalues: _ENV]
+            Return
+              Binary ..
+                String "default "
+                Call
+                  Name tostring
+                  Name k (local 1)
+        Field __newindex
+          Function() [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                String "read only"
+                Integer 0
+  CallStatement
+    Call
+      Name print
+      Index
+        Name proxy (local 6)
+        String "x"
+      Call
+        Name rawget
+        Name proxy (local 6)
+        String "x"
+      Call
+        Name pcall
+        Function() [upvalues: proxy]
+          Assign
+            Targets
+              Index
+                Name proxy (upvalue 0)
+                String "y"
+            Values
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Name rawset
+          Name proxy (local 6)
+          String "y"
+          Integer 2
+        Name proxy (local 6)
+      Index
+        Name proxy (local 6)
+        String "y"
+      Call
+        Name rawget
+        Name proxy (local 6)
+        String "y"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name rawset
+        Name proxy (local 6)
+        Nil
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name rawset
+        Name proxy (local 6)
+        Binary /
+          Integer 0
+          Integer 0
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name rawget
+        String "s"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name rawset
+        Table
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Nil
+      Call
+        Name type
+        True
+      Call
+        Name type
+        Integer 1
+      Call
+        Name type
+        Float 1.5
+      Call
+        Name type
+        String "s"
+      Call
+        Name type
+        Table
+      Call
+        Name type
+        Name print
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Name type
+      Call
+        Name type
+        Index
+          Name io
+          String "stdout"
+      Call
+        Name pcall
+        Name type
+  Return
+    Call
+      Name select
+      String "#"
+      Call
+        Name select
+        Integer 2
+        Integer 1
+        Integer 2
+        Integer 3
+    Call
+      Name select
+      Unary -
+        Integer 2
+      String "x"
+      String "y"
+      String "z"

@@ -1,0 +1,25 @@
+Chunk
+  CallStatement
+    Call
+      Index
+        Name math
+        String "randomseed"
+      Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "random"
+        Integer 5
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "random"
+        Integer 2
+        Integer 1

@@ -1,0 +1,20 @@
+Chunk
+  LocalFunction attach
+    Function(value) [upvalues: _ENV]
+      Return
+        Call
+          Name setmetatable
+          Name value (local 0)
+          Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Call
+          Name attach (local 0)
+          Table
+  CallStatement
+    Call
+      Name attach (local 0)
+      Integer 1

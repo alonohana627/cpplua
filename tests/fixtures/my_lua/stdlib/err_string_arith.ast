@@ -1,0 +1,13 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Binary +
+        String "10"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Binary +
+        String "ten"
+        Integer 1

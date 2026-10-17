@@ -13,6 +13,7 @@ topic:
 | `close/`          | to-be-closed variables (`close_*`, `err_close*`)                      |
 | `gc/`             | finalizers and weak tables (`gc_*`)                                   |
 | `errors/`         | `error`, `pcall`, `xpcall`, `assert` (`error_*`, `err_error_*`, `err_assert*`) |
+| `stdlib/`         | the standard library: `base_*`, `string_*`, `table_*`, `math_*`, `utf8_*`, `io_*`, `os_*`, and their errors (`err_*`) |
 
 A program and its golden files stay together in one folder:
 

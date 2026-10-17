@@ -1,0 +1,544 @@
+
+main <string_gsub.lua:0,0> (373 instructions)
+0+ params, 8 slots, 1 upvalue, 1 local, 78 constants, 7 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[6]	GETTABUP 	1 0 1	; _ENV "string"
+	4	[6]	GETFIELD 	1 1 2	; "gsub"
+	5	[6]	LOADK    	2 3	; "hello world"
+	6	[6]	LOADK    	3 4	; "o"
+	7	[6]	LOADK    	4 5	; "0"
+	8	[6]	CALL     	1 4 0	; 3 in all out
+	9	[6]	CALL     	0 0 1	; all in 0 out
+	10	[7]	GETTABUP 	0 0 0	; _ENV "print"
+	11	[7]	GETTABUP 	1 0 1	; _ENV "string"
+	12	[7]	GETFIELD 	1 1 2	; "gsub"
+	13	[7]	LOADK    	2 3	; "hello world"
+	14	[7]	LOADK    	3 4	; "o"
+	15	[7]	LOADK    	4 5	; "0"
+	16	[7]	LOADI    	5 1
+	17	[7]	CALL     	1 5 0	; 4 in all out
+	18	[7]	CALL     	0 0 1	; all in 0 out
+	19	[8]	GETTABUP 	0 0 0	; _ENV "print"
+	20	[8]	GETTABUP 	1 0 1	; _ENV "string"
+	21	[8]	GETFIELD 	1 1 2	; "gsub"
+	22	[8]	LOADK    	2 3	; "hello world"
+	23	[8]	LOADK    	3 4	; "o"
+	24	[8]	LOADK    	4 5	; "0"
+	25	[8]	LOADI    	5 0
+	26	[8]	CALL     	1 5 0	; 4 in all out
+	27	[8]	CALL     	0 0 1	; all in 0 out
+	28	[9]	GETTABUP 	0 0 0	; _ENV "print"
+	29	[9]	GETTABUP 	1 0 1	; _ENV "string"
+	30	[9]	GETFIELD 	1 1 2	; "gsub"
+	31	[9]	LOADK    	2 3	; "hello world"
+	32	[9]	LOADK    	3 4	; "o"
+	33	[9]	LOADK    	4 5	; "0"
+	34	[9]	LOADI    	5 -1
+	35	[9]	CALL     	1 5 0	; 4 in all out
+	36	[9]	CALL     	0 0 1	; all in 0 out
+	37	[10]	GETTABUP 	0 0 0	; _ENV "print"
+	38	[10]	GETTABUP 	1 0 1	; _ENV "string"
+	39	[10]	GETFIELD 	1 1 2	; "gsub"
+	40	[10]	LOADK    	2 3	; "hello world"
+	41	[10]	LOADK    	3 6	; "(%w+)"
+	42	[10]	LOADK    	4 7	; "<%1>"
+	43	[10]	CALL     	1 4 0	; 3 in all out
+	44	[10]	CALL     	0 0 1	; all in 0 out
+	45	[11]	GETTABUP 	0 0 0	; _ENV "print"
+	46	[11]	GETTABUP 	1 0 1	; _ENV "string"
+	47	[11]	GETFIELD 	1 1 2	; "gsub"
+	48	[11]	LOADK    	2 3	; "hello world"
+	49	[11]	LOADK    	3 8	; "%w+"
+	50	[11]	LOADK    	4 9	; "<%0>"
+	51	[11]	CALL     	1 4 0	; 3 in all out
+	52	[11]	CALL     	0 0 1	; all in 0 out
+	53	[12]	GETTABUP 	0 0 0	; _ENV "print"
+	54	[12]	GETTABUP 	1 0 1	; _ENV "string"
+	55	[12]	GETFIELD 	1 1 2	; "gsub"
+	56	[12]	LOADK    	2 3	; "hello world"
+	57	[12]	LOADK    	3 10	; "(%w+) (%w+)"
+	58	[12]	LOADK    	4 11	; "%2 %1"
+	59	[12]	CALL     	1 4 0	; 3 in all out
+	60	[12]	CALL     	0 0 1	; all in 0 out
+	61	[13]	GETTABUP 	0 0 0	; _ENV "print"
+	62	[13]	GETTABUP 	1 0 1	; _ENV "string"
+	63	[13]	GETFIELD 	1 1 2	; "gsub"
+	64	[13]	LOADK    	2 12	; "abc"
+	65	[13]	LOADK    	3 13	; ""
+	66	[13]	LOADK    	4 14	; "-"
+	67	[13]	CALL     	1 4 0	; 3 in all out
+	68	[13]	CALL     	0 0 1	; all in 0 out
+	69	[14]	GETTABUP 	0 0 0	; _ENV "print"
+	70	[14]	GETTABUP 	1 0 1	; _ENV "string"
+	71	[14]	GETFIELD 	1 1 2	; "gsub"
+	72	[14]	LOADK    	2 12	; "abc"
+	73	[14]	LOADK    	3 15	; "."
+	74	[14]	LOADK    	4 16	; "%0%0"
+	75	[14]	CALL     	1 4 0	; 3 in all out
+	76	[14]	CALL     	0 0 1	; all in 0 out
+	77	[15]	GETTABUP 	0 0 0	; _ENV "print"
+	78	[15]	GETTABUP 	1 0 1	; _ENV "string"
+	79	[15]	GETFIELD 	1 1 2	; "gsub"
+	80	[15]	LOADK    	2 17	; "100%"
+	81	[15]	LOADK    	3 18	; "%%"
+	82	[15]	LOADK    	4 19	; "%%%%"
+	83	[15]	CALL     	1 4 0	; 3 in all out
+	84	[15]	CALL     	0 0 1	; all in 0 out
+	85	[16]	GETTABUP 	0 0 0	; _ENV "print"
+	86	[16]	GETTABUP 	1 0 1	; _ENV "string"
+	87	[16]	GETFIELD 	1 1 2	; "gsub"
+	88	[16]	LOADK    	2 20	; "x"
+	89	[16]	LOADK    	3 20	; "x"
+	90	[16]	LOADK    	4 18	; "%%"
+	91	[16]	CALL     	1 4 0	; 3 in all out
+	92	[16]	CALL     	0 0 1	; all in 0 out
+	93	[17]	GETTABUP 	0 0 0	; _ENV "print"
+	94	[17]	GETTABUP 	1 0 1	; _ENV "string"
+	95	[17]	GETFIELD 	1 1 2	; "gsub"
+	96	[17]	LOADK    	2 21	; "hello"
+	97	[17]	LOADK    	3 22	; "l+"
+	98	[17]	LOADK    	4 13	; ""
+	99	[17]	CALL     	1 4 0	; 3 in all out
+	100	[17]	CALL     	0 0 1	; all in 0 out
+	101	[18]	GETTABUP 	0 0 0	; _ENV "print"
+	102	[18]	GETTABUP 	1 0 1	; _ENV "string"
+	103	[18]	GETFIELD 	1 1 2	; "gsub"
+	104	[18]	LOADK    	2 13	; ""
+	105	[18]	LOADK    	3 23	; "x*"
+	106	[18]	LOADK    	4 24	; "y"
+	107	[18]	CALL     	1 4 0	; 3 in all out
+	108	[18]	CALL     	0 0 1	; all in 0 out
+	109	[19]	GETTABUP 	0 0 0	; _ENV "print"
+	110	[19]	GETTABUP 	1 0 1	; _ENV "string"
+	111	[19]	GETFIELD 	1 1 2	; "gsub"
+	112	[19]	LOADK    	2 12	; "abc"
+	113	[19]	LOADK    	3 25	; "^a"
+	114	[19]	LOADK    	4 26	; "A"
+	115	[19]	CALL     	1 4 2	; 3 in 1 out
+	116	[19]	GETTABUP 	2 0 1	; _ENV "string"
+	117	[19]	GETFIELD 	2 2 2	; "gsub"
+	118	[19]	LOADK    	3 27	; "aaa"
+	119	[19]	LOADK    	4 25	; "^a"
+	120	[19]	LOADK    	5 26	; "A"
+	121	[19]	CALL     	2 4 0	; 3 in all out
+	122	[19]	CALL     	0 0 1	; all in 0 out
+	123	[20]	GETTABUP 	0 0 0	; _ENV "print"
+	124	[20]	GETTABUP 	1 0 1	; _ENV "string"
+	125	[20]	GETFIELD 	1 1 2	; "gsub"
+	126	[20]	LOADK    	2 12	; "abc"
+	127	[20]	LOADK    	3 28	; "c$"
+	128	[20]	LOADK    	4 29	; "C"
+	129	[20]	CALL     	1 4 2	; 3 in 1 out
+	130	[20]	GETTABUP 	2 0 1	; _ENV "string"
+	131	[20]	GETFIELD 	2 2 2	; "gsub"
+	132	[20]	LOADK    	3 12	; "abc"
+	133	[20]	LOADK    	4 30	; "b$"
+	134	[20]	LOADK    	5 31	; "B"
+	135	[20]	CALL     	2 4 0	; 3 in all out
+	136	[20]	CALL     	0 0 1	; all in 0 out
+	137	[21]	GETTABUP 	0 0 0	; _ENV "print"
+	138	[21]	GETTABUP 	1 0 1	; _ENV "string"
+	139	[21]	GETFIELD 	1 1 2	; "gsub"
+	140	[21]	LOADK    	2 12	; "abc"
+	141	[21]	LOADK    	3 32	; "%w"
+	142	[21]	LOADK    	4 33	; "%1"
+	143	[21]	CALL     	1 4 0	; 3 in all out
+	144	[21]	CALL     	0 0 1	; all in 0 out
+	145	[22]	GETTABUP 	0 0 0	; _ENV "print"
+	146	[22]	GETTABUP 	1 0 1	; _ENV "string"
+	147	[22]	GETFIELD 	1 1 2	; "gsub"
+	148	[22]	LOADK    	2 34	; "a,b,,c"
+	149	[22]	LOADK    	3 35	; ","
+	150	[22]	LOADK    	4 36	; ";"
+	151	[22]	LOADI    	5 2
+	152	[22]	CALL     	1 5 0	; 4 in all out
+	153	[22]	CALL     	0 0 1	; all in 0 out
+	154	[23]	GETTABUP 	0 0 0	; _ENV "print"
+	155	[23]	GETTABUP 	1 0 1	; _ENV "string"
+	156	[23]	GETFIELD 	1 1 2	; "gsub"
+	157	[23]	LOADK    	2 12	; "abc"
+	158	[23]	LOADK    	3 37	; "b*"
+	159	[23]	LOADK    	4 14	; "-"
+	160	[23]	CALL     	1 4 0	; 3 in all out
+	161	[23]	CALL     	0 0 1	; all in 0 out
+	162	[26]	NEWTABLE 	0 3 0	; 0
+	163	[26]	EXTRAARG 	0
+	164	[26]	SETFIELD 	0 38 39k	; "name" "Lua"
+	165	[26]	SETFIELD 	0 40 41k	; "version" 5.4
+	166	[26]	SETFIELD 	0 42 43k	; "missing" false
+	167	[27]	GETTABUP 	1 0 0	; _ENV "print"
+	168	[27]	GETTABUP 	2 0 1	; _ENV "string"
+	169	[27]	GETFIELD 	2 2 2	; "gsub"
+	170	[27]	LOADK    	3 44	; "$name $version $missing $unknown"
+	171	[27]	LOADK    	4 45	; "%$(%w+)"
+	172	[27]	MOVE     	5 0
+	173	[27]	CALL     	2 4 0	; 3 in all out
+	174	[27]	CALL     	1 0 1	; all in 0 out
+	175	[28]	GETTABUP 	1 0 0	; _ENV "print"
+	176	[28]	GETTABUP 	2 0 1	; _ENV "string"
+	177	[28]	GETFIELD 	2 2 2	; "gsub"
+	178	[28]	LOADK    	3 46	; "a b c"
+	179	[28]	LOADK    	4 47	; "%a"
+	180	[28]	NEWTABLE 	5 2 0	; 0
+	181	[28]	EXTRAARG 	0
+	182	[28]	SETFIELD 	5 48 49k	; "a" 1
+	183	[28]	SETFIELD 	5 50 31k	; "b" "B"
+	184	[28]	CALL     	2 4 0	; 3 in all out
+	185	[28]	CALL     	1 0 1	; all in 0 out
+	186	[31]	GETTABUP 	1 0 0	; _ENV "print"
+	187	[31]	GETTABUP 	2 0 1	; _ENV "string"
+	188	[31]	GETFIELD 	2 2 2	; "gsub"
+	189	[31]	LOADK    	3 51	; "1 2 3"
+	190	[31]	LOADK    	4 52	; "%d"
+	191	[31]	CLOSURE  	5 0
+	192	[31]	CALL     	2 4 0	; 3 in all out
+	193	[31]	CALL     	1 0 1	; all in 0 out
+	194	[32]	GETTABUP 	1 0 0	; _ENV "print"
+	195	[32]	GETTABUP 	2 0 1	; _ENV "string"
+	196	[32]	GETFIELD 	2 2 2	; "gsub"
+	197	[32]	LOADK    	3 12	; "abc"
+	198	[32]	LOADK    	4 47	; "%a"
+	199	[32]	CLOSURE  	5 1
+	200	[32]	CALL     	2 4 0	; 3 in all out
+	201	[32]	CALL     	1 0 1	; all in 0 out
+	202	[33]	GETTABUP 	1 0 0	; _ENV "print"
+	203	[33]	GETTABUP 	2 0 1	; _ENV "string"
+	204	[33]	GETFIELD 	2 2 2	; "gsub"
+	205	[33]	LOADK    	3 12	; "abc"
+	206	[33]	LOADK    	4 47	; "%a"
+	207	[33]	CLOSURE  	5 2
+	208	[33]	CALL     	2 4 0	; 3 in all out
+	209	[33]	CALL     	1 0 1	; all in 0 out
+	210	[34]	GETTABUP 	1 0 0	; _ENV "print"
+	211	[34]	GETTABUP 	2 0 1	; _ENV "string"
+	212	[34]	GETFIELD 	2 2 2	; "gsub"
+	213	[34]	LOADK    	3 53	; "k1=v1 k2=v2"
+	214	[34]	LOADK    	4 54	; "(%w+)=(%w+)"
+	215	[34]	CLOSURE  	5 3
+	216	[34]	CALL     	2 4 0	; 3 in all out
+	217	[34]	CALL     	1 0 1	; all in 0 out
+	218	[35]	GETTABUP 	1 0 0	; _ENV "print"
+	219	[35]	GETTABUP 	2 0 1	; _ENV "string"
+	220	[35]	GETFIELD 	2 2 2	; "gsub"
+	221	[35]	LOADK    	3 12	; "abc"
+	222	[35]	LOADK    	4 55	; "()"
+	223	[35]	CLOSURE  	5 4
+	224	[35]	CALL     	2 4 0	; 3 in all out
+	225	[35]	CALL     	1 0 1	; all in 0 out
+	226	[36]	GETTABUP 	1 0 0	; _ENV "print"
+	227	[36]	GETTABUP 	2 0 1	; _ENV "string"
+	228	[36]	GETFIELD 	2 2 2	; "gsub"
+	229	[36]	LOADK    	3 21	; "hello"
+	230	[36]	LOADK    	4 56	; "l"
+	231	[36]	CLOSURE  	5 5
+	232	[36]	CALL     	2 4 0	; 3 in all out
+	233	[36]	CALL     	1 0 1	; all in 0 out
+	234	[39]	GETTABUP 	1 0 0	; _ENV "print"
+	235	[39]	GETTABUP 	2 0 1	; _ENV "string"
+	236	[39]	GETFIELD 	2 2 2	; "gsub"
+	237	[39]	LOADK    	3 57	; "THE (quick) fox"
+	238	[39]	LOADK    	4 58	; "%f[%a]%a+"
+	239	[39]	LOADK    	5 59	; "W"
+	240	[39]	CALL     	2 4 0	; 3 in all out
+	241	[39]	CALL     	1 0 1	; all in 0 out
+	242	[40]	GETTABUP 	1 0 0	; _ENV "print"
+	243	[40]	GETTABUP 	2 0 1	; _ENV "string"
+	244	[40]	GETFIELD 	2 2 2	; "gsub"
+	245	[40]	LOADK    	3 3	; "hello world"
+	246	[40]	LOADK    	4 60	; "%f[%w]%w"
+	247	[40]	GETTABUP 	5 0 1	; _ENV "string"
+	248	[40]	GETFIELD 	5 5 61	; "upper"
+	249	[40]	CALL     	2 4 0	; 3 in all out
+	250	[40]	CALL     	1 0 1	; all in 0 out
+	251	[41]	GETTABUP 	1 0 0	; _ENV "print"
+	252	[41]	GETTABUP 	2 0 1	; _ENV "string"
+	253	[41]	GETFIELD 	2 2 2	; "gsub"
+	254	[41]	LOADK    	3 62	; "aaa bbb"
+	255	[41]	LOADK    	4 63	; "%f[%l]"
+	256	[41]	LOADK    	5 64	; "|"
+	257	[41]	CALL     	2 4 0	; 3 in all out
+	258	[41]	CALL     	1 0 1	; all in 0 out
+	259	[42]	GETTABUP 	1 0 0	; _ENV "print"
+	260	[42]	GETTABUP 	2 0 1	; _ENV "string"
+	261	[42]	GETFIELD 	2 2 2	; "gsub"
+	262	[42]	LOADK    	3 62	; "aaa bbb"
+	263	[42]	LOADK    	4 65	; "%f[%L]"
+	264	[42]	LOADK    	5 64	; "|"
+	265	[42]	CALL     	2 4 0	; 3 in all out
+	266	[42]	CALL     	1 0 1	; all in 0 out
+	267	[43]	GETTABUP 	1 0 0	; _ENV "print"
+	268	[43]	GETTABUP 	2 0 1	; _ENV "string"
+	269	[43]	GETFIELD 	2 2 2	; "gsub"
+	270	[43]	LOADK    	3 66	; "THE END"
+	271	[43]	LOADK    	4 67	; "%f[%z]"
+	272	[43]	LOADK    	5 68	; "!"
+	273	[43]	CALL     	2 4 0	; 3 in all out
+	274	[43]	CALL     	1 0 1	; all in 0 out
+	275	[46]	GETTABUP 	1 0 0	; _ENV "print"
+	276	[46]	GETTABUP 	2 0 69	; _ENV "pcall"
+	277	[46]	GETTABUP 	3 0 1	; _ENV "string"
+	278	[46]	GETFIELD 	3 3 2	; "gsub"
+	279	[46]	LOADK    	4 12	; "abc"
+	280	[46]	LOADK    	5 70	; "(a)"
+	281	[46]	LOADK    	6 71	; "%2"
+	282	[46]	CALL     	2 5 0	; 4 in all out
+	283	[46]	CALL     	1 0 1	; all in 0 out
+	284	[47]	GETTABUP 	1 0 0	; _ENV "print"
+	285	[47]	GETTABUP 	2 0 69	; _ENV "pcall"
+	286	[47]	GETTABUP 	3 0 1	; _ENV "string"
+	287	[47]	GETFIELD 	3 3 2	; "gsub"
+	288	[47]	LOADK    	4 12	; "abc"
+	289	[47]	LOADK    	5 48	; "a"
+	290	[47]	LOADK    	6 72	; "%x"
+	291	[47]	CALL     	2 5 0	; 4 in all out
+	292	[47]	CALL     	1 0 1	; all in 0 out
+	293	[48]	GETTABUP 	1 0 0	; _ENV "print"
+	294	[48]	GETTABUP 	2 0 69	; _ENV "pcall"
+	295	[48]	GETTABUP 	3 0 1	; _ENV "string"
+	296	[48]	GETFIELD 	3 3 2	; "gsub"
+	297	[48]	LOADK    	4 12	; "abc"
+	298	[48]	LOADK    	5 48	; "a"
+	299	[48]	LOADK    	6 73	; "%"
+	300	[48]	CALL     	2 5 0	; 4 in all out
+	301	[48]	CALL     	1 0 1	; all in 0 out
+	302	[49]	GETTABUP 	1 0 0	; _ENV "print"
+	303	[49]	GETTABUP 	2 0 69	; _ENV "pcall"
+	304	[49]	GETTABUP 	3 0 1	; _ENV "string"
+	305	[49]	GETFIELD 	3 3 2	; "gsub"
+	306	[49]	LOADK    	4 12	; "abc"
+	307	[49]	LOADK    	5 48	; "a"
+	308	[49]	NEWTABLE 	6 1 0	; 0
+	309	[49]	EXTRAARG 	0
+	310	[49]	NEWTABLE 	7 0 0	; 0
+	311	[49]	EXTRAARG 	0
+	312	[49]	SETFIELD 	6 48 7	; "a"
+	313	[49]	CALL     	2 5 0	; 4 in all out
+	314	[49]	CALL     	1 0 1	; all in 0 out
+	315	[50]	GETTABUP 	1 0 0	; _ENV "print"
+	316	[50]	GETTABUP 	2 0 69	; _ENV "pcall"
+	317	[50]	GETTABUP 	3 0 1	; _ENV "string"
+	318	[50]	GETFIELD 	3 3 2	; "gsub"
+	319	[50]	LOADK    	4 12	; "abc"
+	320	[50]	LOADK    	5 48	; "a"
+	321	[50]	CLOSURE  	6 6
+	322	[50]	CALL     	2 5 0	; 4 in all out
+	323	[50]	CALL     	1 0 1	; all in 0 out
+	324	[51]	GETTABUP 	1 0 0	; _ENV "print"
+	325	[51]	GETTABUP 	2 0 69	; _ENV "pcall"
+	326	[51]	GETTABUP 	3 0 1	; _ENV "string"
+	327	[51]	GETFIELD 	3 3 2	; "gsub"
+	328	[51]	LOADK    	4 12	; "abc"
+	329	[51]	LOADK    	5 48	; "a"
+	330	[51]	LOADTRUE 	6
+	331	[51]	CALL     	2 5 0	; 4 in all out
+	332	[51]	CALL     	1 0 1	; all in 0 out
+	333	[52]	GETTABUP 	1 0 0	; _ENV "print"
+	334	[52]	GETTABUP 	2 0 69	; _ENV "pcall"
+	335	[52]	GETTABUP 	3 0 1	; _ENV "string"
+	336	[52]	GETFIELD 	3 3 2	; "gsub"
+	337	[52]	LOADK    	4 12	; "abc"
+	338	[52]	LOADK    	5 48	; "a"
+	339	[52]	CALL     	2 4 0	; 3 in all out
+	340	[52]	CALL     	1 0 1	; all in 0 out
+	341	[53]	GETTABUP 	1 0 0	; _ENV "print"
+	342	[53]	GETTABUP 	2 0 69	; _ENV "pcall"
+	343	[53]	GETTABUP 	3 0 1	; _ENV "string"
+	344	[53]	GETFIELD 	3 3 2	; "gsub"
+	345	[53]	LOADK    	4 12	; "abc"
+	346	[53]	LOADK    	5 48	; "a"
+	347	[53]	LOADK    	6 74	; "b"
+	348	[53]	LOADK    	7 20	; "x"
+	349	[53]	CALL     	2 6 0	; 5 in all out
+	350	[53]	CALL     	1 0 1	; all in 0 out
+	351	[56]	GETTABUP 	1 0 0	; _ENV "print"
+	352	[56]	GETTABUP 	2 0 1	; _ENV "string"
+	353	[56]	GETFIELD 	2 2 2	; "gsub"
+	354	[56]	LOADK    	3 12	; "abc"
+	355	[56]	LOADK    	4 74	; "b"
+	356	[56]	LOADI    	5 42
+	357	[56]	CALL     	2 4 2	; 3 in 1 out
+	358	[56]	GETTABUP 	3 0 1	; _ENV "string"
+	359	[56]	GETFIELD 	3 3 2	; "gsub"
+	360	[56]	LOADK    	4 12	; "abc"
+	361	[56]	LOADK    	5 74	; "b"
+	362	[56]	LOADK    	6 75	; 1.5
+	363	[56]	CALL     	3 4 0	; 3 in all out
+	364	[56]	CALL     	1 0 1	; all in 0 out
+	365	[58]	GETTABUP 	1 0 1	; _ENV "string"
+	366	[58]	GETFIELD 	1 1 2	; "gsub"
+	367	[58]	LOADK    	2 76	; "one two three"
+	368	[58]	LOADK    	3 6	; "(%w+)"
+	369	[58]	LOADK    	4 77	; "%1!"
+	370	[58]	LOADI    	5 2
+	371	[58]	TAILCALL 	1 5 1	; 4 in
+	372	[58]	RETURN   	1 0 1	; all out
+	373	[58]	RETURN   	1 1 1	; 0 out
+constants (78):
+	0	S	"print"
+	1	S	"string"
+	2	S	"gsub"
+	3	S	"hello world"
+	4	S	"o"
+	5	S	"0"
+	6	S	"(%w+)"
+	7	S	"<%1>"
+	8	S	"%w+"
+	9	S	"<%0>"
+	10	S	"(%w+) (%w+)"
+	11	S	"%2 %1"
+	12	S	"abc"
+	13	S	""
+	14	S	"-"
+	15	S	"."
+	16	S	"%0%0"
+	17	S	"100%"
+	18	S	"%%"
+	19	S	"%%%%"
+	20	S	"x"
+	21	S	"hello"
+	22	S	"l+"
+	23	S	"x*"
+	24	S	"y"
+	25	S	"^a"
+	26	S	"A"
+	27	S	"aaa"
+	28	S	"c$"
+	29	S	"C"
+	30	S	"b$"
+	31	S	"B"
+	32	S	"%w"
+	33	S	"%1"
+	34	S	"a,b,,c"
+	35	S	","
+	36	S	";"
+	37	S	"b*"
+	38	S	"name"
+	39	S	"Lua"
+	40	S	"version"
+	41	F	5.4
+	42	S	"missing"
+	43	B	false
+	44	S	"$name $version $missing $unknown"
+	45	S	"%$(%w+)"
+	46	S	"a b c"
+	47	S	"%a"
+	48	S	"a"
+	49	I	1
+	50	S	"b"
+	51	S	"1 2 3"
+	52	S	"%d"
+	53	S	"k1=v1 k2=v2"
+	54	S	"(%w+)=(%w+)"
+	55	S	"()"
+	56	S	"l"
+	57	S	"THE (quick) fox"
+	58	S	"%f[%a]%a+"
+	59	S	"W"
+	60	S	"%f[%w]%w"
+	61	S	"upper"
+	62	S	"aaa bbb"
+	63	S	"%f[%l]"
+	64	S	"|"
+	65	S	"%f[%L]"
+	66	S	"THE END"
+	67	S	"%f[%z]"
+	68	S	"!"
+	69	S	"pcall"
+	70	S	"(a)"
+	71	S	"%2"
+	72	S	"%x"
+	73	S	"%"
+	74	S	"b"
+	75	F	1.5
+	76	S	"one two three"
+	77	S	"%1!"
+locals (1):
+	0	vars	167	374
+upvalues (1):
+	0	_ENV	1	0
+
+function <string_gsub.lua:31,31> (4 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[31]	MULK     	1 0 0	; 2
+	2	[31]	MMBINK   	0 0 8 0	; __mul 2
+	3	[31]	RETURN1  	1
+	4	[31]	RETURN0  	
+constants (1):
+	0	I	2
+locals (1):
+	0	d	1	5
+upvalues (0):
+
+function <string_gsub.lua:32,32> (8 instructions)
+1 param, 3 slots, 0 upvalues, 1 local, 2 constants, 0 functions
+	1	[32]	EQK      	0 0 0	; "b"
+	2	[32]	JMP      	2	; to 5
+	3	[32]	LOADNIL  	1 0	; 1 out
+	4	[32]	RETURN1  	1
+	5	[32]	SELF     	1 0 1k	; "upper"
+	6	[32]	TAILCALL 	1 2 0	; 1 in
+	7	[32]	RETURN   	1 0 0	; all out
+	8	[32]	RETURN0  	
+constants (2):
+	0	S	"b"
+	1	S	"upper"
+locals (1):
+	0	c	1	9
+upvalues (0):
+
+function <string_gsub.lua:33,33> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[33]	LOADFALSE	0
+	2	[33]	RETURN1  	0
+	3	[33]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <string_gsub.lua:34,34> (6 instructions)
+2 params, 5 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[34]	MOVE     	2 1
+	2	[34]	LOADK    	3 0	; "="
+	3	[34]	MOVE     	4 0
+	4	[34]	CONCAT   	2 3
+	5	[34]	RETURN1  	2
+	6	[34]	RETURN0  	
+constants (1):
+	0	S	"="
+locals (2):
+	0	k	1	7
+	1	v	1	7
+upvalues (0):
+
+function <string_gsub.lua:35,35> (2 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[35]	RETURN1  	0
+	2	[35]	RETURN0  	
+constants (0):
+locals (1):
+	0	p	1	3
+upvalues (0):
+
+function <string_gsub.lua:36,36> (5 instructions)
+1 param, 3 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[36]	MOVE     	1 0
+	2	[36]	LOADK    	2 0	; 1.5
+	3	[36]	CONCAT   	1 2
+	4	[36]	RETURN1  	1
+	5	[36]	RETURN0  	
+constants (1):
+	0	F	1.5
+locals (1):
+	0	m	1	6
+upvalues (0):
+
+function <string_gsub.lua:50,50> (4 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[50]	NEWTABLE 	0 0 0	; 0
+	2	[50]	EXTRAARG 	0
+	3	[50]	RETURN1  	0
+	4	[50]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):

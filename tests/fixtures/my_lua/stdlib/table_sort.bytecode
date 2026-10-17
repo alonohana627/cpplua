@@ -1,0 +1,587 @@
+
+main <table_sort.lua:0,0> (352 instructions)
+0+ params, 23 slots, 1 upvalue, 40 locals, 42 constants, 8 functions
+	1	[1]	VARARGPREP	0
+	2	[8]	CLOSURE  	0 0
+	3	[10]	NEWTABLE 	1 0 10	; 10
+	4	[10]	EXTRAARG 	0
+	5	[10]	LOADI    	2 5
+	6	[10]	LOADI    	3 2
+	7	[10]	LOADI    	4 8
+	8	[10]	LOADI    	5 1
+	9	[10]	LOADI    	6 9
+	10	[10]	LOADI    	7 3
+	11	[10]	LOADI    	8 7
+	12	[10]	LOADI    	9 4
+	13	[10]	LOADI    	10 6
+	14	[10]	LOADI    	11 10
+	15	[10]	SETLIST  	1 10 0
+	16	[11]	GETTABUP 	2 0 0	; _ENV "table"
+	17	[11]	GETFIELD 	2 2 1	; "sort"
+	18	[11]	MOVE     	3 1
+	19	[11]	CALL     	2 2 1	; 1 in 0 out
+	20	[12]	GETTABUP 	2 0 2	; _ENV "print"
+	21	[12]	MOVE     	3 0
+	22	[12]	MOVE     	4 1
+	23	[12]	CALL     	3 2 0	; 1 in all out
+	24	[12]	CALL     	2 0 1	; all in 0 out
+	25	[13]	NEWTABLE 	2 0 9	; 9
+	26	[13]	EXTRAARG 	0
+	27	[13]	LOADK    	3 3	; 3.5
+	28	[13]	LOADI    	4 1
+	29	[13]	LOADI    	5 -2
+	30	[13]	LOADK    	6 4	; 2.25
+	31	[13]	LOADI    	7 0
+	32	[13]	LOADK    	8 5	; -0.5
+	33	[13]	LOADI    	9 100
+	34	[13]	LOADK    	10 6	; 10000000000.0
+	35	[13]	LOADK    	11 7	; -10000000000.0
+	36	[13]	SETLIST  	2 9 0
+	37	[14]	GETTABUP 	3 0 0	; _ENV "table"
+	38	[14]	GETFIELD 	3 3 1	; "sort"
+	39	[14]	MOVE     	4 2
+	40	[14]	CALL     	3 2 1	; 1 in 0 out
+	41	[15]	GETTABUP 	3 0 2	; _ENV "print"
+	42	[15]	MOVE     	4 0
+	43	[15]	MOVE     	5 2
+	44	[15]	CALL     	4 2 0	; 1 in all out
+	45	[15]	CALL     	3 0 1	; all in 0 out
+	46	[16]	NEWTABLE 	3 0 7	; 7
+	47	[16]	EXTRAARG 	0
+	48	[16]	LOADK    	4 8	; "pear"
+	49	[16]	LOADK    	5 9	; "apple"
+	50	[16]	LOADK    	6 10	; "fig"
+	51	[16]	LOADK    	7 11	; "banana"
+	52	[16]	LOADK    	8 12	; "Cherry"
+	53	[16]	LOADK    	9 13	; "apricot"
+	54	[16]	LOADK    	10 14	; ""
+	55	[16]	SETLIST  	3 7 0
+	56	[17]	GETTABUP 	4 0 0	; _ENV "table"
+	57	[17]	GETFIELD 	4 4 1	; "sort"
+	58	[17]	MOVE     	5 3
+	59	[17]	CALL     	4 2 1	; 1 in 0 out
+	60	[18]	GETTABUP 	4 0 2	; _ENV "print"
+	61	[18]	MOVE     	5 0
+	62	[18]	MOVE     	6 3
+	63	[18]	CALL     	5 2 0	; 1 in all out
+	64	[18]	CALL     	4 0 1	; all in 0 out
+	65	[19]	GETTABUP 	4 0 0	; _ENV "table"
+	66	[19]	GETFIELD 	4 4 1	; "sort"
+	67	[19]	MOVE     	5 3
+	68	[19]	CLOSURE  	6 1
+	69	[19]	CALL     	4 3 1	; 2 in 0 out
+	70	[20]	GETTABUP 	4 0 2	; _ENV "print"
+	71	[20]	MOVE     	5 0
+	72	[20]	MOVE     	6 3
+	73	[20]	CALL     	5 2 0	; 1 in all out
+	74	[20]	CALL     	4 0 1	; all in 0 out
+	75	[21]	GETTABUP 	4 0 0	; _ENV "table"
+	76	[21]	GETFIELD 	4 4 1	; "sort"
+	77	[21]	MOVE     	5 3
+	78	[21]	CLOSURE  	6 2
+	79	[21]	CALL     	4 3 1	; 2 in 0 out
+	80	[22]	GETTABUP 	4 0 2	; _ENV "print"
+	81	[22]	MOVE     	5 0
+	82	[22]	MOVE     	6 3
+	83	[22]	CALL     	5 2 0	; 1 in all out
+	84	[22]	CALL     	4 0 1	; all in 0 out
+	85	[25]	NEWTABLE 	4 0 4	; 4
+	86	[25]	EXTRAARG 	0
+	87	[25]	NEWTABLE 	5 2 0	; 0
+	88	[25]	EXTRAARG 	0
+	89	[25]	SETFIELD 	5 15 16k	; "name" "Ann"
+	90	[25]	SETFIELD 	5 17 18k	; "age" 31
+	91	[25]	NEWTABLE 	6 2 0	; 0
+	92	[25]	EXTRAARG 	0
+	93	[25]	SETFIELD 	6 15 19k	; "name" "Bob"
+	94	[25]	SETFIELD 	6 17 20k	; "age" 25
+	95	[25]	NEWTABLE 	7 2 0	; 0
+	96	[25]	EXTRAARG 	0
+	97	[25]	SETFIELD 	7 15 21k	; "name" "Cid"
+	98	[25]	SETFIELD 	7 17 22k	; "age" 40
+	99	[25]	NEWTABLE 	8 2 0	; 0
+	100	[25]	EXTRAARG 	0
+	101	[25]	SETFIELD 	8 15 23k	; "name" "Dee"
+	102	[25]	SETFIELD 	8 17 24k	; "age" 19
+	103	[25]	SETLIST  	4 4 0
+	104	[26]	GETTABUP 	5 0 0	; _ENV "table"
+	105	[26]	GETFIELD 	5 5 1	; "sort"
+	106	[26]	MOVE     	6 4
+	107	[26]	CLOSURE  	7 3
+	108	[26]	CALL     	5 3 1	; 2 in 0 out
+	109	[27]	NEWTABLE 	5 0 0	; 0
+	110	[27]	EXTRAARG 	0
+	111	[28]	GETTABUP 	6 0 25	; _ENV "ipairs"
+	112	[28]	MOVE     	7 4
+	113	[28]	CALL     	6 2 5	; 1 in 4 out
+	114	[28]	TFORPREP 	6 4	; to 119
+	115	[28]	GETFIELD 	12 11 15	; "name"
+	116	[28]	GETFIELD 	13 11 26	; "age"
+	117	[28]	CONCAT   	12 2
+	118	[28]	SETTABLE 	5 10 12
+	119	[28]	TFORCALL 	6 2
+	120	[28]	TFORLOOP 	6 6	; to 115
+	121	[28]	CLOSE    	6
+	122	[29]	GETTABUP 	6 0 2	; _ENV "print"
+	123	[29]	GETTABUP 	7 0 0	; _ENV "table"
+	124	[29]	GETFIELD 	7 7 27	; "concat"
+	125	[29]	MOVE     	8 5
+	126	[29]	LOADK    	9 28	; " "
+	127	[29]	CALL     	7 3 0	; 2 in all out
+	128	[29]	CALL     	6 0 1	; all in 0 out
+	129	[32]	NEWTABLE 	6 0 1	; 1
+	130	[32]	EXTRAARG 	0
+	131	[32]	LOADI    	7 42
+	132	[32]	SETLIST  	6 1 0
+	133	[32]	NEWTABLE 	7 0 0	; 0
+	134	[32]	EXTRAARG 	0
+	135	[33]	GETTABUP 	8 0 0	; _ENV "table"
+	136	[33]	GETFIELD 	8 8 1	; "sort"
+	137	[33]	MOVE     	9 6
+	138	[33]	CALL     	8 2 1	; 1 in 0 out
+	139	[33]	GETTABUP 	8 0 0	; _ENV "table"
+	140	[33]	GETFIELD 	8 8 1	; "sort"
+	141	[33]	MOVE     	9 7
+	142	[33]	CALL     	8 2 1	; 1 in 0 out
+	143	[34]	GETTABUP 	8 0 2	; _ENV "print"
+	144	[34]	MOVE     	9 0
+	145	[34]	MOVE     	10 6
+	146	[34]	CALL     	9 2 2	; 1 in 1 out
+	147	[34]	LEN      	10 7
+	148	[34]	CALL     	8 3 1	; 2 in 0 out
+	149	[35]	NEWTABLE 	8 0 0	; 0
+	150	[35]	EXTRAARG 	0
+	151	[35]	NEWTABLE 	9 0 0	; 0
+	152	[35]	EXTRAARG 	0
+	153	[36]	LOADI    	10 1
+	154	[36]	LOADI    	11 50
+	155	[36]	LOADI    	12 1
+	156	[36]	FORPREP  	10 5	; exit to 163
+	157	[36]	SETTABLE 	8 13 13
+	158	[36]	LOADI    	14 51
+	159	[36]	SUB      	14 14 13
+	160	[36]	MMBIN    	14 13 7	; __sub
+	161	[36]	SETTABLE 	9 13 14
+	162	[36]	FORLOOP  	10 6	; to 157
+	163	[37]	GETTABUP 	10 0 0	; _ENV "table"
+	164	[37]	GETFIELD 	10 10 1	; "sort"
+	165	[37]	MOVE     	11 8
+	166	[37]	CALL     	10 2 1	; 1 in 0 out
+	167	[37]	GETTABUP 	10 0 0	; _ENV "table"
+	168	[37]	GETFIELD 	10 10 1	; "sort"
+	169	[37]	MOVE     	11 9
+	170	[37]	CALL     	10 2 1	; 1 in 0 out
+	171	[38]	GETTABUP 	10 0 2	; _ENV "print"
+	172	[38]	MOVE     	11 0
+	173	[38]	MOVE     	12 8
+	174	[38]	CALL     	11 2 2	; 1 in 1 out
+	175	[38]	MOVE     	12 0
+	176	[38]	MOVE     	13 9
+	177	[38]	CALL     	12 2 2	; 1 in 1 out
+	178	[38]	EQ       	11 12 1
+	179	[38]	JMP      	1	; to 181
+	180	[38]	LFALSESKIP	11
+	181	[38]	LOADTRUE 	11
+	182	[38]	GETI     	12 8 1
+	183	[38]	GETI     	13 8 50
+	184	[38]	GETI     	14 9 25
+	185	[38]	CALL     	10 5 1	; 4 in 0 out
+	186	[39]	NEWTABLE 	10 0 0	; 0
+	187	[39]	EXTRAARG 	0
+	188	[40]	LOADI    	11 1
+	189	[40]	LOADI    	12 200
+	190	[40]	LOADI    	13 1
+	191	[40]	FORPREP  	11 5	; exit to 198
+	192	[40]	MULK     	15 14 29	; 7919
+	193	[40]	MMBINK   	14 29 8 0	; __mul 7919
+	194	[40]	MODK     	15 15 30	; 1009
+	195	[40]	MMBINK   	15 30 9 0	; __mod 1009
+	196	[40]	SETTABLE 	10 14 15
+	197	[40]	FORLOOP  	11 6	; to 192
+	198	[41]	GETTABUP 	11 0 0	; _ENV "table"
+	199	[41]	GETFIELD 	11 11 1	; "sort"
+	200	[41]	MOVE     	12 10
+	201	[41]	CALL     	11 2 1	; 1 in 0 out
+	202	[42]	LOADTRUE 	11
+	203	[43]	LOADI    	12 2
+	204	[43]	LEN      	13 10
+	205	[43]	LOADI    	14 1
+	206	[43]	FORPREP  	12 7	; exit to 215
+	207	[43]	ADDI     	16 15 -1
+	208	[43]	MMBINI   	15 1 7 0	; __sub
+	209	[43]	GETTABLE 	16 10 16
+	210	[43]	GETTABLE 	17 10 15
+	211	[43]	LE       	17 16 0
+	212	[43]	JMP      	1	; to 214
+	213	[43]	LOADFALSE	11
+	214	[43]	FORLOOP  	12 8	; to 207
+	215	[44]	GETTABUP 	12 0 2	; _ENV "print"
+	216	[44]	MOVE     	13 11
+	217	[44]	GETI     	14 10 1
+	218	[44]	GETI     	15 10 100
+	219	[44]	GETI     	16 10 200
+	220	[44]	CALL     	12 5 1	; 4 in 0 out
+	221	[45]	GETTABUP 	12 0 0	; _ENV "table"
+	222	[45]	GETFIELD 	12 12 1	; "sort"
+	223	[45]	MOVE     	13 10
+	224	[45]	CLOSURE  	14 4
+	225	[45]	CALL     	12 3 1	; 2 in 0 out
+	226	[46]	GETTABUP 	12 0 2	; _ENV "print"
+	227	[46]	GETI     	13 10 1
+	228	[46]	GETI     	14 10 200
+	229	[46]	CALL     	12 3 1	; 2 in 0 out
+	230	[49]	NEWTABLE 	12 1 0	; 0
+	231	[49]	EXTRAARG 	0
+	232	[49]	CLOSURE  	13 5
+	233	[49]	SETFIELD 	12 31 13	; "__lt"
+	234	[50]	NEWTABLE 	13 0 0	; 0
+	235	[50]	EXTRAARG 	0
+	236	[51]	GETTABUP 	14 0 25	; _ENV "ipairs"
+	237	[51]	NEWTABLE 	15 0 3	; 3
+	238	[51]	EXTRAARG 	0
+	239	[51]	LOADI    	16 30
+	240	[51]	LOADI    	17 10
+	241	[51]	LOADI    	18 20
+	242	[51]	SETLIST  	15 3 0
+	243	[51]	CALL     	14 2 5	; 1 in 4 out
+	244	[51]	TFORPREP 	14 7	; to 252
+	245	[51]	GETTABUP 	20 0 32	; _ENV "setmetatable"
+	246	[51]	NEWTABLE 	21 1 0	; 0
+	247	[51]	EXTRAARG 	0
+	248	[51]	SETFIELD 	21 33 19	; "v"
+	249	[51]	MOVE     	22 12
+	250	[51]	CALL     	20 3 2	; 2 in 1 out
+	251	[51]	SETTABLE 	13 18 20
+	252	[51]	TFORCALL 	14 2
+	253	[51]	TFORLOOP 	14 9	; to 245
+	254	[51]	CLOSE    	14
+	255	[52]	GETTABUP 	14 0 0	; _ENV "table"
+	256	[52]	GETFIELD 	14 14 1	; "sort"
+	257	[52]	MOVE     	15 13
+	258	[52]	CALL     	14 2 1	; 1 in 0 out
+	259	[53]	GETTABUP 	14 0 2	; _ENV "print"
+	260	[53]	GETI     	15 13 1
+	261	[53]	GETFIELD 	15 15 33	; "v"
+	262	[53]	GETI     	16 13 2
+	263	[53]	GETFIELD 	16 16 33	; "v"
+	264	[53]	GETI     	17 13 3
+	265	[53]	GETFIELD 	17 17 33	; "v"
+	266	[53]	CALL     	14 4 1	; 3 in 0 out
+	267	[56]	NEWTABLE 	14 0 3	; 3
+	268	[56]	EXTRAARG 	0
+	269	[56]	LOADK    	15 34	; "c"
+	270	[56]	LOADK    	16 35	; "a"
+	271	[56]	LOADK    	17 36	; "b"
+	272	[56]	SETLIST  	14 3 0
+	273	[57]	GETTABUP 	15 0 32	; _ENV "setmetatable"
+	274	[57]	NEWTABLE 	16 0 0	; 0
+	275	[57]	EXTRAARG 	0
+	276	[57]	NEWTABLE 	17 3 0	; 0
+	277	[57]	EXTRAARG 	0
+	278	[58]	SETFIELD 	17 37 14	; "__index"
+	279	[59]	SETFIELD 	17 38 14	; "__newindex"
+	280	[60]	CLOSURE  	18 6
+	281	[60]	SETFIELD 	17 39 18	; "__len"
+	282	[57]	CALL     	15 3 2	; 2 in 1 out
+	283	[62]	GETTABUP 	16 0 0	; _ENV "table"
+	284	[62]	GETFIELD 	16 16 1	; "sort"
+	285	[62]	MOVE     	17 15
+	286	[62]	CALL     	16 2 1	; 1 in 0 out
+	287	[63]	GETTABUP 	16 0 2	; _ENV "print"
+	288	[63]	MOVE     	17 0
+	289	[63]	MOVE     	18 14
+	290	[63]	CALL     	17 2 0	; 1 in all out
+	291	[63]	CALL     	16 0 1	; all in 0 out
+	292	[66]	GETTABUP 	16 0 2	; _ENV "print"
+	293	[66]	GETTABUP 	17 0 40	; _ENV "pcall"
+	294	[66]	GETTABUP 	18 0 0	; _ENV "table"
+	295	[66]	GETFIELD 	18 18 1	; "sort"
+	296	[66]	NEWTABLE 	19 0 2	; 2
+	297	[66]	EXTRAARG 	0
+	298	[66]	LOADTRUE 	20
+	299	[66]	LOADFALSE	21
+	300	[66]	SETLIST  	19 2 0
+	301	[66]	CALL     	17 3 0	; 2 in all out
+	302	[66]	CALL     	16 0 1	; all in 0 out
+	303	[67]	GETTABUP 	16 0 2	; _ENV "print"
+	304	[67]	GETTABUP 	17 0 40	; _ENV "pcall"
+	305	[67]	GETTABUP 	18 0 0	; _ENV "table"
+	306	[67]	GETFIELD 	18 18 1	; "sort"
+	307	[67]	NEWTABLE 	19 0 2	; 2
+	308	[67]	EXTRAARG 	0
+	309	[67]	NEWTABLE 	20 0 0	; 0
+	310	[67]	EXTRAARG 	0
+	311	[67]	NEWTABLE 	21 0 0	; 0
+	312	[67]	EXTRAARG 	0
+	313	[67]	SETLIST  	19 2 0
+	314	[67]	CALL     	17 3 0	; 2 in all out
+	315	[67]	CALL     	16 0 1	; all in 0 out
+	316	[68]	GETTABUP 	16 0 2	; _ENV "print"
+	317	[68]	GETTABUP 	17 0 40	; _ENV "pcall"
+	318	[68]	GETTABUP 	18 0 0	; _ENV "table"
+	319	[68]	GETFIELD 	18 18 1	; "sort"
+	320	[68]	NEWTABLE 	19 0 2	; 2
+	321	[68]	EXTRAARG 	0
+	322	[68]	LOADI    	20 1
+	323	[68]	LOADI    	21 2
+	324	[68]	SETLIST  	19 2 0
+	325	[68]	LOADI    	20 3
+	326	[68]	CALL     	17 4 0	; 3 in all out
+	327	[68]	CALL     	16 0 1	; all in 0 out
+	328	[69]	GETTABUP 	16 0 2	; _ENV "print"
+	329	[69]	GETTABUP 	17 0 40	; _ENV "pcall"
+	330	[69]	GETTABUP 	18 0 0	; _ENV "table"
+	331	[69]	GETFIELD 	18 18 1	; "sort"
+	332	[69]	LOADK    	19 41	; "abc"
+	333	[69]	CALL     	17 3 0	; 2 in all out
+	334	[69]	CALL     	16 0 1	; all in 0 out
+	335	[70]	GETTABUP 	16 0 2	; _ENV "print"
+	336	[70]	GETTABUP 	17 0 40	; _ENV "pcall"
+	337	[70]	GETTABUP 	18 0 0	; _ENV "table"
+	338	[70]	GETFIELD 	18 18 1	; "sort"
+	339	[70]	NEWTABLE 	19 0 3	; 3
+	340	[70]	EXTRAARG 	0
+	341	[70]	LOADI    	20 3
+	342	[70]	LOADI    	21 1
+	343	[70]	LOADI    	22 2
+	344	[70]	SETLIST  	19 3 0
+	345	[70]	CLOSURE  	20 7
+	346	[70]	CALL     	17 4 0	; 3 in all out
+	347	[70]	CALL     	16 0 1	; all in 0 out
+	348	[72]	MOVE     	16 0
+	349	[72]	MOVE     	17 1
+	350	[72]	TAILCALL 	16 2 1k	; 1 in
+	351	[72]	RETURN   	16 0 1k	; all out
+	352	[72]	RETURN   	16 1 1k	; 0 out
+constants (42):
+	0	S	"table"
+	1	S	"sort"
+	2	S	"print"
+	3	F	3.5
+	4	F	2.25
+	5	F	-0.5
+	6	F	10000000000.0
+	7	F	-10000000000.0
+	8	S	"pear"
+	9	S	"apple"
+	10	S	"fig"
+	11	S	"banana"
+	12	S	"Cherry"
+	13	S	"apricot"
+	14	S	""
+	15	S	"name"
+	16	S	"Ann"
+	17	S	"age"
+	18	I	31
+	19	S	"Bob"
+	20	I	25
+	21	S	"Cid"
+	22	I	40
+	23	S	"Dee"
+	24	I	19
+	25	S	"ipairs"
+	26	S	"age"
+	27	S	"concat"
+	28	S	" "
+	29	I	7919
+	30	I	1009
+	31	S	"__lt"
+	32	S	"setmetatable"
+	33	S	"v"
+	34	S	"c"
+	35	S	"a"
+	36	S	"b"
+	37	S	"__index"
+	38	S	"__newindex"
+	39	S	"__len"
+	40	S	"pcall"
+	41	S	"abc"
+locals (40):
+	0	show	3	353
+	1	nums	16	353
+	2	mixed	37	353
+	3	words	56	353
+	4	people	104	353
+	5	names	111	353
+	6	(for state)	114	121
+	7	(for state)	114	121
+	8	(for state)	114	121
+	9	(for state)	114	121
+	10	i	115	119
+	11	person	115	119
+	12	one	135	353
+	13	none	135	353
+	14	sorted	153	353
+	15	reversed	153	353
+	16	(for state)	156	163
+	17	(for state)	156	163
+	18	(for state)	156	163
+	19	i	157	162
+	20	big	188	353
+	21	(for state)	191	198
+	22	(for state)	191	198
+	23	(for state)	191	198
+	24	i	192	197
+	25	ok	203	353
+	26	(for state)	206	215
+	27	(for state)	206	215
+	28	(for state)	206	215
+	29	i	207	214
+	30	mt	234	353
+	31	objs	236	353
+	32	(for state)	244	254
+	33	(for state)	244	254
+	34	(for state)	244	254
+	35	(for state)	244	254
+	36	i	245	252
+	37	v	245	252
+	38	backing	273	353
+	39	proxy	283	353
+upvalues (1):
+	0	_ENV	1	0
+
+function <table_sort.lua:8,8> (18 instructions)
+1 param, 8 slots, 1 upvalue, 6 locals, 4 constants, 0 functions
+	1	[8]	NEWTABLE 	1 0 0	; 0
+	2	[8]	EXTRAARG 	0
+	3	[8]	LOADI    	2 1
+	4	[8]	LEN      	3 0
+	5	[8]	LOADI    	4 1
+	6	[8]	FORPREP  	2 4	; exit to 12
+	7	[8]	GETTABUP 	6 0 0	; _ENV "tostring"
+	8	[8]	GETTABLE 	7 0 5
+	9	[8]	CALL     	6 2 2	; 1 in 1 out
+	10	[8]	SETTABLE 	1 5 6
+	11	[8]	FORLOOP  	2 5	; to 7
+	12	[8]	GETTABUP 	2 0 1	; _ENV "table"
+	13	[8]	GETFIELD 	2 2 2	; "concat"
+	14	[8]	MOVE     	3 1
+	15	[8]	LOADK    	4 3	; " "
+	16	[8]	TAILCALL 	2 3 0	; 2 in
+	17	[8]	RETURN   	2 0 0	; all out
+	18	[8]	RETURN0  	
+constants (4):
+	0	S	"tostring"
+	1	S	"table"
+	2	S	"concat"
+	3	S	" "
+locals (6):
+	0	t	1	19
+	1	out	3	19
+	2	(for state)	6	12
+	3	(for state)	6	12
+	4	(for state)	6	12
+	5	i	7	11
+upvalues (1):
+	0	_ENV	0	0
+
+function <table_sort.lua:19,19> (6 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[19]	LT       	1 0 1
+	2	[19]	JMP      	1	; to 4
+	3	[19]	LFALSESKIP	2
+	4	[19]	LOADTRUE 	2
+	5	[19]	RETURN1  	2
+	6	[19]	RETURN0  	
+constants (0):
+locals (2):
+	0	a	1	7
+	1	b	1	7
+upvalues (0):
+
+function <table_sort.lua:21,21> (14 instructions)
+2 params, 4 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[21]	LEN      	2 0
+	2	[21]	LEN      	3 1
+	3	[21]	LT       	2 3 1
+	4	[21]	JMP      	7	; to 12
+	5	[21]	LEN      	2 0
+	6	[21]	LEN      	3 1
+	7	[21]	EQ       	2 3 0
+	8	[21]	JMP      	2	; to 11
+	9	[21]	LT       	0 1 1
+	10	[21]	JMP      	1	; to 12
+	11	[21]	LFALSESKIP	2
+	12	[21]	LOADTRUE 	2
+	13	[21]	RETURN1  	2
+	14	[21]	RETURN0  	
+constants (0):
+locals (2):
+	0	a	1	15
+	1	b	1	15
+upvalues (0):
+
+function <table_sort.lua:26,26> (8 instructions)
+2 params, 4 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[26]	GETFIELD 	2 0 0	; "age"
+	2	[26]	GETFIELD 	3 1 0	; "age"
+	3	[26]	LT       	2 3 1
+	4	[26]	JMP      	1	; to 6
+	5	[26]	LFALSESKIP	2
+	6	[26]	LOADTRUE 	2
+	7	[26]	RETURN1  	2
+	8	[26]	RETURN0  	
+constants (1):
+	0	S	"age"
+locals (2):
+	0	a	1	9
+	1	b	1	9
+upvalues (0):
+
+function <table_sort.lua:45,45> (6 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[45]	LT       	1 0 1
+	2	[45]	JMP      	1	; to 4
+	3	[45]	LFALSESKIP	2
+	4	[45]	LOADTRUE 	2
+	5	[45]	RETURN1  	2
+	6	[45]	RETURN0  	
+constants (0):
+locals (2):
+	0	a	1	7
+	1	b	1	7
+upvalues (0):
+
+function <table_sort.lua:49,49> (8 instructions)
+2 params, 4 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[49]	GETFIELD 	2 0 0	; "v"
+	2	[49]	GETFIELD 	3 1 0	; "v"
+	3	[49]	LT       	2 3 1
+	4	[49]	JMP      	1	; to 6
+	5	[49]	LFALSESKIP	2
+	6	[49]	LOADTRUE 	2
+	7	[49]	RETURN1  	2
+	8	[49]	RETURN0  	
+constants (1):
+	0	S	"v"
+locals (2):
+	0	a	1	9
+	1	b	1	9
+upvalues (0):
+
+function <table_sort.lua:60,60> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[60]	GETUPVAL 	0 0	; backing
+	2	[60]	LEN      	0 0
+	3	[60]	RETURN1  	0
+	4	[60]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	backing	1	14
+
+function <table_sort.lua:70,70> (5 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[70]	GETTABUP 	2 0 0	; _ENV "error"
+	2	[70]	LOADK    	3 1	; "cmp failed"
+	3	[70]	LOADI    	4 0
+	4	[70]	CALL     	2 3 1	; 2 in 0 out
+	5	[70]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"cmp failed"
+locals (2):
+	0	a	1	6
+	1	b	1	6
+upvalues (1):
+	0	_ENV	0	0

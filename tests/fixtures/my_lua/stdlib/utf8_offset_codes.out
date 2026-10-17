@@ -1,0 +1,25 @@
+1	2	4	7	11
+12	nil	11	7	1
+nil	7	4	12
+1	2	4	7	12
+1	nil	1	4	nil
+false	initial position is a continuation byte
+false	bad argument #3 to 'utf8.offset' (position out of bounds)
+false	bad argument #3 to 'utf8.offset' (position out of bounds)
+false	bad argument #2 to 'utf8.offset' (number expected, got no value)
+1:97 2:233 4:8364 7:128512 11:122
+0
+function	hi	0
+1	104
+2	105
+
+1:97 2:55296 5:98
+false	utf8_offset_codes.lua:41: invalid UTF-8 code
+false	utf8_offset_codes.lua:41: invalid UTF-8 code
+false	utf8_offset_codes.lua:41: invalid UTF-8 code
+false	utf8_offset_codes.lua:41: invalid UTF-8 code
+true	102,105,110,101
+false	bad argument #1 to 'utf8.codes' (string expected, got no value)
+function	42	string	0
+11	122	128512	8364	233	97
+4	5

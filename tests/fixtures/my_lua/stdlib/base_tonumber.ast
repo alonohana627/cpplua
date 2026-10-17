@@ -1,0 +1,345 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        Integer 10
+      Call
+        Name tonumber
+        Float 1.5
+      Call
+        Name tonumber
+        String "10"
+      Call
+        Name tonumber
+        String "  10  "
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "0x10"
+      Call
+        Name tonumber
+        String "0X1p4"
+      Call
+        Name tonumber
+        String "1e2"
+      Call
+        Name tonumber
+        String ".5"
+      Call
+        Name tonumber
+        String "5."
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "-7"
+      Call
+        Name tonumber
+        String "+7"
+      Call
+        Name tonumber
+        String "- 7"
+      Call
+        Name tonumber
+        String "-0x10"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Name tonumber
+          String "3"
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Name tonumber
+          String "3.0"
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Name tonumber
+          String "3e0"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String ""
+      Call
+        Name tonumber
+        String " "
+      Call
+        Name tonumber
+        String "abc"
+      Call
+        Name tonumber
+        String "1 2"
+      Call
+        Name tonumber
+        String "1e"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "0x"
+      Call
+        Name tonumber
+        String "1..2"
+      Call
+        Name tonumber
+        String "inf"
+      Call
+        Name tonumber
+        String "nan"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "9223372036854775807"
+      Call
+        Name tonumber
+        String "9223372036854775808"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "0xffffffffffffffff"
+      Call
+        Name tonumber
+        String "0x10000000000000000"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        Nil
+      Call
+        Name tonumber
+        True
+      Binary ==
+        Call
+          Name tonumber
+          Table
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "10\x00"
+      Call
+        Name tonumber
+        String "\t\n10\x0B\x0C\r"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "10"
+        Integer 2
+      Call
+        Name tonumber
+        String "11111111"
+        Integer 2
+      Call
+        Name tonumber
+        String "777"
+        Integer 8
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "ff"
+        Integer 16
+      Call
+        Name tonumber
+        String "FF"
+        Integer 16
+      Call
+        Name tonumber
+        String "zz"
+        Integer 36
+      Call
+        Name tonumber
+        String "ZZ"
+        Integer 36
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "  101  "
+        Integer 2
+      Call
+        Name tonumber
+        String "-101"
+        Integer 2
+      Call
+        Name tonumber
+        String "- 1"
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "2"
+        Integer 2
+      Call
+        Name tonumber
+        String "8"
+        Integer 8
+      Call
+        Name tonumber
+        String "g"
+        Integer 16
+      Call
+        Name tonumber
+        String "1.5"
+        Integer 10
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "1e2"
+        Integer 10
+      Call
+        Name tonumber
+        String ""
+        Integer 10
+      Call
+        Name tonumber
+        String "0x10"
+        Integer 16
+      Call
+        Name tonumber
+        String "10"
+        Integer 36
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Name tonumber
+          String "10"
+          Integer 10
+      Call
+        Name tonumber
+        String "7fffffffffffffff"
+        Integer 16
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String "8000000000000000"
+        Integer 16
+      Call
+        Name tonumber
+        String "10000000000000000"
+        Integer 16
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tonumber
+        String " -ff "
+        Integer 16
+      Call
+        Name tonumber
+        String "+z"
+        Integer 36
+  Local bases
+    Table
+  NumericFor b
+    Integer 2
+    Integer 36
+    Body
+      Assign
+        Targets
+          Index
+            Name bases (local 0)
+            Binary +
+              Unary #
+                Name bases (local 0)
+              Integer 1
+        Values
+          Call
+            Name tonumber
+            String "10"
+            Name b (local 4)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name bases (local 0)
+        String " "
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name tonumber
+        String "10"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name tonumber
+        String "10"
+        Integer 37
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name tonumber
+        Integer 10
+        Integer 16
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name tonumber
+        String "10"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name tonumber
+  Return
+    Call
+      Name tonumber
+      String "z"
+      Integer 36
+    Call
+      Name tonumber
+      String "0.1"

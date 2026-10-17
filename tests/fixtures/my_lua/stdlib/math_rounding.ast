@@ -1,0 +1,604 @@
+Chunk
+  LocalFunction show
+    Function(...) [upvalues: _ENV]
+      Local out
+        Table
+      NumericFor i
+        Integer 1
+        Call
+          Name select
+          String "#"
+          Vararg
+        Body
+          Local v
+            Call
+              Name select
+              Name i (local 4)
+              Vararg
+          Assign
+            Targets
+              Index
+                Name out (local 0)
+                Name i (local 4)
+            Values
+              Binary ..
+                Call
+                  Name tostring
+                  Name v (local 5)
+                Binary ..
+                  String ":"
+                  Paren
+                    Binary or
+                      Call
+                        Index
+                          Name math
+                          String "type"
+                        Name v (local 5)
+                      Call
+                        Name type
+                        Name v (local 5)
+      Return
+        Call
+          Index
+            Name table
+            String "concat"
+          Name out (local 0)
+          String " "
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "abs"
+          Unary -
+            Integer 5
+        Call
+          Index
+            Name math
+            String "abs"
+          Integer 5
+        Call
+          Index
+            Name math
+            String "abs"
+          Unary -
+            Float 5.5
+        Call
+          Index
+            Name math
+            String "abs"
+          Unary -
+            Float 0.0
+        Call
+          Index
+            Name math
+            String "abs"
+          Index
+            Name math
+            String "mininteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "abs"
+          Unary -
+            Index
+              Name math
+              String "huge"
+        Call
+          Index
+            Name math
+            String "abs"
+          String "-3"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "floor"
+          Float 3.7
+        Call
+          Index
+            Name math
+            String "floor"
+          Unary -
+            Float 3.7
+        Call
+          Index
+            Name math
+            String "floor"
+          Integer 5
+        Call
+          Index
+            Name math
+            String "floor"
+          Unary -
+            Float 0.0
+        Call
+          Index
+            Name math
+            String "floor"
+          Binary ^
+            Integer 2
+            Integer 62
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "floor"
+          Binary ^
+            Integer 2
+            Integer 63
+        Call
+          Index
+            Name math
+            String "floor"
+          Unary -
+            Binary ^
+              Integer 2
+              Integer 63
+        Call
+          Index
+            Name math
+            String "floor"
+          Float 1e+100
+        Call
+          Index
+            Name math
+            String "floor"
+          Index
+            Name math
+            String "huge"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "ceil"
+          Float 3.2
+        Call
+          Index
+            Name math
+            String "ceil"
+          Unary -
+            Float 3.2
+        Call
+          Index
+            Name math
+            String "ceil"
+          Integer 5
+        Call
+          Index
+            Name math
+            String "ceil"
+          Unary -
+            Float 0.5
+        Call
+          Index
+            Name math
+            String "ceil"
+          Float 1e+100
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "floor"
+          String "3.5"
+        Call
+          Index
+            Name math
+            String "ceil"
+          String "2"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "floor"
+        String "a"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "ceil"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "fmod"
+          Integer 7
+          Integer 3
+        Call
+          Index
+            Name math
+            String "fmod"
+          Unary -
+            Integer 7
+          Integer 3
+        Call
+          Index
+            Name math
+            String "fmod"
+          Integer 7
+          Unary -
+            Integer 3
+        Call
+          Index
+            Name math
+            String "fmod"
+          Unary -
+            Integer 7
+          Unary -
+            Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "fmod"
+          Float 7.5
+          Integer 2
+        Call
+          Index
+            Name math
+            String "fmod"
+          Unary -
+            Float 7.5
+          Integer 2
+        Call
+          Index
+            Name math
+            String "fmod"
+          Integer 7
+          Float 2.5
+        Call
+          Index
+            Name math
+            String "fmod"
+          Integer 1
+          Index
+            Name math
+            String "huge"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "fmod"
+          Index
+            Name math
+            String "mininteger"
+          Unary -
+            Integer 1
+        Call
+          Index
+            Name math
+            String "fmod"
+          Integer 5
+          Index
+            Name math
+            String "mininteger"
+        Call
+          Index
+            Name math
+            String "fmod"
+          Integer 0
+          Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Binary ~=
+          Call
+            Index
+              Name math
+              String "fmod"
+            Float 5.0
+            Integer 0
+          Call
+            Index
+              Name math
+              String "fmod"
+            Float 5.0
+            Integer 0
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "fmod"
+          Unary -
+            Integer 6
+          Float 4.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "fmod"
+        Integer 5
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "fmod"
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Binary %
+        Unary -
+          Integer 7
+        Integer 3
+      Call
+        Index
+          Name math
+          String "fmod"
+        Unary -
+          Integer 7
+        Integer 3
+      Binary %
+        Unary -
+          Float 7.5
+        Integer 2
+      Call
+        Index
+          Name math
+          String "fmod"
+        Unary -
+          Float 7.5
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "modf"
+          Float 3.7
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "modf"
+          Unary -
+            Float 3.7
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "modf"
+          Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "modf"
+          Unary -
+            Float 0.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "modf"
+          Index
+            Name math
+            String "huge"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "modf"
+          Unary -
+            Index
+              Name math
+              String "huge"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "modf"
+          Binary ^
+            Integer 2
+            Integer 70
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "tointeger"
+          Float 3.0
+        Call
+          Index
+            Name math
+            String "tointeger"
+          Float 3.5
+        Call
+          Index
+            Name math
+            String "tointeger"
+          Unary -
+            Float 0.0
+        Call
+          Index
+            Name math
+            String "tointeger"
+          Integer 7
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "tointeger"
+          Binary ^
+            Integer 2
+            Integer 63
+        Call
+          Index
+            Name math
+            String "tointeger"
+          Unary -
+            Binary ^
+              Integer 2
+              Integer 63
+        Call
+          Index
+            Name math
+            String "tointeger"
+          Binary ^
+            Integer 2
+            Integer 53
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "tointeger"
+          String "8"
+        Call
+          Index
+            Name math
+            String "tointeger"
+          Table
+        Call
+          Index
+            Name math
+            String "tointeger"
+          Index
+            Name math
+            String "huge"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "tointeger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "type"
+        Integer 1
+      Call
+        Index
+          Name math
+          String "type"
+        Float 1.0
+      Call
+        Index
+          Name math
+          String "type"
+        String "1"
+      Call
+        Index
+          Name math
+          String "type"
+        Nil
+      Call
+        Index
+          Name math
+          String "type"
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "type"
+  Return
+    Call
+      Index
+        Name math
+        String "floor"
+      Unary -
+        Float 0.5
+    Call
+      Index
+        Name math
+        String "ceil"
+      Unary -
+        Float 0.5

@@ -1,0 +1,25 @@
+4	1	nil	3	nil	4
+0	true	1
+2	a	b	nil
+1	2	3
+2	3
+2	3
+3	nil	nil
+nil	nil	1
+0	0
+zero	one
+2	3
+5
+nil
+3
+1	4	9	16
+25	36
+nil	false	nil
+3
+nil	function
+false	too many results to unpack
+false	too many results to unpack
+false	bad argument #2 to 'table.unpack' (number has no integer representation)
+false	attempt to get length of a nil value
+false	attempt to get length of a nil value
+r1	r2

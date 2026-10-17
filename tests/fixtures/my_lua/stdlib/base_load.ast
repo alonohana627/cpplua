@@ -1,0 +1,441 @@
+Chunk
+  Local f
+    Call
+      Name load
+      String "return 1 + 2"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Name f (local 0)
+      Call
+        Name f (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          String "local a, b = ... return b, a"
+        Integer 10
+        Integer 20
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          String "return select('#', ...)"
+        Nil
+        Nil
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          String "x_from_load = 5"
+      Name x_from_load
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        String "return +"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        String "x ="
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        String "for"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        String "return 'unfinished"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        String "x = }"
+        String "=mychunk"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        String "\n\nlocal = 1"
+        String "@virtual.lua"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        String "return ) -- a long first line that is shortened in the chunk name"
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        String "a b\nc"
+        String "multi\nline"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Call
+          Name load
+          String "error('boom')"
+          String "=custom"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Call
+          Name load
+          String "local t = nil; return t.x"
+          String "@fake.lua"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Call
+          Name load
+          String "error('in string')"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Call
+          Name load
+          String "return 1 < {}"
+          String "=(load)"
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          String "return 1"
+          String "c"
+          String "t"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        String "return 1"
+        String "c"
+        String "b"
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          String "return 1"
+          String "c"
+          String "bt"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name load
+        String "return 1"
+        String "c"
+        String "x"
+  Local env
+    Table
+      Field y
+        Integer 7
+  Local g
+    Call
+      Name load
+      String "y = y * 2; z = 1; return y"
+      String "env"
+      String "t"
+      Name env (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name g (local 2)
+      Index
+        Name env (local 1)
+        String "y"
+      Index
+        Name env (local 1)
+        String "z"
+      Name y
+      Name z
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          String "return print"
+          String "c"
+          String "t"
+          Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Call
+          Name load
+          String "return print('x')"
+          String "c"
+          String "t"
+          Table
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Call
+            Name load
+            String "return _ENV"
+            String "c"
+            String "t"
+            Name env (local 1)
+        Name env (local 1)
+  Local nil_env
+    Call
+      Name load
+      String "return x"
+      String "nilenv"
+      String "t"
+      Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name nil_env (local 3)
+  Local pieces
+    Table
+      Item
+        String "return "
+      Item
+        String "1 "
+      Item
+        String "+ "
+      Item
+        String "41"
+      Item
+        Nil
+  Local i
+    Integer 0
+  Local reader
+    Call
+      Name load
+      Function() [upvalues: i, pieces]
+        Assign
+          Targets
+            Name i (upvalue 0)
+          Values
+            Binary +
+              Name i (upvalue 0)
+              Integer 1
+        Return
+          Index
+            Name pieces (upvalue 1)
+            Name i (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name reader (local 6)
+  Local parts
+    Table
+      Item
+        String "local a = 'abc'"
+      Item
+        String " return a:upper(), #a"
+      Item
+        String ""
+  Local j
+    Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          Function() [upvalues: j, parts]
+            Assign
+              Targets
+                Name j (upvalue 0)
+              Values
+                Binary +
+                  Name j (upvalue 0)
+                  Integer 1
+            Return
+              Index
+                Name parts (upvalue 1)
+                Name j (upvalue 0)
+  Local one_char
+    String "return 'one char at a time'"
+  Local k
+    Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          Function() [upvalues: k, one_char]
+            Assign
+              Targets
+                Name k (upvalue 0)
+              Values
+                Binary +
+                  Name k (upvalue 0)
+                  Integer 1
+            Return
+              MethodCall sub
+                Name one_char (upvalue 1)
+                Name k (upvalue 0)
+                Name k (upvalue 0)
+          String "=reader"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Call
+          Name load
+          Function()
+            Return
+              Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Call
+          Name load
+          Function()
+            Return
+              Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name load
+        Function()
+          Return
+            Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name load
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "reader failed"
+              Integer 0
+  Local syntax_pieces
+    Table
+      Item
+        String "return "
+      Item
+        String "1 +"
+  Local m
+    Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        Function() [upvalues: m, syntax_pieces]
+          Assign
+            Targets
+              Name m (upvalue 0)
+            Values
+              Binary +
+                Name m (upvalue 0)
+                Integer 1
+          Return
+            Index
+              Name syntax_pieces (upvalue 1)
+              Name m (upvalue 0)
+        String "=pieces"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name load
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name load
+        Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name load
+        Table
+  Local counter_src
+    String "count_global = (count_global or 0) + 1 return count_global"
+  Local c1, c2
+    Call
+      Name load
+      Name counter_src (local 13)
+    Call
+      Name load
+      Name counter_src (local 13)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name c1 (local 14)
+      Call
+        Name c2 (local 15)
+      Call
+        Name c1 (local 14)
+      Binary ==
+        Name c1 (local 14)
+        Name c2 (local 15)
+  Return
+    Call
+      Call
+        Name load
+        String "return ..."
+        String "=v"
+      String "a"
+      String "b"

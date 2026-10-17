@@ -3,8 +3,15 @@
 
 #include "std/auxlib.hpp"
 
+#include <algorithm>
+#include <array>
+#include <bit>
+#include <cerrno>
+#include <cstdio>
+#include <cstring>
 #include <format>
 #include <string>
+#include <system_error>
 
 #include "gc/heap.hpp"
 #include "value/convert.hpp"
@@ -185,6 +192,164 @@ bool check_number(State& state, int n, double& out) {
     return false;
 }
 
+int file_result(State& state, bool ok, const char* name) {
+    const int en = errno;
+    if (ok) {
+        push(state, Value::boolean(true));
+        return 1;
+    }
+    return error_result(state, en, name);
+}
+
+int error_result(State& state, int en, const char* name) {
+    push(state, Value::nil());
+    const std::string message =
+        en != 0 ? std::generic_category().message(en) : std::string{"(no extra info)"};
+    push_string(state, name != nullptr ? std::format("{}: {}", name, message) : message);
+    push(state, Value::integer(en));
+    return 3;
+}
+
+int exec_result(State& state, int stat) {
+    if (stat != 0 && errno != 0) { // an error with an errno
+        return file_result(state, false, nullptr);
+    }
+    // Windows has no signals: the status is always an exit code.
+    push(state, stat == 0 ? Value::boolean(true) : Value::nil());
+    push_string(state, "exit");
+    push(state, Value::integer(stat));
+    return 3;
+}
+
+std::string c_format_number(const char* form, double value) {
+    std::array<char, 128> buffer{};
+#ifdef __MINGW32__
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
+    const int n = __mingw_snprintf(buffer.data(), buffer.size(), form, value);
+#else
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
+    const int n = std::snprintf(buffer.data(), buffer.size(), form, value);
+#endif
+    return n < 0 ? std::string{}
+                 : std::string{buffer.data(), std::min<std::size_t>(static_cast<std::size_t>(n),
+                                                                    buffer.size() - 1)};
+}
+
+Table* table_object(Value v) {
+    return std::bit_cast<Table*>(v.payload());
+}
+
+Status get_index(State& state, Value t, std::int64_t i, Value& out) {
+    if (t.is_table()) {
+        const Table::Slot slot = table_object(t)->get_int(i);
+        if (!slot.empty()) {
+            out = slot.value();
+            return Status::Ok;
+        }
+    }
+    return index_value(state, t, Value::integer(i), out);
+}
+
+Status set_index(State& state, Value t, std::int64_t i, Value v) {
+    if (t.is_table()) {
+        Table* table = table_object(t);
+        const Table::Slot slot = table->get_int(i);
+        if (!slot.empty()) { // luaV_fastseti: a present key ignores __newindex
+            slot.store(v);
+            state.heap().barrier_back(table, v);
+            return Status::Ok;
+        }
+    }
+    return assign_value(state, t, Value::integer(i), v);
+}
+
+Status length_integer(State& state, Value v, std::int64_t& out) {
+    Value n;
+    if (length_value(state, v, n) != Status::Ok) {
+        return Status::Error;
+    }
+    if (n.is_string()) { // lua_tointegerx converts strings
+        n = string_to_number(n.as_string()->view()).value_or(Value::nil());
+    }
+    if (const auto i = to_integer(n)) {
+        out = *i;
+        return Status::Ok;
+    }
+    raise_error(state, "object length is not an integer");
+    return Status::Error;
+}
+
+bool check_view(State& state, int n, std::string_view& out) {
+    const Value v = arg(state, n);
+    if (v.is_number()) {
+        state.set(arg_slot(state, n), Value::string(state.heap().new_string(display_text(v))));
+    } else if (!v.is_string()) {
+        arg_type_error(state, n, "string");
+        return false;
+    }
+    out = arg(state, n).as_string()->view();
+    return true;
+}
+
+bool opt_view(State& state, int n, std::string_view fallback, std::string_view& out) {
+    if (arg_is_none_or_nil(state, n)) {
+        out = fallback;
+        return true;
+    }
+    return check_view(state, n, out);
+}
+
+bool opt_number(State& state, int n, double fallback, double& out) {
+    if (arg_is_none_or_nil(state, n)) {
+        out = fallback;
+        return true;
+    }
+    return check_number(state, n, out);
+}
+
+bool check_option(State& state, int n, std::string_view fallback,
+                  std::span<const std::string_view> options, std::size_t& out) {
+    std::string_view name;
+    if (!(fallback.empty() ? check_view(state, n, name) : opt_view(state, n, fallback, name))) {
+        return false;
+    }
+    for (std::size_t i = 0; i < options.size(); ++i) {
+        if (options[i] == name) {
+            out = i;
+            return true;
+        }
+    }
+    arg_error(state, n, std::format("invalid option '{}'", name));
+    return false;
+}
+
+bool check_function(State& state, int n) {
+    if (!arg(state, n).is_function()) {
+        arg_type_error(state, n, "function");
+        return false;
+    }
+    return true;
+}
+
+void push_string(State& state, std::string_view s) {
+    state.push(Value::string(state.heap().new_string(s)));
+}
+
+void set_functions(Heap& heap, Table& table, std::span<const LibraryFunction> functions) {
+    for (const LibraryFunction& f : functions) {
+        table.set(heap, Value::string(heap.new_string(f.name)), Value::c_function(f.function));
+    }
+}
+
+Table* open_library(Heap& heap, std::string_view name, std::span<const LibraryFunction> functions) {
+    Table* library = heap.new_table();
+    const Value key = Value::string(heap.new_string(name));
+    heap.globals().set(heap, key, Value::table(library));
+    heap.loaded().set(heap, key, Value::table(library));
+    set_functions(heap, *library, functions);
+    return library;
+}
+
 bool opt_integer(State& state, int n, std::int64_t fallback, std::int64_t& out) {
     if (arg_is_none_or_nil(state, n)) {
         out = fallback;
@@ -300,7 +465,18 @@ FunctionName function_name(const State& state, const CallInfo* frame) {
 
 std::optional<std::string> global_function_name(const State& state, Value function) {
     // pushglobalfuncname: findfield over the loaded modules, two levels
-    // deep, "_G." dropped.
+    // deep, "_G." dropped. Lua takes the first name its traversal finds,
+    // so a function with two names (math.atan and math.atan2) gets either;
+    // lua2 takes the shortest, then the first in order, every time.
+    std::optional<std::string> best;
+    const auto consider = [&best](std::string name) {
+        if (name.starts_with("_G.")) {
+            name.erase(0, 3);
+        }
+        if (!best || name.size() < best->size() || (name.size() == best->size() && name < *best)) {
+            best = std::move(name);
+        }
+    };
     Table& loaded = state.heap().loaded();
     Value module_name;
     Value module;
@@ -309,7 +485,8 @@ std::optional<std::string> global_function_name(const State& state, Value functi
             continue;
         }
         if (module.payload() == function.payload() && module.tag() == function.tag()) {
-            return std::string{module_name.as_string()->view()};
+            consider(std::string{module_name.as_string()->view()});
+            continue;
         }
         if (!module.is_table()) {
             continue;
@@ -323,14 +500,11 @@ std::optional<std::string> global_function_name(const State& state, Value functi
                 std::string name{module_name.as_string()->view()};
                 name += '.';
                 name += field_name.as_string()->view();
-                if (name.starts_with("_G.")) {
-                    name.erase(0, 3);
-                }
-                return name;
+                consider(std::move(name));
             }
         }
     }
-    return std::nullopt;
+    return best;
 }
 
 std::string traceback(const State& state, std::optional<std::string_view> message, int level) {

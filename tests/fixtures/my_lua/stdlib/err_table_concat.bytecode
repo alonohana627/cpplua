@@ -1,0 +1,37 @@
+
+main <err_table_concat.lua:0,0> (26 instructions)
+0+ params, 6 slots, 1 upvalue, 0 locals, 4 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[2]	GETTABUP 	1 0 1	; _ENV "table"
+	4	[2]	GETFIELD 	1 1 2	; "concat"
+	5	[2]	NEWTABLE 	2 0 2	; 2
+	6	[2]	EXTRAARG 	0
+	7	[2]	LOADI    	3 1
+	8	[2]	LOADI    	4 2
+	9	[2]	SETLIST  	2 2 0
+	10	[2]	LOADK    	3 3	; "+"
+	11	[2]	CALL     	1 3 0	; 2 in all out
+	12	[2]	CALL     	0 0 1	; all in 0 out
+	13	[3]	GETTABUP 	0 0 0	; _ENV "print"
+	14	[3]	GETTABUP 	1 0 1	; _ENV "table"
+	15	[3]	GETFIELD 	1 1 2	; "concat"
+	16	[3]	NEWTABLE 	2 0 3	; 3
+	17	[3]	EXTRAARG 	0
+	18	[3]	LOADI    	3 1
+	19	[3]	NEWTABLE 	4 0 0	; 0
+	20	[3]	EXTRAARG 	0
+	21	[3]	LOADI    	5 3
+	22	[3]	SETLIST  	2 3 0
+	23	[3]	LOADK    	3 3	; "+"
+	24	[3]	CALL     	1 3 0	; 2 in all out
+	25	[3]	CALL     	0 0 1	; all in 0 out
+	26	[3]	RETURN   	0 1 1	; 0 out
+constants (4):
+	0	S	"print"
+	1	S	"table"
+	2	S	"concat"
+	3	S	"+"
+locals (0):
+upvalues (1):
+	0	_ENV	1	0

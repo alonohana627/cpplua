@@ -68,4 +68,14 @@ Status index_value(State& thread, Value t, Value key, Value& result);
 // (lua_settable).
 Status assign_value(State& thread, Value t, Value key, Value value);
 
+// a < b, or a <= b, with __lt and __le (lua_compare with LUA_OPLT and
+// LUA_OPLE, M3.5).
+Status compare_values(State& thread, Value a, Value b, bool less_or_equal, bool& result);
+
+// a == b with __eq (lua_compare with LUA_OPEQ, M3.4).
+Status equal_values(State& thread, Value a, Value b, bool& result);
+
+// #v with __len (lua_len, M3.6).
+Status length_value(State& thread, Value v, Value& result);
+
 } // namespace lua2

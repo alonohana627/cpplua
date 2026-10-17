@@ -1,0 +1,41 @@
+
+main <err_os_time.lua:0,0> (24 instructions)
+0+ params, 4 slots, 1 upvalue, 0 locals, 10 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[2]	GETTABUP 	1 0 1	; _ENV "math"
+	4	[2]	GETFIELD 	1 1 2	; "type"
+	5	[2]	GETTABUP 	2 0 3	; _ENV "os"
+	6	[2]	GETFIELD 	2 2 4	; "time"
+	7	[2]	NEWTABLE 	3 3 0	; 0
+	8	[2]	EXTRAARG 	0
+	9	[2]	SETFIELD 	3 5 6k	; "year" 2000
+	10	[2]	SETFIELD 	3 7 8k	; "month" 1
+	11	[2]	SETFIELD 	3 9 8k	; "day" 1
+	12	[2]	CALL     	2 2 0	; 1 in all out
+	13	[2]	CALL     	1 0 0	; all in all out
+	14	[2]	CALL     	0 0 1	; all in 0 out
+	15	[3]	GETTABUP 	0 0 0	; _ENV "print"
+	16	[3]	GETTABUP 	1 0 3	; _ENV "os"
+	17	[3]	GETFIELD 	1 1 4	; "time"
+	18	[3]	NEWTABLE 	2 2 0	; 0
+	19	[3]	EXTRAARG 	0
+	20	[3]	SETFIELD 	2 5 6k	; "year" 2000
+	21	[3]	SETFIELD 	2 7 8k	; "month" 1
+	22	[3]	CALL     	1 2 0	; 1 in all out
+	23	[3]	CALL     	0 0 1	; all in 0 out
+	24	[3]	RETURN   	0 1 1	; 0 out
+constants (10):
+	0	S	"print"
+	1	S	"math"
+	2	S	"type"
+	3	S	"os"
+	4	S	"time"
+	5	S	"year"
+	6	I	2000
+	7	S	"month"
+	8	I	1
+	9	S	"day"
+locals (0):
+upvalues (1):
+	0	_ENV	1	0

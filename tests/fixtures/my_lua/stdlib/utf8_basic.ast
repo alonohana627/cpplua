@@ -1,0 +1,579 @@
+Chunk
+  LocalFunction hex
+    Function(s) [upvalues: _ENV]
+      Return
+        Paren
+          MethodCall gsub
+            Name s (local 0)
+            String "."
+            Function(c) [upvalues: _ENV]
+              Return
+                Call
+                  Index
+                    Name string
+                    String "format"
+                  String "%02X "
+                  MethodCall byte
+                    Name c (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 65
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 233
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 8364
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 128512
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 127
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 128
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 2047
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 2048
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 65535
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 65536
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 1114111
+  CallStatement
+    Call
+      Name print
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 1114112
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 2147483647
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "char"
+        Integer 72
+        Integer 105
+        Integer 33
+      Binary ==
+        Call
+          Index
+            Name utf8
+            String "char"
+        String ""
+      Unary #
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 0
+      Call
+        Name hex (local 0)
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 55296
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "char"
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "char"
+        Integer 2147483648
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "char"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "char"
+        Integer 65
+        Float 1.5
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Index
+          Name utf8
+          String "charpattern"
+        String "[\x00-\x7F\xC2-\xFD][\x80-\xBF]*"
+      Unary #
+        Index
+          Name utf8
+          String "charpattern"
+  Local s
+    String "a\xC3\xA9\xE2\x82\xAC\xF0\x9F\x98\x80z"
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name s (local 1)
+      Call
+        Index
+          Name utf8
+          String "len"
+        Name s (local 1)
+      Call
+        Index
+          Name utf8
+          String "len"
+        String ""
+      Call
+        Index
+          Name utf8
+          String "len"
+        String "abc"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "codepoint"
+        Name s (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "codepoint"
+        Name s (local 1)
+        Integer 1
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "codepoint"
+        Name s (local 1)
+        Integer 2
+      Call
+        Index
+          Name utf8
+          String "codepoint"
+        Name s (local 1)
+        Integer 4
+      Call
+        Index
+          Name utf8
+          String "codepoint"
+        Name s (local 1)
+        Integer 7
+      Call
+        Index
+          Name utf8
+          String "codepoint"
+        Name s (local 1)
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "codepoint"
+        Name s (local 1)
+        Integer 2
+        Integer 7
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name utf8
+            String "codepoint"
+          Name s (local 1)
+          Integer 3
+          Integer 2
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name utf8
+            String "codepoint"
+          String ""
+          Integer 1
+          Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "codepoint"
+        Name s (local 1)
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "codepoint"
+        Name s (local 1)
+        Integer 20
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "codepoint"
+        Name s (local 1)
+        Integer 1
+        Integer 20
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "codepoint"
+        String "\xFF"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "codepoint"
+        String "\xC0\x80"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "codepoint"
+        String "\xED\xA0\x80"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "codepoint"
+        String "\xED\xA0\x80"
+        Integer 1
+        Integer 1
+        True
+      Call
+        Index
+          Name utf8
+          String "codepoint"
+        String "\xF4\x90\x80\x80"
+        Integer 1
+        Integer 1
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "codepoint"
+        String "\xF4\x90\x80\x80"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "codepoint"
+        Call
+          Index
+            Name utf8
+            String "char"
+          Integer 2147483647
+        Integer 1
+        Integer 1
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "len"
+        Name s (local 1)
+        Integer 2
+      Call
+        Index
+          Name utf8
+          String "len"
+        Name s (local 1)
+        Integer 4
+      Call
+        Index
+          Name utf8
+          String "len"
+        Name s (local 1)
+        Unary -
+          Integer 1
+      Call
+        Index
+          Name utf8
+          String "len"
+        Name s (local 1)
+        Integer 1
+        Integer 1
+      Call
+        Index
+          Name utf8
+          String "len"
+        Name s (local 1)
+        Integer 1
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "len"
+        Name s (local 1)
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "len"
+        String "abc\xFFdef"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "len"
+        String "\xE2\x82"
+      Call
+        Index
+          Name utf8
+          String "len"
+        String "ok\x80"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "len"
+        String "\xED\xA0\x80"
+      Call
+        Index
+          Name utf8
+          String "len"
+        String "\xED\xA0\x80"
+        Integer 1
+        Unary -
+          Integer 1
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "len"
+        String "\xC0\x80"
+      Call
+        Index
+          Name utf8
+          String "len"
+        String "\xF8\x88\x80\x80\x80"
+        Integer 1
+        Unary -
+          Integer 1
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "len"
+        String "abc"
+        Integer 4
+      Call
+        Index
+          Name utf8
+          String "len"
+        String "abc"
+        Binary -
+          Integer 5
+          Integer 1
+        Integer 3
+      Call
+        Index
+          Name utf8
+          String "len"
+        String "abc"
+        Integer 1
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "len"
+        String "abc"
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "len"
+        String "abc"
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "len"
+        String "abc"
+        Integer 1
+        Integer 4
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name utf8
+          String "len"
+  Return
+    Call
+      Index
+        Name utf8
+        String "len"
+      String "HI"
+    Call
+      Index
+        Name utf8
+        String "char"
+      Integer 76
+      Integer 117
+      Integer 97

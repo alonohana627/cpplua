@@ -1,0 +1,26 @@
+Chunk
+  Local t
+    Table
+      Item
+        Integer 1
+  CallStatement
+    Call
+      Index
+        Name table
+        String "insert"
+      Name t (local 0)
+      Integer 2
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name t (local 0)
+  CallStatement
+    Call
+      Index
+        Name table
+        String "insert"
+      Name t (local 0)
+      Integer 1
+      Integer 2
+      Integer 3

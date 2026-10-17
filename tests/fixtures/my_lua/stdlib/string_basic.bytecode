@@ -1,0 +1,449 @@
+
+main <string_basic.lua:0,0> (402 instructions)
+0+ params, 8 slots, 1 upvalue, 0 locals, 40 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[5]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[5]	GETTABUP 	1 0 1	; _ENV "string"
+	4	[5]	GETFIELD 	1 1 2	; "len"
+	5	[5]	LOADK    	2 3	; ""
+	6	[5]	CALL     	1 2 2	; 1 in 1 out
+	7	[5]	GETTABUP 	2 0 1	; _ENV "string"
+	8	[5]	GETFIELD 	2 2 2	; "len"
+	9	[5]	LOADK    	3 4	; "abc"
+	10	[5]	CALL     	2 2 2	; 1 in 1 out
+	11	[5]	GETTABUP 	3 0 1	; _ENV "string"
+	12	[5]	GETFIELD 	3 3 2	; "len"
+	13	[5]	LOADK    	4 5	; "a\000b"
+	14	[5]	CALL     	3 2 2	; 1 in 1 out
+	15	[5]	LOADK    	4 6	; "a\000b\000"
+	16	[5]	LEN      	4 4
+	17	[5]	CALL     	0 5 1	; 4 in 0 out
+	18	[6]	GETTABUP 	0 0 0	; _ENV "print"
+	19	[6]	GETTABUP 	1 0 7	; _ENV "pcall"
+	20	[6]	GETTABUP 	2 0 1	; _ENV "string"
+	21	[6]	GETFIELD 	2 2 2	; "len"
+	22	[6]	CALL     	1 2 0	; 1 in all out
+	23	[6]	CALL     	0 0 1	; all in 0 out
+	24	[7]	GETTABUP 	0 0 0	; _ENV "print"
+	25	[7]	GETTABUP 	1 0 1	; _ENV "string"
+	26	[7]	GETFIELD 	1 1 2	; "len"
+	27	[7]	LOADI    	2 12
+	28	[7]	CALL     	1 2 2	; 1 in 1 out
+	29	[7]	GETTABUP 	2 0 1	; _ENV "string"
+	30	[7]	GETFIELD 	2 2 2	; "len"
+	31	[7]	LOADK    	3 8	; 12.5
+	32	[7]	CALL     	2 2 2	; 1 in 1 out
+	33	[7]	GETTABUP 	3 0 1	; _ENV "string"
+	34	[7]	GETFIELD 	3 3 2	; "len"
+	35	[7]	LOADF    	4 0
+	36	[7]	UNM      	4 4
+	37	[7]	CALL     	3 2 0	; 1 in all out
+	38	[7]	CALL     	0 0 1	; all in 0 out
+	39	[10]	GETTABUP 	0 0 0	; _ENV "print"
+	40	[10]	GETTABUP 	1 0 1	; _ENV "string"
+	41	[10]	GETFIELD 	1 1 9	; "byte"
+	42	[10]	LOADK    	2 10	; "A"
+	43	[10]	CALL     	1 2 2	; 1 in 1 out
+	44	[10]	GETTABUP 	2 0 1	; _ENV "string"
+	45	[10]	GETFIELD 	2 2 9	; "byte"
+	46	[10]	LOADK    	3 11	; "ABC"
+	47	[10]	LOADI    	4 2
+	48	[10]	CALL     	2 3 2	; 2 in 1 out
+	49	[10]	GETTABUP 	3 0 1	; _ENV "string"
+	50	[10]	GETFIELD 	3 3 9	; "byte"
+	51	[10]	LOADK    	4 11	; "ABC"
+	52	[10]	LOADI    	5 -1
+	53	[10]	CALL     	3 3 0	; 2 in all out
+	54	[10]	CALL     	0 0 1	; all in 0 out
+	55	[11]	GETTABUP 	0 0 0	; _ENV "print"
+	56	[11]	GETTABUP 	1 0 1	; _ENV "string"
+	57	[11]	GETFIELD 	1 1 9	; "byte"
+	58	[11]	LOADK    	2 11	; "ABC"
+	59	[11]	LOADI    	3 1
+	60	[11]	LOADI    	4 3
+	61	[11]	CALL     	1 4 0	; 3 in all out
+	62	[11]	CALL     	0 0 1	; all in 0 out
+	63	[12]	GETTABUP 	0 0 0	; _ENV "print"
+	64	[12]	GETTABUP 	1 0 1	; _ENV "string"
+	65	[12]	GETFIELD 	1 1 9	; "byte"
+	66	[12]	LOADK    	2 11	; "ABC"
+	67	[12]	LOADI    	3 1
+	68	[12]	LOADI    	4 -1
+	69	[12]	CALL     	1 4 0	; 3 in all out
+	70	[12]	CALL     	0 0 1	; all in 0 out
+	71	[13]	GETTABUP 	0 0 0	; _ENV "print"
+	72	[13]	GETTABUP 	1 0 1	; _ENV "string"
+	73	[13]	GETFIELD 	1 1 9	; "byte"
+	74	[13]	LOADK    	2 11	; "ABC"
+	75	[13]	LOADI    	3 -2
+	76	[13]	LOADI    	4 -1
+	77	[13]	CALL     	1 4 0	; 3 in all out
+	78	[13]	CALL     	0 0 1	; all in 0 out
+	79	[14]	GETTABUP 	0 0 0	; _ENV "print"
+	80	[14]	GETTABUP 	1 0 1	; _ENV "string"
+	81	[14]	GETFIELD 	1 1 9	; "byte"
+	82	[14]	LOADK    	2 11	; "ABC"
+	83	[14]	LOADI    	3 0
+	84	[14]	LOADI    	4 2
+	85	[14]	CALL     	1 4 0	; 3 in all out
+	86	[14]	CALL     	0 0 1	; all in 0 out
+	87	[15]	GETTABUP 	0 0 0	; _ENV "print"
+	88	[15]	GETTABUP 	1 0 1	; _ENV "string"
+	89	[15]	GETFIELD 	1 1 9	; "byte"
+	90	[15]	LOADK    	2 11	; "ABC"
+	91	[15]	LOADI    	3 3
+	92	[15]	LOADI    	4 10
+	93	[15]	CALL     	1 4 0	; 3 in all out
+	94	[15]	CALL     	0 0 1	; all in 0 out
+	95	[16]	GETTABUP 	0 0 0	; _ENV "print"
+	96	[16]	GETTABUP 	1 0 12	; _ENV "select"
+	97	[16]	LOADK    	2 13	; "#"
+	98	[16]	GETTABUP 	3 0 1	; _ENV "string"
+	99	[16]	GETFIELD 	3 3 9	; "byte"
+	100	[16]	LOADK    	4 11	; "ABC"
+	101	[16]	LOADI    	5 4
+	102	[16]	CALL     	3 3 0	; 2 in all out
+	103	[16]	CALL     	1 0 2	; all in 1 out
+	104	[16]	GETTABUP 	2 0 12	; _ENV "select"
+	105	[16]	LOADK    	3 13	; "#"
+	106	[16]	GETTABUP 	4 0 1	; _ENV "string"
+	107	[16]	GETFIELD 	4 4 9	; "byte"
+	108	[16]	LOADK    	5 11	; "ABC"
+	109	[16]	LOADI    	6 2
+	110	[16]	LOADI    	7 1
+	111	[16]	CALL     	4 4 0	; 3 in all out
+	112	[16]	CALL     	2 0 0	; all in all out
+	113	[16]	CALL     	0 0 1	; all in 0 out
+	114	[17]	GETTABUP 	0 0 0	; _ENV "print"
+	115	[17]	GETTABUP 	1 0 12	; _ENV "select"
+	116	[17]	LOADK    	2 13	; "#"
+	117	[17]	GETTABUP 	3 0 1	; _ENV "string"
+	118	[17]	GETFIELD 	3 3 9	; "byte"
+	119	[17]	LOADK    	4 3	; ""
+	120	[17]	CALL     	3 2 0	; 1 in all out
+	121	[17]	CALL     	1 0 2	; all in 1 out
+	122	[17]	GETTABUP 	2 0 1	; _ENV "string"
+	123	[17]	GETFIELD 	2 2 9	; "byte"
+	124	[17]	LOADK    	3 14	; "\000\255"
+	125	[17]	LOADI    	4 1
+	126	[17]	LOADI    	5 2
+	127	[17]	CALL     	2 4 0	; 3 in all out
+	128	[17]	CALL     	0 0 1	; all in 0 out
+	129	[18]	GETTABUP 	0 0 0	; _ENV "print"
+	130	[18]	GETTABUP 	1 0 7	; _ENV "pcall"
+	131	[18]	GETTABUP 	2 0 1	; _ENV "string"
+	132	[18]	GETFIELD 	2 2 9	; "byte"
+	133	[18]	LOADK    	3 4	; "abc"
+	134	[18]	LOADK    	4 15	; "x"
+	135	[18]	CALL     	1 4 0	; 3 in all out
+	136	[18]	CALL     	0 0 1	; all in 0 out
+	137	[19]	GETTABUP 	0 0 0	; _ENV "print"
+	138	[19]	GETTABUP 	1 0 7	; _ENV "pcall"
+	139	[19]	GETTABUP 	2 0 1	; _ENV "string"
+	140	[19]	GETFIELD 	2 2 9	; "byte"
+	141	[19]	LOADK    	3 4	; "abc"
+	142	[19]	LOADK    	4 16	; 1.5
+	143	[19]	CALL     	1 4 0	; 3 in all out
+	144	[19]	CALL     	0 0 1	; all in 0 out
+	145	[22]	GETTABUP 	0 0 0	; _ENV "print"
+	146	[22]	GETTABUP 	1 0 1	; _ENV "string"
+	147	[22]	GETFIELD 	1 1 17	; "char"
+	148	[22]	LOADI    	2 72
+	149	[22]	LOADI    	3 105
+	150	[22]	CALL     	1 3 2	; 2 in 1 out
+	151	[22]	GETTABUP 	2 0 1	; _ENV "string"
+	152	[22]	GETFIELD 	2 2 17	; "char"
+	153	[22]	CALL     	2 1 2	; 0 in 1 out
+	154	[22]	EQK      	2 3 1	; ""
+	155	[22]	JMP      	1	; to 157
+	156	[22]	LFALSESKIP	2
+	157	[22]	LOADTRUE 	2
+	158	[22]	GETTABUP 	3 0 1	; _ENV "string"
+	159	[22]	GETFIELD 	3 3 17	; "char"
+	160	[22]	LOADI    	4 0
+	161	[22]	LOADI    	5 0
+	162	[22]	CALL     	3 3 2	; 2 in 1 out
+	163	[22]	LEN      	3 3
+	164	[22]	GETTABUP 	4 0 1	; _ENV "string"
+	165	[22]	GETFIELD 	4 4 17	; "char"
+	166	[22]	LOADF    	5 65
+	167	[22]	CALL     	4 2 0	; 1 in all out
+	168	[22]	CALL     	0 0 1	; all in 0 out
+	169	[23]	GETTABUP 	0 0 0	; _ENV "print"
+	170	[23]	GETTABUP 	1 0 1	; _ENV "string"
+	171	[23]	GETFIELD 	1 1 17	; "char"
+	172	[23]	GETTABUP 	2 0 1	; _ENV "string"
+	173	[23]	GETFIELD 	2 2 9	; "byte"
+	174	[23]	LOADK    	3 18	; "hello"
+	175	[23]	LOADI    	4 1
+	176	[23]	LOADI    	5 -1
+	177	[23]	CALL     	2 4 0	; 3 in all out
+	178	[23]	CALL     	1 0 0	; all in all out
+	179	[23]	CALL     	0 0 1	; all in 0 out
+	180	[24]	GETTABUP 	0 0 0	; _ENV "print"
+	181	[24]	GETTABUP 	1 0 7	; _ENV "pcall"
+	182	[24]	GETTABUP 	2 0 1	; _ENV "string"
+	183	[24]	GETFIELD 	2 2 17	; "char"
+	184	[24]	LOADI    	3 256
+	185	[24]	CALL     	1 3 0	; 2 in all out
+	186	[24]	CALL     	0 0 1	; all in 0 out
+	187	[25]	GETTABUP 	0 0 0	; _ENV "print"
+	188	[25]	GETTABUP 	1 0 7	; _ENV "pcall"
+	189	[25]	GETTABUP 	2 0 1	; _ENV "string"
+	190	[25]	GETFIELD 	2 2 17	; "char"
+	191	[25]	LOADI    	3 -1
+	192	[25]	CALL     	1 3 0	; 2 in all out
+	193	[25]	CALL     	0 0 1	; all in 0 out
+	194	[26]	GETTABUP 	0 0 0	; _ENV "print"
+	195	[26]	GETTABUP 	1 0 7	; _ENV "pcall"
+	196	[26]	GETTABUP 	2 0 1	; _ENV "string"
+	197	[26]	GETFIELD 	2 2 17	; "char"
+	198	[26]	LOADI    	3 65
+	199	[26]	LOADK    	4 15	; "x"
+	200	[26]	CALL     	1 4 0	; 3 in all out
+	201	[26]	CALL     	0 0 1	; all in 0 out
+	202	[27]	GETTABUP 	0 0 0	; _ENV "print"
+	203	[27]	GETTABUP 	1 0 1	; _ENV "string"
+	204	[27]	GETFIELD 	1 1 17	; "char"
+	205	[27]	LOADI    	2 65
+	206	[27]	LOADK    	3 19	; "66"
+	207	[27]	CALL     	1 3 2	; 2 in 1 out
+	208	[27]	GETTABUP 	2 0 1	; _ENV "string"
+	209	[27]	GETFIELD 	2 2 9	; "byte"
+	210	[27]	GETTABUP 	3 0 1	; _ENV "string"
+	211	[27]	GETFIELD 	3 3 17	; "char"
+	212	[27]	LOADI    	4 255
+	213	[27]	CALL     	3 2 0	; 1 in all out
+	214	[27]	CALL     	2 0 0	; all in all out
+	215	[27]	CALL     	0 0 1	; all in 0 out
+	216	[30]	GETTABUP 	0 0 0	; _ENV "print"
+	217	[30]	GETTABUP 	1 0 1	; _ENV "string"
+	218	[30]	GETFIELD 	1 1 20	; "lower"
+	219	[30]	LOADK    	2 21	; "Hello WORLD 123 _!"
+	220	[30]	CALL     	1 2 2	; 1 in 1 out
+	221	[30]	GETTABUP 	2 0 1	; _ENV "string"
+	222	[30]	GETFIELD 	2 2 22	; "upper"
+	223	[30]	LOADK    	3 23	; "Hello world 123 _!"
+	224	[30]	CALL     	2 2 0	; 1 in all out
+	225	[30]	CALL     	0 0 1	; all in 0 out
+	226	[31]	GETTABUP 	0 0 0	; _ENV "print"
+	227	[31]	GETTABUP 	1 0 1	; _ENV "string"
+	228	[31]	GETFIELD 	1 1 22	; "upper"
+	229	[31]	LOADK    	2 5	; "a\000b"
+	230	[31]	CALL     	1 2 2	; 1 in 1 out
+	231	[31]	EQK      	1 24 1	; "A\000B"
+	232	[31]	JMP      	1	; to 234
+	233	[31]	LFALSESKIP	1
+	234	[31]	LOADTRUE 	1
+	235	[31]	GETTABUP 	2 0 1	; _ENV "string"
+	236	[31]	GETFIELD 	2 2 22	; "upper"
+	237	[31]	LOADK    	3 5	; "a\000b"
+	238	[31]	CALL     	2 2 2	; 1 in 1 out
+	239	[31]	LEN      	2 2
+	240	[31]	GETTABUP 	3 0 1	; _ENV "string"
+	241	[31]	GETFIELD 	3 3 20	; "lower"
+	242	[31]	LOADK    	4 3	; ""
+	243	[31]	CALL     	3 2 0	; 1 in all out
+	244	[31]	CALL     	0 0 1	; all in 0 out
+	245	[32]	GETTABUP 	0 0 0	; _ENV "print"
+	246	[32]	GETTABUP 	1 0 1	; _ENV "string"
+	247	[32]	GETFIELD 	1 1 22	; "upper"
+	248	[32]	LOADI    	2 42
+	249	[32]	CALL     	1 2 2	; 1 in 1 out
+	250	[32]	GETTABUP 	2 0 1	; _ENV "string"
+	251	[32]	GETFIELD 	2 2 20	; "lower"
+	252	[32]	LOADK    	3 16	; 1.5
+	253	[32]	CALL     	2 2 0	; 1 in all out
+	254	[32]	CALL     	0 0 1	; all in 0 out
+	255	[35]	GETTABUP 	0 0 0	; _ENV "print"
+	256	[35]	GETTABUP 	1 0 1	; _ENV "string"
+	257	[35]	GETFIELD 	1 1 25	; "rep"
+	258	[35]	LOADK    	2 26	; "ab"
+	259	[35]	LOADI    	3 3
+	260	[35]	CALL     	1 3 2	; 2 in 1 out
+	261	[35]	GETTABUP 	2 0 1	; _ENV "string"
+	262	[35]	GETFIELD 	2 2 25	; "rep"
+	263	[35]	LOADK    	3 26	; "ab"
+	264	[35]	LOADI    	4 3
+	265	[35]	LOADK    	5 27	; ","
+	266	[35]	CALL     	2 4 2	; 3 in 1 out
+	267	[35]	GETTABUP 	3 0 1	; _ENV "string"
+	268	[35]	GETFIELD 	3 3 25	; "rep"
+	269	[35]	LOADK    	4 15	; "x"
+	270	[35]	LOADI    	5 1
+	271	[35]	LOADK    	6 28	; "SEP"
+	272	[35]	CALL     	3 4 0	; 3 in all out
+	273	[35]	CALL     	0 0 1	; all in 0 out
+	274	[36]	GETTABUP 	0 0 0	; _ENV "print"
+	275	[36]	LOADK    	1 29	; "["
+	276	[36]	GETTABUP 	2 0 1	; _ENV "string"
+	277	[36]	GETFIELD 	2 2 25	; "rep"
+	278	[36]	LOADK    	3 26	; "ab"
+	279	[36]	LOADI    	4 0
+	280	[36]	CALL     	2 3 2	; 2 in 1 out
+	281	[36]	LOADK    	3 30	; "]"
+	282	[36]	CONCAT   	1 3
+	283	[36]	LOADK    	2 29	; "["
+	284	[36]	GETTABUP 	3 0 1	; _ENV "string"
+	285	[36]	GETFIELD 	3 3 25	; "rep"
+	286	[36]	LOADK    	4 26	; "ab"
+	287	[36]	LOADI    	5 -5
+	288	[36]	CALL     	3 3 2	; 2 in 1 out
+	289	[36]	LOADK    	4 30	; "]"
+	290	[36]	CONCAT   	2 3
+	291	[36]	CALL     	0 3 1	; 2 in 0 out
+	292	[37]	GETTABUP 	0 0 0	; _ENV "print"
+	293	[37]	LOADK    	1 29	; "["
+	294	[37]	GETTABUP 	2 0 1	; _ENV "string"
+	295	[37]	GETFIELD 	2 2 25	; "rep"
+	296	[37]	LOADK    	3 3	; ""
+	297	[37]	LOADI    	4 100
+	298	[37]	CALL     	2 3 2	; 2 in 1 out
+	299	[37]	LOADK    	3 30	; "]"
+	300	[37]	CONCAT   	1 3
+	301	[37]	GETTABUP 	2 0 1	; _ENV "string"
+	302	[37]	GETFIELD 	2 2 25	; "rep"
+	303	[37]	LOADK    	3 31	; "-"
+	304	[37]	LOADI    	4 5
+	305	[37]	LOADK    	5 3	; ""
+	306	[37]	CALL     	2 4 0	; 3 in all out
+	307	[37]	CALL     	0 0 1	; all in 0 out
+	308	[38]	GETTABUP 	0 0 0	; _ENV "print"
+	309	[38]	GETTABUP 	1 0 1	; _ENV "string"
+	310	[38]	GETFIELD 	1 1 25	; "rep"
+	311	[38]	LOADK    	2 32	; "a"
+	312	[38]	LOADI    	3 2
+	313	[38]	LOADK    	4 33	; "\000"
+	314	[38]	CALL     	1 4 2	; 3 in 1 out
+	315	[38]	EQK      	1 34 1	; "a\000a"
+	316	[38]	JMP      	1	; to 318
+	317	[38]	LFALSESKIP	1
+	318	[38]	LOADTRUE 	1
+	319	[38]	GETTABUP 	2 0 1	; _ENV "string"
+	320	[38]	GETFIELD 	2 2 25	; "rep"
+	321	[38]	LOADI    	3 5
+	322	[38]	LOADI    	4 3
+	323	[38]	CALL     	2 3 2	; 2 in 1 out
+	324	[38]	GETTABUP 	3 0 1	; _ENV "string"
+	325	[38]	GETFIELD 	3 3 25	; "rep"
+	326	[38]	LOADK    	4 15	; "x"
+	327	[38]	LOADF    	5 3
+	328	[38]	CALL     	3 3 0	; 2 in all out
+	329	[38]	CALL     	0 0 1	; all in 0 out
+	330	[39]	GETTABUP 	0 0 0	; _ENV "print"
+	331	[39]	GETTABUP 	1 0 7	; _ENV "pcall"
+	332	[39]	GETTABUP 	2 0 1	; _ENV "string"
+	333	[39]	GETFIELD 	2 2 25	; "rep"
+	334	[39]	LOADK    	3 15	; "x"
+	335	[39]	LOADK    	4 16	; 1.5
+	336	[39]	CALL     	1 4 0	; 3 in all out
+	337	[39]	CALL     	0 0 1	; all in 0 out
+	338	[40]	GETTABUP 	0 0 0	; _ENV "print"
+	339	[40]	GETTABUP 	1 0 7	; _ENV "pcall"
+	340	[40]	GETTABUP 	2 0 1	; _ENV "string"
+	341	[40]	GETFIELD 	2 2 25	; "rep"
+	342	[40]	LOADK    	3 15	; "x"
+	343	[40]	CALL     	1 3 0	; 2 in all out
+	344	[40]	CALL     	0 0 1	; all in 0 out
+	345	[41]	GETTABUP 	0 0 0	; _ENV "print"
+	346	[41]	GETTABUP 	1 0 1	; _ENV "string"
+	347	[41]	GETFIELD 	1 1 25	; "rep"
+	348	[41]	LOADK    	2 4	; "abc"
+	349	[41]	LOADI    	3 1000
+	350	[41]	LOADK    	4 35	; "de"
+	351	[41]	CALL     	1 4 2	; 3 in 1 out
+	352	[41]	LEN      	1 1
+	353	[41]	CALL     	0 2 1	; 1 in 0 out
+	354	[44]	GETTABUP 	0 0 0	; _ENV "print"
+	355	[44]	GETTABUP 	1 0 1	; _ENV "string"
+	356	[44]	GETFIELD 	1 1 36	; "reverse"
+	357	[44]	LOADK    	2 4	; "abc"
+	358	[44]	CALL     	1 2 2	; 1 in 1 out
+	359	[44]	GETTABUP 	2 0 1	; _ENV "string"
+	360	[44]	GETFIELD 	2 2 36	; "reverse"
+	361	[44]	LOADK    	3 3	; ""
+	362	[44]	CALL     	2 2 2	; 1 in 1 out
+	363	[44]	GETTABUP 	3 0 1	; _ENV "string"
+	364	[44]	GETFIELD 	3 3 36	; "reverse"
+	365	[44]	LOADK    	4 32	; "a"
+	366	[44]	CALL     	3 2 2	; 1 in 1 out
+	367	[44]	GETTABUP 	4 0 1	; _ENV "string"
+	368	[44]	GETFIELD 	4 4 36	; "reverse"
+	369	[44]	LOADI    	5 123
+	370	[44]	CALL     	4 2 0	; 1 in all out
+	371	[44]	CALL     	0 0 1	; all in 0 out
+	372	[45]	GETTABUP 	0 0 0	; _ENV "print"
+	373	[45]	GETTABUP 	1 0 1	; _ENV "string"
+	374	[45]	GETFIELD 	1 1 36	; "reverse"
+	375	[45]	LOADK    	2 5	; "a\000b"
+	376	[45]	CALL     	1 2 2	; 1 in 1 out
+	377	[45]	EQK      	1 37 1	; "b\000a"
+	378	[45]	JMP      	1	; to 380
+	379	[45]	LFALSESKIP	1
+	380	[45]	LOADTRUE 	1
+	381	[45]	GETTABUP 	2 0 1	; _ENV "string"
+	382	[45]	GETFIELD 	2 2 36	; "reverse"
+	383	[45]	GETTABUP 	3 0 1	; _ENV "string"
+	384	[45]	GETFIELD 	3 3 36	; "reverse"
+	385	[45]	LOADK    	4 38	; "palindrome"
+	386	[45]	CALL     	3 2 0	; 1 in all out
+	387	[45]	CALL     	2 0 0	; all in all out
+	388	[45]	CALL     	0 0 1	; all in 0 out
+	389	[47]	GETTABUP 	0 0 1	; _ENV "string"
+	390	[47]	GETFIELD 	0 0 17	; "char"
+	391	[47]	LOADI    	1 76
+	392	[47]	LOADI    	2 117
+	393	[47]	LOADI    	3 97
+	394	[47]	CALL     	0 4 2	; 3 in 1 out
+	395	[47]	GETTABUP 	1 0 1	; _ENV "string"
+	396	[47]	GETFIELD 	1 1 9	; "byte"
+	397	[47]	LOADK    	2 39	; "Lua"
+	398	[47]	LOADI    	3 -3
+	399	[47]	LOADI    	4 -1
+	400	[47]	CALL     	1 4 0	; 3 in all out
+	401	[47]	RETURN   	0 0 1	; all out
+	402	[47]	RETURN   	0 1 1	; 0 out
+constants (40):
+	0	S	"print"
+	1	S	"string"
+	2	S	"len"
+	3	S	""
+	4	S	"abc"
+	5	S	"a\000b"
+	6	S	"a\000b\000"
+	7	S	"pcall"
+	8	F	12.5
+	9	S	"byte"
+	10	S	"A"
+	11	S	"ABC"
+	12	S	"select"
+	13	S	"#"
+	14	S	"\000\255"
+	15	S	"x"
+	16	F	1.5
+	17	S	"char"
+	18	S	"hello"
+	19	S	"66"
+	20	S	"lower"
+	21	S	"Hello WORLD 123 _!"
+	22	S	"upper"
+	23	S	"Hello world 123 _!"
+	24	S	"A\000B"
+	25	S	"rep"
+	26	S	"ab"
+	27	S	","
+	28	S	"SEP"
+	29	S	"["
+	30	S	"]"
+	31	S	"-"
+	32	S	"a"
+	33	S	"\000"
+	34	S	"a\000a"
+	35	S	"de"
+	36	S	"reverse"
+	37	S	"b\000a"
+	38	S	"palindrome"
+	39	S	"Lua"
+locals (0):
+upvalues (1):
+	0	_ENV	1	0

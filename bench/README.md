@@ -1,8 +1,8 @@
 # Benchmarks
 
 Lua programs that time the VM and the garbage collector (docs/plan/vm.md), then tables,
-metatables and errors (stages 6 to 8). Each uses only the language and the base library, and
-returns its result, so lua2 and the reference Lua can run the same file.
+metatables and errors (stages 6 to 8), then the standard library (stage 9, `lib_*.lua`). Each
+returns its result, so lua2 and the reference Lua can run the same file and must print the same.
 
 | File                | What it stresses                                         |
 | ------------------- | -------------------------------------------------------- |
@@ -18,6 +18,9 @@ returns its result, so lua2 and the reference Lua can run the same file.
 | `methods.lua`       | classes through `__index` chains, method calls           |
 | `metamethods.lua`   | `__add`, `__mul`, `__eq`, `__len`, an `__index` function |
 | `pcall.lua`         | `pcall` that succeeds and fails, to-be-closed variables  |
+| `lib_string.lua`    | the string library: `gmatch`, `gsub`, `find`, `match`, `format`, methods |
+| `lib_table.lua`     | `table.sort` with and without an order function, `insert`, `remove`, `concat`, `unpack`, `move` |
+| `lib_math.lua`      | `math.random` and the math functions                     |
 
 Run them with the runner, built with the project:
 

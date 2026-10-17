@@ -1,0 +1,660 @@
+Chunk
+  Local base
+    Call
+      Index
+        Name os
+        String "time"
+      Table
+        Field year
+          Integer 2020
+        Field month
+          Integer 1
+        Field day
+          Integer 1
+        Field hour
+          Integer 12
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "type"
+        Name base (local 0)
+      Binary -
+        Call
+          Index
+            Name os
+            String "time"
+          Table
+            Field year
+              Integer 2020
+            Field month
+              Integer 1
+            Field day
+              Integer 2
+            Field hour
+              Integer 12
+        Name base (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary -
+        Call
+          Index
+            Name os
+            String "time"
+          Table
+            Field year
+              Integer 2020
+            Field month
+              Integer 3
+            Field day
+              Integer 1
+            Field hour
+              Integer 12
+        Name base (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary -
+        Call
+          Index
+            Name os
+            String "time"
+          Table
+            Field year
+              Integer 2021
+            Field month
+              Integer 1
+            Field day
+              Integer 1
+            Field hour
+              Integer 12
+        Name base (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary -
+        Call
+          Index
+            Name os
+            String "time"
+          Table
+            Field year
+              Integer 2020
+            Field month
+              Integer 1
+            Field day
+              Integer 1
+            Field hour
+              Integer 13
+            Field min
+              Integer 30
+            Field sec
+              Integer 15
+        Name base (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary -
+        Call
+          Index
+            Name os
+            String "time"
+          Table
+            Field year
+              Integer 2020
+            Field month
+              Integer 13
+            Field day
+              Integer 1
+            Field hour
+              Integer 12
+        Call
+          Index
+            Name os
+            String "time"
+          Table
+            Field year
+              Integer 2021
+            Field month
+              Integer 1
+            Field day
+              Integer 1
+            Field hour
+              Integer 12
+  CallStatement
+    Call
+      Name print
+      Binary -
+        Call
+          Index
+            Name os
+            String "time"
+          Table
+            Field year
+              Integer 2020
+            Field month
+              Integer 1
+            Field day
+              Integer 0
+            Field hour
+              Integer 12
+        Name base (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary -
+        Call
+          Index
+            Name os
+            String "time"
+          Table
+            Field year
+              Integer 2020
+            Field month
+              Integer 1
+            Field day
+              Integer 1
+            Field hour
+              Unary -
+                Integer 12
+        Name base (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary -
+        Call
+          Index
+            Name os
+            String "time"
+          Table
+            Field year
+              Integer 2020
+            Field month
+              Integer 1
+            Field day
+              Integer 1
+        Name base (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary -
+        Call
+          Index
+            Name os
+            String "time"
+          Table
+            Field year
+              String "2020"
+            Field month
+              String "1"
+            Field day
+              String "1"
+            Field hour
+              String "12"
+        Name base (local 0)
+  Local t
+    Table
+      Field year
+        Integer 2020
+      Field month
+        Integer 2
+      Field day
+        Integer 30
+      Field hour
+        Integer 12
+  CallStatement
+    Call
+      Index
+        Name os
+        String "time"
+      Name t (local 1)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 1)
+        String "year"
+      Index
+        Name t (local 1)
+        String "month"
+      Index
+        Name t (local 1)
+        String "day"
+      Index
+        Name t (local 1)
+        String "hour"
+      Index
+        Name t (local 1)
+        String "min"
+      Index
+        Name t (local 1)
+        String "sec"
+      Index
+        Name t (local 1)
+        String "wday"
+      Index
+        Name t (local 1)
+        String "yday"
+      Call
+        Name type
+        Index
+          Name t (local 1)
+          String "isdst"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "time"
+        Table
+          Field year
+            Integer 2020
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "time"
+        Table
+          Field year
+            Integer 2020
+          Field month
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "time"
+        Table
+          Field year
+            Integer 2020
+          Field month
+            Float 1.5
+          Field day
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "time"
+        Table
+          Field year
+            Integer 2020
+          Field month
+            String "x"
+          Field day
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "time"
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "date"
+        String "!%Y-%m-%d %H:%M:%S"
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "date"
+        String "!%Y-%m-%d %H:%M:%S"
+        Binary +
+          Binary *
+            Integer 86400
+            Integer 365
+          Integer 3661
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "date"
+        String "!%Y-%m-%d %H:%M:%S"
+        Integer 1234567890
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "date"
+        String "!%A %a %B %b %d %j %p %y %%"
+        Integer 1234567890
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "date"
+        String "!%I %M %S %w %H"
+        Binary +
+          Integer 1234567890
+          Integer 43200
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "date"
+        String "!%x %X"
+        Integer 0
+      Call
+        Index
+          Name os
+          String "date"
+        String "!%m/%d/%y %U %W"
+        Integer 951782400
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "date"
+        String "!no specifiers"
+        Integer 0
+      Binary ==
+        Call
+          Index
+            Name os
+            String "date"
+          String "!"
+          Integer 0
+        String ""
+  Local d
+    Call
+      Index
+        Name os
+        String "date"
+      String "!*t"
+      Integer 86400
+  CallStatement
+    Call
+      Name print
+      Index
+        Name d (local 2)
+        String "year"
+      Index
+        Name d (local 2)
+        String "month"
+      Index
+        Name d (local 2)
+        String "day"
+      Index
+        Name d (local 2)
+        String "hour"
+      Index
+        Name d (local 2)
+        String "min"
+      Index
+        Name d (local 2)
+        String "sec"
+      Index
+        Name d (local 2)
+        String "wday"
+      Index
+        Name d (local 2)
+        String "yday"
+      Index
+        Name d (local 2)
+        String "isdst"
+  Assign
+    Targets
+      Name d (local 2)
+    Values
+      Call
+        Index
+          Name os
+          String "date"
+        String "!*t"
+        Integer 951782400
+  CallStatement
+    Call
+      Name print
+      Index
+        Name d (local 2)
+        String "year"
+      Index
+        Name d (local 2)
+        String "month"
+      Index
+        Name d (local 2)
+        String "day"
+      Index
+        Name d (local 2)
+        String "wday"
+      Index
+        Name d (local 2)
+        String "yday"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Call
+          Index
+            Name os
+            String "date"
+      Call
+        Name type
+        Call
+          Index
+            Name os
+            String "date"
+          String "*t"
+      Call
+        Name type
+        Call
+          Index
+            Name os
+            String "date"
+          String "%Y"
+      Call
+        Index
+          Name math
+          String "type"
+        Index
+          Call
+            Index
+              Name os
+              String "date"
+            String "*t"
+          String "year"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "date"
+        String "%Ez"
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "date"
+        String "%"
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "date"
+        String "%Q"
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "date"
+        String "!%Y"
+        Float 1.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "date"
+        String "!%Y"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "difftime"
+        Integer 10
+        Integer 4
+      Call
+        Index
+          Name os
+          String "difftime"
+        Integer 4
+        Integer 10
+      Call
+        Index
+          Name os
+          String "difftime"
+        Integer 5
+        Integer 5
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name os
+            String "difftime"
+          Integer 1
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "difftime"
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name os
+          String "difftime"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name os
+            String "clock"
+      Binary >=
+        Call
+          Index
+            Name os
+            String "clock"
+        Integer 0
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name os
+            String "time"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "getenv"
+        String "LUA2_SURELY_UNDEFINED_VARIABLE_12345"
+      Call
+        Name pcall
+        Index
+          Name os
+          String "getenv"
+  Return
+    Call
+      Index
+        Name os
+        String "date"
+      String "!%Y"
+      Integer 0
+    Binary -
+      Call
+        Index
+          Name os
+          String "time"
+        Table
+          Field year
+            Integer 2000
+          Field month
+            Integer 1
+          Field day
+            Integer 2
+          Field hour
+            Integer 0
+      Call
+        Index
+          Name os
+          String "time"
+        Table
+          Field year
+            Integer 2000
+          Field month
+            Integer 1
+          Field day
+            Integer 1
+          Field hour
+            Integer 0

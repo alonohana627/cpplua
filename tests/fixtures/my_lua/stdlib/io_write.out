@@ -1,0 +1,19 @@
+plain 42 1.5 3 -0 1e+100 9.2233720368548e+18 3
+no newline yet; now
+chained file	true	file	file	file
+abc
+through io.stdout 7
+nil	nil	nil	nil	nil
+false	bad argument #1 to 'io.type' (value expected)
+9223372036854775807 -9223372036854775808 0.1 0.33333333333333 inf -inf
+ 3.14|7   |ff
+false	bad argument #1 to 'io.write' (string expected, got table)
+ok false	bad argument #2 to 'io.write' (string expected, got nil)
+false	bad argument #1 to 'io.write' (string expected, got boolean)
+
+false	bad argument #2 to '?' (string expected, got function)
+false	bad argument #1 to '?' (FILE* expected, got number)
+file (	table	FILE*
+function	true
+last line
+file

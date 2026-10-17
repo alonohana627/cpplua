@@ -1,0 +1,1 @@
+err_setmetatable.lua:2: bad argument #1 to 'setmetatable' (table expected, got number)

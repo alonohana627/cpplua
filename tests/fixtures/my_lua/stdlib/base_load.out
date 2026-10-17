@@ -1,0 +1,39 @@
+function	3
+20	10
+3
+nil	5
+
+nil	[string "return +"]:1: unexpected symbol near '+'
+nil	[string "x ="]:1: unexpected symbol near <eof>
+nil	[string "for"]:1: <name> expected near <eof>
+nil	[string "return 'unfinished"]:1: unfinished string near <eof>
+nil	mychunk:1: unexpected symbol near '}'
+nil	virtual.lua:3: <name> expected near '='
+nil	[string "return ) -- a long first line that is shorten..."]:1: unexpected symbol near ')'
+nil	[string "multi..."]:1: syntax error near 'b'
+false	custom:1: boom
+false	fake.lua:1: attempt to index a nil value (local 't')
+false	[string "error('in string')"]:1: in string
+false	(load):1: attempt to compare number with table
+1
+nil	attempt to load a text chunk (mode is 'b')
+1
+true	nil	attempt to load a text chunk (mode is 'x')
+14	14	1	nil	nil
+nil
+false	[string "c"]:1: attempt to call a nil value (global 'print')
+true
+false	[string "nilenv"]:1: attempt to index a nil value (upvalue '_ENV')
+42
+ABC	3
+one char at a time
+function
+true
+true	nil	reader function must return a string
+true	nil	reader failed
+nil	pieces:1: unexpected symbol near <eof>
+false	bad argument #1 to 'load' (function expected, got no value)
+true	nil	[string "42"]:1: unexpected symbol near '42'
+false	bad argument #1 to 'load' (function expected, got table)
+1	2	3	false
+a	b

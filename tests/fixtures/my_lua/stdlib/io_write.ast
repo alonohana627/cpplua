@@ -1,0 +1,304 @@
+Chunk
+  CallStatement
+    Call
+      Index
+        Name io
+        String "write"
+      String "plain "
+      Integer 42
+      String " "
+      Float 1.5
+      String " "
+      Float 3.0
+      String " "
+      Unary -
+        Float 0.0
+      String " "
+      Float 1e+100
+      String " "
+      Binary ^
+        Integer 2
+        Integer 63
+      String " "
+      Binary //
+        Integer 10
+        Integer 3
+      String "\n"
+  CallStatement
+    Call
+      Index
+        Name io
+        String "write"
+  CallStatement
+    Call
+      Index
+        Name io
+        String "write"
+      String ""
+  CallStatement
+    Call
+      Index
+        Name io
+        String "write"
+      String "no newline yet; "
+  CallStatement
+    Call
+      Index
+        Name io
+        String "write"
+      String "now\n"
+  Local f
+    Call
+      Index
+        Name io
+        String "write"
+      String "chained "
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name io
+          String "type"
+        Name f (local 0)
+      Binary ==
+        Name f (local 0)
+        Index
+          Name io
+          String "stdout"
+      Call
+        Index
+          Name io
+          String "type"
+        Index
+          Name io
+          String "stdout"
+      Call
+        Index
+          Name io
+          String "type"
+        Index
+          Name io
+          String "stderr"
+      Call
+        Index
+          Name io
+          String "type"
+        Index
+          Name io
+          String "stdin"
+  CallStatement
+    MethodCall write
+      MethodCall write
+        Call
+          Index
+            Name io
+            String "write"
+          String "a"
+        String "b"
+      String "c"
+      String "\n"
+  CallStatement
+    MethodCall write
+      Index
+        Name io
+        String "stdout"
+      String "through io.stdout "
+      Integer 7
+      String "\n"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name io
+          String "type"
+        Nil
+      Call
+        Index
+          Name io
+          String "type"
+        Integer 42
+      Call
+        Index
+          Name io
+          String "type"
+        String "file"
+      Call
+        Index
+          Name io
+          String "type"
+        Table
+      Call
+        Index
+          Name io
+          String "type"
+        Name print
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name io
+          String "type"
+  CallStatement
+    Call
+      Index
+        Name io
+        String "write"
+      Index
+        Name math
+        String "maxinteger"
+      String " "
+      Index
+        Name math
+        String "mininteger"
+      String " "
+      Float 0.1
+      String " "
+      Binary /
+        Integer 1
+        Integer 3
+      String " "
+      Index
+        Name math
+        String "huge"
+      String " "
+      Unary -
+        Index
+          Name math
+          String "huge"
+      String "\n"
+  CallStatement
+    Call
+      Index
+        Name io
+        String "write"
+      Call
+        Index
+          Name string
+          String "format"
+        String "%5.2f|%-4d|%x\n"
+        Float 3.14159
+        Integer 7
+        Integer 255
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name io
+          String "write"
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name io
+          String "write"
+        String "ok "
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name io
+          String "write"
+        True
+  CallStatement
+    Call
+      Index
+        Name io
+        String "write"
+      String "\n"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Index
+            Name io
+            String "stdout"
+          String "write"
+        Index
+          Name io
+          String "stdout"
+        Name print
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Index
+            Name io
+            String "stdout"
+          String "write"
+        Integer 42
+  CallStatement
+    Call
+      Name print
+      MethodCall sub
+        Call
+          Name tostring
+          Index
+            Name io
+            String "stdout"
+        Integer 1
+        Integer 6
+      Call
+        Name type
+        Call
+          Name getmetatable
+          Index
+            Name io
+            String "stdout"
+      Index
+        Call
+          Name getmetatable
+          Index
+            Name io
+            String "stdout"
+        String "__name"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Index
+          Index
+            Name io
+            String "stdout"
+          String "write"
+      Binary ==
+        Index
+          Index
+            Name io
+            String "stdout"
+          String "write"
+        Index
+          Index
+            Name io
+            String "stderr"
+          String "write"
+  CallStatement
+    Call
+      Index
+        Name io
+        String "write"
+      String "last line\n"
+  Return
+    Call
+      Index
+        Name io
+        String "type"
+      Index
+        Name io
+        String "stdout"

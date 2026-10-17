@@ -1,0 +1,31 @@
+%a	52	ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+%c	33	
+%d	10	0123456789
+%g	94	!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+%l	26	abcdefghijklmnopqrstuvwxyz
+%p	32	!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+%s	6	
+%u	26	ABCDEFGHIJKLMNOPQRSTUVWXYZ
+%w	62	0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+%x	22	0123456789ABCDEFabcdef
+%A	76	128
+%C	95	128
+%D	118	128
+%G	34	128
+%L	102	128
+%P	96	128
+%S	122	128
+%U	102	128
+%W	66	128
+%X	106	128
+spaces	9 10 11 12 13 32
+controls or spaces	34
+128	true
+1 2 3 4 5 6 7 8 9 10 11 12
+.	50%	+
+snake	snake_case99
+DEADbeef
+_i_e_	M_X_D	2
+a1.b2.c3.	3
+x1	5
+36	0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ

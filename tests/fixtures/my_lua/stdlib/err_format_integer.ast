@@ -1,0 +1,19 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%d"
+        Float 3.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%d"
+        Float 1.5

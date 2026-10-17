@@ -1,0 +1,493 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "hello world"
+        String "o"
+        String "0"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "hello world"
+        String "o"
+        String "0"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "hello world"
+        String "o"
+        String "0"
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "hello world"
+        String "o"
+        String "0"
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "hello world"
+        String "(%w+)"
+        String "<%1>"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "hello world"
+        String "%w+"
+        String "<%0>"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "hello world"
+        String "(%w+) (%w+)"
+        String "%2 %1"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String ""
+        String "-"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "."
+        String "%0%0"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "100%"
+        String "%%"
+        String "%%%%"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "x"
+        String "x"
+        String "%%"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "hello"
+        String "l+"
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String ""
+        String "x*"
+        String "y"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "^a"
+        String "A"
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "aaa"
+        String "^a"
+        String "A"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "c$"
+        String "C"
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "b$"
+        String "B"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "%w"
+        String "%1"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "a,b,,c"
+        String ","
+        String ";"
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "b*"
+        String "-"
+  Local vars
+    Table
+      Field name
+        String "Lua"
+      Field version
+        Float 5.4
+      Field missing
+        False
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "$name $version $missing $unknown"
+        String "%$(%w+)"
+        Name vars (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "a b c"
+        String "%a"
+        Table
+          Field a
+            Integer 1
+          Field b
+            Binary and
+              True
+              String "B"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "1 2 3"
+        String "%d"
+        Function(d)
+          Return
+            Binary *
+              Name d (local 0)
+              Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "%a"
+        Function(c)
+          If
+            If
+              Binary ==
+                Name c (local 0)
+                String "b"
+              Then
+                Return
+                  Nil
+          Return
+            MethodCall upper
+              Name c (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "%a"
+        Function()
+          Return
+            False
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "k1=v1 k2=v2"
+        String "(%w+)=(%w+)"
+        Function(k, v)
+          Return
+            Binary ..
+              Name v (local 1)
+              Binary ..
+                String "="
+                Name k (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "()"
+        Function(p)
+          Return
+            Name p (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "hello"
+        String "l"
+        Function(m)
+          Return
+            Binary ..
+              Name m (local 0)
+              Float 1.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "THE (quick) fox"
+        String "%f[%a]%a+"
+        String "W"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "hello world"
+        String "%f[%w]%w"
+        Index
+          Name string
+          String "upper"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "aaa bbb"
+        String "%f[%l]"
+        String "|"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "aaa bbb"
+        String "%f[%L]"
+        String "|"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "THE END"
+        String "%f[%z]"
+        String "!"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "(a)"
+        String "%2"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "a"
+        String "%x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "a"
+        String "%"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "a"
+        Table
+          Field a
+            Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "a"
+        Function()
+          Return
+            Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "a"
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "a"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "a"
+        String "b"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "b"
+        Integer 42
+      Call
+        Index
+          Name string
+          String "gsub"
+        String "abc"
+        String "b"
+        Float 1.5
+  Return
+    Call
+      Index
+        Name string
+        String "gsub"
+      String "one two three"
+      String "(%w+)"
+      String "%1!"
+      Integer 2

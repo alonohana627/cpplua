@@ -1,0 +1,27 @@
+Lua 5.4	string
+true	true	true
+set through _G
+
+
+false	bad argument #1 to 'warn' (string expected, got no value)
+false	bad argument #1 to 'warn' (string expected, got table)
+false	bad argument #2 to 'warn' (string expected, got nil)
+true	nil	nil
+locked
+false	cannot change a protected metatable
+false	cannot change a protected metatable
+true
+false	bad argument #2 to 'setmetatable' (nil or table expected, got number)
+false	bad argument #2 to 'setmetatable' (nil or table expected, got no value)
+true
+1=10 2=20
+1=1 2=4 3=9
+false	bad argument #1 to 'ipairs' (value expected)
+1	2	3	nil
+nil	false	invalid key to 'next'
+1	2	3
+3
+false	assertion failed!
+false	custom message
+false	bad argument #1 to 'assert' (value expected)
+Lua 5.4

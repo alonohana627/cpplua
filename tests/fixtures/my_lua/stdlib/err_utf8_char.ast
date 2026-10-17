@@ -1,0 +1,19 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "char"
+        Integer 72
+        Integer 105
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name utf8
+          String "char"
+        Unary -
+          Integer 1

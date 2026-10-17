@@ -1,0 +1,14 @@
+Chunk
+  GenericFor pos, code
+    In
+      Call
+        Index
+          Name utf8
+          String "codes"
+        String "ok\xFFno"
+    Body
+      CallStatement
+        Call
+          Name print
+          Name pos (local 4)
+          Name code (local 5)

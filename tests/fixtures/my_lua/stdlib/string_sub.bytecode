@@ -1,0 +1,319 @@
+
+main <string_sub.lua:0,0> (280 instructions)
+0+ params, 13 slots, 1 upvalue, 11 locals, 21 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[5]	LOADK    	0 0	; "Hello, Lua"
+	3	[6]	GETTABUP 	1 0 1	; _ENV "print"
+	4	[6]	GETTABUP 	2 0 2	; _ENV "string"
+	5	[6]	GETFIELD 	2 2 3	; "sub"
+	6	[6]	MOVE     	3 0
+	7	[6]	LOADI    	4 1
+	8	[6]	LOADI    	5 5
+	9	[6]	CALL     	2 4 2	; 3 in 1 out
+	10	[6]	GETTABUP 	3 0 2	; _ENV "string"
+	11	[6]	GETFIELD 	3 3 3	; "sub"
+	12	[6]	MOVE     	4 0
+	13	[6]	LOADI    	5 8
+	14	[6]	CALL     	3 3 2	; 2 in 1 out
+	15	[6]	GETTABUP 	4 0 2	; _ENV "string"
+	16	[6]	GETFIELD 	4 4 3	; "sub"
+	17	[6]	MOVE     	5 0
+	18	[6]	LOADI    	6 -3
+	19	[6]	CALL     	4 3 2	; 2 in 1 out
+	20	[6]	GETTABUP 	5 0 2	; _ENV "string"
+	21	[6]	GETFIELD 	5 5 3	; "sub"
+	22	[6]	MOVE     	6 0
+	23	[6]	LOADI    	7 -3
+	24	[6]	LOADI    	8 -2
+	25	[6]	CALL     	5 4 0	; 3 in all out
+	26	[6]	CALL     	1 0 1	; all in 0 out
+	27	[7]	GETTABUP 	1 0 1	; _ENV "print"
+	28	[7]	GETTABUP 	2 0 2	; _ENV "string"
+	29	[7]	GETFIELD 	2 2 3	; "sub"
+	30	[7]	MOVE     	3 0
+	31	[7]	LOADI    	4 0
+	32	[7]	CALL     	2 3 2	; 2 in 1 out
+	33	[7]	GETTABUP 	3 0 2	; _ENV "string"
+	34	[7]	GETFIELD 	3 3 3	; "sub"
+	35	[7]	MOVE     	4 0
+	36	[7]	LOADI    	5 1
+	37	[7]	LOADI    	6 0
+	38	[7]	CALL     	3 4 2	; 3 in 1 out
+	39	[7]	EQK      	3 4 1	; ""
+	40	[7]	JMP      	1	; to 42
+	41	[7]	LFALSESKIP	3
+	42	[7]	LOADTRUE 	3
+	43	[7]	GETTABUP 	4 0 2	; _ENV "string"
+	44	[7]	GETFIELD 	4 4 3	; "sub"
+	45	[7]	MOVE     	5 0
+	46	[7]	LOADI    	6 5
+	47	[7]	LOADI    	7 3
+	48	[7]	CALL     	4 4 2	; 3 in 1 out
+	49	[7]	EQK      	4 4 1	; ""
+	50	[7]	JMP      	1	; to 52
+	51	[7]	LFALSESKIP	4
+	52	[7]	LOADTRUE 	4
+	53	[7]	CALL     	1 4 1	; 3 in 0 out
+	54	[8]	GETTABUP 	1 0 1	; _ENV "print"
+	55	[8]	GETTABUP 	2 0 2	; _ENV "string"
+	56	[8]	GETFIELD 	2 2 3	; "sub"
+	57	[8]	MOVE     	3 0
+	58	[8]	LOADI    	4 -100
+	59	[8]	LOADI    	5 2
+	60	[8]	CALL     	2 4 2	; 3 in 1 out
+	61	[8]	GETTABUP 	3 0 2	; _ENV "string"
+	62	[8]	GETFIELD 	3 3 3	; "sub"
+	63	[8]	MOVE     	4 0
+	64	[8]	LOADI    	5 8
+	65	[8]	LOADI    	6 100
+	66	[8]	CALL     	3 4 2	; 3 in 1 out
+	67	[8]	GETTABUP 	4 0 2	; _ENV "string"
+	68	[8]	GETFIELD 	4 4 3	; "sub"
+	69	[8]	MOVE     	5 0
+	70	[8]	LOADI    	6 11
+	71	[8]	CALL     	4 3 2	; 2 in 1 out
+	72	[8]	EQK      	4 4 1	; ""
+	73	[8]	JMP      	1	; to 75
+	74	[8]	LFALSESKIP	4
+	75	[8]	LOADTRUE 	4
+	76	[8]	CALL     	1 4 1	; 3 in 0 out
+	77	[9]	GETTABUP 	1 0 1	; _ENV "print"
+	78	[9]	GETTABUP 	2 0 2	; _ENV "string"
+	79	[9]	GETFIELD 	2 2 3	; "sub"
+	80	[9]	MOVE     	3 0
+	81	[9]	LOADI    	4 -1
+	82	[9]	LOADI    	5 -1
+	83	[9]	CALL     	2 4 2	; 3 in 1 out
+	84	[9]	GETTABUP 	3 0 2	; _ENV "string"
+	85	[9]	GETFIELD 	3 3 3	; "sub"
+	86	[9]	MOVE     	4 0
+	87	[9]	LOADI    	5 10
+	88	[9]	LOADI    	6 10
+	89	[9]	CALL     	3 4 2	; 3 in 1 out
+	90	[9]	GETTABUP 	4 0 2	; _ENV "string"
+	91	[9]	GETFIELD 	4 4 3	; "sub"
+	92	[9]	MOVE     	5 0
+	93	[9]	LOADI    	6 0
+	94	[9]	LOADI    	7 0
+	95	[9]	CALL     	4 4 2	; 3 in 1 out
+	96	[9]	EQK      	4 4 1	; ""
+	97	[9]	JMP      	1	; to 99
+	98	[9]	LFALSESKIP	4
+	99	[9]	LOADTRUE 	4
+	100	[9]	CALL     	1 4 1	; 3 in 0 out
+	101	[10]	GETTABUP 	1 0 1	; _ENV "print"
+	102	[10]	GETTABUP 	2 0 2	; _ENV "string"
+	103	[10]	GETFIELD 	2 2 3	; "sub"
+	104	[10]	MOVE     	3 0
+	105	[10]	GETTABUP 	4 0 5	; _ENV "math"
+	106	[10]	GETFIELD 	4 4 6	; "mininteger"
+	107	[10]	GETTABUP 	5 0 5	; _ENV "math"
+	108	[10]	GETFIELD 	5 5 7	; "maxinteger"
+	109	[10]	CALL     	2 4 2	; 3 in 1 out
+	110	[10]	EQ       	2 0 1
+	111	[10]	JMP      	1	; to 113
+	112	[10]	LFALSESKIP	2
+	113	[10]	LOADTRUE 	2
+	114	[10]	CALL     	1 2 1	; 1 in 0 out
+	115	[11]	GETTABUP 	1 0 1	; _ENV "print"
+	116	[11]	GETTABUP 	2 0 2	; _ENV "string"
+	117	[11]	GETFIELD 	2 2 3	; "sub"
+	118	[11]	MOVE     	3 0
+	119	[11]	GETTABUP 	4 0 5	; _ENV "math"
+	120	[11]	GETFIELD 	4 4 7	; "maxinteger"
+	121	[11]	CALL     	2 3 2	; 2 in 1 out
+	122	[11]	EQK      	2 4 1	; ""
+	123	[11]	JMP      	1	; to 125
+	124	[11]	LFALSESKIP	2
+	125	[11]	LOADTRUE 	2
+	126	[11]	GETTABUP 	3 0 2	; _ENV "string"
+	127	[11]	GETFIELD 	3 3 3	; "sub"
+	128	[11]	MOVE     	4 0
+	129	[11]	LOADI    	5 2
+	130	[11]	GETTABUP 	6 0 5	; _ENV "math"
+	131	[11]	GETFIELD 	6 6 6	; "mininteger"
+	132	[11]	CALL     	3 4 2	; 3 in 1 out
+	133	[11]	EQK      	3 4 1	; ""
+	134	[11]	JMP      	1	; to 136
+	135	[11]	LFALSESKIP	3
+	136	[11]	LOADTRUE 	3
+	137	[11]	CALL     	1 3 1	; 2 in 0 out
+	138	[12]	GETTABUP 	1 0 1	; _ENV "print"
+	139	[12]	GETTABUP 	2 0 2	; _ENV "string"
+	140	[12]	GETFIELD 	2 2 3	; "sub"
+	141	[12]	MOVE     	3 0
+	142	[12]	LOADF    	4 2
+	143	[12]	LOADF    	5 3
+	144	[12]	CALL     	2 4 2	; 3 in 1 out
+	145	[12]	GETTABUP 	3 0 2	; _ENV "string"
+	146	[12]	GETFIELD 	3 3 3	; "sub"
+	147	[12]	MOVE     	4 0
+	148	[12]	LOADK    	5 8	; "2"
+	149	[12]	LOADK    	6 9	; "4"
+	150	[12]	CALL     	3 4 0	; 3 in all out
+	151	[12]	CALL     	1 0 1	; all in 0 out
+	152	[13]	GETTABUP 	1 0 1	; _ENV "print"
+	153	[13]	GETTABUP 	2 0 2	; _ENV "string"
+	154	[13]	GETFIELD 	2 2 3	; "sub"
+	155	[13]	LOADK    	3 4	; ""
+	156	[13]	LOADI    	4 1
+	157	[13]	LOADI    	5 1
+	158	[13]	CALL     	2 4 2	; 3 in 1 out
+	159	[13]	EQK      	2 4 1	; ""
+	160	[13]	JMP      	1	; to 162
+	161	[13]	LFALSESKIP	2
+	162	[13]	LOADTRUE 	2
+	163	[13]	GETTABUP 	3 0 2	; _ENV "string"
+	164	[13]	GETFIELD 	3 3 3	; "sub"
+	165	[13]	LOADK    	4 4	; ""
+	166	[13]	LOADI    	5 -1
+	167	[13]	CALL     	3 3 2	; 2 in 1 out
+	168	[13]	EQK      	3 4 1	; ""
+	169	[13]	JMP      	1	; to 171
+	170	[13]	LFALSESKIP	3
+	171	[13]	LOADTRUE 	3
+	172	[13]	GETTABUP 	4 0 2	; _ENV "string"
+	173	[13]	GETFIELD 	4 4 3	; "sub"
+	174	[13]	LOADK    	5 10	; "x"
+	175	[13]	LOADI    	6 1
+	176	[13]	LOADI    	7 1
+	177	[13]	CALL     	4 4 0	; 3 in all out
+	178	[13]	CALL     	1 0 1	; all in 0 out
+	179	[14]	GETTABUP 	1 0 1	; _ENV "print"
+	180	[14]	GETTABUP 	2 0 2	; _ENV "string"
+	181	[14]	GETFIELD 	2 2 3	; "sub"
+	182	[14]	LOADI    	3 12345
+	183	[14]	LOADI    	4 2
+	184	[14]	LOADI    	5 4
+	185	[14]	CALL     	2 4 2	; 3 in 1 out
+	186	[14]	GETTABUP 	3 0 2	; _ENV "string"
+	187	[14]	GETFIELD 	3 3 3	; "sub"
+	188	[14]	LOADK    	4 11	; 1.25
+	189	[14]	LOADI    	5 2
+	190	[14]	CALL     	3 3 0	; 2 in all out
+	191	[14]	CALL     	1 0 1	; all in 0 out
+	192	[15]	GETTABUP 	1 0 1	; _ENV "print"
+	193	[15]	GETTABUP 	2 0 12	; _ENV "pcall"
+	194	[15]	GETTABUP 	3 0 2	; _ENV "string"
+	195	[15]	GETFIELD 	3 3 3	; "sub"
+	196	[15]	MOVE     	4 0
+	197	[15]	CALL     	2 3 0	; 2 in all out
+	198	[15]	CALL     	1 0 1	; all in 0 out
+	199	[16]	GETTABUP 	1 0 1	; _ENV "print"
+	200	[16]	GETTABUP 	2 0 12	; _ENV "pcall"
+	201	[16]	GETTABUP 	3 0 2	; _ENV "string"
+	202	[16]	GETFIELD 	3 3 3	; "sub"
+	203	[16]	MOVE     	4 0
+	204	[16]	LOADK    	5 13	; 1.5
+	205	[16]	CALL     	2 4 0	; 3 in all out
+	206	[16]	CALL     	1 0 1	; all in 0 out
+	207	[17]	GETTABUP 	1 0 1	; _ENV "print"
+	208	[17]	GETTABUP 	2 0 12	; _ENV "pcall"
+	209	[17]	GETTABUP 	3 0 2	; _ENV "string"
+	210	[17]	GETFIELD 	3 3 3	; "sub"
+	211	[17]	MOVE     	4 0
+	212	[17]	LOADI    	5 1
+	213	[17]	LOADK    	6 14	; "z"
+	214	[17]	CALL     	2 5 0	; 4 in all out
+	215	[17]	CALL     	1 0 1	; all in 0 out
+	216	[18]	GETTABUP 	1 0 1	; _ENV "print"
+	217	[18]	GETTABUP 	2 0 12	; _ENV "pcall"
+	218	[18]	GETTABUP 	3 0 2	; _ENV "string"
+	219	[18]	GETFIELD 	3 3 3	; "sub"
+	220	[18]	LOADNIL  	4 0	; 1 out
+	221	[18]	LOADI    	5 1
+	222	[18]	CALL     	2 4 0	; 3 in all out
+	223	[18]	CALL     	1 0 1	; all in 0 out
+	224	[21]	NEWTABLE 	1 0 0	; 0
+	225	[21]	EXTRAARG 	0
+	226	[22]	LOADI    	2 -1
+	227	[22]	LOADI    	3 -4
+	228	[22]	LOADI    	4 -1
+	229	[22]	FORPREP  	2 8	; exit to 239
+	230	[22]	LEN      	6 1
+	231	[22]	ADDI     	6 6 1
+	232	[22]	MMBINI   	6 1 6 0	; __add
+	233	[22]	LOADK    	7 15	; "abcd"
+	234	[22]	SELF     	7 7 3k	; "sub"
+	235	[22]	MOVE     	9 5
+	236	[22]	CALL     	7 3 2	; 2 in 1 out
+	237	[22]	SETTABLE 	1 6 7
+	238	[22]	FORLOOP  	2 9	; to 230
+	239	[23]	GETTABUP 	2 0 1	; _ENV "print"
+	240	[23]	GETTABUP 	3 0 16	; _ENV "table"
+	241	[23]	GETFIELD 	3 3 17	; "concat"
+	242	[23]	MOVE     	4 1
+	243	[23]	LOADK    	5 18	; " "
+	244	[23]	CALL     	3 3 0	; 2 in all out
+	245	[23]	CALL     	2 0 1	; all in 0 out
+	246	[26]	NEWTABLE 	2 0 0	; 0
+	247	[26]	EXTRAARG 	0
+	248	[27]	LOADI    	3 0
+	249	[27]	LOADI    	4 4
+	250	[27]	LOADI    	5 1
+	251	[27]	FORPREP  	3 12	; exit to 265
+	252	[27]	LEN      	7 2
+	253	[27]	ADDI     	7 7 1
+	254	[27]	MMBINI   	7 1 6 0	; __add
+	255	[27]	LOADK    	8 19	; "["
+	256	[27]	LOADK    	9 15	; "abcd"
+	257	[27]	SELF     	9 9 3k	; "sub"
+	258	[27]	LOADI    	11 1
+	259	[27]	MOVE     	12 6
+	260	[27]	CALL     	9 4 2	; 3 in 1 out
+	261	[27]	LOADK    	10 20	; "]"
+	262	[27]	CONCAT   	8 3
+	263	[27]	SETTABLE 	2 7 8
+	264	[27]	FORLOOP  	3 13	; to 252
+	265	[28]	GETTABUP 	3 0 1	; _ENV "print"
+	266	[28]	GETTABUP 	4 0 16	; _ENV "table"
+	267	[28]	GETFIELD 	4 4 17	; "concat"
+	268	[28]	MOVE     	5 2
+	269	[28]	LOADK    	6 18	; " "
+	270	[28]	CALL     	4 3 0	; 2 in all out
+	271	[28]	CALL     	3 0 1	; all in 0 out
+	272	[30]	SELF     	3 0 3k	; "sub"
+	273	[30]	LOADI    	5 -3
+	274	[30]	CALL     	3 3 2	; 2 in 1 out
+	275	[30]	SELF     	4 0 3k	; "sub"
+	276	[30]	LOADI    	6 1
+	277	[30]	LOADI    	7 -6
+	278	[30]	CALL     	4 4 0	; 3 in all out
+	279	[30]	RETURN   	3 0 1	; all out
+	280	[30]	RETURN   	3 1 1	; 0 out
+constants (21):
+	0	S	"Hello, Lua"
+	1	S	"print"
+	2	S	"string"
+	3	S	"sub"
+	4	S	""
+	5	S	"math"
+	6	S	"mininteger"
+	7	S	"maxinteger"
+	8	S	"2"
+	9	S	"4"
+	10	S	"x"
+	11	F	1.25
+	12	S	"pcall"
+	13	F	1.5
+	14	S	"z"
+	15	S	"abcd"
+	16	S	"table"
+	17	S	"concat"
+	18	S	" "
+	19	S	"["
+	20	S	"]"
+locals (11):
+	0	s	3	281
+	1	suffixes	226	281
+	2	(for state)	229	239
+	3	(for state)	229	239
+	4	(for state)	229	239
+	5	i	230	238
+	6	prefixes	248	281
+	7	(for state)	251	265
+	8	(for state)	251	265
+	9	(for state)	251	265
+	10	j	252	264
+upvalues (1):
+	0	_ENV	1	0

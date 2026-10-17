@@ -1,0 +1,534 @@
+
+main <os_time_date.lua:0,0> (467 instructions)
+0+ params, 13 slots, 1 upvalue, 3 locals, 57 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[8]	GETTABUP 	0 0 0	; _ENV "os"
+	3	[8]	GETFIELD 	0 0 1	; "time"
+	4	[8]	NEWTABLE 	1 3 0	; 0
+	5	[8]	EXTRAARG 	0
+	6	[8]	SETFIELD 	1 2 3k	; "year" 2020
+	7	[8]	SETFIELD 	1 4 5k	; "month" 1
+	8	[8]	SETFIELD 	1 6 5k	; "day" 1
+	9	[8]	SETFIELD 	1 7 8k	; "hour" 12
+	10	[8]	CALL     	0 2 2	; 1 in 1 out
+	11	[9]	GETTABUP 	1 0 9	; _ENV "print"
+	12	[9]	GETTABUP 	2 0 10	; _ENV "math"
+	13	[9]	GETFIELD 	2 2 11	; "type"
+	14	[9]	MOVE     	3 0
+	15	[9]	CALL     	2 2 2	; 1 in 1 out
+	16	[9]	GETTABUP 	3 0 0	; _ENV "os"
+	17	[9]	GETFIELD 	3 3 1	; "time"
+	18	[9]	NEWTABLE 	4 3 0	; 0
+	19	[9]	EXTRAARG 	0
+	20	[9]	SETFIELD 	4 2 3k	; "year" 2020
+	21	[9]	SETFIELD 	4 4 5k	; "month" 1
+	22	[9]	SETFIELD 	4 6 12k	; "day" 2
+	23	[9]	SETFIELD 	4 7 8k	; "hour" 12
+	24	[9]	CALL     	3 2 2	; 1 in 1 out
+	25	[9]	SUB      	3 3 0
+	26	[9]	MMBIN    	3 0 7	; __sub
+	27	[9]	CALL     	1 3 1	; 2 in 0 out
+	28	[10]	GETTABUP 	1 0 9	; _ENV "print"
+	29	[10]	GETTABUP 	2 0 0	; _ENV "os"
+	30	[10]	GETFIELD 	2 2 1	; "time"
+	31	[10]	NEWTABLE 	3 3 0	; 0
+	32	[10]	EXTRAARG 	0
+	33	[10]	SETFIELD 	3 2 3k	; "year" 2020
+	34	[10]	SETFIELD 	3 4 13k	; "month" 3
+	35	[10]	SETFIELD 	3 6 5k	; "day" 1
+	36	[10]	SETFIELD 	3 7 8k	; "hour" 12
+	37	[10]	CALL     	2 2 2	; 1 in 1 out
+	38	[10]	SUB      	2 2 0
+	39	[10]	MMBIN    	2 0 7	; __sub
+	40	[10]	CALL     	1 2 1	; 1 in 0 out
+	41	[11]	GETTABUP 	1 0 9	; _ENV "print"
+	42	[11]	GETTABUP 	2 0 0	; _ENV "os"
+	43	[11]	GETFIELD 	2 2 1	; "time"
+	44	[11]	NEWTABLE 	3 3 0	; 0
+	45	[11]	EXTRAARG 	0
+	46	[11]	SETFIELD 	3 2 14k	; "year" 2021
+	47	[11]	SETFIELD 	3 4 5k	; "month" 1
+	48	[11]	SETFIELD 	3 6 5k	; "day" 1
+	49	[11]	SETFIELD 	3 7 8k	; "hour" 12
+	50	[11]	CALL     	2 2 2	; 1 in 1 out
+	51	[11]	SUB      	2 2 0
+	52	[11]	MMBIN    	2 0 7	; __sub
+	53	[11]	CALL     	1 2 1	; 1 in 0 out
+	54	[12]	GETTABUP 	1 0 9	; _ENV "print"
+	55	[12]	GETTABUP 	2 0 0	; _ENV "os"
+	56	[12]	GETFIELD 	2 2 1	; "time"
+	57	[12]	NEWTABLE 	3 4 0	; 0
+	58	[12]	EXTRAARG 	0
+	59	[12]	SETFIELD 	3 2 3k	; "year" 2020
+	60	[12]	SETFIELD 	3 4 5k	; "month" 1
+	61	[12]	SETFIELD 	3 6 5k	; "day" 1
+	62	[12]	SETFIELD 	3 7 15k	; "hour" 13
+	63	[12]	SETFIELD 	3 16 17k	; "min" 30
+	64	[12]	SETFIELD 	3 18 19k	; "sec" 15
+	65	[12]	CALL     	2 2 2	; 1 in 1 out
+	66	[12]	SUB      	2 2 0
+	67	[12]	MMBIN    	2 0 7	; __sub
+	68	[12]	CALL     	1 2 1	; 1 in 0 out
+	69	[13]	GETTABUP 	1 0 9	; _ENV "print"
+	70	[13]	GETTABUP 	2 0 0	; _ENV "os"
+	71	[13]	GETFIELD 	2 2 1	; "time"
+	72	[13]	NEWTABLE 	3 3 0	; 0
+	73	[13]	EXTRAARG 	0
+	74	[13]	SETFIELD 	3 2 3k	; "year" 2020
+	75	[13]	SETFIELD 	3 4 15k	; "month" 13
+	76	[13]	SETFIELD 	3 6 5k	; "day" 1
+	77	[13]	SETFIELD 	3 7 8k	; "hour" 12
+	78	[13]	CALL     	2 2 2	; 1 in 1 out
+	79	[13]	GETTABUP 	3 0 0	; _ENV "os"
+	80	[13]	GETFIELD 	3 3 1	; "time"
+	81	[13]	NEWTABLE 	4 3 0	; 0
+	82	[13]	EXTRAARG 	0
+	83	[13]	SETFIELD 	4 2 14k	; "year" 2021
+	84	[13]	SETFIELD 	4 4 5k	; "month" 1
+	85	[13]	SETFIELD 	4 6 5k	; "day" 1
+	86	[13]	SETFIELD 	4 7 8k	; "hour" 12
+	87	[13]	CALL     	3 2 2	; 1 in 1 out
+	88	[13]	SUB      	2 2 3
+	89	[13]	MMBIN    	2 3 7	; __sub
+	90	[13]	CALL     	1 2 1	; 1 in 0 out
+	91	[14]	GETTABUP 	1 0 9	; _ENV "print"
+	92	[14]	GETTABUP 	2 0 0	; _ENV "os"
+	93	[14]	GETFIELD 	2 2 1	; "time"
+	94	[14]	NEWTABLE 	3 3 0	; 0
+	95	[14]	EXTRAARG 	0
+	96	[14]	SETFIELD 	3 2 3k	; "year" 2020
+	97	[14]	SETFIELD 	3 4 5k	; "month" 1
+	98	[14]	SETFIELD 	3 6 20k	; "day" 0
+	99	[14]	SETFIELD 	3 7 8k	; "hour" 12
+	100	[14]	CALL     	2 2 2	; 1 in 1 out
+	101	[14]	SUB      	2 2 0
+	102	[14]	MMBIN    	2 0 7	; __sub
+	103	[14]	CALL     	1 2 1	; 1 in 0 out
+	104	[15]	GETTABUP 	1 0 9	; _ENV "print"
+	105	[15]	GETTABUP 	2 0 0	; _ENV "os"
+	106	[15]	GETFIELD 	2 2 1	; "time"
+	107	[15]	NEWTABLE 	3 3 0	; 0
+	108	[15]	EXTRAARG 	0
+	109	[15]	SETFIELD 	3 2 3k	; "year" 2020
+	110	[15]	SETFIELD 	3 4 5k	; "month" 1
+	111	[15]	SETFIELD 	3 6 5k	; "day" 1
+	112	[15]	SETFIELD 	3 7 21k	; "hour" -12
+	113	[15]	CALL     	2 2 2	; 1 in 1 out
+	114	[15]	SUB      	2 2 0
+	115	[15]	MMBIN    	2 0 7	; __sub
+	116	[15]	CALL     	1 2 1	; 1 in 0 out
+	117	[16]	GETTABUP 	1 0 9	; _ENV "print"
+	118	[16]	GETTABUP 	2 0 0	; _ENV "os"
+	119	[16]	GETFIELD 	2 2 1	; "time"
+	120	[16]	NEWTABLE 	3 3 0	; 0
+	121	[16]	EXTRAARG 	0
+	122	[16]	SETFIELD 	3 2 3k	; "year" 2020
+	123	[16]	SETFIELD 	3 4 5k	; "month" 1
+	124	[16]	SETFIELD 	3 6 5k	; "day" 1
+	125	[16]	CALL     	2 2 2	; 1 in 1 out
+	126	[16]	SUB      	2 2 0
+	127	[16]	MMBIN    	2 0 7	; __sub
+	128	[16]	CALL     	1 2 1	; 1 in 0 out
+	129	[17]	GETTABUP 	1 0 9	; _ENV "print"
+	130	[17]	GETTABUP 	2 0 0	; _ENV "os"
+	131	[17]	GETFIELD 	2 2 1	; "time"
+	132	[17]	NEWTABLE 	3 3 0	; 0
+	133	[17]	EXTRAARG 	0
+	134	[17]	SETFIELD 	3 2 22k	; "year" "2020"
+	135	[17]	SETFIELD 	3 4 23k	; "month" "1"
+	136	[17]	SETFIELD 	3 6 23k	; "day" "1"
+	137	[17]	SETFIELD 	3 7 24k	; "hour" "12"
+	138	[17]	CALL     	2 2 2	; 1 in 1 out
+	139	[17]	SUB      	2 2 0
+	140	[17]	MMBIN    	2 0 7	; __sub
+	141	[17]	CALL     	1 2 1	; 1 in 0 out
+	142	[20]	NEWTABLE 	1 3 0	; 0
+	143	[20]	EXTRAARG 	0
+	144	[20]	SETFIELD 	1 2 3k	; "year" 2020
+	145	[20]	SETFIELD 	1 4 12k	; "month" 2
+	146	[20]	SETFIELD 	1 6 17k	; "day" 30
+	147	[20]	SETFIELD 	1 7 8k	; "hour" 12
+	148	[21]	GETTABUP 	2 0 0	; _ENV "os"
+	149	[21]	GETFIELD 	2 2 1	; "time"
+	150	[21]	MOVE     	3 1
+	151	[21]	CALL     	2 2 1	; 1 in 0 out
+	152	[22]	GETTABUP 	2 0 9	; _ENV "print"
+	153	[22]	GETFIELD 	3 1 2	; "year"
+	154	[22]	GETFIELD 	4 1 4	; "month"
+	155	[22]	GETFIELD 	5 1 6	; "day"
+	156	[22]	GETFIELD 	6 1 7	; "hour"
+	157	[22]	GETFIELD 	7 1 16	; "min"
+	158	[22]	GETFIELD 	8 1 18	; "sec"
+	159	[22]	GETFIELD 	9 1 25	; "wday"
+	160	[22]	GETFIELD 	10 1 26	; "yday"
+	161	[22]	GETTABUP 	11 0 11	; _ENV "type"
+	162	[22]	GETFIELD 	12 1 27	; "isdst"
+	163	[22]	CALL     	11 2 0	; 1 in all out
+	164	[22]	CALL     	2 0 1	; all in 0 out
+	165	[24]	GETTABUP 	2 0 9	; _ENV "print"
+	166	[24]	GETTABUP 	3 0 28	; _ENV "pcall"
+	167	[24]	GETTABUP 	4 0 0	; _ENV "os"
+	168	[24]	GETFIELD 	4 4 1	; "time"
+	169	[24]	NEWTABLE 	5 1 0	; 0
+	170	[24]	EXTRAARG 	0
+	171	[24]	SETFIELD 	5 2 3k	; "year" 2020
+	172	[24]	CALL     	3 3 0	; 2 in all out
+	173	[24]	CALL     	2 0 1	; all in 0 out
+	174	[25]	GETTABUP 	2 0 9	; _ENV "print"
+	175	[25]	GETTABUP 	3 0 28	; _ENV "pcall"
+	176	[25]	GETTABUP 	4 0 0	; _ENV "os"
+	177	[25]	GETFIELD 	4 4 1	; "time"
+	178	[25]	NEWTABLE 	5 2 0	; 0
+	179	[25]	EXTRAARG 	0
+	180	[25]	SETFIELD 	5 2 3k	; "year" 2020
+	181	[25]	SETFIELD 	5 4 5k	; "month" 1
+	182	[25]	CALL     	3 3 0	; 2 in all out
+	183	[25]	CALL     	2 0 1	; all in 0 out
+	184	[26]	GETTABUP 	2 0 9	; _ENV "print"
+	185	[26]	GETTABUP 	3 0 28	; _ENV "pcall"
+	186	[26]	GETTABUP 	4 0 0	; _ENV "os"
+	187	[26]	GETFIELD 	4 4 1	; "time"
+	188	[26]	NEWTABLE 	5 3 0	; 0
+	189	[26]	EXTRAARG 	0
+	190	[26]	SETFIELD 	5 2 3k	; "year" 2020
+	191	[26]	SETFIELD 	5 4 29k	; "month" 1.5
+	192	[26]	SETFIELD 	5 6 5k	; "day" 1
+	193	[26]	CALL     	3 3 0	; 2 in all out
+	194	[26]	CALL     	2 0 1	; all in 0 out
+	195	[27]	GETTABUP 	2 0 9	; _ENV "print"
+	196	[27]	GETTABUP 	3 0 28	; _ENV "pcall"
+	197	[27]	GETTABUP 	4 0 0	; _ENV "os"
+	198	[27]	GETFIELD 	4 4 1	; "time"
+	199	[27]	NEWTABLE 	5 3 0	; 0
+	200	[27]	EXTRAARG 	0
+	201	[27]	SETFIELD 	5 2 3k	; "year" 2020
+	202	[27]	SETFIELD 	5 4 30k	; "month" "x"
+	203	[27]	SETFIELD 	5 6 5k	; "day" 1
+	204	[27]	CALL     	3 3 0	; 2 in all out
+	205	[27]	CALL     	2 0 1	; all in 0 out
+	206	[28]	GETTABUP 	2 0 9	; _ENV "print"
+	207	[28]	GETTABUP 	3 0 28	; _ENV "pcall"
+	208	[28]	GETTABUP 	4 0 0	; _ENV "os"
+	209	[28]	GETFIELD 	4 4 1	; "time"
+	210	[28]	LOADI    	5 5
+	211	[28]	CALL     	3 3 0	; 2 in all out
+	212	[28]	CALL     	2 0 1	; all in 0 out
+	213	[31]	GETTABUP 	2 0 9	; _ENV "print"
+	214	[31]	GETTABUP 	3 0 0	; _ENV "os"
+	215	[31]	GETFIELD 	3 3 31	; "date"
+	216	[31]	LOADK    	4 32	; "!%Y-%m-%d %H:%M:%S"
+	217	[31]	LOADI    	5 0
+	218	[31]	CALL     	3 3 0	; 2 in all out
+	219	[31]	CALL     	2 0 1	; all in 0 out
+	220	[32]	GETTABUP 	2 0 9	; _ENV "print"
+	221	[32]	GETTABUP 	3 0 0	; _ENV "os"
+	222	[32]	GETFIELD 	3 3 31	; "date"
+	223	[32]	LOADK    	4 32	; "!%Y-%m-%d %H:%M:%S"
+	224	[32]	LOADK    	5 33	; 31539661
+	225	[32]	CALL     	3 3 0	; 2 in all out
+	226	[32]	CALL     	2 0 1	; all in 0 out
+	227	[33]	GETTABUP 	2 0 9	; _ENV "print"
+	228	[33]	GETTABUP 	3 0 0	; _ENV "os"
+	229	[33]	GETFIELD 	3 3 31	; "date"
+	230	[33]	LOADK    	4 32	; "!%Y-%m-%d %H:%M:%S"
+	231	[33]	LOADK    	5 34	; 1234567890
+	232	[33]	CALL     	3 3 0	; 2 in all out
+	233	[33]	CALL     	2 0 1	; all in 0 out
+	234	[34]	GETTABUP 	2 0 9	; _ENV "print"
+	235	[34]	GETTABUP 	3 0 0	; _ENV "os"
+	236	[34]	GETFIELD 	3 3 31	; "date"
+	237	[34]	LOADK    	4 35	; "!%A %a %B %b %d %j %p %y %%"
+	238	[34]	LOADK    	5 34	; 1234567890
+	239	[34]	CALL     	3 3 0	; 2 in all out
+	240	[34]	CALL     	2 0 1	; all in 0 out
+	241	[35]	GETTABUP 	2 0 9	; _ENV "print"
+	242	[35]	GETTABUP 	3 0 0	; _ENV "os"
+	243	[35]	GETFIELD 	3 3 31	; "date"
+	244	[35]	LOADK    	4 36	; "!%I %M %S %w %H"
+	245	[35]	LOADK    	5 37	; 1234611090
+	246	[35]	CALL     	3 3 0	; 2 in all out
+	247	[35]	CALL     	2 0 1	; all in 0 out
+	248	[36]	GETTABUP 	2 0 9	; _ENV "print"
+	249	[36]	GETTABUP 	3 0 0	; _ENV "os"
+	250	[36]	GETFIELD 	3 3 31	; "date"
+	251	[36]	LOADK    	4 38	; "!%x %X"
+	252	[36]	LOADI    	5 0
+	253	[36]	CALL     	3 3 2	; 2 in 1 out
+	254	[36]	GETTABUP 	4 0 0	; _ENV "os"
+	255	[36]	GETFIELD 	4 4 31	; "date"
+	256	[36]	LOADK    	5 39	; "!%m/%d/%y %U %W"
+	257	[36]	LOADK    	6 40	; 951782400
+	258	[36]	CALL     	4 3 0	; 2 in all out
+	259	[36]	CALL     	2 0 1	; all in 0 out
+	260	[37]	GETTABUP 	2 0 9	; _ENV "print"
+	261	[37]	GETTABUP 	3 0 0	; _ENV "os"
+	262	[37]	GETFIELD 	3 3 31	; "date"
+	263	[37]	LOADK    	4 41	; "!no specifiers"
+	264	[37]	LOADI    	5 0
+	265	[37]	CALL     	3 3 2	; 2 in 1 out
+	266	[37]	GETTABUP 	4 0 0	; _ENV "os"
+	267	[37]	GETFIELD 	4 4 31	; "date"
+	268	[37]	LOADK    	5 42	; "!"
+	269	[37]	LOADI    	6 0
+	270	[37]	CALL     	4 3 2	; 2 in 1 out
+	271	[37]	EQK      	4 43 1	; ""
+	272	[37]	JMP      	1	; to 274
+	273	[37]	LFALSESKIP	4
+	274	[37]	LOADTRUE 	4
+	275	[37]	CALL     	2 3 1	; 2 in 0 out
+	276	[38]	GETTABUP 	2 0 0	; _ENV "os"
+	277	[38]	GETFIELD 	2 2 31	; "date"
+	278	[38]	LOADK    	3 44	; "!*t"
+	279	[38]	LOADK    	4 45	; 86400
+	280	[38]	CALL     	2 3 2	; 2 in 1 out
+	281	[39]	GETTABUP 	3 0 9	; _ENV "print"
+	282	[39]	GETFIELD 	4 2 2	; "year"
+	283	[39]	GETFIELD 	5 2 4	; "month"
+	284	[39]	GETFIELD 	6 2 6	; "day"
+	285	[39]	GETFIELD 	7 2 7	; "hour"
+	286	[39]	GETFIELD 	8 2 16	; "min"
+	287	[39]	GETFIELD 	9 2 18	; "sec"
+	288	[39]	GETFIELD 	10 2 25	; "wday"
+	289	[39]	GETFIELD 	11 2 26	; "yday"
+	290	[39]	GETFIELD 	12 2 27	; "isdst"
+	291	[39]	CALL     	3 10 1	; 9 in 0 out
+	292	[40]	GETTABUP 	3 0 0	; _ENV "os"
+	293	[40]	GETFIELD 	3 3 31	; "date"
+	294	[40]	LOADK    	4 44	; "!*t"
+	295	[40]	LOADK    	5 40	; 951782400
+	296	[40]	CALL     	3 3 2	; 2 in 1 out
+	297	[40]	MOVE     	2 3
+	298	[41]	GETTABUP 	3 0 9	; _ENV "print"
+	299	[41]	GETFIELD 	4 2 2	; "year"
+	300	[41]	GETFIELD 	5 2 4	; "month"
+	301	[41]	GETFIELD 	6 2 6	; "day"
+	302	[41]	GETFIELD 	7 2 25	; "wday"
+	303	[41]	GETFIELD 	8 2 26	; "yday"
+	304	[41]	CALL     	3 6 1	; 5 in 0 out
+	305	[42]	GETTABUP 	3 0 9	; _ENV "print"
+	306	[42]	GETTABUP 	4 0 11	; _ENV "type"
+	307	[42]	GETTABUP 	5 0 0	; _ENV "os"
+	308	[42]	GETFIELD 	5 5 31	; "date"
+	309	[42]	CALL     	5 1 0	; 0 in all out
+	310	[42]	CALL     	4 0 2	; all in 1 out
+	311	[42]	GETTABUP 	5 0 11	; _ENV "type"
+	312	[42]	GETTABUP 	6 0 0	; _ENV "os"
+	313	[42]	GETFIELD 	6 6 31	; "date"
+	314	[42]	LOADK    	7 46	; "*t"
+	315	[42]	CALL     	6 2 0	; 1 in all out
+	316	[42]	CALL     	5 0 2	; all in 1 out
+	317	[42]	GETTABUP 	6 0 11	; _ENV "type"
+	318	[42]	GETTABUP 	7 0 0	; _ENV "os"
+	319	[42]	GETFIELD 	7 7 31	; "date"
+	320	[42]	LOADK    	8 47	; "%Y"
+	321	[42]	CALL     	7 2 0	; 1 in all out
+	322	[42]	CALL     	6 0 2	; all in 1 out
+	323	[42]	GETTABUP 	7 0 10	; _ENV "math"
+	324	[42]	GETFIELD 	7 7 11	; "type"
+	325	[42]	GETTABUP 	8 0 0	; _ENV "os"
+	326	[42]	GETFIELD 	8 8 31	; "date"
+	327	[42]	LOADK    	9 46	; "*t"
+	328	[42]	CALL     	8 2 2	; 1 in 1 out
+	329	[42]	GETFIELD 	8 8 2	; "year"
+	330	[42]	CALL     	7 2 0	; 1 in all out
+	331	[42]	CALL     	3 0 1	; all in 0 out
+	332	[43]	GETTABUP 	3 0 9	; _ENV "print"
+	333	[43]	GETTABUP 	4 0 28	; _ENV "pcall"
+	334	[43]	GETTABUP 	5 0 0	; _ENV "os"
+	335	[43]	GETFIELD 	5 5 31	; "date"
+	336	[43]	LOADK    	6 48	; "%Ez"
+	337	[43]	LOADI    	7 0
+	338	[43]	CALL     	4 4 0	; 3 in all out
+	339	[43]	CALL     	3 0 1	; all in 0 out
+	340	[44]	GETTABUP 	3 0 9	; _ENV "print"
+	341	[44]	GETTABUP 	4 0 28	; _ENV "pcall"
+	342	[44]	GETTABUP 	5 0 0	; _ENV "os"
+	343	[44]	GETFIELD 	5 5 31	; "date"
+	344	[44]	LOADK    	6 49	; "%"
+	345	[44]	LOADI    	7 0
+	346	[44]	CALL     	4 4 0	; 3 in all out
+	347	[44]	CALL     	3 0 1	; all in 0 out
+	348	[45]	GETTABUP 	3 0 9	; _ENV "print"
+	349	[45]	GETTABUP 	4 0 28	; _ENV "pcall"
+	350	[45]	GETTABUP 	5 0 0	; _ENV "os"
+	351	[45]	GETFIELD 	5 5 31	; "date"
+	352	[45]	LOADK    	6 50	; "%Q"
+	353	[45]	LOADI    	7 0
+	354	[45]	CALL     	4 4 0	; 3 in all out
+	355	[45]	CALL     	3 0 1	; all in 0 out
+	356	[46]	GETTABUP 	3 0 9	; _ENV "print"
+	357	[46]	GETTABUP 	4 0 28	; _ENV "pcall"
+	358	[46]	GETTABUP 	5 0 0	; _ENV "os"
+	359	[46]	GETFIELD 	5 5 31	; "date"
+	360	[46]	LOADK    	6 51	; "!%Y"
+	361	[46]	LOADK    	7 29	; 1.5
+	362	[46]	CALL     	4 4 0	; 3 in all out
+	363	[46]	CALL     	3 0 1	; all in 0 out
+	364	[47]	GETTABUP 	3 0 9	; _ENV "print"
+	365	[47]	GETTABUP 	4 0 28	; _ENV "pcall"
+	366	[47]	GETTABUP 	5 0 0	; _ENV "os"
+	367	[47]	GETFIELD 	5 5 31	; "date"
+	368	[47]	LOADK    	6 51	; "!%Y"
+	369	[47]	LOADK    	7 30	; "x"
+	370	[47]	CALL     	4 4 0	; 3 in all out
+	371	[47]	CALL     	3 0 1	; all in 0 out
+	372	[50]	GETTABUP 	3 0 9	; _ENV "print"
+	373	[50]	GETTABUP 	4 0 0	; _ENV "os"
+	374	[50]	GETFIELD 	4 4 52	; "difftime"
+	375	[50]	LOADI    	5 10
+	376	[50]	LOADI    	6 4
+	377	[50]	CALL     	4 3 2	; 2 in 1 out
+	378	[50]	GETTABUP 	5 0 0	; _ENV "os"
+	379	[50]	GETFIELD 	5 5 52	; "difftime"
+	380	[50]	LOADI    	6 4
+	381	[50]	LOADI    	7 10
+	382	[50]	CALL     	5 3 2	; 2 in 1 out
+	383	[50]	GETTABUP 	6 0 0	; _ENV "os"
+	384	[50]	GETFIELD 	6 6 52	; "difftime"
+	385	[50]	LOADI    	7 5
+	386	[50]	LOADI    	8 5
+	387	[50]	CALL     	6 3 2	; 2 in 1 out
+	388	[50]	GETTABUP 	7 0 10	; _ENV "math"
+	389	[50]	GETFIELD 	7 7 11	; "type"
+	390	[50]	GETTABUP 	8 0 0	; _ENV "os"
+	391	[50]	GETFIELD 	8 8 52	; "difftime"
+	392	[50]	LOADI    	9 1
+	393	[50]	LOADI    	10 1
+	394	[50]	CALL     	8 3 0	; 2 in all out
+	395	[50]	CALL     	7 0 0	; all in all out
+	396	[50]	CALL     	3 0 1	; all in 0 out
+	397	[51]	GETTABUP 	3 0 9	; _ENV "print"
+	398	[51]	GETTABUP 	4 0 28	; _ENV "pcall"
+	399	[51]	GETTABUP 	5 0 0	; _ENV "os"
+	400	[51]	GETFIELD 	5 5 52	; "difftime"
+	401	[51]	LOADI    	6 5
+	402	[51]	CALL     	4 3 0	; 2 in all out
+	403	[51]	CALL     	3 0 1	; all in 0 out
+	404	[52]	GETTABUP 	3 0 9	; _ENV "print"
+	405	[52]	GETTABUP 	4 0 28	; _ENV "pcall"
+	406	[52]	GETTABUP 	5 0 0	; _ENV "os"
+	407	[52]	GETFIELD 	5 5 52	; "difftime"
+	408	[52]	CALL     	4 2 0	; 1 in all out
+	409	[52]	CALL     	3 0 1	; all in 0 out
+	410	[55]	GETTABUP 	3 0 9	; _ENV "print"
+	411	[55]	GETTABUP 	4 0 10	; _ENV "math"
+	412	[55]	GETFIELD 	4 4 11	; "type"
+	413	[55]	GETTABUP 	5 0 0	; _ENV "os"
+	414	[55]	GETFIELD 	5 5 53	; "clock"
+	415	[55]	CALL     	5 1 0	; 0 in all out
+	416	[55]	CALL     	4 0 2	; all in 1 out
+	417	[55]	GETTABUP 	5 0 0	; _ENV "os"
+	418	[55]	GETFIELD 	5 5 53	; "clock"
+	419	[55]	CALL     	5 1 2	; 0 in 1 out
+	420	[55]	GEI      	5 0 1
+	421	[55]	JMP      	1	; to 423
+	422	[55]	LFALSESKIP	5
+	423	[55]	LOADTRUE 	5
+	424	[55]	GETTABUP 	6 0 10	; _ENV "math"
+	425	[55]	GETFIELD 	6 6 11	; "type"
+	426	[55]	GETTABUP 	7 0 0	; _ENV "os"
+	427	[55]	GETFIELD 	7 7 1	; "time"
+	428	[55]	CALL     	7 1 0	; 0 in all out
+	429	[55]	CALL     	6 0 0	; all in all out
+	430	[55]	CALL     	3 0 1	; all in 0 out
+	431	[56]	GETTABUP 	3 0 9	; _ENV "print"
+	432	[56]	GETTABUP 	4 0 0	; _ENV "os"
+	433	[56]	GETFIELD 	4 4 54	; "getenv"
+	434	[56]	LOADK    	5 55	; "LUA2_SURELY_UNDEFINED_VARIABLE_12345"
+	435	[56]	CALL     	4 2 2	; 1 in 1 out
+	436	[56]	GETTABUP 	5 0 28	; _ENV "pcall"
+	437	[56]	GETTABUP 	6 0 0	; _ENV "os"
+	438	[56]	GETFIELD 	6 6 54	; "getenv"
+	439	[56]	CALL     	5 2 0	; 1 in all out
+	440	[56]	CALL     	3 0 1	; all in 0 out
+	441	[58]	GETTABUP 	3 0 0	; _ENV "os"
+	442	[58]	GETFIELD 	3 3 31	; "date"
+	443	[58]	LOADK    	4 51	; "!%Y"
+	444	[58]	LOADI    	5 0
+	445	[58]	CALL     	3 3 2	; 2 in 1 out
+	446	[58]	GETTABUP 	4 0 0	; _ENV "os"
+	447	[58]	GETFIELD 	4 4 1	; "time"
+	448	[58]	NEWTABLE 	5 3 0	; 0
+	449	[58]	EXTRAARG 	0
+	450	[58]	SETFIELD 	5 2 56k	; "year" 2000
+	451	[58]	SETFIELD 	5 4 5k	; "month" 1
+	452	[58]	SETFIELD 	5 6 12k	; "day" 2
+	453	[58]	SETFIELD 	5 7 20k	; "hour" 0
+	454	[58]	CALL     	4 2 2	; 1 in 1 out
+	455	[58]	GETTABUP 	5 0 0	; _ENV "os"
+	456	[58]	GETFIELD 	5 5 1	; "time"
+	457	[58]	NEWTABLE 	6 3 0	; 0
+	458	[58]	EXTRAARG 	0
+	459	[58]	SETFIELD 	6 2 56k	; "year" 2000
+	460	[58]	SETFIELD 	6 4 5k	; "month" 1
+	461	[58]	SETFIELD 	6 6 5k	; "day" 1
+	462	[58]	SETFIELD 	6 7 20k	; "hour" 0
+	463	[58]	CALL     	5 2 2	; 1 in 1 out
+	464	[58]	SUB      	4 4 5
+	465	[58]	MMBIN    	4 5 7	; __sub
+	466	[58]	RETURN   	3 3 1	; 2 out
+	467	[58]	RETURN   	3 1 1	; 0 out
+constants (57):
+	0	S	"os"
+	1	S	"time"
+	2	S	"year"
+	3	I	2020
+	4	S	"month"
+	5	I	1
+	6	S	"day"
+	7	S	"hour"
+	8	I	12
+	9	S	"print"
+	10	S	"math"
+	11	S	"type"
+	12	I	2
+	13	I	3
+	14	I	2021
+	15	I	13
+	16	S	"min"
+	17	I	30
+	18	S	"sec"
+	19	I	15
+	20	I	0
+	21	I	-12
+	22	S	"2020"
+	23	S	"1"
+	24	S	"12"
+	25	S	"wday"
+	26	S	"yday"
+	27	S	"isdst"
+	28	S	"pcall"
+	29	F	1.5
+	30	S	"x"
+	31	S	"date"
+	32	S	"!%Y-%m-%d %H:%M:%S"
+	33	I	31539661
+	34	I	1234567890
+	35	S	"!%A %a %B %b %d %j %p %y %%"
+	36	S	"!%I %M %S %w %H"
+	37	I	1234611090
+	38	S	"!%x %X"
+	39	S	"!%m/%d/%y %U %W"
+	40	I	951782400
+	41	S	"!no specifiers"
+	42	S	"!"
+	43	S	""
+	44	S	"!*t"
+	45	I	86400
+	46	S	"*t"
+	47	S	"%Y"
+	48	S	"%Ez"
+	49	S	"%"
+	50	S	"%Q"
+	51	S	"!%Y"
+	52	S	"difftime"
+	53	S	"clock"
+	54	S	"getenv"
+	55	S	"LUA2_SURELY_UNDEFINED_VARIABLE_12345"
+	56	I	2000
+locals (3):
+	0	base	11	468
+	1	t	148	468
+	2	d	281	468
+upvalues (1):
+	0	_ENV	1	0

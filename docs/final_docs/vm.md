@@ -346,7 +346,8 @@ dead frames' upvalues and to-be-closed variables ([errors.md](errors.md)).
 
 ## Benchmarks
 
-`bench/` holds twelve programs; each returns its result, the same under lua2 and the real Lua.
+`bench/` holds twelve programs of the language (and three of the standard library, in
+[stdlib.md](stdlib.md)); each returns its result, the same under lua2 and the real Lua.
 `lua2_bench` takes the best of N runs of each (whole processes, so about 30 ms of process start
 is in every time). Release build, best of 5, on the development machine, after stages 6 to 8:
 

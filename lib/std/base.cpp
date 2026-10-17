@@ -4,9 +4,11 @@
 
 #include "std/base.hpp"
 
+#include <algorithm>
 #include <array>
 #include <cctype>
 #include <cstdint>
+#include <expected>
 #include <string>
 #include <string_view>
 
@@ -15,7 +17,9 @@
 #include "value/convert.hpp"
 #include "value/table.hpp"
 #include "vm/execute.hpp"
+#include "vm/function.hpp"
 #include "vm/metamethods.hpp"
+#include "vm/run.hpp"
 #include "vm/state.hpp"
 
 namespace lua2 {
@@ -512,6 +516,156 @@ int traceback(State& state) {
     return 1;
 }
 
+// ---- Loading chunks ----
+
+// load_aux: the loaded function, with `env` (the argument at `env_arg`, if
+// given) as its first upvalue; or fail and the message.
+int load_result(State& state, const std::expected<void, std::string>& loaded, int env_arg) {
+    if (!loaded) {
+        push(state, Value::nil());
+        push_string(state, loaded.error());
+        return 2;
+    }
+    if (env_arg != 0) {
+        const Value env = arg(state, env_arg);
+        const LuaClosure* f = state.get(state.top - 1).as_closure();
+        if (!f->upvalues().empty()) { // lua_setupvalue
+            Upvalue* upvalue = f->upvalues()[0];
+            upvalue->set(env);
+            state.heap().barrier(upvalue, env);
+        }
+    }
+    return 1;
+}
+
+// generic_reader: the pieces a reader function returns, up to nil or "".
+// Errors are load's errors; false after one, with the error object in
+// error_value.
+bool read_pieces(State& state, Value reader, std::string& source) {
+    for (;;) {
+        const std::uint32_t func = state.top;
+        if (!state.check_stack(2)) {
+            return false;
+        }
+        state.push(reader);
+        if (protected_call(state, func, 1, Value::nil()) != Status::Ok) {
+            state.error_value = state.get(func);
+            state.top = func;
+            return false;
+        }
+        const Value piece = state.get(func);
+        state.top = func;
+        if (piece.is_nil()) {
+            return true;
+        }
+        if (!piece.is_string() && !piece.is_number()) {
+            raise_error(state, "reader function must return a string");
+            return false;
+        }
+        const std::string text =
+            piece.is_string() ? std::string{piece.as_string()->view()} : display_text(piece);
+        if (text.empty()) {
+            return true;
+        }
+        source += text;
+    }
+}
+
+int load(State& state) {
+    const Value chunk = arg(state, 1);
+    std::string_view mode;
+    if (!opt_view(state, 3, "bt", mode)) {
+        return c_function_error;
+    }
+    const int env = arg_is_none(state, 4) ? 0 : 4;
+    if (chunk.is_string() || chunk.is_number()) {
+        std::string_view source;
+        std::string_view name;
+        if (!check_view(state, 1, source) || !opt_view(state, 2, source, name)) {
+            return c_function_error;
+        }
+        return load_result(state, load_chunk(state, source, name, mode), env);
+    }
+    std::string_view name;
+    if (!opt_view(state, 2, "=(load)", name) || !check_function(state, 1)) {
+        return c_function_error;
+    }
+    const std::string chunk_name{name}; // the reader may change the stack
+    const std::string mode_text{mode};
+    std::string source;
+    if (!read_pieces(state, chunk, source)) {
+        push(state, Value::nil());
+        push(state, state.error_value);
+        return 2;
+    }
+    return load_result(state, load_chunk(state, source, chunk_name, mode_text), env);
+}
+
+// luaL_loadfilex: a file (stdin without a name) as a chunk named "@name".
+std::expected<void, std::string> load_file(State& state, std::string_view name,
+                                           std::string_view mode) {
+    const auto source = read_chunk_file(std::string{name});
+    if (!source) {
+        return std::unexpected(source.error());
+    }
+    const std::string chunk_name = name.empty() ? "=stdin" : "@" + std::string{name};
+    return load_chunk(state, *source, chunk_name, mode);
+}
+
+int loadfile(State& state) {
+    std::string_view name;
+    std::string_view mode;
+    if (!opt_view(state, 1, "", name) || !opt_view(state, 2, "bt", mode)) {
+        return c_function_error;
+    }
+    const int env = arg_is_none(state, 3) ? 0 : 3;
+    return load_result(state, load_file(state, name, mode), env);
+}
+
+int dofile(State& state) {
+    std::string_view name;
+    if (!opt_view(state, 1, "", name)) {
+        return c_function_error;
+    }
+    state.top = arg_slot(state, 1) + 1;
+    const std::uint32_t func = state.top;
+    if (auto loaded = load_file(state, name, "bt"); !loaded) {
+        state.set_error(loaded.error()); // raised as it is, without a position
+        return c_function_error;
+    }
+    if (call(state, func, all_results) != Status::Ok) {
+        return c_function_error;
+    }
+    return static_cast<int>(state.top - func);
+}
+
+// warn(msg1, ...): the pieces as one warning, or "@on" and "@off" (luaB_warn
+// and lauxlib's warnf functions).
+int warn(State& state) {
+    const int n = arg_count(state);
+    std::string message;
+    for (int i = 1; i <= std::max(n, 1); ++i) {
+        std::string_view piece;
+        if (!check_view(state, i, piece)) {
+            return c_function_error;
+        }
+        message += piece;
+    }
+    Heap& heap = state.heap();
+    if (n == 1 && message.starts_with('@')) { // a control message
+        if (message == "@on") {
+            heap.set_warnings_on(true);
+        } else if (message == "@off") {
+            heap.set_warnings_on(false);
+        }
+        return 0;
+    }
+    if (heap.warnings_on()) {
+        heap.write_error("Lua warning: " + message + "\n");
+    }
+    return 0;
+}
+
 // NOLINTEND(misc-const-correctness,readability-non-const-parameter)
 
 void set_function(Heap& heap, Table& table, std::string_view name, CFunction f) {
@@ -525,9 +679,12 @@ void open_base(Heap& heap) {
     Table& g = heap.globals();
     set_function(heap, g, "assert", &assert_value);
     set_function(heap, g, "collectgarbage", &collectgarbage);
+    set_function(heap, g, "dofile", &dofile);
     set_function(heap, g, "error", &error);
     set_function(heap, g, "getmetatable", &getmetatable);
     set_function(heap, g, "ipairs", &ipairs);
+    set_function(heap, g, "load", &load);
+    set_function(heap, g, "loadfile", &loadfile);
     set_function(heap, g, "next", &base_next);
     set_function(heap, g, "pairs", &pairs);
     set_function(heap, g, "pcall", &pcall);
@@ -541,6 +698,7 @@ void open_base(Heap& heap) {
     set_function(heap, g, "tonumber", &tonumber);
     set_function(heap, g, "tostring", &tostring);
     set_function(heap, g, "type", &type);
+    set_function(heap, g, "warn", &warn);
     set_function(heap, g, "xpcall", &xpcall);
     g.set(heap, Value::string(heap.new_string("_G")), Value::table(&g));
     g.set(heap, Value::string(heap.new_string("_VERSION")),

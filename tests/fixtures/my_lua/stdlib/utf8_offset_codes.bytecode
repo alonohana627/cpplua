@@ -1,0 +1,486 @@
+
+main <utf8_offset_codes.lua:0,0> (375 instructions)
+0+ params, 23 slots, 1 upvalue, 36 locals, 27 constants, 1 function
+	1	[1]	VARARGPREP	0
+	2	[7]	LOADK    	0 0	; "a\195\169\226\130\172\240\159\152\128z"
+	3	[8]	GETTABUP 	1 0 1	; _ENV "print"
+	4	[8]	GETTABUP 	2 0 2	; _ENV "utf8"
+	5	[8]	GETFIELD 	2 2 3	; "offset"
+	6	[8]	MOVE     	3 0
+	7	[8]	LOADI    	4 1
+	8	[8]	CALL     	2 3 2	; 2 in 1 out
+	9	[8]	GETTABUP 	3 0 2	; _ENV "utf8"
+	10	[8]	GETFIELD 	3 3 3	; "offset"
+	11	[8]	MOVE     	4 0
+	12	[8]	LOADI    	5 2
+	13	[8]	CALL     	3 3 2	; 2 in 1 out
+	14	[8]	GETTABUP 	4 0 2	; _ENV "utf8"
+	15	[8]	GETFIELD 	4 4 3	; "offset"
+	16	[8]	MOVE     	5 0
+	17	[8]	LOADI    	6 3
+	18	[8]	CALL     	4 3 2	; 2 in 1 out
+	19	[8]	GETTABUP 	5 0 2	; _ENV "utf8"
+	20	[8]	GETFIELD 	5 5 3	; "offset"
+	21	[8]	MOVE     	6 0
+	22	[8]	LOADI    	7 4
+	23	[8]	CALL     	5 3 2	; 2 in 1 out
+	24	[8]	GETTABUP 	6 0 2	; _ENV "utf8"
+	25	[8]	GETFIELD 	6 6 3	; "offset"
+	26	[8]	MOVE     	7 0
+	27	[8]	LOADI    	8 5
+	28	[8]	CALL     	6 3 0	; 2 in all out
+	29	[8]	CALL     	1 0 1	; all in 0 out
+	30	[9]	GETTABUP 	1 0 1	; _ENV "print"
+	31	[9]	GETTABUP 	2 0 2	; _ENV "utf8"
+	32	[9]	GETFIELD 	2 2 3	; "offset"
+	33	[9]	MOVE     	3 0
+	34	[9]	LOADI    	4 6
+	35	[9]	CALL     	2 3 2	; 2 in 1 out
+	36	[9]	GETTABUP 	3 0 2	; _ENV "utf8"
+	37	[9]	GETFIELD 	3 3 3	; "offset"
+	38	[9]	MOVE     	4 0
+	39	[9]	LOADI    	5 7
+	40	[9]	CALL     	3 3 2	; 2 in 1 out
+	41	[9]	GETTABUP 	4 0 2	; _ENV "utf8"
+	42	[9]	GETFIELD 	4 4 3	; "offset"
+	43	[9]	MOVE     	5 0
+	44	[9]	LOADI    	6 -1
+	45	[9]	CALL     	4 3 2	; 2 in 1 out
+	46	[9]	GETTABUP 	5 0 2	; _ENV "utf8"
+	47	[9]	GETFIELD 	5 5 3	; "offset"
+	48	[9]	MOVE     	6 0
+	49	[9]	LOADI    	7 -2
+	50	[9]	CALL     	5 3 2	; 2 in 1 out
+	51	[9]	GETTABUP 	6 0 2	; _ENV "utf8"
+	52	[9]	GETFIELD 	6 6 3	; "offset"
+	53	[9]	MOVE     	7 0
+	54	[9]	LOADI    	8 -5
+	55	[9]	CALL     	6 3 0	; 2 in all out
+	56	[9]	CALL     	1 0 1	; all in 0 out
+	57	[10]	GETTABUP 	1 0 1	; _ENV "print"
+	58	[10]	GETTABUP 	2 0 2	; _ENV "utf8"
+	59	[10]	GETFIELD 	2 2 3	; "offset"
+	60	[10]	MOVE     	3 0
+	61	[10]	LOADI    	4 -6
+	62	[10]	CALL     	2 3 2	; 2 in 1 out
+	63	[10]	GETTABUP 	3 0 2	; _ENV "utf8"
+	64	[10]	GETFIELD 	3 3 3	; "offset"
+	65	[10]	MOVE     	4 0
+	66	[10]	LOADI    	5 2
+	67	[10]	LOADI    	6 4
+	68	[10]	CALL     	3 4 2	; 3 in 1 out
+	69	[10]	GETTABUP 	4 0 2	; _ENV "utf8"
+	70	[10]	GETFIELD 	4 4 3	; "offset"
+	71	[10]	MOVE     	5 0
+	72	[10]	LOADI    	6 -1
+	73	[10]	LOADI    	7 7
+	74	[10]	CALL     	4 4 2	; 3 in 1 out
+	75	[10]	GETTABUP 	5 0 2	; _ENV "utf8"
+	76	[10]	GETFIELD 	5 5 3	; "offset"
+	77	[10]	MOVE     	6 0
+	78	[10]	LOADI    	7 1
+	79	[10]	LOADI    	8 12
+	80	[10]	CALL     	5 4 0	; 3 in all out
+	81	[10]	CALL     	1 0 1	; all in 0 out
+	82	[11]	GETTABUP 	1 0 1	; _ENV "print"
+	83	[11]	GETTABUP 	2 0 2	; _ENV "utf8"
+	84	[11]	GETFIELD 	2 2 3	; "offset"
+	85	[11]	MOVE     	3 0
+	86	[11]	LOADI    	4 0
+	87	[11]	LOADI    	5 1
+	88	[11]	CALL     	2 4 2	; 3 in 1 out
+	89	[11]	GETTABUP 	3 0 2	; _ENV "utf8"
+	90	[11]	GETFIELD 	3 3 3	; "offset"
+	91	[11]	MOVE     	4 0
+	92	[11]	LOADI    	5 0
+	93	[11]	LOADI    	6 3
+	94	[11]	CALL     	3 4 2	; 3 in 1 out
+	95	[11]	GETTABUP 	4 0 2	; _ENV "utf8"
+	96	[11]	GETFIELD 	4 4 3	; "offset"
+	97	[11]	MOVE     	5 0
+	98	[11]	LOADI    	6 0
+	99	[11]	LOADI    	7 6
+	100	[11]	CALL     	4 4 2	; 3 in 1 out
+	101	[11]	GETTABUP 	5 0 2	; _ENV "utf8"
+	102	[11]	GETFIELD 	5 5 3	; "offset"
+	103	[11]	MOVE     	6 0
+	104	[11]	LOADI    	7 0
+	105	[11]	LOADI    	8 9
+	106	[11]	CALL     	5 4 2	; 3 in 1 out
+	107	[11]	GETTABUP 	6 0 2	; _ENV "utf8"
+	108	[11]	GETFIELD 	6 6 3	; "offset"
+	109	[11]	MOVE     	7 0
+	110	[11]	LOADI    	8 0
+	111	[11]	LOADI    	9 12
+	112	[11]	CALL     	6 4 0	; 3 in all out
+	113	[11]	CALL     	1 0 1	; all in 0 out
+	114	[12]	GETTABUP 	1 0 1	; _ENV "print"
+	115	[12]	GETTABUP 	2 0 2	; _ENV "utf8"
+	116	[12]	GETFIELD 	2 2 3	; "offset"
+	117	[12]	LOADK    	3 4	; ""
+	118	[12]	LOADI    	4 1
+	119	[12]	CALL     	2 3 2	; 2 in 1 out
+	120	[12]	GETTABUP 	3 0 2	; _ENV "utf8"
+	121	[12]	GETFIELD 	3 3 3	; "offset"
+	122	[12]	LOADK    	4 4	; ""
+	123	[12]	LOADI    	5 -1
+	124	[12]	CALL     	3 3 2	; 2 in 1 out
+	125	[12]	GETTABUP 	4 0 2	; _ENV "utf8"
+	126	[12]	GETFIELD 	4 4 3	; "offset"
+	127	[12]	LOADK    	5 4	; ""
+	128	[12]	LOADI    	6 0
+	129	[12]	CALL     	4 3 2	; 2 in 1 out
+	130	[12]	GETTABUP 	5 0 2	; _ENV "utf8"
+	131	[12]	GETFIELD 	5 5 3	; "offset"
+	132	[12]	LOADK    	6 5	; "abc"
+	133	[12]	LOADI    	7 4
+	134	[12]	CALL     	5 3 2	; 2 in 1 out
+	135	[12]	GETTABUP 	6 0 2	; _ENV "utf8"
+	136	[12]	GETFIELD 	6 6 3	; "offset"
+	137	[12]	LOADK    	7 5	; "abc"
+	138	[12]	LOADI    	8 5
+	139	[12]	CALL     	6 3 0	; 2 in all out
+	140	[12]	CALL     	1 0 1	; all in 0 out
+	141	[13]	GETTABUP 	1 0 1	; _ENV "print"
+	142	[13]	GETTABUP 	2 0 6	; _ENV "pcall"
+	143	[13]	GETTABUP 	3 0 2	; _ENV "utf8"
+	144	[13]	GETFIELD 	3 3 3	; "offset"
+	145	[13]	MOVE     	4 0
+	146	[13]	LOADI    	5 1
+	147	[13]	LOADI    	6 3
+	148	[13]	CALL     	2 5 0	; 4 in all out
+	149	[13]	CALL     	1 0 1	; all in 0 out
+	150	[14]	GETTABUP 	1 0 1	; _ENV "print"
+	151	[14]	GETTABUP 	2 0 6	; _ENV "pcall"
+	152	[14]	GETTABUP 	3 0 2	; _ENV "utf8"
+	153	[14]	GETFIELD 	3 3 3	; "offset"
+	154	[14]	MOVE     	4 0
+	155	[14]	LOADI    	5 1
+	156	[14]	LOADI    	6 13
+	157	[14]	CALL     	2 5 0	; 4 in all out
+	158	[14]	CALL     	1 0 1	; all in 0 out
+	159	[15]	GETTABUP 	1 0 1	; _ENV "print"
+	160	[15]	GETTABUP 	2 0 6	; _ENV "pcall"
+	161	[15]	GETTABUP 	3 0 2	; _ENV "utf8"
+	162	[15]	GETFIELD 	3 3 3	; "offset"
+	163	[15]	MOVE     	4 0
+	164	[15]	LOADI    	5 1
+	165	[15]	LOADI    	6 0
+	166	[15]	CALL     	2 5 0	; 4 in all out
+	167	[15]	CALL     	1 0 1	; all in 0 out
+	168	[16]	GETTABUP 	1 0 1	; _ENV "print"
+	169	[16]	GETTABUP 	2 0 6	; _ENV "pcall"
+	170	[16]	GETTABUP 	3 0 2	; _ENV "utf8"
+	171	[16]	GETFIELD 	3 3 3	; "offset"
+	172	[16]	MOVE     	4 0
+	173	[16]	CALL     	2 3 0	; 2 in all out
+	174	[16]	CALL     	1 0 1	; all in 0 out
+	175	[19]	NEWTABLE 	1 0 0	; 0
+	176	[19]	EXTRAARG 	0
+	177	[20]	GETTABUP 	2 0 2	; _ENV "utf8"
+	178	[20]	GETFIELD 	2 2 7	; "codes"
+	179	[20]	MOVE     	3 0
+	180	[20]	CALL     	2 2 5	; 1 in 4 out
+	181	[20]	TFORPREP 	2 8	; to 190
+	182	[20]	LEN      	8 1
+	183	[20]	ADDI     	8 8 1
+	184	[20]	MMBINI   	8 1 6 0	; __add
+	185	[20]	MOVE     	9 6
+	186	[20]	LOADK    	10 8	; ":"
+	187	[20]	MOVE     	11 7
+	188	[20]	CONCAT   	9 3
+	189	[20]	SETTABLE 	1 8 9
+	190	[20]	TFORCALL 	2 2
+	191	[20]	TFORLOOP 	2 10	; to 182
+	192	[20]	CLOSE    	2
+	193	[21]	GETTABUP 	2 0 1	; _ENV "print"
+	194	[21]	GETTABUP 	3 0 9	; _ENV "table"
+	195	[21]	GETFIELD 	3 3 10	; "concat"
+	196	[21]	MOVE     	4 1
+	197	[21]	LOADK    	5 11	; " "
+	198	[21]	CALL     	3 3 0	; 2 in all out
+	199	[21]	CALL     	2 0 1	; all in 0 out
+	200	[22]	LOADI    	2 0
+	201	[23]	GETTABUP 	3 0 2	; _ENV "utf8"
+	202	[23]	GETFIELD 	3 3 7	; "codes"
+	203	[23]	LOADK    	4 4	; ""
+	204	[23]	CALL     	3 2 5	; 1 in 4 out
+	205	[23]	TFORPREP 	3 2	; to 208
+	206	[23]	ADDI     	2 2 1
+	207	[23]	MMBINI   	2 1 6 0	; __add
+	208	[23]	TFORCALL 	3 1
+	209	[23]	TFORLOOP 	3 4	; to 206
+	210	[23]	CLOSE    	3
+	211	[24]	GETTABUP 	3 0 1	; _ENV "print"
+	212	[24]	MOVE     	4 2
+	213	[24]	CALL     	3 2 1	; 1 in 0 out
+	214	[27]	GETTABUP 	3 0 2	; _ENV "utf8"
+	215	[27]	GETFIELD 	3 3 7	; "codes"
+	216	[27]	LOADK    	4 12	; "hi"
+	217	[27]	CALL     	3 2 4	; 1 in 3 out
+	218	[28]	GETTABUP 	6 0 1	; _ENV "print"
+	219	[28]	GETTABUP 	7 0 13	; _ENV "type"
+	220	[28]	MOVE     	8 3
+	221	[28]	CALL     	7 2 2	; 1 in 1 out
+	222	[28]	MOVE     	8 4
+	223	[28]	MOVE     	9 5
+	224	[28]	CALL     	6 4 1	; 3 in 0 out
+	225	[29]	GETTABUP 	6 0 1	; _ENV "print"
+	226	[29]	MOVE     	7 3
+	227	[29]	MOVE     	8 4
+	228	[29]	MOVE     	9 5
+	229	[29]	CALL     	7 3 0	; 2 in all out
+	230	[29]	CALL     	6 0 1	; all in 0 out
+	231	[30]	GETTABUP 	6 0 1	; _ENV "print"
+	232	[30]	MOVE     	7 3
+	233	[30]	MOVE     	8 4
+	234	[30]	LOADI    	9 1
+	235	[30]	CALL     	7 3 0	; 2 in all out
+	236	[30]	CALL     	6 0 1	; all in 0 out
+	237	[31]	GETTABUP 	6 0 1	; _ENV "print"
+	238	[31]	MOVE     	7 3
+	239	[31]	MOVE     	8 4
+	240	[31]	LOADI    	9 2
+	241	[31]	CALL     	7 3 0	; 2 in all out
+	242	[31]	CALL     	6 0 1	; all in 0 out
+	243	[34]	NEWTABLE 	6 0 0	; 0
+	244	[34]	EXTRAARG 	0
+	245	[34]	MOVE     	1 6
+	246	[35]	GETTABUP 	6 0 2	; _ENV "utf8"
+	247	[35]	GETFIELD 	6 6 7	; "codes"
+	248	[35]	LOADK    	7 14	; "a\237\160\128b"
+	249	[35]	LOADTRUE 	8
+	250	[35]	CALL     	6 3 5	; 2 in 4 out
+	251	[35]	TFORPREP 	6 8	; to 260
+	252	[35]	LEN      	12 1
+	253	[35]	ADDI     	12 12 1
+	254	[35]	MMBINI   	12 1 6 0	; __add
+	255	[35]	MOVE     	13 10
+	256	[35]	LOADK    	14 8	; ":"
+	257	[35]	MOVE     	15 11
+	258	[35]	CONCAT   	13 3
+	259	[35]	SETTABLE 	1 12 13
+	260	[35]	TFORCALL 	6 2
+	261	[35]	TFORLOOP 	6 10	; to 252
+	262	[35]	CLOSE    	6
+	263	[36]	GETTABUP 	6 0 1	; _ENV "print"
+	264	[36]	GETTABUP 	7 0 9	; _ENV "table"
+	265	[36]	GETFIELD 	7 7 10	; "concat"
+	266	[36]	MOVE     	8 1
+	267	[36]	LOADK    	9 11	; " "
+	268	[36]	CALL     	7 3 0	; 2 in all out
+	269	[36]	CALL     	6 0 1	; all in 0 out
+	270	[43]	CLOSURE  	6 0
+	271	[44]	GETTABUP 	7 0 1	; _ENV "print"
+	272	[44]	GETTABUP 	8 0 6	; _ENV "pcall"
+	273	[44]	MOVE     	9 6
+	274	[44]	LOADK    	10 15	; "ab\255cd"
+	275	[44]	CALL     	8 3 0	; 2 in all out
+	276	[44]	CALL     	7 0 1	; all in 0 out
+	277	[45]	GETTABUP 	7 0 1	; _ENV "print"
+	278	[45]	GETTABUP 	8 0 6	; _ENV "pcall"
+	279	[45]	MOVE     	9 6
+	280	[45]	LOADK    	10 16	; "ab\237\160\128"
+	281	[45]	CALL     	8 3 0	; 2 in all out
+	282	[45]	CALL     	7 0 1	; all in 0 out
+	283	[46]	GETTABUP 	7 0 1	; _ENV "print"
+	284	[46]	GETTABUP 	8 0 6	; _ENV "pcall"
+	285	[46]	MOVE     	9 6
+	286	[46]	LOADK    	10 17	; "\226\130"
+	287	[46]	CALL     	8 3 0	; 2 in all out
+	288	[46]	CALL     	7 0 1	; all in 0 out
+	289	[47]	GETTABUP 	7 0 1	; _ENV "print"
+	290	[47]	GETTABUP 	8 0 6	; _ENV "pcall"
+	291	[47]	MOVE     	9 6
+	292	[47]	LOADK    	10 18	; "ok\128"
+	293	[47]	CALL     	8 3 0	; 2 in all out
+	294	[47]	CALL     	7 0 1	; all in 0 out
+	295	[48]	GETTABUP 	7 0 1	; _ENV "print"
+	296	[48]	GETTABUP 	8 0 6	; _ENV "pcall"
+	297	[48]	MOVE     	9 6
+	298	[48]	LOADK    	10 19	; "fine"
+	299	[48]	CALL     	8 3 0	; 2 in all out
+	300	[48]	CALL     	7 0 1	; all in 0 out
+	301	[49]	GETTABUP 	7 0 1	; _ENV "print"
+	302	[49]	GETTABUP 	8 0 6	; _ENV "pcall"
+	303	[49]	GETTABUP 	9 0 20	; _ENV "utf8"
+	304	[49]	GETFIELD 	9 9 21	; "codes"
+	305	[49]	CALL     	8 2 0	; 1 in all out
+	306	[49]	CALL     	7 0 1	; all in 0 out
+	307	[50]	GETTABUP 	7 0 20	; _ENV "utf8"
+	308	[50]	GETFIELD 	7 7 21	; "codes"
+	309	[50]	LOADI    	8 42
+	310	[50]	CALL     	7 2 4	; 1 in 3 out
+	311	[51]	GETTABUP 	10 0 1	; _ENV "print"
+	312	[51]	GETTABUP 	11 0 13	; _ENV "type"
+	313	[51]	MOVE     	12 7
+	314	[51]	CALL     	11 2 2	; 1 in 1 out
+	315	[51]	MOVE     	12 8
+	316	[51]	GETTABUP 	13 0 13	; _ENV "type"
+	317	[51]	MOVE     	14 8
+	318	[51]	CALL     	13 2 2	; 1 in 1 out
+	319	[51]	MOVE     	14 9
+	320	[51]	CALL     	10 5 1	; 4 in 0 out
+	321	[54]	NEWTABLE 	10 0 0	; 0
+	322	[54]	EXTRAARG 	0
+	323	[55]	GETTABUP 	11 0 20	; _ENV "utf8"
+	324	[55]	GETFIELD 	11 11 22	; "len"
+	325	[55]	MOVE     	12 0
+	326	[55]	CALL     	11 2 2	; 1 in 1 out
+	327	[56]	MOVE     	12 11
+	328	[56]	LOADI    	13 1
+	329	[56]	LOADI    	14 -1
+	330	[56]	FORPREP  	12 20	; exit to 352
+	331	[57]	GETTABUP 	16 0 20	; _ENV "utf8"
+	332	[57]	GETFIELD 	16 16 3	; "offset"
+	333	[57]	MOVE     	17 0
+	334	[57]	MOVE     	18 15
+	335	[57]	CALL     	16 3 2	; 2 in 1 out
+	336	[58]	GETTABUP 	17 0 20	; _ENV "utf8"
+	337	[58]	GETFIELD 	17 17 3	; "offset"
+	338	[58]	MOVE     	18 0
+	339	[58]	ADDI     	19 15 1
+	340	[58]	MMBINI   	15 1 6 0	; __add
+	341	[58]	CALL     	17 3 2	; 2 in 1 out
+	342	[59]	LEN      	18 10
+	343	[59]	ADDI     	18 18 1
+	344	[59]	MMBINI   	18 1 6 0	; __add
+	345	[59]	SELF     	19 0 23k	; "sub"
+	346	[59]	MOVE     	21 16
+	347	[59]	ADDI     	22 17 -1
+	348	[59]	MMBINI   	17 1 7 0	; __sub
+	349	[59]	CALL     	19 4 2	; 3 in 1 out
+	350	[59]	SETTABLE 	10 18 19
+	351	[56]	FORLOOP  	12 21	; to 331
+	352	[61]	GETTABUP 	12 0 24	; _ENV "table"
+	353	[61]	GETFIELD 	12 12 25	; "concat"
+	354	[61]	MOVE     	13 10
+	355	[61]	CALL     	12 2 2	; 1 in 1 out
+	356	[62]	GETTABUP 	13 0 1	; _ENV "print"
+	357	[62]	LEN      	14 12
+	358	[62]	GETTABUP 	15 0 20	; _ENV "utf8"
+	359	[62]	GETFIELD 	15 15 26	; "codepoint"
+	360	[62]	MOVE     	16 12
+	361	[62]	LOADI    	17 1
+	362	[62]	LOADI    	18 -1
+	363	[62]	CALL     	15 4 0	; 3 in all out
+	364	[62]	CALL     	13 0 1	; all in 0 out
+	365	[64]	GETTABUP 	13 0 20	; _ENV "utf8"
+	366	[64]	GETFIELD 	13 13 3	; "offset"
+	367	[64]	MOVE     	14 0
+	368	[64]	LOADI    	15 3
+	369	[64]	CALL     	13 3 2	; 2 in 1 out
+	370	[64]	GETTABUP 	14 0 20	; _ENV "utf8"
+	371	[64]	GETFIELD 	14 14 22	; "len"
+	372	[64]	MOVE     	15 0
+	373	[64]	CALL     	14 2 0	; 1 in all out
+	374	[64]	RETURN   	13 0 1k	; all out
+	375	[64]	RETURN   	13 1 1k	; 0 out
+constants (27):
+	0	S	"a\195\169\226\130\172\240\159\152\128z"
+	1	S	"print"
+	2	S	"utf8"
+	3	S	"offset"
+	4	S	""
+	5	S	"abc"
+	6	S	"pcall"
+	7	S	"codes"
+	8	S	":"
+	9	S	"table"
+	10	S	"concat"
+	11	S	" "
+	12	S	"hi"
+	13	S	"type"
+	14	S	"a\237\160\128b"
+	15	S	"ab\255cd"
+	16	S	"ab\237\160\128"
+	17	S	"\226\130"
+	18	S	"ok\128"
+	19	S	"fine"
+	20	S	"utf8"
+	21	S	"codes"
+	22	S	"len"
+	23	S	"sub"
+	24	S	"table"
+	25	S	"concat"
+	26	S	"codepoint"
+locals (36):
+	0	s	3	376
+	1	out	177	376
+	2	(for state)	181	192
+	3	(for state)	181	192
+	4	(for state)	181	192
+	5	(for state)	181	192
+	6	pos	182	190
+	7	code	182	190
+	8	count	201	376
+	9	(for state)	205	210
+	10	(for state)	205	210
+	11	(for state)	205	210
+	12	(for state)	205	210
+	13	_	206	208
+	14	iter	218	376
+	15	state	218	376
+	16	init	218	376
+	17	(for state)	251	262
+	18	(for state)	251	262
+	19	(for state)	251	262
+	20	(for state)	251	262
+	21	pos	252	260
+	22	code	252	260
+	23	collect	271	376
+	24	num_iter	311	376
+	25	num_state	311	376
+	26	num_init	311	376
+	27	rev	323	376
+	28	n	327	376
+	29	(for state)	330	352
+	30	(for state)	330	352
+	31	(for state)	330	352
+	32	i	331	351
+	33	first	336	351
+	34	after	342	351
+	35	reversed	356	376
+upvalues (1):
+	0	_ENV	1	0
+
+function <utf8_offset_codes.lua:39,43> (21 instructions)
+1 param, 9 slots, 1 upvalue, 8 locals, 5 constants, 0 functions
+	1	[40]	NEWTABLE 	1 0 0	; 0
+	2	[40]	EXTRAARG 	0
+	3	[41]	GETTABUP 	2 0 0	; _ENV "utf8"
+	4	[41]	GETFIELD 	2 2 1	; "codes"
+	5	[41]	MOVE     	3 0
+	6	[41]	CALL     	2 2 5	; 1 in 4 out
+	7	[41]	TFORPREP 	2 4	; to 12
+	8	[41]	LEN      	8 1
+	9	[41]	ADDI     	8 8 1
+	10	[41]	MMBINI   	8 1 6 0	; __add
+	11	[41]	SETTABLE 	1 8 7
+	12	[41]	TFORCALL 	2 2
+	13	[41]	TFORLOOP 	2 6	; to 8
+	14	[41]	CLOSE    	2
+	15	[42]	GETTABUP 	2 0 2	; _ENV "table"
+	16	[42]	GETFIELD 	2 2 3	; "concat"
+	17	[42]	MOVE     	3 1
+	18	[42]	LOADK    	4 4	; ","
+	19	[42]	TAILCALL 	2 3 0k	; 2 in
+	20	[42]	RETURN   	2 0 0k	; all out
+	21	[43]	RETURN   	2 1 0k	; 0 out
+constants (5):
+	0	S	"utf8"
+	1	S	"codes"
+	2	S	"table"
+	3	S	"concat"
+	4	S	","
+locals (8):
+	0	str	1	22
+	1	got	3	22
+	2	(for state)	7	14
+	3	(for state)	7	14
+	4	(for state)	7	14
+	5	(for state)	7	14
+	6	_	8	12
+	7	code	8	12
+upvalues (1):
+	0	_ENV	0	0

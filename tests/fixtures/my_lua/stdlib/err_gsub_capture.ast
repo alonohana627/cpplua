@@ -1,0 +1,17 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      MethodCall gsub
+        Paren
+          String "hello world"
+        String "(%w+)"
+        String "<%1>"
+  CallStatement
+    Call
+      Name print
+      MethodCall gsub
+        Paren
+          String "hello world"
+        String "(%w+)"
+        String "<%2>"

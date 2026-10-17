@@ -1,0 +1,18 @@
+1 2 3 4 5 6 7 8 9 10
+-10000000000.0 -2 -0.5 0 1 2.25 3.5 100 10000000000.0
+ Cherry apple apricot banana fig pear
+pear fig banana apricot apple Cherry 
+ fig pear apple Cherry banana apricot
+Dee19 Bob25 Ann31 Cid40
+42	0
+true	1	50	25
+true	9	509	1005
+1005	9
+10	20	30
+a b c
+false	attempt to compare two boolean values
+false	attempt to compare two table values
+false	bad argument #2 to 'table.sort' (function expected, got number)
+false	bad argument #1 to 'table.sort' (table expected, got string)
+false	cmp failed
+1 2 3 4 5 6 7 8 9 10

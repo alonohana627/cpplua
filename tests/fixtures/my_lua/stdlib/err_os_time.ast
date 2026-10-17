@@ -1,0 +1,31 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name os
+            String "time"
+          Table
+            Field year
+              Integer 2000
+            Field month
+              Integer 1
+            Field day
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "time"
+        Table
+          Field year
+            Integer 2000
+          Field month
+            Integer 1

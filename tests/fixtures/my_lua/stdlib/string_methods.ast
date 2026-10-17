@@ -1,0 +1,361 @@
+Chunk
+  Local s
+    String "hello"
+  CallStatement
+    Call
+      Name print
+      MethodCall len
+        Name s (local 0)
+      MethodCall upper
+        Name s (local 0)
+      MethodCall rep
+        Name s (local 0)
+        Integer 2
+        String "-"
+      MethodCall sub
+        Name s (local 0)
+        Integer 2
+        Integer 3
+      MethodCall byte
+        Name s (local 0)
+        Integer 1
+      MethodCall find
+        Name s (local 0)
+        String "l"
+  CallStatement
+    Call
+      Name print
+      MethodCall rep
+        Paren
+          String "x"
+        Integer 3
+      MethodCall format
+        Paren
+          String "%d-%s"
+        Integer 5
+        String "five"
+      MethodCall gsub
+        Paren
+          String "a,b"
+        String ","
+        String ";"
+  CallStatement
+    Call
+      Name print
+      Unary #
+        String "abc"
+      Unary #
+        String ""
+      Unary #
+        Name s (local 0)
+      Unary -
+        Unary #
+          Name s (local 0)
+  CallStatement
+    Call
+      Name print
+      MethodCall upper
+        MethodCall reverse
+          Paren
+            String "abc"
+      Binary +
+        MethodCall len
+          Name s (local 0)
+        Integer 1
+  Local mt
+    Call
+      Name getmetatable
+      String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Name mt (local 1)
+      Binary ==
+        Index
+          Name mt (local 1)
+          String "__index"
+        Name string
+      Binary ==
+        Call
+          Name getmetatable
+          Name s (local 0)
+        Name mt (local 1)
+  FunctionStatement
+    Index
+      Name string
+      String "shout"
+    Function(str)
+      Return
+        Binary ..
+          MethodCall upper
+            Name str (local 0)
+          String "!"
+  CallStatement
+    Call
+      Name print
+      MethodCall shout
+        Name s (local 0)
+      MethodCall shout
+        Paren
+          String "quiet"
+  Assign
+    Targets
+      Index
+        Name string
+        String "shout"
+    Values
+      Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: s]
+          Return
+            MethodCall shout
+              Name s (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Index
+          Name s (local 0)
+          String "len"
+        Index
+          Name string
+          String "len"
+      Index
+        Paren
+          String "x"
+        String "nothing"
+      Index
+        Name s (local 0)
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Binary +
+        String "10"
+        Integer 1
+      Binary *
+        String "10"
+        String "2"
+      Binary +
+        String "3.0"
+        Integer 1
+      Binary +
+        String "0x10"
+        Integer 0
+      Binary +
+        String "1e1"
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "type"
+        Binary +
+          String "10"
+          Integer 1
+      Call
+        Index
+          Name math
+          String "type"
+        Binary +
+          String "10"
+          Float 1.0
+      Call
+        Index
+          Name math
+          String "type"
+        Binary +
+          String "10.0"
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Binary //
+        String "7"
+        String "2"
+      Binary %
+        String "7"
+        String "3"
+      Binary ^
+        String "2"
+        String "3"
+      Binary /
+        String "7"
+        String "2"
+      Unary -
+        String "3"
+      Unary -
+        String "3.5"
+  CallStatement
+    Call
+      Name print
+      Binary +
+        String " 5 "
+        Integer 0
+      Binary *
+        String "\t5\n"
+        Integer 2
+      Binary -
+        String "-5"
+        String "-5"
+      Binary //
+        String "10"
+        String "0.0"
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        Integer 10
+        Integer 20
+      Binary ..
+        Float 1.5
+        String ""
+      Binary ..
+        String "x"
+        Binary ..
+          Integer 1
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary |
+              String "3"
+              Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary <<
+              Integer 1
+              String "4"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Unary ~
+              String "0"
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        String "10"
+        Integer 10
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary <
+              String "10"
+              Integer 5
+  CallStatement
+    Call
+      Name print
+      Binary <
+        String "10"
+        String "9"
+      Binary <
+        String "a"
+        String "b"
+      Binary <
+        String ""
+        String "a"
+      Binary <
+        String "Z"
+        String "a"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary +
+              String "abc"
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary |
+              String "1.5"
+              Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary *
+              String "10x"
+              Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary ..
+              Table
+              String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Unary -
+              String "x"
+  CallStatement
+    Call
+      Name print
+      MethodCall reverse
+        Call
+          Name tostring
+          Integer 12345
+      MethodCall len
+        Paren
+          Call
+            Name tostring
+            Float 3.5
+      MethodCall sub
+        Paren
+          Binary ..
+            Binary ^
+              Integer 2
+              Integer 10
+            String ""
+        Integer 1
+        Integer 2
+  Return
+    MethodCall upper
+      Name s (local 0)
+    Binary *
+      Paren
+        Binary +
+          String "10"
+          Integer 5
+      Integer 2

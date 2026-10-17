@@ -1,0 +1,14 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      MethodCall rep
+        Paren
+          String "ab"
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      MethodCall rep
+        Paren
+          String "ab"

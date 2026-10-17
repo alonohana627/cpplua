@@ -1,0 +1,29 @@
+5:integer 5:integer 5.5:float 0.0:float -9223372036854775808:integer
+inf:float 3.0:float
+3:integer -4:integer 5:integer 0:integer 4611686018427387904:integer
+9.2233720368548e+18:float -9223372036854775808:integer 1e+100:float inf:float
+4:integer -3:integer 5:integer 0:integer 1e+100:float
+3:integer 2:integer
+false	bad argument #1 to 'math.floor' (number expected, got string)
+false	bad argument #1 to 'math.ceil' (number expected, got no value)
+1:integer -1:integer 1:integer -1:integer
+1.5:float -1.5:float 2.0:float 1.0:float
+0:integer 5:integer 0:integer
+true:boolean	-2.0:float
+false	bad argument #2 to 'math.fmod' (zero)
+false	bad argument #2 to 'math.fmod' (number expected, got no value)
+2	-1	0.5	-1.5
+3:integer 0.7:float
+-3:integer -0.7:float
+5:integer 0.0:float
+0:integer 0.0:float
+inf:float 0.0:float
+-inf:float 0.0:float
+1.1805916207174e+21:float 0.0:float
+3:integer nil:nil 0:integer 7:integer
+nil:nil -9223372036854775808:integer 9007199254740992:integer
+8:integer nil:nil nil:nil
+false	bad argument #1 to 'math.tointeger' (value expected)
+integer	float	nil	nil	nil
+false	bad argument #1 to 'math.type' (value expected)
+-1	0

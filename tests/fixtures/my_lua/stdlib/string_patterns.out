@@ -1,0 +1,39 @@
+hello	HELLO123	bc
+]	-	^	x^
+a-z	2+3=5	here
+a....z	4
+Hello World	123	3
+test	a
+aaa	true	aaa	a
+<a><b>	<a>
+C C	2
+xyz	123	true
+x	a	aXb
+-42	1.5e10
+(a, (b), c)	{{}}
+if x the	nil
+X	1
+"	hi
+abc	ab	nil
+==	long
+a^b	a$b	b$
+1	4	abc	nil
+[hello] [world]	2
+one;|two;;|three	2
+1	3
+(     	false	unfinished capture
+%     	false	malformed pattern (ends with '%')
+[a    	false	malformed pattern (missing ']')
+[a-   	false	malformed pattern (missing ']')
+%b    	false	malformed pattern (missing arguments to '%b')
+%ba   	false	malformed pattern (missing arguments to '%b')
+%f    	false	missing '[' after '%f' in pattern
+%fx   	false	missing '[' after '%f' in pattern
+(()   	false	unfinished capture
+)     	false	invalid pattern capture
+%1    	false	invalid capture index %1
+(a)%2 	false	invalid capture index %2
+[%    	false	malformed pattern (missing ']')
+(a%)  	false	unfinished capture
+6	false	invalid pattern capture
+e	n	d

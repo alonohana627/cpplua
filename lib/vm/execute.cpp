@@ -1384,6 +1384,58 @@ Status assign_value(State& thread, Value t, Value key, Value value) {
     return finish_set(&thread, t, key, value, {});
 }
 
+Status compare_values(State& thread, Value a, Value b, bool less_or_equal, bool& result) {
+    if ((a.is_number() && b.is_number()) || (a.is_string() && b.is_string())) {
+        const CompareResult r = less_or_equal ? less_equal(a, b) : less_than(a, b);
+        result = r.value_or(false);
+        return Status::Ok;
+    }
+    return order_metamethod(&thread, a, b, less_or_equal, result);
+}
+
+Status equal_values(State& thread, Value a, Value b, bool& result) {
+    if (a.tag() != b.tag() || (!a.is_table() && !a.is_userdata()) || a.payload() == b.payload()) {
+        result = equals(a, b);
+        return Status::Ok;
+    }
+    const Heap& heap = thread.heap();
+    Value tm = metamethod_in(heap, metatable_of(heap, a), Event::Eq);
+    if (tm.is_nil()) {
+        tm = metamethod_in(heap, metatable_of(heap, b), Event::Eq);
+    }
+    if (tm.is_nil()) {
+        result = false;
+        return Status::Ok;
+    }
+    Value r;
+    if (call_metamethod(thread, tm, a, b, r) != Status::Ok) {
+        return Status::Error;
+    }
+    result = r.is_truthy();
+    return Status::Ok;
+}
+
+Status length_value(State& thread, Value v, Value& result) {
+    const Heap& heap = thread.heap();
+    Value tm;
+    if (v.is_table()) {
+        tm = metamethod_in(heap, table_of(v)->metatable, Event::Len);
+        if (tm.is_nil()) {
+            result = Value::integer(static_cast<std::int64_t>(table_of(v)->length()));
+            return Status::Ok;
+        }
+    } else if (v.is_string()) {
+        result = Value::integer(static_cast<std::int64_t>(v.as_string()->length()));
+        return Status::Ok;
+    } else {
+        tm = metamethod_of(heap, v, Event::Len);
+        if (tm.is_nil()) {
+            return type_error(&thread, v, "get length of", {});
+        }
+    }
+    return call_metamethod(thread, tm, v, v, result);
+}
+
 Status call(State& thread, std::uint32_t func, int wanted) {
     // ccall and luaD_precall, from C++. On an error the count of C++ calls
     // stays where the error was, as Lua's does until its longjmp; the

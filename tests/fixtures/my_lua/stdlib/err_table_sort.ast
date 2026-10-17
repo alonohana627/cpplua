@@ -1,0 +1,13 @@
+Chunk
+  Local t
+    Table
+      Item
+        False
+      Item
+        True
+  CallStatement
+    Call
+      Index
+        Name table
+        String "sort"
+      Name t (local 0)

@@ -1,0 +1,387 @@
+
+main <base_tonumber.lua:0,0> (316 instructions)
+0+ params, 9 slots, 1 upvalue, 5 locals, 59 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[7]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	4	[7]	LOADI    	2 10
+	5	[7]	CALL     	1 2 2	; 1 in 1 out
+	6	[7]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	7	[7]	LOADK    	3 2	; 1.5
+	8	[7]	CALL     	2 2 2	; 1 in 1 out
+	9	[7]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	10	[7]	LOADK    	4 3	; "10"
+	11	[7]	CALL     	3 2 2	; 1 in 1 out
+	12	[7]	GETTABUP 	4 0 1	; _ENV "tonumber"
+	13	[7]	LOADK    	5 4	; "  10  "
+	14	[7]	CALL     	4 2 0	; 1 in all out
+	15	[7]	CALL     	0 0 1	; all in 0 out
+	16	[8]	GETTABUP 	0 0 0	; _ENV "print"
+	17	[8]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	18	[8]	LOADK    	2 5	; "0x10"
+	19	[8]	CALL     	1 2 2	; 1 in 1 out
+	20	[8]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	21	[8]	LOADK    	3 6	; "0X1p4"
+	22	[8]	CALL     	2 2 2	; 1 in 1 out
+	23	[8]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	24	[8]	LOADK    	4 7	; "1e2"
+	25	[8]	CALL     	3 2 2	; 1 in 1 out
+	26	[8]	GETTABUP 	4 0 1	; _ENV "tonumber"
+	27	[8]	LOADK    	5 8	; ".5"
+	28	[8]	CALL     	4 2 2	; 1 in 1 out
+	29	[8]	GETTABUP 	5 0 1	; _ENV "tonumber"
+	30	[8]	LOADK    	6 9	; "5."
+	31	[8]	CALL     	5 2 0	; 1 in all out
+	32	[8]	CALL     	0 0 1	; all in 0 out
+	33	[9]	GETTABUP 	0 0 0	; _ENV "print"
+	34	[9]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	35	[9]	LOADK    	2 10	; "-7"
+	36	[9]	CALL     	1 2 2	; 1 in 1 out
+	37	[9]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	38	[9]	LOADK    	3 11	; "+7"
+	39	[9]	CALL     	2 2 2	; 1 in 1 out
+	40	[9]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	41	[9]	LOADK    	4 12	; "- 7"
+	42	[9]	CALL     	3 2 2	; 1 in 1 out
+	43	[9]	GETTABUP 	4 0 1	; _ENV "tonumber"
+	44	[9]	LOADK    	5 13	; "-0x10"
+	45	[9]	CALL     	4 2 0	; 1 in all out
+	46	[9]	CALL     	0 0 1	; all in 0 out
+	47	[10]	GETTABUP 	0 0 0	; _ENV "print"
+	48	[10]	GETTABUP 	1 0 14	; _ENV "math"
+	49	[10]	GETFIELD 	1 1 15	; "type"
+	50	[10]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	51	[10]	LOADK    	3 16	; "3"
+	52	[10]	CALL     	2 2 0	; 1 in all out
+	53	[10]	CALL     	1 0 2	; all in 1 out
+	54	[10]	GETTABUP 	2 0 14	; _ENV "math"
+	55	[10]	GETFIELD 	2 2 15	; "type"
+	56	[10]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	57	[10]	LOADK    	4 17	; "3.0"
+	58	[10]	CALL     	3 2 0	; 1 in all out
+	59	[10]	CALL     	2 0 2	; all in 1 out
+	60	[10]	GETTABUP 	3 0 14	; _ENV "math"
+	61	[10]	GETFIELD 	3 3 15	; "type"
+	62	[10]	GETTABUP 	4 0 1	; _ENV "tonumber"
+	63	[10]	LOADK    	5 18	; "3e0"
+	64	[10]	CALL     	4 2 0	; 1 in all out
+	65	[10]	CALL     	3 0 0	; all in all out
+	66	[10]	CALL     	0 0 1	; all in 0 out
+	67	[11]	GETTABUP 	0 0 0	; _ENV "print"
+	68	[11]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	69	[11]	LOADK    	2 19	; ""
+	70	[11]	CALL     	1 2 2	; 1 in 1 out
+	71	[11]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	72	[11]	LOADK    	3 20	; " "
+	73	[11]	CALL     	2 2 2	; 1 in 1 out
+	74	[11]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	75	[11]	LOADK    	4 21	; "abc"
+	76	[11]	CALL     	3 2 2	; 1 in 1 out
+	77	[11]	GETTABUP 	4 0 1	; _ENV "tonumber"
+	78	[11]	LOADK    	5 22	; "1 2"
+	79	[11]	CALL     	4 2 2	; 1 in 1 out
+	80	[11]	GETTABUP 	5 0 1	; _ENV "tonumber"
+	81	[11]	LOADK    	6 23	; "1e"
+	82	[11]	CALL     	5 2 0	; 1 in all out
+	83	[11]	CALL     	0 0 1	; all in 0 out
+	84	[12]	GETTABUP 	0 0 0	; _ENV "print"
+	85	[12]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	86	[12]	LOADK    	2 24	; "0x"
+	87	[12]	CALL     	1 2 2	; 1 in 1 out
+	88	[12]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	89	[12]	LOADK    	3 25	; "1..2"
+	90	[12]	CALL     	2 2 2	; 1 in 1 out
+	91	[12]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	92	[12]	LOADK    	4 26	; "inf"
+	93	[12]	CALL     	3 2 2	; 1 in 1 out
+	94	[12]	GETTABUP 	4 0 1	; _ENV "tonumber"
+	95	[12]	LOADK    	5 27	; "nan"
+	96	[12]	CALL     	4 2 0	; 1 in all out
+	97	[12]	CALL     	0 0 1	; all in 0 out
+	98	[13]	GETTABUP 	0 0 0	; _ENV "print"
+	99	[13]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	100	[13]	LOADK    	2 28	; "9223372036854775807"
+	101	[13]	CALL     	1 2 2	; 1 in 1 out
+	102	[13]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	103	[13]	LOADK    	3 29	; "9223372036854775808"
+	104	[13]	CALL     	2 2 0	; 1 in all out
+	105	[13]	CALL     	0 0 1	; all in 0 out
+	106	[14]	GETTABUP 	0 0 0	; _ENV "print"
+	107	[14]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	108	[14]	LOADK    	2 30	; "0xffffffffffffffff"
+	109	[14]	CALL     	1 2 2	; 1 in 1 out
+	110	[14]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	111	[14]	LOADK    	3 31	; "0x10000000000000000"
+	112	[14]	CALL     	2 2 0	; 1 in all out
+	113	[14]	CALL     	0 0 1	; all in 0 out
+	114	[15]	GETTABUP 	0 0 0	; _ENV "print"
+	115	[15]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	116	[15]	LOADNIL  	2 0	; 1 out
+	117	[15]	CALL     	1 2 2	; 1 in 1 out
+	118	[15]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	119	[15]	LOADTRUE 	3
+	120	[15]	CALL     	2 2 2	; 1 in 1 out
+	121	[15]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	122	[15]	NEWTABLE 	4 0 0	; 0
+	123	[15]	EXTRAARG 	0
+	124	[15]	CALL     	3 2 2	; 1 in 1 out
+	125	[15]	EQK      	3 32 1	; nil
+	126	[15]	JMP      	1	; to 128
+	127	[15]	LFALSESKIP	3
+	128	[15]	LOADTRUE 	3
+	129	[15]	CALL     	0 4 1	; 3 in 0 out
+	130	[16]	GETTABUP 	0 0 0	; _ENV "print"
+	131	[16]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	132	[16]	LOADK    	2 33	; "10\000"
+	133	[16]	CALL     	1 2 2	; 1 in 1 out
+	134	[16]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	135	[16]	LOADK    	3 34	; "\t\n10\v\f\r"
+	136	[16]	CALL     	2 2 0	; 1 in all out
+	137	[16]	CALL     	0 0 1	; all in 0 out
+	138	[19]	GETTABUP 	0 0 0	; _ENV "print"
+	139	[19]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	140	[19]	LOADK    	2 3	; "10"
+	141	[19]	LOADI    	3 2
+	142	[19]	CALL     	1 3 2	; 2 in 1 out
+	143	[19]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	144	[19]	LOADK    	3 35	; "11111111"
+	145	[19]	LOADI    	4 2
+	146	[19]	CALL     	2 3 2	; 2 in 1 out
+	147	[19]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	148	[19]	LOADK    	4 36	; "777"
+	149	[19]	LOADI    	5 8
+	150	[19]	CALL     	3 3 0	; 2 in all out
+	151	[19]	CALL     	0 0 1	; all in 0 out
+	152	[20]	GETTABUP 	0 0 0	; _ENV "print"
+	153	[20]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	154	[20]	LOADK    	2 37	; "ff"
+	155	[20]	LOADI    	3 16
+	156	[20]	CALL     	1 3 2	; 2 in 1 out
+	157	[20]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	158	[20]	LOADK    	3 38	; "FF"
+	159	[20]	LOADI    	4 16
+	160	[20]	CALL     	2 3 2	; 2 in 1 out
+	161	[20]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	162	[20]	LOADK    	4 39	; "zz"
+	163	[20]	LOADI    	5 36
+	164	[20]	CALL     	3 3 2	; 2 in 1 out
+	165	[20]	GETTABUP 	4 0 1	; _ENV "tonumber"
+	166	[20]	LOADK    	5 40	; "ZZ"
+	167	[20]	LOADI    	6 36
+	168	[20]	CALL     	4 3 0	; 2 in all out
+	169	[20]	CALL     	0 0 1	; all in 0 out
+	170	[21]	GETTABUP 	0 0 0	; _ENV "print"
+	171	[21]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	172	[21]	LOADK    	2 41	; "  101  "
+	173	[21]	LOADI    	3 2
+	174	[21]	CALL     	1 3 2	; 2 in 1 out
+	175	[21]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	176	[21]	LOADK    	3 42	; "-101"
+	177	[21]	LOADI    	4 2
+	178	[21]	CALL     	2 3 2	; 2 in 1 out
+	179	[21]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	180	[21]	LOADK    	4 43	; "- 1"
+	181	[21]	LOADI    	5 2
+	182	[21]	CALL     	3 3 0	; 2 in all out
+	183	[21]	CALL     	0 0 1	; all in 0 out
+	184	[22]	GETTABUP 	0 0 0	; _ENV "print"
+	185	[22]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	186	[22]	LOADK    	2 44	; "2"
+	187	[22]	LOADI    	3 2
+	188	[22]	CALL     	1 3 2	; 2 in 1 out
+	189	[22]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	190	[22]	LOADK    	3 45	; "8"
+	191	[22]	LOADI    	4 8
+	192	[22]	CALL     	2 3 2	; 2 in 1 out
+	193	[22]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	194	[22]	LOADK    	4 46	; "g"
+	195	[22]	LOADI    	5 16
+	196	[22]	CALL     	3 3 2	; 2 in 1 out
+	197	[22]	GETTABUP 	4 0 1	; _ENV "tonumber"
+	198	[22]	LOADK    	5 47	; "1.5"
+	199	[22]	LOADI    	6 10
+	200	[22]	CALL     	4 3 0	; 2 in all out
+	201	[22]	CALL     	0 0 1	; all in 0 out
+	202	[23]	GETTABUP 	0 0 0	; _ENV "print"
+	203	[23]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	204	[23]	LOADK    	2 7	; "1e2"
+	205	[23]	LOADI    	3 10
+	206	[23]	CALL     	1 3 2	; 2 in 1 out
+	207	[23]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	208	[23]	LOADK    	3 19	; ""
+	209	[23]	LOADI    	4 10
+	210	[23]	CALL     	2 3 2	; 2 in 1 out
+	211	[23]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	212	[23]	LOADK    	4 5	; "0x10"
+	213	[23]	LOADI    	5 16
+	214	[23]	CALL     	3 3 2	; 2 in 1 out
+	215	[23]	GETTABUP 	4 0 1	; _ENV "tonumber"
+	216	[23]	LOADK    	5 3	; "10"
+	217	[23]	LOADI    	6 36
+	218	[23]	CALL     	4 3 0	; 2 in all out
+	219	[23]	CALL     	0 0 1	; all in 0 out
+	220	[24]	GETTABUP 	0 0 0	; _ENV "print"
+	221	[24]	GETTABUP 	1 0 14	; _ENV "math"
+	222	[24]	GETFIELD 	1 1 15	; "type"
+	223	[24]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	224	[24]	LOADK    	3 3	; "10"
+	225	[24]	LOADI    	4 10
+	226	[24]	CALL     	2 3 0	; 2 in all out
+	227	[24]	CALL     	1 0 2	; all in 1 out
+	228	[24]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	229	[24]	LOADK    	3 48	; "7fffffffffffffff"
+	230	[24]	LOADI    	4 16
+	231	[24]	CALL     	2 3 0	; 2 in all out
+	232	[24]	CALL     	0 0 1	; all in 0 out
+	233	[25]	GETTABUP 	0 0 0	; _ENV "print"
+	234	[25]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	235	[25]	LOADK    	2 49	; "8000000000000000"
+	236	[25]	LOADI    	3 16
+	237	[25]	CALL     	1 3 2	; 2 in 1 out
+	238	[25]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	239	[25]	LOADK    	3 50	; "10000000000000000"
+	240	[25]	LOADI    	4 16
+	241	[25]	CALL     	2 3 0	; 2 in all out
+	242	[25]	CALL     	0 0 1	; all in 0 out
+	243	[26]	GETTABUP 	0 0 0	; _ENV "print"
+	244	[26]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	245	[26]	LOADK    	2 51	; " -ff "
+	246	[26]	LOADI    	3 16
+	247	[26]	CALL     	1 3 2	; 2 in 1 out
+	248	[26]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	249	[26]	LOADK    	3 52	; "+z"
+	250	[26]	LOADI    	4 36
+	251	[26]	CALL     	2 3 0	; 2 in all out
+	252	[26]	CALL     	0 0 1	; all in 0 out
+	253	[29]	NEWTABLE 	0 0 0	; 0
+	254	[29]	EXTRAARG 	0
+	255	[30]	LOADI    	1 2
+	256	[30]	LOADI    	2 36
+	257	[30]	LOADI    	3 1
+	258	[30]	FORPREP  	1 8	; exit to 268
+	259	[30]	LEN      	5 0
+	260	[30]	ADDI     	5 5 1
+	261	[30]	MMBINI   	5 1 6 0	; __add
+	262	[30]	GETTABUP 	6 0 1	; _ENV "tonumber"
+	263	[30]	LOADK    	7 3	; "10"
+	264	[30]	MOVE     	8 4
+	265	[30]	CALL     	6 3 2	; 2 in 1 out
+	266	[30]	SETTABLE 	0 5 6
+	267	[30]	FORLOOP  	1 9	; to 259
+	268	[31]	GETTABUP 	1 0 0	; _ENV "print"
+	269	[31]	GETTABUP 	2 0 53	; _ENV "table"
+	270	[31]	GETFIELD 	2 2 54	; "concat"
+	271	[31]	MOVE     	3 0
+	272	[31]	LOADK    	4 20	; " "
+	273	[31]	CALL     	2 3 0	; 2 in all out
+	274	[31]	CALL     	1 0 1	; all in 0 out
+	275	[34]	GETTABUP 	1 0 0	; _ENV "print"
+	276	[34]	GETTABUP 	2 0 55	; _ENV "pcall"
+	277	[34]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	278	[34]	LOADK    	4 3	; "10"
+	279	[34]	LOADI    	5 1
+	280	[34]	CALL     	2 4 0	; 3 in all out
+	281	[34]	CALL     	1 0 1	; all in 0 out
+	282	[35]	GETTABUP 	1 0 0	; _ENV "print"
+	283	[35]	GETTABUP 	2 0 55	; _ENV "pcall"
+	284	[35]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	285	[35]	LOADK    	4 3	; "10"
+	286	[35]	LOADI    	5 37
+	287	[35]	CALL     	2 4 0	; 3 in all out
+	288	[35]	CALL     	1 0 1	; all in 0 out
+	289	[36]	GETTABUP 	1 0 0	; _ENV "print"
+	290	[36]	GETTABUP 	2 0 55	; _ENV "pcall"
+	291	[36]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	292	[36]	LOADI    	4 10
+	293	[36]	LOADI    	5 16
+	294	[36]	CALL     	2 4 0	; 3 in all out
+	295	[36]	CALL     	1 0 1	; all in 0 out
+	296	[37]	GETTABUP 	1 0 0	; _ENV "print"
+	297	[37]	GETTABUP 	2 0 55	; _ENV "pcall"
+	298	[37]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	299	[37]	LOADK    	4 3	; "10"
+	300	[37]	LOADK    	5 56	; "x"
+	301	[37]	CALL     	2 4 0	; 3 in all out
+	302	[37]	CALL     	1 0 1	; all in 0 out
+	303	[38]	GETTABUP 	1 0 0	; _ENV "print"
+	304	[38]	GETTABUP 	2 0 55	; _ENV "pcall"
+	305	[38]	GETTABUP 	3 0 1	; _ENV "tonumber"
+	306	[38]	CALL     	2 2 0	; 1 in all out
+	307	[38]	CALL     	1 0 1	; all in 0 out
+	308	[40]	GETTABUP 	1 0 1	; _ENV "tonumber"
+	309	[40]	LOADK    	2 57	; "z"
+	310	[40]	LOADI    	3 36
+	311	[40]	CALL     	1 3 2	; 2 in 1 out
+	312	[40]	GETTABUP 	2 0 1	; _ENV "tonumber"
+	313	[40]	LOADK    	3 58	; "0.1"
+	314	[40]	CALL     	2 2 0	; 1 in all out
+	315	[40]	RETURN   	1 0 1	; all out
+	316	[40]	RETURN   	1 1 1	; 0 out
+constants (59):
+	0	S	"print"
+	1	S	"tonumber"
+	2	F	1.5
+	3	S	"10"
+	4	S	"  10  "
+	5	S	"0x10"
+	6	S	"0X1p4"
+	7	S	"1e2"
+	8	S	".5"
+	9	S	"5."
+	10	S	"-7"
+	11	S	"+7"
+	12	S	"- 7"
+	13	S	"-0x10"
+	14	S	"math"
+	15	S	"type"
+	16	S	"3"
+	17	S	"3.0"
+	18	S	"3e0"
+	19	S	""
+	20	S	" "
+	21	S	"abc"
+	22	S	"1 2"
+	23	S	"1e"
+	24	S	"0x"
+	25	S	"1..2"
+	26	S	"inf"
+	27	S	"nan"
+	28	S	"9223372036854775807"
+	29	S	"9223372036854775808"
+	30	S	"0xffffffffffffffff"
+	31	S	"0x10000000000000000"
+	32	N	nil
+	33	S	"10\000"
+	34	S	"\t\n10\v\f\r"
+	35	S	"11111111"
+	36	S	"777"
+	37	S	"ff"
+	38	S	"FF"
+	39	S	"zz"
+	40	S	"ZZ"
+	41	S	"  101  "
+	42	S	"-101"
+	43	S	"- 1"
+	44	S	"2"
+	45	S	"8"
+	46	S	"g"
+	47	S	"1.5"
+	48	S	"7fffffffffffffff"
+	49	S	"8000000000000000"
+	50	S	"10000000000000000"
+	51	S	" -ff "
+	52	S	"+z"
+	53	S	"table"
+	54	S	"concat"
+	55	S	"pcall"
+	56	S	"x"
+	57	S	"z"
+	58	S	"0.1"
+locals (5):
+	0	bases	255	317
+	1	(for state)	258	268
+	2	(for state)	258	268
+	3	(for state)	258	268
+	4	b	259	267
+upvalues (1):
+	0	_ENV	1	0

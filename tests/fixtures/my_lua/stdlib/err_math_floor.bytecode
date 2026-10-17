@@ -1,0 +1,26 @@
+
+main <err_math_floor.lua:0,0> (14 instructions)
+0+ params, 3 slots, 1 upvalue, 0 locals, 5 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[2]	GETTABUP 	1 0 1	; _ENV "math"
+	4	[2]	GETFIELD 	1 1 2	; "floor"
+	5	[2]	LOADK    	2 3	; "2.5"
+	6	[2]	CALL     	1 2 0	; 1 in all out
+	7	[2]	CALL     	0 0 1	; all in 0 out
+	8	[3]	GETTABUP 	0 0 0	; _ENV "print"
+	9	[3]	GETTABUP 	1 0 1	; _ENV "math"
+	10	[3]	GETFIELD 	1 1 2	; "floor"
+	11	[3]	LOADK    	2 4	; "a"
+	12	[3]	CALL     	1 2 0	; 1 in all out
+	13	[3]	CALL     	0 0 1	; all in 0 out
+	14	[3]	RETURN   	0 1 1	; 0 out
+constants (5):
+	0	S	"print"
+	1	S	"math"
+	2	S	"floor"
+	3	S	"2.5"
+	4	S	"a"
+locals (0):
+upvalues (1):
+	0	_ENV	1	0

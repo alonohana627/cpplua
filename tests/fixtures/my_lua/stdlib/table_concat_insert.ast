@@ -1,0 +1,516 @@
+Chunk
+  Local t
+    Table
+      Item
+        String "a"
+      Item
+        String "b"
+      Item
+        String "c"
+      Item
+        String "d"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name t (local 0)
+      Call
+        Index
+          Name table
+          String "concat"
+        Name t (local 0)
+        String ", "
+      Call
+        Index
+          Name table
+          String "concat"
+        Name t (local 0)
+        String ""
+        Integer 2
+      Call
+        Index
+          Name table
+          String "concat"
+        Name t (local 0)
+        String "-"
+        Integer 2
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name table
+            String "concat"
+          Name t (local 0)
+          String "-"
+          Integer 3
+          Integer 2
+        String ""
+      Binary ==
+        Call
+          Index
+            Name table
+            String "concat"
+          Table
+        String ""
+      Binary ==
+        Call
+          Index
+            Name table
+            String "concat"
+          Table
+          String "x"
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name t (local 0)
+        String "-"
+        Integer 4
+        Integer 4
+      Call
+        Index
+          Name table
+          String "concat"
+        Table
+          Item
+            Integer 1
+          Item
+            Float 2.5
+          Item
+            Unary -
+              Integer 3
+          Item
+            Binary ^
+              Integer 2
+              Integer 63
+        String " "
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Table
+          Item
+            Integer 1
+          Item
+            String "two"
+          Item
+            Integer 3
+        Integer 0
+      Call
+        Name pcall
+        Index
+          Name table
+          String "concat"
+        Name t (local 0)
+        String ""
+        Unary -
+          Integer 1
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Table
+          Field
+            Integer 0
+            String "zero"
+          Item
+            String "one"
+        String ","
+        Integer 0
+        Integer 1
+      Binary ==
+        Call
+          Index
+            Name table
+            String "concat"
+          Table
+            Item
+              String "x"
+          String "\x00"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "concat"
+        Table
+          Item
+            Integer 1
+          Item
+            Table
+          Item
+            Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "concat"
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+          Item
+            Nil
+          Item
+            Integer 4
+        String ","
+        Integer 1
+        Integer 4
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "concat"
+        Table
+          Item
+            True
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "concat"
+        Name t (local 0)
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "concat"
+        String "abc"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "concat"
+  Local virtual
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(_, i)
+            Return
+              Binary ..
+                String "v"
+                Name i (local 1)
+        Field __len
+          Function()
+            Return
+              Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name virtual (local 1)
+        String "+"
+  Local list
+    Table
+  CallStatement
+    Call
+      Index
+        Name table
+        String "insert"
+      Name list (local 2)
+      String "x"
+  CallStatement
+    Call
+      Index
+        Name table
+        String "insert"
+      Name list (local 2)
+      String "y"
+  CallStatement
+    Call
+      Index
+        Name table
+        String "insert"
+      Name list (local 2)
+      Integer 1
+      String "first"
+  CallStatement
+    Call
+      Index
+        Name table
+        String "insert"
+      Name list (local 2)
+      Binary +
+        Unary #
+          Name list (local 2)
+        Integer 1
+      String "last"
+  CallStatement
+    Call
+      Index
+        Name table
+        String "insert"
+      Name list (local 2)
+      Integer 3
+      String "middle"
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name list (local 2)
+      Call
+        Index
+          Name table
+          String "concat"
+        Name list (local 2)
+        String " "
+  CallStatement
+    Call
+      Index
+        Name table
+        String "insert"
+      Name list (local 2)
+      Float 1.0
+      String "float pos"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name list (local 2)
+        String " "
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "insert"
+        Name list (local 2)
+        Integer 0
+        String "zero"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "insert"
+        Name list (local 2)
+        Binary +
+          Unary #
+            Name list (local 2)
+          Integer 2
+        String "too far"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "insert"
+        Name list (local 2)
+        Unary -
+          Integer 1
+        String "neg"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "insert"
+        Name list (local 2)
+        Float 1.5
+        String "half"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "insert"
+        Name list (local 2)
+        Integer 1
+        Integer 2
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "insert"
+        Name list (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "insert"
+        Nil
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "insert"
+        Name list (local 2)
+        String "x"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name table
+            String "insert"
+          Name list (local 2)
+          String "z"
+      Unary #
+        Name list (local 2)
+  Local holes
+    Table
+      Item
+        Integer 1
+      Item
+        Integer 2
+      Item
+        Integer 3
+  CallStatement
+    Call
+      Index
+        Name table
+        String "insert"
+      Name holes (local 3)
+      Nil
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name holes (local 3)
+  Local empty
+    Table
+  CallStatement
+    Call
+      Index
+        Name table
+        String "insert"
+      Name empty (local 4)
+      Integer 1
+      String "only"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name empty (local 4)
+        Integer 1
+      Unary #
+        Name empty (local 4)
+  Local log
+    Table
+  Local proxy
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __len
+          Function()
+            Return
+              Integer 2
+        Field __index
+          Function(_, k)
+            Return
+              Binary ..
+                String "old"
+                Name k (local 1)
+        Field __newindex
+          Function(_, k, v) [upvalues: log]
+            Assign
+              Targets
+                Index
+                  Name log (upvalue 0)
+                  Binary +
+                    Unary #
+                      Name log (upvalue 0)
+                    Integer 1
+              Values
+                Binary ..
+                  Name k (local 1)
+                  Binary ..
+                    String "="
+                    Name v (local 2)
+  CallStatement
+    Call
+      Index
+        Name table
+        String "insert"
+      Name proxy (local 6)
+      Integer 1
+      String "new"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name log (local 5)
+        String " "
+  Return
+    Call
+      Index
+        Name table
+        String "concat"
+      Name list (local 2)
+      String ","
+    Unary #
+      Name list (local 2)

@@ -1,0 +1,355 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "hello123"
+        String "[a-z]+"
+      MethodCall match
+        Paren
+          String "HELLO123"
+        String "[A-Z0-9]+"
+      MethodCall match
+        Paren
+          String "abc"
+        String "[^a]+"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "x]y"
+        String "[]]"
+      MethodCall match
+        Paren
+          String "x-y"
+        String "[a-]"
+      MethodCall match
+        Paren
+          String "x^y"
+        String "[%^]"
+      MethodCall match
+        Paren
+          String "x^y"
+        String "[x^]+"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "a-z"
+        String "[a%-z]+"
+      MethodCall match
+        Paren
+          String "2+3=5"
+        String "[%d%+=]+"
+      MethodCall match
+        Paren
+          String "tab\there"
+        String "[^%s]+$"
+  CallStatement
+    Call
+      Name print
+      MethodCall gsub
+        Paren
+          String "abcxyz"
+        String "[b-dx-y]"
+        String "."
+  CallStatement
+    Call
+      Name print
+      MethodCall gsub
+        Paren
+          String "Hello World"
+        String "[^%a ]"
+        String ""
+      MethodCall gsub
+        Paren
+          String "a1b2c3"
+        String "[^%d]"
+        String ""
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "[test]"
+        String "^%[(.*)%]$"
+      MethodCall match
+        Paren
+          String "a]b"
+        String "[^]]+"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "aaa"
+        String "a*"
+      Binary ==
+        MethodCall match
+          Paren
+            String "aaa"
+          String "a-"
+        String ""
+      MethodCall match
+        Paren
+          String "aaa"
+        String "a+"
+      MethodCall match
+        Paren
+          String "aaa"
+        String "a?"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "<a><b>"
+        String "<.*>"
+      MethodCall match
+        Paren
+          String "<a><b>"
+        String "<.->"
+  CallStatement
+    Call
+      Name print
+      MethodCall gsub
+        Paren
+          String "color colour"
+        String "colou?r"
+        String "C"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "xyz"
+        String "x?y?z?w?"
+      MethodCall match
+        Paren
+          String "123abc"
+        String "^%d*"
+      Binary ==
+        MethodCall match
+          Paren
+            String "abc"
+          String "^%d*"
+        String ""
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "  x  "
+        String "^ *(.-) *$"
+      MethodCall match
+        Paren
+          String "aXbXc"
+        String "(.-)X"
+      MethodCall match
+        Paren
+          String "aXbXc"
+        String "(.*)X"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "integer -42 here"
+        String "[+-]?%d+"
+      MethodCall match
+        Paren
+          String "1.5e10"
+        String "^[%d.]+e?%d*$"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "f(a, (b), c) + g()"
+        String "%b()"
+      MethodCall match
+        Paren
+          String "{{}}{"
+        String "%b{}"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "if x then y end"
+        String "%bie"
+      MethodCall match
+        Paren
+          String "no close (here"
+        String "%b()"
+  CallStatement
+    Call
+      Name print
+      MethodCall gsub
+        Paren
+          String "[[a][b]]"
+        String "%b[]"
+        String "X"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "say \"hi\" now"
+        String "([\"'])(.-)%1"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "abcabc"
+        String "(abc)%1"
+      MethodCall match
+        Paren
+          String "abab"
+        String "^(ab)%1$"
+      MethodCall match
+        Paren
+          String "abac"
+        String "^(ab)%1$"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "x = [==[long]==]"
+        String "%[(=*)%[(.-)%]%1%]"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Paren
+          String "a^b"
+        String "a^b"
+      MethodCall match
+        Paren
+          String "a$b"
+        String "a$b"
+      MethodCall match
+        Paren
+          String "ab$"
+        String "b%$$"
+  CallStatement
+    Call
+      Name print
+      MethodCall find
+        Paren
+          String "abc"
+        String "^"
+      MethodCall find
+        Paren
+          String "abc"
+        String "$"
+      MethodCall match
+        Paren
+          String "abc"
+        String "^abc$"
+      MethodCall match
+        Paren
+          String "abcd"
+        String "^abc$"
+  CallStatement
+    Call
+      Name print
+      MethodCall gsub
+        Paren
+          String "hello world"
+        String "%f[%w]%w+"
+        String "[%0]"
+  CallStatement
+    Call
+      Name print
+      MethodCall gsub
+        Paren
+          String "one;two;;three"
+        String "%f[^;]"
+        String "|"
+  CallStatement
+    Call
+      Name print
+      MethodCall find
+        Paren
+          String "THE (quick) fox"
+        String "%f[%a]%a+%f[%A]"
+  Local bad
+    Table
+      Item
+        String "("
+      Item
+        String "%"
+      Item
+        String "[a"
+      Item
+        String "[a-"
+      Item
+        String "%b"
+      Item
+        String "%ba"
+      Item
+        String "%f"
+      Item
+        String "%fx"
+      Item
+        String "(()"
+      Item
+        String ")"
+      Item
+        String "%1"
+      Item
+        String "(a)%2"
+      Item
+        String "[%"
+      Item
+        String "(a%)"
+  GenericFor _, p
+    In
+      Call
+        Name ipairs
+        Name bad (local 0)
+    Body
+      CallStatement
+        Call
+          Name print
+          Call
+            Index
+              Name string
+              String "format"
+            String "%-6s"
+            Name p (local 6)
+          Call
+            Name pcall
+            Index
+              Name string
+              String "match"
+            String "abc(a)"
+            Name p (local 6)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "find"
+        String "abc(a)"
+        String ")"
+      Call
+        Name pcall
+        Index
+          Name string
+          String "gsub"
+        String "abc(a)"
+        String ")"
+        String ""
+  Return
+    MethodCall match
+      Paren
+        String "end"
+      String "(e)(n)(d)"

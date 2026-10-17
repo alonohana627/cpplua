@@ -1,0 +1,24 @@
+Chunk
+  LocalFunction pick
+    Function(n, ...) [upvalues: _ENV]
+      Return
+        Call
+          Name select
+          Name n (local 0)
+          Vararg
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pick (local 0)
+        Integer 2
+        String "a"
+        String "b"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pick (local 0)
+        Integer 0
+        String "a"
+        String "b"

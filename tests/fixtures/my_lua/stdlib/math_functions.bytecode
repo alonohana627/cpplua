@@ -1,0 +1,641 @@
+
+main <math_functions.lua:0,0> (566 instructions)
+0+ params, 11 slots, 1 upvalue, 2 locals, 30 constants, 2 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	CLOSURE  	0 0
+	3	[7]	CLOSURE  	1 1
+	4	[9]	GETTABUP 	2 0 0	; _ENV "print"
+	5	[9]	GETTABUP 	3 0 1	; _ENV "math"
+	6	[9]	GETFIELD 	3 3 2	; "sqrt"
+	7	[9]	LOADI    	4 16
+	8	[9]	CALL     	3 2 2	; 1 in 1 out
+	9	[9]	GETTABUP 	4 0 1	; _ENV "math"
+	10	[9]	GETFIELD 	4 4 2	; "sqrt"
+	11	[9]	LOADI    	5 2
+	12	[9]	CALL     	4 2 2	; 1 in 1 out
+	13	[9]	POWK     	4 4 3	; 2
+	14	[9]	MMBINK   	4 3 10 0	; __pow 2
+	15	[9]	EQI      	4 2 1
+	16	[9]	JMP      	1	; to 18
+	17	[9]	LFALSESKIP	4
+	18	[9]	LOADTRUE 	4
+	19	[9]	MOVE     	5 0
+	20	[9]	GETTABUP 	6 0 1	; _ENV "math"
+	21	[9]	GETFIELD 	6 6 2	; "sqrt"
+	22	[9]	LOADI    	7 2
+	23	[9]	CALL     	6 2 0	; 1 in all out
+	24	[9]	CALL     	5 0 2	; all in 1 out
+	25	[9]	GETTABUP 	6 0 1	; _ENV "math"
+	26	[9]	GETFIELD 	6 6 2	; "sqrt"
+	27	[9]	LOADI    	7 0
+	28	[9]	CALL     	6 2 2	; 1 in 1 out
+	29	[9]	GETTABUP 	7 0 1	; _ENV "math"
+	30	[9]	GETFIELD 	7 7 2	; "sqrt"
+	31	[9]	LOADF    	8 0
+	32	[9]	UNM      	8 8
+	33	[9]	CALL     	7 2 0	; 1 in all out
+	34	[9]	CALL     	2 0 1	; all in 0 out
+	35	[10]	GETTABUP 	2 0 0	; _ENV "print"
+	36	[10]	GETTABUP 	3 0 1	; _ENV "math"
+	37	[10]	GETFIELD 	3 3 2	; "sqrt"
+	38	[10]	GETTABUP 	4 0 1	; _ENV "math"
+	39	[10]	GETFIELD 	4 4 4	; "huge"
+	40	[10]	CALL     	3 2 2	; 1 in 1 out
+	41	[10]	GETTABUP 	4 0 1	; _ENV "math"
+	42	[10]	GETFIELD 	4 4 5	; "type"
+	43	[10]	GETTABUP 	5 0 1	; _ENV "math"
+	44	[10]	GETFIELD 	5 5 2	; "sqrt"
+	45	[10]	LOADI    	6 4
+	46	[10]	CALL     	5 2 0	; 1 in all out
+	47	[10]	CALL     	4 0 2	; all in 1 out
+	48	[10]	GETTABUP 	5 0 1	; _ENV "math"
+	49	[10]	GETFIELD 	5 5 2	; "sqrt"
+	50	[10]	LOADK    	6 6	; "9"
+	51	[10]	CALL     	5 2 0	; 1 in all out
+	52	[10]	CALL     	2 0 1	; all in 0 out
+	53	[11]	GETTABUP 	2 0 0	; _ENV "print"
+	54	[11]	GETTABUP 	3 0 1	; _ENV "math"
+	55	[11]	GETFIELD 	3 3 2	; "sqrt"
+	56	[11]	LOADI    	4 -1
+	57	[11]	CALL     	3 2 2	; 1 in 1 out
+	58	[11]	GETTABUP 	4 0 1	; _ENV "math"
+	59	[11]	GETFIELD 	4 4 2	; "sqrt"
+	60	[11]	LOADI    	5 -1
+	61	[11]	CALL     	4 2 2	; 1 in 1 out
+	62	[11]	EQ       	3 4 0
+	63	[11]	JMP      	1	; to 65
+	64	[11]	LFALSESKIP	3
+	65	[11]	LOADTRUE 	3
+	66	[11]	CALL     	2 2 1	; 1 in 0 out
+	67	[13]	GETTABUP 	2 0 0	; _ENV "print"
+	68	[13]	GETTABUP 	3 0 1	; _ENV "math"
+	69	[13]	GETFIELD 	3 3 7	; "exp"
+	70	[13]	LOADI    	4 0
+	71	[13]	CALL     	3 2 2	; 1 in 1 out
+	72	[13]	MOVE     	4 0
+	73	[13]	GETTABUP 	5 0 1	; _ENV "math"
+	74	[13]	GETFIELD 	5 5 7	; "exp"
+	75	[13]	LOADI    	6 1
+	76	[13]	CALL     	5 2 0	; 1 in all out
+	77	[13]	CALL     	4 0 2	; all in 1 out
+	78	[13]	MOVE     	5 1
+	79	[13]	GETTABUP 	6 0 1	; _ENV "math"
+	80	[13]	GETFIELD 	6 6 7	; "exp"
+	81	[13]	LOADI    	7 10
+	82	[13]	CALL     	6 2 0	; 1 in all out
+	83	[13]	CALL     	5 0 2	; all in 1 out
+	84	[13]	GETTABUP 	6 0 1	; _ENV "math"
+	85	[13]	GETFIELD 	6 6 7	; "exp"
+	86	[13]	GETTABUP 	7 0 1	; _ENV "math"
+	87	[13]	GETFIELD 	7 7 4	; "huge"
+	88	[13]	UNM      	7 7
+	89	[13]	CALL     	6 2 2	; 1 in 1 out
+	90	[13]	GETTABUP 	7 0 1	; _ENV "math"
+	91	[13]	GETFIELD 	7 7 7	; "exp"
+	92	[13]	GETTABUP 	8 0 1	; _ENV "math"
+	93	[13]	GETFIELD 	8 8 4	; "huge"
+	94	[13]	CALL     	7 2 0	; 1 in all out
+	95	[13]	CALL     	2 0 1	; all in 0 out
+	96	[14]	GETTABUP 	2 0 0	; _ENV "print"
+	97	[14]	GETTABUP 	3 0 1	; _ENV "math"
+	98	[14]	GETFIELD 	3 3 8	; "log"
+	99	[14]	LOADI    	4 1
+	100	[14]	CALL     	3 2 2	; 1 in 1 out
+	101	[14]	MOVE     	4 0
+	102	[14]	GETTABUP 	5 0 1	; _ENV "math"
+	103	[14]	GETFIELD 	5 5 8	; "log"
+	104	[14]	GETTABUP 	6 0 1	; _ENV "math"
+	105	[14]	GETFIELD 	6 6 7	; "exp"
+	106	[14]	LOADI    	7 2
+	107	[14]	CALL     	6 2 0	; 1 in all out
+	108	[14]	CALL     	5 0 0	; all in all out
+	109	[14]	CALL     	4 0 2	; all in 1 out
+	110	[14]	GETTABUP 	5 0 1	; _ENV "math"
+	111	[14]	GETFIELD 	5 5 8	; "log"
+	112	[14]	LOADI    	6 0
+	113	[14]	CALL     	5 2 2	; 1 in 1 out
+	114	[14]	GETTABUP 	6 0 1	; _ENV "math"
+	115	[14]	GETFIELD 	6 6 8	; "log"
+	116	[14]	LOADI    	7 8
+	117	[14]	LOADI    	8 2
+	118	[14]	CALL     	6 3 2	; 2 in 1 out
+	119	[14]	GETTABUP 	7 0 1	; _ENV "math"
+	120	[14]	GETFIELD 	7 7 8	; "log"
+	121	[14]	LOADI    	8 1024
+	122	[14]	LOADI    	9 2
+	123	[14]	CALL     	7 3 0	; 2 in all out
+	124	[14]	CALL     	2 0 1	; all in 0 out
+	125	[15]	GETTABUP 	2 0 0	; _ENV "print"
+	126	[15]	GETTABUP 	3 0 1	; _ENV "math"
+	127	[15]	GETFIELD 	3 3 8	; "log"
+	128	[15]	LOADI    	4 100
+	129	[15]	LOADI    	5 10
+	130	[15]	CALL     	3 3 2	; 2 in 1 out
+	131	[15]	GETTABUP 	4 0 1	; _ENV "math"
+	132	[15]	GETFIELD 	4 4 8	; "log"
+	133	[15]	LOADI    	5 1000
+	134	[15]	LOADI    	6 10
+	135	[15]	CALL     	4 3 2	; 2 in 1 out
+	136	[15]	GETTABUP 	5 0 1	; _ENV "math"
+	137	[15]	GETFIELD 	5 5 8	; "log"
+	138	[15]	LOADK    	6 9	; 1e+15
+	139	[15]	LOADI    	7 10
+	140	[15]	CALL     	5 3 2	; 2 in 1 out
+	141	[15]	MOVE     	6 0
+	142	[15]	GETTABUP 	7 0 1	; _ENV "math"
+	143	[15]	GETFIELD 	7 7 8	; "log"
+	144	[15]	LOADI    	8 27
+	145	[15]	LOADI    	9 3
+	146	[15]	CALL     	7 3 0	; 2 in all out
+	147	[15]	CALL     	6 0 0	; all in all out
+	148	[15]	CALL     	2 0 1	; all in 0 out
+	149	[16]	GETTABUP 	2 0 0	; _ENV "print"
+	150	[16]	GETTABUP 	3 0 1	; _ENV "math"
+	151	[16]	GETFIELD 	3 3 8	; "log"
+	152	[16]	LOADK    	4 10	; 4.5035996273705e+15
+	153	[16]	LOADI    	5 2
+	154	[16]	CALL     	3 3 2	; 2 in 1 out
+	155	[16]	GETTABUP 	4 0 1	; _ENV "math"
+	156	[16]	GETFIELD 	4 4 8	; "log"
+	157	[16]	LOADI    	5 1
+	158	[16]	LOADI    	6 10
+	159	[16]	CALL     	4 3 2	; 2 in 1 out
+	160	[16]	MOVE     	5 1
+	161	[16]	GETTABUP 	6 0 1	; _ENV "math"
+	162	[16]	GETFIELD 	6 6 8	; "log"
+	163	[16]	LOADI    	7 2
+	164	[16]	LOADI    	8 10
+	165	[16]	CALL     	6 3 0	; 2 in all out
+	166	[16]	CALL     	5 0 2	; all in 1 out
+	167	[16]	MOVE     	6 0
+	168	[16]	GETTABUP 	7 0 1	; _ENV "math"
+	169	[16]	GETFIELD 	7 7 8	; "log"
+	170	[16]	LOADI    	8 10
+	171	[16]	GETTABUP 	9 0 1	; _ENV "math"
+	172	[16]	GETFIELD 	9 9 7	; "exp"
+	173	[16]	LOADI    	10 1
+	174	[16]	CALL     	9 2 0	; 1 in all out
+	175	[16]	CALL     	7 0 0	; all in all out
+	176	[16]	CALL     	6 0 0	; all in all out
+	177	[16]	CALL     	2 0 1	; all in 0 out
+	178	[17]	GETTABUP 	2 0 0	; _ENV "print"
+	179	[17]	GETTABUP 	3 0 1	; _ENV "math"
+	180	[17]	GETFIELD 	3 3 8	; "log"
+	181	[17]	GETTABUP 	4 0 1	; _ENV "math"
+	182	[17]	GETFIELD 	4 4 4	; "huge"
+	183	[17]	CALL     	3 2 2	; 1 in 1 out
+	184	[17]	GETTABUP 	4 0 1	; _ENV "math"
+	185	[17]	GETFIELD 	4 4 8	; "log"
+	186	[17]	LOADI    	5 -1
+	187	[17]	CALL     	4 2 2	; 1 in 1 out
+	188	[17]	GETTABUP 	5 0 1	; _ENV "math"
+	189	[17]	GETFIELD 	5 5 8	; "log"
+	190	[17]	LOADI    	6 -1
+	191	[17]	CALL     	5 2 2	; 1 in 1 out
+	192	[17]	EQ       	4 5 0
+	193	[17]	JMP      	1	; to 195
+	194	[17]	LFALSESKIP	4
+	195	[17]	LOADTRUE 	4
+	196	[17]	GETTABUP 	5 0 1	; _ENV "math"
+	197	[17]	GETFIELD 	5 5 5	; "type"
+	198	[17]	GETTABUP 	6 0 1	; _ENV "math"
+	199	[17]	GETFIELD 	6 6 8	; "log"
+	200	[17]	LOADI    	7 8
+	201	[17]	LOADI    	8 2
+	202	[17]	CALL     	6 3 0	; 2 in all out
+	203	[17]	CALL     	5 0 0	; all in all out
+	204	[17]	CALL     	2 0 1	; all in 0 out
+	205	[19]	GETTABUP 	2 0 0	; _ENV "print"
+	206	[19]	MOVE     	3 0
+	207	[19]	GETTABUP 	4 0 1	; _ENV "math"
+	208	[19]	GETFIELD 	4 4 11	; "pi"
+	209	[19]	CALL     	3 2 2	; 1 in 1 out
+	210	[19]	GETTABUP 	4 0 1	; _ENV "math"
+	211	[19]	GETFIELD 	4 4 11	; "pi"
+	212	[19]	EQK      	4 12 1	; 3.1415926535898
+	213	[19]	JMP      	1	; to 215
+	214	[19]	LFALSESKIP	4
+	215	[19]	LOADTRUE 	4
+	216	[19]	GETTABUP 	5 0 1	; _ENV "math"
+	217	[19]	GETFIELD 	5 5 4	; "huge"
+	218	[19]	GETTABUP 	6 0 1	; _ENV "math"
+	219	[19]	GETFIELD 	6 6 4	; "huge"
+	220	[19]	UNM      	6 6
+	221	[19]	GETTABUP 	7 0 1	; _ENV "math"
+	222	[19]	GETFIELD 	7 7 4	; "huge"
+	223	[19]	GETTABUP 	8 0 1	; _ENV "math"
+	224	[19]	GETFIELD 	8 8 13	; "maxinteger"
+	225	[19]	LT       	8 7 1
+	226	[19]	JMP      	1	; to 228
+	227	[19]	LFALSESKIP	7
+	228	[19]	LOADTRUE 	7
+	229	[19]	CALL     	2 6 1	; 5 in 0 out
+	230	[20]	GETTABUP 	2 0 0	; _ENV "print"
+	231	[20]	GETTABUP 	3 0 1	; _ENV "math"
+	232	[20]	GETFIELD 	3 3 14	; "sin"
+	233	[20]	LOADI    	4 0
+	234	[20]	CALL     	3 2 2	; 1 in 1 out
+	235	[20]	MOVE     	4 0
+	236	[20]	GETTABUP 	5 0 1	; _ENV "math"
+	237	[20]	GETFIELD 	5 5 14	; "sin"
+	238	[20]	GETTABUP 	6 0 1	; _ENV "math"
+	239	[20]	GETFIELD 	6 6 11	; "pi"
+	240	[20]	DIVK     	6 6 3	; 2
+	241	[20]	MMBINK   	6 3 11 0	; __div 2
+	242	[20]	CALL     	5 2 0	; 1 in all out
+	243	[20]	CALL     	4 0 2	; all in 1 out
+	244	[20]	MOVE     	5 0
+	245	[20]	GETTABUP 	6 0 1	; _ENV "math"
+	246	[20]	GETFIELD 	6 6 14	; "sin"
+	247	[20]	GETTABUP 	7 0 1	; _ENV "math"
+	248	[20]	GETFIELD 	7 7 11	; "pi"
+	249	[20]	DIVK     	7 7 15	; 6
+	250	[20]	MMBINK   	7 15 11 0	; __div 6
+	251	[20]	CALL     	6 2 0	; 1 in all out
+	252	[20]	CALL     	5 0 2	; all in 1 out
+	253	[20]	MOVE     	6 0
+	254	[20]	GETTABUP 	7 0 1	; _ENV "math"
+	255	[20]	GETFIELD 	7 7 14	; "sin"
+	256	[20]	LOADI    	8 -1
+	257	[20]	CALL     	7 2 0	; 1 in all out
+	258	[20]	CALL     	6 0 0	; all in all out
+	259	[20]	CALL     	2 0 1	; all in 0 out
+	260	[21]	GETTABUP 	2 0 0	; _ENV "print"
+	261	[21]	GETTABUP 	3 0 1	; _ENV "math"
+	262	[21]	GETFIELD 	3 3 16	; "cos"
+	263	[21]	LOADI    	4 0
+	264	[21]	CALL     	3 2 2	; 1 in 1 out
+	265	[21]	MOVE     	4 0
+	266	[21]	GETTABUP 	5 0 1	; _ENV "math"
+	267	[21]	GETFIELD 	5 5 16	; "cos"
+	268	[21]	GETTABUP 	6 0 1	; _ENV "math"
+	269	[21]	GETFIELD 	6 6 11	; "pi"
+	270	[21]	CALL     	5 2 0	; 1 in all out
+	271	[21]	CALL     	4 0 2	; all in 1 out
+	272	[21]	MOVE     	5 0
+	273	[21]	GETTABUP 	6 0 1	; _ENV "math"
+	274	[21]	GETFIELD 	6 6 16	; "cos"
+	275	[21]	GETTABUP 	7 0 1	; _ENV "math"
+	276	[21]	GETFIELD 	7 7 11	; "pi"
+	277	[21]	DIVK     	7 7 17	; 3
+	278	[21]	MMBINK   	7 17 11 0	; __div 3
+	279	[21]	CALL     	6 2 0	; 1 in all out
+	280	[21]	CALL     	5 0 2	; all in 1 out
+	281	[21]	MOVE     	6 0
+	282	[21]	GETTABUP 	7 0 1	; _ENV "math"
+	283	[21]	GETFIELD 	7 7 16	; "cos"
+	284	[21]	LOADI    	8 2
+	285	[21]	CALL     	7 2 0	; 1 in all out
+	286	[21]	CALL     	6 0 0	; all in all out
+	287	[21]	CALL     	2 0 1	; all in 0 out
+	288	[22]	GETTABUP 	2 0 0	; _ENV "print"
+	289	[22]	GETTABUP 	3 0 1	; _ENV "math"
+	290	[22]	GETFIELD 	3 3 18	; "tan"
+	291	[22]	LOADI    	4 0
+	292	[22]	CALL     	3 2 2	; 1 in 1 out
+	293	[22]	MOVE     	4 0
+	294	[22]	GETTABUP 	5 0 1	; _ENV "math"
+	295	[22]	GETFIELD 	5 5 18	; "tan"
+	296	[22]	GETTABUP 	6 0 1	; _ENV "math"
+	297	[22]	GETFIELD 	6 6 11	; "pi"
+	298	[22]	DIVK     	6 6 19	; 4
+	299	[22]	MMBINK   	6 19 11 0	; __div 4
+	300	[22]	CALL     	5 2 0	; 1 in all out
+	301	[22]	CALL     	4 0 2	; all in 1 out
+	302	[22]	MOVE     	5 0
+	303	[22]	GETTABUP 	6 0 1	; _ENV "math"
+	304	[22]	GETFIELD 	6 6 18	; "tan"
+	305	[22]	LOADI    	7 1
+	306	[22]	CALL     	6 2 0	; 1 in all out
+	307	[22]	CALL     	5 0 2	; all in 1 out
+	308	[22]	MOVE     	6 0
+	309	[22]	GETTABUP 	7 0 1	; _ENV "math"
+	310	[22]	GETFIELD 	7 7 18	; "tan"
+	311	[22]	LOADK    	8 20	; -0.5
+	312	[22]	CALL     	7 2 0	; 1 in all out
+	313	[22]	CALL     	6 0 0	; all in all out
+	314	[22]	CALL     	2 0 1	; all in 0 out
+	315	[23]	GETTABUP 	2 0 0	; _ENV "print"
+	316	[23]	GETTABUP 	3 0 1	; _ENV "math"
+	317	[23]	GETFIELD 	3 3 21	; "asin"
+	318	[23]	LOADI    	4 0
+	319	[23]	CALL     	3 2 2	; 1 in 1 out
+	320	[23]	MOVE     	4 0
+	321	[23]	GETTABUP 	5 0 1	; _ENV "math"
+	322	[23]	GETFIELD 	5 5 21	; "asin"
+	323	[23]	LOADI    	6 1
+	324	[23]	CALL     	5 2 0	; 1 in all out
+	325	[23]	CALL     	4 0 2	; all in 1 out
+	326	[23]	MOVE     	5 0
+	327	[23]	GETTABUP 	6 0 1	; _ENV "math"
+	328	[23]	GETFIELD 	6 6 21	; "asin"
+	329	[23]	LOADK    	7 20	; -0.5
+	330	[23]	CALL     	6 2 0	; 1 in all out
+	331	[23]	CALL     	5 0 2	; all in 1 out
+	332	[23]	GETTABUP 	6 0 1	; _ENV "math"
+	333	[23]	GETFIELD 	6 6 21	; "asin"
+	334	[23]	LOADI    	7 2
+	335	[23]	CALL     	6 2 2	; 1 in 1 out
+	336	[23]	GETTABUP 	7 0 1	; _ENV "math"
+	337	[23]	GETFIELD 	7 7 21	; "asin"
+	338	[23]	LOADI    	8 2
+	339	[23]	CALL     	7 2 2	; 1 in 1 out
+	340	[23]	EQ       	6 7 0
+	341	[23]	JMP      	1	; to 343
+	342	[23]	LFALSESKIP	6
+	343	[23]	LOADTRUE 	6
+	344	[23]	CALL     	2 5 1	; 4 in 0 out
+	345	[24]	GETTABUP 	2 0 0	; _ENV "print"
+	346	[24]	MOVE     	3 0
+	347	[24]	GETTABUP 	4 0 1	; _ENV "math"
+	348	[24]	GETFIELD 	4 4 22	; "acos"
+	349	[24]	LOADI    	5 1
+	350	[24]	CALL     	4 2 0	; 1 in all out
+	351	[24]	CALL     	3 0 2	; all in 1 out
+	352	[24]	MOVE     	4 0
+	353	[24]	GETTABUP 	5 0 1	; _ENV "math"
+	354	[24]	GETFIELD 	5 5 22	; "acos"
+	355	[24]	LOADI    	6 0
+	356	[24]	CALL     	5 2 0	; 1 in all out
+	357	[24]	CALL     	4 0 2	; all in 1 out
+	358	[24]	MOVE     	5 0
+	359	[24]	GETTABUP 	6 0 1	; _ENV "math"
+	360	[24]	GETFIELD 	6 6 22	; "acos"
+	361	[24]	LOADI    	7 -1
+	362	[24]	CALL     	6 2 0	; 1 in all out
+	363	[24]	CALL     	5 0 2	; all in 1 out
+	364	[24]	MOVE     	6 0
+	365	[24]	GETTABUP 	7 0 1	; _ENV "math"
+	366	[24]	GETFIELD 	7 7 22	; "acos"
+	367	[24]	LOADK    	8 23	; 0.5
+	368	[24]	CALL     	7 2 0	; 1 in all out
+	369	[24]	CALL     	6 0 0	; all in all out
+	370	[24]	CALL     	2 0 1	; all in 0 out
+	371	[25]	GETTABUP 	2 0 0	; _ENV "print"
+	372	[25]	GETTABUP 	3 0 1	; _ENV "math"
+	373	[25]	GETFIELD 	3 3 24	; "atan"
+	374	[25]	LOADI    	4 0
+	375	[25]	CALL     	3 2 2	; 1 in 1 out
+	376	[25]	MOVE     	4 0
+	377	[25]	GETTABUP 	5 0 1	; _ENV "math"
+	378	[25]	GETFIELD 	5 5 24	; "atan"
+	379	[25]	LOADI    	6 1
+	380	[25]	CALL     	5 2 0	; 1 in all out
+	381	[25]	CALL     	4 0 2	; all in 1 out
+	382	[25]	MOVE     	5 0
+	383	[25]	GETTABUP 	6 0 1	; _ENV "math"
+	384	[25]	GETFIELD 	6 6 24	; "atan"
+	385	[25]	LOADI    	7 -1
+	386	[25]	CALL     	6 2 0	; 1 in all out
+	387	[25]	CALL     	5 0 2	; all in 1 out
+	388	[25]	MOVE     	6 0
+	389	[25]	GETTABUP 	7 0 1	; _ENV "math"
+	390	[25]	GETFIELD 	7 7 24	; "atan"
+	391	[25]	GETTABUP 	8 0 1	; _ENV "math"
+	392	[25]	GETFIELD 	8 8 4	; "huge"
+	393	[25]	CALL     	7 2 0	; 1 in all out
+	394	[25]	CALL     	6 0 0	; all in all out
+	395	[25]	CALL     	2 0 1	; all in 0 out
+	396	[26]	GETTABUP 	2 0 0	; _ENV "print"
+	397	[26]	MOVE     	3 0
+	398	[26]	GETTABUP 	4 0 1	; _ENV "math"
+	399	[26]	GETFIELD 	4 4 24	; "atan"
+	400	[26]	LOADI    	5 1
+	401	[26]	LOADI    	6 1
+	402	[26]	CALL     	4 3 0	; 2 in all out
+	403	[26]	CALL     	3 0 2	; all in 1 out
+	404	[26]	MOVE     	4 0
+	405	[26]	GETTABUP 	5 0 1	; _ENV "math"
+	406	[26]	GETFIELD 	5 5 24	; "atan"
+	407	[26]	LOADI    	6 1
+	408	[26]	LOADI    	7 -1
+	409	[26]	CALL     	5 3 0	; 2 in all out
+	410	[26]	CALL     	4 0 2	; all in 1 out
+	411	[26]	MOVE     	5 0
+	412	[26]	GETTABUP 	6 0 1	; _ENV "math"
+	413	[26]	GETFIELD 	6 6 24	; "atan"
+	414	[26]	LOADI    	7 -1
+	415	[26]	LOADI    	8 -1
+	416	[26]	CALL     	6 3 0	; 2 in all out
+	417	[26]	CALL     	5 0 2	; all in 1 out
+	418	[26]	MOVE     	6 0
+	419	[26]	GETTABUP 	7 0 1	; _ENV "math"
+	420	[26]	GETFIELD 	7 7 24	; "atan"
+	421	[26]	LOADI    	8 0
+	422	[26]	LOADI    	9 -1
+	423	[26]	CALL     	7 3 0	; 2 in all out
+	424	[26]	CALL     	6 0 0	; all in all out
+	425	[26]	CALL     	2 0 1	; all in 0 out
+	426	[27]	GETTABUP 	2 0 0	; _ENV "print"
+	427	[27]	GETTABUP 	3 0 1	; _ENV "math"
+	428	[27]	GETFIELD 	3 3 24	; "atan"
+	429	[27]	LOADI    	4 0
+	430	[27]	LOADI    	5 1
+	431	[27]	CALL     	3 3 2	; 2 in 1 out
+	432	[27]	MOVE     	4 0
+	433	[27]	GETTABUP 	5 0 1	; _ENV "math"
+	434	[27]	GETFIELD 	5 5 24	; "atan"
+	435	[27]	LOADI    	6 1
+	436	[27]	LOADI    	7 0
+	437	[27]	CALL     	5 3 0	; 2 in all out
+	438	[27]	CALL     	4 0 2	; all in 1 out
+	439	[27]	MOVE     	5 0
+	440	[27]	GETTABUP 	6 0 1	; _ENV "math"
+	441	[27]	GETFIELD 	6 6 24	; "atan"
+	442	[27]	LOADI    	7 -1
+	443	[27]	LOADI    	8 0
+	444	[27]	CALL     	6 3 0	; 2 in all out
+	445	[27]	CALL     	5 0 2	; all in 1 out
+	446	[27]	MOVE     	6 0
+	447	[27]	GETTABUP 	7 0 1	; _ENV "math"
+	448	[27]	GETFIELD 	7 7 24	; "atan"
+	449	[27]	LOADI    	8 5
+	450	[27]	CALL     	7 2 0	; 1 in all out
+	451	[27]	CALL     	6 0 0	; all in all out
+	452	[27]	CALL     	2 0 1	; all in 0 out
+	453	[30]	GETTABUP 	2 0 0	; _ENV "print"
+	454	[30]	GETTABUP 	3 0 1	; _ENV "math"
+	455	[30]	GETFIELD 	3 3 25	; "deg"
+	456	[30]	GETTABUP 	4 0 1	; _ENV "math"
+	457	[30]	GETFIELD 	4 4 11	; "pi"
+	458	[30]	CALL     	3 2 2	; 1 in 1 out
+	459	[30]	GETTABUP 	4 0 1	; _ENV "math"
+	460	[30]	GETFIELD 	4 4 26	; "rad"
+	461	[30]	LOADI    	5 180
+	462	[30]	CALL     	4 2 2	; 1 in 1 out
+	463	[30]	GETTABUP 	5 0 1	; _ENV "math"
+	464	[30]	GETFIELD 	5 5 11	; "pi"
+	465	[30]	EQ       	4 5 1
+	466	[30]	JMP      	1	; to 468
+	467	[30]	LFALSESKIP	4
+	468	[30]	LOADTRUE 	4
+	469	[30]	MOVE     	5 0
+	470	[30]	GETTABUP 	6 0 1	; _ENV "math"
+	471	[30]	GETFIELD 	6 6 25	; "deg"
+	472	[30]	LOADI    	7 1
+	473	[30]	CALL     	6 2 0	; 1 in all out
+	474	[30]	CALL     	5 0 2	; all in 1 out
+	475	[30]	MOVE     	6 0
+	476	[30]	GETTABUP 	7 0 1	; _ENV "math"
+	477	[30]	GETFIELD 	7 7 26	; "rad"
+	478	[30]	LOADI    	8 1
+	479	[30]	CALL     	7 2 0	; 1 in all out
+	480	[30]	CALL     	6 0 0	; all in all out
+	481	[30]	CALL     	2 0 1	; all in 0 out
+	482	[31]	GETTABUP 	2 0 0	; _ENV "print"
+	483	[31]	GETTABUP 	3 0 1	; _ENV "math"
+	484	[31]	GETFIELD 	3 3 25	; "deg"
+	485	[31]	LOADI    	4 0
+	486	[31]	CALL     	3 2 2	; 1 in 1 out
+	487	[31]	GETTABUP 	4 0 1	; _ENV "math"
+	488	[31]	GETFIELD 	4 4 26	; "rad"
+	489	[31]	LOADI    	5 0
+	490	[31]	CALL     	4 2 2	; 1 in 1 out
+	491	[31]	GETTABUP 	5 0 1	; _ENV "math"
+	492	[31]	GETFIELD 	5 5 5	; "type"
+	493	[31]	GETTABUP 	6 0 1	; _ENV "math"
+	494	[31]	GETFIELD 	6 6 25	; "deg"
+	495	[31]	LOADI    	7 1
+	496	[31]	CALL     	6 2 0	; 1 in all out
+	497	[31]	CALL     	5 0 0	; all in all out
+	498	[31]	CALL     	2 0 1	; all in 0 out
+	499	[34]	GETTABUP 	2 0 0	; _ENV "print"
+	500	[34]	GETTABUP 	3 0 1	; _ENV "math"
+	501	[34]	GETFIELD 	3 3 5	; "type"
+	502	[34]	GETTABUP 	4 0 1	; _ENV "math"
+	503	[34]	GETFIELD 	4 4 14	; "sin"
+	504	[34]	LOADI    	5 0
+	505	[34]	CALL     	4 2 0	; 1 in all out
+	506	[34]	CALL     	3 0 2	; all in 1 out
+	507	[34]	GETTABUP 	4 0 1	; _ENV "math"
+	508	[34]	GETFIELD 	4 4 5	; "type"
+	509	[34]	GETTABUP 	5 0 1	; _ENV "math"
+	510	[34]	GETFIELD 	5 5 7	; "exp"
+	511	[34]	LOADI    	6 0
+	512	[34]	CALL     	5 2 0	; 1 in all out
+	513	[34]	CALL     	4 0 2	; all in 1 out
+	514	[34]	GETTABUP 	5 0 1	; _ENV "math"
+	515	[34]	GETFIELD 	5 5 5	; "type"
+	516	[34]	GETTABUP 	6 0 1	; _ENV "math"
+	517	[34]	GETFIELD 	6 6 2	; "sqrt"
+	518	[34]	LOADI    	7 9
+	519	[34]	CALL     	6 2 0	; 1 in all out
+	520	[34]	CALL     	5 0 0	; all in all out
+	521	[34]	CALL     	2 0 1	; all in 0 out
+	522	[37]	GETTABUP 	2 0 0	; _ENV "print"
+	523	[37]	GETTABUP 	3 0 27	; _ENV "pcall"
+	524	[37]	GETTABUP 	4 0 1	; _ENV "math"
+	525	[37]	GETFIELD 	4 4 2	; "sqrt"
+	526	[37]	CALL     	3 2 0	; 1 in all out
+	527	[37]	CALL     	2 0 1	; all in 0 out
+	528	[38]	GETTABUP 	2 0 0	; _ENV "print"
+	529	[38]	GETTABUP 	3 0 27	; _ENV "pcall"
+	530	[38]	GETTABUP 	4 0 1	; _ENV "math"
+	531	[38]	GETFIELD 	4 4 14	; "sin"
+	532	[38]	LOADK    	5 28	; "x"
+	533	[38]	CALL     	3 3 0	; 2 in all out
+	534	[38]	CALL     	2 0 1	; all in 0 out
+	535	[39]	GETTABUP 	2 0 0	; _ENV "print"
+	536	[39]	GETTABUP 	3 0 27	; _ENV "pcall"
+	537	[39]	GETTABUP 	4 0 1	; _ENV "math"
+	538	[39]	GETFIELD 	4 4 8	; "log"
+	539	[39]	LOADI    	5 8
+	540	[39]	LOADK    	6 29	; "two"
+	541	[39]	CALL     	3 4 0	; 3 in all out
+	542	[39]	CALL     	2 0 1	; all in 0 out
+	543	[40]	GETTABUP 	2 0 0	; _ENV "print"
+	544	[40]	GETTABUP 	3 0 27	; _ENV "pcall"
+	545	[40]	GETTABUP 	4 0 1	; _ENV "math"
+	546	[40]	GETFIELD 	4 4 24	; "atan"
+	547	[40]	CALL     	3 2 0	; 1 in all out
+	548	[40]	CALL     	2 0 1	; all in 0 out
+	549	[41]	GETTABUP 	2 0 0	; _ENV "print"
+	550	[41]	GETTABUP 	3 0 27	; _ENV "pcall"
+	551	[41]	GETTABUP 	4 0 1	; _ENV "math"
+	552	[41]	GETFIELD 	4 4 7	; "exp"
+	553	[41]	NEWTABLE 	5 0 0	; 0
+	554	[41]	EXTRAARG 	0
+	555	[41]	CALL     	3 3 0	; 2 in all out
+	556	[41]	CALL     	2 0 1	; all in 0 out
+	557	[43]	MOVE     	2 0
+	558	[43]	GETTABUP 	3 0 1	; _ENV "math"
+	559	[43]	GETFIELD 	3 3 11	; "pi"
+	560	[43]	CALL     	2 2 2	; 1 in 1 out
+	561	[43]	GETTABUP 	3 0 1	; _ENV "math"
+	562	[43]	GETFIELD 	3 3 2	; "sqrt"
+	563	[43]	LOADI    	4 144
+	564	[43]	CALL     	3 2 0	; 1 in all out
+	565	[43]	RETURN   	2 0 1	; all out
+	566	[43]	RETURN   	2 1 1	; 0 out
+constants (30):
+	0	S	"print"
+	1	S	"math"
+	2	S	"sqrt"
+	3	I	2
+	4	S	"huge"
+	5	S	"type"
+	6	S	"9"
+	7	S	"exp"
+	8	S	"log"
+	9	F	1e+15
+	10	F	4.5035996273705e+15
+	11	S	"pi"
+	12	F	3.1415926535898
+	13	S	"maxinteger"
+	14	S	"sin"
+	15	I	6
+	16	S	"cos"
+	17	I	3
+	18	S	"tan"
+	19	I	4
+	20	F	-0.5
+	21	S	"asin"
+	22	S	"acos"
+	23	F	0.5
+	24	S	"atan"
+	25	S	"deg"
+	26	S	"rad"
+	27	S	"pcall"
+	28	S	"x"
+	29	S	"two"
+locals (2):
+	0	f6	3	567
+	1	g6	4	567
+upvalues (1):
+	0	_ENV	1	0
+
+function <math_functions.lua:6,6> (7 instructions)
+1 param, 4 slots, 1 upvalue, 1 local, 3 constants, 0 functions
+	1	[6]	GETTABUP 	1 0 0	; _ENV "string"
+	2	[6]	GETFIELD 	1 1 1	; "format"
+	3	[6]	LOADK    	2 2	; "%.6f"
+	4	[6]	MOVE     	3 0
+	5	[6]	TAILCALL 	1 3 0	; 2 in
+	6	[6]	RETURN   	1 0 0	; all out
+	7	[6]	RETURN0  	
+constants (3):
+	0	S	"string"
+	1	S	"format"
+	2	S	"%.6f"
+locals (1):
+	0	x	1	8
+upvalues (1):
+	0	_ENV	0	0
+
+function <math_functions.lua:7,7> (7 instructions)
+1 param, 4 slots, 1 upvalue, 1 local, 3 constants, 0 functions
+	1	[7]	GETTABUP 	1 0 0	; _ENV "string"
+	2	[7]	GETFIELD 	1 1 1	; "format"
+	3	[7]	LOADK    	2 2	; "%.6g"
+	4	[7]	MOVE     	3 0
+	5	[7]	TAILCALL 	1 3 0	; 2 in
+	6	[7]	RETURN   	1 0 0	; all out
+	7	[7]	RETURN0  	
+constants (3):
+	0	S	"string"
+	1	S	"format"
+	2	S	"%.6g"
+locals (1):
+	0	x	1	8
+upvalues (1):
+	0	_ENV	0	0

@@ -1,0 +1,414 @@
+
+main <string_find.lua:0,0> (355 instructions)
+0+ params, 8 slots, 1 upvalue, 1 local, 51 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	LOADK    	0 0	; "hello world, hello lua"
+	3	[7]	GETTABUP 	1 0 1	; _ENV "print"
+	4	[7]	GETTABUP 	2 0 2	; _ENV "string"
+	5	[7]	GETFIELD 	2 2 3	; "find"
+	6	[7]	MOVE     	3 0
+	7	[7]	LOADK    	4 4	; "hello"
+	8	[7]	CALL     	2 3 0	; 2 in all out
+	9	[7]	CALL     	1 0 1	; all in 0 out
+	10	[8]	GETTABUP 	1 0 1	; _ENV "print"
+	11	[8]	GETTABUP 	2 0 2	; _ENV "string"
+	12	[8]	GETFIELD 	2 2 3	; "find"
+	13	[8]	MOVE     	3 0
+	14	[8]	LOADK    	4 4	; "hello"
+	15	[8]	LOADI    	5 2
+	16	[8]	CALL     	2 4 0	; 3 in all out
+	17	[8]	CALL     	1 0 1	; all in 0 out
+	18	[9]	GETTABUP 	1 0 1	; _ENV "print"
+	19	[9]	GETTABUP 	2 0 2	; _ENV "string"
+	20	[9]	GETFIELD 	2 2 3	; "find"
+	21	[9]	MOVE     	3 0
+	22	[9]	LOADK    	4 4	; "hello"
+	23	[9]	LOADI    	5 -9
+	24	[9]	CALL     	2 4 0	; 3 in all out
+	25	[9]	CALL     	1 0 1	; all in 0 out
+	26	[10]	GETTABUP 	1 0 1	; _ENV "print"
+	27	[10]	GETTABUP 	2 0 2	; _ENV "string"
+	28	[10]	GETFIELD 	2 2 3	; "find"
+	29	[10]	MOVE     	3 0
+	30	[10]	LOADK    	4 4	; "hello"
+	31	[10]	LOADI    	5 -100
+	32	[10]	CALL     	2 4 0	; 3 in all out
+	33	[10]	CALL     	1 0 1	; all in 0 out
+	34	[11]	GETTABUP 	1 0 1	; _ENV "print"
+	35	[11]	GETTABUP 	2 0 2	; _ENV "string"
+	36	[11]	GETFIELD 	2 2 3	; "find"
+	37	[11]	MOVE     	3 0
+	38	[11]	LOADK    	4 5	; "lua"
+	39	[11]	LOADI    	5 100
+	40	[11]	CALL     	2 4 0	; 3 in all out
+	41	[11]	CALL     	1 0 1	; all in 0 out
+	42	[12]	GETTABUP 	1 0 1	; _ENV "print"
+	43	[12]	GETTABUP 	2 0 2	; _ENV "string"
+	44	[12]	GETFIELD 	2 2 3	; "find"
+	45	[12]	MOVE     	3 0
+	46	[12]	LOADK    	4 6	; "xyz"
+	47	[12]	CALL     	2 3 0	; 2 in all out
+	48	[12]	CALL     	1 0 1	; all in 0 out
+	49	[13]	GETTABUP 	1 0 1	; _ENV "print"
+	50	[13]	GETTABUP 	2 0 2	; _ENV "string"
+	51	[13]	GETFIELD 	2 2 3	; "find"
+	52	[13]	MOVE     	3 0
+	53	[13]	LOADK    	4 7	; "o"
+	54	[13]	LOADI    	5 0
+	55	[13]	CALL     	2 4 2	; 3 in 1 out
+	56	[13]	GETTABUP 	3 0 2	; _ENV "string"
+	57	[13]	GETFIELD 	3 3 3	; "find"
+	58	[13]	MOVE     	4 0
+	59	[13]	LOADK    	5 7	; "o"
+	60	[13]	LOADI    	6 6
+	61	[13]	CALL     	3 4 0	; 3 in all out
+	62	[13]	CALL     	1 0 1	; all in 0 out
+	63	[14]	GETTABUP 	1 0 1	; _ENV "print"
+	64	[14]	GETTABUP 	2 0 2	; _ENV "string"
+	65	[14]	GETFIELD 	2 2 3	; "find"
+	66	[14]	MOVE     	3 0
+	67	[14]	LOADK    	4 8	; "a"
+	68	[14]	LOADI    	5 -1
+	69	[14]	CALL     	2 4 2	; 3 in 1 out
+	70	[14]	GETTABUP 	3 0 2	; _ENV "string"
+	71	[14]	GETFIELD 	3 3 3	; "find"
+	72	[14]	MOVE     	4 0
+	73	[14]	LOADK    	5 8	; "a"
+	74	[14]	LOADI    	6 -2
+	75	[14]	CALL     	3 4 0	; 3 in all out
+	76	[14]	CALL     	1 0 1	; all in 0 out
+	77	[17]	GETTABUP 	1 0 1	; _ENV "print"
+	78	[17]	GETTABUP 	2 0 2	; _ENV "string"
+	79	[17]	GETFIELD 	2 2 3	; "find"
+	80	[17]	LOADK    	3 9	; "abc"
+	81	[17]	LOADK    	4 10	; ""
+	82	[17]	CALL     	2 3 2	; 2 in 1 out
+	83	[17]	GETTABUP 	3 0 2	; _ENV "string"
+	84	[17]	GETFIELD 	3 3 3	; "find"
+	85	[17]	LOADK    	4 9	; "abc"
+	86	[17]	LOADK    	5 10	; ""
+	87	[17]	LOADI    	6 3
+	88	[17]	CALL     	3 4 2	; 3 in 1 out
+	89	[17]	GETTABUP 	4 0 2	; _ENV "string"
+	90	[17]	GETFIELD 	4 4 3	; "find"
+	91	[17]	LOADK    	5 9	; "abc"
+	92	[17]	LOADK    	6 10	; ""
+	93	[17]	LOADI    	7 4
+	94	[17]	CALL     	4 4 0	; 3 in all out
+	95	[17]	CALL     	1 0 1	; all in 0 out
+	96	[18]	GETTABUP 	1 0 1	; _ENV "print"
+	97	[18]	GETTABUP 	2 0 2	; _ENV "string"
+	98	[18]	GETFIELD 	2 2 3	; "find"
+	99	[18]	LOADK    	3 9	; "abc"
+	100	[18]	LOADK    	4 10	; ""
+	101	[18]	LOADI    	5 5
+	102	[18]	CALL     	2 4 2	; 3 in 1 out
+	103	[18]	GETTABUP 	3 0 2	; _ENV "string"
+	104	[18]	GETFIELD 	3 3 3	; "find"
+	105	[18]	LOADK    	4 10	; ""
+	106	[18]	LOADK    	5 10	; ""
+	107	[18]	CALL     	3 3 2	; 2 in 1 out
+	108	[18]	GETTABUP 	4 0 2	; _ENV "string"
+	109	[18]	GETFIELD 	4 4 3	; "find"
+	110	[18]	LOADK    	5 10	; ""
+	111	[18]	LOADK    	6 10	; ""
+	112	[18]	LOADI    	7 1
+	113	[18]	CALL     	4 4 0	; 3 in all out
+	114	[18]	CALL     	1 0 1	; all in 0 out
+	115	[19]	GETTABUP 	1 0 1	; _ENV "print"
+	116	[19]	GETTABUP 	2 0 2	; _ENV "string"
+	117	[19]	GETFIELD 	2 2 3	; "find"
+	118	[19]	LOADK    	3 9	; "abc"
+	119	[19]	LOADK    	4 10	; ""
+	120	[19]	LOADI    	5 -1
+	121	[19]	CALL     	2 4 2	; 3 in 1 out
+	122	[19]	GETTABUP 	3 0 2	; _ENV "string"
+	123	[19]	GETFIELD 	3 3 3	; "find"
+	124	[19]	LOADK    	4 9	; "abc"
+	125	[19]	LOADK    	5 10	; ""
+	126	[19]	LOADI    	6 -10
+	127	[19]	CALL     	3 4 0	; 3 in all out
+	128	[19]	CALL     	1 0 1	; all in 0 out
+	129	[22]	GETTABUP 	1 0 1	; _ENV "print"
+	130	[22]	GETTABUP 	2 0 2	; _ENV "string"
+	131	[22]	GETFIELD 	2 2 3	; "find"
+	132	[22]	MOVE     	3 0
+	133	[22]	LOADK    	4 11	; "w%a+"
+	134	[22]	CALL     	2 3 0	; 2 in all out
+	135	[22]	CALL     	1 0 1	; all in 0 out
+	136	[23]	GETTABUP 	1 0 1	; _ENV "print"
+	137	[23]	GETTABUP 	2 0 2	; _ENV "string"
+	138	[23]	GETFIELD 	2 2 3	; "find"
+	139	[23]	MOVE     	3 0
+	140	[23]	LOADK    	4 12	; "(%a+), (%a+)"
+	141	[23]	CALL     	2 3 0	; 2 in all out
+	142	[23]	CALL     	1 0 1	; all in 0 out
+	143	[24]	GETTABUP 	1 0 1	; _ENV "print"
+	144	[24]	GETTABUP 	2 0 2	; _ENV "string"
+	145	[24]	GETFIELD 	2 2 3	; "find"
+	146	[24]	MOVE     	3 0
+	147	[24]	LOADK    	4 13	; "()ll()"
+	148	[24]	CALL     	2 3 0	; 2 in all out
+	149	[24]	CALL     	1 0 1	; all in 0 out
+	150	[25]	GETTABUP 	1 0 1	; _ENV "print"
+	151	[25]	GETTABUP 	2 0 2	; _ENV "string"
+	152	[25]	GETFIELD 	2 2 3	; "find"
+	153	[25]	MOVE     	3 0
+	154	[25]	LOADK    	4 14	; "l+"
+	155	[25]	CALL     	2 3 0	; 2 in all out
+	156	[25]	CALL     	1 0 1	; all in 0 out
+	157	[26]	GETTABUP 	1 0 1	; _ENV "print"
+	158	[26]	GETTABUP 	2 0 2	; _ENV "string"
+	159	[26]	GETFIELD 	2 2 3	; "find"
+	160	[26]	LOADK    	3 15	; "  trim  "
+	161	[26]	LOADK    	4 16	; "^%s*(.-)%s*$"
+	162	[26]	CALL     	2 3 0	; 2 in all out
+	163	[26]	CALL     	1 0 1	; all in 0 out
+	164	[27]	GETTABUP 	1 0 1	; _ENV "print"
+	165	[27]	GETTABUP 	2 0 2	; _ENV "string"
+	166	[27]	GETFIELD 	2 2 3	; "find"
+	167	[27]	LOADK    	3 17	; "key = value"
+	168	[27]	LOADK    	4 18	; "(%w+)%s*=%s*(%w+)"
+	169	[27]	CALL     	2 3 0	; 2 in all out
+	170	[27]	CALL     	1 0 1	; all in 0 out
+	171	[28]	GETTABUP 	1 0 1	; _ENV "print"
+	172	[28]	GETTABUP 	2 0 2	; _ENV "string"
+	173	[28]	GETFIELD 	2 2 3	; "find"
+	174	[28]	LOADK    	3 19	; "2024-01-15"
+	175	[28]	LOADK    	4 20	; "(%d+)-(%d+)-(%d+)"
+	176	[28]	CALL     	2 3 0	; 2 in all out
+	177	[28]	CALL     	1 0 1	; all in 0 out
+	178	[29]	GETTABUP 	1 0 1	; _ENV "print"
+	179	[29]	GETTABUP 	2 0 2	; _ENV "string"
+	180	[29]	GETFIELD 	2 2 3	; "find"
+	181	[29]	LOADK    	3 9	; "abc"
+	182	[29]	LOADK    	4 21	; "^b"
+	183	[29]	CALL     	2 3 2	; 2 in 1 out
+	184	[29]	GETTABUP 	3 0 2	; _ENV "string"
+	185	[29]	GETFIELD 	3 3 3	; "find"
+	186	[29]	LOADK    	4 9	; "abc"
+	187	[29]	LOADK    	5 22	; "^a"
+	188	[29]	CALL     	3 3 2	; 2 in 1 out
+	189	[29]	GETTABUP 	4 0 2	; _ENV "string"
+	190	[29]	GETFIELD 	4 4 3	; "find"
+	191	[29]	LOADK    	5 9	; "abc"
+	192	[29]	LOADK    	6 23	; "c$"
+	193	[29]	CALL     	4 3 0	; 2 in all out
+	194	[29]	CALL     	1 0 1	; all in 0 out
+	195	[30]	GETTABUP 	1 0 1	; _ENV "print"
+	196	[30]	GETTABUP 	2 0 2	; _ENV "string"
+	197	[30]	GETFIELD 	2 2 3	; "find"
+	198	[30]	LOADK    	3 9	; "abc"
+	199	[30]	LOADK    	4 24	; "b"
+	200	[30]	LOADI    	5 1
+	201	[30]	LOADFALSE	6
+	202	[30]	CALL     	2 5 2	; 4 in 1 out
+	203	[30]	GETTABUP 	3 0 2	; _ENV "string"
+	204	[30]	GETFIELD 	3 3 3	; "find"
+	205	[30]	LOADK    	4 25	; "a.c"
+	206	[30]	LOADK    	5 26	; "."
+	207	[30]	LOADI    	6 1
+	208	[30]	LOADNIL  	7 0	; 1 out
+	209	[30]	CALL     	3 5 0	; 4 in all out
+	210	[30]	CALL     	1 0 1	; all in 0 out
+	211	[33]	GETTABUP 	1 0 1	; _ENV "print"
+	212	[33]	GETTABUP 	2 0 2	; _ENV "string"
+	213	[33]	GETFIELD 	2 2 3	; "find"
+	214	[33]	LOADK    	3 25	; "a.c"
+	215	[33]	LOADK    	4 26	; "."
+	216	[33]	LOADI    	5 1
+	217	[33]	LOADTRUE 	6
+	218	[33]	CALL     	2 5 2	; 4 in 1 out
+	219	[33]	GETTABUP 	3 0 2	; _ENV "string"
+	220	[33]	GETFIELD 	3 3 3	; "find"
+	221	[33]	LOADK    	4 27	; "a+b"
+	222	[33]	LOADK    	5 28	; "+"
+	223	[33]	LOADI    	6 1
+	224	[33]	LOADTRUE 	7
+	225	[33]	CALL     	3 5 0	; 4 in all out
+	226	[33]	CALL     	1 0 1	; all in 0 out
+	227	[34]	GETTABUP 	1 0 1	; _ENV "print"
+	228	[34]	GETTABUP 	2 0 2	; _ENV "string"
+	229	[34]	GETFIELD 	2 2 3	; "find"
+	230	[34]	LOADK    	3 29	; "50% off"
+	231	[34]	LOADK    	4 30	; "%"
+	232	[34]	LOADI    	5 1
+	233	[34]	LOADTRUE 	6
+	234	[34]	CALL     	2 5 2	; 4 in 1 out
+	235	[34]	GETTABUP 	3 0 2	; _ENV "string"
+	236	[34]	GETFIELD 	3 3 3	; "find"
+	237	[34]	LOADK    	4 31	; "(x)"
+	238	[34]	LOADK    	5 32	; "("
+	239	[34]	LOADI    	6 1
+	240	[34]	LOADTRUE 	7
+	241	[34]	CALL     	3 5 0	; 4 in all out
+	242	[34]	CALL     	1 0 1	; all in 0 out
+	243	[35]	GETTABUP 	1 0 1	; _ENV "print"
+	244	[35]	GETTABUP 	2 0 2	; _ENV "string"
+	245	[35]	GETFIELD 	2 2 3	; "find"
+	246	[35]	LOADK    	3 33	; "a.b.c"
+	247	[35]	LOADK    	4 34	; ".b."
+	248	[35]	LOADI    	5 1
+	249	[35]	LOADTRUE 	6
+	250	[35]	CALL     	2 5 2	; 4 in 1 out
+	251	[35]	GETTABUP 	3 0 2	; _ENV "string"
+	252	[35]	GETFIELD 	3 3 3	; "find"
+	253	[35]	LOADK    	4 9	; "abc"
+	254	[35]	LOADK    	5 22	; "^a"
+	255	[35]	LOADI    	6 1
+	256	[35]	LOADTRUE 	7
+	257	[35]	CALL     	3 5 0	; 4 in all out
+	258	[35]	CALL     	1 0 1	; all in 0 out
+	259	[36]	GETTABUP 	1 0 1	; _ENV "print"
+	260	[36]	GETTABUP 	2 0 2	; _ENV "string"
+	261	[36]	GETFIELD 	2 2 3	; "find"
+	262	[36]	LOADK    	3 35	; "x[y]"
+	263	[36]	LOADK    	4 36	; "[y]"
+	264	[36]	LOADI    	5 1
+	265	[36]	LOADTRUE 	6
+	266	[36]	CALL     	2 5 2	; 4 in 1 out
+	267	[36]	GETTABUP 	3 0 2	; _ENV "string"
+	268	[36]	GETFIELD 	3 3 3	; "find"
+	269	[36]	LOADK    	4 35	; "x[y]"
+	270	[36]	LOADK    	5 36	; "[y]"
+	271	[36]	CALL     	3 3 0	; 2 in all out
+	272	[36]	CALL     	1 0 1	; all in 0 out
+	273	[37]	GETTABUP 	1 0 1	; _ENV "print"
+	274	[37]	GETTABUP 	2 0 2	; _ENV "string"
+	275	[37]	GETFIELD 	2 2 3	; "find"
+	276	[37]	LOADK    	3 37	; "a\000b"
+	277	[37]	LOADK    	4 38	; "\000"
+	278	[37]	LOADI    	5 1
+	279	[37]	LOADTRUE 	6
+	280	[37]	CALL     	2 5 2	; 4 in 1 out
+	281	[37]	GETTABUP 	3 0 2	; _ENV "string"
+	282	[37]	GETFIELD 	3 3 3	; "find"
+	283	[37]	LOADK    	4 37	; "a\000b"
+	284	[37]	LOADK    	5 39	; "%z"
+	285	[37]	CALL     	3 3 0	; 2 in all out
+	286	[37]	CALL     	1 0 1	; all in 0 out
+	287	[38]	GETTABUP 	1 0 1	; _ENV "print"
+	288	[38]	GETTABUP 	2 0 2	; _ENV "string"
+	289	[38]	GETFIELD 	2 2 3	; "find"
+	290	[38]	LOADK    	3 40	; "aaa"
+	291	[38]	LOADK    	4 41	; "aa"
+	292	[38]	LOADI    	5 2
+	293	[38]	LOADTRUE 	6
+	294	[38]	CALL     	2 5 2	; 4 in 1 out
+	295	[38]	GETTABUP 	3 0 2	; _ENV "string"
+	296	[38]	GETFIELD 	3 3 3	; "find"
+	297	[38]	LOADK    	4 40	; "aaa"
+	298	[38]	LOADK    	5 42	; "aaaa"
+	299	[38]	LOADI    	6 1
+	300	[38]	LOADTRUE 	7
+	301	[38]	CALL     	3 5 0	; 4 in all out
+	302	[38]	CALL     	1 0 1	; all in 0 out
+	303	[41]	GETTABUP 	1 0 1	; _ENV "print"
+	304	[41]	GETTABUP 	2 0 2	; _ENV "string"
+	305	[41]	GETFIELD 	2 2 3	; "find"
+	306	[41]	LOADI    	3 12345
+	307	[41]	LOADI    	4 34
+	308	[41]	CALL     	2 3 2	; 2 in 1 out
+	309	[41]	GETTABUP 	3 0 2	; _ENV "string"
+	310	[41]	GETFIELD 	3 3 3	; "find"
+	311	[41]	LOADK    	4 43	; 1.5
+	312	[41]	LOADK    	5 26	; "."
+	313	[41]	LOADI    	6 1
+	314	[41]	LOADTRUE 	7
+	315	[41]	CALL     	3 5 0	; 4 in all out
+	316	[41]	CALL     	1 0 1	; all in 0 out
+	317	[44]	GETTABUP 	1 0 1	; _ENV "print"
+	318	[44]	LOADK    	2 44	; "find me"
+	319	[44]	SELF     	2 2 3k	; "find"
+	320	[44]	LOADK    	4 45	; "me"
+	321	[44]	CALL     	2 3 2	; 2 in 1 out
+	322	[44]	LOADK    	3 44	; "find me"
+	323	[44]	SELF     	3 3 3k	; "find"
+	324	[44]	LOADK    	5 46	; "%s"
+	325	[44]	CALL     	3 3 0	; 2 in all out
+	326	[44]	CALL     	1 0 1	; all in 0 out
+	327	[46]	GETTABUP 	1 0 1	; _ENV "print"
+	328	[46]	GETTABUP 	2 0 47	; _ENV "pcall"
+	329	[46]	GETTABUP 	3 0 2	; _ENV "string"
+	330	[46]	GETFIELD 	3 3 3	; "find"
+	331	[46]	CALL     	2 2 0	; 1 in all out
+	332	[46]	CALL     	1 0 1	; all in 0 out
+	333	[47]	GETTABUP 	1 0 1	; _ENV "print"
+	334	[47]	GETTABUP 	2 0 47	; _ENV "pcall"
+	335	[47]	GETTABUP 	3 0 2	; _ENV "string"
+	336	[47]	GETFIELD 	3 3 3	; "find"
+	337	[47]	LOADK    	4 9	; "abc"
+	338	[47]	CALL     	2 3 0	; 2 in all out
+	339	[47]	CALL     	1 0 1	; all in 0 out
+	340	[48]	GETTABUP 	1 0 1	; _ENV "print"
+	341	[48]	GETTABUP 	2 0 47	; _ENV "pcall"
+	342	[48]	GETTABUP 	3 0 2	; _ENV "string"
+	343	[48]	GETFIELD 	3 3 3	; "find"
+	344	[48]	LOADK    	4 9	; "abc"
+	345	[48]	LOADK    	5 24	; "b"
+	346	[48]	LOADK    	6 48	; "x"
+	347	[48]	CALL     	2 5 0	; 4 in all out
+	348	[48]	CALL     	1 0 1	; all in 0 out
+	349	[50]	GETTABUP 	1 0 2	; _ENV "string"
+	350	[50]	GETFIELD 	1 1 3	; "find"
+	351	[50]	LOADK    	2 49	; "the end"
+	352	[50]	LOADK    	3 50	; "(e)(n)(d)"
+	353	[50]	TAILCALL 	1 3 1	; 2 in
+	354	[50]	RETURN   	1 0 1	; all out
+	355	[50]	RETURN   	1 1 1	; 0 out
+constants (51):
+	0	S	"hello world, hello lua"
+	1	S	"print"
+	2	S	"string"
+	3	S	"find"
+	4	S	"hello"
+	5	S	"lua"
+	6	S	"xyz"
+	7	S	"o"
+	8	S	"a"
+	9	S	"abc"
+	10	S	""
+	11	S	"w%a+"
+	12	S	"(%a+), (%a+)"
+	13	S	"()ll()"
+	14	S	"l+"
+	15	S	"  trim  "
+	16	S	"^%s*(.-)%s*$"
+	17	S	"key = value"
+	18	S	"(%w+)%s*=%s*(%w+)"
+	19	S	"2024-01-15"
+	20	S	"(%d+)-(%d+)-(%d+)"
+	21	S	"^b"
+	22	S	"^a"
+	23	S	"c$"
+	24	S	"b"
+	25	S	"a.c"
+	26	S	"."
+	27	S	"a+b"
+	28	S	"+"
+	29	S	"50% off"
+	30	S	"%"
+	31	S	"(x)"
+	32	S	"("
+	33	S	"a.b.c"
+	34	S	".b."
+	35	S	"x[y]"
+	36	S	"[y]"
+	37	S	"a\000b"
+	38	S	"\000"
+	39	S	"%z"
+	40	S	"aaa"
+	41	S	"aa"
+	42	S	"aaaa"
+	43	F	1.5
+	44	S	"find me"
+	45	S	"me"
+	46	S	"%s"
+	47	S	"pcall"
+	48	S	"x"
+	49	S	"the end"
+	50	S	"(e)(n)(d)"
+locals (1):
+	0	s	3	356
+upvalues (1):
+	0	_ENV	1	0

@@ -1,0 +1,22 @@
+
+main <err_string_method.lua:0,0> (10 instructions)
+0+ params, 5 slots, 1 upvalue, 1 local, 4 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[3]	LOADK    	0 0	; "x"
+	3	[4]	GETTABUP 	1 0 1	; _ENV "print"
+	4	[4]	SELF     	2 0 2k	; "rep"
+	5	[4]	LOADI    	4 3
+	6	[4]	CALL     	2 3 0	; 2 in all out
+	7	[4]	CALL     	1 0 1	; all in 0 out
+	8	[5]	SELF     	1 0 3k	; "bad"
+	9	[5]	CALL     	1 2 1	; 1 in 0 out
+	10	[5]	RETURN   	1 1 1	; 0 out
+constants (4):
+	0	S	"x"
+	1	S	"print"
+	2	S	"rep"
+	3	S	"bad"
+locals (1):
+	0	s	3	11
+upvalues (1):
+	0	_ENV	1	0

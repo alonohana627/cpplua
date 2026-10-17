@@ -1,0 +1,710 @@
+Chunk
+  LocalFunction f6
+    Function(x) [upvalues: _ENV]
+      Return
+        Call
+          Index
+            Name string
+            String "format"
+          String "%.6f"
+          Name x (local 0)
+  LocalFunction g6
+    Function(x) [upvalues: _ENV]
+      Return
+        Call
+          Index
+            Name string
+            String "format"
+          String "%.6g"
+          Name x (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "sqrt"
+        Integer 16
+      Binary ==
+        Binary ^
+          Call
+            Index
+              Name math
+              String "sqrt"
+            Integer 2
+          Integer 2
+        Integer 2
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "sqrt"
+          Integer 2
+      Call
+        Index
+          Name math
+          String "sqrt"
+        Integer 0
+      Call
+        Index
+          Name math
+          String "sqrt"
+        Unary -
+          Float 0.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "sqrt"
+        Index
+          Name math
+          String "huge"
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name math
+            String "sqrt"
+          Integer 4
+      Call
+        Index
+          Name math
+          String "sqrt"
+        String "9"
+  CallStatement
+    Call
+      Name print
+      Binary ~=
+        Call
+          Index
+            Name math
+            String "sqrt"
+          Unary -
+            Integer 1
+        Call
+          Index
+            Name math
+            String "sqrt"
+          Unary -
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "exp"
+        Integer 0
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "exp"
+          Integer 1
+      Call
+        Name g6 (local 1)
+        Call
+          Index
+            Name math
+            String "exp"
+          Integer 10
+      Call
+        Index
+          Name math
+          String "exp"
+        Unary -
+          Index
+            Name math
+            String "huge"
+      Call
+        Index
+          Name math
+          String "exp"
+        Index
+          Name math
+          String "huge"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "log"
+        Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "log"
+          Call
+            Index
+              Name math
+              String "exp"
+            Integer 2
+      Call
+        Index
+          Name math
+          String "log"
+        Integer 0
+      Call
+        Index
+          Name math
+          String "log"
+        Integer 8
+        Integer 2
+      Call
+        Index
+          Name math
+          String "log"
+        Integer 1024
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "log"
+        Integer 100
+        Integer 10
+      Call
+        Index
+          Name math
+          String "log"
+        Integer 1000
+        Integer 10
+      Call
+        Index
+          Name math
+          String "log"
+        Float 1e+15
+        Integer 10
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "log"
+          Integer 27
+          Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "log"
+        Binary ^
+          Integer 2
+          Integer 52
+        Integer 2
+      Call
+        Index
+          Name math
+          String "log"
+        Integer 1
+        Integer 10
+      Call
+        Name g6 (local 1)
+        Call
+          Index
+            Name math
+            String "log"
+          Integer 2
+          Integer 10
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "log"
+          Integer 10
+          Call
+            Index
+              Name math
+              String "exp"
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "log"
+        Index
+          Name math
+          String "huge"
+      Binary ~=
+        Call
+          Index
+            Name math
+            String "log"
+          Unary -
+            Integer 1
+        Call
+          Index
+            Name math
+            String "log"
+          Unary -
+            Integer 1
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name math
+            String "log"
+          Integer 8
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name f6 (local 0)
+        Index
+          Name math
+          String "pi"
+      Binary ==
+        Index
+          Name math
+          String "pi"
+        Float 3.141592653589793
+      Index
+        Name math
+        String "huge"
+      Unary -
+        Index
+          Name math
+          String "huge"
+      Binary >
+        Index
+          Name math
+          String "huge"
+        Index
+          Name math
+          String "maxinteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "sin"
+        Integer 0
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "sin"
+          Binary /
+            Index
+              Name math
+              String "pi"
+            Integer 2
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "sin"
+          Binary /
+            Index
+              Name math
+              String "pi"
+            Integer 6
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "sin"
+          Unary -
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "cos"
+        Integer 0
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "cos"
+          Index
+            Name math
+            String "pi"
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "cos"
+          Binary /
+            Index
+              Name math
+              String "pi"
+            Integer 3
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "cos"
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "tan"
+        Integer 0
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "tan"
+          Binary /
+            Index
+              Name math
+              String "pi"
+            Integer 4
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "tan"
+          Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "tan"
+          Unary -
+            Float 0.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "asin"
+        Integer 0
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "asin"
+          Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "asin"
+          Unary -
+            Float 0.5
+      Binary ~=
+        Call
+          Index
+            Name math
+            String "asin"
+          Integer 2
+        Call
+          Index
+            Name math
+            String "asin"
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "acos"
+          Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "acos"
+          Integer 0
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "acos"
+          Unary -
+            Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "acos"
+          Float 0.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "atan"
+        Integer 0
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "atan"
+          Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "atan"
+          Unary -
+            Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "atan"
+          Index
+            Name math
+            String "huge"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "atan"
+          Integer 1
+          Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "atan"
+          Integer 1
+          Unary -
+            Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "atan"
+          Unary -
+            Integer 1
+          Unary -
+            Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "atan"
+          Integer 0
+          Unary -
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "atan"
+        Integer 0
+        Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "atan"
+          Integer 1
+          Integer 0
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "atan"
+          Unary -
+            Integer 1
+          Integer 0
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "atan"
+          Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "deg"
+        Index
+          Name math
+          String "pi"
+      Binary ==
+        Call
+          Index
+            Name math
+            String "rad"
+          Integer 180
+        Index
+          Name math
+          String "pi"
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "deg"
+          Integer 1
+      Call
+        Name f6 (local 0)
+        Call
+          Index
+            Name math
+            String "rad"
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "deg"
+        Integer 0
+      Call
+        Index
+          Name math
+          String "rad"
+        Integer 0
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name math
+            String "deg"
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name math
+            String "sin"
+          Integer 0
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name math
+            String "exp"
+          Integer 0
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name math
+            String "sqrt"
+          Integer 9
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "sqrt"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "sin"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "log"
+        Integer 8
+        String "two"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "atan"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "exp"
+        Table
+  Return
+    Call
+      Name f6 (local 0)
+      Index
+        Name math
+        String "pi"
+    Call
+      Index
+        Name math
+        String "sqrt"
+      Integer 144

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 # Pre-release: bump by 0.0.1 per step. The release becomes 5.4.
-project(lua2 VERSION 0.0.8 LANGUAGES CXX)
+project(lua2 VERSION 0.0.9 LANGUAGES CXX)
 
 # C++26 (clang spells it -std=c++2c), no compiler extensions.
 set(CMAKE_CXX_STANDARD 26)
@@ -52,6 +52,14 @@ add_library(lua2_lib
   lib/value/table.cpp
   lib/std/base.cpp
   lib/std/auxlib.cpp
+  lib/std/io.cpp
+  lib/std/libs.cpp
+  lib/std/math.cpp
+  lib/std/os.cpp
+  lib/std/package.cpp
+  lib/std/string.cpp
+  lib/std/table.cpp
+  lib/std/utf8.cpp
   lib/api.cpp
 )
 add_library(lua2::lua2 ALIAS lua2_lib)
@@ -115,13 +123,15 @@ if(BUILD_TESTING)
     tests/table_test.cpp
     tests/meta_test.cpp
     tests/error_test.cpp
+    tests/stdlib_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
   # Tests may include internal headers from lib/internal/ to test internals directly.
   target_include_directories(lua2_tests PRIVATE lib/internal)
   target_compile_definitions(lua2_tests PRIVATE
     LUA2_VERSION="${PROJECT_VERSION}"
-    LUA2_FIXTURES_DIR="${PROJECT_SOURCE_DIR}/tests/fixtures")
+    LUA2_FIXTURES_DIR="${PROJECT_SOURCE_DIR}/tests/fixtures"
+    LUA2_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
   # The public API's tests, which see only include/lua2 (no lib/internal):
   # what a program embedding lua2 can use.

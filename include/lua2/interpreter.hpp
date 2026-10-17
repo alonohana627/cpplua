@@ -94,8 +94,11 @@ public:
 
     // ---- The rest ----
 
-    // Where `print` writes (stdout by default).
+    // Where `print`, io.write and io.stdout write (stdout by default).
     void set_output(std::function<void(std::string_view)> output);
+
+    // Where warnings (warn) and io.stderr write (stderr by default).
+    void set_error_output(std::function<void(std::string_view)> output);
 
     // The garbage collector (E9.6): a full cycle; the mode, generational or
     // incremental (the default); the memory in use, in bytes.

@@ -1,0 +1,57 @@
+01000000	00000001	feffffff
+ff	ff	feff
+abcd	563412	ffffff
+0100000000000000	8000000000000000
+ffffffffffffffffffffffffffffffff	00000000000000000000000000000001
+01020003000000	010200030004
+123456	5
+-1	255	2
+-2	258	3
+8388607	-8388608	4
+-5	17
+true
+1	2	5
+1	5
+1	5
+-1	9
+000000000000f83f	c0000000	000000000000e03f
+0.1	0.25	5
+false	inf	9
+float	-0.0	9
+03616263	0003616263	00000000
+686900	6162000000	6162
+abc	5
+hello	7
+hello	world	13
+abc	4
+xy	7	6
+true	true
+010002	0100000200
+0100000002000000	010002000000	01000000000000000200000000000000
+0100000000000000	010002
+-1	99	9
+4	15	16
+10	16	8	4
+1	0	4	0
+false	bad argument #2 to 'string.pack' (integer overflow)
+false	bad argument #2 to 'string.pack' (unsigned overflow)
+false	bad argument #2 to 'string.pack' (integer overflow)
+false	integral size (17) out of limits [1,16]
+false	integral size (0) out of limits [1,16]
+false	bad argument #2 to 'string.pack' (string length does not fit in given size)
+false	bad argument #2 to 'string.pack' (string contains zeros)
+false	bad argument #2 to 'string.pack' (string longer than given size)
+false	bad argument #2 to 'string.pack' (number expected, got nil)
+false	bad argument #2 to 'string.pack' (number expected, got string)
+false	invalid format option 'y'
+false	bad argument #1 to 'string.pack' (format asks for alignment not power of 2)
+false	bad argument #1 to 'string.packsize' (variable-length format)
+false	bad argument #1 to 'string.packsize' (variable-length format)
+false	bad argument #2 to 'string.unpack' (data string too short)
+false	bad argument #2 to 'string.unpack' (unfinished string for format 'z')
+false	bad argument #2 to 'string.unpack' (data string too short)
+false	bad argument #3 to 'string.unpack' (initial position out of string)
+false	9-byte integer does not fit into Lua Integer
+false	missing size for format option 'c'
+false	bad argument #1 to 'string.pack' (invalid next option for option 'X')
+1	-1	300	7

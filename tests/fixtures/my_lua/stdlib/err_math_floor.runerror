@@ -1,0 +1,1 @@
+err_math_floor.lua:3: bad argument #1 to 'floor' (number expected, got string)

@@ -1,0 +1,1 @@
+err_table_concat.lua:3: invalid value (table) at index 2 in table for 'concat'

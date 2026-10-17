@@ -1,0 +1,503 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String "plain"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String "say \"hi\""
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String "back\\slash"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String "line1\nline2"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String "tab\there"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String "\x00"
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String "\x001"
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String "\x01a"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String "\r\n"
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String "\x7F"
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String "\x1Fx"
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name string
+            String "format"
+          String "%q"
+          String "\xC8\xFF"
+        String "\"\xC8\xFF\""
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Integer 42
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Unary -
+          Integer 7
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Index
+          Name math
+          String "maxinteger"
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Index
+          Name math
+          String "mininteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Float 1.5
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Float 0.1
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Unary -
+          Float 2.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Float 1.0
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Float 1e+100
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Index
+          Name math
+          String "huge"
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Unary -
+          Index
+            Name math
+            String "huge"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Nil
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        True
+      Call
+        Index
+          Name string
+          String "format"
+        String "%q"
+        False
+  Local tricky
+    String "quote\" back\\ nl\n zero\x00 one\x01 digit\x009 high\xFA"
+  Local loaded
+    Call
+      Call
+        Name load
+        Binary ..
+          String "return "
+          Call
+            Index
+              Name string
+              String "format"
+            String "%q"
+            Name tricky (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name loaded (local 1)
+        Name tricky (local 0)
+      Unary #
+        Name loaded (local 1)
+  GenericFor _, v
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            Float 0.1
+          Item
+            Binary /
+              Integer 1
+              Integer 3
+          Item
+            Unary -
+              Float 1e-300
+          Item
+            Binary ^
+              Integer 2
+              Integer 63
+          Item
+            Index
+              Name math
+              String "mininteger"
+          Item
+            Integer 12345
+    Body
+      Local back
+        Call
+          Call
+            Name load
+            Binary ..
+              String "return "
+              Call
+                Index
+                  Name string
+                  String "format"
+                String "%q"
+                Name v (local 7)
+      CallStatement
+        Call
+          Index
+            Name io
+            String "write"
+          Call
+            Name tostring
+            Binary and
+              Binary ==
+                Name back (local 8)
+                Name v (local 7)
+              Binary ==
+                Call
+                  Index
+                    Name math
+                    String "type"
+                  Name back (local 8)
+                Call
+                  Index
+                    Name math
+                    String "type"
+                  Name v (local 7)
+          String " "
+  CallStatement
+    Call
+      Name print
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%q"
+        Name print
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%10q"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%d"
+        Float 1.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%d"
+        String "1.5"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%d"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%x"
+        Binary ^
+          Integer 2
+          Integer 63
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%d"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%s"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%y"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%10.123f"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%123d"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%#d"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%.3c"
+        Integer 65
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%c"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%f"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        Table
+  Return
+    Call
+      Index
+        Name string
+        String "format"
+      String "%q"
+      String "a\nb"

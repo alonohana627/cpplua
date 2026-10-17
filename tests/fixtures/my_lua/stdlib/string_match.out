@@ -1,0 +1,30 @@
+123
+hello	123
+3	5
+hell	el	l
+nil	true	true
+l	o	nil
+key	val
+key	
+padded|
+[nested]
+(a(b)c)
+quick
+1	4	nil
+20	1	2
+3	one,two,three
+a:1 b:2 c:3
+2 4 6
+1 2 3 4
+[aa][]
+0
+2	^a
+cdef
+ef
+0
+x	y	nil
+<first><><third>
+false	bad argument #2 to 'string.match' (string expected, got no value)
+false	bad argument #2 to 'string.gmatch' (string expected, got no value)
+false	unfinished capture
+5	4	9

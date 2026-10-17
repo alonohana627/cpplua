@@ -1,0 +1,529 @@
+
+main <utf8_basic.lua:0,0> (455 instructions)
+0+ params, 11 slots, 1 upvalue, 2 locals, 29 constants, 1 function
+	1	[1]	VARARGPREP	0
+	2	[9]	CLOSURE  	0 0
+	3	[11]	GETTABUP 	1 0 0	; _ENV "print"
+	4	[11]	MOVE     	2 0
+	5	[11]	GETTABUP 	3 0 1	; _ENV "utf8"
+	6	[11]	GETFIELD 	3 3 2	; "char"
+	7	[11]	LOADI    	4 65
+	8	[11]	CALL     	3 2 0	; 1 in all out
+	9	[11]	CALL     	2 0 2	; all in 1 out
+	10	[11]	MOVE     	3 0
+	11	[11]	GETTABUP 	4 0 1	; _ENV "utf8"
+	12	[11]	GETFIELD 	4 4 2	; "char"
+	13	[11]	LOADI    	5 233
+	14	[11]	CALL     	4 2 0	; 1 in all out
+	15	[11]	CALL     	3 0 2	; all in 1 out
+	16	[11]	MOVE     	4 0
+	17	[11]	GETTABUP 	5 0 1	; _ENV "utf8"
+	18	[11]	GETFIELD 	5 5 2	; "char"
+	19	[11]	LOADI    	6 8364
+	20	[11]	CALL     	5 2 0	; 1 in all out
+	21	[11]	CALL     	4 0 2	; all in 1 out
+	22	[11]	MOVE     	5 0
+	23	[11]	GETTABUP 	6 0 1	; _ENV "utf8"
+	24	[11]	GETFIELD 	6 6 2	; "char"
+	25	[11]	LOADK    	7 3	; 128512
+	26	[11]	CALL     	6 2 0	; 1 in all out
+	27	[11]	CALL     	5 0 0	; all in all out
+	28	[11]	CALL     	1 0 1	; all in 0 out
+	29	[12]	GETTABUP 	1 0 0	; _ENV "print"
+	30	[12]	MOVE     	2 0
+	31	[12]	GETTABUP 	3 0 1	; _ENV "utf8"
+	32	[12]	GETFIELD 	3 3 2	; "char"
+	33	[12]	LOADI    	4 127
+	34	[12]	CALL     	3 2 0	; 1 in all out
+	35	[12]	CALL     	2 0 2	; all in 1 out
+	36	[12]	MOVE     	3 0
+	37	[12]	GETTABUP 	4 0 1	; _ENV "utf8"
+	38	[12]	GETFIELD 	4 4 2	; "char"
+	39	[12]	LOADI    	5 128
+	40	[12]	CALL     	4 2 0	; 1 in all out
+	41	[12]	CALL     	3 0 2	; all in 1 out
+	42	[12]	MOVE     	4 0
+	43	[12]	GETTABUP 	5 0 1	; _ENV "utf8"
+	44	[12]	GETFIELD 	5 5 2	; "char"
+	45	[12]	LOADI    	6 2047
+	46	[12]	CALL     	5 2 0	; 1 in all out
+	47	[12]	CALL     	4 0 2	; all in 1 out
+	48	[12]	MOVE     	5 0
+	49	[12]	GETTABUP 	6 0 1	; _ENV "utf8"
+	50	[12]	GETFIELD 	6 6 2	; "char"
+	51	[12]	LOADI    	7 2048
+	52	[12]	CALL     	6 2 0	; 1 in all out
+	53	[12]	CALL     	5 0 0	; all in all out
+	54	[12]	CALL     	1 0 1	; all in 0 out
+	55	[13]	GETTABUP 	1 0 0	; _ENV "print"
+	56	[13]	MOVE     	2 0
+	57	[13]	GETTABUP 	3 0 1	; _ENV "utf8"
+	58	[13]	GETFIELD 	3 3 2	; "char"
+	59	[13]	LOADI    	4 65535
+	60	[13]	CALL     	3 2 0	; 1 in all out
+	61	[13]	CALL     	2 0 2	; all in 1 out
+	62	[13]	MOVE     	3 0
+	63	[13]	GETTABUP 	4 0 1	; _ENV "utf8"
+	64	[13]	GETFIELD 	4 4 2	; "char"
+	65	[13]	LOADI    	5 65536
+	66	[13]	CALL     	4 2 0	; 1 in all out
+	67	[13]	CALL     	3 0 2	; all in 1 out
+	68	[13]	MOVE     	4 0
+	69	[13]	GETTABUP 	5 0 1	; _ENV "utf8"
+	70	[13]	GETFIELD 	5 5 2	; "char"
+	71	[13]	LOADK    	6 4	; 1114111
+	72	[13]	CALL     	5 2 0	; 1 in all out
+	73	[13]	CALL     	4 0 0	; all in all out
+	74	[13]	CALL     	1 0 1	; all in 0 out
+	75	[14]	GETTABUP 	1 0 0	; _ENV "print"
+	76	[14]	MOVE     	2 0
+	77	[14]	GETTABUP 	3 0 1	; _ENV "utf8"
+	78	[14]	GETFIELD 	3 3 2	; "char"
+	79	[14]	LOADK    	4 5	; 1114112
+	80	[14]	CALL     	3 2 0	; 1 in all out
+	81	[14]	CALL     	2 0 2	; all in 1 out
+	82	[14]	MOVE     	3 0
+	83	[14]	GETTABUP 	4 0 1	; _ENV "utf8"
+	84	[14]	GETFIELD 	4 4 2	; "char"
+	85	[14]	LOADK    	5 6	; 2147483647
+	86	[14]	CALL     	4 2 0	; 1 in all out
+	87	[14]	CALL     	3 0 0	; all in all out
+	88	[14]	CALL     	1 0 1	; all in 0 out
+	89	[15]	GETTABUP 	1 0 0	; _ENV "print"
+	90	[15]	GETTABUP 	2 0 1	; _ENV "utf8"
+	91	[15]	GETFIELD 	2 2 2	; "char"
+	92	[15]	LOADI    	3 72
+	93	[15]	LOADI    	4 105
+	94	[15]	LOADI    	5 33
+	95	[15]	CALL     	2 4 2	; 3 in 1 out
+	96	[15]	GETTABUP 	3 0 1	; _ENV "utf8"
+	97	[15]	GETFIELD 	3 3 2	; "char"
+	98	[15]	CALL     	3 1 2	; 0 in 1 out
+	99	[15]	EQK      	3 7 1	; ""
+	100	[15]	JMP      	1	; to 102
+	101	[15]	LFALSESKIP	3
+	102	[15]	LOADTRUE 	3
+	103	[15]	GETTABUP 	4 0 1	; _ENV "utf8"
+	104	[15]	GETFIELD 	4 4 2	; "char"
+	105	[15]	LOADI    	5 0
+	106	[15]	CALL     	4 2 2	; 1 in 1 out
+	107	[15]	LEN      	4 4
+	108	[15]	MOVE     	5 0
+	109	[15]	GETTABUP 	6 0 1	; _ENV "utf8"
+	110	[15]	GETFIELD 	6 6 2	; "char"
+	111	[15]	LOADI    	7 55296
+	112	[15]	CALL     	6 2 0	; 1 in all out
+	113	[15]	CALL     	5 0 0	; all in all out
+	114	[15]	CALL     	1 0 1	; all in 0 out
+	115	[16]	GETTABUP 	1 0 0	; _ENV "print"
+	116	[16]	GETTABUP 	2 0 8	; _ENV "pcall"
+	117	[16]	GETTABUP 	3 0 1	; _ENV "utf8"
+	118	[16]	GETFIELD 	3 3 2	; "char"
+	119	[16]	LOADI    	4 -1
+	120	[16]	CALL     	2 3 0	; 2 in all out
+	121	[16]	CALL     	1 0 1	; all in 0 out
+	122	[17]	GETTABUP 	1 0 0	; _ENV "print"
+	123	[17]	GETTABUP 	2 0 8	; _ENV "pcall"
+	124	[17]	GETTABUP 	3 0 1	; _ENV "utf8"
+	125	[17]	GETFIELD 	3 3 2	; "char"
+	126	[17]	LOADK    	4 9	; 2147483648
+	127	[17]	CALL     	2 3 0	; 2 in all out
+	128	[17]	CALL     	1 0 1	; all in 0 out
+	129	[18]	GETTABUP 	1 0 0	; _ENV "print"
+	130	[18]	GETTABUP 	2 0 8	; _ENV "pcall"
+	131	[18]	GETTABUP 	3 0 1	; _ENV "utf8"
+	132	[18]	GETFIELD 	3 3 2	; "char"
+	133	[18]	LOADK    	4 10	; "x"
+	134	[18]	CALL     	2 3 0	; 2 in all out
+	135	[18]	CALL     	1 0 1	; all in 0 out
+	136	[19]	GETTABUP 	1 0 0	; _ENV "print"
+	137	[19]	GETTABUP 	2 0 8	; _ENV "pcall"
+	138	[19]	GETTABUP 	3 0 1	; _ENV "utf8"
+	139	[19]	GETFIELD 	3 3 2	; "char"
+	140	[19]	LOADI    	4 65
+	141	[19]	LOADK    	5 11	; 1.5
+	142	[19]	CALL     	2 4 0	; 3 in all out
+	143	[19]	CALL     	1 0 1	; all in 0 out
+	144	[21]	GETTABUP 	1 0 0	; _ENV "print"
+	145	[21]	GETTABUP 	2 0 1	; _ENV "utf8"
+	146	[21]	GETFIELD 	2 2 12	; "charpattern"
+	147	[21]	EQK      	2 13 1	; "[\000-\127\194-\253][\128-\191]*"
+	148	[21]	JMP      	1	; to 150
+	149	[21]	LFALSESKIP	2
+	150	[21]	LOADTRUE 	2
+	151	[21]	GETTABUP 	3 0 1	; _ENV "utf8"
+	152	[21]	GETFIELD 	3 3 12	; "charpattern"
+	153	[21]	LEN      	3 3
+	154	[21]	CALL     	1 3 1	; 2 in 0 out
+	155	[23]	LOADK    	1 14	; "a\195\169\226\130\172\240\159\152\128z"
+	156	[24]	GETTABUP 	2 0 0	; _ENV "print"
+	157	[24]	LEN      	3 1
+	158	[24]	GETTABUP 	4 0 1	; _ENV "utf8"
+	159	[24]	GETFIELD 	4 4 15	; "len"
+	160	[24]	MOVE     	5 1
+	161	[24]	CALL     	4 2 2	; 1 in 1 out
+	162	[24]	GETTABUP 	5 0 1	; _ENV "utf8"
+	163	[24]	GETFIELD 	5 5 15	; "len"
+	164	[24]	LOADK    	6 7	; ""
+	165	[24]	CALL     	5 2 2	; 1 in 1 out
+	166	[24]	GETTABUP 	6 0 1	; _ENV "utf8"
+	167	[24]	GETFIELD 	6 6 15	; "len"
+	168	[24]	LOADK    	7 16	; "abc"
+	169	[24]	CALL     	6 2 0	; 1 in all out
+	170	[24]	CALL     	2 0 1	; all in 0 out
+	171	[25]	GETTABUP 	2 0 0	; _ENV "print"
+	172	[25]	GETTABUP 	3 0 1	; _ENV "utf8"
+	173	[25]	GETFIELD 	3 3 17	; "codepoint"
+	174	[25]	MOVE     	4 1
+	175	[25]	CALL     	3 2 0	; 1 in all out
+	176	[25]	CALL     	2 0 1	; all in 0 out
+	177	[26]	GETTABUP 	2 0 0	; _ENV "print"
+	178	[26]	GETTABUP 	3 0 1	; _ENV "utf8"
+	179	[26]	GETFIELD 	3 3 17	; "codepoint"
+	180	[26]	MOVE     	4 1
+	181	[26]	LOADI    	5 1
+	182	[26]	LOADI    	6 -1
+	183	[26]	CALL     	3 4 0	; 3 in all out
+	184	[26]	CALL     	2 0 1	; all in 0 out
+	185	[27]	GETTABUP 	2 0 0	; _ENV "print"
+	186	[27]	GETTABUP 	3 0 1	; _ENV "utf8"
+	187	[27]	GETFIELD 	3 3 17	; "codepoint"
+	188	[27]	MOVE     	4 1
+	189	[27]	LOADI    	5 2
+	190	[27]	CALL     	3 3 2	; 2 in 1 out
+	191	[27]	GETTABUP 	4 0 1	; _ENV "utf8"
+	192	[27]	GETFIELD 	4 4 17	; "codepoint"
+	193	[27]	MOVE     	5 1
+	194	[27]	LOADI    	6 4
+	195	[27]	CALL     	4 3 2	; 2 in 1 out
+	196	[27]	GETTABUP 	5 0 1	; _ENV "utf8"
+	197	[27]	GETFIELD 	5 5 17	; "codepoint"
+	198	[27]	MOVE     	6 1
+	199	[27]	LOADI    	7 7
+	200	[27]	CALL     	5 3 2	; 2 in 1 out
+	201	[27]	GETTABUP 	6 0 1	; _ENV "utf8"
+	202	[27]	GETFIELD 	6 6 17	; "codepoint"
+	203	[27]	MOVE     	7 1
+	204	[27]	LOADI    	8 -1
+	205	[27]	CALL     	6 3 0	; 2 in all out
+	206	[27]	CALL     	2 0 1	; all in 0 out
+	207	[28]	GETTABUP 	2 0 0	; _ENV "print"
+	208	[28]	GETTABUP 	3 0 1	; _ENV "utf8"
+	209	[28]	GETFIELD 	3 3 17	; "codepoint"
+	210	[28]	MOVE     	4 1
+	211	[28]	LOADI    	5 2
+	212	[28]	LOADI    	6 7
+	213	[28]	CALL     	3 4 0	; 3 in all out
+	214	[28]	CALL     	2 0 1	; all in 0 out
+	215	[29]	GETTABUP 	2 0 0	; _ENV "print"
+	216	[29]	GETTABUP 	3 0 18	; _ENV "select"
+	217	[29]	LOADK    	4 19	; "#"
+	218	[29]	GETTABUP 	5 0 1	; _ENV "utf8"
+	219	[29]	GETFIELD 	5 5 17	; "codepoint"
+	220	[29]	MOVE     	6 1
+	221	[29]	LOADI    	7 3
+	222	[29]	LOADI    	8 2
+	223	[29]	CALL     	5 4 0	; 3 in all out
+	224	[29]	CALL     	3 0 2	; all in 1 out
+	225	[29]	GETTABUP 	4 0 18	; _ENV "select"
+	226	[29]	LOADK    	5 19	; "#"
+	227	[29]	GETTABUP 	6 0 1	; _ENV "utf8"
+	228	[29]	GETFIELD 	6 6 17	; "codepoint"
+	229	[29]	LOADK    	7 7	; ""
+	230	[29]	LOADI    	8 1
+	231	[29]	LOADI    	9 0
+	232	[29]	CALL     	6 4 0	; 3 in all out
+	233	[29]	CALL     	4 0 0	; all in all out
+	234	[29]	CALL     	2 0 1	; all in 0 out
+	235	[30]	GETTABUP 	2 0 0	; _ENV "print"
+	236	[30]	GETTABUP 	3 0 8	; _ENV "pcall"
+	237	[30]	GETTABUP 	4 0 1	; _ENV "utf8"
+	238	[30]	GETFIELD 	4 4 17	; "codepoint"
+	239	[30]	MOVE     	5 1
+	240	[30]	LOADI    	6 3
+	241	[30]	CALL     	3 4 0	; 3 in all out
+	242	[30]	CALL     	2 0 1	; all in 0 out
+	243	[31]	GETTABUP 	2 0 0	; _ENV "print"
+	244	[31]	GETTABUP 	3 0 8	; _ENV "pcall"
+	245	[31]	GETTABUP 	4 0 1	; _ENV "utf8"
+	246	[31]	GETFIELD 	4 4 17	; "codepoint"
+	247	[31]	MOVE     	5 1
+	248	[31]	LOADI    	6 20
+	249	[31]	CALL     	3 4 0	; 3 in all out
+	250	[31]	CALL     	2 0 1	; all in 0 out
+	251	[32]	GETTABUP 	2 0 0	; _ENV "print"
+	252	[32]	GETTABUP 	3 0 8	; _ENV "pcall"
+	253	[32]	GETTABUP 	4 0 1	; _ENV "utf8"
+	254	[32]	GETFIELD 	4 4 17	; "codepoint"
+	255	[32]	MOVE     	5 1
+	256	[32]	LOADI    	6 1
+	257	[32]	LOADI    	7 20
+	258	[32]	CALL     	3 5 0	; 4 in all out
+	259	[32]	CALL     	2 0 1	; all in 0 out
+	260	[33]	GETTABUP 	2 0 0	; _ENV "print"
+	261	[33]	GETTABUP 	3 0 8	; _ENV "pcall"
+	262	[33]	GETTABUP 	4 0 1	; _ENV "utf8"
+	263	[33]	GETFIELD 	4 4 17	; "codepoint"
+	264	[33]	LOADK    	5 20	; "\255"
+	265	[33]	CALL     	3 3 0	; 2 in all out
+	266	[33]	CALL     	2 0 1	; all in 0 out
+	267	[34]	GETTABUP 	2 0 0	; _ENV "print"
+	268	[34]	GETTABUP 	3 0 8	; _ENV "pcall"
+	269	[34]	GETTABUP 	4 0 1	; _ENV "utf8"
+	270	[34]	GETFIELD 	4 4 17	; "codepoint"
+	271	[34]	LOADK    	5 21	; "\192\128"
+	272	[34]	CALL     	3 3 0	; 2 in all out
+	273	[34]	CALL     	2 0 1	; all in 0 out
+	274	[35]	GETTABUP 	2 0 0	; _ENV "print"
+	275	[35]	GETTABUP 	3 0 8	; _ENV "pcall"
+	276	[35]	GETTABUP 	4 0 1	; _ENV "utf8"
+	277	[35]	GETFIELD 	4 4 17	; "codepoint"
+	278	[35]	LOADK    	5 22	; "\237\160\128"
+	279	[35]	CALL     	3 3 0	; 2 in all out
+	280	[35]	CALL     	2 0 1	; all in 0 out
+	281	[36]	GETTABUP 	2 0 0	; _ENV "print"
+	282	[36]	GETTABUP 	3 0 1	; _ENV "utf8"
+	283	[36]	GETFIELD 	3 3 17	; "codepoint"
+	284	[36]	LOADK    	4 22	; "\237\160\128"
+	285	[36]	LOADI    	5 1
+	286	[36]	LOADI    	6 1
+	287	[36]	LOADTRUE 	7
+	288	[36]	CALL     	3 5 2	; 4 in 1 out
+	289	[36]	GETTABUP 	4 0 1	; _ENV "utf8"
+	290	[36]	GETFIELD 	4 4 17	; "codepoint"
+	291	[36]	LOADK    	5 23	; "\244\144\128\128"
+	292	[36]	LOADI    	6 1
+	293	[36]	LOADI    	7 1
+	294	[36]	LOADTRUE 	8
+	295	[36]	CALL     	4 5 0	; 4 in all out
+	296	[36]	CALL     	2 0 1	; all in 0 out
+	297	[37]	GETTABUP 	2 0 0	; _ENV "print"
+	298	[37]	GETTABUP 	3 0 8	; _ENV "pcall"
+	299	[37]	GETTABUP 	4 0 1	; _ENV "utf8"
+	300	[37]	GETFIELD 	4 4 17	; "codepoint"
+	301	[37]	LOADK    	5 23	; "\244\144\128\128"
+	302	[37]	CALL     	3 3 0	; 2 in all out
+	303	[37]	CALL     	2 0 1	; all in 0 out
+	304	[38]	GETTABUP 	2 0 0	; _ENV "print"
+	305	[38]	GETTABUP 	3 0 1	; _ENV "utf8"
+	306	[38]	GETFIELD 	3 3 17	; "codepoint"
+	307	[38]	GETTABUP 	4 0 1	; _ENV "utf8"
+	308	[38]	GETFIELD 	4 4 2	; "char"
+	309	[38]	LOADK    	5 6	; 2147483647
+	310	[38]	CALL     	4 2 2	; 1 in 1 out
+	311	[38]	LOADI    	5 1
+	312	[38]	LOADI    	6 1
+	313	[38]	LOADTRUE 	7
+	314	[38]	CALL     	3 5 0	; 4 in all out
+	315	[38]	CALL     	2 0 1	; all in 0 out
+	316	[41]	GETTABUP 	2 0 0	; _ENV "print"
+	317	[41]	GETTABUP 	3 0 1	; _ENV "utf8"
+	318	[41]	GETFIELD 	3 3 15	; "len"
+	319	[41]	MOVE     	4 1
+	320	[41]	LOADI    	5 2
+	321	[41]	CALL     	3 3 2	; 2 in 1 out
+	322	[41]	GETTABUP 	4 0 1	; _ENV "utf8"
+	323	[41]	GETFIELD 	4 4 15	; "len"
+	324	[41]	MOVE     	5 1
+	325	[41]	LOADI    	6 4
+	326	[41]	CALL     	4 3 2	; 2 in 1 out
+	327	[41]	GETTABUP 	5 0 1	; _ENV "utf8"
+	328	[41]	GETFIELD 	5 5 15	; "len"
+	329	[41]	MOVE     	6 1
+	330	[41]	LOADI    	7 -1
+	331	[41]	CALL     	5 3 2	; 2 in 1 out
+	332	[41]	GETTABUP 	6 0 1	; _ENV "utf8"
+	333	[41]	GETFIELD 	6 6 15	; "len"
+	334	[41]	MOVE     	7 1
+	335	[41]	LOADI    	8 1
+	336	[41]	LOADI    	9 1
+	337	[41]	CALL     	6 4 2	; 3 in 1 out
+	338	[41]	GETTABUP 	7 0 1	; _ENV "utf8"
+	339	[41]	GETFIELD 	7 7 15	; "len"
+	340	[41]	MOVE     	8 1
+	341	[41]	LOADI    	9 1
+	342	[41]	LOADI    	10 2
+	343	[41]	CALL     	7 4 0	; 3 in all out
+	344	[41]	CALL     	2 0 1	; all in 0 out
+	345	[42]	GETTABUP 	2 0 0	; _ENV "print"
+	346	[42]	GETTABUP 	3 0 1	; _ENV "utf8"
+	347	[42]	GETFIELD 	3 3 15	; "len"
+	348	[42]	MOVE     	4 1
+	349	[42]	LOADI    	5 3
+	350	[42]	CALL     	3 3 0	; 2 in all out
+	351	[42]	CALL     	2 0 1	; all in 0 out
+	352	[43]	GETTABUP 	2 0 0	; _ENV "print"
+	353	[43]	GETTABUP 	3 0 1	; _ENV "utf8"
+	354	[43]	GETFIELD 	3 3 15	; "len"
+	355	[43]	LOADK    	4 24	; "abc\255def"
+	356	[43]	CALL     	3 2 0	; 1 in all out
+	357	[43]	CALL     	2 0 1	; all in 0 out
+	358	[44]	GETTABUP 	2 0 0	; _ENV "print"
+	359	[44]	GETTABUP 	3 0 1	; _ENV "utf8"
+	360	[44]	GETFIELD 	3 3 15	; "len"
+	361	[44]	LOADK    	4 25	; "\226\130"
+	362	[44]	CALL     	3 2 2	; 1 in 1 out
+	363	[44]	GETTABUP 	4 0 1	; _ENV "utf8"
+	364	[44]	GETFIELD 	4 4 15	; "len"
+	365	[44]	LOADK    	5 26	; "ok\128"
+	366	[44]	CALL     	4 2 0	; 1 in all out
+	367	[44]	CALL     	2 0 1	; all in 0 out
+	368	[45]	GETTABUP 	2 0 0	; _ENV "print"
+	369	[45]	GETTABUP 	3 0 1	; _ENV "utf8"
+	370	[45]	GETFIELD 	3 3 15	; "len"
+	371	[45]	LOADK    	4 22	; "\237\160\128"
+	372	[45]	CALL     	3 2 2	; 1 in 1 out
+	373	[45]	GETTABUP 	4 0 1	; _ENV "utf8"
+	374	[45]	GETFIELD 	4 4 15	; "len"
+	375	[45]	LOADK    	5 22	; "\237\160\128"
+	376	[45]	LOADI    	6 1
+	377	[45]	LOADI    	7 -1
+	378	[45]	LOADTRUE 	8
+	379	[45]	CALL     	4 5 0	; 4 in all out
+	380	[45]	CALL     	2 0 1	; all in 0 out
+	381	[46]	GETTABUP 	2 0 0	; _ENV "print"
+	382	[46]	GETTABUP 	3 0 1	; _ENV "utf8"
+	383	[46]	GETFIELD 	3 3 15	; "len"
+	384	[46]	LOADK    	4 21	; "\192\128"
+	385	[46]	CALL     	3 2 2	; 1 in 1 out
+	386	[46]	GETTABUP 	4 0 1	; _ENV "utf8"
+	387	[46]	GETFIELD 	4 4 15	; "len"
+	388	[46]	LOADK    	5 27	; "\248\136\128\128\128"
+	389	[46]	LOADI    	6 1
+	390	[46]	LOADI    	7 -1
+	391	[46]	LOADTRUE 	8
+	392	[46]	CALL     	4 5 0	; 4 in all out
+	393	[46]	CALL     	2 0 1	; all in 0 out
+	394	[47]	GETTABUP 	2 0 0	; _ENV "print"
+	395	[47]	GETTABUP 	3 0 1	; _ENV "utf8"
+	396	[47]	GETFIELD 	3 3 15	; "len"
+	397	[47]	LOADK    	4 16	; "abc"
+	398	[47]	LOADI    	5 4
+	399	[47]	CALL     	3 3 2	; 2 in 1 out
+	400	[47]	GETTABUP 	4 0 1	; _ENV "utf8"
+	401	[47]	GETFIELD 	4 4 15	; "len"
+	402	[47]	LOADK    	5 16	; "abc"
+	403	[47]	LOADI    	6 4
+	404	[47]	LOADI    	7 3
+	405	[47]	CALL     	4 4 2	; 3 in 1 out
+	406	[47]	GETTABUP 	5 0 1	; _ENV "utf8"
+	407	[47]	GETFIELD 	5 5 15	; "len"
+	408	[47]	LOADK    	6 16	; "abc"
+	409	[47]	LOADI    	7 1
+	410	[47]	LOADI    	8 0
+	411	[47]	CALL     	5 4 0	; 3 in all out
+	412	[47]	CALL     	2 0 1	; all in 0 out
+	413	[48]	GETTABUP 	2 0 0	; _ENV "print"
+	414	[48]	GETTABUP 	3 0 8	; _ENV "pcall"
+	415	[48]	GETTABUP 	4 0 1	; _ENV "utf8"
+	416	[48]	GETFIELD 	4 4 15	; "len"
+	417	[48]	LOADK    	5 16	; "abc"
+	418	[48]	LOADI    	6 5
+	419	[48]	CALL     	3 4 0	; 3 in all out
+	420	[48]	CALL     	2 0 1	; all in 0 out
+	421	[49]	GETTABUP 	2 0 0	; _ENV "print"
+	422	[49]	GETTABUP 	3 0 8	; _ENV "pcall"
+	423	[49]	GETTABUP 	4 0 1	; _ENV "utf8"
+	424	[49]	GETFIELD 	4 4 15	; "len"
+	425	[49]	LOADK    	5 16	; "abc"
+	426	[49]	LOADI    	6 0
+	427	[49]	CALL     	3 4 0	; 3 in all out
+	428	[49]	CALL     	2 0 1	; all in 0 out
+	429	[50]	GETTABUP 	2 0 0	; _ENV "print"
+	430	[50]	GETTABUP 	3 0 8	; _ENV "pcall"
+	431	[50]	GETTABUP 	4 0 1	; _ENV "utf8"
+	432	[50]	GETFIELD 	4 4 15	; "len"
+	433	[50]	LOADK    	5 16	; "abc"
+	434	[50]	LOADI    	6 1
+	435	[50]	LOADI    	7 4
+	436	[50]	CALL     	3 5 0	; 4 in all out
+	437	[50]	CALL     	2 0 1	; all in 0 out
+	438	[51]	GETTABUP 	2 0 0	; _ENV "print"
+	439	[51]	GETTABUP 	3 0 8	; _ENV "pcall"
+	440	[51]	GETTABUP 	4 0 1	; _ENV "utf8"
+	441	[51]	GETFIELD 	4 4 15	; "len"
+	442	[51]	CALL     	3 2 0	; 1 in all out
+	443	[51]	CALL     	2 0 1	; all in 0 out
+	444	[53]	GETTABUP 	2 0 1	; _ENV "utf8"
+	445	[53]	GETFIELD 	2 2 15	; "len"
+	446	[53]	LOADK    	3 28	; "HI"
+	447	[53]	CALL     	2 2 2	; 1 in 1 out
+	448	[53]	GETTABUP 	3 0 1	; _ENV "utf8"
+	449	[53]	GETFIELD 	3 3 2	; "char"
+	450	[53]	LOADI    	4 76
+	451	[53]	LOADI    	5 117
+	452	[53]	LOADI    	6 97
+	453	[53]	CALL     	3 4 0	; 3 in all out
+	454	[53]	RETURN   	2 0 1	; all out
+	455	[53]	RETURN   	2 1 1	; 0 out
+constants (29):
+	0	S	"print"
+	1	S	"utf8"
+	2	S	"char"
+	3	I	128512
+	4	I	1114111
+	5	I	1114112
+	6	I	2147483647
+	7	S	""
+	8	S	"pcall"
+	9	I	2147483648
+	10	S	"x"
+	11	F	1.5
+	12	S	"charpattern"
+	13	S	"[\000-\127\194-\253][\128-\191]*"
+	14	S	"a\195\169\226\130\172\240\159\152\128z"
+	15	S	"len"
+	16	S	"abc"
+	17	S	"codepoint"
+	18	S	"select"
+	19	S	"#"
+	20	S	"\255"
+	21	S	"\192\128"
+	22	S	"\237\160\128"
+	23	S	"\244\144\128\128"
+	24	S	"abc\255def"
+	25	S	"\226\130"
+	26	S	"ok\128"
+	27	S	"\248\136\128\128\128"
+	28	S	"HI"
+locals (2):
+	0	hex	3	456
+	1	s	156	456
+upvalues (1):
+	0	_ENV	1	0
+
+function <utf8_basic.lua:7,9> (6 instructions)
+1 param, 5 slots, 1 upvalue, 1 local, 2 constants, 1 function
+	1	[8]	SELF     	1 0 0k	; "gsub"
+	2	[8]	LOADK    	3 1	; "."
+	3	[8]	CLOSURE  	4 0
+	4	[8]	CALL     	1 4 2	; 3 in 1 out
+	5	[8]	RETURN1  	1
+	6	[9]	RETURN0  	
+constants (2):
+	0	S	"gsub"
+	1	S	"."
+locals (1):
+	0	s	1	7
+upvalues (1):
+	0	_ENV	0	0
+
+function <utf8_basic.lua:8,8> (8 instructions)
+1 param, 5 slots, 1 upvalue, 1 local, 4 constants, 0 functions
+	1	[8]	GETTABUP 	1 0 0	; _ENV "string"
+	2	[8]	GETFIELD 	1 1 1	; "format"
+	3	[8]	LOADK    	2 2	; "%02X "
+	4	[8]	SELF     	3 0 3k	; "byte"
+	5	[8]	CALL     	3 2 0	; 1 in all out
+	6	[8]	TAILCALL 	1 0 0	; -1 in
+	7	[8]	RETURN   	1 0 0	; all out
+	8	[8]	RETURN0  	
+constants (4):
+	0	S	"string"
+	1	S	"format"
+	2	S	"%02X "
+	3	S	"byte"
+locals (1):
+	0	c	1	9
+upvalues (1):
+	0	_ENV	0	0

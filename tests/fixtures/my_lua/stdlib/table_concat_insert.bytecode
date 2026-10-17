@@ -1,0 +1,527 @@
+
+main <table_concat_insert.lua:0,0> (404 instructions)
+0+ params, 11 slots, 1 upvalue, 7 locals, 41 constants, 5 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	NEWTABLE 	0 0 4	; 4
+	3	[7]	EXTRAARG 	0
+	4	[7]	LOADK    	1 0	; "a"
+	5	[7]	LOADK    	2 1	; "b"
+	6	[7]	LOADK    	3 2	; "c"
+	7	[7]	LOADK    	4 3	; "d"
+	8	[7]	SETLIST  	0 4 0
+	9	[8]	GETTABUP 	1 0 4	; _ENV "print"
+	10	[8]	GETTABUP 	2 0 5	; _ENV "table"
+	11	[8]	GETFIELD 	2 2 6	; "concat"
+	12	[8]	MOVE     	3 0
+	13	[8]	CALL     	2 2 2	; 1 in 1 out
+	14	[8]	GETTABUP 	3 0 5	; _ENV "table"
+	15	[8]	GETFIELD 	3 3 6	; "concat"
+	16	[8]	MOVE     	4 0
+	17	[8]	LOADK    	5 7	; ", "
+	18	[8]	CALL     	3 3 2	; 2 in 1 out
+	19	[8]	GETTABUP 	4 0 5	; _ENV "table"
+	20	[8]	GETFIELD 	4 4 6	; "concat"
+	21	[8]	MOVE     	5 0
+	22	[8]	LOADK    	6 8	; ""
+	23	[8]	LOADI    	7 2
+	24	[8]	CALL     	4 4 2	; 3 in 1 out
+	25	[8]	GETTABUP 	5 0 5	; _ENV "table"
+	26	[8]	GETFIELD 	5 5 6	; "concat"
+	27	[8]	MOVE     	6 0
+	28	[8]	LOADK    	7 9	; "-"
+	29	[8]	LOADI    	8 2
+	30	[8]	LOADI    	9 3
+	31	[8]	CALL     	5 5 0	; 4 in all out
+	32	[8]	CALL     	1 0 1	; all in 0 out
+	33	[9]	GETTABUP 	1 0 4	; _ENV "print"
+	34	[9]	GETTABUP 	2 0 5	; _ENV "table"
+	35	[9]	GETFIELD 	2 2 6	; "concat"
+	36	[9]	MOVE     	3 0
+	37	[9]	LOADK    	4 9	; "-"
+	38	[9]	LOADI    	5 3
+	39	[9]	LOADI    	6 2
+	40	[9]	CALL     	2 5 2	; 4 in 1 out
+	41	[9]	EQK      	2 8 1	; ""
+	42	[9]	JMP      	1	; to 44
+	43	[9]	LFALSESKIP	2
+	44	[9]	LOADTRUE 	2
+	45	[9]	GETTABUP 	3 0 5	; _ENV "table"
+	46	[9]	GETFIELD 	3 3 6	; "concat"
+	47	[9]	NEWTABLE 	4 0 0	; 0
+	48	[9]	EXTRAARG 	0
+	49	[9]	CALL     	3 2 2	; 1 in 1 out
+	50	[9]	EQK      	3 8 1	; ""
+	51	[9]	JMP      	1	; to 53
+	52	[9]	LFALSESKIP	3
+	53	[9]	LOADTRUE 	3
+	54	[9]	GETTABUP 	4 0 5	; _ENV "table"
+	55	[9]	GETFIELD 	4 4 6	; "concat"
+	56	[9]	NEWTABLE 	5 0 0	; 0
+	57	[9]	EXTRAARG 	0
+	58	[9]	LOADK    	6 10	; "x"
+	59	[9]	CALL     	4 3 2	; 2 in 1 out
+	60	[9]	EQK      	4 8 1	; ""
+	61	[9]	JMP      	1	; to 63
+	62	[9]	LFALSESKIP	4
+	63	[9]	LOADTRUE 	4
+	64	[9]	CALL     	1 4 1	; 3 in 0 out
+	65	[10]	GETTABUP 	1 0 4	; _ENV "print"
+	66	[10]	GETTABUP 	2 0 5	; _ENV "table"
+	67	[10]	GETFIELD 	2 2 6	; "concat"
+	68	[10]	MOVE     	3 0
+	69	[10]	LOADK    	4 9	; "-"
+	70	[10]	LOADI    	5 4
+	71	[10]	LOADI    	6 4
+	72	[10]	CALL     	2 5 2	; 4 in 1 out
+	73	[10]	GETTABUP 	3 0 5	; _ENV "table"
+	74	[10]	GETFIELD 	3 3 6	; "concat"
+	75	[10]	NEWTABLE 	4 0 4	; 4
+	76	[10]	EXTRAARG 	0
+	77	[10]	LOADI    	5 1
+	78	[10]	LOADK    	6 11	; 2.5
+	79	[10]	LOADI    	7 -3
+	80	[10]	LOADK    	8 12	; 9.2233720368548e+18
+	81	[10]	SETLIST  	4 4 0
+	82	[10]	LOADK    	5 13	; " "
+	83	[10]	CALL     	3 3 0	; 2 in all out
+	84	[10]	CALL     	1 0 1	; all in 0 out
+	85	[11]	GETTABUP 	1 0 4	; _ENV "print"
+	86	[11]	GETTABUP 	2 0 5	; _ENV "table"
+	87	[11]	GETFIELD 	2 2 6	; "concat"
+	88	[11]	NEWTABLE 	3 0 3	; 3
+	89	[11]	EXTRAARG 	0
+	90	[11]	LOADI    	4 1
+	91	[11]	LOADK    	5 14	; "two"
+	92	[11]	LOADI    	6 3
+	93	[11]	SETLIST  	3 3 0
+	94	[11]	LOADI    	4 0
+	95	[11]	CALL     	2 3 2	; 2 in 1 out
+	96	[11]	GETTABUP 	3 0 15	; _ENV "pcall"
+	97	[11]	GETTABUP 	4 0 5	; _ENV "table"
+	98	[11]	GETFIELD 	4 4 6	; "concat"
+	99	[11]	MOVE     	5 0
+	100	[11]	LOADK    	6 8	; ""
+	101	[11]	LOADI    	7 -1
+	102	[11]	LOADI    	8 1
+	103	[11]	CALL     	3 6 0	; 5 in all out
+	104	[11]	CALL     	1 0 1	; all in 0 out
+	105	[12]	GETTABUP 	1 0 4	; _ENV "print"
+	106	[12]	GETTABUP 	2 0 5	; _ENV "table"
+	107	[12]	GETFIELD 	2 2 6	; "concat"
+	108	[12]	NEWTABLE 	3 1 1	; 1
+	109	[12]	EXTRAARG 	0
+	110	[12]	SETI     	3 0 16k	; "zero"
+	111	[12]	LOADK    	4 17	; "one"
+	112	[12]	SETLIST  	3 1 0
+	113	[12]	LOADK    	4 18	; ","
+	114	[12]	LOADI    	5 0
+	115	[12]	LOADI    	6 1
+	116	[12]	CALL     	2 5 2	; 4 in 1 out
+	117	[12]	GETTABUP 	3 0 5	; _ENV "table"
+	118	[12]	GETFIELD 	3 3 6	; "concat"
+	119	[12]	NEWTABLE 	4 0 1	; 1
+	120	[12]	EXTRAARG 	0
+	121	[12]	LOADK    	5 10	; "x"
+	122	[12]	SETLIST  	4 1 0
+	123	[12]	LOADK    	5 19	; "\000"
+	124	[12]	CALL     	3 3 2	; 2 in 1 out
+	125	[12]	EQK      	3 10 1	; "x"
+	126	[12]	JMP      	1	; to 128
+	127	[12]	LFALSESKIP	3
+	128	[12]	LOADTRUE 	3
+	129	[12]	CALL     	1 3 1	; 2 in 0 out
+	130	[13]	GETTABUP 	1 0 4	; _ENV "print"
+	131	[13]	GETTABUP 	2 0 15	; _ENV "pcall"
+	132	[13]	GETTABUP 	3 0 5	; _ENV "table"
+	133	[13]	GETFIELD 	3 3 6	; "concat"
+	134	[13]	NEWTABLE 	4 0 3	; 3
+	135	[13]	EXTRAARG 	0
+	136	[13]	LOADI    	5 1
+	137	[13]	NEWTABLE 	6 0 0	; 0
+	138	[13]	EXTRAARG 	0
+	139	[13]	LOADI    	7 3
+	140	[13]	SETLIST  	4 3 0
+	141	[13]	CALL     	2 3 0	; 2 in all out
+	142	[13]	CALL     	1 0 1	; all in 0 out
+	143	[14]	GETTABUP 	1 0 4	; _ENV "print"
+	144	[14]	GETTABUP 	2 0 15	; _ENV "pcall"
+	145	[14]	GETTABUP 	3 0 5	; _ENV "table"
+	146	[14]	GETFIELD 	3 3 6	; "concat"
+	147	[14]	NEWTABLE 	4 0 4	; 4
+	148	[14]	EXTRAARG 	0
+	149	[14]	LOADI    	5 1
+	150	[14]	LOADI    	6 2
+	151	[14]	LOADNIL  	7 0	; 1 out
+	152	[14]	LOADI    	8 4
+	153	[14]	SETLIST  	4 4 0
+	154	[14]	LOADK    	5 18	; ","
+	155	[14]	LOADI    	6 1
+	156	[14]	LOADI    	7 4
+	157	[14]	CALL     	2 6 0	; 5 in all out
+	158	[14]	CALL     	1 0 1	; all in 0 out
+	159	[15]	GETTABUP 	1 0 4	; _ENV "print"
+	160	[15]	GETTABUP 	2 0 15	; _ENV "pcall"
+	161	[15]	GETTABUP 	3 0 5	; _ENV "table"
+	162	[15]	GETFIELD 	3 3 6	; "concat"
+	163	[15]	NEWTABLE 	4 0 1	; 1
+	164	[15]	EXTRAARG 	0
+	165	[15]	LOADTRUE 	5
+	166	[15]	SETLIST  	4 1 0
+	167	[15]	CALL     	2 3 0	; 2 in all out
+	168	[15]	CALL     	1 0 1	; all in 0 out
+	169	[16]	GETTABUP 	1 0 4	; _ENV "print"
+	170	[16]	GETTABUP 	2 0 15	; _ENV "pcall"
+	171	[16]	GETTABUP 	3 0 5	; _ENV "table"
+	172	[16]	GETFIELD 	3 3 6	; "concat"
+	173	[16]	MOVE     	4 0
+	174	[16]	NEWTABLE 	5 0 0	; 0
+	175	[16]	EXTRAARG 	0
+	176	[16]	CALL     	2 4 0	; 3 in all out
+	177	[16]	CALL     	1 0 1	; all in 0 out
+	178	[17]	GETTABUP 	1 0 4	; _ENV "print"
+	179	[17]	GETTABUP 	2 0 15	; _ENV "pcall"
+	180	[17]	GETTABUP 	3 0 5	; _ENV "table"
+	181	[17]	GETFIELD 	3 3 6	; "concat"
+	182	[17]	LOADK    	4 20	; "abc"
+	183	[17]	CALL     	2 3 0	; 2 in all out
+	184	[17]	CALL     	1 0 1	; all in 0 out
+	185	[18]	GETTABUP 	1 0 4	; _ENV "print"
+	186	[18]	GETTABUP 	2 0 15	; _ENV "pcall"
+	187	[18]	GETTABUP 	3 0 5	; _ENV "table"
+	188	[18]	GETFIELD 	3 3 6	; "concat"
+	189	[18]	CALL     	2 2 0	; 1 in all out
+	190	[18]	CALL     	1 0 1	; all in 0 out
+	191	[21]	GETTABUP 	1 0 21	; _ENV "setmetatable"
+	192	[21]	NEWTABLE 	2 0 0	; 0
+	193	[21]	EXTRAARG 	0
+	194	[21]	NEWTABLE 	3 2 0	; 0
+	195	[21]	EXTRAARG 	0
+	196	[22]	CLOSURE  	4 0
+	197	[22]	SETFIELD 	3 22 4	; "__index"
+	198	[23]	CLOSURE  	4 1
+	199	[23]	SETFIELD 	3 23 4	; "__len"
+	200	[21]	CALL     	1 3 2	; 2 in 1 out
+	201	[25]	GETTABUP 	2 0 4	; _ENV "print"
+	202	[25]	GETTABUP 	3 0 5	; _ENV "table"
+	203	[25]	GETFIELD 	3 3 6	; "concat"
+	204	[25]	MOVE     	4 1
+	205	[25]	LOADK    	5 24	; "+"
+	206	[25]	CALL     	3 3 0	; 2 in all out
+	207	[25]	CALL     	2 0 1	; all in 0 out
+	208	[28]	NEWTABLE 	2 0 0	; 0
+	209	[28]	EXTRAARG 	0
+	210	[29]	GETTABUP 	3 0 5	; _ENV "table"
+	211	[29]	GETFIELD 	3 3 25	; "insert"
+	212	[29]	MOVE     	4 2
+	213	[29]	LOADK    	5 10	; "x"
+	214	[29]	CALL     	3 3 1	; 2 in 0 out
+	215	[30]	GETTABUP 	3 0 5	; _ENV "table"
+	216	[30]	GETFIELD 	3 3 25	; "insert"
+	217	[30]	MOVE     	4 2
+	218	[30]	LOADK    	5 26	; "y"
+	219	[30]	CALL     	3 3 1	; 2 in 0 out
+	220	[31]	GETTABUP 	3 0 5	; _ENV "table"
+	221	[31]	GETFIELD 	3 3 25	; "insert"
+	222	[31]	MOVE     	4 2
+	223	[31]	LOADI    	5 1
+	224	[31]	LOADK    	6 27	; "first"
+	225	[31]	CALL     	3 4 1	; 3 in 0 out
+	226	[32]	GETTABUP 	3 0 5	; _ENV "table"
+	227	[32]	GETFIELD 	3 3 25	; "insert"
+	228	[32]	MOVE     	4 2
+	229	[32]	LEN      	5 2
+	230	[32]	ADDI     	5 5 1
+	231	[32]	MMBINI   	5 1 6 0	; __add
+	232	[32]	LOADK    	6 28	; "last"
+	233	[32]	CALL     	3 4 1	; 3 in 0 out
+	234	[33]	GETTABUP 	3 0 5	; _ENV "table"
+	235	[33]	GETFIELD 	3 3 25	; "insert"
+	236	[33]	MOVE     	4 2
+	237	[33]	LOADI    	5 3
+	238	[33]	LOADK    	6 29	; "middle"
+	239	[33]	CALL     	3 4 1	; 3 in 0 out
+	240	[34]	GETTABUP 	3 0 4	; _ENV "print"
+	241	[34]	LEN      	4 2
+	242	[34]	GETTABUP 	5 0 5	; _ENV "table"
+	243	[34]	GETFIELD 	5 5 6	; "concat"
+	244	[34]	MOVE     	6 2
+	245	[34]	LOADK    	7 13	; " "
+	246	[34]	CALL     	5 3 0	; 2 in all out
+	247	[34]	CALL     	3 0 1	; all in 0 out
+	248	[35]	GETTABUP 	3 0 5	; _ENV "table"
+	249	[35]	GETFIELD 	3 3 25	; "insert"
+	250	[35]	MOVE     	4 2
+	251	[35]	LOADF    	5 1
+	252	[35]	LOADK    	6 30	; "float pos"
+	253	[35]	CALL     	3 4 1	; 3 in 0 out
+	254	[36]	GETTABUP 	3 0 4	; _ENV "print"
+	255	[36]	GETTABUP 	4 0 5	; _ENV "table"
+	256	[36]	GETFIELD 	4 4 6	; "concat"
+	257	[36]	MOVE     	5 2
+	258	[36]	LOADK    	6 13	; " "
+	259	[36]	CALL     	4 3 0	; 2 in all out
+	260	[36]	CALL     	3 0 1	; all in 0 out
+	261	[37]	GETTABUP 	3 0 4	; _ENV "print"
+	262	[37]	GETTABUP 	4 0 15	; _ENV "pcall"
+	263	[37]	GETTABUP 	5 0 5	; _ENV "table"
+	264	[37]	GETFIELD 	5 5 25	; "insert"
+	265	[37]	MOVE     	6 2
+	266	[37]	LOADI    	7 0
+	267	[37]	LOADK    	8 16	; "zero"
+	268	[37]	CALL     	4 5 0	; 4 in all out
+	269	[37]	CALL     	3 0 1	; all in 0 out
+	270	[38]	GETTABUP 	3 0 4	; _ENV "print"
+	271	[38]	GETTABUP 	4 0 15	; _ENV "pcall"
+	272	[38]	GETTABUP 	5 0 5	; _ENV "table"
+	273	[38]	GETFIELD 	5 5 25	; "insert"
+	274	[38]	MOVE     	6 2
+	275	[38]	LEN      	7 2
+	276	[38]	ADDI     	7 7 2
+	277	[38]	MMBINI   	7 2 6 0	; __add
+	278	[38]	LOADK    	8 31	; "too far"
+	279	[38]	CALL     	4 5 0	; 4 in all out
+	280	[38]	CALL     	3 0 1	; all in 0 out
+	281	[39]	GETTABUP 	3 0 4	; _ENV "print"
+	282	[39]	GETTABUP 	4 0 15	; _ENV "pcall"
+	283	[39]	GETTABUP 	5 0 5	; _ENV "table"
+	284	[39]	GETFIELD 	5 5 25	; "insert"
+	285	[39]	MOVE     	6 2
+	286	[39]	LOADI    	7 -1
+	287	[39]	LOADK    	8 32	; "neg"
+	288	[39]	CALL     	4 5 0	; 4 in all out
+	289	[39]	CALL     	3 0 1	; all in 0 out
+	290	[40]	GETTABUP 	3 0 4	; _ENV "print"
+	291	[40]	GETTABUP 	4 0 15	; _ENV "pcall"
+	292	[40]	GETTABUP 	5 0 5	; _ENV "table"
+	293	[40]	GETFIELD 	5 5 25	; "insert"
+	294	[40]	MOVE     	6 2
+	295	[40]	LOADK    	7 33	; 1.5
+	296	[40]	LOADK    	8 34	; "half"
+	297	[40]	CALL     	4 5 0	; 4 in all out
+	298	[40]	CALL     	3 0 1	; all in 0 out
+	299	[41]	GETTABUP 	3 0 4	; _ENV "print"
+	300	[41]	GETTABUP 	4 0 15	; _ENV "pcall"
+	301	[41]	GETTABUP 	5 0 5	; _ENV "table"
+	302	[41]	GETFIELD 	5 5 25	; "insert"
+	303	[41]	MOVE     	6 2
+	304	[41]	LOADI    	7 1
+	305	[41]	LOADI    	8 2
+	306	[41]	LOADI    	9 3
+	307	[41]	CALL     	4 6 0	; 5 in all out
+	308	[41]	CALL     	3 0 1	; all in 0 out
+	309	[42]	GETTABUP 	3 0 4	; _ENV "print"
+	310	[42]	GETTABUP 	4 0 15	; _ENV "pcall"
+	311	[42]	GETTABUP 	5 0 5	; _ENV "table"
+	312	[42]	GETFIELD 	5 5 25	; "insert"
+	313	[42]	MOVE     	6 2
+	314	[42]	CALL     	4 3 0	; 2 in all out
+	315	[42]	CALL     	3 0 1	; all in 0 out
+	316	[43]	GETTABUP 	3 0 4	; _ENV "print"
+	317	[43]	GETTABUP 	4 0 15	; _ENV "pcall"
+	318	[43]	GETTABUP 	5 0 5	; _ENV "table"
+	319	[43]	GETFIELD 	5 5 25	; "insert"
+	320	[43]	LOADNIL  	6 0	; 1 out
+	321	[43]	LOADI    	7 1
+	322	[43]	CALL     	4 4 0	; 3 in all out
+	323	[43]	CALL     	3 0 1	; all in 0 out
+	324	[44]	GETTABUP 	3 0 4	; _ENV "print"
+	325	[44]	GETTABUP 	4 0 15	; _ENV "pcall"
+	326	[44]	GETTABUP 	5 0 5	; _ENV "table"
+	327	[44]	GETFIELD 	5 5 25	; "insert"
+	328	[44]	MOVE     	6 2
+	329	[44]	LOADK    	7 10	; "x"
+	330	[44]	LOADI    	8 1
+	331	[44]	CALL     	4 5 0	; 4 in all out
+	332	[44]	CALL     	3 0 1	; all in 0 out
+	333	[47]	GETTABUP 	3 0 4	; _ENV "print"
+	334	[47]	GETTABUP 	4 0 35	; _ENV "select"
+	335	[47]	LOADK    	5 36	; "#"
+	336	[47]	GETTABUP 	6 0 5	; _ENV "table"
+	337	[47]	GETFIELD 	6 6 25	; "insert"
+	338	[47]	MOVE     	7 2
+	339	[47]	LOADK    	8 37	; "z"
+	340	[47]	CALL     	6 3 0	; 2 in all out
+	341	[47]	CALL     	4 0 2	; all in 1 out
+	342	[47]	LEN      	5 2
+	343	[47]	CALL     	3 3 1	; 2 in 0 out
+	344	[48]	NEWTABLE 	3 0 3	; 3
+	345	[48]	EXTRAARG 	0
+	346	[48]	LOADI    	4 1
+	347	[48]	LOADI    	5 2
+	348	[48]	LOADI    	6 3
+	349	[48]	SETLIST  	3 3 0
+	350	[49]	GETTABUP 	4 0 5	; _ENV "table"
+	351	[49]	GETFIELD 	4 4 25	; "insert"
+	352	[49]	MOVE     	5 3
+	353	[49]	LOADNIL  	6 0	; 1 out
+	354	[49]	CALL     	4 3 1	; 2 in 0 out
+	355	[50]	GETTABUP 	4 0 4	; _ENV "print"
+	356	[50]	LEN      	5 3
+	357	[50]	CALL     	4 2 1	; 1 in 0 out
+	358	[53]	NEWTABLE 	4 0 0	; 0
+	359	[53]	EXTRAARG 	0
+	360	[54]	GETTABUP 	5 0 5	; _ENV "table"
+	361	[54]	GETFIELD 	5 5 25	; "insert"
+	362	[54]	MOVE     	6 4
+	363	[54]	LOADI    	7 1
+	364	[54]	LOADK    	8 38	; "only"
+	365	[54]	CALL     	5 4 1	; 3 in 0 out
+	366	[55]	GETTABUP 	5 0 4	; _ENV "print"
+	367	[55]	GETI     	6 4 1
+	368	[55]	LEN      	7 4
+	369	[55]	CALL     	5 3 1	; 2 in 0 out
+	370	[58]	NEWTABLE 	5 0 0	; 0
+	371	[58]	EXTRAARG 	0
+	372	[59]	GETTABUP 	6 0 21	; _ENV "setmetatable"
+	373	[59]	NEWTABLE 	7 0 0	; 0
+	374	[59]	EXTRAARG 	0
+	375	[59]	NEWTABLE 	8 3 0	; 0
+	376	[59]	EXTRAARG 	0
+	377	[60]	CLOSURE  	9 2
+	378	[60]	SETFIELD 	8 23 9	; "__len"
+	379	[61]	CLOSURE  	9 3
+	380	[61]	SETFIELD 	8 22 9	; "__index"
+	381	[62]	CLOSURE  	9 4
+	382	[62]	SETFIELD 	8 39 9	; "__newindex"
+	383	[59]	CALL     	6 3 2	; 2 in 1 out
+	384	[64]	GETTABUP 	7 0 5	; _ENV "table"
+	385	[64]	GETFIELD 	7 7 25	; "insert"
+	386	[64]	MOVE     	8 6
+	387	[64]	LOADI    	9 1
+	388	[64]	LOADK    	10 40	; "new"
+	389	[64]	CALL     	7 4 1	; 3 in 0 out
+	390	[65]	GETTABUP 	7 0 4	; _ENV "print"
+	391	[65]	GETTABUP 	8 0 5	; _ENV "table"
+	392	[65]	GETFIELD 	8 8 6	; "concat"
+	393	[65]	MOVE     	9 5
+	394	[65]	LOADK    	10 13	; " "
+	395	[65]	CALL     	8 3 0	; 2 in all out
+	396	[65]	CALL     	7 0 1	; all in 0 out
+	397	[67]	GETTABUP 	7 0 5	; _ENV "table"
+	398	[67]	GETFIELD 	7 7 6	; "concat"
+	399	[67]	MOVE     	8 2
+	400	[67]	LOADK    	9 18	; ","
+	401	[67]	CALL     	7 3 2	; 2 in 1 out
+	402	[67]	LEN      	8 2
+	403	[67]	RETURN   	7 3 1k	; 2 out
+	404	[67]	RETURN   	7 1 1k	; 0 out
+constants (41):
+	0	S	"a"
+	1	S	"b"
+	2	S	"c"
+	3	S	"d"
+	4	S	"print"
+	5	S	"table"
+	6	S	"concat"
+	7	S	", "
+	8	S	""
+	9	S	"-"
+	10	S	"x"
+	11	F	2.5
+	12	F	9.2233720368548e+18
+	13	S	" "
+	14	S	"two"
+	15	S	"pcall"
+	16	S	"zero"
+	17	S	"one"
+	18	S	","
+	19	S	"\000"
+	20	S	"abc"
+	21	S	"setmetatable"
+	22	S	"__index"
+	23	S	"__len"
+	24	S	"+"
+	25	S	"insert"
+	26	S	"y"
+	27	S	"first"
+	28	S	"last"
+	29	S	"middle"
+	30	S	"float pos"
+	31	S	"too far"
+	32	S	"neg"
+	33	F	1.5
+	34	S	"half"
+	35	S	"select"
+	36	S	"#"
+	37	S	"z"
+	38	S	"only"
+	39	S	"__newindex"
+	40	S	"new"
+locals (7):
+	0	t	9	405
+	1	virtual	201	405
+	2	list	210	405
+	3	holes	350	405
+	4	empty	360	405
+	5	log	372	405
+	6	proxy	384	405
+upvalues (1):
+	0	_ENV	1	0
+
+function <table_concat_insert.lua:22,22> (5 instructions)
+2 params, 4 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[22]	LOADK    	2 0	; "v"
+	2	[22]	MOVE     	3 1
+	3	[22]	CONCAT   	2 2
+	4	[22]	RETURN1  	2
+	5	[22]	RETURN0  	
+constants (1):
+	0	S	"v"
+locals (2):
+	0	_	1	6
+	1	i	1	6
+upvalues (0):
+
+function <table_concat_insert.lua:23,23> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[23]	LOADI    	0 3
+	2	[23]	RETURN1  	0
+	3	[23]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <table_concat_insert.lua:60,60> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[60]	LOADI    	0 2
+	2	[60]	RETURN1  	0
+	3	[60]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <table_concat_insert.lua:61,61> (5 instructions)
+2 params, 4 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[61]	LOADK    	2 0	; "old"
+	2	[61]	MOVE     	3 1
+	3	[61]	CONCAT   	2 2
+	4	[61]	RETURN1  	2
+	5	[61]	RETURN0  	
+constants (1):
+	0	S	"old"
+locals (2):
+	0	_	1	6
+	1	k	1	6
+upvalues (0):
+
+function <table_concat_insert.lua:62,62> (11 instructions)
+3 params, 8 slots, 1 upvalue, 3 locals, 1 constant, 0 functions
+	1	[62]	GETUPVAL 	3 0	; log
+	2	[62]	LEN      	3 3
+	3	[62]	ADDI     	4 3 1
+	4	[62]	MMBINI   	3 1 6 0	; __add
+	5	[62]	GETUPVAL 	3 0	; log
+	6	[62]	MOVE     	5 1
+	7	[62]	LOADK    	6 0	; "="
+	8	[62]	MOVE     	7 2
+	9	[62]	CONCAT   	5 3
+	10	[62]	SETTABLE 	3 4 5
+	11	[62]	RETURN0  	
+constants (1):
+	0	S	"="
+locals (3):
+	0	_	1	12
+	1	k	1	12
+	2	v	1	12
+upvalues (1):
+	0	log	1	5

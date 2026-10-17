@@ -1,0 +1,28 @@
+0	1	2	3
+a	b	c
+b	c
+c
+
+c
+a	b	c
+b
+false	bad argument #1 to 'select' (index out of range)
+false	bad argument #1 to 'select' (index out of range)
+false	bad argument #1 to 'select' (number expected, got string)
+false	bad argument #1 to 'select' (number has no integer representation)
+false	bad argument #1 to 'select' (number expected, got no value)
+0	1	3	3
+true	false	true	true	true
+true	false	false	bad argument #2 to 'rawequal' (value expected)
+99	3	5	0
+false	bad argument #1 to 'rawlen' (table or string expected, got number)
+false	bad argument #1 to 'rawlen' (table or string expected, got no value)
+default x	nil	false	read only
+true	2	2
+false	table index is nil
+false	table index is NaN
+false	bad argument #1 to 'rawget' (table expected, got string)
+false	bad argument #3 to 'rawset' (value expected)
+nil	boolean	number	number	string	table	function
+function	userdata	false	bad argument #1 to 'type' (value expected)
+2	y	z

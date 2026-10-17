@@ -1,0 +1,17 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "floor"
+        String "2.5"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "floor"
+        String "a"

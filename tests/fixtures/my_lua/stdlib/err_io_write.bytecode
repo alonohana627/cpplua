@@ -1,0 +1,18 @@
+
+main <err_io_write.lua:0,0> (8 instructions)
+0+ params, 3 slots, 1 upvalue, 0 locals, 3 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[3]	GETTABUP 	0 0 0	; _ENV "io"
+	3	[3]	GETFIELD 	0 0 1	; "write"
+	4	[3]	LOADK    	1 2	; "written first\n"
+	5	[3]	NEWTABLE 	2 0 0	; 0
+	6	[3]	EXTRAARG 	0
+	7	[3]	CALL     	0 3 1	; 2 in 0 out
+	8	[3]	RETURN   	0 1 1	; 0 out
+constants (3):
+	0	S	"io"
+	1	S	"write"
+	2	S	"written first\n"
+locals (0):
+upvalues (1):
+	0	_ENV	1	0

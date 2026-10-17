@@ -20,6 +20,17 @@ namespace lua2 {
 std::expected<void, std::string> load(State& state, std::string_view source,
                                       std::string_view chunk_name);
 
+// lua_load with Lua's own chunk name: "@path" for a file, "=name" for a
+// name shown as it is, or else the text itself ([string "..."]); `mode` is
+// load's: "b", "t" or "bt". lua2 loads no binary chunks.
+std::expected<void, std::string> load_chunk(State& state, std::string_view source,
+                                            std::string_view source_name, std::string_view mode);
+
+// Reads a file to load as a chunk, without what luaL_loadfilex skips (a
+// byte order mark, a first line starting with '#'): the error is Lua's
+// "cannot open name: reason". An empty path reads stdin.
+std::expected<std::string, std::string> read_chunk_file(const std::string& path);
+
 // How run_text reports an error.
 enum class ErrorReport : std::uint8_t {
     Message,   // the message only, as a .runerror file has it

@@ -17,7 +17,7 @@
 
 #include "gc/heap.hpp"
 #include "std/auxlib.hpp"
-#include "std/base.hpp"
+#include "std/libs.hpp"
 #include "value/convert.hpp"
 #include "value/number.hpp"
 #include "value/table.hpp"
@@ -590,8 +590,7 @@ void ClassBase::allow_fields() {
 // ==== Interpreter ====
 
 Interpreter::Interpreter() : heap_(std::make_unique<Heap>()) {
-    open_base(*heap_);
-    open_debug(*heap_);
+    open_libraries(*heap_);
 }
 
 Interpreter::Interpreter(Interpreter&&) noexcept = default;
@@ -642,6 +641,10 @@ Ref Interpreter::make_function(Function f) {
 
 void Interpreter::set_output(std::function<void(std::string_view)> output) {
     heap_->set_output(std::move(output));
+}
+
+void Interpreter::set_error_output(std::function<void(std::string_view)> output) {
+    heap_->set_error_output(std::move(output));
 }
 
 void Interpreter::collect() {

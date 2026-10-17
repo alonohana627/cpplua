@@ -1,0 +1,25 @@
+
+main <err_utf8_char.lua:0,0> (15 instructions)
+0+ params, 4 slots, 1 upvalue, 0 locals, 3 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[2]	GETTABUP 	1 0 1	; _ENV "utf8"
+	4	[2]	GETFIELD 	1 1 2	; "char"
+	5	[2]	LOADI    	2 72
+	6	[2]	LOADI    	3 105
+	7	[2]	CALL     	1 3 0	; 2 in all out
+	8	[2]	CALL     	0 0 1	; all in 0 out
+	9	[3]	GETTABUP 	0 0 0	; _ENV "print"
+	10	[3]	GETTABUP 	1 0 1	; _ENV "utf8"
+	11	[3]	GETFIELD 	1 1 2	; "char"
+	12	[3]	LOADI    	2 -1
+	13	[3]	CALL     	1 2 0	; 1 in all out
+	14	[3]	CALL     	0 0 1	; all in 0 out
+	15	[3]	RETURN   	0 1 1	; 0 out
+constants (3):
+	0	S	"print"
+	1	S	"utf8"
+	2	S	"char"
+locals (0):
+upvalues (1):
+	0	_ENV	1	0

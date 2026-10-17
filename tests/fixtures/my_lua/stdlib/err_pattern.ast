@@ -1,0 +1,15 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      MethodCall find
+        Paren
+          String "abc"
+        String "[a-c]+"
+  CallStatement
+    Call
+      Name print
+      MethodCall find
+        Paren
+          String "abc"
+        String "[a-c"

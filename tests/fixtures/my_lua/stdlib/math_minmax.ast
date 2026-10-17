@@ -1,0 +1,494 @@
+Chunk
+  LocalFunction show
+    Function(v) [upvalues: _ENV]
+      Return
+        Binary ..
+          Call
+            Name tostring
+            Name v (local 0)
+          Binary ..
+            String ":"
+            Call
+              Index
+                Name math
+                String "type"
+              Name v (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "max"
+          Integer 1
+          Integer 2
+          Integer 3
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "max"
+          Integer 3
+          Integer 2
+          Integer 1
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "max"
+          Integer 1
+          Float 2.5
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "max"
+          Float 2.0
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "max"
+          Integer 2
+          Float 2.0
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "min"
+          Integer 2
+          Float 2.0
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "min"
+          Float 2.0
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "min"
+          Integer 1
+          Integer 2
+          Integer 3
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "min"
+          Unary -
+            Float 1.5
+          Unary -
+            Integer 1
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "max"
+          Integer 7
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "min"
+          Float 7.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "max"
+          Unary -
+            Index
+              Name math
+              String "huge"
+          Index
+            Name math
+            String "mininteger"
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "min"
+          Index
+            Name math
+            String "huge"
+          Index
+            Name math
+            String "maxinteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "max"
+          Index
+            Name math
+            String "maxinteger"
+          Binary ^
+            Integer 2
+            Integer 63
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "min"
+          Unary -
+            Float 0.0
+          Integer 0
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name math
+            String "max"
+          Integer 0
+          Unary -
+            Float 0.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "max"
+        String "10"
+        Integer 9
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "min"
+        Integer 1
+        String "0.5"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "max"
+        String "10"
+      Call
+        Name type
+        Call
+          Index
+            Name math
+            String "max"
+          String "10"
+      Call
+        Index
+          Name math
+          String "max"
+        String "10"
+        String "9"
+      Call
+        Index
+          Name math
+          String "min"
+        String "10"
+        String "9"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "max"
+        String "a"
+        String "b"
+        String "ab"
+      Call
+        Name type
+        Call
+          Index
+            Name math
+            String "min"
+          Table
+      Call
+        Index
+          Name math
+          String "max"
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "max"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "min"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "max"
+        Integer 1
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "min"
+        Nil
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Index
+        Name math
+        String "maxinteger"
+      Index
+        Name math
+        String "mininteger"
+      Binary ==
+        Binary +
+          Index
+            Name math
+            String "maxinteger"
+          Integer 1
+        Index
+          Name math
+          String "mininteger"
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Binary -
+          Index
+            Name math
+            String "mininteger"
+          Integer 1
+        Index
+          Name math
+          String "maxinteger"
+      Binary ==
+        Unary -
+          Index
+            Name math
+            String "mininteger"
+        Index
+          Name math
+          String "mininteger"
+  CallStatement
+    Call
+      Name print
+      Binary *
+        Index
+          Name math
+          String "maxinteger"
+        Integer 2
+      Binary //
+        Index
+          Name math
+          String "mininteger"
+        Unary -
+          Integer 1
+      Binary %
+        Index
+          Name math
+          String "mininteger"
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Binary +
+          Index
+            Name math
+            String "maxinteger"
+          Float 0.0
+        Binary ^
+          Integer 2
+          Integer 63
+      Binary ==
+        Binary //
+          Index
+            Name math
+            String "maxinteger"
+          Integer 1
+        Index
+          Name math
+          String "maxinteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "type"
+        Index
+          Name math
+          String "maxinteger"
+      Call
+        Index
+          Name math
+          String "type"
+        Index
+          Name math
+          String "huge"
+      Binary //
+        Index
+          Name math
+          String "huge"
+        Integer 1
+      Binary //
+        Unary -
+          Index
+            Name math
+            String "huge"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "ult"
+        Integer 1
+        Integer 2
+      Call
+        Index
+          Name math
+          String "ult"
+        Integer 2
+        Integer 1
+      Call
+        Index
+          Name math
+          String "ult"
+        Unary -
+          Integer 1
+        Integer 1
+      Call
+        Index
+          Name math
+          String "ult"
+        Integer 1
+        Unary -
+          Integer 1
+      Call
+        Index
+          Name math
+          String "ult"
+        Integer 0
+        Index
+          Name math
+          String "mininteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "ult"
+        Index
+          Name math
+          String "maxinteger"
+        Index
+          Name math
+          String "mininteger"
+      Call
+        Index
+          Name math
+          String "ult"
+        Integer 5
+        Integer 5
+      Call
+        Index
+          Name math
+          String "ult"
+        Unary -
+          Integer 2
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "ult"
+        Float 1.5
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "ult"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "ult"
+        Float 1.0
+        Integer 2
+  Return
+    Call
+      Index
+        Name math
+        String "max"
+      Integer 1
+      Integer 5
+      Integer 3
+    Call
+      Index
+        Name math
+        String "min"
+      Float 4.5
+      Integer 9

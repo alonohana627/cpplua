@@ -1,0 +1,569 @@
+
+main <string_match.lua:0,0> (432 instructions)
+0+ params, 20 slots, 1 upvalue, 67 locals, 63 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[7]	GETTABUP 	1 0 1	; _ENV "string"
+	4	[7]	GETFIELD 	1 1 2	; "match"
+	5	[7]	LOADK    	2 3	; "hello 123 world"
+	6	[7]	LOADK    	3 4	; "%d+"
+	7	[7]	CALL     	1 3 0	; 2 in all out
+	8	[7]	CALL     	0 0 1	; all in 0 out
+	9	[8]	GETTABUP 	0 0 0	; _ENV "print"
+	10	[8]	GETTABUP 	1 0 1	; _ENV "string"
+	11	[8]	GETFIELD 	1 1 2	; "match"
+	12	[8]	LOADK    	2 3	; "hello 123 world"
+	13	[8]	LOADK    	3 5	; "(%a+) (%d+)"
+	14	[8]	CALL     	1 3 0	; 2 in all out
+	15	[8]	CALL     	0 0 1	; all in 0 out
+	16	[9]	GETTABUP 	0 0 0	; _ENV "print"
+	17	[9]	GETTABUP 	1 0 1	; _ENV "string"
+	18	[9]	GETFIELD 	1 1 2	; "match"
+	19	[9]	LOADK    	2 6	; "hello"
+	20	[9]	LOADK    	3 7	; "()ll()"
+	21	[9]	CALL     	1 3 0	; 2 in all out
+	22	[9]	CALL     	0 0 1	; all in 0 out
+	23	[10]	GETTABUP 	0 0 0	; _ENV "print"
+	24	[10]	GETTABUP 	1 0 1	; _ENV "string"
+	25	[10]	GETFIELD 	1 1 2	; "match"
+	26	[10]	LOADK    	2 6	; "hello"
+	27	[10]	LOADK    	3 8	; "(h(el)(l))o"
+	28	[10]	CALL     	1 3 0	; 2 in all out
+	29	[10]	CALL     	0 0 1	; all in 0 out
+	30	[11]	GETTABUP 	0 0 0	; _ENV "print"
+	31	[11]	GETTABUP 	1 0 1	; _ENV "string"
+	32	[11]	GETFIELD 	1 1 2	; "match"
+	33	[11]	LOADK    	2 6	; "hello"
+	34	[11]	LOADK    	3 9	; "xyz"
+	35	[11]	CALL     	1 3 2	; 2 in 1 out
+	36	[11]	GETTABUP 	2 0 1	; _ENV "string"
+	37	[11]	GETFIELD 	2 2 2	; "match"
+	38	[11]	LOADK    	3 10	; ""
+	39	[11]	LOADK    	4 11	; ".*"
+	40	[11]	CALL     	2 3 2	; 2 in 1 out
+	41	[11]	EQK      	2 10 1	; ""
+	42	[11]	JMP      	1	; to 44
+	43	[11]	LFALSESKIP	2
+	44	[11]	LOADTRUE 	2
+	45	[11]	GETTABUP 	3 0 1	; _ENV "string"
+	46	[11]	GETFIELD 	3 3 2	; "match"
+	47	[11]	LOADK    	4 10	; ""
+	48	[11]	LOADK    	5 12	; "x*"
+	49	[11]	CALL     	3 3 2	; 2 in 1 out
+	50	[11]	EQK      	3 10 1	; ""
+	51	[11]	JMP      	1	; to 53
+	52	[11]	LFALSESKIP	3
+	53	[11]	LOADTRUE 	3
+	54	[11]	CALL     	0 4 1	; 3 in 0 out
+	55	[12]	GETTABUP 	0 0 0	; _ENV "print"
+	56	[12]	GETTABUP 	1 0 1	; _ENV "string"
+	57	[12]	GETFIELD 	1 1 2	; "match"
+	58	[12]	LOADK    	2 6	; "hello"
+	59	[12]	LOADK    	3 13	; "l"
+	60	[12]	LOADI    	4 -2
+	61	[12]	CALL     	1 4 2	; 3 in 1 out
+	62	[12]	GETTABUP 	2 0 1	; _ENV "string"
+	63	[12]	GETFIELD 	2 2 2	; "match"
+	64	[12]	LOADK    	3 6	; "hello"
+	65	[12]	LOADK    	4 14	; "."
+	66	[12]	LOADI    	5 -1
+	67	[12]	CALL     	2 4 2	; 3 in 1 out
+	68	[12]	GETTABUP 	3 0 1	; _ENV "string"
+	69	[12]	GETFIELD 	3 3 2	; "match"
+	70	[12]	LOADK    	4 6	; "hello"
+	71	[12]	LOADK    	5 15	; "^h"
+	72	[12]	LOADI    	6 2
+	73	[12]	CALL     	3 4 0	; 3 in all out
+	74	[12]	CALL     	0 0 1	; all in 0 out
+	75	[13]	GETTABUP 	0 0 0	; _ENV "print"
+	76	[13]	GETTABUP 	1 0 1	; _ENV "string"
+	77	[13]	GETFIELD 	1 1 2	; "match"
+	78	[13]	LOADK    	2 16	; "key=val"
+	79	[13]	LOADK    	3 17	; "^(%w+)=(%w*)$"
+	80	[13]	CALL     	1 3 0	; 2 in all out
+	81	[13]	CALL     	0 0 1	; all in 0 out
+	82	[14]	GETTABUP 	0 0 0	; _ENV "print"
+	83	[14]	GETTABUP 	1 0 1	; _ENV "string"
+	84	[14]	GETFIELD 	1 1 2	; "match"
+	85	[14]	LOADK    	2 18	; "key="
+	86	[14]	LOADK    	3 17	; "^(%w+)=(%w*)$"
+	87	[14]	CALL     	1 3 0	; 2 in all out
+	88	[14]	CALL     	0 0 1	; all in 0 out
+	89	[15]	GETTABUP 	0 0 0	; _ENV "print"
+	90	[15]	GETTABUP 	1 0 1	; _ENV "string"
+	91	[15]	GETFIELD 	1 1 2	; "match"
+	92	[15]	LOADK    	2 19	; "  padded  "
+	93	[15]	LOADK    	3 20	; "^%s*(.-)%s*$"
+	94	[15]	CALL     	1 3 2	; 2 in 1 out
+	95	[15]	LOADK    	2 21	; "|"
+	96	[15]	CONCAT   	1 2
+	97	[15]	CALL     	0 2 1	; 1 in 0 out
+	98	[16]	GETTABUP 	0 0 0	; _ENV "print"
+	99	[16]	GETTABUP 	1 0 1	; _ENV "string"
+	100	[16]	GETFIELD 	1 1 2	; "match"
+	101	[16]	LOADK    	2 22	; "[[nested]]"
+	102	[16]	LOADK    	3 23	; "%[(%b[])%]"
+	103	[16]	CALL     	1 3 0	; 2 in all out
+	104	[16]	CALL     	0 0 1	; all in 0 out
+	105	[17]	GETTABUP 	0 0 0	; _ENV "print"
+	106	[17]	GETTABUP 	1 0 1	; _ENV "string"
+	107	[17]	GETFIELD 	1 1 2	; "match"
+	108	[17]	LOADK    	2 24	; "f(a(b)c)d"
+	109	[17]	LOADK    	3 25	; "%b()"
+	110	[17]	CALL     	1 3 0	; 2 in all out
+	111	[17]	CALL     	0 0 1	; all in 0 out
+	112	[18]	GETTABUP 	0 0 0	; _ENV "print"
+	113	[18]	GETTABUP 	1 0 1	; _ENV "string"
+	114	[18]	GETFIELD 	1 1 2	; "match"
+	115	[18]	LOADK    	2 26	; "THE (quick) fox"
+	116	[18]	LOADK    	3 27	; "%((%a+)%)"
+	117	[18]	CALL     	1 3 0	; 2 in all out
+	118	[18]	CALL     	0 0 1	; all in 0 out
+	119	[19]	GETTABUP 	0 0 0	; _ENV "print"
+	120	[19]	GETTABUP 	1 0 1	; _ENV "string"
+	121	[19]	GETFIELD 	1 1 2	; "match"
+	122	[19]	LOADK    	2 28	; "abc"
+	123	[19]	LOADK    	3 29	; "()"
+	124	[19]	CALL     	1 3 2	; 2 in 1 out
+	125	[19]	GETTABUP 	2 0 1	; _ENV "string"
+	126	[19]	GETFIELD 	2 2 2	; "match"
+	127	[19]	LOADK    	3 28	; "abc"
+	128	[19]	LOADK    	4 29	; "()"
+	129	[19]	LOADI    	5 4
+	130	[19]	CALL     	2 4 2	; 3 in 1 out
+	131	[19]	GETTABUP 	3 0 1	; _ENV "string"
+	132	[19]	GETFIELD 	3 3 2	; "match"
+	133	[19]	LOADK    	4 28	; "abc"
+	134	[19]	LOADK    	5 29	; "()"
+	135	[19]	LOADI    	6 10
+	136	[19]	CALL     	3 4 0	; 3 in all out
+	137	[19]	CALL     	0 0 1	; all in 0 out
+	138	[20]	GETTABUP 	0 0 0	; _ENV "print"
+	139	[20]	GETTABUP 	1 0 1	; _ENV "string"
+	140	[20]	GETFIELD 	1 1 2	; "match"
+	141	[20]	LOADI    	2 2024
+	142	[20]	LOADK    	3 30	; "^%d%d"
+	143	[20]	CALL     	1 3 2	; 2 in 1 out
+	144	[20]	GETTABUP 	2 0 1	; _ENV "string"
+	145	[20]	GETFIELD 	2 2 2	; "match"
+	146	[20]	LOADK    	3 31	; "x"
+	147	[20]	LOADK    	4 32	; "()x()"
+	148	[20]	CALL     	2 3 0	; 2 in all out
+	149	[20]	CALL     	0 0 1	; all in 0 out
+	150	[23]	NEWTABLE 	0 0 0	; 0
+	151	[23]	EXTRAARG 	0
+	152	[24]	GETTABUP 	1 0 1	; _ENV "string"
+	153	[24]	GETFIELD 	1 1 33	; "gmatch"
+	154	[24]	LOADK    	2 34	; "one two  three"
+	155	[24]	LOADK    	3 35	; "%a+"
+	156	[24]	CALL     	1 3 5	; 2 in 4 out
+	157	[24]	TFORPREP 	1 4	; to 162
+	158	[24]	LEN      	6 0
+	159	[24]	ADDI     	6 6 1
+	160	[24]	MMBINI   	6 1 6 0	; __add
+	161	[24]	SETTABLE 	0 6 5
+	162	[24]	TFORCALL 	1 1
+	163	[24]	TFORLOOP 	1 6	; to 158
+	164	[24]	CLOSE    	1
+	165	[25]	GETTABUP 	1 0 0	; _ENV "print"
+	166	[25]	LEN      	2 0
+	167	[25]	GETTABUP 	3 0 36	; _ENV "table"
+	168	[25]	GETFIELD 	3 3 37	; "concat"
+	169	[25]	MOVE     	4 0
+	170	[25]	LOADK    	5 38	; ","
+	171	[25]	CALL     	3 3 0	; 2 in all out
+	172	[25]	CALL     	1 0 1	; all in 0 out
+	173	[28]	NEWTABLE 	1 0 0	; 0
+	174	[28]	EXTRAARG 	0
+	175	[29]	GETTABUP 	2 0 1	; _ENV "string"
+	176	[29]	GETFIELD 	2 2 33	; "gmatch"
+	177	[29]	LOADK    	3 39	; "a=1, b=2, c=3"
+	178	[29]	LOADK    	4 40	; "(%w+)=(%w+)"
+	179	[29]	CALL     	2 3 5	; 2 in 4 out
+	180	[29]	TFORPREP 	2 8	; to 189
+	181	[30]	LEN      	8 1
+	182	[30]	ADDI     	8 8 1
+	183	[30]	MMBINI   	8 1 6 0	; __add
+	184	[30]	MOVE     	9 6
+	185	[30]	LOADK    	10 41	; ":"
+	186	[30]	MOVE     	11 7
+	187	[30]	CONCAT   	9 3
+	188	[30]	SETTABLE 	1 8 9
+	189	[29]	TFORCALL 	2 2
+	190	[29]	TFORLOOP 	2 10	; to 181
+	191	[31]	CLOSE    	2
+	192	[32]	GETTABUP 	2 0 0	; _ENV "print"
+	193	[32]	GETTABUP 	3 0 36	; _ENV "table"
+	194	[32]	GETFIELD 	3 3 37	; "concat"
+	195	[32]	MOVE     	4 1
+	196	[32]	LOADK    	5 42	; " "
+	197	[32]	CALL     	3 3 0	; 2 in all out
+	198	[32]	CALL     	2 0 1	; all in 0 out
+	199	[35]	NEWTABLE 	2 0 0	; 0
+	200	[35]	EXTRAARG 	0
+	201	[36]	GETTABUP 	3 0 1	; _ENV "string"
+	202	[36]	GETFIELD 	3 3 33	; "gmatch"
+	203	[36]	LOADK    	4 43	; "banana"
+	204	[36]	LOADK    	5 44	; "()a"
+	205	[36]	CALL     	3 3 5	; 2 in 4 out
+	206	[36]	TFORPREP 	3 4	; to 211
+	207	[36]	LEN      	8 2
+	208	[36]	ADDI     	8 8 1
+	209	[36]	MMBINI   	8 1 6 0	; __add
+	210	[36]	SETTABLE 	2 8 7
+	211	[36]	TFORCALL 	3 1
+	212	[36]	TFORLOOP 	3 6	; to 207
+	213	[36]	CLOSE    	3
+	214	[37]	GETTABUP 	3 0 0	; _ENV "print"
+	215	[37]	GETTABUP 	4 0 36	; _ENV "table"
+	216	[37]	GETFIELD 	4 4 37	; "concat"
+	217	[37]	MOVE     	5 2
+	218	[37]	LOADK    	6 42	; " "
+	219	[37]	CALL     	4 3 0	; 2 in all out
+	220	[37]	CALL     	3 0 1	; all in 0 out
+	221	[40]	NEWTABLE 	3 0 0	; 0
+	222	[40]	EXTRAARG 	0
+	223	[41]	GETTABUP 	4 0 1	; _ENV "string"
+	224	[41]	GETFIELD 	4 4 33	; "gmatch"
+	225	[41]	LOADK    	5 28	; "abc"
+	226	[41]	LOADK    	6 29	; "()"
+	227	[41]	CALL     	4 3 5	; 2 in 4 out
+	228	[41]	TFORPREP 	4 4	; to 233
+	229	[41]	LEN      	9 3
+	230	[41]	ADDI     	9 9 1
+	231	[41]	MMBINI   	9 1 6 0	; __add
+	232	[41]	SETTABLE 	3 9 8
+	233	[41]	TFORCALL 	4 1
+	234	[41]	TFORLOOP 	4 6	; to 229
+	235	[41]	CLOSE    	4
+	236	[42]	GETTABUP 	4 0 0	; _ENV "print"
+	237	[42]	GETTABUP 	5 0 36	; _ENV "table"
+	238	[42]	GETFIELD 	5 5 37	; "concat"
+	239	[42]	MOVE     	6 3
+	240	[42]	LOADK    	7 42	; " "
+	241	[42]	CALL     	5 3 0	; 2 in all out
+	242	[42]	CALL     	4 0 1	; all in 0 out
+	243	[43]	NEWTABLE 	4 0 0	; 0
+	244	[43]	EXTRAARG 	0
+	245	[44]	GETTABUP 	5 0 1	; _ENV "string"
+	246	[44]	GETFIELD 	5 5 33	; "gmatch"
+	247	[44]	LOADK    	6 45	; "aab"
+	248	[44]	LOADK    	7 46	; "a*"
+	249	[44]	CALL     	5 3 5	; 2 in 4 out
+	250	[44]	TFORPREP 	5 8	; to 259
+	251	[44]	LEN      	10 4
+	252	[44]	ADDI     	10 10 1
+	253	[44]	MMBINI   	10 1 6 0	; __add
+	254	[44]	LOADK    	11 47	; "["
+	255	[44]	MOVE     	12 9
+	256	[44]	LOADK    	13 48	; "]"
+	257	[44]	CONCAT   	11 3
+	258	[44]	SETTABLE 	4 10 11
+	259	[44]	TFORCALL 	5 1
+	260	[44]	TFORLOOP 	5 10	; to 251
+	261	[44]	CLOSE    	5
+	262	[45]	GETTABUP 	5 0 0	; _ENV "print"
+	263	[45]	GETTABUP 	6 0 36	; _ENV "table"
+	264	[45]	GETFIELD 	6 6 37	; "concat"
+	265	[45]	MOVE     	7 4
+	266	[45]	CALL     	6 2 0	; 1 in all out
+	267	[45]	CALL     	5 0 1	; all in 0 out
+	268	[48]	NEWTABLE 	5 0 0	; 0
+	269	[48]	EXTRAARG 	0
+	270	[49]	GETTABUP 	6 0 1	; _ENV "string"
+	271	[49]	GETFIELD 	6 6 33	; "gmatch"
+	272	[49]	LOADK    	7 49	; "aaa"
+	273	[49]	LOADK    	8 50	; "^a"
+	274	[49]	CALL     	6 3 5	; 2 in 4 out
+	275	[49]	TFORPREP 	6 4	; to 280
+	276	[49]	LEN      	11 5
+	277	[49]	ADDI     	11 11 1
+	278	[49]	MMBINI   	11 1 6 0	; __add
+	279	[49]	SETTABLE 	5 11 10
+	280	[49]	TFORCALL 	6 1
+	281	[49]	TFORLOOP 	6 6	; to 276
+	282	[49]	CLOSE    	6
+	283	[50]	GETTABUP 	6 0 0	; _ENV "print"
+	284	[50]	LEN      	7 5
+	285	[50]	CALL     	6 2 1	; 1 in 0 out
+	286	[51]	GETTABUP 	6 0 1	; _ENV "string"
+	287	[51]	GETFIELD 	6 6 33	; "gmatch"
+	288	[51]	LOADK    	7 51	; "^a^a"
+	289	[51]	LOADK    	8 50	; "^a"
+	290	[51]	CALL     	6 3 5	; 2 in 4 out
+	291	[51]	TFORPREP 	6 4	; to 296
+	292	[51]	LEN      	11 5
+	293	[51]	ADDI     	11 11 1
+	294	[51]	MMBINI   	11 1 6 0	; __add
+	295	[51]	SETTABLE 	5 11 10
+	296	[51]	TFORCALL 	6 1
+	297	[51]	TFORLOOP 	6 6	; to 292
+	298	[51]	CLOSE    	6
+	299	[52]	GETTABUP 	6 0 0	; _ENV "print"
+	300	[52]	LEN      	7 5
+	301	[52]	GETI     	8 5 1
+	302	[52]	CALL     	6 3 1	; 2 in 0 out
+	303	[55]	NEWTABLE 	6 0 0	; 0
+	304	[55]	EXTRAARG 	0
+	305	[56]	GETTABUP 	7 0 1	; _ENV "string"
+	306	[56]	GETFIELD 	7 7 33	; "gmatch"
+	307	[56]	LOADK    	8 52	; "abcdef"
+	308	[56]	LOADK    	9 14	; "."
+	309	[56]	LOADI    	10 3
+	310	[56]	CALL     	7 4 5	; 3 in 4 out
+	311	[56]	TFORPREP 	7 4	; to 316
+	312	[56]	LEN      	12 6
+	313	[56]	ADDI     	12 12 1
+	314	[56]	MMBINI   	12 1 6 0	; __add
+	315	[56]	SETTABLE 	6 12 11
+	316	[56]	TFORCALL 	7 1
+	317	[56]	TFORLOOP 	7 6	; to 312
+	318	[56]	CLOSE    	7
+	319	[57]	GETTABUP 	7 0 0	; _ENV "print"
+	320	[57]	GETTABUP 	8 0 36	; _ENV "table"
+	321	[57]	GETFIELD 	8 8 37	; "concat"
+	322	[57]	MOVE     	9 6
+	323	[57]	CALL     	8 2 0	; 1 in all out
+	324	[57]	CALL     	7 0 1	; all in 0 out
+	325	[58]	NEWTABLE 	7 0 0	; 0
+	326	[58]	EXTRAARG 	0
+	327	[59]	GETTABUP 	8 0 1	; _ENV "string"
+	328	[59]	GETFIELD 	8 8 33	; "gmatch"
+	329	[59]	LOADK    	9 52	; "abcdef"
+	330	[59]	LOADK    	10 14	; "."
+	331	[59]	LOADI    	11 -2
+	332	[59]	CALL     	8 4 5	; 3 in 4 out
+	333	[59]	TFORPREP 	8 4	; to 338
+	334	[59]	LEN      	13 7
+	335	[59]	ADDI     	13 13 1
+	336	[59]	MMBINI   	13 1 6 0	; __add
+	337	[59]	SETTABLE 	7 13 12
+	338	[59]	TFORCALL 	8 1
+	339	[59]	TFORLOOP 	8 6	; to 334
+	340	[59]	CLOSE    	8
+	341	[60]	GETTABUP 	8 0 0	; _ENV "print"
+	342	[60]	GETTABUP 	9 0 36	; _ENV "table"
+	343	[60]	GETFIELD 	9 9 37	; "concat"
+	344	[60]	MOVE     	10 7
+	345	[60]	CALL     	9 2 0	; 1 in all out
+	346	[60]	CALL     	8 0 1	; all in 0 out
+	347	[61]	LOADI    	8 0
+	348	[62]	GETTABUP 	9 0 1	; _ENV "string"
+	349	[62]	GETFIELD 	9 9 33	; "gmatch"
+	350	[62]	LOADK    	10 28	; "abc"
+	351	[62]	LOADK    	11 14	; "."
+	352	[62]	LOADI    	12 10
+	353	[62]	CALL     	9 4 5	; 3 in 4 out
+	354	[62]	TFORPREP 	9 2	; to 357
+	355	[62]	ADDI     	8 8 1
+	356	[62]	MMBINI   	8 1 6 0	; __add
+	357	[62]	TFORCALL 	9 1
+	358	[62]	TFORLOOP 	9 4	; to 355
+	359	[62]	CLOSE    	9
+	360	[63]	GETTABUP 	9 0 0	; _ENV "print"
+	361	[63]	MOVE     	10 8
+	362	[63]	CALL     	9 2 1	; 1 in 0 out
+	363	[66]	GETTABUP 	9 0 1	; _ENV "string"
+	364	[66]	GETFIELD 	9 9 33	; "gmatch"
+	365	[66]	LOADK    	10 53	; "x y"
+	366	[66]	LOADK    	11 54	; "%a"
+	367	[66]	CALL     	9 3 2	; 2 in 1 out
+	368	[67]	GETTABUP 	10 0 0	; _ENV "print"
+	369	[67]	MOVE     	11 9
+	370	[67]	CALL     	11 1 2	; 0 in 1 out
+	371	[67]	MOVE     	12 9
+	372	[67]	CALL     	12 1 2	; 0 in 1 out
+	373	[67]	MOVE     	13 9
+	374	[67]	CALL     	13 1 2	; 0 in 1 out
+	375	[67]	MOVE     	14 9
+	376	[67]	CALL     	14 1 0	; 0 in all out
+	377	[67]	CALL     	10 0 1	; all in 0 out
+	378	[70]	NEWTABLE 	10 0 0	; 0
+	379	[70]	EXTRAARG 	0
+	380	[71]	GETTABUP 	11 0 1	; _ENV "string"
+	381	[71]	GETFIELD 	11 11 33	; "gmatch"
+	382	[71]	LOADK    	12 55	; "first\n\nthird\n"
+	383	[71]	LOADK    	13 56	; "([^\n]*)\n"
+	384	[71]	CALL     	11 3 5	; 2 in 4 out
+	385	[71]	TFORPREP 	11 8	; to 394
+	386	[71]	LEN      	16 10
+	387	[71]	ADDI     	16 16 1
+	388	[71]	MMBINI   	16 1 6 0	; __add
+	389	[71]	LOADK    	17 57	; "<"
+	390	[71]	MOVE     	18 15
+	391	[71]	LOADK    	19 58	; ">"
+	392	[71]	CONCAT   	17 3
+	393	[71]	SETTABLE 	10 16 17
+	394	[71]	TFORCALL 	11 1
+	395	[71]	TFORLOOP 	11 10	; to 386
+	396	[71]	CLOSE    	11
+	397	[72]	GETTABUP 	11 0 0	; _ENV "print"
+	398	[72]	GETTABUP 	12 0 36	; _ENV "table"
+	399	[72]	GETFIELD 	12 12 37	; "concat"
+	400	[72]	MOVE     	13 10
+	401	[72]	CALL     	12 2 0	; 1 in all out
+	402	[72]	CALL     	11 0 1	; all in 0 out
+	403	[74]	GETTABUP 	11 0 0	; _ENV "print"
+	404	[74]	GETTABUP 	12 0 59	; _ENV "pcall"
+	405	[74]	GETTABUP 	13 0 1	; _ENV "string"
+	406	[74]	GETFIELD 	13 13 2	; "match"
+	407	[74]	LOADK    	14 28	; "abc"
+	408	[74]	CALL     	12 3 0	; 2 in all out
+	409	[74]	CALL     	11 0 1	; all in 0 out
+	410	[75]	GETTABUP 	11 0 0	; _ENV "print"
+	411	[75]	GETTABUP 	12 0 59	; _ENV "pcall"
+	412	[75]	GETTABUP 	13 0 1	; _ENV "string"
+	413	[75]	GETFIELD 	13 13 33	; "gmatch"
+	414	[75]	LOADK    	14 28	; "abc"
+	415	[75]	CALL     	12 3 0	; 2 in all out
+	416	[75]	CALL     	11 0 1	; all in 0 out
+	417	[76]	GETTABUP 	11 0 0	; _ENV "print"
+	418	[76]	GETTABUP 	12 0 59	; _ENV "pcall"
+	419	[76]	GETTABUP 	13 0 1	; _ENV "string"
+	420	[76]	GETFIELD 	13 13 2	; "match"
+	421	[76]	LOADK    	14 28	; "abc"
+	422	[76]	LOADK    	15 60	; "("
+	423	[76]	LOADI    	16 1
+	424	[76]	CALL     	12 5 0	; 4 in all out
+	425	[76]	CALL     	11 0 1	; all in 0 out
+	426	[78]	GETTABUP 	11 0 1	; _ENV "string"
+	427	[78]	GETFIELD 	11 11 2	; "match"
+	428	[78]	LOADK    	12 61	; "version 5.4.9"
+	429	[78]	LOADK    	13 62	; "(%d+)%.(%d+)%.(%d+)"
+	430	[78]	TAILCALL 	11 3 1k	; 2 in
+	431	[78]	RETURN   	11 0 1k	; all out
+	432	[78]	RETURN   	11 1 1k	; 0 out
+constants (63):
+	0	S	"print"
+	1	S	"string"
+	2	S	"match"
+	3	S	"hello 123 world"
+	4	S	"%d+"
+	5	S	"(%a+) (%d+)"
+	6	S	"hello"
+	7	S	"()ll()"
+	8	S	"(h(el)(l))o"
+	9	S	"xyz"
+	10	S	""
+	11	S	".*"
+	12	S	"x*"
+	13	S	"l"
+	14	S	"."
+	15	S	"^h"
+	16	S	"key=val"
+	17	S	"^(%w+)=(%w*)$"
+	18	S	"key="
+	19	S	"  padded  "
+	20	S	"^%s*(.-)%s*$"
+	21	S	"|"
+	22	S	"[[nested]]"
+	23	S	"%[(%b[])%]"
+	24	S	"f(a(b)c)d"
+	25	S	"%b()"
+	26	S	"THE (quick) fox"
+	27	S	"%((%a+)%)"
+	28	S	"abc"
+	29	S	"()"
+	30	S	"^%d%d"
+	31	S	"x"
+	32	S	"()x()"
+	33	S	"gmatch"
+	34	S	"one two  three"
+	35	S	"%a+"
+	36	S	"table"
+	37	S	"concat"
+	38	S	","
+	39	S	"a=1, b=2, c=3"
+	40	S	"(%w+)=(%w+)"
+	41	S	":"
+	42	S	" "
+	43	S	"banana"
+	44	S	"()a"
+	45	S	"aab"
+	46	S	"a*"
+	47	S	"["
+	48	S	"]"
+	49	S	"aaa"
+	50	S	"^a"
+	51	S	"^a^a"
+	52	S	"abcdef"
+	53	S	"x y"
+	54	S	"%a"
+	55	S	"first\n\nthird\n"
+	56	S	"([^\n]*)\n"
+	57	S	"<"
+	58	S	">"
+	59	S	"pcall"
+	60	S	"("
+	61	S	"version 5.4.9"
+	62	S	"(%d+)%.(%d+)%.(%d+)"
+locals (67):
+	0	words	152	433
+	1	(for state)	157	164
+	2	(for state)	157	164
+	3	(for state)	157	164
+	4	(for state)	157	164
+	5	w	158	162
+	6	pairs_found	175	433
+	7	(for state)	180	191
+	8	(for state)	180	191
+	9	(for state)	180	191
+	10	(for state)	180	191
+	11	k	181	189
+	12	v	181	189
+	13	positions	201	433
+	14	(for state)	206	213
+	15	(for state)	206	213
+	16	(for state)	206	213
+	17	(for state)	206	213
+	18	p	207	211
+	19	empties	223	433
+	20	(for state)	228	235
+	21	(for state)	228	235
+	22	(for state)	228	235
+	23	(for state)	228	235
+	24	p	229	233
+	25	stars	245	433
+	26	(for state)	250	261
+	27	(for state)	250	261
+	28	(for state)	250	261
+	29	(for state)	250	261
+	30	m	251	259
+	31	anchored	270	433
+	32	(for state)	275	282
+	33	(for state)	275	282
+	34	(for state)	275	282
+	35	(for state)	275	282
+	36	m	276	280
+	37	(for state)	291	298
+	38	(for state)	291	298
+	39	(for state)	291	298
+	40	(for state)	291	298
+	41	m	292	296
+	42	from3	305	433
+	43	(for state)	311	318
+	44	(for state)	311	318
+	45	(for state)	311	318
+	46	(for state)	311	318
+	47	m	312	316
+	48	from_neg	327	433
+	49	(for state)	333	340
+	50	(for state)	333	340
+	51	(for state)	333	340
+	52	(for state)	333	340
+	53	m	334	338
+	54	past	348	433
+	55	(for state)	354	359
+	56	(for state)	354	359
+	57	(for state)	354	359
+	58	(for state)	354	359
+	59	_	355	357
+	60	it	368	433
+	61	lines	380	433
+	62	(for state)	385	396
+	63	(for state)	385	396
+	64	(for state)	385	396
+	65	(for state)	385	396
+	66	line	386	394
+upvalues (1):
+	0	_ENV	1	0

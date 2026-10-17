@@ -1,0 +1,465 @@
+
+main <base_select.lua:0,0> (342 instructions)
+0+ params, 16 slots, 1 upvalue, 7 locals, 32 constants, 6 functions
+	1	[1]	VARARGPREP	0
+	2	[5]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[5]	GETTABUP 	1 0 1	; _ENV "select"
+	4	[5]	LOADK    	2 2	; "#"
+	5	[5]	CALL     	1 2 2	; 1 in 1 out
+	6	[5]	GETTABUP 	2 0 1	; _ENV "select"
+	7	[5]	LOADK    	3 2	; "#"
+	8	[5]	LOADNIL  	4 0	; 1 out
+	9	[5]	CALL     	2 3 2	; 2 in 1 out
+	10	[5]	GETTABUP 	3 0 1	; _ENV "select"
+	11	[5]	LOADK    	4 2	; "#"
+	12	[5]	LOADNIL  	5 1	; 2 out
+	13	[5]	CALL     	3 4 2	; 3 in 1 out
+	14	[5]	GETTABUP 	4 0 1	; _ENV "select"
+	15	[5]	LOADK    	5 2	; "#"
+	16	[5]	LOADI    	6 1
+	17	[5]	LOADNIL  	7 0	; 1 out
+	18	[5]	LOADI    	8 3
+	19	[5]	CALL     	4 5 0	; 4 in all out
+	20	[5]	CALL     	0 0 1	; all in 0 out
+	21	[6]	GETTABUP 	0 0 0	; _ENV "print"
+	22	[6]	GETTABUP 	1 0 1	; _ENV "select"
+	23	[6]	LOADI    	2 1
+	24	[6]	LOADK    	3 3	; "a"
+	25	[6]	LOADK    	4 4	; "b"
+	26	[6]	LOADK    	5 5	; "c"
+	27	[6]	CALL     	1 5 0	; 4 in all out
+	28	[6]	CALL     	0 0 1	; all in 0 out
+	29	[7]	GETTABUP 	0 0 0	; _ENV "print"
+	30	[7]	GETTABUP 	1 0 1	; _ENV "select"
+	31	[7]	LOADI    	2 2
+	32	[7]	LOADK    	3 3	; "a"
+	33	[7]	LOADK    	4 4	; "b"
+	34	[7]	LOADK    	5 5	; "c"
+	35	[7]	CALL     	1 5 0	; 4 in all out
+	36	[7]	CALL     	0 0 1	; all in 0 out
+	37	[8]	GETTABUP 	0 0 0	; _ENV "print"
+	38	[8]	GETTABUP 	1 0 1	; _ENV "select"
+	39	[8]	LOADI    	2 3
+	40	[8]	LOADK    	3 3	; "a"
+	41	[8]	LOADK    	4 4	; "b"
+	42	[8]	LOADK    	5 5	; "c"
+	43	[8]	CALL     	1 5 0	; 4 in all out
+	44	[8]	CALL     	0 0 1	; all in 0 out
+	45	[9]	GETTABUP 	0 0 0	; _ENV "print"
+	46	[9]	GETTABUP 	1 0 1	; _ENV "select"
+	47	[9]	LOADI    	2 4
+	48	[9]	LOADK    	3 3	; "a"
+	49	[9]	LOADK    	4 4	; "b"
+	50	[9]	LOADK    	5 5	; "c"
+	51	[9]	CALL     	1 5 0	; 4 in all out
+	52	[9]	CALL     	0 0 1	; all in 0 out
+	53	[10]	GETTABUP 	0 0 0	; _ENV "print"
+	54	[10]	GETTABUP 	1 0 1	; _ENV "select"
+	55	[10]	LOADI    	2 -1
+	56	[10]	LOADK    	3 3	; "a"
+	57	[10]	LOADK    	4 4	; "b"
+	58	[10]	LOADK    	5 5	; "c"
+	59	[10]	CALL     	1 5 0	; 4 in all out
+	60	[10]	CALL     	0 0 1	; all in 0 out
+	61	[11]	GETTABUP 	0 0 0	; _ENV "print"
+	62	[11]	GETTABUP 	1 0 1	; _ENV "select"
+	63	[11]	LOADI    	2 -3
+	64	[11]	LOADK    	3 3	; "a"
+	65	[11]	LOADK    	4 4	; "b"
+	66	[11]	LOADK    	5 5	; "c"
+	67	[11]	CALL     	1 5 0	; 4 in all out
+	68	[11]	CALL     	0 0 1	; all in 0 out
+	69	[12]	GETTABUP 	0 0 0	; _ENV "print"
+	70	[12]	GETTABUP 	1 0 1	; _ENV "select"
+	71	[12]	LOADF    	2 2
+	72	[12]	LOADK    	3 3	; "a"
+	73	[12]	LOADK    	4 4	; "b"
+	74	[12]	CALL     	1 4 0	; 3 in all out
+	75	[12]	CALL     	0 0 1	; all in 0 out
+	76	[13]	GETTABUP 	0 0 0	; _ENV "print"
+	77	[13]	GETTABUP 	1 0 6	; _ENV "pcall"
+	78	[13]	GETTABUP 	2 0 1	; _ENV "select"
+	79	[13]	LOADI    	3 -4
+	80	[13]	LOADK    	4 3	; "a"
+	81	[13]	LOADK    	5 4	; "b"
+	82	[13]	LOADK    	6 5	; "c"
+	83	[13]	CALL     	1 6 0	; 5 in all out
+	84	[13]	CALL     	0 0 1	; all in 0 out
+	85	[14]	GETTABUP 	0 0 0	; _ENV "print"
+	86	[14]	GETTABUP 	1 0 6	; _ENV "pcall"
+	87	[14]	GETTABUP 	2 0 1	; _ENV "select"
+	88	[14]	LOADI    	3 0
+	89	[14]	LOADK    	4 3	; "a"
+	90	[14]	CALL     	1 4 0	; 3 in all out
+	91	[14]	CALL     	0 0 1	; all in 0 out
+	92	[15]	GETTABUP 	0 0 0	; _ENV "print"
+	93	[15]	GETTABUP 	1 0 6	; _ENV "pcall"
+	94	[15]	GETTABUP 	2 0 1	; _ENV "select"
+	95	[15]	LOADK    	3 7	; "x"
+	96	[15]	CALL     	1 3 0	; 2 in all out
+	97	[15]	CALL     	0 0 1	; all in 0 out
+	98	[16]	GETTABUP 	0 0 0	; _ENV "print"
+	99	[16]	GETTABUP 	1 0 6	; _ENV "pcall"
+	100	[16]	GETTABUP 	2 0 1	; _ENV "select"
+	101	[16]	LOADK    	3 8	; 1.5
+	102	[16]	LOADK    	4 3	; "a"
+	103	[16]	CALL     	1 4 0	; 3 in all out
+	104	[16]	CALL     	0 0 1	; all in 0 out
+	105	[17]	GETTABUP 	0 0 0	; _ENV "print"
+	106	[17]	GETTABUP 	1 0 6	; _ENV "pcall"
+	107	[17]	GETTABUP 	2 0 1	; _ENV "select"
+	108	[17]	CALL     	1 2 0	; 1 in all out
+	109	[17]	CALL     	0 0 1	; all in 0 out
+	110	[20]	CLOSURE  	0 0
+	111	[21]	GETTABUP 	1 0 0	; _ENV "print"
+	112	[21]	MOVE     	2 0
+	113	[21]	CALL     	2 1 2	; 0 in 1 out
+	114	[21]	MOVE     	3 0
+	115	[21]	LOADNIL  	4 0	; 1 out
+	116	[21]	CALL     	3 2 2	; 1 in 1 out
+	117	[21]	MOVE     	4 0
+	118	[21]	LOADI    	5 1
+	119	[21]	LOADI    	6 2
+	120	[21]	LOADNIL  	7 0	; 1 out
+	121	[21]	CALL     	4 4 2	; 3 in 1 out
+	122	[21]	MOVE     	5 0
+	123	[21]	GETTABUP 	6 0 9	; _ENV "table"
+	124	[21]	GETFIELD 	6 6 10	; "unpack"
+	125	[21]	NEWTABLE 	7 0 3	; 3
+	126	[21]	EXTRAARG 	0
+	127	[21]	LOADI    	8 1
+	128	[21]	LOADNIL  	9 0	; 1 out
+	129	[21]	LOADI    	10 3
+	130	[21]	SETLIST  	7 3 0
+	131	[21]	LOADI    	8 1
+	132	[21]	LOADI    	9 3
+	133	[21]	CALL     	6 4 0	; 3 in all out
+	134	[21]	CALL     	5 0 0	; all in all out
+	135	[21]	CALL     	1 0 1	; all in 0 out
+	136	[24]	NEWTABLE 	1 1 0	; 0
+	137	[24]	EXTRAARG 	0
+	138	[24]	CLOSURE  	2 1
+	139	[24]	SETFIELD 	1 11 2	; "__eq"
+	140	[25]	GETTABUP 	2 0 12	; _ENV "setmetatable"
+	141	[25]	NEWTABLE 	3 0 0	; 0
+	142	[25]	EXTRAARG 	0
+	143	[25]	MOVE     	4 1
+	144	[25]	CALL     	2 3 2	; 2 in 1 out
+	145	[25]	GETTABUP 	3 0 12	; _ENV "setmetatable"
+	146	[25]	NEWTABLE 	4 0 0	; 0
+	147	[25]	EXTRAARG 	0
+	148	[25]	MOVE     	5 1
+	149	[25]	CALL     	3 3 2	; 2 in 1 out
+	150	[26]	GETTABUP 	4 0 0	; _ENV "print"
+	151	[26]	EQ       	2 3 1
+	152	[26]	JMP      	1	; to 154
+	153	[26]	LFALSESKIP	5
+	154	[26]	LOADTRUE 	5
+	155	[26]	GETTABUP 	6 0 13	; _ENV "rawequal"
+	156	[26]	MOVE     	7 2
+	157	[26]	MOVE     	8 3
+	158	[26]	CALL     	6 3 2	; 2 in 1 out
+	159	[26]	GETTABUP 	7 0 13	; _ENV "rawequal"
+	160	[26]	MOVE     	8 2
+	161	[26]	MOVE     	9 2
+	162	[26]	CALL     	7 3 2	; 2 in 1 out
+	163	[26]	GETTABUP 	8 0 13	; _ENV "rawequal"
+	164	[26]	LOADI    	9 1
+	165	[26]	LOADF    	10 1
+	166	[26]	CALL     	8 3 2	; 2 in 1 out
+	167	[26]	GETTABUP 	9 0 13	; _ENV "rawequal"
+	168	[26]	LOADK    	10 7	; "x"
+	169	[26]	LOADK    	11 7	; "x"
+	170	[26]	CALL     	9 3 0	; 2 in all out
+	171	[26]	CALL     	4 0 1	; all in 0 out
+	172	[27]	GETTABUP 	4 0 0	; _ENV "print"
+	173	[27]	GETTABUP 	5 0 13	; _ENV "rawequal"
+	174	[27]	LOADNIL  	6 1	; 2 out
+	175	[27]	CALL     	5 3 2	; 2 in 1 out
+	176	[27]	GETTABUP 	6 0 13	; _ENV "rawequal"
+	177	[27]	LOADI    	7 1
+	178	[27]	LOADK    	8 14	; "1"
+	179	[27]	CALL     	6 3 2	; 2 in 1 out
+	180	[27]	GETTABUP 	7 0 6	; _ENV "pcall"
+	181	[27]	GETTABUP 	8 0 13	; _ENV "rawequal"
+	182	[27]	LOADI    	9 1
+	183	[27]	CALL     	7 3 0	; 2 in all out
+	184	[27]	CALL     	4 0 1	; all in 0 out
+	185	[30]	NEWTABLE 	4 1 0	; 0
+	186	[30]	EXTRAARG 	0
+	187	[30]	CLOSURE  	5 2
+	188	[30]	SETFIELD 	4 15 5	; "__len"
+	189	[31]	GETTABUP 	5 0 12	; _ENV "setmetatable"
+	190	[31]	NEWTABLE 	6 0 3	; 3
+	191	[31]	EXTRAARG 	0
+	192	[31]	LOADI    	7 1
+	193	[31]	LOADI    	8 2
+	194	[31]	LOADI    	9 3
+	195	[31]	SETLIST  	6 3 0
+	196	[31]	MOVE     	7 4
+	197	[31]	CALL     	5 3 2	; 2 in 1 out
+	198	[32]	GETTABUP 	6 0 0	; _ENV "print"
+	199	[32]	LEN      	7 5
+	200	[32]	GETTABUP 	8 0 16	; _ENV "rawlen"
+	201	[32]	MOVE     	9 5
+	202	[32]	CALL     	8 2 2	; 1 in 1 out
+	203	[32]	GETTABUP 	9 0 16	; _ENV "rawlen"
+	204	[32]	LOADK    	10 17	; "hello"
+	205	[32]	CALL     	9 2 2	; 1 in 1 out
+	206	[32]	GETTABUP 	10 0 16	; _ENV "rawlen"
+	207	[32]	LOADK    	11 18	; ""
+	208	[32]	CALL     	10 2 0	; 1 in all out
+	209	[32]	CALL     	6 0 1	; all in 0 out
+	210	[33]	GETTABUP 	6 0 0	; _ENV "print"
+	211	[33]	GETTABUP 	7 0 6	; _ENV "pcall"
+	212	[33]	GETTABUP 	8 0 16	; _ENV "rawlen"
+	213	[33]	LOADI    	9 5
+	214	[33]	CALL     	7 3 0	; 2 in all out
+	215	[33]	CALL     	6 0 1	; all in 0 out
+	216	[34]	GETTABUP 	6 0 0	; _ENV "print"
+	217	[34]	GETTABUP 	7 0 6	; _ENV "pcall"
+	218	[34]	GETTABUP 	8 0 16	; _ENV "rawlen"
+	219	[34]	CALL     	7 2 0	; 1 in all out
+	220	[34]	CALL     	6 0 1	; all in 0 out
+	221	[37]	GETTABUP 	6 0 12	; _ENV "setmetatable"
+	222	[37]	NEWTABLE 	7 0 0	; 0
+	223	[37]	EXTRAARG 	0
+	224	[37]	NEWTABLE 	8 2 0	; 0
+	225	[37]	EXTRAARG 	0
+	226	[38]	CLOSURE  	9 3
+	227	[38]	SETFIELD 	8 19 9	; "__index"
+	228	[39]	CLOSURE  	9 4
+	229	[39]	SETFIELD 	8 20 9	; "__newindex"
+	230	[37]	CALL     	6 3 2	; 2 in 1 out
+	231	[41]	GETTABUP 	7 0 0	; _ENV "print"
+	232	[41]	GETFIELD 	8 6 7	; "x"
+	233	[41]	GETTABUP 	9 0 21	; _ENV "rawget"
+	234	[41]	MOVE     	10 6
+	235	[41]	LOADK    	11 7	; "x"
+	236	[41]	CALL     	9 3 2	; 2 in 1 out
+	237	[41]	GETTABUP 	10 0 6	; _ENV "pcall"
+	238	[41]	CLOSURE  	11 5
+	239	[41]	CALL     	10 2 0	; 1 in all out
+	240	[41]	CALL     	7 0 1	; all in 0 out
+	241	[42]	GETTABUP 	7 0 0	; _ENV "print"
+	242	[42]	GETTABUP 	8 0 22	; _ENV "rawset"
+	243	[42]	MOVE     	9 6
+	244	[42]	LOADK    	10 23	; "y"
+	245	[42]	LOADI    	11 2
+	246	[42]	CALL     	8 4 2	; 3 in 1 out
+	247	[42]	EQ       	8 6 1
+	248	[42]	JMP      	1	; to 250
+	249	[42]	LFALSESKIP	8
+	250	[42]	LOADTRUE 	8
+	251	[42]	GETFIELD 	9 6 23	; "y"
+	252	[42]	GETTABUP 	10 0 21	; _ENV "rawget"
+	253	[42]	MOVE     	11 6
+	254	[42]	LOADK    	12 23	; "y"
+	255	[42]	CALL     	10 3 0	; 2 in all out
+	256	[42]	CALL     	7 0 1	; all in 0 out
+	257	[43]	GETTABUP 	7 0 0	; _ENV "print"
+	258	[43]	GETTABUP 	8 0 6	; _ENV "pcall"
+	259	[43]	GETTABUP 	9 0 22	; _ENV "rawset"
+	260	[43]	MOVE     	10 6
+	261	[43]	LOADNIL  	11 0	; 1 out
+	262	[43]	LOADI    	12 1
+	263	[43]	CALL     	8 5 0	; 4 in all out
+	264	[43]	CALL     	7 0 1	; all in 0 out
+	265	[44]	GETTABUP 	7 0 0	; _ENV "print"
+	266	[44]	GETTABUP 	8 0 6	; _ENV "pcall"
+	267	[44]	GETTABUP 	9 0 22	; _ENV "rawset"
+	268	[44]	MOVE     	10 6
+	269	[44]	LOADI    	11 0
+	270	[44]	DIVK     	11 11 24	; 0
+	271	[44]	MMBINK   	11 24 11 0	; __div 0
+	272	[44]	LOADI    	12 1
+	273	[44]	CALL     	8 5 0	; 4 in all out
+	274	[44]	CALL     	7 0 1	; all in 0 out
+	275	[45]	GETTABUP 	7 0 0	; _ENV "print"
+	276	[45]	GETTABUP 	8 0 6	; _ENV "pcall"
+	277	[45]	GETTABUP 	9 0 21	; _ENV "rawget"
+	278	[45]	LOADK    	10 25	; "s"
+	279	[45]	LOADI    	11 1
+	280	[45]	CALL     	8 4 0	; 3 in all out
+	281	[45]	CALL     	7 0 1	; all in 0 out
+	282	[46]	GETTABUP 	7 0 0	; _ENV "print"
+	283	[46]	GETTABUP 	8 0 6	; _ENV "pcall"
+	284	[46]	GETTABUP 	9 0 22	; _ENV "rawset"
+	285	[46]	NEWTABLE 	10 0 0	; 0
+	286	[46]	EXTRAARG 	0
+	287	[46]	LOADI    	11 1
+	288	[46]	CALL     	8 4 0	; 3 in all out
+	289	[46]	CALL     	7 0 1	; all in 0 out
+	290	[49]	GETTABUP 	7 0 0	; _ENV "print"
+	291	[49]	GETTABUP 	8 0 26	; _ENV "type"
+	292	[49]	LOADNIL  	9 0	; 1 out
+	293	[49]	CALL     	8 2 2	; 1 in 1 out
+	294	[49]	GETTABUP 	9 0 26	; _ENV "type"
+	295	[49]	LOADTRUE 	10
+	296	[49]	CALL     	9 2 2	; 1 in 1 out
+	297	[49]	GETTABUP 	10 0 26	; _ENV "type"
+	298	[49]	LOADI    	11 1
+	299	[49]	CALL     	10 2 2	; 1 in 1 out
+	300	[49]	GETTABUP 	11 0 26	; _ENV "type"
+	301	[49]	LOADK    	12 8	; 1.5
+	302	[49]	CALL     	11 2 2	; 1 in 1 out
+	303	[49]	GETTABUP 	12 0 26	; _ENV "type"
+	304	[49]	LOADK    	13 25	; "s"
+	305	[49]	CALL     	12 2 2	; 1 in 1 out
+	306	[49]	GETTABUP 	13 0 26	; _ENV "type"
+	307	[49]	NEWTABLE 	14 0 0	; 0
+	308	[49]	EXTRAARG 	0
+	309	[49]	CALL     	13 2 2	; 1 in 1 out
+	310	[49]	GETTABUP 	14 0 26	; _ENV "type"
+	311	[49]	GETTABUP 	15 0 0	; _ENV "print"
+	312	[49]	CALL     	14 2 0	; 1 in all out
+	313	[49]	CALL     	7 0 1	; all in 0 out
+	314	[50]	GETTABUP 	7 0 0	; _ENV "print"
+	315	[50]	GETTABUP 	8 0 26	; _ENV "type"
+	316	[50]	GETTABUP 	9 0 26	; _ENV "type"
+	317	[50]	CALL     	8 2 2	; 1 in 1 out
+	318	[50]	GETTABUP 	9 0 26	; _ENV "type"
+	319	[50]	GETTABUP 	10 0 27	; _ENV "io"
+	320	[50]	GETFIELD 	10 10 28	; "stdout"
+	321	[50]	CALL     	9 2 2	; 1 in 1 out
+	322	[50]	GETTABUP 	10 0 6	; _ENV "pcall"
+	323	[50]	GETTABUP 	11 0 26	; _ENV "type"
+	324	[50]	CALL     	10 2 0	; 1 in all out
+	325	[50]	CALL     	7 0 1	; all in 0 out
+	326	[52]	GETTABUP 	7 0 29	; _ENV "select"
+	327	[52]	LOADK    	8 30	; "#"
+	328	[52]	GETTABUP 	9 0 29	; _ENV "select"
+	329	[52]	LOADI    	10 2
+	330	[52]	LOADI    	11 1
+	331	[52]	LOADI    	12 2
+	332	[52]	LOADI    	13 3
+	333	[52]	CALL     	9 5 0	; 4 in all out
+	334	[52]	CALL     	7 0 2	; all in 1 out
+	335	[52]	GETTABUP 	8 0 29	; _ENV "select"
+	336	[52]	LOADI    	9 -2
+	337	[52]	LOADK    	10 7	; "x"
+	338	[52]	LOADK    	11 23	; "y"
+	339	[52]	LOADK    	12 31	; "z"
+	340	[52]	CALL     	8 5 0	; 4 in all out
+	341	[52]	RETURN   	7 0 1k	; all out
+	342	[52]	RETURN   	7 1 1k	; 0 out
+constants (32):
+	0	S	"print"
+	1	S	"select"
+	2	S	"#"
+	3	S	"a"
+	4	S	"b"
+	5	S	"c"
+	6	S	"pcall"
+	7	S	"x"
+	8	F	1.5
+	9	S	"table"
+	10	S	"unpack"
+	11	S	"__eq"
+	12	S	"setmetatable"
+	13	S	"rawequal"
+	14	S	"1"
+	15	S	"__len"
+	16	S	"rawlen"
+	17	S	"hello"
+	18	S	""
+	19	S	"__index"
+	20	S	"__newindex"
+	21	S	"rawget"
+	22	S	"rawset"
+	23	S	"y"
+	24	I	0
+	25	S	"s"
+	26	S	"type"
+	27	S	"io"
+	28	S	"stdout"
+	29	S	"select"
+	30	S	"#"
+	31	S	"z"
+locals (7):
+	0	count	111	343
+	1	eqmt	140	343
+	2	a	150	343
+	3	b	150	343
+	4	lenmt	189	343
+	5	t	198	343
+	6	proxy	231	343
+upvalues (1):
+	0	_ENV	1	0
+
+function <base_select.lua:20,20> (7 instructions)
+0+ params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[20]	VARARGPREP	0
+	2	[20]	GETTABUP 	0 0 0	; _ENV "select"
+	3	[20]	LOADK    	1 1	; "#"
+	4	[20]	VARARG   	2 0	; all out
+	5	[20]	TAILCALL 	0 0 1	; -1 in
+	6	[20]	RETURN   	0 0 1	; all out
+	7	[20]	RETURN   	0 1 1	; 0 out
+constants (2):
+	0	S	"select"
+	1	S	"#"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <base_select.lua:24,24> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[24]	LOADTRUE 	0
+	2	[24]	RETURN1  	0
+	3	[24]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <base_select.lua:30,30> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[30]	LOADI    	0 99
+	2	[30]	RETURN1  	0
+	3	[30]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <base_select.lua:38,38> (7 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[38]	LOADK    	2 0	; "default "
+	2	[38]	GETTABUP 	3 0 1	; _ENV "tostring"
+	3	[38]	MOVE     	4 1
+	4	[38]	CALL     	3 2 2	; 1 in 1 out
+	5	[38]	CONCAT   	2 2
+	6	[38]	RETURN1  	2
+	7	[38]	RETURN0  	
+constants (2):
+	0	S	"default "
+	1	S	"tostring"
+locals (2):
+	0	_	1	8
+	1	k	1	8
+upvalues (1):
+	0	_ENV	0	0
+
+function <base_select.lua:39,39> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[39]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[39]	LOADK    	1 1	; "read only"
+	3	[39]	LOADI    	2 0
+	4	[39]	CALL     	0 3 1	; 2 in 0 out
+	5	[39]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"read only"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <base_select.lua:41,41> (2 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[41]	SETTABUP 	0 0 1k	; proxy "y" 1
+	2	[41]	RETURN0  	
+constants (2):
+	0	S	"y"
+	1	I	1
+locals (0):
+upvalues (1):
+	0	proxy	1	6

@@ -1,0 +1,596 @@
+Chunk
+  LocalFunction show
+    Function(t, n) [upvalues: _ENV]
+      Local out
+        Table
+      NumericFor i
+        Integer 1
+        Binary or
+          Name n (local 1)
+          Unary #
+            Name t (local 0)
+        Body
+          Assign
+            Targets
+              Index
+                Name out (local 2)
+                Name i (local 6)
+            Values
+              Call
+                Name tostring
+                Index
+                  Name t (local 0)
+                  Name i (local 6)
+      Return
+        Call
+          Index
+            Name table
+            String "concat"
+          Name out (local 2)
+          String " "
+  Local t
+    Table
+      Item
+        String "a"
+      Item
+        String "b"
+      Item
+        String "c"
+      Item
+        String "d"
+      Item
+        String "e"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "remove"
+        Name t (local 1)
+      Call
+        Name show (local 0)
+        Name t (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "remove"
+        Name t (local 1)
+        Integer 2
+      Call
+        Name show (local 0)
+        Name t (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "remove"
+        Name t (local 1)
+        Integer 1
+      Call
+        Name show (local 0)
+        Name t (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "remove"
+        Name t (local 1)
+        Unary #
+          Name t (local 1)
+      Call
+        Name show (local 0)
+        Name t (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "remove"
+        Name t (local 1)
+        Binary +
+          Unary #
+            Name t (local 1)
+          Integer 1
+      Call
+        Name show (local 0)
+        Name t (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "remove"
+        Name t (local 1)
+      Call
+        Name show (local 0)
+        Name t (local 1)
+      Unary #
+        Name t (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "remove"
+        Name t (local 1)
+      Unary #
+        Name t (local 1)
+  Local empty
+    Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "remove"
+        Name empty (local 2)
+      Call
+        Index
+          Name table
+          String "remove"
+        Name empty (local 2)
+        Integer 0
+      Call
+        Index
+          Name table
+          String "remove"
+        Name empty (local 2)
+        Integer 1
+      Unary #
+        Name empty (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name table
+            String "remove"
+          Table
+  Local zero
+    Table
+      Field
+        Integer 0
+        String "z"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "remove"
+        Name zero (local 3)
+        Integer 0
+      Index
+        Name zero (local 3)
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "remove"
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+          Item
+            Integer 3
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "remove"
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+          Item
+            Integer 3
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "remove"
+        Table
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "remove"
+        Table
+          Item
+            Integer 1
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "remove"
+  Local stack
+    Table
+      Item
+        Integer 1
+      Item
+        Integer 2
+      Item
+        Integer 3
+      Item
+        Integer 4
+  Local popped
+    Table
+  While
+    Binary >
+      Unary #
+        Name stack (local 4)
+      Integer 0
+    Body
+      Assign
+        Targets
+          Index
+            Name popped (local 5)
+            Binary +
+              Unary #
+                Name popped (local 5)
+              Integer 1
+        Values
+          Call
+            Index
+              Name table
+              String "remove"
+            Name stack (local 4)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Name popped (local 5)
+      Unary #
+        Name stack (local 4)
+  Local m
+    Table
+      Item
+        Integer 1
+      Item
+        Integer 2
+      Item
+        Integer 3
+      Item
+        Integer 4
+      Item
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name table
+            String "move"
+          Name m (local 6)
+          Integer 1
+          Integer 3
+          Integer 3
+        Name m (local 6)
+      Call
+        Name show (local 0)
+        Name m (local 6)
+  Assign
+    Targets
+      Name m (local 6)
+    Values
+      Table
+        Item
+          Integer 1
+        Item
+          Integer 2
+        Item
+          Integer 3
+        Item
+          Integer 4
+        Item
+          Integer 5
+  CallStatement
+    Call
+      Index
+        Name table
+        String "move"
+      Name m (local 6)
+      Integer 3
+      Integer 5
+      Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Name m (local 6)
+  Local src, dst
+    Table
+      Item
+        String "x"
+      Item
+        String "y"
+      Item
+        String "z"
+    Table
+      Item
+        String "1"
+      Item
+        String "2"
+      Item
+        String "3"
+      Item
+        String "4"
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name table
+            String "move"
+          Name src (local 7)
+          Integer 1
+          Integer 3
+          Integer 2
+          Name dst (local 8)
+        Name dst (local 8)
+      Call
+        Name show (local 0)
+        Name dst (local 8)
+      Call
+        Name show (local 0)
+        Name src (local 7)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name show (local 0)
+        Call
+          Index
+            Name table
+            String "move"
+          Table
+            Item
+              Integer 1
+            Item
+              Integer 2
+          Integer 2
+          Integer 1
+          Integer 1
+          Table
+            Item
+              Integer 9
+            Item
+              Integer 9
+  Local neg
+    Call
+      Index
+        Name table
+        String "move"
+      Table
+        Item
+          String "a"
+        Item
+          String "b"
+      Integer 1
+      Integer 2
+      Unary -
+        Integer 1
+      Table
+  CallStatement
+    Call
+      Name print
+      Index
+        Name neg (local 9)
+        Unary -
+          Integer 1
+      Index
+        Name neg (local 9)
+        Integer 0
+      Index
+        Name neg (local 9)
+        Integer 1
+  Local holes
+    Call
+      Index
+        Name table
+        String "move"
+      Table
+        Item
+          Integer 1
+        Item
+          Nil
+        Item
+          Integer 3
+      Integer 1
+      Integer 3
+      Integer 1
+      Table
+  CallStatement
+    Call
+      Name print
+      Index
+        Name holes (local 10)
+        Integer 1
+      Index
+        Name holes (local 10)
+        Integer 2
+      Index
+        Name holes (local 10)
+        Integer 3
+  Local writes
+    Table
+  Local proxy
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __newindex
+          Function(_, k, v) [upvalues: writes]
+            Assign
+              Targets
+                Index
+                  Name writes (upvalue 0)
+                  Binary +
+                    Unary #
+                      Name writes (upvalue 0)
+                    Integer 1
+              Values
+                Binary ..
+                  Name k (local 1)
+                  Binary ..
+                    String ":"
+                    Name v (local 2)
+  CallStatement
+    Call
+      Index
+        Name table
+        String "move"
+      Call
+        Name setmetatable
+        Table
+        Table
+          Field __index
+            Function(_, k)
+              Return
+                Binary *
+                  Name k (local 1)
+                  Integer 10
+      Integer 1
+      Integer 3
+      Integer 5
+      Name proxy (local 12)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name writes (local 11)
+        String " "
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "move"
+        Table
+        Integer 1
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "move"
+        Table
+        Integer 1
+        Integer 2
+        Integer 1
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "move"
+        Table
+        Integer 1
+        Index
+          Name math
+          String "maxinteger"
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "move"
+        Table
+        Unary -
+          Integer 1
+        Index
+          Name math
+          String "maxinteger"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Paren
+        Call
+          Name pcall
+          Index
+            Name table
+            String "move"
+          Table
+            Item
+              Integer 1
+          Integer 1
+          Integer 1
+          Index
+            Name math
+            String "maxinteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "move"
+        Integer 1
+        Integer 1
+        Integer 1
+        Integer 1
+  Return
+    Call
+      Name show (local 0)
+      Name m (local 6)
+    Call
+      Name show (local 0)
+      Name dst (local 8)

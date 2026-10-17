@@ -58,7 +58,12 @@ if (results) {
 
 - `run(source, chunk_name)` compiles and runs a chunk; pass `true` as a third argument to get a
   stack traceback after an error message, as `lua2 file.lua` prints it.
-- `lua.set_output(function)` sends what `print` writes somewhere else than stdout.
+- `lua.set_output(function)` sends what `print`, `io.write` and `io.stdout` write somewhere
+  else than stdout, and `lua.set_error_output(function)` does the same for `warn` and
+  `io.stderr`.
+- A new `Interpreter` has the whole standard library open (`string`, `table`, `math`, `io`,
+  `os`, `require`, ...); `std/*.lua` documents every function. Lua modules load with `require`
+  from `package.path`; C libraries (`.dll`, `.so`) do not: add C++ functions with this API.
 - Destroying the `Interpreter` closes it like `lua_close`: pending `<close>` variables close,
   `__gc` finalizers run, and every C++ object Lua still holds is destroyed (section 6).
 
@@ -460,7 +465,7 @@ no metatable and Lua never frees it.
 | `set_function(name, f)` / `function(f)` | a C++ callable as a global / as a `Ref` |
 | `new_table()` | an empty table, as a `Ref` |
 | `new_class<T>(name)` | a `Class<T>` builder |
-| `set_output(f)`, `collect()`, `set_generational(b)`, `memory_in_use()` | output and collector |
+| `set_output(f)`, `set_error_output(f)`, `collect()`, `set_generational(b)`, `memory_in_use()` | output and collector |
 
 **`lua2::Class<T>`**: `constructor<A...>(name = "new")`, `function(name, f)`, `method(name, f)`,
 `property(name, getter[, setter])`, `meta(event, f)`, `fields()`; each returns the builder.

@@ -1,0 +1,376 @@
+
+main <string_pattern_classes.lua:0,0> (221 instructions)
+0+ params, 17 slots, 1 upvalue, 39 locals, 58 constants, 1 function
+	1	[1]	VARARGPREP	0
+	2	[6]	NEWTABLE 	0 0 0	; 0
+	3	[6]	EXTRAARG 	0
+	4	[7]	LOADI    	1 0
+	5	[7]	LOADI    	2 127
+	6	[7]	LOADI    	3 1
+	7	[7]	FORPREP  	1 8	; exit to 17
+	8	[7]	LEN      	5 0
+	9	[7]	ADDI     	5 5 1
+	10	[7]	MMBINI   	5 1 6 0	; __add
+	11	[7]	GETTABUP 	6 0 0	; _ENV "string"
+	12	[7]	GETFIELD 	6 6 1	; "char"
+	13	[7]	MOVE     	7 4
+	14	[7]	CALL     	6 2 2	; 1 in 1 out
+	15	[7]	SETTABLE 	0 5 6
+	16	[7]	FORLOOP  	1 9	; to 8
+	17	[8]	GETTABUP 	1 0 2	; _ENV "table"
+	18	[8]	GETFIELD 	1 1 3	; "concat"
+	19	[8]	MOVE     	2 0
+	20	[8]	CALL     	1 2 2	; 1 in 1 out
+	21	[18]	CLOSURE  	2 0
+	22	[20]	GETTABUP 	3 0 4	; _ENV "ipairs"
+	23	[20]	NEWTABLE 	4 0 10	; 10
+	24	[20]	EXTRAARG 	0
+	25	[20]	LOADK    	5 5	; "%a"
+	26	[20]	LOADK    	6 6	; "%c"
+	27	[20]	LOADK    	7 7	; "%d"
+	28	[20]	LOADK    	8 8	; "%g"
+	29	[20]	LOADK    	9 9	; "%l"
+	30	[20]	LOADK    	10 10	; "%p"
+	31	[20]	LOADK    	11 11	; "%s"
+	32	[20]	LOADK    	12 12	; "%u"
+	33	[20]	LOADK    	13 13	; "%w"
+	34	[20]	LOADK    	14 14	; "%x"
+	35	[20]	SETLIST  	4 10 0
+	36	[20]	CALL     	3 2 5	; 1 in 4 out
+	37	[20]	TFORPREP 	3 6	; to 44
+	38	[21]	GETTABUP 	9 0 15	; _ENV "print"
+	39	[21]	MOVE     	10 8
+	40	[21]	MOVE     	11 2
+	41	[21]	MOVE     	12 8
+	42	[21]	CALL     	11 2 0	; 1 in all out
+	43	[21]	CALL     	9 0 1	; all in 0 out
+	44	[20]	TFORCALL 	3 2
+	45	[20]	TFORLOOP 	3 8	; to 38
+	46	[22]	CLOSE    	3
+	47	[25]	GETTABUP 	3 0 4	; _ENV "ipairs"
+	48	[25]	NEWTABLE 	4 0 10	; 10
+	49	[25]	EXTRAARG 	0
+	50	[25]	LOADK    	5 16	; "%A"
+	51	[25]	LOADK    	6 17	; "%C"
+	52	[25]	LOADK    	7 18	; "%D"
+	53	[25]	LOADK    	8 19	; "%G"
+	54	[25]	LOADK    	9 20	; "%L"
+	55	[25]	LOADK    	10 21	; "%P"
+	56	[25]	LOADK    	11 22	; "%S"
+	57	[25]	LOADK    	12 23	; "%U"
+	58	[25]	LOADK    	13 24	; "%W"
+	59	[25]	LOADK    	14 25	; "%X"
+	60	[25]	SETLIST  	4 10 0
+	61	[25]	CALL     	3 2 5	; 1 in 4 out
+	62	[25]	TFORPREP 	3 13	; to 76
+	63	[26]	MOVE     	9 2
+	64	[26]	MOVE     	10 8
+	65	[26]	CALL     	9 2 2	; 1 in 1 out
+	66	[27]	GETTABUP 	10 0 15	; _ENV "print"
+	67	[27]	MOVE     	11 8
+	68	[27]	MOVE     	12 9
+	69	[27]	MOVE     	13 2
+	70	[27]	SELF     	14 8 26k	; "lower"
+	71	[27]	CALL     	14 2 0	; 1 in all out
+	72	[27]	CALL     	13 0 2	; all in 1 out
+	73	[27]	ADD      	13 9 13
+	74	[27]	MMBIN    	9 13 6	; __add
+	75	[27]	CALL     	10 4 1	; 3 in 0 out
+	76	[25]	TFORCALL 	3 2
+	77	[25]	TFORLOOP 	3 15	; to 63
+	78	[28]	CLOSE    	3
+	79	[31]	NEWTABLE 	3 0 0	; 0
+	80	[31]	EXTRAARG 	0
+	81	[32]	SELF     	4 1 27k	; "gmatch"
+	82	[32]	LOADK    	6 11	; "%s"
+	83	[32]	CALL     	4 3 5	; 2 in 4 out
+	84	[32]	TFORPREP 	4 6	; to 91
+	85	[32]	LEN      	9 3
+	86	[32]	ADDI     	9 9 1
+	87	[32]	MMBINI   	9 1 6 0	; __add
+	88	[32]	SELF     	10 8 28k	; "byte"
+	89	[32]	CALL     	10 2 2	; 1 in 1 out
+	90	[32]	SETTABLE 	3 9 10
+	91	[32]	TFORCALL 	4 1
+	92	[32]	TFORLOOP 	4 8	; to 85
+	93	[32]	CLOSE    	4
+	94	[33]	GETTABUP 	4 0 15	; _ENV "print"
+	95	[33]	LOADK    	5 29	; "spaces"
+	96	[33]	GETTABUP 	6 0 2	; _ENV "table"
+	97	[33]	GETFIELD 	6 6 3	; "concat"
+	98	[33]	MOVE     	7 3
+	99	[33]	LOADK    	8 30	; " "
+	100	[33]	CALL     	6 3 0	; 2 in all out
+	101	[33]	CALL     	4 0 1	; all in 0 out
+	102	[34]	NEWTABLE 	4 0 0	; 0
+	103	[34]	EXTRAARG 	0
+	104	[35]	SELF     	5 1 27k	; "gmatch"
+	105	[35]	LOADK    	7 31	; "[%c%s]"
+	106	[35]	CALL     	5 3 5	; 2 in 4 out
+	107	[35]	TFORPREP 	5 6	; to 114
+	108	[35]	LEN      	10 4
+	109	[35]	ADDI     	10 10 1
+	110	[35]	MMBINI   	10 1 6 0	; __add
+	111	[35]	SELF     	11 9 28k	; "byte"
+	112	[35]	CALL     	11 2 2	; 1 in 1 out
+	113	[35]	SETTABLE 	4 10 11
+	114	[35]	TFORCALL 	5 1
+	115	[35]	TFORLOOP 	5 8	; to 108
+	116	[35]	CLOSE    	5
+	117	[36]	GETTABUP 	5 0 15	; _ENV "print"
+	118	[36]	LOADK    	6 32	; "controls or spaces"
+	119	[36]	LEN      	7 4
+	120	[36]	CALL     	5 3 1	; 2 in 0 out
+	121	[39]	GETTABUP 	5 0 15	; _ENV "print"
+	122	[39]	MOVE     	6 2
+	123	[39]	LOADK    	7 33	; "."
+	124	[39]	CALL     	6 2 2	; 1 in 1 out
+	125	[39]	LOADK    	7 34	; "\000\n"
+	126	[39]	SELF     	7 7 35k	; "match"
+	127	[39]	LOADK    	9 36	; "^..$"
+	128	[39]	CALL     	7 3 2	; 2 in 1 out
+	129	[39]	EQK      	7 34 1	; "\000\n"
+	130	[39]	JMP      	1	; to 132
+	131	[39]	LFALSESKIP	7
+	132	[39]	LOADTRUE 	7
+	133	[39]	CALL     	5 3 1	; 2 in 0 out
+	134	[42]	LOADK    	5 37	; "^$()%.[]*+-?"
+	135	[43]	NEWTABLE 	6 0 0	; 0
+	136	[43]	EXTRAARG 	0
+	137	[44]	SELF     	7 5 27k	; "gmatch"
+	138	[44]	LOADK    	9 33	; "."
+	139	[44]	CALL     	7 3 5	; 2 in 4 out
+	140	[44]	TFORPREP 	7 10	; to 151
+	141	[44]	LEN      	12 6
+	142	[44]	ADDI     	12 12 1
+	143	[44]	MMBINI   	12 1 6 0	; __add
+	144	[44]	SELF     	13 5 38k	; "find"
+	145	[44]	LOADK    	15 39	; "%"
+	146	[44]	MOVE     	16 11
+	147	[44]	CONCAT   	15 2
+	148	[44]	LOADI    	16 1
+	149	[44]	CALL     	13 4 2	; 3 in 1 out
+	150	[44]	SETTABLE 	6 12 13
+	151	[44]	TFORCALL 	7 1
+	152	[44]	TFORLOOP 	7 12	; to 141
+	153	[44]	CLOSE    	7
+	154	[45]	GETTABUP 	7 0 15	; _ENV "print"
+	155	[45]	GETTABUP 	8 0 2	; _ENV "table"
+	156	[45]	GETFIELD 	8 8 3	; "concat"
+	157	[45]	MOVE     	9 6
+	158	[45]	LOADK    	10 30	; " "
+	159	[45]	CALL     	8 3 0	; 2 in all out
+	160	[45]	CALL     	7 0 1	; all in 0 out
+	161	[46]	GETTABUP 	7 0 15	; _ENV "print"
+	162	[46]	LOADK    	8 40	; "a.b"
+	163	[46]	SELF     	8 8 35k	; "match"
+	164	[46]	LOADK    	10 41	; "%."
+	165	[46]	CALL     	8 3 2	; 2 in 1 out
+	166	[46]	LOADK    	9 42	; "50%"
+	167	[46]	SELF     	9 9 35k	; "match"
+	168	[46]	LOADK    	11 43	; "%d+%%"
+	169	[46]	CALL     	9 3 2	; 2 in 1 out
+	170	[46]	LOADK    	10 44	; "x+y"
+	171	[46]	SELF     	10 10 35k	; "match"
+	172	[46]	LOADK    	12 45	; "%+"
+	173	[46]	CALL     	10 3 0	; 2 in all out
+	174	[46]	CALL     	7 0 1	; all in 0 out
+	175	[49]	GETTABUP 	7 0 15	; _ENV "print"
+	176	[49]	LOADK    	8 46	; "snake_case99"
+	177	[49]	SELF     	8 8 35k	; "match"
+	178	[49]	LOADK    	10 47	; "%w+"
+	179	[49]	CALL     	8 3 2	; 2 in 1 out
+	180	[49]	LOADK    	9 46	; "snake_case99"
+	181	[49]	SELF     	9 9 35k	; "match"
+	182	[49]	LOADK    	11 48	; "[%w_]+"
+	183	[49]	CALL     	9 3 0	; 2 in all out
+	184	[49]	CALL     	7 0 1	; all in 0 out
+	185	[50]	GETTABUP 	7 0 15	; _ENV "print"
+	186	[50]	LOADK    	8 49	; "Hex: 0xDEADbeef!"
+	187	[50]	SELF     	8 8 35k	; "match"
+	188	[50]	LOADK    	10 50	; "0x(%x+)"
+	189	[50]	CALL     	8 3 0	; 2 in all out
+	190	[50]	CALL     	7 0 1	; all in 0 out
+	191	[51]	GETTABUP 	7 0 15	; _ENV "print"
+	192	[51]	LOADK    	8 51	; "MiXeD"
+	193	[51]	SELF     	8 8 52k	; "gsub"
+	194	[51]	LOADK    	10 12	; "%u"
+	195	[51]	LOADK    	11 53	; "_"
+	196	[51]	CALL     	8 4 2	; 3 in 1 out
+	197	[51]	LOADK    	9 51	; "MiXeD"
+	198	[51]	SELF     	9 9 52k	; "gsub"
+	199	[51]	LOADK    	11 9	; "%l"
+	200	[51]	LOADK    	12 53	; "_"
+	201	[51]	CALL     	9 4 0	; 3 in all out
+	202	[51]	CALL     	7 0 1	; all in 0 out
+	203	[52]	GETTABUP 	7 0 15	; _ENV "print"
+	204	[52]	LOADK    	8 54	; "a1 b2\tc3\n"
+	205	[52]	SELF     	8 8 52k	; "gsub"
+	206	[52]	LOADK    	10 11	; "%s"
+	207	[52]	LOADK    	11 33	; "."
+	208	[52]	CALL     	8 4 0	; 3 in all out
+	209	[52]	CALL     	7 0 1	; all in 0 out
+	210	[53]	GETTABUP 	7 0 15	; _ENV "print"
+	211	[53]	LOADK    	8 55	; "{x=[1]}"
+	212	[53]	SELF     	8 8 52k	; "gsub"
+	213	[53]	LOADK    	10 10	; "%p"
+	214	[53]	LOADK    	11 56	; ""
+	215	[53]	CALL     	8 4 0	; 3 in all out
+	216	[53]	CALL     	7 0 1	; all in 0 out
+	217	[55]	MOVE     	7 2
+	218	[55]	LOADK    	8 57	; "[%d%u]"
+	219	[55]	TAILCALL 	7 2 1k	; 1 in
+	220	[55]	RETURN   	7 0 1k	; all out
+	221	[55]	RETURN   	7 1 1k	; 0 out
+constants (58):
+	0	S	"string"
+	1	S	"char"
+	2	S	"table"
+	3	S	"concat"
+	4	S	"ipairs"
+	5	S	"%a"
+	6	S	"%c"
+	7	S	"%d"
+	8	S	"%g"
+	9	S	"%l"
+	10	S	"%p"
+	11	S	"%s"
+	12	S	"%u"
+	13	S	"%w"
+	14	S	"%x"
+	15	S	"print"
+	16	S	"%A"
+	17	S	"%C"
+	18	S	"%D"
+	19	S	"%G"
+	20	S	"%L"
+	21	S	"%P"
+	22	S	"%S"
+	23	S	"%U"
+	24	S	"%W"
+	25	S	"%X"
+	26	S	"lower"
+	27	S	"gmatch"
+	28	S	"byte"
+	29	S	"spaces"
+	30	S	" "
+	31	S	"[%c%s]"
+	32	S	"controls or spaces"
+	33	S	"."
+	34	S	"\000\n"
+	35	S	"match"
+	36	S	"^..$"
+	37	S	"^$()%.[]*+-?"
+	38	S	"find"
+	39	S	"%"
+	40	S	"a.b"
+	41	S	"%."
+	42	S	"50%"
+	43	S	"%d+%%"
+	44	S	"x+y"
+	45	S	"%+"
+	46	S	"snake_case99"
+	47	S	"%w+"
+	48	S	"[%w_]+"
+	49	S	"Hex: 0xDEADbeef!"
+	50	S	"0x(%x+)"
+	51	S	"MiXeD"
+	52	S	"gsub"
+	53	S	"_"
+	54	S	"a1 b2\tc3\n"
+	55	S	"{x=[1]}"
+	56	S	""
+	57	S	"[%d%u]"
+locals (39):
+	0	all	4	222
+	1	(for state)	7	17
+	2	(for state)	7	17
+	3	(for state)	7	17
+	4	c	8	16
+	5	ascii	21	222
+	6	members	22	222
+	7	(for state)	37	46
+	8	(for state)	37	46
+	9	(for state)	37	46
+	10	(for state)	37	46
+	11	_	38	44
+	12	class	38	44
+	13	(for state)	62	78
+	14	(for state)	62	78
+	15	(for state)	62	78
+	16	(for state)	62	78
+	17	_	63	76
+	18	class	63	76
+	19	count	66	76
+	20	spaces	81	222
+	21	(for state)	84	93
+	22	(for state)	84	93
+	23	(for state)	84	93
+	24	(for state)	84	93
+	25	c	85	91
+	26	controls	104	222
+	27	(for state)	107	116
+	28	(for state)	107	116
+	29	(for state)	107	116
+	30	(for state)	107	116
+	31	c	108	114
+	32	magic	135	222
+	33	escaped	137	222
+	34	(for state)	140	153
+	35	(for state)	140	153
+	36	(for state)	140	153
+	37	(for state)	140	153
+	38	c	141	151
+upvalues (1):
+	0	_ENV	1	0
+
+function <string_pattern_classes.lua:10,18> (30 instructions)
+1 param, 10 slots, 2 upvalues, 9 locals, 4 constants, 0 functions
+	1	[11]	LOADI    	1 0
+	2	[11]	NEWTABLE 	2 0 0	; 0
+	3	[11]	EXTRAARG 	0
+	4	[12]	GETUPVAL 	3 0	; ascii
+	5	[12]	SELF     	3 3 0k	; "gmatch"
+	6	[12]	MOVE     	5 0
+	7	[12]	CALL     	3 3 5	; 2 in 4 out
+	8	[12]	TFORPREP 	3 12	; to 21
+	9	[13]	ADDI     	1 1 1
+	10	[13]	MMBINI   	1 1 6 0	; __add
+	11	[14]	SELF     	8 7 1k	; "byte"
+	12	[14]	CALL     	8 2 2	; 1 in 1 out
+	13	[15]	GTI      	8 32 0
+	14	[15]	JMP      	6	; to 21
+	15	[15]	LTI      	8 127 0
+	16	[15]	JMP      	4	; to 21
+	17	[15]	LEN      	9 2
+	18	[15]	ADDI     	9 9 1
+	19	[15]	MMBINI   	9 1 6 0	; __add
+	20	[15]	SETTABLE 	2 9 7
+	21	[12]	TFORCALL 	3 1
+	22	[12]	TFORLOOP 	3 14	; to 9
+	23	[16]	CLOSE    	3
+	24	[17]	MOVE     	3 1
+	25	[17]	GETTABUP 	4 1 2	; _ENV "table"
+	26	[17]	GETFIELD 	4 4 3	; "concat"
+	27	[17]	MOVE     	5 2
+	28	[17]	CALL     	4 2 0	; 1 in all out
+	29	[17]	RETURN   	3 0 0k	; all out
+	30	[18]	RETURN   	3 1 0k	; 0 out
+constants (4):
+	0	S	"gmatch"
+	1	S	"byte"
+	2	S	"table"
+	3	S	"concat"
+locals (9):
+	0	class	1	31
+	1	count	4	31
+	2	shown	4	31
+	3	(for state)	8	23
+	4	(for state)	8	23
+	5	(for state)	8	23
+	6	(for state)	8	23
+	7	c	9	21
+	8	b	13	21
+upvalues (2):
+	0	ascii	1	1
+	1	_ENV	0	0

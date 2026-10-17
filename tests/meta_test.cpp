@@ -32,7 +32,7 @@ std::string run(std::string_view source) {
 TEST_CASE("M1.1 setmetatable returns its table, getmetatable reads it back", "[meta]") {
     CHECK(run("local mt = {} local t = {} return setmetatable(t, mt) == t, getmetatable(t) == mt, "
               "getmetatable(setmetatable(t, nil))") == "true,true,nil");
-    CHECK(run("return getmetatable('x'), getmetatable(1)") == "nil,nil");
+    CHECK(run("return getmetatable('x').__index == string, getmetatable(1)") == "true,nil");
 }
 
 TEST_CASE("M1.3 __metatable protects a metatable", "[meta]") {
@@ -141,8 +141,7 @@ TEST_CASE("M5.1 tostring uses __tostring and __name", "[meta]") {
     CHECK(
         run("return pcall(tostring, setmetatable({}, {__tostring = function() return {} end}))") ==
         "false,'__tostring' must return a string");
-    CHECK(run("return tostring(setmetatable({}, {__name = 'Thing'})):sub(1, 6)")
-              .starts_with("input:1: attempt to index a string value"));
+    CHECK(run("return tostring(setmetatable({}, {__name = 'Thing'})):sub(1, 7)") == "Thing: ");
 }
 
 TEST_CASE("M6.1 a to-be-closed value needs __close", "[meta]") {

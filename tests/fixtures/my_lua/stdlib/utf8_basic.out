@@ -1,0 +1,37 @@
+41 	C3 A9 	E2 82 AC 	F0 9F 98 80 
+7F 	C2 80 	DF BF 	E0 A0 80 
+EF BF BF 	F0 90 80 80 	F4 8F BF BF 
+F4 90 80 80 	FD BF BF BF BF BF 
+Hi!	true	1	ED A0 80 
+false	bad argument #1 to 'utf8.char' (value out of range)
+false	bad argument #1 to 'utf8.char' (value out of range)
+false	bad argument #1 to 'utf8.char' (number expected, got string)
+false	bad argument #2 to 'utf8.char' (number has no integer representation)
+true	14
+11	5	0	3
+97
+97	233	8364	128512	122
+233	8364	128512	122
+233	8364	128512
+0	0
+false	invalid UTF-8 code
+false	bad argument #3 to 'utf8.codepoint' (out of bounds)
+false	bad argument #3 to 'utf8.codepoint' (out of bounds)
+false	invalid UTF-8 code
+false	invalid UTF-8 code
+false	invalid UTF-8 code
+55296	1114112
+false	invalid UTF-8 code
+2147483647
+4	3	1	1	2
+nil	3
+nil	4
+nil	nil	3
+nil	1
+nil	1
+0	0	0
+false	bad argument #2 to 'utf8.len' (initial position out of bounds)
+false	bad argument #2 to 'utf8.len' (initial position out of bounds)
+false	bad argument #3 to 'utf8.len' (final position out of bounds)
+false	bad argument #1 to 'utf8.len' (string expected, got no value)
+2	Lua

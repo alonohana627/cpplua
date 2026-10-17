@@ -1,0 +1,512 @@
+Chunk
+  LocalFunction floats
+    Function(n) [upvalues: _ENV]
+      Local out
+        Table
+      NumericFor i
+        Integer 1
+        Name n (local 0)
+        Body
+          Assign
+            Targets
+              Index
+                Name out (local 1)
+                Name i (local 5)
+            Values
+              Call
+                Index
+                  Name string
+                  String "format"
+                String "%.17g"
+                Call
+                  Index
+                    Name math
+                    String "random"
+      Return
+        Call
+          Index
+            Name table
+            String "concat"
+          Name out (local 1)
+          String " "
+  LocalFunction ints
+    Function(n, ...) [upvalues: _ENV]
+      Local out
+        Table
+      NumericFor i
+        Integer 1
+        Name n (local 0)
+        Body
+          Assign
+            Targets
+              Index
+                Name out (local 1)
+                Name i (local 5)
+            Values
+              Call
+                Index
+                  Name math
+                  String "random"
+                Vararg
+      Return
+        Call
+          Index
+            Name table
+            String "concat"
+          Name out (local 1)
+          String " "
+  CallStatement
+    Call
+      Index
+        Name math
+        String "randomseed"
+      Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Name floats (local 0)
+        Integer 4
+  CallStatement
+    Call
+      Name print
+      Call
+        Name ints (local 1)
+        Integer 10
+        Integer 10
+  CallStatement
+    Call
+      Name print
+      Call
+        Name ints (local 1)
+        Integer 10
+        Integer 5
+        Integer 20
+  CallStatement
+    Call
+      Name print
+      Call
+        Name ints (local 1)
+        Integer 3
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name ints (local 1)
+        Integer 5
+        Unary -
+          Integer 3
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name ints (local 1)
+        Integer 3
+        Index
+          Name math
+          String "mininteger"
+        Index
+          Name math
+          String "maxinteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name ints (local 1)
+        Integer 5
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name ints (local 1)
+        Integer 4
+        Integer 7
+        Integer 7
+  CallStatement
+    Call
+      Index
+        Name math
+        String "randomseed"
+      Integer 42
+  Local first
+    Call
+      Name floats (local 0)
+      Integer 4
+  CallStatement
+    Call
+      Index
+        Name math
+        String "randomseed"
+      Integer 42
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name first (local 2)
+        Call
+          Name floats (local 0)
+          Integer 4
+  GenericFor _, seed
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            Integer 0
+          Item
+            Integer 1
+          Item
+            Integer 123456789
+          Item
+            Unary -
+              Integer 1
+          Item
+            Index
+              Name math
+              String "maxinteger"
+          Item
+            Index
+              Name math
+              String "mininteger"
+    Body
+      CallStatement
+        Call
+          Index
+            Name math
+            String "randomseed"
+          Name seed (local 8)
+      CallStatement
+        Call
+          Name print
+          Name seed (local 8)
+          Call
+            Name ints (local 1)
+            Integer 6
+            Integer 100
+          Call
+            Name ints (local 1)
+            Integer 1
+            Integer 0
+  CallStatement
+    Call
+      Index
+        Name math
+        String "randomseed"
+      Float 3.0
+  CallStatement
+    Call
+      Name print
+      String "3.0"
+      Call
+        Name ints (local 1)
+        Integer 6
+        Integer 100
+  CallStatement
+    Call
+      Index
+        Name math
+        String "randomseed"
+      Integer 1
+      Integer 2
+  CallStatement
+    Call
+      Name print
+      String "1,2"
+      Call
+        Name ints (local 1)
+        Integer 6
+        Integer 100
+      Call
+        Name floats (local 0)
+        Integer 1
+  CallStatement
+    Call
+      Index
+        Name math
+        String "randomseed"
+      Integer 1
+      Integer 0
+  CallStatement
+    Call
+      Name print
+      String "1,0"
+      Call
+        Name ints (local 1)
+        Integer 6
+        Integer 100
+  CallStatement
+    Call
+      Index
+        Name math
+        String "randomseed"
+      Integer 0
+      Integer 1
+  CallStatement
+    Call
+      Name print
+      String "0,1"
+      Call
+        Name ints (local 1)
+        Integer 6
+        Integer 100
+  CallStatement
+    Call
+      Index
+        Name math
+        String "randomseed"
+      Integer 7
+  Local seen, outside
+    Table
+    Integer 0
+  NumericFor _
+    Integer 1
+    Integer 1000
+    Body
+      Local r
+        Call
+          Index
+            Name math
+            String "random"
+          Integer 3
+          Integer 6
+      If
+        If
+          Binary or
+            Binary <
+              Name r (local 9)
+              Integer 3
+            Binary >
+              Name r (local 9)
+              Integer 6
+          Then
+            Assign
+              Targets
+                Name outside (local 4)
+              Values
+                Binary +
+                  Name outside (local 4)
+                  Integer 1
+      Assign
+        Targets
+          Index
+            Name seen (local 3)
+            Name r (local 9)
+        Values
+          True
+  CallStatement
+    Call
+      Name print
+      Name outside (local 4)
+      Index
+        Name seen (local 3)
+        Integer 3
+      Index
+        Name seen (local 3)
+        Integer 4
+      Index
+        Name seen (local 3)
+        Integer 5
+      Index
+        Name seen (local 3)
+        Integer 6
+  Local all_floats_ok
+    True
+  NumericFor _
+    Integer 1
+    Integer 1000
+    Body
+      Local r
+        Call
+          Index
+            Name math
+            String "random"
+      If
+        If
+          Binary or
+            Binary or
+              Binary <
+                Name r (local 10)
+                Integer 0
+              Binary >=
+                Name r (local 10)
+                Integer 1
+            Binary ~=
+              Call
+                Index
+                  Name math
+                  String "type"
+                Name r (local 10)
+              String "float"
+          Then
+            Assign
+              Targets
+                Name all_floats_ok (local 5)
+              Values
+                False
+  CallStatement
+    Call
+      Name print
+      Name all_floats_ok (local 5)
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name math
+            String "random"
+          Integer 5
+      Call
+        Index
+          Name math
+          String "type"
+        Call
+          Index
+            Name math
+            String "random"
+          Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name math
+            String "randomseed"
+      Call
+        Index
+          Name math
+          String "type"
+        Paren
+          Call
+            Index
+              Name math
+              String "randomseed"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "randomseed"
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name math
+          String "randomseed"
+        Unary -
+          Integer 7
+        Integer 9
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "random"
+        Integer 0
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "random"
+        Integer 10
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "random"
+        Unary -
+          Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "random"
+        Integer 1
+        Integer 2
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "random"
+        Float 1.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "random"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "randomseed"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "randomseed"
+        Float 3.5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name math
+          String "randomseed"
+        Integer 1
+        Table
+  CallStatement
+    Call
+      Index
+        Name math
+        String "randomseed"
+      Integer 2024
+  Return
+    Call
+      Index
+        Name math
+        String "random"
+      Integer 1000
+    Call
+      Index
+        Name math
+        String "random"
+      Integer 1000

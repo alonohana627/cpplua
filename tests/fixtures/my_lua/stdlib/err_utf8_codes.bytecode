@@ -1,0 +1,31 @@
+
+main <err_utf8_codes.lua:0,0> (14 instructions)
+0+ params, 9 slots, 1 upvalue, 6 locals, 4 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[3]	GETTABUP 	0 0 0	; _ENV "utf8"
+	3	[3]	GETFIELD 	0 0 1	; "codes"
+	4	[3]	LOADK    	1 2	; "ok\255no"
+	5	[3]	CALL     	0 2 5	; 1 in 4 out
+	6	[3]	TFORPREP 	0 4	; to 11
+	7	[3]	GETTABUP 	6 0 3	; _ENV "print"
+	8	[3]	MOVE     	7 4
+	9	[3]	MOVE     	8 5
+	10	[3]	CALL     	6 3 1	; 2 in 0 out
+	11	[3]	TFORCALL 	0 2
+	12	[3]	TFORLOOP 	0 6	; to 7
+	13	[3]	CLOSE    	0
+	14	[3]	RETURN   	0 1 1k	; 0 out
+constants (4):
+	0	S	"utf8"
+	1	S	"codes"
+	2	S	"ok\255no"
+	3	S	"print"
+locals (6):
+	0	(for state)	6	13
+	1	(for state)	6	13
+	2	(for state)	6	13
+	3	(for state)	6	13
+	4	pos	7	11
+	5	code	7	11
+upvalues (1):
+	0	_ENV	1	0
