@@ -1,0 +1,52 @@
+Chunk
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "sethook"
+      Name print
+      String ""
+      Binary ^
+        Integer 2
+        Integer 32
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name debug
+          String "gethook"
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "sethook"
+      Name print
+      String ""
+      Binary +
+        Binary ^
+          Integer 2
+          Integer 32
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Integer 2
+        Call
+          Index
+            Name debug
+            String "gethook"
+      Call
+        Name select
+        Integer 3
+        Call
+          Index
+            Name debug
+            String "gethook"
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "sethook"

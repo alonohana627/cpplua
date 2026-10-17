@@ -196,6 +196,11 @@ if(CPPLUA_BUILD_TESTS)
   # The official Lua 5.4.9 test suite (stage 11): all.lua prints
   # "final OK !!!" when every file passes. _port skips the tests that need
   # a POSIX system.
+  # The cpplua program itself (tests/cli/): what only a whole process shows.
+  add_test(NAME cli_os_exit_flush
+    COMMAND ${CMAKE_COMMAND} -DCPPLUA=$<TARGET_FILE:cpplua> -DWORK=${CMAKE_CURRENT_BINARY_DIR}/cli_tests
+      -P ${PROJECT_SOURCE_DIR}/tests/cli/os_exit_flush.cmake)
+
   add_test(NAME lua_5_4_test_suite
     COMMAND cpplua -e "_port=true" all.lua
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/tests/fixtures/lua-5.4.9-tests)

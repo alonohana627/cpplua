@@ -67,6 +67,8 @@ struct Stream {
 constexpr char file_tag = 0;
 constexpr char input_key = 0;
 constexpr char output_key = 0;
+// Every file userdata, in a table with weak keys: what os.exit flushes.
+constexpr char all_files_key = 0;
 
 Value registry_get(Heap& heap, const void* key) {
     return heap.references().get(Value::light_userdata(key)).value();
@@ -115,6 +117,7 @@ Stream* new_stream(Heap& heap, Value& out) {
     u->destructor = [](void* data) { static_cast<Stream*>(data)->~Stream(); };
     heap.set_metatable(u, table_object(registry_get(heap, &file_tag)));
     out = Value::userdata(u);
+    table_object(registry_get(heap, &all_files_key))->set(heap, out, Value::boolean(true));
     return s;
 }
 
@@ -204,7 +207,7 @@ int aux_close(State& state, Stream& s) {
 // Writes to s; the standard output and error go through the heap.
 bool write_bytes(Heap& heap, Stream& s, std::string_view text) {
     switch (s.standard) {
-    case Standard::Output: heap.write_output(text); return true;
+    case Standard::Output: heap.write_output(text, false); return true;
     case Standard::Error: heap.write_error(text); return true;
     case Standard::Input: errno = EBADF; return false;
     case Standard::None: break;
@@ -838,9 +841,19 @@ int f_setvbuf(State& state) {
     if (!check_option(state, 2, "", names, op) || !opt_integer(state, 3, 1024, size)) {
         return c_function_error;
     }
-    // "no": every write reaches the file at once; "line": at each newline.
-    if (op == 0 && s->standard == Standard::None) {
-        s->buffer->pubsetbuf(nullptr, 0);
+    // "no": every write reaches the file at once; "full" and "line" buffer
+    // again ("line" flushing at each newline). A filebuf drops what its
+    // buffer holds when it changes buffers, so what waits to be written is
+    // written first, and the position (past what was read ahead) comes back.
+    if (s->standard == Standard::None) {
+        std::streambuf& buffer = *s->buffer;
+        const auto position = buffer.pubseekoff(0, std::ios::cur, std::ios::in | std::ios::out);
+        buffer.pubsync();
+        const auto bytes = size > 0 ? static_cast<std::streamsize>(size) : 1024;
+        buffer.pubsetbuf(nullptr, op == 0 ? 0 : bytes);
+        if (position != std::streampos(std::streamoff(-1))) {
+            buffer.pubseekpos(position, std::ios::in | std::ios::out);
+        }
     }
     s->line_buffered = op == 2;
     push(state, Value::boolean(true));
@@ -936,8 +949,37 @@ void standard_file(Heap& heap, Table& library, Standard which, std::streambuf* b
 
 } // namespace
 
+void flush_all_files(Heap& heap) {
+    // What the C library's exit() does with its FILE*s: flush every open
+    // file, and delete io.tmpfile's files.
+    const Value all = registry_get(heap, &all_files_key);
+    if (!all.is_table()) {
+        return;
+    }
+    Value key;
+    Value value;
+    while (table_object(all)->next_entry(key, value) == Table::NextResult::Found) {
+        Stream* s = to_stream(key);
+        if (s == nullptr || s->closer == Closer::Closed || s->buffer == nullptr) {
+            continue;
+        }
+        s->buffer->pubsync();
+        if (!s->remove_on_close.empty() && s->file != nullptr) {
+            s->file->close();
+            std::error_code ec;
+            std::filesystem::remove(s->remove_on_close, ec);
+        }
+    }
+}
+
 void open_io(Heap& heap) {
     Table* library = open_library(heap, "io", io_functions);
+    Table* all_files = heap.new_table();
+    Table* weak_keys = heap.new_table();
+    weak_keys->set(heap, Value::string(heap.new_string("__mode")),
+                   Value::string(heap.new_string("k")));
+    heap.set_metatable(all_files, weak_keys);
+    registry_set(heap, &all_files_key, Value::table(all_files));
     // createmeta: the metatable of files, named "FILE*", with the methods
     // as its __index.
     Table* mt = heap.new_table();

@@ -388,15 +388,16 @@ void Heap::write_error(std::string_view text) {
     std::cerr.flush();
 }
 
-void Heap::write_output(std::string_view text) {
+void Heap::write_output(std::string_view text, bool flush_lines) {
     if (output_) {
         output_(text);
         return;
     }
-    // lua_writestring and lua_writeline: a write, and a flush at the end
-    // of each line.
+    // lua_writestring and lua_writeline: a write, and for print a flush at
+    // the end of each line. io.write leaves stdout to its own buffering
+    // (by line on a terminal), as Lua's fwrite does.
     std::cout.write(text.data(), static_cast<std::streamsize>(text.size()));
-    if (text.ends_with('\n')) {
+    if (flush_lines && text.ends_with('\n')) {
         std::cout.flush();
     }
 }

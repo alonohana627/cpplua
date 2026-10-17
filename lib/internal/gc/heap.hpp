@@ -206,7 +206,8 @@ public:
     // each line as Lua does; tests capture it.
     void set_output(std::function<void(std::string_view)> output) { output_ = std::move(output); }
 
-    void write_output(std::string_view text);
+    // `flush_lines`: flush after a newline (print does; io.write does not).
+    void write_output(std::string_view text, bool flush_lines = true);
 
     // Flushes the standard output when it is where output goes (io.flush).
     void flush_output();

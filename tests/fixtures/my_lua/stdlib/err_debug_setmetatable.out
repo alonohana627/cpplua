@@ -1,0 +1,4 @@
+false	bad argument #2 to 'debug.setmetatable' (nil or table expected, got no value)
+false	bad argument #2 to 'debug.setmetatable' (nil or table expected, got no value)
+10
+

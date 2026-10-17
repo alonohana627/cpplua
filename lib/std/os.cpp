@@ -395,6 +395,8 @@ int os_exit(State& state) {
     }
     if (arg(state, 2).is_truthy()) {
         state.heap().close();
+    } else {
+        flush_all_files(state.heap());
     }
     std::cout.flush();
     std::cerr.flush();

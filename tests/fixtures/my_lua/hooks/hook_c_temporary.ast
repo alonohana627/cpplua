@@ -1,0 +1,63 @@
+Chunk
+  Local out
+    Table
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "sethook"
+      Function(e) [upvalues: _ENV, out]
+        Local info
+          Call
+            Index
+              Name debug
+              String "getinfo"
+            Integer 2
+            String "S"
+        If
+          If
+            Binary ==
+              Index
+                Name info (local 1)
+                String "what"
+              String "C"
+            Then
+              Assign
+                Targets
+                  Index
+                    Name out (upvalue 1)
+                    Binary +
+                      Unary #
+                        Name out (upvalue 1)
+                      Integer 1
+                Values
+                  Call
+                    Name tostring
+                    Call
+                      Index
+                        Name debug
+                        String "getlocal"
+                      Integer 2
+                      Integer 1
+      String "c"
+  CallStatement
+    Call
+      Index
+        Name math
+        String "abs"
+      Unary -
+        Integer 3
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "sethook"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name out (local 0)
+        String " "

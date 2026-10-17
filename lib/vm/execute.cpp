@@ -1312,7 +1312,10 @@ Status run_hook(State* state, HookEvent event, int line, int first_transfer, int
     ci->top = std::max(ci->top, state->top + min_stack);
     state->allow_hook = false; // no hooks inside a hook
     ci->hooked = true;
-    const std::uint32_t func = state->top;
+    // As ldblib's hookf: the hook table, then the function called above it
+    // (debug.getlocal sees that slot as a temporary of the hooked frame).
+    state->set(state->top, hooks);
+    const std::uint32_t func = state->top + 1;
     state->set(func, function);
     state->set(func + 1, Value::string(heap.hook_event_string(static_cast<std::size_t>(event))));
     state->set(func + 2, line >= 0 ? Value::integer(line) : Value::nil());
