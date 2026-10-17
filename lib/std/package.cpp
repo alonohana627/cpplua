@@ -333,6 +333,7 @@ int require(State& state) {
 // NOLINTEND(misc-const-correctness,readability-non-const-parameter)
 
 // The directory of the running program, for '!' in the paths (setprogdir).
+// NOLINTNEXTLINE(modernize-use-string-view): a built string on Windows
 std::string program_directory() {
 #ifdef _WIN32
     std::array<char, MAX_PATH + 1> buffer{};

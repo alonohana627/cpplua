@@ -158,6 +158,7 @@ jobs:
           -DCLANG_FORMAT=/usr/bin/clang-format-$LLVM_VERSION
           -DCLANG_TIDY=/usr/bin/clang-tidy-$LLVM_VERSION
           -DRUN_CLANG_TIDY=/usr/bin/run-clang-tidy-$LLVM_VERSION
+          -DCMAKE_CXX_SCAN_FOR_MODULES=OFF
 
       - name: clang-format
         run: cmake --build --preset debug --target format-check
