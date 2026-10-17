@@ -11,6 +11,8 @@
 #include "gc/heap.hpp"
 #include "std/auxlib.hpp"
 #include "std/libs.hpp"
+#include "value/convert.hpp"
+#include "value/number.hpp"
 #include "value/table.hpp"
 #include "vm/execute.hpp"
 #include "vm/state.hpp"
@@ -256,7 +258,13 @@ int utf8_codes_step(State& state) {
         return c_function_error;
     }
     const Value control = arg(state, 2);
-    auto n = static_cast<std::uint64_t>(control.is_integer() ? control.as_integer() : 0);
+    // (lua_Unsigned)lua_tointeger: floats and strings with an integer value
+    // count too; anything else is 0.
+    Value number = control;
+    if (control.is_string()) {
+        number = string_to_number(control.as_string()->view()).value_or(Value::nil());
+    }
+    auto n = static_cast<std::uint64_t>(to_integer(number).value_or(0));
     if (n < s.size()) {
         while (is_continuation(s, n)) { // the next character
             ++n;

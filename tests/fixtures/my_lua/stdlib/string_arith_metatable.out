@@ -1,0 +1,9 @@
+3	20	2	8.0	3	-3
+false	attempt to divide by zero
+false	string_arith_metatable.lua:5: attempt to add a 'string' with a 'number'
+false	string_arith_metatable.lua:6: attempt to add a 'string' with a 'table'
+false	false	string_arith_metatable.lua:7: attempt to perform bitwise operation on a string value (constant '1.5')
+mt
+false	string_arith_metatable.lua:11: attempt to perform arithmetic on a string value (local 's')
+false	string_arith_metatable.lua:13: attempt to perform arithmetic on a string value (local 's')
+

@@ -1,0 +1,83 @@
+Chunk
+  Local calls
+    Integer 0
+  Local mt
+    Table
+      Field __eq
+        Function() [upvalues: calls, _ENV]
+          Assign
+            Targets
+              Name calls (upvalue 0)
+            Values
+              Binary +
+                Name calls (upvalue 0)
+                Integer 1
+          CallStatement
+            Call
+              Name error
+              String "no __eq here"
+  Local a
+    Call
+      Name setmetatable
+      Table
+        Item
+          Integer 1
+        Item
+          Integer 2
+        Item
+          Integer 3
+      Name mt (local 1)
+  Local b
+    Call
+      Name setmetatable
+      Table
+      Name mt (local 1)
+  CallStatement
+    Call
+      Index
+        Name table
+        String "move"
+      Name a (local 2)
+      Integer 1
+      Integer 3
+      Integer 5
+      Name b (local 3)
+  CallStatement
+    Call
+      Index
+        Name table
+        String "move"
+      Name a (local 2)
+      Integer 2
+      Integer 3
+      Integer 1
+      Name b (local 3)
+  CallStatement
+    Call
+      Name print
+      Name calls (local 0)
+      Index
+        Name b (local 3)
+        Integer 1
+      Index
+        Name b (local 3)
+        Integer 2
+      Index
+        Name b (local 3)
+        Integer 5
+      Index
+        Name b (local 3)
+        Integer 7
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name table
+          String "move"
+        Name a (local 2)
+        Integer 1
+        Integer 3
+        Integer 2
+        Name b (local 3)

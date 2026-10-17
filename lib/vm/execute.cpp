@@ -515,7 +515,6 @@ Status arith_slow(State* state, const Instruction* pc, const Operand& p1, const 
     protect(state, pc);
     Heap& heap = state->heap();
     const auto e = static_cast<Event>(event);
-    const bool string_library = !is_bitwise(event); // strings have arithmetic metamethods
     const auto call_tm = [&](Value tm) {
         Value r;
         if (const Status status = call_metamethod(*state, tm, p1.value, p2.value, r);
@@ -525,37 +524,21 @@ Status arith_slow(State* state, const Instruction* pc, const Operand& p1, const 
         state->set(result, r);
         return Status::Ok;
     };
-    // The string library's metamethod: both as numbers, else the other
-    // operand's metamethod (trymt).
-    const auto string_arith = [&] {
-        const ArithResult r = arith_event(event, p1.value, p2.value);
-        if (r) {
-            state->set(result, *r);
-            return Status::Ok;
-        }
-        if (!p2.value.is_string()) {
-            const Value tm = metamethod_of(heap, p2.value, e);
-            if (!tm.is_nil()) {
-                return call_tm(tm);
-            }
-        }
-        return runtime_error(*state, r.error().message);
-    };
-    if (p1.value.is_string() && string_library) {
-        return string_arith();
-    }
+    // Strings convert through their metatable's arithmetic metamethods
+    // (lstrlib's), like any other value's metamethods: a program that
+    // changes or removes them changes string arithmetic, as in Lua.
     if (const Value tm = metamethod_of(heap, p1.value, e); !tm.is_nil()) {
         return call_tm(tm);
-    }
-    if (p2.value.is_string() && string_library) {
-        return string_arith();
     }
     if (const Value tm = metamethod_of(heap, p2.value, e); !tm.is_nil()) {
         return call_tm(tm);
     }
-    if (const ArithResult r = arith_event(event, p1.value, p2.value)) {
-        state->set(result, *r); // numbers (a path the fast code left out)
-        return Status::Ok;
+    if (p1.value.is_number() && p2.value.is_number()) {
+        // numbers (a path the fast code left out)
+        if (const ArithResult r = arith_event(event, p1.value, p2.value)) {
+            state->set(result, *r);
+            return Status::Ok;
+        }
     }
     return binary_error(state, p1, p2, event);
 }

@@ -37,6 +37,12 @@ namespace cpplua {
 
 namespace {
 
+// The text of a format specification as Lua's messages show it: a C
+// string, cut at a NUL.
+std::string_view until_nul(std::string_view text) {
+    return text.substr(0, text.find('\0'));
+}
+
 // NOLINTBEGIN(misc-const-correctness,readability-non-const-parameter): the CFunction signature
 // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic): byte-level string work
 
@@ -1093,7 +1099,7 @@ bool check_format(State& state, const std::string& form, std::string_view flags,
         }
     }
     if (at >= form.size() || std::isalpha(uchar(form[at])) == 0) {
-        raise_error(state, std::format("invalid conversion specification: '{}'", form));
+        raise_error(state, std::format("invalid conversion specification: '{}'", until_nul(form)));
         return false;
     }
     return true;
@@ -1179,10 +1185,18 @@ int str_format(State& state) {
         case 'g':
         case 'G': {
             if (conversion == 'F') {
-                return raise_error(state, std::format("invalid conversion '{}' to 'format'", form));
+                return raise_error(
+                    state, std::format("invalid conversion '{}' to 'format'", until_nul(form)));
+            }
+            // %a and %A check the specification before the argument, the
+            // others after it, as Lua's str_format does.
+            const bool hex = conversion == 'a' || conversion == 'A';
+            if (hex && !check_format(state, form, flags_float, true)) {
+                return c_function_error;
             }
             double n = 0;
-            if (!check_number(state, arg_n, n) || !check_format(state, form, flags_float, true)) {
+            if (!check_number(state, arg_n, n) ||
+                (!hex && !check_format(state, form, flags_float, true))) {
                 return c_function_error;
             }
             b += format_one(form, n);
@@ -1263,7 +1277,8 @@ int str_format(State& state) {
             break;
         }
         default:
-            return raise_error(state, std::format("invalid conversion '{}' to 'format'", form));
+            return raise_error(state,
+                               std::format("invalid conversion '{}' to 'format'", until_nul(form)));
         }
     }
     push_string(state, b);
@@ -1368,6 +1383,8 @@ Option get_details(Header& h, std::size_t total, std::string_view fmt, std::size
     if (opt == Option::PaddAlign &&
         (at >= fmt.size() || get_option(h, fmt, at, align) == Option::Char || align == 0)) {
         arg_error_text = "invalid next option for option 'X'";
+        to_align = 0;
+        return opt; // (luaL_argerror stops there)
     }
     if (align <= 1 || opt == Option::Char) {
         to_align = 0;
@@ -1426,7 +1443,8 @@ int str_pack(State& state) {
     if (!check_view(state, 1, fmt)) {
         return c_function_error;
     }
-    push(state, Value::nil()); // Lua's mark after the arguments: a missing one is nil
+    fmt = fmt.substr(0, fmt.find('\0')); // the format is a C string in Lua: it ends at a NUL
+    push(state, Value::nil());           // Lua's mark after the arguments: a missing one is nil
     Header h;
     std::string b;
     std::size_t total = 0;
@@ -1542,6 +1560,7 @@ int str_packsize(State& state) {
     if (!check_view(state, 1, fmt)) {
         return c_function_error;
     }
+    fmt = fmt.substr(0, fmt.find('\0')); // the format is a C string in Lua: it ends at a NUL
     Header h;
     std::size_t total = 0;
     std::size_t at = 0;
@@ -1603,6 +1622,7 @@ int str_unpack(State& state) {
         !opt_integer(state, 3, 1, init_arg)) {
         return c_function_error;
     }
+    fmt = fmt.substr(0, fmt.find('\0')); // the format is a C string in Lua: it ends at a NUL
     std::size_t pos = start_position(init_arg, data.size()) - 1;
     if (pos > data.size()) {
         return arg_error(state, 3, "initial position out of string");
@@ -1627,7 +1647,7 @@ int str_unpack(State& state) {
         }
         pos += static_cast<std::size_t>(to_align);
         if (!state.check_stack(2)) {
-            return raise_error(state, "too many results");
+            return raise_error(state, "stack overflow (too many results)");
         }
         ++n;
         const char* p = data.data() + pos;

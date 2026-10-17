@@ -1,0 +1,97 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name string
+          String "packsize"
+        String "i\x00i"
+      Unary #
+        Call
+          Index
+            Name string
+            String "pack"
+          String "i\x00i"
+          Integer 1
+      Call
+        Index
+          Name string
+          String "unpack"
+        String "i\x00i"
+        Call
+          Index
+            Name string
+            String "pack"
+          String "i"
+          Integer 7
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "pack"
+        String "!16Xc3i9"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%100a"
+        String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "format"
+        String "%\x00d"
+        Integer 1
+  Local f
+    Call
+      Index
+        Name utf8
+        String "codes"
+      String "abc"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name f (local 0)
+        String "abc"
+        Float 1.0
+      Call
+        Name f (local 0)
+        String "abc"
+        String "1"
+  Local ok, message
+    Call
+      Name pcall
+      Index
+        Name string
+        String "unpack"
+      Call
+        Index
+          Name string
+          String "rep"
+        String "b"
+        Float 1e+06
+      Call
+        Index
+          Name string
+          String "rep"
+        String "\x00"
+        Float 1e+06
+  CallStatement
+    Call
+      Name print
+      Name ok (local 1)
+      Name message (local 2)
