@@ -14,6 +14,8 @@
 #include <exception>
 #include <expected>
 #include <functional>
+#include <limits>
+#include <memory>
 #include <new>
 #include <optional>
 #include <string>
@@ -106,7 +108,15 @@ public:
     // How many values are on this context's part of the stack (arguments and
     // what was pushed).
     [[nodiscard]] int top() const;
-    void set_top(int n); // drops values above n (or adds nils)
+    // Drops values above n (or adds nils); a negative n counts from the top,
+    // -1 being the top value, as lua_settop does.
+    void set_top(int n);
+
+    // Makes room for `n` more values (lua_checkstack); false when the stack
+    // cannot grow that much. The push functions make room themselves (and
+    // throw std::length_error past the stack's limit), so this is only to
+    // check first.
+    [[nodiscard]] bool ensure(int n);
 
     // ---- Errors ----
     //
@@ -133,7 +143,8 @@ public:
     // for -1) are where the function was. The error message otherwise
     // (and the stack back to `func - 1` values).
     std::expected<void, std::string> call(int func, int args, int results);
-    // t[key] with __index, pushed; false after raising an error.
+    // t[key] with __index, pushed; false after raising an error (also when
+    // there is no value t).
     bool get_field(int t, std::string_view key);
     // t[key] with __index, as a Ref (nil after raising an error: check
     // failed()).
@@ -147,8 +158,16 @@ public:
     [[nodiscard]] State& state() const { return *state_; }
 
     void* object_data(int n, const void* tag) const;
+    // Pushes a blank userdata of `size` bytes for an object of the class
+    // with `tag`, or raises an error (nullptr) if the class is unknown.
+    // finish_object() makes it an object of the class once the C++ object
+    // is built in it, so a constructor that throws leaves only a blank
+    // userdata, never a finalizable object that was never constructed.
     void* push_userdata(const void* tag, std::size_t size);
-    void set_destructor(void (*destructor)(void*)); // for the userdata on top
+    void finish_object(const void* tag, void (*destructor)(void*)); // the userdata on top
+    // Pushes an object of the class with `tag` that is `object`, a part of
+    // the object at index `owner` (a data member), which it keeps alive.
+    bool push_member(int owner, void* object, const void* tag);
     [[nodiscard]] std::string class_name(const void* tag) const;
 
 protected:
@@ -156,6 +175,8 @@ protected:
 
 private:
     [[nodiscard]] std::uint32_t slot(int n) const;
+    [[nodiscard]] bool valid(int n) const; // index n is on this context's stack
+    void reserve();                        // room for one more value, or std::length_error
 
     State* state_;
     std::uint32_t base_; // the function's slot; argument 1 is the next
@@ -204,8 +225,13 @@ public:
     template <class T>
     [[nodiscard]] std::optional<T> as() const;
 
-    // For tables (and objects with __index / __newindex): t[key].
+    // For tables (and objects with __index / __newindex): t[key], nil
+    // when indexing fails (index() gives the error).
     [[nodiscard]] Ref get(std::string_view key) const;
+
+    // t[key], or the error message (indexing a non-table, an __index that
+    // fails).
+    [[nodiscard]] std::expected<Ref, std::string> index(std::string_view key) const;
 
     template <class T>
     [[nodiscard]] std::optional<T> get(std::string_view key) const {
@@ -226,7 +252,11 @@ public:
     static Ref from_top(State& state);
     // t[key] = (the value on top, popped) in protected mode.
     [[nodiscard]] std::expected<void, std::string> set_from_top(std::string_view key) const;
+    // Pushes the value; it must be of the same interpreter as `state`, else
+    // std::invalid_argument (a value of another interpreter would be freed
+    // by its own collector while this one still uses it).
     void push_to(State& state) const;
+    // The thread to work in: the running one (a coroutine, inside one).
     [[nodiscard]] State* state() const;
 
 private:
@@ -266,7 +296,15 @@ struct Converter<T, std::enable_if_t<std::is_integral_v<T> && !std::is_same_v<T,
         return static_cast<T>(*i);
     }
 
-    static void push(Context& ctx, T v) { ctx.push_integer(static_cast<std::int64_t>(v)); }
+    // An unsigned value past Lua's integers becomes a float rather than
+    // wrapping around to a negative integer.
+    static void push(Context& ctx, T v) {
+        if (std::in_range<std::int64_t>(v)) {
+            ctx.push_integer(static_cast<std::int64_t>(v));
+        } else {
+            ctx.push_number(static_cast<double>(v));
+        }
+    }
 };
 
 template <class T>
@@ -305,6 +343,13 @@ struct Converter<std::string_view> {
 template <>
 struct Converter<const char*> {
     static constexpr std::string_view expected = "string";
+
+    // As a parameter: valid until the function returns (Lua strings end
+    // with a '\0').
+    static std::optional<const char*> get(Context& ctx, int n) {
+        const auto s = ctx.to_string(n);
+        return s ? std::optional<const char*>{s->data()} : std::nullopt;
+    }
 
     static void push(Context& ctx, const char* v) {
         if (v == nullptr) {
@@ -416,6 +461,13 @@ struct Arg {
     bool fetch(Context& ctx, int& n) {
         value = Converter<B>::get(ctx, n);
         if (!value) {
+            if constexpr (std::is_integral_v<B> && !std::is_same_v<B, bool>) {
+                if (ctx.to_number(n)) { // a number, but not one of B's
+                    ctx.arg_error(n, ctx.to_integer(n) ? "number out of range"
+                                                       : "number has no integer representation");
+                    return false;
+                }
+            }
             ctx.type_error(n, expected_name<B>(ctx));
             return false;
         }
@@ -560,26 +612,86 @@ struct Invoker<F, R, std::tuple<P...>> {
 
 // A member function pointer as a callable taking the object first (so the
 // object is argument 1: `obj:method(...)`); other callables as they are.
-template <class T, class R, class... P>
-auto method_callable(R (T::*f)(P...)) {
+// The object is a T, the bound class, which may derive from the class C
+// that declares the function (an inherited method).
+template <class T, class C, class R, class... P>
+    requires std::derived_from<T, C>
+auto method_callable(R (C::*f)(P...)) {
     return [f](T& self, P... a) -> R { return (self.*f)(std::forward<P>(a)...); };
 }
 
-template <class T, class R, class... P>
-auto method_callable(R (T::*f)(P...) const) {
+template <class T, class C, class R, class... P>
+    requires std::derived_from<T, C>
+auto method_callable(R (C::*f)(P...) const) {
     return [f](const T& self, P... a) -> R { return (self.*f)(std::forward<P>(a)...); };
 }
 
-template <class F>
+template <class T, class C, class R, class... P>
+    requires std::derived_from<T, C>
+auto method_callable(R (C::*f)(P...) noexcept) {
+    return [f](T& self, P... a) -> R { return (self.*f)(std::forward<P>(a)...); };
+}
+
+template <class T, class C, class R, class... P>
+    requires std::derived_from<T, C>
+auto method_callable(R (C::*f)(P...) const noexcept) {
+    return [f](const T& self, P... a) -> R { return (self.*f)(std::forward<P>(a)...); };
+}
+
+template <class T, class F>
     requires(!std::is_member_function_pointer_v<F>)
 auto method_callable(F f) {
     return f;
 }
 
+// The result types a Ref cannot give: views into a value that may be
+// collected once the stack slot holding it is popped. std::string instead.
+template <class R>
+inline constexpr bool dangling_result =
+    std::is_same_v<Bare<R>, std::string_view> || std::is_same_v<Bare<R>, const char*>;
+
 } // namespace detail
 
-// What the interpreter stores for a bound C++ function.
-using Function = std::function<int(Context&)>;
+// What the interpreter stores for a bound C++ function: any callable
+// `int(Context&)`, move-only ones too (like std::move_only_function).
+class Function {
+public:
+    Function() = default;
+
+    template <class F>
+        requires(!std::is_same_v<std::remove_cvref_t<F>, Function> &&
+                 std::is_invocable_r_v<int, std::decay_t<F>&, Context&>)
+    Function(F&& f) // NOLINT(google-explicit-constructor): like std::function
+        : callable_(std::make_unique<Callable<std::decay_t<F>>>(std::forward<F>(f))) {}
+
+    int operator()(Context& ctx) const { return callable_->call(ctx); }
+
+    explicit operator bool() const { return callable_ != nullptr; }
+
+private:
+    struct Base {
+        Base() = default;
+        Base(const Base&) = delete;
+        Base& operator=(const Base&) = delete;
+        Base(Base&&) = delete;
+        Base& operator=(Base&&) = delete;
+        virtual ~Base() = default;
+        virtual int call(Context& ctx) = 0;
+    };
+
+    template <class F>
+    struct Callable final : Base {
+        explicit Callable(F&& f) : f(std::move(f)) {}
+
+        explicit Callable(const F& f) : f(f) {}
+
+        int call(Context& ctx) override { return std::invoke(f, ctx); }
+
+        F f;
+    };
+
+    std::unique_ptr<Base> callable_;
+};
 
 // Wraps any callable (a function pointer, a lambda without `auto`
 // parameters, a std::function) as a Function: its arguments are converted
@@ -589,9 +701,11 @@ using Function = std::function<int(Context&)>;
 // is: it pushes its results and returns how many.
 template <class F>
 Function bind(F f) {
-    if constexpr (std::is_invocable_r_v<int, F&, Context&> &&
-                  std::is_same_v<typename detail::Signature<std::decay_t<F>>::Params,
-                                 std::tuple<Context&>>) {
+    if constexpr (std::is_same_v<F, Function>) {
+        return f;
+    } else if constexpr (std::is_invocable_r_v<int, F&, Context&> &&
+                         std::is_same_v<typename detail::Signature<std::decay_t<F>>::Params,
+                                        std::tuple<Context&>>) {
         return Function{std::move(f)};
     } else {
         using Sig = detail::Signature<std::decay_t<F>>;
@@ -610,16 +724,20 @@ T* Context::push_object(A&&... args) {
     if (memory == nullptr) {
         return nullptr;
     }
-    // The object belongs to the userdata, which the collector owns.
+    // The object belongs to the userdata, which the collector owns. If the
+    // constructor throws, the userdata stays blank: no __gc, no destructor.
     T* object = new (memory) T(std::forward<A>(args)...); // NOLINT(cppcoreguidelines-owning-memory)
-    if constexpr (!std::is_trivially_destructible_v<T>) {
-        set_destructor([](void* p) { static_cast<T*>(p)->~T(); });
+    if constexpr (std::is_trivially_destructible_v<T>) {
+        finish_object(&class_tag<T>, nullptr);
+    } else {
+        finish_object(&class_tag<T>, [](void* p) { static_cast<T*>(p)->~T(); });
     }
     return object;
 }
 
 template <class T>
 std::optional<T> Ref::as() const {
+    static_assert(!detail::dangling_result<T>, "a view would dangle: use std::string");
     if (heap_ == nullptr) {
         if constexpr (detail::IsOptional<T>::value) {
             return T{};
@@ -643,6 +761,7 @@ std::expected<void, std::string> Ref::set(std::string_view key, V&& value) const
 
 template <class R, class... A>
 std::expected<R, std::string> Ref::call(A&&... args) const {
+    static_assert(!detail::dangling_result<R>, "a view would dangle: use std::string");
     if (heap_ == nullptr) {
         return std::unexpected(std::string{"attempt to call a nil value"});
     }
@@ -727,7 +846,7 @@ public:
     // whose first parameter is T& (or const T&).
     template <class F>
     Class& method(std::string_view name, F f) {
-        add_function(name, bind(detail::method_callable(f)));
+        add_function(name, bind(detail::method_callable<T>(f)));
         return *this;
     }
 
@@ -753,7 +872,7 @@ public:
     // anything else, converted as for methods).
     template <class F>
     Class& meta(std::string_view event, F f) {
-        add_meta(event, bind(detail::method_callable(f)));
+        add_meta(event, bind(detail::method_callable<T>(f)));
         return *this;
     }
 
@@ -768,9 +887,22 @@ private:
     template <class G>
     static Function getter_function(G getter) {
         if constexpr (std::is_member_object_pointer_v<G>) {
-            return bind([getter](const T& self) { return self.*getter; });
+            using M = std::remove_cvref_t<decltype(std::declval<T&>().*getter)>;
+            if constexpr (detail::LuaScalar<M> || detail::IsOptional<M>::value) {
+                return bind([getter](const T& self) { return self.*getter; });
+            } else {
+                // A member of a bound class type is the member itself, not a
+                // copy: `car.engine.hp = 1` changes the car's engine.
+                return Function{[getter](Context& ctx) -> int {
+                    T* self = ctx.to_object<T>(1);
+                    if (self == nullptr) {
+                        return ctx.type_error(1, ctx.class_name(&class_tag<T>));
+                    }
+                    return ctx.push_member(1, &(self->*getter), &class_tag<M>) ? 1 : function_error;
+                }};
+            }
         } else {
-            return bind(detail::method_callable(getter));
+            return bind(detail::method_callable<T>(getter));
         }
     }
 
@@ -780,7 +912,7 @@ private:
             using V = std::remove_cvref_t<decltype(std::declval<T&>().*setter)>;
             return bind([setter](T& self, V value) { self.*setter = std::move(value); });
         } else {
-            return bind(detail::method_callable(setter));
+            return bind(detail::method_callable<T>(setter));
         }
     }
 };

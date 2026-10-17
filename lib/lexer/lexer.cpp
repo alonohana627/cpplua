@@ -49,15 +49,16 @@ void append_utf8(std::string& out, std::uint32_t code) {
     std::array<char, 6> bytes{};
     std::size_t count = 0;
     std::uint32_t first_max = 0x3F;
+    // (At most 6 bytes for a value up to 2^31: the index stays in range.)
     do {
-        bytes.at(5 - count) = static_cast<char>(0x80U | (code & 0x3FU));
+        bytes[5 - count] = static_cast<char>(0x80U | (code & 0x3FU));
         ++count;
         code >>= 6U;
         first_max >>= 1U;
     } while (code > first_max);
     // The first byte: as many leading 1 bits as there are bytes, then a 0,
     // then what is left of the code.
-    bytes.at(5 - count) = static_cast<char>(((~first_max << 1U) | code) & 0xFFU);
+    bytes[5 - count] = static_cast<char>(((~first_max << 1U) | code) & 0xFFU);
     ++count;
     out.append(bytes.data() + (6 - count), count);
 }

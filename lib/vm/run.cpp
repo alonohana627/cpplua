@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <new>
 #include <string>
 
 #include <cpplua/source_file.hpp>
@@ -161,8 +162,12 @@ std::expected<void, std::string> run_protected(State& state, std::string_view so
 
 } // namespace
 
-std::expected<std::vector<std::string>, std::string>
-run_text(State& state, std::string_view source, std::string_view chunk_name, ErrorReport report) {
+namespace {
+
+std::expected<std::vector<std::string>, std::string> run_text_body(State& state,
+                                                                   std::string_view source,
+                                                                   std::string_view chunk_name,
+                                                                   ErrorReport report) {
     const std::uint32_t base = state.top;
     if (auto ran = run_protected(state, source, chunk_name, base, report); !ran) {
         return std::unexpected(std::move(ran.error()));
@@ -183,10 +188,32 @@ run_text(State& state, std::string_view source, std::string_view chunk_name, Err
     return texts;
 }
 
+} // namespace
+
+std::expected<std::vector<std::string>, std::string>
+run_text(State& state, std::string_view source, std::string_view chunk_name, ErrorReport report) {
+    // Loading and converting the results to text are not protected calls:
+    // out of memory there is the same error as inside.
+    const std::uint32_t base = state.top;
+    try {
+        return run_text_body(state, source, chunk_name, report);
+    } catch (const std::bad_alloc&) {
+        state.top = base;
+        return std::unexpected(std::string{"not enough memory"});
+    }
+}
+
 std::expected<std::vector<Value>, std::string> run(State& state, std::string_view source,
                                                    std::string_view chunk_name) {
     const std::uint32_t base = state.top;
-    if (auto ran = run_protected(state, source, chunk_name, base, ErrorReport::Message); !ran) {
+    std::expected<void, std::string> ran;
+    try {
+        ran = run_protected(state, source, chunk_name, base, ErrorReport::Message);
+    } catch (const std::bad_alloc&) {
+        state.top = base;
+        ran = std::unexpected(std::string{"not enough memory"});
+    }
+    if (!ran) {
         return std::unexpected(std::move(ran.error()));
     }
     std::vector<Value> results;

@@ -1,0 +1,136 @@
+Chunk
+  Local n
+    Integer 20000
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          Binary ..
+            String "return 1"
+            MethodCall rep
+              Paren
+                String "+1"
+              Name n (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          Binary ..
+            String "return 'x'"
+            MethodCall rep
+              Paren
+                String " == 'x'"
+              Name n (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          Binary ..
+            String "return 1"
+            MethodCall rep
+              Paren
+                String " and 1"
+              Name n (local 0)
+      Call
+        Call
+          Name load
+          Binary ..
+            String "return nil"
+            Binary ..
+              MethodCall rep
+                Paren
+                  String " or nil"
+                Name n (local 0)
+              String " or 2"
+  Local f
+  Assign
+    Targets
+      Name f (local 1)
+    Values
+      Function() [upvalues: f]
+        Return
+          Name f (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          Binary ..
+            String "local f = ... return f"
+            Binary ..
+              MethodCall rep
+                Paren
+                  String "()"
+                Name n (local 0)
+              String " == f"
+        Name f (local 1)
+  Local t
+    Table
+  Assign
+    Targets
+      Index
+        Name t (local 2)
+        String "a"
+    Values
+      Name t (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          Binary ..
+            String "local t = ... return t"
+            Binary ..
+              MethodCall rep
+                Paren
+                  String ".a"
+                Name n (local 0)
+              String " == t"
+        Name t (local 2)
+  Local o
+    Table
+  FunctionStatement (method)
+    Index
+      Name o (local 3)
+      String "m"
+    Function(self)
+      Return
+        Name self (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          Binary ..
+            String "local o = ... return o"
+            Binary ..
+              MethodCall rep
+                Paren
+                  String ":m()"
+                Name n (local 0)
+              String " == o"
+        Name o (local 3)
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          Binary ..
+            String "local t = ... return t"
+            Binary ..
+              MethodCall rep
+                Paren
+                  String "['a']"
+                Name n (local 0)
+              String ".a == t"
+        Name t (local 2)

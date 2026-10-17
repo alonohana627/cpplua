@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <bit>
 #include <cstddef>
 #include <cstdint>
@@ -252,6 +253,15 @@ public:
     int base_hook_count = 0;
     int hook_count_left = 0;
     int old_pc = 0;
+
+    // The table of instruction handlers the VM dispatches through: the plain
+    // one, or one that runs the hooks first while this thread has hooks or
+    // an interrupt is waiting (update_dispatch, vm/execute.cpp). Per thread,
+    // so a hook costs the other threads and interpreters nothing.
+    const void* dispatch = nullptr;
+    // request_interrupt was called for this thread, maybe from a signal
+    // handler or another thread of the program.
+    std::atomic<bool> interrupt_requested{false};
 
     // The error that stopped execute(), until a protected call takes it
     // (R1.1). A root of the collector.

@@ -8,6 +8,8 @@
 #include <bit>
 #include <cstdlib>
 #include <limits>
+#include <new>
+#include <string>
 #include <string_view>
 
 #include "gc/heap.hpp"
@@ -653,7 +655,11 @@ void Heap::check_sizes() {
     // checkSizes: shrink the string table when it is mostly empty.
     if (short_count_ < buckets_.size() / 4) {
         const std::ptrdiff_t old_debt = debt_;
-        resize_string_table(buckets_.size() / 2);
+        try {
+            resize_string_table(buckets_.size() / 2);
+        } catch (const std::bad_alloc&) {
+            return; // (luaS_resize keeps the table when it cannot shrink it)
+        }
         estimate_ += debt_ - old_debt;
     }
 }
@@ -1177,8 +1183,8 @@ GcObject* Heap::next_to_finalize() {
 }
 
 void Heap::call_finalizer() {
-    // GCTM: __gc(o) in protected mode, with collection stopped; errors are
-    // ignored (Lua makes them warnings, off by default).
+    // GCTM: __gc(o) in protected mode, with collection stopped and no
+    // hooks; an error becomes a warning (shown once warnings are on).
     GcObject* o = next_to_finalize();
     const Value object = o->type == ObjectType::Userdata ? Value::userdata(object_cast<Userdata>(o))
                                                          : Value::table(object_cast<Table>(o));
@@ -1195,8 +1201,21 @@ void Heap::call_finalizer() {
     thread.top = top + 2;
     CallInfo* ci = thread.ci;
     ci->finalizer = true;
-    protected_call(thread, top, 0, Value::nil());
+    const bool allow_hook = thread.allow_hook;
+    thread.allow_hook = false;
+    const Status status = protected_call(thread, top, 0, Value::nil());
+    thread.allow_hook = allow_hook;
     ci->finalizer = false;
+    if (status != Status::Ok && warnings_on_) {
+        // luaE_warnerror
+        const Value error = thread.get(top);
+        const std::string_view message =
+            error.is_string() ? error.as_string()->view() : "error object is not a string";
+        try {
+            write_error("Lua warning: error in __gc (" + std::string{message} + ")\n");
+        } catch (...) { // NOLINT(bugprone-empty-catch): a warning is never an error
+        }
+    }
     thread.top = top;
     in_finalizer_ = was_in_finalizer;
 }

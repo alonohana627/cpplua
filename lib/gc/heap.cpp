@@ -1,5 +1,6 @@
 #include "gc/heap.hpp"
 
+#include <algorithm>
 #include <array>
 #include <cstdio>
 #include <cstring>
@@ -10,6 +11,7 @@
 
 #include "value/table.hpp"
 #include "value/userdata.hpp"
+#include "vm/execute.hpp"
 #include "vm/function.hpp"
 #include "vm/proto.hpp"
 #include "vm/state.hpp"
@@ -50,6 +52,16 @@ Heap::Heap(std::uint32_t seed)
     }
     name_string_ = new_string("__name");
     fix(name_string_);
+    memory_error_string_ = new_string("not enough memory");
+    fix(memory_error_string_);
+    hook_key_string_ = new_string("_HOOKKEY");
+    fix(hook_key_string_);
+    constexpr std::array<std::string_view, 5> hook_events{"call", "return", "line", "count",
+                                                          "tail call"};
+    for (std::size_t e = 0; e < hook_events.size(); ++e) {
+        hook_event_strings_.at(e) = new_string(hook_events.at(e));
+        fix(hook_event_strings_.at(e));
+    }
     // The registry's tables: the globals, and the loaded modules with the
     // globals as "_G" (luaL_openlibs does that through luaopen_base).
     // NOLINTNEXTLINE(cppcoreguidelines-prefer-member-initializer): the same
@@ -96,8 +108,16 @@ Heap::~Heap() {
 // ---- Memory ----
 
 void* Heap::allocate(std::size_t size) {
+    // Out of memory, this throws std::bad_alloc before anything changed;
+    // protected calls and the C++ function boundary turn it into the
+    // "not enough memory" error (vm/execute.cpp).
+    if (memory_limit_ != 0 && size > memory_limit_ - std::min(memory_limit_, total_bytes()))
+        [[unlikely]] {
+        throw std::bad_alloc{};
+    }
+    void* block = pool_.allocate(size);
     debt_ += static_cast<std::ptrdiff_t>(size);
-    return pool_.allocate(size);
+    return block;
 }
 
 void Heap::free(void* block, std::size_t size) {
@@ -114,7 +134,11 @@ void Heap::set_debt(std::ptrdiff_t debt) {
 }
 
 State* Heap::new_thread() {
-    return link_new<State>(allocate(sizeof(State)), ObjectType::Thread);
+    // lua_newthread: the new thread has the hooks of the running one (its
+    // hook function stays the running thread's, in _HOOKKEY).
+    State* thread = link_new<State>(allocate(sizeof(State)), ObjectType::Thread);
+    set_hook(*thread, running_->hook_mask, running_->base_hook_count);
+    return thread;
 }
 
 template <typename T>
@@ -210,7 +234,8 @@ const String* Heap::intern(std::string_view bytes) {
     const std::uint32_t hash = string_hash(bytes, seed_);
     String** bucket = &buckets_[hash & (buckets_.size() - 1)];
     for (String* s = *bucket; s != nullptr; s = s->next_in_bucket_) {
-        if (s->length_ == bytes.size() && std::memcmp(s->data(), bytes.data(), bytes.size()) == 0) {
+        if (s->length_ == bytes.size() &&
+            (bytes.empty() || std::memcmp(s->data(), bytes.data(), bytes.size()) == 0)) {
             // A string the collector found dead but has not freed yet (it
             // is in the sweep phase) comes back to life.
             if (is_dead(s)) {
@@ -224,7 +249,9 @@ const String* Heap::intern(std::string_view bytes) {
         bucket = &buckets_[hash & (buckets_.size() - 1)];
     }
     String* s = allocate_string(bytes.size(), hash, true);
-    std::memcpy(bytes_of(s), bytes.data(), bytes.size());
+    if (!bytes.empty()) { // (a view of nothing may have a null data())
+        std::memcpy(bytes_of(s), bytes.data(), bytes.size());
+    }
     s->next_in_bucket_ = *bucket;
     *bucket = s;
     ++short_count_;

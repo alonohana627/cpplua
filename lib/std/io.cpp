@@ -5,6 +5,7 @@
 // goes through the heap's output functions, as print's does, so an
 // embedding program (and the tests) can capture it.
 
+#include <algorithm>
 #include <array>
 #include <bit>
 #include <cerrno>
@@ -27,6 +28,7 @@
 #include "std/libs.hpp"
 #include "value/convert.hpp"
 #include "value/locale.hpp"
+#include "value/number.hpp"
 #include "value/table.hpp"
 #include "value/userdata.hpp"
 #include "vm/execute.hpp"
@@ -681,17 +683,24 @@ constexpr int max_line_arguments = 250; // MAXARGLINE
 int lines_step(State& state) {
     const auto* closure = state.get(state.ci->func).as_c_closure();
     const auto upvalues = closure->upvalues();
+    // debug.setupvalue can replace any upvalue, so none of them is trusted.
     Stream* s = to_stream(upvalues[0]);
+    if (s == nullptr) {
+        return raise_error(state, "bad file in 'lines' iterator");
+    }
     if (s->closer == Closer::Closed) {
         return raise_error(state, "file is already closed");
     }
-    const auto n = static_cast<int>(upvalues[1].as_integer());
+    // lua_tointeger: 0 when it is not an integer; the formats past the
+    // closure's upvalues are nil, as lua_upvalueindex past the count reads.
+    const auto count = to_integer(upvalues[1]).value_or(0);
+    const auto n = static_cast<int>(std::clamp<std::int64_t>(count, 0, max_line_arguments));
     state.top = arg_slot(state, 1) + 1; // lua_settop(L, 1)
     if (!state.check_stack(static_cast<std::uint32_t>(n) + 20)) {
         return raise_error(state, "stack overflow (too many arguments)");
     }
-    for (int i = 0; i < n; ++i) {
-        state.push(upvalues[3 + static_cast<std::size_t>(i)]);
+    for (std::size_t i = 0; std::cmp_less(i, n); ++i) {
+        state.push(3 + i < upvalues.size() ? upvalues[3 + i] : Value::nil());
     }
     const int results = read_values(state, *s, 2);
     if (results == c_function_error) {

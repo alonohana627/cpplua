@@ -22,10 +22,10 @@ State::State(Heap& heap) : stack_last(basic_stack_size), top(1), heap_(&heap) {
     base_ci.wanted = 0;
     base_ci.top = top + min_stack;
     ci = &base_ci;
+    update_dispatch(*this);
 }
 
 State::~State() {
-    set_hook(*this, 0, 0); // a thread with hooks no longer counts
     ci = &base_ci;
     while (base_ci.next != nullptr) {
         CallInfo* next = base_ci.next;
@@ -52,8 +52,15 @@ void State::resize_stack(std::uint32_t size) {
     // they need nothing.
     const std::uint32_t old_slots = stack_last + extra_stack;
     const std::uint32_t new_slots = size + extra_stack;
+    // Out of memory, the stack stays as it was.
     auto* tags = static_cast<Tag*>(heap_->allocate(new_slots * sizeof(Tag)));
-    auto* values = static_cast<std::uint64_t*>(heap_->allocate(new_slots * sizeof(std::uint64_t)));
+    std::uint64_t* values = nullptr;
+    try {
+        values = static_cast<std::uint64_t*>(heap_->allocate(new_slots * sizeof(std::uint64_t)));
+    } catch (...) {
+        heap_->free(tags, new_slots * sizeof(Tag));
+        throw;
+    }
     const std::uint32_t kept = std::min(old_slots, new_slots);
     std::memcpy(tags, stack_tags, kept * sizeof(Tag));
     std::memcpy(values, stack_values, kept * sizeof(std::uint64_t));
@@ -103,7 +110,12 @@ void State::shrink_stack() {
     const std::uint32_t in_use = std::max(limit + 1, min_stack);
     const std::uint32_t max = in_use > max_stack / 3 ? max_stack : in_use * 3;
     if (in_use <= max_stack && stack_last > max) {
-        resize_stack(in_use > max_stack / 2 ? max_stack : in_use * 2);
+        try {
+            resize_stack(in_use > max_stack / 2 ? max_stack : in_use * 2);
+        } catch (const std::bad_alloc&) {
+            // Lua ignores a failed shrink too; it runs inside the collector
+            // and after errors, where nothing may throw.
+        }
     }
     shrink_call_infos();
 }

@@ -1,0 +1,77 @@
+Chunk
+  Local f
+    Call
+      Index
+        Name io
+        String "tmpfile"
+  CallStatement
+    MethodCall write
+      Name f (local 0)
+      String "a\nb\n"
+  CallStatement
+    MethodCall seek
+      Name f (local 0)
+      String "set"
+  Local it
+    MethodCall lines
+      Name f (local 0)
+      String "l"
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "setupvalue"
+      Name it (local 1)
+      Integer 2
+      Integer 50
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name it (local 1)
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "setupvalue"
+      Name it (local 1)
+      Integer 2
+      String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name it (local 1)
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "setupvalue"
+      Name it (local 1)
+      Integer 2
+      Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name it (local 1)
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "setupvalue"
+      Name it (local 1)
+      Integer 1
+      String "not a file"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name it (local 1)
+  CallStatement
+    MethodCall close
+      Name f (local 0)

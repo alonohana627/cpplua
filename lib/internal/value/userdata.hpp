@@ -60,6 +60,10 @@ public:
     // a C++ function can check it was given the right kind of object.
     const void* type_tag = nullptr;
     Destructor destructor = nullptr;
+    // The block holds a pointer to the C++ object, which lives in another
+    // object (a data member of a bound class, Context::push_member), kept
+    // alive by user value 2.
+    bool holds_pointer = false;
     // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
 
 private:

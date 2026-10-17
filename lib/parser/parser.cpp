@@ -409,7 +409,7 @@ std::expected<LocalName::Attribute, SyntaxError> Parser::parse_attribute() {
     if (!check(TokenKind::Name)) {
         return error_expected(TokenKind::Name);
     }
-    const std::string attribute = std::get<std::string>(current_.value);
+    const std::string attribute = *std::get_if<std::string>(&current_.value);
     if (auto moved = advance(); !moved) {
         return std::unexpected(std::move(moved.error()));
     }
@@ -586,7 +586,10 @@ std::expected<StatId, SyntaxError> Parser::parse_jump() {
         return std::unexpected(std::move(moved.error()));
     }
     if (keyword == TokenKind::Break) {
-        scopes_.add_break(line); // resolved when the enclosing loop ends (G8.6)
+        // resolved when the enclosing loop ends (G8.6)
+        if (auto added = scopes_.add_break(line); !added) {
+            return semantic_error(added.error());
+        }
         return add_statement(BreakStat{}, line);
     }
 
@@ -596,7 +599,10 @@ std::expected<StatId, SyntaxError> Parser::parse_jump() {
         return std::unexpected(std::move(name.error()));
     }
     if (keyword == TokenKind::Goto) {
-        scopes_.add_goto(*name, name_line); // resolved now, or when its label appears (G8.2)
+        // resolved now, or when its label appears (G8.2)
+        if (auto added = scopes_.add_goto(*name, name_line); !added) {
+            return semantic_error(added.error());
+        }
         return add_statement(GotoStat{.label = *name}, line);
     }
     // ::Name:: (G3.4). parse_block() registers the label with the scopes,
@@ -1033,11 +1039,13 @@ std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
         expression = VarargExpr{};
         break;
     case TokenKind::Integer:
-        expression = IntegerExpr{.value = std::get<std::int64_t>(current_.value)};
+        expression = IntegerExpr{.value = *std::get_if<std::int64_t>(&current_.value)};
         break;
-    case TokenKind::Float: expression = FloatExpr{.value = std::get<double>(current_.value)}; break;
+    case TokenKind::Float:
+        expression = FloatExpr{.value = *std::get_if<double>(&current_.value)};
+        break;
     case TokenKind::String:
-        expression = StringExpr{.text = ast_.add_text(std::get<std::string>(current_.value))};
+        expression = StringExpr{.text = ast_.add_text(*std::get_if<std::string>(&current_.value))};
         break;
     case TokenKind::LBrace: return parse_table();
     case TokenKind::Function: { // function funcbody (G5.1)
@@ -1303,35 +1311,22 @@ std::expected<TableField, SyntaxError> Parser::parse_table_field() {
 std::expected<ExprId, SyntaxError> Parser::make_name(TextRange name, int line) {
     // Like Lua's singlevar(): resolve the name; for a global, also resolve
     // _ENV, since `x` means `_ENV.x` (G5.6).
-    auto variable = scopes_.resolve(name);
-    if (!variable) {
-        return upvalue_limit_error(variable.error().function_line);
-    }
+    // (The limit of 255 upvalues is the compiler's to check: it knows which
+    // <const> locals are compile-time constants, which need no upvalue.)
+    const VariableRef variable = scopes_.resolve(name);
     VariableRef environment;
-    if (variable->kind == VariableRef::Kind::Global) {
-        auto env = scopes_.resolve(env_name_);
-        if (!env) {
-            return upvalue_limit_error(env.error().function_line);
-        }
-        environment = *env;
+    if (variable.kind == VariableRef::Kind::Global) {
+        environment = scopes_.resolve(env_name_);
     }
-    return add_expression(NameExpr{.name = name, .variable = *variable, .environment = environment},
+    return add_expression(NameExpr{.name = name, .variable = variable, .environment = environment},
                           line);
-}
-
-std::unexpected<SyntaxError> Parser::upvalue_limit_error(int function_line) const {
-    // Lua's errorlimit(): a syntax error, so it shows the current token.
-    const std::string where = function_line == 0
-                                  ? std::string("main function")
-                                  : std::format("function at line {}", function_line);
-    return error(std::format("too many upvalues (limit is {}) in {}", Scopes::max_upvalues, where));
 }
 
 std::expected<TextRange, SyntaxError> Parser::expect_name() {
     if (!check(TokenKind::Name)) {
         return error_expected(TokenKind::Name);
     }
-    const TextRange name = ast_.add_text(std::get<std::string>(current_.value));
+    const TextRange name = ast_.add_text(*std::get_if<std::string>(&current_.value));
     if (auto moved = advance(); !moved) {
         return std::unexpected(std::move(moved.error()));
     }
@@ -1417,6 +1412,11 @@ std::unexpected<SyntaxError> Parser::error(std::string_view message,
 
 std::unexpected<SyntaxError> Parser::semantic_error(std::string_view message,
                                                     std::source_location origin) const {
+    if (message == Scopes::too_many_labels) {
+        // A memory limit in Lua (luaM_growvector), raised without a position.
+        return std::unexpected(
+            SyntaxError{.message = std::string{message}, .line = current_.line, .origin = origin});
+    }
     return std::unexpected(
         make_syntax_error(lexer_.chunk_name(), current_.line, message, "", origin));
 }
@@ -1432,8 +1432,12 @@ std::string Parser::near_current() const {
         return std::string{near_eof};
     }
     const std::string_view text = source_.substr(current_.offset, current_.length);
-    // A stray byte shows as '@', or as its value when unprintable: '<\200>'.
+    // A stray byte shows as '@', or as its value when unprintable: '<\200>';
+    // a NUL byte not at all (Lua's lexerror tests `if (token)`).
     if (current_.kind == TokenKind::Other) {
+        if (text.front() == '\0') {
+            return "";
+        }
         return near_char(static_cast<unsigned char>(text.front()));
     }
     // A short string is the exception: like Lua, show its value after escapes,
@@ -1442,7 +1446,7 @@ std::string Parser::near_current() const {
     if (current_.kind == TokenKind::String && (text.front() == '"' || text.front() == '\'')) {
         const char quote = text.front();
         return near_text(
-            std::format("{}{}{}", quote, std::get<std::string>(current_.value), quote));
+            std::format("{}{}{}", quote, *std::get_if<std::string>(&current_.value), quote));
     }
     return near_text(text);
 }

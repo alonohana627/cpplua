@@ -29,7 +29,7 @@
     do {                                                                                           \
         const std::uint32_t check_top_ = (TOP);                                                    \
         const Proto* check_proto_ = std::bit_cast<const LuaClosure*>(CLOSURE)->proto;              \
-        if (state->free_slots(check_top_) <= check_proto_->max_stack_size ||                      \
+        if (state->free_slots(check_top_) <= check_proto_->max_stack_size ||                       \
             state->ci->next == nullptr) [[unlikely]] {                                             \
             state->top = check_top_;                                                               \
             VM_COLD(GrowAndRetry);                                                                 \
@@ -118,9 +118,9 @@
 #define VM_FINISH_RETURN(N)                                                                        \
     do {                                                                                           \
         CallInfo* ret_ci_ = state->ci;                                                             \
-        const std::uint32_t ret_first_ = ret_ci_->func + 1 + u32(get_a(i));                       \
+        const std::uint32_t ret_first_ = ret_ci_->func + 1 + u32(get_a(i));                        \
         const int ret_n_ = (N);                                                                    \
-        if (get_c(i) != 0) { /* a vararg function: back to the real function slot */              \
+        if (get_c(i) != 0) { /* a vararg function: back to the real function slot */               \
             ret_ci_->func -= u32(ret_ci_->extra_args + get_c(i));                                  \
         }                                                                                          \
         state->top = ret_first_ + u32(ret_n_);                                                     \
@@ -225,9 +225,14 @@ VM_WARM_HANDLER(CallOther) {
         VM_NEXT();
     }
     // A tail call: this function returns what the C++ function returned
-    // (luaD_poscall after luaD_pretailcall).
+    // (luaD_poscall after luaD_pretailcall), with its return hook.
     CallInfo* ci = state->ci;
     const int n = static_cast<int>(state->top - func);
+    if (state->hook_mask != 0) [[unlikely]] {
+        if (const Status status = return_hook(state, ci, func, n); status != Status::Ok) {
+            return status;
+        }
+    }
     if (get_c(i) != 0) { // a vararg function: back to the real function slot
         ci->func -= u32(ci->extra_args + get_c(i));
     }
@@ -242,7 +247,9 @@ VM_WARM_HANDLER(ForIterator) {
     // library's functions (luaB_next, ipairsaux); anything else is a call.
     const int a = get_a(i);
     const auto iterator = std::bit_cast<CFunction>(vals[a + 4]);
-    if (tags[a + 4] == Tag::CFunction && tags[a + 5] == Tag::Table) {
+    // (Not with call or return hooks: they must see the iterator's calls.)
+    if (tags[a + 4] == Tag::CFunction && tags[a + 5] == Tag::Table &&
+        (state->hook_mask & (hook_call | hook_return)) == 0) {
         Table* t = table_of(vals[a + 5]);
         std::array<Value, 2> results{};
         int n = -1;
@@ -271,8 +278,9 @@ VM_WARM_HANDLER(ForIterator) {
         if (n >= 0) {
             const int wanted = get_c(i);
             for (int j = 0; j < wanted; ++j) {
+                // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-constant-array-index): j < n <= 2
                 set_register(tags, vals, a + 4 + j,
-                             j < n ? results.at(static_cast<std::size_t>(j)) : Value::nil());
+                             j < n ? results[static_cast<std::size_t>(j)] : Value::nil());
             }
             VM_NEXT();
         }
@@ -342,7 +350,8 @@ VM_WARM_HANDLER(Index) {
     }
     const std::uint32_t base = base_index(state, tags);
     protect(state, pc);
-    if (const Status status = finish_get(state, t, key, base + u32(get_a(i)), source); status != Status::Ok) {
+    if (const Status status = finish_get(state, t, key, base + u32(get_a(i)), source);
+        status != Status::Ok) {
         return status;
     }
     VM_RELOAD(base);
@@ -402,8 +411,7 @@ VM_COLD_HANDLER(FloatArith) {
     const int b = get_b(i);
     const bool constant = get_op(i) == OpCode::ModK || get_op(i) == OpCode::PowK;
     const Tag tc = constant ? k[get_c(i)].tag() : tags[get_c(i)];
-    const std::uint64_t* pc_value =
-        constant ? k[get_c(i)].payload_address() : &vals[get_c(i)];
+    const std::uint64_t* pc_value = constant ? k[get_c(i)].payload_address() : &vals[get_c(i)];
     const bool power = get_op(i) == OpCode::Pow || get_op(i) == OpCode::PowK;
     if (float_arith(tags, vals, get_a(i), tags[b], &vals[b], tc, pc_value,
                     power ? float_power : float_modulo)) {
@@ -419,7 +427,8 @@ VM_COLD_HANDLER(Unary) {
     const int b = get_b(i);
     const Operand operand{.value = register_value(tags, vals, b), .reg = b};
     const std::uint32_t base = base_index(state, tags);
-    if (const Status status = arith_slow(state, pc, operand, operand, event, base + u32(get_a(i))); status != Status::Ok) {
+    if (const Status status = arith_slow(state, pc, operand, operand, event, base + u32(get_a(i)));
+        status != Status::Ok) {
         return status;
     }
     VM_RELOAD(base);
@@ -449,7 +458,9 @@ VM_COLD_HANDLER(Compare) {
     bool cond = false;
     Status status = Status::Ok;
     switch (get_op(i)) {
-    case OpCode::Eq: status = equal_slow(state, pc, left, register_value(tags, vals, get_b(i)), cond); break;
+    case OpCode::Eq:
+        status = equal_slow(state, pc, left, register_value(tags, vals, get_b(i)), cond);
+        break;
     case OpCode::EqK: cond = equals(left, k[get_b(i)]); break;
     case OpCode::Lt:
     case OpCode::Le:
@@ -1186,7 +1197,8 @@ VM_HANDLER(Close) {
 VM_HANDLER(Tbc) {
     // luaF_newtbcupval: R[A] becomes a to-be-closed variable (M6.1).
     const int a = get_a(i);
-    if (const Status status = new_to_be_closed(state, pc, base_index(state, tags) + u32(a), a); status != Status::Ok) {
+    if (const Status status = new_to_be_closed(state, pc, base_index(state, tags) + u32(a), a);
+        status != Status::Ok) {
         return status;
     }
     VM_NEXT();
@@ -1217,7 +1229,8 @@ VM_HANDLER(Eq) {
         } else if (ta == Tag::LongString || ta == Tag::Table || ta == Tag::Userdata) {
             VM_COLD(Compare); // long strings compare their bytes; tables and userdata try __eq
         }
-    } else if ((ta == Tag::Integer || ta == Tag::Float) && (tb == Tag::Integer || tb == Tag::Float)) {
+    } else if ((ta == Tag::Integer || ta == Tag::Float) &&
+               (tb == Tag::Integer || tb == Tag::Float)) {
         VM_COLD(Compare); // an integer and a float
     }
     VM_COND_JUMP(cond);
@@ -1563,8 +1576,8 @@ VM_HANDLER(Closure) {
     const auto upvalues = closure->upvalues();
     for (std::size_t j = 0; j < upvalues.size(); ++j) {
         const Proto::UpvalueInfo& info = p->upvalues[j];
-        upvalues[j] = info.in_stack ? state->find_upvalue(base + info.index)
-                                    : enclosing->upvalue(info.index);
+        upvalues[j] =
+            info.in_stack ? state->find_upvalue(base + info.index) : enclosing->upvalue(info.index);
         state->heap().object_barrier(closure, upvalues[j]);
     }
     VM_CHECK_GC(base + u32(a) + 1);

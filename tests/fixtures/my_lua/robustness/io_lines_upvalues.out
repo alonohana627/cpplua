@@ -1,0 +1,5 @@
+false	bad argument #3 to '?' (string expected, got nil)
+true	b
+true
+false	bad file in 'lines' iterator
+

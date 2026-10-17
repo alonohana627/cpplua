@@ -137,9 +137,6 @@ private:
     // global (G5.6). Lua's singlevar().
     std::expected<ExprId, SyntaxError> make_name(TextRange name, int line);
 
-    // "too many upvalues (limit is 255) in function at line N" (G10).
-    [[nodiscard]] std::unexpected<SyntaxError> upvalue_limit_error(int function_line) const;
-
     // The current token must be a Name: moves past it and returns its text,
     // or the error "<name> expected".
     std::expected<TextRange, SyntaxError> expect_name();

@@ -57,17 +57,25 @@ Status report(State& state, Status status) {
     return status;
 }
 
+// The thread a Ctrl-C interrupts (lua.c's globalL): a signal handler gets
+// no arguments, so it has to be here.
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables): read by the signal handler
+std::atomic<State*> interrupt_target{nullptr};
+
 // laction: Ctrl-C stops the running Lua code at its next instruction
 // ("interrupted!").
 extern "C" void on_interrupt(int /*signal*/) {
     std::signal(SIGINT, SIG_DFL); // a second Ctrl-C ends the program
-    request_interrupt();
+    if (State* state = interrupt_target.load()) {
+        request_interrupt(*state);
+    }
 }
 
 // docall: the function and its `nargs` arguments on the top, called with
 // the traceback message handler.
 Status docall(State& state, int nargs, int nresults) {
     const std::uint32_t func = state.top - static_cast<std::uint32_t>(nargs) - 1;
+    interrupt_target.store(&state);
     std::signal(SIGINT, &on_interrupt);
     const Status status =
         protected_call(state, func, nresults, Value::c_function(&traceback_handler));

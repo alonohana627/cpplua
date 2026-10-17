@@ -1,0 +1,79 @@
+Chunk
+  Local log
+    Table
+  LocalFunction f
+    Function() [upvalues: _ENV]
+      Return
+        Call
+          Name select
+          String "#"
+          Integer 1
+          Integer 2
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "sethook"
+      Function(event) [upvalues: _ENV, log]
+        Local info
+          Call
+            Index
+              Name debug
+              String "getinfo"
+            Integer 2
+            String "nS"
+        Assign
+          Targets
+            Index
+              Name log (upvalue 1)
+              Binary +
+                Unary #
+                  Name log (upvalue 1)
+                Integer 1
+          Values
+            Binary ..
+              Name event (local 0)
+              Binary ..
+                String ":"
+                Paren
+                  Binary or
+                    Index
+                      Name info (local 1)
+                      String "name"
+                    Index
+                      Name info (local 1)
+                      String "what"
+      String "cr"
+  CallStatement
+    Call
+      Name f (local 1)
+  GenericFor _
+    In
+      Call
+        Name pairs
+        Table
+          Item
+            Integer 1
+    Body
+  GenericFor _
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            Integer 1
+    Body
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "sethook"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name log (local 0)
+        String " "

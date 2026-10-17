@@ -128,16 +128,12 @@ Scopes::Lookup Scopes::lookup(std::string_view name) const {
     return Lookup{.kind = Lookup::Kind::Global, .attribute = LocalName::Attribute::None};
 }
 
-std::expected<VariableRef, Scopes::TooManyUpvalues> Scopes::resolve(TextRange name) {
-    auto found = resolve_in(functions_.size() - 1, name);
-    if (!found) {
-        return std::unexpected(found.error());
-    }
-    return found->value_or(VariableRef{.kind = VariableRef::Kind::Global, .index = 0});
+VariableRef Scopes::resolve(TextRange name) {
+    return resolve_in(functions_.size() - 1, name)
+        .value_or(VariableRef{.kind = VariableRef::Kind::Global, .index = 0});
 }
 
-std::expected<std::optional<VariableRef>, Scopes::TooManyUpvalues>
-Scopes::resolve_in(std::size_t level, TextRange name) {
+std::optional<VariableRef> Scopes::resolve_in(std::size_t level, TextRange name) {
     Function& function = functions_[level];
 
     // 1. A visible local of this function, the most recent first.
@@ -167,17 +163,14 @@ Scopes::resolve_in(std::size_t level, TextRange name) {
     if (level == 0) {
         return std::nullopt;
     }
-    auto outer = resolve_in(level - 1, name);
-    if (!outer || !*outer) {
-        return outer; // an error, or a global
-    }
-    if (function.upvalues.size() >= max_upvalues) {
-        return std::unexpected(TooManyUpvalues{.function_line = function.line});
+    const auto outer = resolve_in(level - 1, name);
+    if (!outer) {
+        return outer; // a global
     }
     function.upvalues.push_back(UpvalueDesc{
         .name = name,
-        .from_parent_local = (*outer)->kind == VariableRef::Kind::Local,
-        .index = (*outer)->index,
+        .from_parent_local = outer->kind == VariableRef::Kind::Local,
+        .index = outer->index,
     });
     return VariableRef{
         .kind = VariableRef::Kind::Upvalue,
@@ -191,9 +184,13 @@ bool Scopes::same_name(TextRange a, TextRange b) const {
     return ast_.text(a) == ast_.text(b);
 }
 
-const Scopes::Label* Scopes::find_label(TextRange name) const {
+std::size_t Scopes::hash_of(TextRange name) const {
+    return std::hash<std::string_view>{}(ast_.text(name));
+}
+
+const Scopes::Label* Scopes::find_label(TextRange name, std::size_t hash) const {
     for (std::size_t i = functions_.back().first_label; i < labels_.size(); ++i) {
-        if (same_name(labels_[i].name, name)) {
+        if (labels_[i].hash == hash && same_name(labels_[i].name, name)) {
             return &labels_[i];
         }
     }
@@ -201,23 +198,27 @@ const Scopes::Label* Scopes::find_label(TextRange name) const {
 }
 
 std::expected<void, std::string> Scopes::add_label(TextRange name, int line, bool last) {
-    if (const Label* existing = find_label(name)) {
+    const std::size_t hash = hash_of(name);
+    if (const Label* existing = find_label(name, hash)) {
         return std::unexpected(
             std::format("label '{}' already defined on line {}", ast_.text(name), existing->line));
+    }
+    if (labels_.size() >= max_labels) {
+        return std::unexpected(std::string{too_many_labels});
     }
 
     const Function& function = functions_.back();
     const Block& block = function.blocks.back();
     // A label at the end of its block counts as outside the block's locals.
     const std::size_t active = last ? block.first_active : function.active;
-    labels_.push_back(Label{.name = name, .line = line, .active = active});
+    labels_.push_back(Label{.name = name, .hash = hash, .line = line, .active = active});
 
     // Resolve the pending gotos of this block that jump to it (Lua's
     // solvegotos). A goto with fewer locals active than the label would jump
     // into the scope of the first extra local.
     for (std::size_t i = block.first_goto; i < gotos_.size();) {
         const Goto& pending = gotos_[i];
-        if (pending.is_break || !same_name(pending.name, name)) {
+        if (pending.is_break || pending.hash != hash || !same_name(pending.name, name)) {
             ++i;
             continue;
         }
@@ -232,20 +233,32 @@ std::expected<void, std::string> Scopes::add_label(TextRange name, int line, boo
     return {};
 }
 
-void Scopes::add_goto(TextRange name, int line) {
-    if (find_label(name) != nullptr) {
-        return; // a backward jump to a visible label is always fine
+std::expected<void, std::string> Scopes::add_goto(TextRange name, int line) {
+    const std::size_t hash = hash_of(name);
+    if (find_label(name, hash) != nullptr) {
+        return {}; // a backward jump to a visible label is always fine
     }
-    gotos_.push_back(
-        Goto{.name = name, .line = line, .active = functions_.back().active, .is_break = false});
+    if (gotos_.size() >= max_labels) {
+        return std::unexpected(std::string{too_many_labels});
+    }
+    gotos_.push_back(Goto{.name = name,
+                          .hash = hash,
+                          .line = line,
+                          .active = functions_.back().active,
+                          .is_break = false});
+    return {};
 }
 
-void Scopes::add_break(int line) {
+std::expected<void, std::string> Scopes::add_break(int line) {
+    if (gotos_.size() >= max_labels) {
+        return std::unexpected(std::string{too_many_labels});
+    }
     Goto pending; // a break has no label name
     pending.line = line;
     pending.active = functions_.back().active;
     pending.is_break = true;
     gotos_.push_back(pending);
+    return {};
 }
 
 } // namespace cpplua

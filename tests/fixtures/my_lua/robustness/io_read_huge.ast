@@ -1,0 +1,71 @@
+Chunk
+  Local f
+    Call
+      Index
+        Name io
+        String "tmpfile"
+  CallStatement
+    MethodCall write
+      Name f (local 0)
+      String "abc"
+  CallStatement
+    MethodCall seek
+      Name f (local 0)
+      String "set"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name f (local 0)
+          String "read"
+        Name f (local 0)
+        Binary <<
+          Integer 1
+          Integer 50
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name f (local 0)
+          String "read"
+        Name f (local 0)
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: f]
+          GenericFor _
+            In
+              MethodCall lines
+                Name f (upvalue 0)
+                Unary -
+                  Integer 1
+            Body
+  CallStatement
+    Call
+      Name print
+      MethodCall read
+        Name f (local 0)
+        String "a"
+  CallStatement
+    MethodCall close
+      Name f (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name string
+          String "rep"
+        String "x"
+        Binary <<
+          Integer 1
+          Integer 40

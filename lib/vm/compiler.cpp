@@ -7,6 +7,7 @@
 
 #include "vm/compiler.hpp"
 
+#include <algorithm>
 #include <bit>
 #include <cmath>
 #include <cstdint>
@@ -472,6 +473,9 @@ private:
     // ---- lparser.c: expressions ----
 
     [[nodiscard]] int first_line(ExprId id) const;
+    std::vector<ExprId> left_chain(ExprId id, bool binary, ExprId& start) const;
+    void binary_chain(ExprId id, ExpDesc& v);
+    void suffix_chain(ExprId id, ExpDesc& v);
     int explist(IdRange<ExprId> list, ExpDesc& v);
     void funcargs(ExpDesc& f, IdRange<ExprId> arguments, int line, int end_line);
     void constructor(const TableExpr& table, ExpDesc& t, int end_line);
@@ -2131,15 +2135,101 @@ void Compiler::body(ExpDesc& e, FunctionId id, int line) {
 // ---- lparser.c: expressions ----
 
 int Compiler::first_line(ExprId id) const {
-    // The line of an expression's first token.
-    return std::visit(Overloaded{
-                          [&](const BinaryExpr& e) { return first_line(e.left); },
-                          [&](const CallExpr& e) { return first_line(e.function); },
-                          [&](const MethodCallExpr& e) { return first_line(e.object); },
-                          [&](const IndexExpr& e) { return first_line(e.object); },
-                          [&](const auto&) { return ast_.line(id); },
-                      },
-                      ast_.expression(id));
+    // The line of an expression's first token: down its left side, in a
+    // loop (the side can be as long as the source).
+    for (;;) {
+        const Expr& e = ast_.expression(id);
+        if (const auto* b = std::get_if<BinaryExpr>(&e)) {
+            id = b->left;
+        } else if (const auto* c = std::get_if<CallExpr>(&e)) {
+            id = c->function;
+        } else if (const auto* m = std::get_if<MethodCallExpr>(&e)) {
+            id = m->object;
+        } else if (const auto* x = std::get_if<IndexExpr>(&e)) {
+            id = x->object;
+        } else {
+            return ast_.line(id);
+        }
+    }
+}
+
+// The left side of a chain the parser builds in a loop, as Lua's subexpr
+// and suffixedexp do: `a + b + c ...` is a BinaryExpr whose left operand is
+// a BinaryExpr..., and `a.b(c):d()[e] ...` an Index/Call/MethodCall node
+// whose object is another. Such a chain can be as long as the source, so
+// expr() compiles it in a loop instead of recursing down it (the parser's
+// depth limit never sees it). Returns the nodes from the innermost one out,
+// after the expression at the chain's start.
+std::vector<ExprId> Compiler::left_chain(ExprId id, bool binary, ExprId& start) const {
+    std::vector<ExprId> chain;
+    for (;;) {
+        const Expr& e = ast_.expression(id);
+        ExprId next{};
+        if (binary) {
+            const auto* b = std::get_if<BinaryExpr>(&e);
+            if (b == nullptr) {
+                break;
+            }
+            next = b->left;
+        } else if (const auto* c = std::get_if<CallExpr>(&e)) {
+            next = c->function;
+        } else if (const auto* m = std::get_if<MethodCallExpr>(&e)) {
+            next = m->object;
+        } else if (const auto* x = std::get_if<IndexExpr>(&e)) {
+            next = x->object;
+        } else {
+            break;
+        }
+        chain.push_back(id);
+        id = next;
+    }
+    start = id;
+    std::ranges::reverse(chain);
+    return chain;
+}
+
+void Compiler::binary_chain(ExprId id, ExpDesc& v) {
+    ExprId start{};
+    const std::vector<ExprId> chain = left_chain(id, true, start);
+    expr(start, v);
+    for (const ExprId link : chain) {
+        const auto& e = *std::get_if<BinaryExpr>(&ast_.expression(link)); // (left_chain saw it)
+        const int line = ast_.line(link);
+        const BinOpr op = binary_operator(e.op);
+        last_line_ = line; // the operator
+        infix(op, v);
+        ExpDesc v2;
+        expr(e.right, v2);
+        posfix(op, v, v2, line);
+    }
+}
+
+void Compiler::suffix_chain(ExprId id, ExpDesc& v) {
+    ExprId start{};
+    const std::vector<ExprId> chain = left_chain(id, false, start);
+    expr(start, v);
+    for (const ExprId link : chain) {
+        const int line = ast_.line(link);
+        const int end_line = ast_.end_line(link);
+        const Expr& node = ast_.expression(link);
+        if (const auto* x = std::get_if<IndexExpr>(&node)) {
+            exp2anyregup(v);
+            ExpDesc key;
+            expr(x->key, key);
+            exp2val(key);
+            last_line_ = end_line; // the name, or ']'
+            indexed(v, key);
+        } else if (const auto* c = std::get_if<CallExpr>(&node)) {
+            exp2nextreg(v);
+            funcargs(v, c->arguments, line, end_line);
+        } else if (const auto* m = std::get_if<MethodCallExpr>(&node)) {
+            ExpDesc key;
+            codestring(key, string_of(m->method));
+            last_line_ = m->method_line;
+            self(v, key);
+            funcargs(v, m->arguments, line, end_line);
+        }
+    }
 }
 
 int Compiler::explist(IdRange<ExprId> list, ExpDesc& v) {
@@ -2281,15 +2371,7 @@ void Compiler::expr(ExprId id, ExpDesc& v) {
                        expr(e.operand, v);
                        prefix(unary_operator(e.op), v, line);
                    },
-                   [&](const BinaryExpr& e) {
-                       const BinOpr op = binary_operator(e.op);
-                       expr(e.left, v);
-                       last_line_ = line; // the operator
-                       infix(op, v);
-                       ExpDesc v2;
-                       expr(e.right, v2);
-                       posfix(op, v, v2, line);
-                   },
+                   [&](const BinaryExpr&) { binary_chain(id, v); },
                    [&](const NameExpr& e) {
                        last_line_ = end_line;
                        singlevar(string_of(e.name), v);
@@ -2300,28 +2382,9 @@ void Compiler::expr(ExprId id, ExpDesc& v) {
                        last_line_ = end_line; // ')'
                        dischargevars(v);
                    },
-                   [&](const IndexExpr& e) {
-                       expr(e.object, v);
-                       exp2anyregup(v);
-                       ExpDesc key;
-                       expr(e.key, key);
-                       exp2val(key);
-                       last_line_ = end_line; // the name, or ']'
-                       indexed(v, key);
-                   },
-                   [&](const CallExpr& e) {
-                       expr(e.function, v);
-                       exp2nextreg(v);
-                       funcargs(v, e.arguments, line, end_line);
-                   },
-                   [&](const MethodCallExpr& e) {
-                       expr(e.object, v);
-                       ExpDesc key;
-                       codestring(key, string_of(e.method));
-                       last_line_ = e.method_line;
-                       self(v, key);
-                       funcargs(v, e.arguments, line, end_line);
-                   },
+                   [&](const IndexExpr&) { suffix_chain(id, v); },
+                   [&](const CallExpr&) { suffix_chain(id, v); },
+                   [&](const MethodCallExpr&) { suffix_chain(id, v); },
                    [&](const TableExpr& e) { constructor(e, v, end_line); },
                    [&](const FunctionExpr& e) {
                        last_line_ = line;
@@ -2350,8 +2413,8 @@ void Compiler::statlist(std::span<const StatId> statements, bool repeat_body) {
             for (std::size_t j = end; j-- > i;) {
                 const StatId id = statements[j];
                 last_line_ = ast_.end_line(id);
-                labelstat(string_of(std::get<LabelStat>(ast_.statement(id)).name), ast_.line(id),
-                          last);
+                labelstat(string_of(std::get_if<LabelStat>(&ast_.statement(id))->name),
+                          ast_.line(id), last);
                 fs_->freereg = nvarstack();
             }
             (void)label;
