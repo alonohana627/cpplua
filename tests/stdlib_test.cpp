@@ -214,8 +214,16 @@ TEST_CASE("S7.2 os.remove, os.rename and os.getenv", "[stdlib]") {
                           b)) == "true,true,true");
     CHECK(run("return os.remove(" + b + ")").ends_with("b.txt: No such file or directory,2"));
     CHECK(run("return os.getenv('CPPLUA_SURELY_NOT_SET_VARIABLE')") == "nil");
+    // os.tmpname makes the file on POSIX (mkstemp) and only names it on
+    // Windows (tmpnam), as Lua does.
+#ifdef _WIN32
+    CHECK(run("local name = os.tmpname() local absent = io.open(name) == nil "
+              "local f = io.open(name, 'w') f:close() return absent, os.remove(name)") ==
+          "true,true");
+#else
     CHECK(run("local name = os.tmpname() local f = io.open(name) local ok = f ~= nil "
               "f:close() return ok, os.remove(name)") == "true,true");
+#endif
 }
 
 TEST_CASE("S6.4 io.popen is not supported", "[stdlib]") {
