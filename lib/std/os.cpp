@@ -80,7 +80,7 @@ int filesystem_result(State& state, const std::error_code& ec, const char* name)
     return error_result(state, ec.default_error_condition().value(), name);
 }
 
-// os.remove: a file or an empty folder, as C's remove.
+// os.remove: a file, or on POSIX an empty folder, as C's remove.
 int os_remove(State& state) {
     std::string_view name;
     if (!check_view(state, 1, name)) {
@@ -88,6 +88,12 @@ int os_remove(State& state) {
     }
     const std::string file{name};
     std::error_code ec;
+#ifdef _WIN32
+    // The Windows C library's remove() deletes files only.
+    if (std::filesystem::is_directory(file, ec)) {
+        return error_result(state, EACCES, file.c_str());
+    }
+#endif
     if (!std::filesystem::remove(file, ec) && !ec) {
         ec = std::make_error_code(std::errc::no_such_file_or_directory);
     }
@@ -101,6 +107,12 @@ int os_rename(State& state) {
         return c_function_error;
     }
     std::error_code ec;
+#ifdef _WIN32
+    // The Windows C library's rename() never replaces an existing file.
+    if (std::filesystem::exists(std::string{to}, ec)) {
+        return error_result(state, EEXIST, nullptr);
+    }
+#endif
     std::filesystem::rename(std::string{from}, std::string{to}, ec);
     return filesystem_result(state, ec, nullptr);
 }

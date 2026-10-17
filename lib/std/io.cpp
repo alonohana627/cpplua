@@ -10,6 +10,7 @@
 #include <bit>
 #include <cerrno>
 #include <cstdint>
+#include <cstdio>
 #include <filesystem>
 #include <format>
 #include <fstream>
@@ -55,6 +56,7 @@ struct Stream {
     Standard standard = Standard::None;
     Closer closer = Closer::Closed;
     bool line_buffered = false; // setvbuf "line": flush at each newline
+    bool directory = false;     // POSIX opens a directory; reading it fails (EISDIR)
     bool text = false;
     bool readable = false;                 // opened for reading, for writing
     bool writable = false;                 // Windows text mode: "\n" is "\r\n" in the file
@@ -165,6 +167,8 @@ bool open_file(Stream& s, const std::string& name, std::ios::openmode mode) {
     }
     s.buffer = file.get();
     s.file = std::move(file);
+    std::error_code ec;
+    s.directory = std::filesystem::is_directory(name, ec);
     s.readable = (mode & std::ios::in) != 0;
     s.writable = (mode & (std::ios::out | std::ios::app)) != 0;
     s.closer = Closer::File;
@@ -434,6 +438,9 @@ int read_values(State& state, Stream& s, int first) {
     if (buffer == nullptr || (s.standard == Standard::None && !s.readable)) {
         // reading an output stream: the C library's EBADF
         return error_result(state, EBADF, nullptr);
+    }
+    if (s.directory) {
+        return error_result(state, EISDIR, nullptr);
     }
     Reader reader{*buffer, s.text};
     const int nargs = arg_count(state) - first + 1;
@@ -818,8 +825,35 @@ int f_seek(State& state) {
     if (!check_option(state, 2, "cur", names, op) || !opt_integer(state, 3, 0, offset)) {
         return c_function_error;
     }
-    if (s->standard == Standard::Output || s->standard == Standard::Error) {
-        return error_result(state, ESPIPE, nullptr); // the heap's output has no position
+    if (s->standard != Standard::None) {
+        // The standard streams go through the C library's (std::cout and
+        // friends are synchronized with stdio): seek there, as Lua does, so
+        // a redirected stdin can seek. Output an embedder captures has no
+        // position.
+        Heap& heap = state.heap();
+        const bool captured = (s->standard == Standard::Output && heap.captures_output()) ||
+                              (s->standard == Standard::Error && heap.captures_error_output());
+        if (captured) {
+            return error_result(state, ESPIPE, nullptr);
+        }
+        std::FILE* c_file = s->standard == Standard::Input    ? stdin
+                            : s->standard == Standard::Output ? stdout
+                                                              : stderr;
+        static constexpr std::array<int, 3> whence{SEEK_SET, SEEK_CUR, SEEK_END};
+        std::cout.flush();
+        errno = 0;
+#ifdef _WIN32
+        const bool failed = _fseeki64(c_file, offset, whence.at(op)) != 0;
+        const std::int64_t position = failed ? -1 : _ftelli64(c_file);
+#else
+        const bool failed = fseeko(c_file, static_cast<off_t>(offset), whence.at(op)) != 0;
+        const std::int64_t position = failed ? -1 : ftello(c_file);
+#endif
+        if (failed || position < 0) {
+            return error_result(state, errno != 0 ? errno : ESPIPE, nullptr);
+        }
+        push(state, Value::integer(position));
+        return 1;
     }
     const auto at = s->buffer->pubseekoff(static_cast<std::streamoff>(offset), directions.at(op),
                                           std::ios::in | std::ios::out);

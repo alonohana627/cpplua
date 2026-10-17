@@ -209,6 +209,11 @@ public:
     // `flush_lines`: flush after a newline (print does; io.write does not).
     void write_output(std::string_view text, bool flush_lines = true);
 
+    // Whether set_output and set_error_output replaced stdout and stderr.
+    [[nodiscard]] bool captures_output() const { return static_cast<bool>(output_); }
+
+    [[nodiscard]] bool captures_error_output() const { return static_cast<bool>(error_output_); }
+
     // Flushes the standard output when it is where output goes (io.flush).
     void flush_output();
 

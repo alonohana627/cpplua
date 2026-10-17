@@ -2,6 +2,7 @@
 
 #include <cerrno>
 #include <cstring>
+#include <filesystem>
 #include <format>
 #include <fstream>
 #include <iostream>
@@ -103,7 +104,17 @@ std::expected<std::string, std::string> read_chunk_file(const std::string& path)
         // NOLINTNEXTLINE(concurrency-mt-unsafe): the message of the open that failed
         return std::unexpected(std::format("cannot open {}: {}", path, std::strerror(errno)));
     }
+    // A directory opens on POSIX, but cannot be read (luaL_loadfilex's
+    // "cannot read").
+    if (std::error_code ec; std::filesystem::is_directory(path, ec)) {
+        // NOLINTNEXTLINE(concurrency-mt-unsafe): as Lua's errfile
+        return std::unexpected(std::format("cannot read {}: {}", path, std::strerror(EISDIR)));
+    }
     const std::string text{std::istreambuf_iterator<char>{file}, std::istreambuf_iterator<char>{}};
+    if (file.bad()) {
+        // NOLINTNEXTLINE(concurrency-mt-unsafe): as Lua's errfile
+        return std::unexpected(std::format("cannot read {}: {}", path, std::strerror(errno)));
+    }
     return chunk_text(text);
 }
 

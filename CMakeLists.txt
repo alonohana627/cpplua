@@ -200,6 +200,9 @@ if(CPPLUA_BUILD_TESTS)
   add_test(NAME cli_os_exit_flush
     COMMAND ${CMAKE_COMMAND} -DCPPLUA=$<TARGET_FILE:cpplua> -DWORK=${CMAKE_CURRENT_BINARY_DIR}/cli_tests
       -P ${PROJECT_SOURCE_DIR}/tests/cli/os_exit_flush.cmake)
+  add_test(NAME cli_stdin_seek
+    COMMAND ${CMAKE_COMMAND} -DCPPLUA=$<TARGET_FILE:cpplua> -DWORK=${CMAKE_CURRENT_BINARY_DIR}/cli_tests
+      -P ${PROJECT_SOURCE_DIR}/tests/cli/stdin_seek.cmake)
 
   add_test(NAME lua_5_4_test_suite
     COMMAND cpplua -e "_port=true" all.lua
