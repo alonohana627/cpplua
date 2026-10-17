@@ -646,7 +646,10 @@ bool joinable(Value v) {
     state->ci->saved_pc = pc;
     std::uint32_t top = first + u32(total);
     state->top = top;
-    std::vector<Value> run;
+    // The joinable values of a run, gathered from the split stack: in a
+    // buffer on the C++ stack for the usual short runs.
+    std::array<Value, 32> small{};
+    std::vector<Value> large;
     while (total > 1) {
         const Value a = state->get(top - 2);
         const Value b = state->get(top - 1);
@@ -655,9 +658,15 @@ bool joinable(Value v) {
             while (n < total && joinable(state->get(top - u32(n) - 1))) {
                 ++n;
             }
-            run.clear();
-            for (std::uint32_t slot = top - u32(n); slot < top; ++slot) {
-                run.push_back(state->get(slot));
+            std::span<Value> run;
+            if (std::cmp_less_equal(n, small.size())) {
+                run = std::span{small}.first(static_cast<std::size_t>(n));
+            } else {
+                large.resize(static_cast<std::size_t>(n));
+                run = large;
+            }
+            for (std::size_t j = 0; j < run.size(); ++j) {
+                run[j] = state->get(top - u32(n) + static_cast<std::uint32_t>(j));
             }
             const auto joined = concatenate(state->heap(), run);
             if (!joined) {

@@ -137,16 +137,16 @@ public:
 
     void push(Value v) { set(top++, v); }
 
-    // Makes room for `n` more slots above top (luaD_checkstack): false when
-    // the stack would pass max_stack, with the error ("stack overflow",
-    // still without its position, or "error in error handling" when the
-    // stack is already past the limit) in error_value.
     // How many usable slots there are from `from` on: negative when `from`
     // is past them, in the extra slots (as Lua's pointer difference is).
     [[nodiscard]] std::int64_t free_slots(std::uint32_t from) const {
         return std::int64_t{stack_last} - std::int64_t{from};
     }
 
+    // Makes room for `n` more slots above top (luaD_checkstack): false when
+    // the stack would pass max_stack, with the error ("stack overflow",
+    // still without its position, or "error in error handling" when the
+    // stack is already past the limit) in error_value.
     [[nodiscard]] bool check_stack(std::uint32_t n) {
         if (free_slots(top) > n) [[likely]] {
             return true;
