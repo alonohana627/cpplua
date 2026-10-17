@@ -99,7 +99,8 @@ private:
     // 'do' block 'end', the body shared by both fors. `line` is the line of
     // 'for', for the "to close 'for'" message; `variables` is how many loop
     // variables become visible in the body.
-    std::expected<Block, SyntaxError> parse_for_body(int line, std::size_t variables);
+    // `do block end`; `do_line` gets the line of `do`.
+    std::expected<Block, SyntaxError> parse_for_body(int line, std::size_t variables, int& do_line);
 
     // explist ::= exp { ',' exp } (G4.6)
     std::expected<IdRange<ExprId>, SyntaxError> parse_expression_list();

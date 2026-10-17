@@ -32,13 +32,14 @@ namespace cpplua {
 
 namespace {
 
-constexpr int no_jump = -1;          // NO_JUMP: the end of a jump list
-constexpr int no_reg = max_a;        // NO_REG
-constexpr int max_registers = 255;   // MAXREGS
-constexpr int max_index_rk = max_b;  // MAXINDEXRK
-constexpr int fields_per_flush = 50; // LFIELDS_PER_FLUSH
-constexpr int max_upvalues = 255;    // MAXUPVAL
-constexpr int multiple_results = -1; // LUA_MULTRET
+constexpr int no_jump = -1;                     // NO_JUMP: the end of a jump list
+constexpr int no_reg = max_a;                   // NO_REG
+constexpr int max_registers = 255;              // MAXREGS
+constexpr int max_index_rk = max_b;             // MAXINDEXRK
+constexpr int fields_per_flush = 50;            // LFIELDS_PER_FLUSH
+constexpr int max_upvalues = 255;               // MAXUPVAL
+constexpr std::size_t max_debug_locals = 32767; // SHRT_MAX: the debug entries of one function
+constexpr int multiple_results = -1;            // LUA_MULTRET
 
 // What an expression is while being compiled (Lua's expkind). Code is
 // generated as late as possible, so the descriptor says where the value is
@@ -312,6 +313,16 @@ private:
         }
     }
 
+    // A limit Lua's memory functions check (luaM_growvector), whose error
+    // has no position.
+    void limit_error(std::string_view message) {
+        if (!error_) {
+            error_ = SyntaxError{.message = std::string{message},
+                                 .line = last_line_,
+                                 .origin = std::source_location::current()};
+        }
+    }
+
     // ---- Strings ----
 
     const String* string_of(TextRange text);
@@ -501,7 +512,7 @@ private:
     void repeatstat(const RepeatStat& s, StatId id);
     void exp1(ExprId e);
     void fixforjump(int pc, int dest, bool back);
-    void forbody(int base, int line, int nvars, bool isgen, const Block& b);
+    void forbody(int base, int line, int do_line, int nvars, bool isgen, const Block& b);
     void fornum(const NumericForStat& s, int line);
     void forlist(const GenericForStat& s);
     void test_then_block(int& escapelist, const IfClause& clause, bool more);
@@ -1826,6 +1837,9 @@ void Compiler::adjustlocalvars(int nvars) {
         const int vidx = fs_->nactvar++;
         VarDesc& var = getlocalvardesc(fs_, vidx);
         var.ridx = level++;
+        if (fs_->f->locals.size() >= max_debug_locals) { // registerlocalvar
+            limit_error("too many local variables (limit is 32767)");
+        }
         fs_->f->locals.push_back(Proto::LocalInfo{.name = var.name, .start_pc = fs_->pc()});
         var.pidx = static_cast<int>(fs_->f->locals.size()) - 1;
     }
@@ -2654,8 +2668,10 @@ void Compiler::fixforjump(int pc, int dest, bool back) {
     jmp = set_bx(jmp, offset);
 }
 
-void Compiler::forbody(int base, int line, int nvars, bool isgen, const Block& b) {
-    // forbody: the loop variables are in a block around the body.
+void Compiler::forbody(int base, int line, int do_line, int nvars, bool isgen, const Block& b) {
+    // forbody: the loop variables are in a block around the body. The
+    // prep instruction comes right after `do` is read: it gets its line.
+    last_line_ = do_line;
     const int prep = code_abx(isgen ? OpCode::TForPrep : OpCode::ForPrep, base, 0);
     BlockCnt bl;
     enterblock(bl, false);
@@ -2690,7 +2706,7 @@ void Compiler::fornum(const NumericForStat& s, int line) {
         reserveregs(1);
     }
     adjustlocalvars(3);
-    forbody(base, line, 1, false, s.body);
+    forbody(base, line, s.do_line, 1, false, s.body);
 }
 
 void Compiler::forlist(const GenericForStat& s) {
@@ -2712,7 +2728,7 @@ void Compiler::forlist(const GenericForStat& s) {
     adjustlocalvars(4);
     marktobeclosed(fs_); // the closing value is to be closed
     checkstack(3);       // room to call the iterator
-    forbody(base, line, nvars - 4, true, s.body);
+    forbody(base, line, s.do_line, nvars - 4, true, s.body);
 }
 
 void Compiler::test_then_block(int& escapelist, const IfClause& clause, bool more) {

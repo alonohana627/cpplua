@@ -800,7 +800,7 @@ std::expected<StatId, SyntaxError> Parser::parse_numeric_for(TextRange variable,
     }
 
     scopes_.activate(3); // the hidden control variables
-    auto body = parse_for_body(line, 1);
+    auto body = parse_for_body(line, 1, statement.do_line);
     if (!body) {
         return std::unexpected(std::move(body.error()));
     }
@@ -842,16 +842,21 @@ std::expected<StatId, SyntaxError> Parser::parse_generic_for(TextRange first_nam
         return std::unexpected(std::move(values.error()));
     }
     scopes_.activate(4); // the hidden control variables
-    auto body = parse_for_body(line, names.size());
+    int do_line = 0;
+    auto body = parse_for_body(line, names.size(), do_line);
     if (!body) {
         return std::unexpected(std::move(body.error()));
     }
-    return add_statement(
-        GenericForStat{.names = ast_.add_local_name_list(names), .values = *values, .body = *body},
-        line);
+    return add_statement(GenericForStat{.names = ast_.add_local_name_list(names),
+                                        .values = *values,
+                                        .body = *body,
+                                        .do_line = do_line},
+                         line);
 }
 
-std::expected<Block, SyntaxError> Parser::parse_for_body(int line, std::size_t variables) {
+std::expected<Block, SyntaxError> Parser::parse_for_body(int line, std::size_t variables,
+                                                         int& do_line) {
+    do_line = current_.line;
     if (auto keyword = expect(TokenKind::Do); !keyword) {
         return std::unexpected(std::move(keyword.error()));
     }

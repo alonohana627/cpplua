@@ -361,6 +361,7 @@ struct NumericForStat {
     ExprId step; // only meaningful when has_step
     bool has_step = false;
     Block body;
+    int do_line = 0; // the line of `do`, where FORPREP goes
 
     bool operator==(const NumericForStat&) const = default;
 };
@@ -370,6 +371,7 @@ struct GenericForStat {
     IdRange<LocalNameId> names; // all without attributes
     IdRange<ExprId> values;
     Block body;
+    int do_line = 0; // the line of `do`, where TFORPREP goes
 
     bool operator==(const GenericForStat&) const = default;
 };
