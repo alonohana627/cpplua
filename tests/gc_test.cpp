@@ -1,8 +1,10 @@
+#include <algorithm>
 #include <bit>
 #include <cstddef>
 #include <cstdint>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -191,4 +193,26 @@ TEST_CASE("E9.2 open upvalues follow the stack when it moves", "[gc]") {
     CHECK(first_result(heap, "local function deep(n) local v = n local f = function() return v "
                              "end if n == 0 then return f() end local r = deep(n - 1) return r + "
                              "f() end return deep(2000)") == "2001000");
+}
+
+TEST_CASE("E9.10 the pool gives empty pages back", "[gc][pool]") {
+    // A program that goes through phases with different object sizes keeps
+    // only the pages of the phase it is in (issue #8).
+    cpplua::Pool pool;
+    std::vector<void*> blocks;
+    std::size_t most_pages = 0;
+    for (std::size_t size = 48; size <= 464; size += 16) {
+        for (int i = 0; i < 20000; ++i) {
+            blocks.push_back(pool.allocate(size));
+        }
+        most_pages = std::max(most_pages, pool.page_count());
+        for (void* block : blocks) {
+            pool.free(block, size);
+        }
+        blocks.clear();
+    }
+    // The biggest phase alone needs 20000 * 464 bytes, about 142 pages;
+    // every phase kept would be thousands.
+    CHECK(most_pages < 200);
+    CHECK(pool.page_count() <= 16); // only the spares are left
 }

@@ -444,6 +444,13 @@ int collectgarbage(State& state) {
             heap.new_string(mode == GcMode::Incremental ? "incremental" : "generational"));
     };
     const auto stored = [](int parameter) { return std::int64_t{parameter / 4} * 4; };
+    // Lua keeps the parameters in bytes, most of them divided by 4
+    // (setgcparam), from int arguments: wrapped the same way here, so any
+    // value a program passes stays in the collector's range.
+    const auto as_parameter = [](std::int64_t v) {
+        return static_cast<std::uint8_t>(static_cast<int>(v) / 4) * 4;
+    };
+    const auto as_byte = [](std::int64_t v) { return int{static_cast<std::uint8_t>(v)}; };
     GcParameters& p = heap.parameters();
     switch (o) {
     case 0:
@@ -463,7 +470,7 @@ int collectgarbage(State& state) {
         if (!opt_integer(state, 2, 0, x)) {
             return c_function_error;
         }
-        push(state, Value::boolean(heap.step_kilobytes(x)));
+        push(state, Value::boolean(heap.step_kilobytes(static_cast<int>(x)))); // (an int in Lua)
         return 1;
     case 5:
     case 6: {
@@ -472,7 +479,7 @@ int collectgarbage(State& state) {
         }
         int& parameter = o == 5 ? p.pause : p.step_multiplier;
         push(state, Value::integer(stored(parameter)));
-        parameter = static_cast<int>(x);
+        parameter = as_parameter(x);
         return 1;
     }
     case 7: push(state, Value::boolean(heap.is_running())); return 1;
@@ -482,10 +489,10 @@ int collectgarbage(State& state) {
         }
         const Value previous = mode_name(heap.mode());
         if (x != 0) {
-            p.minor_multiplier = static_cast<int>(x);
+            p.minor_multiplier = as_byte(x);
         }
         if (y != 0) {
-            p.major_multiplier = static_cast<int>(y);
+            p.major_multiplier = as_parameter(y);
         }
         heap.set_mode(GcMode::Generational);
         push(state, previous);
@@ -498,13 +505,13 @@ int collectgarbage(State& state) {
         }
         const Value previous = mode_name(heap.mode());
         if (x != 0) {
-            p.pause = static_cast<int>(x);
+            p.pause = as_parameter(x);
         }
         if (y != 0) {
-            p.step_multiplier = static_cast<int>(y);
+            p.step_multiplier = as_parameter(y);
         }
         if (z != 0) {
-            p.step_size = static_cast<int>(z);
+            p.step_size = as_byte(z);
         }
         heap.set_mode(GcMode::Incremental);
         push(state, previous);

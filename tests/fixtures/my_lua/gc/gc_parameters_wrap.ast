@@ -1,0 +1,87 @@
+Chunk
+  CallStatement
+    Call
+      Name collectgarbage
+      String "incremental"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "incremental"
+        Integer 0
+        Integer 0
+        Unary -
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "incremental"
+        Integer 1000
+        Integer 1000
+        Integer 300
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "setpause"
+        Integer 200
+      Call
+        Name collectgarbage
+        String "setpause"
+        Integer 200
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "setstepmul"
+        Integer 100
+      Call
+        Name collectgarbage
+        String "setstepmul"
+        Integer 100
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Call
+          Name collectgarbage
+          String "step"
+          Index
+            Name math
+            String "maxinteger"
+      Call
+        Name type
+        Call
+          Name collectgarbage
+          String "step"
+          Index
+            Name math
+            String "mininteger"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "incremental"
+        Integer 200
+        Integer 100
+        Integer 13
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "generational"
+        Unary -
+          Integer 1
+        Unary -
+          Integer 1
+      Call
+        Name collectgarbage
+        String "incremental"

@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstring>
 #include <iostream>
+#include <limits>
 #include <new>
 #include <random>
 #include <utility>
@@ -129,6 +130,8 @@ void Heap::set_debt(std::ptrdiff_t debt) {
     // Lua's luaE_setdebt: the total stays the same, only how it splits
     // between total_bytes_ and debt_ changes.
     const auto total = static_cast<std::ptrdiff_t>(total_bytes());
+    // (a debt so negative that the total would overflow is cut, as there)
+    debt = std::max(debt, total - std::numeric_limits<std::ptrdiff_t>::max());
     total_bytes_ = total - debt;
     debt_ = debt;
 }
