@@ -39,4 +39,11 @@ NumberText float_text(double f);
 // The text of a number value; nothing for other values.
 std::optional<NumberText> number_text(Value value);
 
+// The number a string holds (V5), as Lua's luaO_str2num reads it: one whole
+// numeral with spaces around it and an optional sign, " -0x10 " or "1e2".
+// An integer when it reads as an integer numeral that fits, otherwise a
+// float; nothing when the string is not a number. inf and nan are never
+// numbers here.
+std::optional<Value> string_to_number(std::string_view text);
+
 } // namespace lua2

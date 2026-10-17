@@ -259,25 +259,33 @@ malformed number instead of quietly splitting into a number and something else. 
 the numeral only right after an exponent letter, so `1e-5` is one number but `1-5` is three
 tokens.
 
-**2. Validate and convert.** Two helpers, `to_integer` and `to_float`, each either accept the
-**whole** text or return nothing (`std::optional`):
+**2. Validate and convert.** Two functions, `integer_numeral` and `float_numeral`, each either
+accept the **whole** text or return nothing (`std::optional`). They live in
+`lib/internal/numeral.hpp` (with `lib/numeral.cpp`), not in the lexer, because the conversion
+of strings to numbers (`"10" + 1`, `tonumber`) reads numerals the same way; Lua shares
+`luaO_str2num` between the two in the same way. See
+[values.md](values.md#strings-to-numbers).
 
-- `to_integer` handles:
+- `integer_numeral` handles:
   - **Hex** (`0xff`): at least one hex digit and nothing else. The value is built in a
     `std::uint64_t`, which wraps around modulo 2^64, then converted to `std::int64_t`, which keeps
     the bits: `0xffffffffffffffff` is `-1`.
-  - **Decimal** (`345`): `std::from_chars` must use the whole text. A decimal integer too large
-    for 64 bits fails here, so it becomes a float, as Lua says.
-- `to_float` uses `std::from_chars`, in hex format (without the `0x`) or general format:
+  - **Decimal** (`345`): `std::from_chars` into a `std::uint64_t` must use the whole text, and
+    the value must fit in an `std::int64_t`. A decimal integer too large for 64 bits fails here,
+    so it becomes a float, as Lua says.
+- `float_numeral` uses `std::from_chars`, in hex format (without the `0x`) or general format:
   `0xA23p-4` is 162.1875 and `314.16e-2` is 3.1416. A value too large is infinity (`1e400`), and
   a value too small is 0 (`1e-400`). That is not an error in Lua. `from_chars` reports those
   cases as `errc::result_out_of_range`, but libc++ still stores infinity or 0, so that code is
-  accepted. Tests pin this down in case a library ever behaves differently.
+  accepted. Tests pin this down in case a library ever behaves differently. `from_chars` also
+  accepts a leading `-` and the words `inf` and `nan`; a numeral has neither, so text starting
+  with `-` or containing an `n` is refused first.
 
-`read_number()` tries `to_integer`, then `to_float`. If neither accepts the text, the result is
-`malformed number near '<text>'`. `std::from_chars` ignores the locale, never allocates, and
-reports problems as an error code rather than an exception.
-
+`read_number()` tries `integer_numeral`, then `float_numeral`. If neither accepts the text, the
+result is `malformed number near '<text>'`. `std::from_chars` ignores the locale, never
+allocates, and reports problems as an error code rather than an exception. The small
+`is_hex_digit()` and `hex_value()` helpers live in `numeral.hpp` too, and the lexer uses them for
+`\x` escapes as well.
 An integer is a numeral with no point and no exponent that fits; anything else that converts is a
 `Float`. In hex, `e` is a digit, so `0x1e` is the integer 30.
 

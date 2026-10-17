@@ -4,9 +4,15 @@
 #include <cmath>
 #include <string_view>
 
+#include "numeral.hpp"
+
 namespace lua2 {
 
 namespace {
+
+// Lua's spaces (lisspace, isspace in the C locale): space, \t, \n, \v, \f,
+// \r (V5.1).
+constexpr std::string_view spaces = " \t\n\v\f\r";
 
 // The text of inf, -inf, nan and -nan (V6.3), the same on every platform:
 // what glibc's printf writes. (On Windows, std::to_chars writes "-nan(ind)".)
@@ -52,6 +58,41 @@ NumberText float_text(double f) {
     }
     text.length_ = length;
     return text;
+}
+
+std::optional<Value> string_to_number(std::string_view text) {
+    // Spaces around the numeral are allowed (V5.1).
+    const auto first = text.find_first_not_of(spaces);
+    if (first == std::string_view::npos) {
+        return std::nullopt; // empty, or only spaces
+    }
+    text = text.substr(first, text.find_last_not_of(spaces) - first + 1);
+
+    // inf and nan are never numbers (V5.4): like Lua's l_str2d, anything
+    // with an 'n' is refused, so strtod-style readers never see them.
+    if (text.find_first_of("nN") != std::string_view::npos) {
+        return std::nullopt;
+    }
+
+    // One sign (V5.2). The numeral itself starts right after it: "- 1" and
+    // "--1" are not numbers.
+    const bool negative = text.starts_with('-');
+    if (negative || text.starts_with('+')) {
+        text.remove_prefix(1);
+    }
+    if (text.empty() || text.front() == '-' || text.front() == '+') {
+        return std::nullopt;
+    }
+
+    // An integer if it reads as one and fits (V5.3), otherwise a float
+    // (V5.4); a '\0' anywhere makes both fail (V5.5).
+    if (const auto integer = integer_numeral(text, negative)) {
+        return Value::integer(*integer);
+    }
+    if (const auto number = float_numeral(text)) {
+        return Value::number(negative ? -*number : *number);
+    }
+    return std::nullopt;
 }
 
 std::optional<NumberText> number_text(Value value) {

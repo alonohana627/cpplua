@@ -9,8 +9,8 @@ in [../learn/values.md](../learn/values.md), and the remaining work in
 a string, and knows its Lua type and its truthiness; numbers convert between integer and
 float; the arithmetic, bitwise and comparison operators work with Lua's rules and error
 messages; strings are interned like Lua's and have a length; numbers convert to text like
-Lua's `tostring`. Still to come: strings to numbers, and the coercions that use both
-directions (parts 7 and 8).
+Lua's `tostring`, and strings convert to numbers like Lua's `tonumber`. Still to come: the
+coercions that use both directions (part 8) and the conformance sweep (part 9).
 
 ## Where it lives
 
@@ -29,6 +29,8 @@ directions (parts 7 and 8).
 | `lib/value/string.cpp`           | its implementation                                   |
 | `lib/internal/value/convert.hpp` | conversions between numbers and text                 |
 | `lib/value/convert.cpp`          | its implementation                                   |
+| `lib/internal/numeral.hpp`       | reading numerals, shared with the lexer              |
+| `lib/numeral.cpp`                | its implementation                                   |
 | `lib/internal/runtime_error.hpp` | `RuntimeError`, an error raised while Lua code runs  |
 | `tests/arith_test.cpp`           | arithmetic tests, tagged `[value][arith]`            |
 | `tests/bitwise_test.cpp`         | bitwise tests, tagged `[value][bitwise]`             |
@@ -388,3 +390,28 @@ only when one is needed.
 Fourteen digits is fewer than a double needs to read back exactly (17), so `0.1 + 0.2` shows as
 `0.3`, as in Lua. The tests use `strings.lua`'s cases and the borders of `%g`: the switch to an
 exponent at `1e14` and below `0.0001`, the smallest and largest doubles, 2^53 and 2^63.
+## Strings to numbers
+
+`string_to_number(text)` in `convert.hpp` is the number a string holds, or nothing (V5): what
+`"10" + 1` (part 8) and `tonumber("10")` (stage 11) will use. It follows Lua's `luaO_str2num`:
+
+1. Trim spaces at both ends: space, `\t`, `\n`, `\v`, `\f`, `\r` (Lua's `lisspace`). Nothing left
+   is no number (V5.1).
+2. Refuse anything with an `n` or `N` (V5.4): no `inf`, `nan` or `infinity`, which C's `strtod`
+   and C++'s `from_chars` would accept. Lua's `l_str2d` does the same.
+3. Take one optional `-` or `+` (V5.2). The numeral must start right after it, so `- 1` and
+   `--1` are not numbers.
+4. Read the rest with `integer_numeral(text, negative)` (V5.3). `negative` lets
+   `-9223372036854775808` be an integer, as in Lua's `l_str2int`; any other decimal too big
+   for an integer fails here.
+5. Otherwise read it with `float_numeral(text)` (V5.4) and apply the sign.
+
+The numeral readers are the lexer's own, moved to `lib/internal/numeral.hpp` so both use them,
+as Lua's lexer and `tonumber` both use `luaO_str2num`. The rules therefore match exactly:
+hex integers wrap (`"0xffffffffffffffff"` is `-1`), hex floats work (`" 0x2.5 "` is `2.3125`),
+and `1e400` is `inf`. A `\0` anywhere is never part of a numeral, so such strings never
+convert (V5.5). The result keeps the subtype it read as (V5.6): `"10"` is an integer,
+`"10.0"` and `"1e1"` are floats.
+
+The tests use `math.lua`'s `tonumber` cases without a base (about 80 strings, valid and not),
+and check that numbers read back from their own text.

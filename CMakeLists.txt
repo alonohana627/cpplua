@@ -26,6 +26,7 @@ add_library(lua2_lib
   lib/debug.cpp
   lib/source_file.cpp
   lib/text_format.cpp
+  lib/numeral.cpp
   lib/lexer/lexer.cpp
   lib/lexer/token.cpp
   lib/parser/ast.cpp

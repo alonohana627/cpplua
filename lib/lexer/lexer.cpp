@@ -13,6 +13,7 @@
 #include <system_error>
 #include <utility>
 
+#include "numeral.hpp"
 #include "syntax_error.hpp"
 
 namespace lua2 {
@@ -27,21 +28,6 @@ constexpr bool is_letter(char c) {
 
 constexpr bool is_digit(char c) {
     return c >= '0' && c <= '9';
-}
-
-constexpr bool is_hex_digit(char c) {
-    return is_digit(c) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
-}
-
-// The value of a hex digit; only call it when is_hex_digit(c) is true.
-constexpr unsigned hex_value(char c) {
-    if (is_digit(c)) {
-        return static_cast<unsigned>(c - '0');
-    }
-    if (c >= 'a' && c <= 'f') {
-        return static_cast<unsigned>(c - 'a' + 10);
-    }
-    return static_cast<unsigned>(c - 'A' + 10);
 }
 
 // Whitespace for \z (L1.3): the same set next() skips, line breaks included.
@@ -74,60 +60,6 @@ void append_utf8(std::string& out, std::uint32_t code) {
     bytes.at(5 - count) = static_cast<char>(((~first_max << 1U) | code) & 0xFFU);
     ++count;
     out.append(bytes.data() + (6 - count), count);
-}
-
-constexpr bool has_hex_prefix(std::string_view text) {
-    return text.starts_with("0x") || text.starts_with("0X");
-}
-
-// Converts a whole numeral to an integer, or returns nothing when the text is
-// not an integer numeral (it has a point or an exponent, or is malformed) or
-// is a decimal too large for 64 bits.
-std::optional<std::int64_t> to_integer(std::string_view text) {
-    if (has_hex_prefix(text)) {
-        // Hex: at least one hex digit, and nothing else (L5.5). The value
-        // wraps around modulo 2^64 (L5.8): unsigned arithmetic wraps by
-        // definition, and the conversion to signed keeps the bits.
-        const std::string_view digits = text.substr(2);
-        if (digits.empty() || !std::ranges::all_of(digits, is_hex_digit)) {
-            return std::nullopt;
-        }
-        std::uint64_t value = 0;
-        for (const char c : digits) {
-            value = (value * 16) + hex_value(c);
-        }
-        return static_cast<std::int64_t>(value);
-    }
-    // Decimal: from_chars must use the whole text. On overflow it reports
-    // errc::result_out_of_range, and the numeral becomes a float (L5.7).
-    std::int64_t value = 0;
-    const auto [end, ec] = std::from_chars(text.data(), text.data() + text.size(), value);
-    if (ec != std::errc{} || end != text.data() + text.size()) {
-        return std::nullopt;
-    }
-    return value;
-}
-
-// Converts a whole numeral to a float, or returns nothing when it is
-// malformed. Hex floats use from_chars' hex format, which expects the digits
-// without the 0x prefix.
-std::optional<double> to_float(std::string_view text) {
-    const bool hex = has_hex_prefix(text);
-    const std::string_view digits = hex ? text.substr(2) : text;
-    const auto format = hex ? std::chars_format::hex : std::chars_format::general;
-
-    // Too large or too small is not an error in Lua (L5.9): 1e400 is
-    // infinity and 1e-400 is 0. from_chars reports those as
-    // errc::result_out_of_range, and libc++ still stores inf or 0 in `value`
-    // (the tests pin this down), so that code is accepted too.
-    double value = 0.0;
-    const auto [end, ec] =
-        std::from_chars(digits.data(), digits.data() + digits.size(), value, format);
-    if ((ec != std::errc{} && ec != std::errc::result_out_of_range) ||
-        end != digits.data() + digits.size()) {
-        return std::nullopt;
-    }
-    return value;
 }
 
 } // namespace
@@ -367,10 +299,10 @@ std::expected<Token, SyntaxError> Lexer::read_number() {
 
     // Step 2: validate and convert. An integer first (L5.6-L5.8), then a
     // float (L5.6, L5.9); if neither accepts the whole text, it is malformed.
-    if (const auto integer = to_integer(text)) {
+    if (const auto integer = integer_numeral(text)) {
         return Token{.kind = TokenKind::Integer, .line = line_, .value = *integer};
     }
-    if (const auto number = to_float(text)) {
+    if (const auto number = float_numeral(text)) {
         return Token{.kind = TokenKind::Float, .line = line_, .value = *number};
     }
     return error("malformed number", near_text(text));
