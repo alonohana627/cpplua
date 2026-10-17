@@ -5,14 +5,13 @@ built. The rules are in [../spec/values.md](../spec/values.md), the background a
 in [../learn/values.md](../learn/values.md), and the remaining work in
 [../plan/values.md](../plan/values.md).
 
-**Status:** parts 0 to 5 of the plan. A `Value` holds `nil`, a boolean, an integer, a float or
-a string, and knows its Lua type and its truthiness; numbers convert between integer and
-float; the arithmetic, bitwise and comparison operators work with Lua's rules and error
-messages; strings are interned like Lua's and have a length; numbers convert to text like
-Lua's `tostring`, and strings convert to numbers like Lua's `tonumber`; strings take part in
-arithmetic as Lua's string library makes them, and `..` joins strings and numbers. Still to
-come: the conformance sweep (part 9).
-
+**Status:** complete (all parts of the plan, version 0.0.4). A `Value` holds `nil`, a boolean,
+an integer, a float or a string, and knows its Lua type and its truthiness. Numbers convert
+between integer and float; the arithmetic, bitwise and comparison operators work with Lua's
+rules and error messages; strings are interned like Lua's, have a length, take part in
+arithmetic as Lua's string library makes them, and join with `..`; numbers and strings convert
+both ways like `tostring` and `tonumber`. Everything is tested from C++, including the parts of
+the official `math.lua` and `strings.lua` that need no VM.
 ## Where it lives
 
 | File                             | Contents                                             |
@@ -39,6 +38,7 @@ come: the conformance sweep (part 9).
 | `tests/string_test.cpp`          | string tests, tagged `[value][string]`               |
 | `tests/convert_test.cpp`         | conversion tests, tagged `[value][convert]`          |
 | `tests/coerce_test.cpp`          | string arithmetic and `..`, tagged `[value][coerce]` |
+| `tests/values_conformance_test.cpp` | `math.lua` and `strings.lua` assertions, tagged `[value][conformance]` |
 | `tests/value_printer.hpp`        | shows a `Value` in Catch2 failure messages           |
 | `tests/value_test.cpp`           | tests, tagged `[value]`                              |
 
@@ -466,3 +466,19 @@ given length (with its `\0`) for the caller to fill, `bytes_of()` gives the plac
 
 The concatenation and string arithmetic were run under AddressSanitizer with 3,000 chains of
 up to 20 mixed operands, short and long results, with no errors.
+## Conformance
+
+`tests/values_conformance_test.cpp` (tags `[value][conformance]`) rewrites in C++ the
+assertions of the official suite's `math.lua` and `strings.lua` that need only values: about
+2,300 checks. Each test case names the section it comes from:
+
+- `math.lua`: the integer and float sizes of the build, numeric strings and implicit
+  conversions, integer arithmetic, floor division (every pair of `-16..15` as integers and as
+  floats), the mod operator (sign rules, integer/float agreement, precision for `2^i` up to the
+  largest float, the extremes, and the section the suite skips on Windows because of `fmod`),
+  order between floats and integers, floats to integers (`x | x`), `-0` and NaN, and
+  `tonumber`/`tostring` at the limits.
+- `strings.lua`: string comparisons with embedded `\0`, and numbers in concatenation.
+
+The sweep found no difference from Lua. The rest of those files needs the VM and the
+standard library, and runs in the conformance stage (12).
