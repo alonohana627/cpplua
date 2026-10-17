@@ -1,0 +1,230 @@
+Chunk
+  LocalFunction check
+    Function(x) [upvalues: _ENV]
+      If
+        If
+          Binary ~=
+            Call
+              Name type
+              Name x (local 0)
+            String "number"
+          Then
+            CallStatement
+              Call
+                Name error
+                Binary ..
+                  String "expected a number, got "
+                  Call
+                    Name type
+                    Name x (local 0)
+                Integer 2
+      Return
+        Name x (local 0)
+  LocalFunction caller
+    Function() [upvalues: check]
+      Return
+        Call
+          Name check (upvalue 0)
+          String "oops"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name caller (local 1)
+  LocalFunction wrapper
+    Function() [upvalues: check]
+      Local v
+        Call
+          Name check (upvalue 0)
+          Table
+      Return
+        Name v (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name wrapper (local 2)
+  LocalFunction validate
+    Function(v) [upvalues: _ENV]
+      If
+        If
+          Unary not
+            Name v (local 0)
+          Then
+            CallStatement
+              Call
+                Name error
+                String "invalid"
+                Integer 3
+  LocalFunction api
+    Function(v) [upvalues: validate]
+      CallStatement
+        Call
+          Name validate (upvalue 0)
+          Name v (local 0)
+  LocalFunction user_code
+    Function() [upvalues: api]
+      CallStatement
+        Call
+          Name api (upvalue 0)
+          False
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name user_code (local 5)
+  LocalFunction lvl
+    Function(n) [upvalues: _ENV]
+      CallStatement
+        Call
+          Name error
+          Binary ..
+            String "level "
+            Name n (local 0)
+          Name n (local 0)
+  LocalFunction call_lvl
+    Function(n) [upvalues: lvl]
+      CallStatement
+        Call
+          Name lvl (upvalue 0)
+          Name n (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name call_lvl (local 7)
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name call_lvl (local 7)
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name call_lvl (local 7)
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name lvl (local 6)
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name call_lvl (local 7)
+        Integer 50
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name error
+        Integer 42
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              True
+              Integer 2
+  Local t
+    Table
+  Local ok, e
+    Call
+      Name pcall
+      Function() [upvalues: _ENV, t]
+        CallStatement
+          Call
+            Name error
+            Name t (upvalue 1)
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Name ok (local 9)
+      Binary ==
+        Name e (local 10)
+        Name t (local 8)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "42"
+  Local obj
+    Table
+  FunctionStatement (method)
+    Index
+      Name obj (local 11)
+      String "fail"
+    Function(self) [upvalues: _ENV]
+      CallStatement
+        Call
+          Name error
+          String "method failed"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name obj (local 11)
+          String "fail"
+        Name obj (local 11)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: obj]
+          CallStatement
+            MethodCall fail
+              Name obj (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local a
+            Table
+          Local b
+            Integer 1
+          Return
+            Binary +
+              Name b (local 1)
+              Name a (local 0)
+  Return
+    String "done"

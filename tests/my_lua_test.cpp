@@ -16,7 +16,8 @@
 #include "std/base.hpp"
 #include "vm/run.hpp"
 
-// Golden-file tests over tests/fixtures/my_lua/: every Lua file written while
+// Golden-file tests over tests/fixtures/my_lua/ and its topic folders
+// (parser/, vm/, tables/, ...): every Lua file written while
 // developing lua2 is kept there with its expected result next to it:
 //
 //   name.lua       the program
@@ -43,7 +44,7 @@ std::string read_bytes(const std::filesystem::path& path) {
 
 std::vector<std::filesystem::path> lua_files() {
     std::vector<std::filesystem::path> files;
-    for (const auto& entry : std::filesystem::directory_iterator{folder}) {
+    for (const auto& entry : std::filesystem::recursive_directory_iterator{folder}) {
         if (entry.path().extension() == ".lua") {
             files.push_back(entry.path());
         }
@@ -57,27 +58,33 @@ std::filesystem::path with_extension(const std::filesystem::path& path, std::str
 
 // Runs a program the way `lua2 file.lua` does, and returns its output: what
 // it printed, then its results joined with tabs, as `print(...)` writes
-// them (what `lua_ref -e "print(dofile('name.lua'))"` writes); or only the
-// error message, with a final newline, like the golden files.
+// them (what `lua_ref -e "print(dofile('name.lua'))"` writes), then what
+// finalizers print when the interpreter closes; or only the error message;
+// with a final newline, like the golden files.
 std::string run_output(std::string_view source, std::string_view name, lua2::GcMode mode,
                        lua2::GcStress stress) {
-    lua2::Heap heap{1};
-    lua2::open_base(heap);
     std::string out;
-    heap.set_output([&out](std::string_view text) { out += text; });
-    heap.set_mode(mode);
-    heap.set_stress(stress);
-    const auto results = lua2::run(heap.main_thread(), source, name);
-    if (!results) {
-        return results.error() + "\n";
-    }
-    for (std::size_t n = 0; n < results->size(); ++n) {
-        if (n > 0) {
-            out += '\t';
+    {
+        lua2::Heap heap{1};
+        lua2::open_base(heap);
+        lua2::open_debug(heap);
+        heap.set_output([&out](std::string_view text) { out += text; });
+        heap.set_mode(mode);
+        heap.set_stress(stress);
+        const auto results = lua2::run_text(heap.main_thread(), source, name);
+        if (!results) {
+            return results.error() + "\n"; // the golden files keep only the error
         }
-        out += lua2::display_text((*results)[n]);
+        for (std::size_t n = 0; n < results->size(); ++n) {
+            if (n > 0) {
+                out += '\t';
+            }
+            out += (*results)[n];
+        }
+        out += '\n';
+        heap.close(); // finalizers print after the results, as in Lua
     }
-    return out + "\n";
+    return out;
 }
 
 } // namespace

@@ -1,0 +1,395 @@
+Chunk
+  LocalFunction add_context
+    Function(msg) [upvalues: _ENV]
+      Return
+        Binary ..
+          String "handled: "
+          Call
+            Name tostring
+            Name msg (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function()
+          Return
+            String "fine"
+            Integer 2
+        Name add_context (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "broken"
+              Integer 0
+        Name add_context (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "broken"
+        Name add_context (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function()
+          Local t
+            Nil
+          Return
+            Index
+              Name t (local 0)
+              Integer 1
+        Name add_context (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function(a, b, ...) [upvalues: _ENV]
+          Return
+            Binary +
+              Name a (local 0)
+              Name b (local 1)
+            Call
+              Name select
+              String "#"
+              Vararg
+        Name add_context (local 0)
+        Integer 1
+        Integer 2
+        Integer 3
+        Integer 4
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function(a)
+          Return
+            Index
+              Name a (local 0)
+              String "x"
+        Name add_context (local 0)
+        Nil
+  Local ok, info
+    Call
+      Name xpcall
+      Function() [upvalues: _ENV]
+        CallStatement
+          Call
+            Name error
+            String "with table"
+            Integer 0
+      Function(m)
+        Return
+          Table
+            Field message
+              Name m (local 0)
+            Field handled
+              True
+  CallStatement
+    Call
+      Name print
+      Name ok (local 1)
+      Call
+        Name type
+        Name info (local 2)
+      Index
+        Name info (local 2)
+        String "message"
+      Index
+        Name info (local 2)
+        String "handled"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Name error
+        Function(m)
+          Return
+            Name m (local 0)
+            String "dropped"
+        String "first only"
+        Integer 0
+  Local obj
+    Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function() [upvalues: _ENV, obj]
+          CallStatement
+            Call
+              Name error
+              Name obj (upvalue 1)
+        Function(e) [upvalues: obj]
+          Return
+            Binary ==
+              Name e (local 0)
+              Name obj (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              Integer 12
+        Function(e) [upvalues: _ENV]
+          Return
+            Binary ..
+              Call
+                Name type
+                Name e (local 0)
+              Binary ..
+                String " "
+                Name e (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+        Function(e) [upvalues: _ENV]
+          Return
+            Binary ..
+              String "got "
+              Call
+                Name tostring
+                Name e (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              False
+        Function(e)
+          Return
+            Binary ==
+              Name e (local 0)
+              False
+  Local order
+    Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function() [upvalues: _ENV, order]
+          Local c <close>
+            Call
+              Name setmetatable
+              Table
+              Table
+                Field __close
+                  Function() [upvalues: order]
+                    Assign
+                      Targets
+                        Index
+                          Name order (upvalue 0)
+                          Binary +
+                            Unary #
+                              Name order (upvalue 0)
+                            Integer 1
+                      Values
+                        String "close"
+          CallStatement
+            Call
+              Name error
+              String "x"
+              Integer 0
+        Function(m) [upvalues: order]
+          Assign
+            Targets
+              Index
+                Name order (upvalue 0)
+                Binary +
+                  Unary #
+                    Name order (upvalue 0)
+                  Integer 1
+            Values
+              String "handler"
+          Return
+            Name m (local 0)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name order (local 4)
+        Integer 1
+      Index
+        Name order (local 4)
+        Integer 2
+  Local calls
+    Integer 0
+  LocalFunction counting
+    Function(m) [upvalues: calls]
+      Assign
+        Targets
+          Name calls (upvalue 0)
+        Values
+          Binary +
+            Name calls (upvalue 0)
+            Integer 1
+      Return
+        Name m (local 0)
+  NumericFor i
+    Integer 1
+    Integer 3
+    Body
+      CallStatement
+        Call
+          Name xpcall
+          Name error
+          Name counting (local 6)
+          Name i (local 10)
+  CallStatement
+    Call
+      Name xpcall
+      Function()
+      Name counting (local 6)
+  CallStatement
+    Call
+      Name print
+      Name calls (local 5)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "original"
+              Integer 0
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "in handler"
+              Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "original"
+              Integer 0
+        Function(m)
+          Local t
+            Nil
+          Return
+            Index
+              Name t (local 1)
+              String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name xpcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "e"
+              Integer 0
+        Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name xpcall
+        Function()
+          Return
+            String "no error"
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name xpcall
+        Name print
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name xpcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "inner"
+              Integer 0
+        Name add_context (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function() [upvalues: _ENV]
+          Return
+            Call
+              Name pcall
+              Name error
+              String "deep"
+              Integer 0
+        Name add_context (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name xpcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name pcall
+              Name error
+              String "caught"
+          CallStatement
+            Call
+              Name error
+              String "escaped"
+              Integer 0
+        Name add_context (local 0)
+  Return
+    Call
+      Name xpcall
+      Function(...)
+        Return
+          Vararg
+      Name add_context (local 0)
+      String "r1"
+      String "r2"

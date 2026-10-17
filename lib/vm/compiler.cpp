@@ -276,6 +276,9 @@ ConstKey key_of(Value v) {
     case Tag::LongString:
     case Tag::CFunction:
     case Tag::LuaClosure:
+    case Tag::CClosure:
+    case Tag::LightUserdata:
+    case Tag::Userdata:
     case Tag::Table: break;
     }
     return {.kind = ConstKey::Kind::String, .bits = v.payload()};
@@ -925,6 +928,9 @@ void Compiler::const2exp(Value v, ExpDesc& e) {
         break;
     case Tag::CFunction:
     case Tag::LuaClosure:
+    case Tag::CClosure:
+    case Tag::LightUserdata:
+    case Tag::Userdata:
     case Tag::Table: break; // never a constant
     }
 }

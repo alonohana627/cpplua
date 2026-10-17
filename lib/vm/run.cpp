@@ -5,12 +5,14 @@
 
 #include "gc/heap.hpp"
 #include "parser/parser.hpp"
+#include "std/auxlib.hpp"
 #include "value/convert.hpp"
 #include "value/string.hpp"
 #include "value/table.hpp"
 #include "vm/compiler.hpp"
 #include "vm/execute.hpp"
 #include "vm/function.hpp"
+#include "vm/metamethods.hpp"
 
 namespace lua2 {
 
@@ -35,32 +37,103 @@ std::expected<void, std::string> load(State& state, std::string_view source,
     env->set(Value::table(&heap.globals()));
     closure->upvalues()[0] = env;
     if (!state.check_stack(1)) {
-        return std::unexpected(std::move(state.error_message));
+        return std::unexpected(std::string{"stack overflow"});
     }
     state.push(Value::closure(closure));
     return {};
 }
 
-std::expected<std::vector<Value>, std::string> run(State& state, std::string_view source,
-                                                   std::string_view chunk_name) {
-    const std::uint32_t func = state.top;
+namespace {
+
+// lua.c's msghandler: the error object as text, with a traceback from where
+// it happened (R2.5). An object with __tostring is shown by it alone.
+int message_handler(State& state) { // NOLINT(misc-const-correctness)
+    const Value error = arg(state, 1);
+    std::string message;
+    if (error.is_string() || error.is_number()) {
+        message = display_text(error);
+    } else {
+        Value text;
+        if (!metafield(state.heap(), error, "__tostring").is_nil() &&
+            to_display_string(state, error, text) == Status::Ok && text.is_string()) {
+            push(state, text);
+            return 1;
+        }
+        message = std::format("(error object is a {} value)", type_name(error.type()));
+    }
+    push(state, Value::string(state.heap().new_string(traceback(state, message, 1))));
+    return 1;
+}
+
+// The C++ function that runs a chunk, as lua.c's pmain does: so a traceback
+// ends with "[C]: in ?", as the real Lua's.
+int run_chunk(State& state) { // NOLINT(misc-const-correctness)
+    const std::uint32_t chunk = arg_slot(state, 1);
+    if (call(state, chunk, all_results) != Status::Ok) {
+        return c_function_error;
+    }
+    return static_cast<int>(state.top - chunk);
+}
+
+// Loads the chunk and runs it protected; the results (or the error object)
+// start at `base`.
+std::expected<void, std::string> run_protected(State& state, std::string_view source,
+                                               std::string_view chunk_name, std::uint32_t base,
+                                               ErrorReport report) {
+    if (!state.check_stack(2)) {
+        return std::unexpected(std::string{"stack overflow"});
+    }
+    state.push(Value::c_function(&run_chunk));
     if (auto loaded = load(state, source, chunk_name); !loaded) {
+        state.top = base;
         return std::unexpected(std::move(loaded.error()));
     }
-    if (call(state, func, all_results) != Status::Ok) {
-        // Unwind what the error left: close the upvalues of the dead frames
-        // and go back to the bottom frame (stage 8 does this per pcall).
-        state.close_upvalues(func);
-        state.ci = &state.base_ci;
-        state.top = func;
-        return std::unexpected(std::move(state.error_message));
+    const Value handler =
+        report == ErrorReport::Traceback ? Value::c_function(&message_handler) : Value::nil();
+    if (protected_call(state, base, all_results, handler) != Status::Ok) {
+        std::string text = error_text(state, state.get(base));
+        state.top = base;
+        return std::unexpected(std::move(text));
+    }
+    return {};
+}
+
+} // namespace
+
+std::expected<std::vector<std::string>, std::string>
+run_text(State& state, std::string_view source, std::string_view chunk_name, ErrorReport report) {
+    const std::uint32_t base = state.top;
+    if (auto ran = run_protected(state, source, chunk_name, base, report); !ran) {
+        return std::unexpected(std::move(ran.error()));
+    }
+    // The results are on the stack, anchored, while __tostring runs.
+    std::vector<std::string> texts;
+    const std::uint32_t end = state.top;
+    for (std::uint32_t slot = base; slot < end; ++slot) {
+        Value text;
+        if (to_display_string(state, state.get(slot), text) != Status::Ok) {
+            std::string error = error_text(state, state.error_value);
+            state.top = base;
+            return std::unexpected(std::move(error));
+        }
+        texts.emplace_back(text.as_string()->view());
+    }
+    state.top = base;
+    return texts;
+}
+
+std::expected<std::vector<Value>, std::string> run(State& state, std::string_view source,
+                                                   std::string_view chunk_name) {
+    const std::uint32_t base = state.top;
+    if (auto ran = run_protected(state, source, chunk_name, base, ErrorReport::Message); !ran) {
+        return std::unexpected(std::move(ran.error()));
     }
     std::vector<Value> results;
-    results.reserve(state.top - func);
-    for (std::uint32_t slot = func; slot < state.top; ++slot) {
+    results.reserve(state.top - base);
+    for (std::uint32_t slot = base; slot < state.top; ++slot) {
         results.push_back(state.get(slot));
     }
-    state.top = func;
+    state.top = base;
     return results;
 }
 
@@ -75,6 +148,9 @@ std::string display_text(Value value) {
     case Tag::LongString: return std::string{value.as_string()->view()};
     case Tag::CFunction:
     case Tag::LuaClosure:
+    case Tag::CClosure:
+    case Tag::LightUserdata:
+    case Tag::Userdata:
     case Tag::Table:
         // "%s: %p" (luaL_tolstring), with the address the way the C library's
         // %p writes it: 16 hex digits on Windows, 0x and the digits elsewhere.

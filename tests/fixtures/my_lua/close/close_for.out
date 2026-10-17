@@ -1,0 +1,25 @@
+1	i=1
+2	i=2
+3	i=3
+4	closed normal err=nil
+1	i=1
+2	closed break err=nil
+found 4
+not found
+1	closed return err=nil
+2	closed return err=nil
+1	closed goto err=nil
+2	after goto
+false	stop at 3
+1	closed error err=stop at 3
+1	1,1
+2	1,2
+3	closed inner1 err=nil
+4	2,1
+5	2,2
+6	closed inner2 err=nil
+7	closed outer err=nil
+1	one pass
+2	x
+false	close_for.lua:69: variable '(for state)' got a non-closable value
+done

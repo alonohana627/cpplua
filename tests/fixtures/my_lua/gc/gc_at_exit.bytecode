@@ -1,0 +1,146 @@
+
+main <gc_at_exit.lua:0,0> (58 instructions)
+0+ params, 8 slots, 1 upvalue, 5 locals, 12 constants, 2 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	GETTABUP 	0 0 0	; _ENV "collectgarbage"
+	3	[7]	LOADK    	1 1	; "stop"
+	4	[7]	CALL     	0 2 1	; 1 in 0 out
+	5	[11]	CLOSURE  	0 0
+	6	[13]	GETTABUP 	1 0 2	; _ENV "setmetatable"
+	7	[13]	NEWTABLE 	2 0 0	; 0
+	8	[13]	EXTRAARG 	0
+	9	[13]	MOVE     	3 0
+	10	[13]	LOADK    	4 3	; "first (alive)"
+	11	[13]	CALL     	3 2 0	; 1 in all out
+	12	[13]	CALL     	1 0 2	; all in 1 out
+	13	[14]	GETTABUP 	2 0 2	; _ENV "setmetatable"
+	14	[14]	NEWTABLE 	3 0 0	; 0
+	15	[14]	EXTRAARG 	0
+	16	[14]	MOVE     	4 0
+	17	[14]	LOADK    	5 4	; "garbage, never collected"
+	18	[14]	CALL     	4 2 0	; 1 in all out
+	19	[14]	CALL     	2 0 1	; all in 0 out
+	20	[15]	GETTABUP 	2 0 2	; _ENV "setmetatable"
+	21	[15]	NEWTABLE 	3 0 0	; 0
+	22	[15]	EXTRAARG 	0
+	23	[15]	MOVE     	4 0
+	24	[15]	LOADK    	5 5	; "second (alive)"
+	25	[15]	CALL     	4 2 0	; 1 in all out
+	26	[15]	CALL     	2 0 2	; all in 1 out
+	27	[16]	GETTABUP 	3 0 2	; _ENV "setmetatable"
+	28	[16]	NEWTABLE 	4 0 0	; 0
+	29	[16]	EXTRAARG 	0
+	30	[16]	MOVE     	5 0
+	31	[16]	LOADK    	6 7	; "global (alive)"
+	32	[16]	CALL     	5 2 0	; 1 in all out
+	33	[16]	CALL     	3 0 2	; all in 1 out
+	34	[16]	SETTABUP 	0 6 3	; _ENV "global_obj"
+	35	[19]	NEWTABLE 	3 0 3	; 3
+	36	[19]	EXTRAARG 	0
+	37	[19]	LOADI    	4 1
+	38	[19]	LOADI    	5 2
+	39	[19]	LOADI    	6 3
+	40	[19]	SETLIST  	3 3 0
+	41	[20]	GETTABUP 	4 0 2	; _ENV "setmetatable"
+	42	[20]	NEWTABLE 	5 0 0	; 0
+	43	[20]	EXTRAARG 	0
+	44	[20]	NEWTABLE 	6 1 0	; 0
+	45	[20]	EXTRAARG 	0
+	46	[24]	CLOSURE  	7 1
+	47	[24]	SETFIELD 	6 8 7	; "__gc"
+	48	[20]	CALL     	4 3 2	; 2 in 1 out
+	49	[26]	GETTABUP 	5 0 9	; _ENV "print"
+	50	[26]	LOADK    	6 10	; "program body done"
+	51	[26]	CALL     	5 2 1	; 1 in 0 out
+	52	[27]	LOADK    	5 11	; "returned"
+	53	[27]	EQ       	1 2 0
+	54	[27]	JMP      	1	; to 56
+	55	[27]	LFALSESKIP	6
+	56	[27]	LOADTRUE 	6
+	57	[27]	RETURN   	5 3 1k	; 2 out
+	58	[27]	RETURN   	5 1 1k	; 0 out
+constants (12):
+	0	S	"collectgarbage"
+	1	S	"stop"
+	2	S	"setmetatable"
+	3	S	"first (alive)"
+	4	S	"garbage, never collected"
+	5	S	"second (alive)"
+	6	S	"global_obj"
+	7	S	"global (alive)"
+	8	S	"__gc"
+	9	S	"print"
+	10	S	"program body done"
+	11	S	"returned"
+locals (5):
+	0	finalizer	6	59
+	1	first	13	59
+	2	second	27	59
+	3	data	41	59
+	4	summer	49	59
+upvalues (1):
+	0	_ENV	1	0
+
+function <gc_at_exit.lua:9,11> (6 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 1 constant, 1 function
+	1	[10]	NEWTABLE 	1 1 0	; 0
+	2	[10]	EXTRAARG 	0
+	3	[10]	CLOSURE  	2 0
+	4	[10]	SETFIELD 	1 0 2	; "__gc"
+	5	[10]	RETURN   	1 2 0k	; 1 out
+	6	[11]	RETURN   	1 1 0k	; 0 out
+constants (1):
+	0	S	"__gc"
+locals (1):
+	0	name	1	7
+upvalues (1):
+	0	_ENV	0	0
+
+function <gc_at_exit.lua:10,10> (6 instructions)
+0 params, 3 slots, 2 upvalues, 0 locals, 2 constants, 0 functions
+	1	[10]	GETTABUP 	0 0 0	; _ENV "print"
+	2	[10]	LOADK    	1 1	; "finalizing "
+	3	[10]	GETUPVAL 	2 1	; name
+	4	[10]	CONCAT   	1 2
+	5	[10]	CALL     	0 2 1	; 1 in 0 out
+	6	[10]	RETURN0  	
+constants (2):
+	0	S	"print"
+	1	S	"finalizing "
+locals (0):
+upvalues (2):
+	0	_ENV	0	0
+	1	name	1	0
+
+function <gc_at_exit.lua:20,24> (15 instructions)
+0 params, 8 slots, 2 upvalues, 7 locals, 3 constants, 0 functions
+	1	[21]	LOADI    	0 0
+	2	[22]	GETTABUP 	1 0 0	; _ENV "ipairs"
+	3	[22]	GETUPVAL 	2 1	; data
+	4	[22]	CALL     	1 2 5	; 1 in 4 out
+	5	[22]	TFORPREP 	1 2	; to 8
+	6	[22]	ADD      	0 0 6
+	7	[22]	MMBIN    	0 6 6	; __add
+	8	[22]	TFORCALL 	1 2
+	9	[22]	TFORLOOP 	1 4	; to 6
+	10	[22]	CLOSE    	1
+	11	[23]	GETTABUP 	1 0 1	; _ENV "print"
+	12	[23]	LOADK    	2 2	; "sum at exit"
+	13	[23]	MOVE     	3 0
+	14	[23]	CALL     	1 3 1	; 2 in 0 out
+	15	[24]	RETURN   	1 1 0k	; 0 out
+constants (3):
+	0	S	"ipairs"
+	1	S	"print"
+	2	S	"sum at exit"
+locals (7):
+	0	s	2	16
+	1	(for state)	5	10
+	2	(for state)	5	10
+	3	(for state)	5	10
+	4	(for state)	5	10
+	5	_	6	8
+	6	v	6	8
+upvalues (2):
+	0	_ENV	0	0
+	1	data	1	3

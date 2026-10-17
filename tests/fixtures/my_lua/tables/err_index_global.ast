@@ -1,0 +1,9 @@
+Chunk
+  Local x
+    Integer 1
+  Return
+    Binary +
+      Index
+        Name config
+        String "width"
+      Name x (local 0)

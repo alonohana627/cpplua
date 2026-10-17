@@ -1,0 +1,546 @@
+Chunk
+  Local defaults
+    Table
+      Field color
+        String "red"
+      Field size
+        Integer 10
+  Local item
+    Call
+      Name setmetatable
+      Table
+        Field size
+          Integer 3
+      Table
+        Field __index
+          Name defaults (local 0)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name item (local 1)
+        String "color"
+      Index
+        Name item (local 1)
+        String "size"
+      Index
+        Name item (local 1)
+        String "weight"
+      Call
+        Name rawget
+        Name item (local 1)
+        String "color"
+      Call
+        Name rawget
+        Name item (local 1)
+        String "size"
+  Local base
+    Table
+      Field kind
+        String "base"
+      Field level
+        Integer 1
+  Local middle
+    Call
+      Name setmetatable
+      Table
+        Field level
+          Integer 2
+      Table
+        Field __index
+          Name base (local 2)
+  Local top
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Name middle (local 3)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name top (local 4)
+        String "kind"
+      Index
+        Name top (local 4)
+        String "level"
+      Index
+        Name top (local 4)
+        String "missing"
+      Call
+        Name rawget
+        Name top (local 4)
+        String "level"
+  Assign
+    Targets
+      Index
+        Name middle (local 3)
+        String "level"
+    Values
+      Nil
+  CallStatement
+    Call
+      Name print
+      Index
+        Name top (local 4)
+        String "level"
+  Assign
+    Targets
+      Index
+        Name base (local 2)
+        String "kind"
+    Values
+      String "changed"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name top (local 4)
+        String "kind"
+  Local Animal
+    Table
+  Assign
+    Targets
+      Index
+        Name Animal (local 5)
+        String "__index"
+    Values
+      Name Animal (local 5)
+  FunctionStatement
+    Index
+      Name Animal (local 5)
+      String "new"
+    Function(name, sound) [upvalues: _ENV, Animal]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field name
+              Name name (local 0)
+            Field sound
+              Name sound (local 1)
+          Name Animal (upvalue 1)
+  FunctionStatement (method)
+    Index
+      Name Animal (local 5)
+      String "speak"
+    Function(self)
+      Return
+        Binary ..
+          Index
+            Name self (local 0)
+            String "name"
+          Binary ..
+            String " says "
+            Index
+              Name self (local 0)
+              String "sound"
+  FunctionStatement (method)
+    Index
+      Name Animal (local 5)
+      String "kind"
+    Function(self)
+      Return
+        String "animal"
+  Local Dog
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Name Animal (local 5)
+  Assign
+    Targets
+      Index
+        Name Dog (local 6)
+        String "__index"
+    Values
+      Name Dog (local 6)
+  FunctionStatement
+    Index
+      Name Dog (local 6)
+      String "new"
+    Function(name) [upvalues: Animal, _ENV, Dog]
+      Local d
+        Call
+          Index
+            Name Animal (upvalue 0)
+            String "new"
+          Name name (local 0)
+          String "woof"
+      Return
+        Call
+          Name setmetatable
+          Name d (local 1)
+          Name Dog (upvalue 2)
+  FunctionStatement (method)
+    Index
+      Name Dog (local 6)
+      String "kind"
+    Function(self)
+      Return
+        String "dog"
+  FunctionStatement (method)
+    Index
+      Name Dog (local 6)
+      String "fetch"
+    Function(self)
+      Return
+        Binary ..
+          Index
+            Name self (local 0)
+            String "name"
+          String " fetches"
+  Local cat
+    Call
+      Index
+        Name Animal (local 5)
+        String "new"
+      String "cat"
+      String "meow"
+  Local rex
+    Call
+      Index
+        Name Dog (local 6)
+        String "new"
+      String "rex"
+  CallStatement
+    Call
+      Name print
+      MethodCall speak
+        Name cat (local 7)
+      MethodCall kind
+        Name cat (local 7)
+      Index
+        Name cat (local 7)
+        String "fetch"
+  CallStatement
+    Call
+      Name print
+      MethodCall speak
+        Name rex (local 8)
+      MethodCall kind
+        Name rex (local 8)
+      MethodCall fetch
+        Name rex (local 8)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Name getmetatable
+          Name rex (local 8)
+        Name Dog (local 6)
+      Call
+        Name rawget
+        Name rex (local 8)
+        String "speak"
+      Binary ==
+        Index
+          Name Dog (local 6)
+          String "speak"
+        Index
+          Name Animal (local 5)
+          String "speak"
+  Local log
+    Table
+  Local computed
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(t, k) [upvalues: log, _ENV]
+            Assign
+              Targets
+                Index
+                  Name log (upvalue 0)
+                  Binary +
+                    Unary #
+                      Name log (upvalue 0)
+                    Integer 1
+              Values
+                Name k (local 1)
+            If
+              If
+                Binary ==
+                  Call
+                    Name type
+                    Name k (local 1)
+                  String "number"
+                Then
+                  Return
+                    Binary *
+                      Name k (local 1)
+                      Name k (local 1)
+            Return
+              Binary ..
+                String "<"
+                Binary ..
+                  Call
+                    Name tostring
+                    Name k (local 1)
+                  String ">"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name computed (local 10)
+        Integer 4
+      Index
+        Name computed (local 10)
+        String "name"
+      Index
+        Name computed (local 10)
+        Float 2.5
+      Index
+        Name computed (local 10)
+        True
+  Assign
+    Targets
+      Index
+        Name computed (local 10)
+        Integer 4
+    Values
+      String "stored"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name computed (local 10)
+        Integer 4
+      Unary #
+        Name log (local 9)
+      Index
+        Name log (local 9)
+        Integer 1
+      Index
+        Name log (local 9)
+        Integer 2
+  Local seen_self
+  Local proxy
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(t, k) [upvalues: seen_self]
+            Assign
+              Targets
+                Name seen_self (upvalue 0)
+              Values
+                Name t (local 0)
+            Return
+              Name k (local 1)
+  Local _
+    Index
+      Name proxy (local 12)
+      String "anything"
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name seen_self (local 11)
+        Name proxy (local 12)
+  Local seq
+    Call
+      Name setmetatable
+      Table
+        Item
+          Integer 10
+        Item
+          Integer 20
+        Item
+          Integer 30
+      Table
+        Field __index
+          Function(_, i)
+            Return
+              Unary -
+                Name i (local 1)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name seq (local 14)
+        Integer 1
+      Index
+        Name seq (local 14)
+        Integer 3
+      Index
+        Name seq (local 14)
+        Integer 4
+      Index
+        Name seq (local 14)
+        Integer 0
+      Index
+        Name seq (local 14)
+        Unary -
+          Integer 2
+      Unary #
+        Name seq (local 14)
+  Local fallback
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(_, k)
+            Return
+              Binary ..
+                String "fallback "
+                Name k (local 1)
+  Local chained
+    Call
+      Name setmetatable
+      Table
+        Field own
+          String "own"
+      Table
+        Field __index
+          Name fallback (local 15)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name chained (local 16)
+        String "own"
+      Index
+        Name chained (local 16)
+        String "other"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name rawget
+        Name computed (local 10)
+        String "nothing"
+      Call
+        Name rawget
+        Name seq (local 14)
+        Integer 4
+      Call
+        Name rawget
+        Name seq (local 14)
+        Integer 1
+  Local calls
+    Integer 0
+  Local squares
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(t, n) [upvalues: calls, _ENV]
+            Assign
+              Targets
+                Name calls (upvalue 0)
+              Values
+                Binary +
+                  Name calls (upvalue 0)
+                  Integer 1
+            Local v
+              Binary *
+                Name n (local 1)
+                Name n (local 1)
+            CallStatement
+              Call
+                Name rawset
+                Name t (local 0)
+                Name n (local 1)
+                Name v (local 2)
+            Return
+              Name v (local 2)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name squares (local 18)
+        Integer 12
+      Index
+        Name squares (local 18)
+        Integer 12
+      Index
+        Name squares (local 18)
+        Integer 13
+      Name calls (local 17)
+  Local Vec
+    Table
+  Assign
+    Targets
+      Index
+        Name Vec (local 19)
+        String "__index"
+    Values
+      Name Vec (local 19)
+  FunctionStatement (method)
+    Index
+      Name Vec (local 19)
+      String "len2"
+    Function(self)
+      Return
+        Binary +
+          Binary *
+            Index
+              Name self (local 0)
+              Integer 1
+            Index
+              Name self (local 0)
+              Integer 1
+          Binary *
+            Index
+              Name self (local 0)
+              Integer 2
+            Index
+              Name self (local 0)
+              Integer 2
+  CallStatement
+    Call
+      Name print
+      MethodCall len2
+        Call
+          Name setmetatable
+          Table
+            Item
+              Integer 3
+            Item
+              Integer 4
+          Name Vec (local 19)
+  Local mt
+    Table
+  Local late
+    Call
+      Name setmetatable
+      Table
+      Name mt (local 20)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name late (local 21)
+        String "x"
+  Assign
+    Targets
+      Index
+        Name mt (local 20)
+        String "__index"
+    Values
+      Table
+        Field x
+          String "now"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name late (local 21)
+        String "x"
+  Return
+    Index
+      Name top (local 4)
+      String "kind"
+    MethodCall kind
+      Name rex (local 8)
+    Index
+      Name computed (local 10)
+      Integer 3

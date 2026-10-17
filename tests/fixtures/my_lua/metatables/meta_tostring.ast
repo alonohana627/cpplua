@@ -1,0 +1,319 @@
+Chunk
+  Local Point
+    Table
+  Assign
+    Targets
+      Index
+        Name Point (local 0)
+        String "__tostring"
+    Values
+      Function(p)
+        Return
+          Binary ..
+            String "Point("
+            Binary ..
+              Index
+                Name p (local 0)
+                String "x"
+              Binary ..
+                String ", "
+                Binary ..
+                  Index
+                    Name p (local 0)
+                    String "y"
+                  String ")"
+  Local p
+    Call
+      Name setmetatable
+      Table
+        Field x
+          Integer 1
+        Field y
+          Integer 2
+      Name Point (local 0)
+  CallStatement
+    Call
+      Name print
+      Name p (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Name p (local 1)
+      Binary ..
+        String "in "
+        Call
+          Name tostring
+          Name p (local 1)
+  CallStatement
+    Call
+      Name print
+      Name p (local 1)
+      Name p (local 1)
+      String "end"
+  Local Named
+    Table
+      Field __index
+        Table
+          Field greeting
+            String "hello"
+  Assign
+    Targets
+      Index
+        Name Named (local 2)
+        String "__tostring"
+    Values
+      Function(self)
+        Return
+          Binary ..
+            Index
+              Name self (local 0)
+              String "greeting"
+            Binary ..
+              String " "
+              Index
+                Name self (local 0)
+                String "name"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name setmetatable
+        Table
+          Field name
+            String "world"
+        Name Named (local 2)
+  Local both
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __tostring
+          Function()
+            Return
+              String "custom"
+        Field __name
+          String "MyType"
+  CallStatement
+    Call
+      Name print
+      Name both (local 3)
+      Call
+        Name tostring
+        Name both (local 3)
+  Local named_only
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __name
+          String "MyType"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Call
+          Name tostring
+          Name named_only (local 4)
+  Local bad_name
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __name
+          Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Call
+          Name tostring
+          Name bad_name (local 5)
+  Local wrong
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __tostring
+          Function()
+            Return
+              Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name tostring
+        Name wrong (local 6)
+  Local wrong_nil
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __tostring
+          Function()
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name tostring
+        Name wrong_nil (local 7)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name print
+        Name wrong (local 6)
+  Local failing
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __tostring
+          Function() [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                String "no text"
+                Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name tostring
+        Name failing (local 8)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Nil
+      Call
+        Name tostring
+        True
+      Call
+        Name tostring
+        False
+      Call
+        Name tostring
+        Integer 12
+      Call
+        Name tostring
+        Unary -
+          Float 0.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        Float 1e+15
+      Call
+        Name tostring
+        Float 1e+16
+      Call
+        Name tostring
+        Binary ^
+          Integer 2
+          Integer 63
+      Call
+        Name tostring
+        Binary //
+          Unary -
+            Integer 7
+          Integer 2
+      Call
+        Name tostring
+        Binary /
+          Integer 7
+          Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tostring
+        String "str"
+      Call
+        Name tostring
+        String ""
+      Call
+        Name pcall
+        Name tostring
+  Local List
+    Table
+  Assign
+    Targets
+      Index
+        Name List (local 9)
+        String "__tostring"
+    Values
+      Function(l) [upvalues: _ENV]
+        Local s
+          String "{"
+        GenericFor i, v
+          In
+            Call
+              Name ipairs
+              Name l (local 0)
+          Body
+            If
+              If
+                Binary >
+                  Name i (local 6)
+                  Integer 1
+                Then
+                  Assign
+                    Targets
+                      Name s (local 1)
+                    Values
+                      Binary ..
+                        Name s (local 1)
+                        String ", "
+            Assign
+              Targets
+                Name s (local 1)
+              Values
+                Binary ..
+                  Name s (local 1)
+                  Call
+                    Name tostring
+                    Name v (local 7)
+        Return
+          Binary ..
+            Name s (local 1)
+            String "}"
+  LocalFunction list
+    Function(...) [upvalues: _ENV, List]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Item
+              Vararg
+          Name List (upvalue 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name list (local 10)
+        Integer 1
+        String "two"
+        Name p (local 1)
+        Call
+          Name list (local 10)
+          True
+          False
+        Call
+          Name list (local 10)
+  Return
+    Call
+      Name tostring
+      Name p (local 1)
+    Index
+      Name p (local 1)
+      String "x"

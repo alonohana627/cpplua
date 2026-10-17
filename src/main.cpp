@@ -55,7 +55,7 @@ int print_dump(const std::string& path, Dump dump_view) {
 
 // `lua2 file.lua`: runs the file (its `print`s write to stdout), then prints
 // what it returns, if anything, separated by tabs, as `print(...)` would. An
-// error goes to stderr.
+// error goes to stderr with a stack traceback, as the real lua prints it.
 int run_file(const std::string& path, bool generational) {
     const auto source = read_file(path);
     if (!source) {
@@ -64,7 +64,7 @@ int run_file(const std::string& path, bool generational) {
     }
     lua2::Interpreter interpreter;
     interpreter.set_generational(generational);
-    const auto results = interpreter.run(lua2::skip_file_prefix(*source), path);
+    const auto results = interpreter.run(lua2::skip_file_prefix(*source), path, true);
     if (!results) {
         std::println(stderr, "lua2: {}", results.error());
         return EXIT_FAILURE;

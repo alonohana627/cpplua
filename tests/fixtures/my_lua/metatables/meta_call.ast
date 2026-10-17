@@ -1,0 +1,292 @@
+Chunk
+  Local counter
+    Call
+      Name setmetatable
+      Table
+        Field count
+          Integer 0
+      Table
+        Field __call
+          Function(self, by)
+            Assign
+              Targets
+                Index
+                  Name self (local 0)
+                  String "count"
+              Values
+                Binary +
+                  Index
+                    Name self (local 0)
+                    String "count"
+                  Paren
+                    Binary or
+                      Name by (local 1)
+                      Integer 1
+            Return
+              Index
+                Name self (local 0)
+                String "count"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name counter (local 0)
+      Call
+        Name counter (local 0)
+        Integer 5
+      Index
+        Name counter (local 0)
+        String "count"
+  Local multi
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __call
+          Function(self, ...) [upvalues: _ENV]
+            Return
+              Call
+                Name select
+                String "#"
+                Vararg
+              Vararg
+  CallStatement
+    Call
+      Name print
+      Call
+        Name multi (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name multi (local 1)
+        Integer 1
+        Nil
+        Integer 3
+  Local packed
+    Table
+      Item
+        Call
+          Name multi (local 1)
+          String "a"
+          String "b"
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name packed (local 2)
+      Index
+        Name packed (local 2)
+        Integer 1
+      Index
+        Name packed (local 2)
+        Integer 2
+      Index
+        Name packed (local 2)
+        Integer 3
+  Local who
+    Call
+      Name setmetatable
+      Table
+        Field name
+          String "me"
+      Table
+        Field __call
+          Function(self)
+            Return
+              Index
+                Name self (local 0)
+                String "name"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name who (local 3)
+  Local Point
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __call
+          Function(cls, x, y) [upvalues: _ENV]
+            Return
+              Call
+                Name setmetatable
+                Table
+                  Field x
+                    Name x (local 1)
+                  Field y
+                    Name y (local 2)
+                Name cls (local 0)
+  Assign
+    Targets
+      Index
+        Name Point (local 4)
+        String "__index"
+    Values
+      Name Point (local 4)
+  FunctionStatement (method)
+    Index
+      Name Point (local 4)
+      String "sum"
+    Function(self)
+      Return
+        Binary +
+          Index
+            Name self (local 0)
+            String "x"
+          Index
+            Name self (local 0)
+            String "y"
+  Local p
+    Call
+      Name Point (local 4)
+      Integer 3
+      Integer 4
+  CallStatement
+    Call
+      Name print
+      Index
+        Name p (local 5)
+        String "x"
+      Index
+        Name p (local 5)
+        String "y"
+      MethodCall sum
+        Name p (local 5)
+      Binary ==
+        Call
+          Name getmetatable
+          Name p (local 5)
+        Name Point (local 4)
+  Local range
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __call
+          Function(_, limit, i)
+            If
+              If
+                Binary <
+                  Name i (local 2)
+                  Name limit (local 1)
+                Then
+                  Return
+                    Binary +
+                      Name i (local 2)
+                      Integer 1
+  Local seen
+    Integer 0
+  GenericFor i
+    In
+      Name range (local 6)
+      Integer 5
+      Integer 0
+    Body
+      Assign
+        Targets
+          Name seen (local 7)
+        Values
+          Binary +
+            Name seen (local 7)
+            Name i (local 12)
+  CallStatement
+    Call
+      Name print
+      Name seen (local 7)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name counter (local 0)
+        Integer 10
+  LocalFunction tail
+    Function() [upvalues: counter]
+      Return
+        Call
+          Name counter (upvalue 0)
+          Integer 100
+  CallStatement
+    Call
+      Name print
+      Call
+        Name tail (local 8)
+  Local holder
+    Table
+      Field f
+        Name who (local 3)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name holder (local 9)
+          String "f"
+  Local inner, outer
+  Assign
+    Targets
+      Name inner (local 10)
+    Values
+      Call
+        Name setmetatable
+        Table
+        Table
+          Field __call
+            Function(self, a, b) [upvalues: inner, outer]
+              Return
+                Binary ==
+                  Name self (local 0)
+                  Name inner (upvalue 0)
+                Binary ==
+                  Name a (local 1)
+                  Name outer (upvalue 1)
+                Name b (local 2)
+  Assign
+    Targets
+      Name outer (local 11)
+    Values
+      Call
+        Name setmetatable
+        Table
+        Table
+          Field __call
+            Name inner (local 10)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name outer (local 11)
+        String "x"
+  Local plain
+    Call
+      Name setmetatable
+      Table
+      Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name plain (local 12)
+  Local ok, msg
+    Call
+      Name pcall
+      Function()
+        Local t
+          Table
+        CallStatement
+          Call
+            Name t (local 0)
+  CallStatement
+    Call
+      Name print
+      Name ok (local 13)
+      Name msg (local 14)
+  Return
+    Index
+      Name counter (local 0)
+      String "count"
+    MethodCall sum
+      Name p (local 5)

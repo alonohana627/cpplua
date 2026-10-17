@@ -1,0 +1,398 @@
+Chunk
+  Local made
+    Integer 0
+  NumericFor i
+    Integer 1
+    Integer 20000
+    Body
+      Local t
+        Table
+          Item
+            Name i (local 4)
+          Item
+            Binary +
+              Name i (local 4)
+              Integer 1
+          Field name
+            Binary ..
+              String "t"
+              Paren
+                Binary %
+                  Name i (local 4)
+                  Integer 10
+      Assign
+        Targets
+          Name made (local 0)
+        Values
+          Binary -
+            Binary +
+              Name made (local 0)
+              Index
+                Name t (local 5)
+                Integer 2
+            Index
+              Name t (local 5)
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Name made (local 0)
+  LocalFunction build
+    Function(depth) [upvalues: build]
+      If
+        If
+          Binary ==
+            Name depth (local 0)
+            Integer 0
+          Then
+            Return
+              Table
+                Field leaf
+                  True
+      Return
+        Table
+          Field left
+            Call
+              Name build (upvalue 0)
+              Binary -
+                Name depth (local 0)
+                Integer 1
+          Field right
+            Call
+              Name build (upvalue 0)
+              Binary -
+                Name depth (local 0)
+                Integer 1
+          Field depth
+            Name depth (local 0)
+  LocalFunction count
+    Function(node) [upvalues: count]
+      If
+        If
+          Index
+            Name node (local 0)
+            String "leaf"
+          Then
+            Return
+              Integer 1
+      Return
+        Binary +
+          Binary +
+            Integer 1
+            Call
+              Name count (upvalue 0)
+              Index
+                Name node (local 0)
+                String "left"
+          Call
+            Name count (upvalue 0)
+            Index
+              Name node (local 0)
+              String "right"
+  Local tree
+    Call
+      Name build (local 1)
+      Integer 12
+  NumericFor _
+    Integer 1
+    Integer 3
+    Body
+      CallStatement
+        Call
+          Name build (local 1)
+          Integer 10
+  CallStatement
+    Call
+      Name print
+      Call
+        Name count (local 2)
+        Name tree (local 3)
+      Index
+        Name tree (local 3)
+        String "depth"
+      Index
+        Index
+          Index
+            Name tree (local 3)
+            String "left"
+          String "left"
+        String "depth"
+  Local ring
+    Table
+  NumericFor i
+    Integer 1
+    Integer 1000
+    Body
+      Assign
+        Targets
+          Index
+            Name ring (local 4)
+            Name i (local 8)
+        Values
+          Table
+            Field id
+              Name i (local 8)
+  NumericFor i
+    Integer 1
+    Integer 1000
+    Body
+      Assign
+        Targets
+          Index
+            Index
+              Name ring (local 4)
+              Name i (local 8)
+            String "next"
+        Values
+          Index
+            Name ring (local 4)
+            Binary +
+              Binary %
+                Name i (local 8)
+                Integer 1000
+              Integer 1
+  Local node, steps
+    Index
+      Name ring (local 4)
+      Integer 1
+    Integer 0
+  Repeat
+    Body
+      Assign
+        Targets
+          Name node (local 5)
+        Values
+          Index
+            Name node (local 5)
+            String "next"
+      Assign
+        Targets
+          Name steps (local 6)
+        Values
+          Binary +
+            Name steps (local 6)
+            Integer 1
+    Until
+      Binary ==
+        Name node (local 5)
+        Index
+          Name ring (local 4)
+          Integer 1
+  Assign
+    Targets
+      Name ring (local 4)
+    Values
+      Table
+        Item
+          Name node (local 5)
+  Assign
+    Targets
+      Name node (local 5)
+    Values
+      Index
+        Index
+          Name node (local 5)
+          String "next"
+        String "next"
+  CallStatement
+    Call
+      Name print
+      Name steps (local 6)
+      Index
+        Name node (local 5)
+        String "id"
+      Index
+        Index
+          Name node (local 5)
+          String "next"
+        String "id"
+  NumericFor _
+    Integer 1
+    Integer 200
+    Body
+      Local a, b
+        Table
+        Table
+      Assign
+        Targets
+          Index
+            Name a (local 11)
+            String "other"
+          Index
+            Name b (local 12)
+            String "other"
+        Values
+          Name b (local 12)
+          Name a (local 11)
+      Assign
+        Targets
+          Index
+            Name a (local 11)
+            String "self"
+        Values
+          Name a (local 11)
+  Local registry
+    Table
+  NumericFor i
+    Integer 1
+    Integer 5000
+    Body
+      Local key
+        Table
+      Assign
+        Targets
+          Index
+            Name registry (local 7)
+            Binary +
+              Binary %
+                Name i (local 11)
+                Integer 50
+              Integer 1
+        Values
+          Table
+            Field key
+              Name key (local 12)
+            Field
+              Name key (local 12)
+              Name i (local 11)
+  Local rsum
+    Integer 0
+  NumericFor i
+    Integer 1
+    Integer 50
+    Body
+      Local entry
+        Index
+          Name registry (local 7)
+          Name i (local 12)
+      Assign
+        Targets
+          Name rsum (local 8)
+        Values
+          Binary +
+            Name rsum (local 8)
+            Index
+              Name entry (local 13)
+              Index
+                Name entry (local 13)
+                String "key"
+  CallStatement
+    Call
+      Name print
+      Name rsum (local 8)
+  Local big
+    Table
+  NumericFor i
+    Integer 1
+    Integer 100000
+    Body
+      Assign
+        Targets
+          Index
+            Name big (local 9)
+            Name i (local 13)
+        Values
+          Name i (local 13)
+  Local sum
+    Integer 0
+  NumericFor i
+    Integer 1
+    Unary #
+      Name big (local 9)
+    Body
+      Assign
+        Targets
+          Name sum (local 10)
+        Values
+          Binary +
+            Name sum (local 10)
+            Index
+              Name big (local 9)
+              Name i (local 14)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name big (local 9)
+      Name sum (local 10)
+  Local psum
+    Integer 0
+  GenericFor _, v
+    In
+      Call
+        Name ipairs
+        Name big (local 9)
+    Body
+      Assign
+        Targets
+          Name psum (local 11)
+        Values
+          Binary +
+            Name psum (local 11)
+            Name v (local 17)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name psum (local 11)
+        Name sum (local 10)
+  Local strs
+    Table
+  NumericFor i
+    Integer 1
+    Integer 3000
+    Body
+      Assign
+        Targets
+          Index
+            Name strs (local 12)
+            Name i (local 16)
+        Values
+          Binary ..
+            String "s"
+            Name i (local 16)
+  Local len
+    Integer 0
+  NumericFor i
+    Integer 1
+    Unary #
+      Name strs (local 12)
+    Body
+      Assign
+        Targets
+          Name len (local 13)
+        Values
+          Binary +
+            Name len (local 13)
+            Unary #
+              Index
+                Name strs (local 12)
+                Name i (local 17)
+  CallStatement
+    Call
+      Name print
+      Name len (local 13)
+      Index
+        Name strs (local 12)
+        Integer 3000
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      Call
+        Name count (local 2)
+        Name tree (local 3)
+      Unary #
+        Name big (local 9)
+      Index
+        Name strs (local 12)
+        Integer 1
+  Return
+    Name sum (local 10)
+    Binary >
+      Call
+        Name collectgarbage
+        String "count"
+      Integer 0

@@ -1,0 +1,513 @@
+
+main <meta_concat_len.lua:0,0> (222 instructions)
+0+ params, 22 slots, 1 upvalue, 20 locals, 23 constants, 15 functions
+	1	[1]	VARARGPREP	0
+	2	[9]	CLOSURE  	0 0
+	3	[10]	NEWTABLE 	1 1 0	; 0
+	4	[10]	EXTRAARG 	0
+	5	[10]	CLOSURE  	2 1
+	6	[10]	SETFIELD 	1 0 2	; "__concat"
+	7	[11]	CLOSURE  	2 2
+	8	[12]	MOVE     	3 2
+	9	[12]	LOADK    	4 1	; "a"
+	10	[12]	CALL     	3 2 2	; 1 in 1 out
+	11	[12]	MOVE     	4 2
+	12	[12]	LOADK    	5 2	; "b"
+	13	[12]	CALL     	4 2 2	; 1 in 1 out
+	14	[14]	GETTABUP 	5 0 3	; _ENV "print"
+	15	[14]	MOVE     	6 3
+	16	[14]	MOVE     	7 4
+	17	[14]	CONCAT   	6 2
+	18	[14]	CALL     	5 2 1	; 1 in 0 out
+	19	[15]	GETTABUP 	5 0 3	; _ENV "print"
+	20	[15]	MOVE     	6 3
+	21	[15]	LOADK    	7 4	; "s"
+	22	[15]	CONCAT   	6 2
+	23	[15]	LOADK    	7 4	; "s"
+	24	[15]	MOVE     	8 3
+	25	[15]	CONCAT   	7 2
+	26	[15]	MOVE     	8 3
+	27	[15]	LOADI    	9 1
+	28	[15]	CONCAT   	8 2
+	29	[15]	LOADI    	9 2
+	30	[15]	MOVE     	10 3
+	31	[15]	CONCAT   	9 2
+	32	[15]	MOVE     	10 3
+	33	[15]	LOADK    	11 5	; 1.5
+	34	[15]	CONCAT   	10 2
+	35	[15]	CALL     	5 6 1	; 5 in 0 out
+	36	[16]	GETTABUP 	5 0 3	; _ENV "print"
+	37	[16]	LOADK    	6 6	; "x"
+	38	[16]	LOADK    	7 7	; "y"
+	39	[16]	MOVE     	8 3
+	40	[16]	CONCAT   	6 3
+	41	[16]	CALL     	5 2 1	; 1 in 0 out
+	42	[17]	GETTABUP 	5 0 3	; _ENV "print"
+	43	[17]	MOVE     	6 3
+	44	[17]	LOADK    	7 6	; "x"
+	45	[17]	LOADK    	8 7	; "y"
+	46	[17]	CONCAT   	6 3
+	47	[17]	CALL     	5 2 1	; 1 in 0 out
+	48	[18]	GETTABUP 	5 0 3	; _ENV "print"
+	49	[18]	LOADK    	6 6	; "x"
+	50	[18]	MOVE     	7 3
+	51	[18]	LOADK    	8 7	; "y"
+	52	[18]	CONCAT   	6 3
+	53	[18]	CALL     	5 2 1	; 1 in 0 out
+	54	[19]	GETTABUP 	5 0 3	; _ENV "print"
+	55	[19]	MOVE     	6 3
+	56	[19]	MOVE     	7 4
+	57	[19]	MOVE     	8 3
+	58	[19]	CONCAT   	6 3
+	59	[19]	CALL     	5 2 1	; 1 in 0 out
+	60	[20]	GETTABUP 	5 0 3	; _ENV "print"
+	61	[20]	LOADK    	6 8	; "p"
+	62	[20]	LOADK    	7 9	; "q"
+	63	[20]	MOVE     	8 3
+	64	[20]	LOADK    	9 10	; "r"
+	65	[20]	LOADK    	10 4	; "s"
+	66	[20]	CONCAT   	6 5
+	67	[20]	CALL     	5 2 1	; 1 in 0 out
+	68	[21]	GETTABUP 	5 0 3	; _ENV "print"
+	69	[21]	LOADI    	6 1
+	70	[21]	LOADI    	7 2
+	71	[21]	MOVE     	8 3
+	72	[21]	LOADI    	9 3
+	73	[21]	LOADI    	10 4
+	74	[21]	CONCAT   	6 5
+	75	[21]	CALL     	5 2 1	; 1 in 0 out
+	76	[24]	NEWTABLE 	5 0 0	; 0
+	77	[24]	EXTRAARG 	0
+	78	[25]	CLOSURE  	6 3
+	79	[26]	CLOSURE  	7 4
+	80	[27]	CLOSURE  	8 5
+	81	[27]	SETFIELD 	5 0 8	; "__concat"
+	82	[28]	MOVE     	8 6
+	83	[28]	LOADK    	9 11	; "ab"
+	84	[28]	CALL     	8 2 2	; 1 in 1 out
+	85	[28]	LOADK    	9 12	; "cd"
+	86	[28]	MOVE     	10 6
+	87	[28]	LOADK    	11 13	; "ef"
+	88	[28]	CALL     	10 2 2	; 1 in 1 out
+	89	[28]	LOADI    	11 7
+	90	[28]	CONCAT   	8 4
+	91	[29]	GETTABUP 	9 0 3	; _ENV "print"
+	92	[29]	GETTABUP 	10 0 14	; _ENV "getmetatable"
+	93	[29]	MOVE     	11 8
+	94	[29]	CALL     	10 2 2	; 1 in 1 out
+	95	[29]	EQ       	10 5 1
+	96	[29]	JMP      	1	; to 98
+	97	[29]	LFALSESKIP	10
+	98	[29]	LOADTRUE 	10
+	99	[29]	GETFIELD 	11 8 15	; "s"
+	100	[29]	CALL     	9 3 1	; 2 in 0 out
+	101	[32]	GETTABUP 	9 0 3	; _ENV "print"
+	102	[32]	GETTABUP 	10 0 16	; _ENV "pcall"
+	103	[32]	CLOSURE  	11 6
+	104	[32]	CALL     	10 2 0	; 1 in all out
+	105	[32]	CALL     	9 0 1	; all in 0 out
+	106	[33]	GETTABUP 	9 0 3	; _ENV "print"
+	107	[33]	GETTABUP 	10 0 16	; _ENV "pcall"
+	108	[33]	CLOSURE  	11 7
+	109	[33]	CALL     	10 2 0	; 1 in all out
+	110	[33]	CALL     	9 0 1	; all in 0 out
+	111	[34]	GETTABUP 	9 0 3	; _ENV "print"
+	112	[34]	GETTABUP 	10 0 16	; _ENV "pcall"
+	113	[34]	CLOSURE  	11 8
+	114	[34]	CALL     	10 2 0	; 1 in all out
+	115	[34]	CALL     	9 0 1	; all in 0 out
+	116	[35]	GETTABUP 	9 0 3	; _ENV "print"
+	117	[35]	GETTABUP 	10 0 16	; _ENV "pcall"
+	118	[35]	CLOSURE  	11 9
+	119	[35]	CALL     	10 2 0	; 1 in all out
+	120	[35]	CALL     	9 0 1	; all in 0 out
+	121	[38]	GETTABUP 	9 0 17	; _ENV "setmetatable"
+	122	[38]	NEWTABLE 	10 0 3	; 3
+	123	[38]	EXTRAARG 	0
+	124	[38]	LOADI    	11 1
+	125	[38]	LOADI    	12 2
+	126	[38]	LOADI    	13 3
+	127	[38]	SETLIST  	10 3 0
+	128	[38]	NEWTABLE 	11 1 0	; 0
+	129	[38]	EXTRAARG 	0
+	130	[38]	CLOSURE  	12 10
+	131	[38]	SETFIELD 	11 18 12	; "__len"
+	132	[38]	CALL     	9 3 2	; 2 in 1 out
+	133	[39]	GETTABUP 	10 0 3	; _ENV "print"
+	134	[39]	LEN      	11 9
+	135	[39]	GETTABUP 	12 0 19	; _ENV "rawlen"
+	136	[39]	MOVE     	13 9
+	137	[39]	CALL     	12 2 0	; 1 in all out
+	138	[39]	CALL     	10 0 1	; all in 0 out
+	139	[40]	GETTABUP 	10 0 17	; _ENV "setmetatable"
+	140	[40]	NEWTABLE 	11 0 0	; 0
+	141	[40]	EXTRAARG 	0
+	142	[40]	NEWTABLE 	12 1 0	; 0
+	143	[40]	EXTRAARG 	0
+	144	[40]	CLOSURE  	13 11
+	145	[40]	SETFIELD 	12 18 13	; "__len"
+	146	[40]	CALL     	10 3 2	; 2 in 1 out
+	147	[41]	GETTABUP 	11 0 3	; _ENV "print"
+	148	[41]	LEN      	12 10
+	149	[41]	CALL     	11 2 1	; 1 in 0 out
+	150	[42]	GETTABUP 	11 0 17	; _ENV "setmetatable"
+	151	[42]	NEWTABLE 	12 0 0	; 0
+	152	[42]	EXTRAARG 	0
+	153	[42]	NEWTABLE 	13 1 0	; 0
+	154	[42]	EXTRAARG 	0
+	155	[42]	CLOSURE  	14 12
+	156	[42]	SETFIELD 	13 18 14	; "__len"
+	157	[42]	CALL     	11 3 2	; 2 in 1 out
+	158	[43]	GETTABUP 	12 0 3	; _ENV "print"
+	159	[43]	LEN      	13 11
+	160	[43]	CALL     	12 2 1	; 1 in 0 out
+	161	[45]	GETTABUP 	12 0 17	; _ENV "setmetatable"
+	162	[45]	NEWTABLE 	13 0 0	; 0
+	163	[45]	EXTRAARG 	0
+	164	[45]	NEWTABLE 	14 1 0	; 0
+	165	[45]	EXTRAARG 	0
+	166	[45]	CLOSURE  	15 13
+	167	[45]	SETFIELD 	14 18 15	; "__len"
+	168	[45]	CALL     	12 3 2	; 2 in 1 out
+	169	[46]	GETTABUP 	13 0 3	; _ENV "print"
+	170	[46]	LEN      	14 12
+	171	[46]	CALL     	13 2 1	; 1 in 0 out
+	172	[48]	NEWTABLE 	13 0 4	; 4
+	173	[48]	EXTRAARG 	0
+	174	[48]	LOADI    	14 10
+	175	[48]	LOADI    	15 20
+	176	[48]	LOADI    	16 30
+	177	[48]	LOADI    	17 40
+	178	[48]	SETLIST  	13 4 0
+	179	[49]	GETTABUP 	14 0 17	; _ENV "setmetatable"
+	180	[49]	NEWTABLE 	15 0 0	; 0
+	181	[49]	EXTRAARG 	0
+	182	[49]	NEWTABLE 	16 2 0	; 0
+	183	[49]	EXTRAARG 	0
+	184	[49]	SETFIELD 	16 20 13	; "__index"
+	185	[49]	CLOSURE  	17 14
+	186	[49]	SETFIELD 	16 18 17	; "__len"
+	187	[49]	CALL     	14 3 2	; 2 in 1 out
+	188	[50]	LOADI    	15 0
+	189	[51]	LOADI    	16 1
+	190	[51]	LEN      	17 14
+	191	[51]	LOADI    	18 1
+	192	[51]	FORPREP  	16 3	; exit to 197
+	193	[51]	GETTABLE 	20 14 19
+	194	[51]	ADD      	15 15 20
+	195	[51]	MMBIN    	15 20 6	; __add
+	196	[51]	FORLOOP  	16 4	; to 193
+	197	[52]	GETTABUP 	16 0 3	; _ENV "print"
+	198	[52]	LEN      	17 14
+	199	[52]	MOVE     	18 15
+	200	[52]	CALL     	16 3 1	; 2 in 0 out
+	201	[55]	GETTABUP 	16 0 3	; _ENV "print"
+	202	[55]	GETTABUP 	17 0 19	; _ENV "rawlen"
+	203	[55]	NEWTABLE 	18 0 2	; 2
+	204	[55]	EXTRAARG 	0
+	205	[55]	LOADI    	19 1
+	206	[55]	LOADI    	20 2
+	207	[55]	SETLIST  	18 2 0
+	208	[55]	CALL     	17 2 2	; 1 in 1 out
+	209	[55]	GETTABUP 	18 0 19	; _ENV "rawlen"
+	210	[55]	LOADK    	19 21	; "abc"
+	211	[55]	CALL     	18 2 2	; 1 in 1 out
+	212	[55]	GETTABUP 	19 0 16	; _ENV "pcall"
+	213	[55]	GETTABUP 	20 0 19	; _ENV "rawlen"
+	214	[55]	LOADI    	21 5
+	215	[55]	CALL     	19 3 0	; 2 in all out
+	216	[55]	CALL     	16 0 1	; all in 0 out
+	217	[57]	LEN      	16 9
+	218	[57]	MOVE     	17 3
+	219	[57]	LOADK    	18 22	; "end"
+	220	[57]	CONCAT   	17 2
+	221	[57]	RETURN   	16 3 1k	; 2 out
+	222	[57]	RETURN   	16 1 1k	; 0 out
+constants (23):
+	0	S	"__concat"
+	1	S	"a"
+	2	S	"b"
+	3	S	"print"
+	4	S	"s"
+	5	F	1.5
+	6	S	"x"
+	7	S	"y"
+	8	S	"p"
+	9	S	"q"
+	10	S	"r"
+	11	S	"ab"
+	12	S	"cd"
+	13	S	"ef"
+	14	S	"getmetatable"
+	15	S	"s"
+	16	S	"pcall"
+	17	S	"setmetatable"
+	18	S	"__len"
+	19	S	"rawlen"
+	20	S	"__index"
+	21	S	"abc"
+	22	S	"end"
+locals (20):
+	0	name	3	223
+	1	mt	7	223
+	2	V	8	223
+	3	a	14	223
+	4	b	14	223
+	5	Rope	78	223
+	6	rope	79	223
+	7	str	80	223
+	8	r	91	223
+	9	sized	133	223
+	10	stringy	147	223
+	11	multi	158	223
+	12	got	169	223
+	13	data	179	223
+	14	proxy	188	223
+	15	s	189	223
+	16	(for state)	192	197
+	17	(for state)	192	197
+	18	(for state)	192	197
+	19	i	193	196
+upvalues (1):
+	0	_ENV	1	0
+
+function <meta_concat_len.lua:6,9> (12 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 4 constants, 0 functions
+	1	[7]	GETTABUP 	1 0 0	; _ENV "type"
+	2	[7]	MOVE     	2 0
+	3	[7]	CALL     	1 2 2	; 1 in 1 out
+	4	[7]	EQK      	1 1 0	; "table"
+	5	[7]	JMP      	2	; to 8
+	6	[7]	GETFIELD 	1 0 2	; "name"
+	7	[7]	RETURN1  	1
+	8	[8]	GETTABUP 	1 0 3	; _ENV "tostring"
+	9	[8]	MOVE     	2 0
+	10	[8]	TAILCALL 	1 2 0	; 1 in
+	11	[8]	RETURN   	1 0 0	; all out
+	12	[9]	RETURN0  	
+constants (4):
+	0	S	"type"
+	1	S	"table"
+	2	S	"name"
+	3	S	"tostring"
+locals (1):
+	0	x	1	13
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_concat_len.lua:10,10> (12 instructions)
+2 params, 7 slots, 1 upvalue, 2 locals, 3 constants, 0 functions
+	1	[10]	LOADK    	2 0	; "["
+	2	[10]	GETUPVAL 	3 0	; name
+	3	[10]	MOVE     	4 0
+	4	[10]	CALL     	3 2 2	; 1 in 1 out
+	5	[10]	LOADK    	4 1	; "+"
+	6	[10]	GETUPVAL 	5 0	; name
+	7	[10]	MOVE     	6 1
+	8	[10]	CALL     	5 2 2	; 1 in 1 out
+	9	[10]	LOADK    	6 2	; "]"
+	10	[10]	CONCAT   	2 5
+	11	[10]	RETURN1  	2
+	12	[10]	RETURN0  	
+constants (3):
+	0	S	"["
+	1	S	"+"
+	2	S	"]"
+locals (2):
+	0	a	1	13
+	1	b	1	13
+upvalues (1):
+	0	name	1	0
+
+function <meta_concat_len.lua:11,11> (8 instructions)
+1 param, 4 slots, 2 upvalues, 1 local, 2 constants, 0 functions
+	1	[11]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	2	[11]	NEWTABLE 	2 1 0	; 0
+	3	[11]	EXTRAARG 	0
+	4	[11]	SETFIELD 	2 1 0	; "name"
+	5	[11]	GETUPVAL 	3 1	; mt
+	6	[11]	TAILCALL 	1 3 0	; 2 in
+	7	[11]	RETURN   	1 0 0	; all out
+	8	[11]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"name"
+locals (1):
+	0	n	1	9
+upvalues (2):
+	0	_ENV	0	0
+	1	mt	1	1
+
+function <meta_concat_len.lua:25,25> (8 instructions)
+1 param, 4 slots, 2 upvalues, 1 local, 2 constants, 0 functions
+	1	[25]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	2	[25]	NEWTABLE 	2 1 0	; 0
+	3	[25]	EXTRAARG 	0
+	4	[25]	SETFIELD 	2 1 0	; "s"
+	5	[25]	GETUPVAL 	3 1	; Rope
+	6	[25]	TAILCALL 	1 3 0	; 2 in
+	7	[25]	RETURN   	1 0 0	; all out
+	8	[25]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"s"
+locals (1):
+	0	s	1	9
+upvalues (2):
+	0	_ENV	0	0
+	1	Rope	1	5
+
+function <meta_concat_len.lua:26,26> (12 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 4 constants, 0 functions
+	1	[26]	GETTABUP 	1 0 0	; _ENV "type"
+	2	[26]	MOVE     	2 0
+	3	[26]	CALL     	1 2 2	; 1 in 1 out
+	4	[26]	EQK      	1 1 0	; "table"
+	5	[26]	JMP      	2	; to 8
+	6	[26]	GETFIELD 	1 0 2	; "s"
+	7	[26]	RETURN1  	1
+	8	[26]	GETTABUP 	1 0 3	; _ENV "tostring"
+	9	[26]	MOVE     	2 0
+	10	[26]	TAILCALL 	1 2 0	; 1 in
+	11	[26]	RETURN   	1 0 0	; all out
+	12	[26]	RETURN0  	
+constants (4):
+	0	S	"type"
+	1	S	"table"
+	2	S	"s"
+	3	S	"tostring"
+locals (1):
+	0	x	1	13
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_concat_len.lua:27,27> (11 instructions)
+2 params, 6 slots, 2 upvalues, 2 locals, 0 constants, 0 functions
+	1	[27]	GETUPVAL 	2 0	; rope
+	2	[27]	GETUPVAL 	3 1	; str
+	3	[27]	MOVE     	4 0
+	4	[27]	CALL     	3 2 2	; 1 in 1 out
+	5	[27]	GETUPVAL 	4 1	; str
+	6	[27]	MOVE     	5 1
+	7	[27]	CALL     	4 2 2	; 1 in 1 out
+	8	[27]	CONCAT   	3 2
+	9	[27]	TAILCALL 	2 2 0	; 1 in
+	10	[27]	RETURN   	2 0 0	; all out
+	11	[27]	RETURN0  	
+constants (0):
+locals (2):
+	0	p	1	12
+	1	q	1	12
+upvalues (2):
+	0	rope	1	6
+	1	str	1	7
+
+function <meta_concat_len.lua:32,32> (6 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[32]	LOADK    	0 0	; "a"
+	2	[32]	NEWTABLE 	1 0 0	; 0
+	3	[32]	EXTRAARG 	0
+	4	[32]	CONCAT   	0 2
+	5	[32]	RETURN1  	0
+	6	[32]	RETURN0  	
+constants (1):
+	0	S	"a"
+locals (0):
+upvalues (0):
+
+function <meta_concat_len.lua:33,33> (7 instructions)
+0 params, 3 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[33]	NEWTABLE 	0 0 0	; 0
+	2	[33]	EXTRAARG 	0
+	3	[33]	MOVE     	1 0
+	4	[33]	LOADK    	2 0	; "a"
+	5	[33]	CONCAT   	1 2
+	6	[33]	RETURN1  	1
+	7	[33]	RETURN0  	
+constants (1):
+	0	S	"a"
+locals (1):
+	0	t	3	8
+upvalues (0):
+
+function <meta_concat_len.lua:34,34> (5 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[34]	LOADK    	0 0	; "a"
+	2	[34]	LOADNIL  	1 0	; 1 out
+	3	[34]	CONCAT   	0 2
+	4	[34]	RETURN1  	0
+	5	[34]	RETURN0  	
+constants (1):
+	0	S	"a"
+locals (0):
+upvalues (0):
+
+function <meta_concat_len.lua:35,35> (6 instructions)
+0 params, 3 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[35]	LOADTRUE 	0
+	2	[35]	LOADI    	1 1
+	3	[35]	MOVE     	2 0
+	4	[35]	CONCAT   	1 2
+	5	[35]	RETURN1  	1
+	6	[35]	RETURN0  	
+constants (0):
+locals (1):
+	0	f	2	7
+upvalues (0):
+
+function <meta_concat_len.lua:38,38> (3 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[38]	LOADI    	1 42
+	2	[38]	RETURN1  	1
+	3	[38]	RETURN0  	
+constants (0):
+locals (1):
+	0	t	1	4
+upvalues (0):
+
+function <meta_concat_len.lua:40,40> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[40]	LOADK    	0 0	; "long"
+	2	[40]	RETURN1  	0
+	3	[40]	RETURN0  	
+constants (1):
+	0	S	"long"
+locals (0):
+upvalues (0):
+
+function <meta_concat_len.lua:42,42> (4 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[42]	LOADI    	0 1
+	2	[42]	LOADI    	1 2
+	3	[42]	RETURN   	0 3 0	; 2 out
+	4	[42]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_concat_len.lua:45,45> (6 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 1 constant, 0 functions
+	1	[45]	GETTABUP 	2 0 0	; _ENV "rawequal"
+	2	[45]	MOVE     	3 0
+	3	[45]	MOVE     	4 1
+	4	[45]	TAILCALL 	2 3 0	; 2 in
+	5	[45]	RETURN   	2 0 0	; all out
+	6	[45]	RETURN0  	
+constants (1):
+	0	S	"rawequal"
+locals (2):
+	0	t	1	7
+	1	u	1	7
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_concat_len.lua:49,49> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[49]	GETUPVAL 	0 0	; data
+	2	[49]	LEN      	0 0
+	3	[49]	RETURN1  	0
+	4	[49]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	data	1	13

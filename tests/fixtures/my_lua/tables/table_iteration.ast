@@ -1,0 +1,524 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Name next
+        Table
+  Local one
+    Table
+      Field only
+        Integer 42
+  Local k, v
+    Call
+      Name next
+      Name one (local 0)
+  CallStatement
+    Call
+      Name print
+      Name k (local 1)
+      Name v (local 2)
+      Call
+        Name next
+        Name one (local 0)
+        Name k (local 1)
+  Local t
+    Table
+      Item
+        Integer 10
+      Item
+        Integer 20
+      Item
+        Integer 30
+      Field x
+        Integer 1
+      Field y
+        Integer 2
+      Field z
+        Integer 3
+      Field
+        Float 2.5
+        Integer 4
+      Field
+        True
+        Integer 5
+  Local count, vsum, seen
+    Integer 0
+    Integer 0
+    Table
+  GenericFor key, val
+    In
+      Call
+        Name pairs
+        Name t (local 3)
+    Body
+      Assign
+        Targets
+          Name count (local 4)
+        Values
+          Binary +
+            Name count (local 4)
+            Integer 1
+      Assign
+        Targets
+          Name vsum (local 5)
+        Values
+          Binary +
+            Name vsum (local 5)
+            Name val (local 12)
+      Assign
+        Targets
+          Index
+            Name seen (local 6)
+            Name key (local 11)
+        Values
+          Binary +
+            Paren
+              Binary or
+                Index
+                  Name seen (local 6)
+                  Name key (local 11)
+                Integer 0
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Name count (local 4)
+      Name vsum (local 5)
+      Index
+        Name seen (local 6)
+        Integer 1
+      Index
+        Name seen (local 6)
+        Integer 2
+      Index
+        Name seen (local 6)
+        Integer 3
+      Index
+        Name seen (local 6)
+        String "x"
+      Index
+        Name seen (local 6)
+        String "y"
+      Index
+        Name seen (local 6)
+        String "z"
+      Index
+        Name seen (local 6)
+        Float 2.5
+      Index
+        Name seen (local 6)
+        True
+  Local n2, key
+    Integer 0
+    Nil
+  Repeat
+    Body
+      Assign
+        Targets
+          Name key (local 8)
+        Values
+          Call
+            Name next
+            Name t (local 3)
+            Name key (local 8)
+      If
+        If
+          Binary ~=
+            Name key (local 8)
+            Nil
+          Then
+            Assign
+              Targets
+                Name n2 (local 7)
+              Values
+                Binary +
+                  Name n2 (local 7)
+                  Integer 1
+    Until
+      Binary ==
+        Name key (local 8)
+        Nil
+  CallStatement
+    Call
+      Name print
+      Name n2 (local 7)
+  Local f, s, init
+    Call
+      Name pairs
+      Name t (local 3)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name f (local 9)
+        Name next
+      Binary ==
+        Name s (local 10)
+        Name t (local 3)
+      Name init (local 11)
+  Local clear
+    Table
+      Field a
+        Integer 1
+      Field b
+        Integer 2
+      Field c
+        Integer 3
+      Field d
+        Integer 4
+      Item
+        Integer 5
+      Item
+        Integer 6
+  GenericFor key
+    In
+      Call
+        Name pairs
+        Name clear (local 12)
+    Body
+      Assign
+        Targets
+          Index
+            Name clear (local 12)
+            Name key (local 17)
+        Values
+          Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name next
+        Name clear (local 12)
+  Local dbl
+    Table
+      Field a
+        Integer 1
+      Field b
+        Integer 2
+      Field c
+        Integer 3
+  GenericFor key, val
+    In
+      Call
+        Name pairs
+        Name dbl (local 13)
+    Body
+      Assign
+        Targets
+          Index
+            Name dbl (local 13)
+            Name key (local 18)
+        Values
+          Binary *
+            Name val (local 19)
+            Integer 2
+  CallStatement
+    Call
+      Name print
+      Index
+        Name dbl (local 13)
+        String "a"
+      Index
+        Name dbl (local 13)
+        String "b"
+      Index
+        Name dbl (local 13)
+        String "c"
+  Local seq
+    Table
+      Item
+        String "a"
+      Item
+        String "b"
+      Item
+        String "c"
+      Item
+        Nil
+      Item
+        String "e"
+  GenericFor i, val
+    In
+      Call
+        Name ipairs
+        Name seq (local 14)
+    Body
+      CallStatement
+        Call
+          Name print
+          Name i (local 19)
+          Name val (local 20)
+  Local f2, s2, i2
+    Call
+      Name ipairs
+      Name seq (local 14)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name s2 (local 16)
+        Name seq (local 14)
+      Name i2 (local 17)
+      Call
+        Name f2 (local 15)
+        Name seq (local 14)
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name f2 (local 15)
+        Name seq (local 14)
+        Integer 3
+  Local hits
+    Integer 0
+  GenericFor _
+    In
+      Call
+        Name ipairs
+        Table
+    Body
+      Assign
+        Targets
+          Name hits (local 18)
+        Values
+          Binary +
+            Name hits (local 18)
+            Integer 1
+  GenericFor _
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            Nil
+          Item
+            Integer 2
+    Body
+      Assign
+        Targets
+          Name hits (local 18)
+        Values
+          Binary +
+            Name hits (local 18)
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Name hits (local 18)
+  GenericFor i, val
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            False
+          Item
+            False
+    Body
+      CallStatement
+        Call
+          Name print
+          Name i (local 23)
+          Name val (local 24)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Nil
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Integer 1
+        Nil
+        Integer 3
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Integer 1
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Integer 2
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Integer 3
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Integer 4
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Unary -
+          Integer 1
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Unary -
+          Integer 2
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Unary -
+          Integer 3
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Float 2.0
+        String "x"
+        String "y"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name select
+        Integer 0
+        String "a"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name select
+        Unary -
+          Integer 4
+        String "a"
+        String "b"
+        String "c"
+  LocalFunction count_args
+    Function(...) [upvalues: _ENV]
+      Return
+        Call
+          Name select
+          String "#"
+          Vararg
+  LocalFunction last_arg
+    Function(...) [upvalues: _ENV]
+      Return
+        Paren
+          Call
+            Name select
+            Unary -
+              Integer 1
+            Vararg
+  CallStatement
+    Call
+      Name print
+      Call
+        Name count_args (local 19)
+      Call
+        Name count_args (local 19)
+        Nil
+      Call
+        Name count_args (local 19)
+        Integer 1
+        Integer 2
+        Integer 3
+      Call
+        Name last_arg (local 20)
+        Integer 1
+        Integer 2
+        Integer 3
+  LocalFunction sum
+    Function(...) [upvalues: _ENV]
+      Local total
+        Integer 0
+      NumericFor i
+        Integer 1
+        Call
+          Name select
+          String "#"
+          Vararg
+        Body
+          Assign
+            Targets
+              Name total (local 0)
+            Values
+              Binary +
+                Name total (local 0)
+                Paren
+                  Call
+                    Name select
+                    Name i (local 4)
+                    Vararg
+      Return
+        Name total (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name sum (local 21)
+      Call
+        Name sum (local 21)
+        Integer 1
+      Call
+        Name sum (local 21)
+        Integer 1
+        Integer 2
+        Integer 3
+        Integer 4
+        Integer 5
+  Return
+    Call
+      Name select
+      String "#"
+      Integer 1
+      Integer 2
+    Call
+      Name select
+      Integer 2
+      String "p"
+      String "q"

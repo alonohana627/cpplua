@@ -81,12 +81,13 @@ TEST_CASE("E9.1 unreachable strings are collected, reachable ones are not", "[gc
 
 TEST_CASE("E9.1 the string table forgets dead strings and shrinks", "[gc]") {
     Heap heap{test_seed};
+    const std::size_t own = heap.short_string_count(); // the heap's own strings
     for (int i = 0; i < 5000; ++i) {
         heap.new_string("s" + std::to_string(i));
     }
     CHECK(heap.short_string_count() >= 5000);
     heap.collect();
-    CHECK(heap.short_string_count() == 0);
+    CHECK(heap.short_string_count() == own);
     // New strings still intern correctly after the table shrank.
     const lua2::String* a = heap.new_string("again");
     CHECK(heap.new_string("again") == a);

@@ -1,0 +1,20 @@
+[a+b]
+[a+s]	[s+a]	[a+1]	[2+a]	[a+1.5]
+x[y+a]
+[a+xy]
+x[a+y]
+[a+[b+a]]
+pq[a+rs]
+12[a+34]
+true	abcdef7
+false	meta_concat_len.lua:32: attempt to concatenate a table value
+false	meta_concat_len.lua:33: attempt to concatenate a table value (local 't')
+false	meta_concat_len.lua:34: attempt to concatenate a nil value
+false	meta_concat_len.lua:35: attempt to concatenate a boolean value (local 'f')
+42	3
+long
+1
+true
+4	100
+2	3	false	bad argument #1 to 'rawlen' (table or string expected, got number)
+42	[a+end]

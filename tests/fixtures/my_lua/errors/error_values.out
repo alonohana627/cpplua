@@ -1,0 +1,26 @@
+42	-1.5	9.2233720368548e+18
+true	false	nil
+number	nil	string
+true	404	not found
+false	Error[500]: server failure	500	true
+Error[500]: server failure
+false	first	Error[1]: first
+ok
+Error 7
+string: plain
+other: 3.25
+other: nil
+string: error_values.lua:48: attempt to index a nil value (local 'n')
+false	bad value: nil
+false	bad value: true
+false	bad value: 10
+false	bad value: 10.0
+false	bad value: -0.0
+false	bad value: inf
+false	bad value: -inf
+false	bad value: 4.9406564584125e-324
+false	bad value: 9007199254740993
+false	bad value: text
+false	count: 3, ratio: 0.5
+false	true	true
+nil	0

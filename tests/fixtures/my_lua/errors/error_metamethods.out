@@ -1,0 +1,21 @@
+false	error_metamethods.lua:12: undefined field 'missing'
+false	error_metamethods.lua:15: cannot add field 'new'
+false	error_metamethods.lua:17: undefined field '1'
+false	error_metamethods.lua:21: no adding
+false	error_metamethods.lua:21: no adding
+false	no comparing
+false	no comparing
+false	table	concat
+false	no length
+false	called with 99
+false	no equality
+true	true
+false	error_metamethods.lua:27: attempt to index a nil value (local 'z')
+false	cannot show
+beforefalse	cannot show
+42	false	only numbers, got string
+false	only numbers, got boolean
+false	negative
+15
+true	outer fine	false	error_metamethods.lua:21: no adding
+15

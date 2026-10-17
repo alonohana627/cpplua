@@ -1,0 +1,393 @@
+
+main <meta_tostring.lua:0,0> (207 instructions)
+0+ params, 19 slots, 1 upvalue, 11 locals, 28 constants, 8 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	NEWTABLE 	0 0 0	; 0
+	3	[6]	EXTRAARG 	0
+	4	[7]	CLOSURE  	1 0
+	5	[7]	SETFIELD 	0 0 1	; "__tostring"
+	6	[8]	GETTABUP 	1 0 1	; _ENV "setmetatable"
+	7	[8]	NEWTABLE 	2 2 0	; 0
+	8	[8]	EXTRAARG 	0
+	9	[8]	SETFIELD 	2 2 3k	; "x" 1
+	10	[8]	SETFIELD 	2 4 5k	; "y" 2
+	11	[8]	MOVE     	3 0
+	12	[8]	CALL     	1 3 2	; 2 in 1 out
+	13	[9]	GETTABUP 	2 0 6	; _ENV "print"
+	14	[9]	MOVE     	3 1
+	15	[9]	CALL     	2 2 1	; 1 in 0 out
+	16	[10]	GETTABUP 	2 0 6	; _ENV "print"
+	17	[10]	GETTABUP 	3 0 7	; _ENV "tostring"
+	18	[10]	MOVE     	4 1
+	19	[10]	CALL     	3 2 2	; 1 in 1 out
+	20	[10]	LOADK    	4 8	; "in "
+	21	[10]	GETTABUP 	5 0 7	; _ENV "tostring"
+	22	[10]	MOVE     	6 1
+	23	[10]	CALL     	5 2 2	; 1 in 1 out
+	24	[10]	CONCAT   	4 2
+	25	[10]	CALL     	2 3 1	; 2 in 0 out
+	26	[11]	GETTABUP 	2 0 6	; _ENV "print"
+	27	[11]	MOVE     	3 1
+	28	[11]	MOVE     	4 1
+	29	[11]	LOADK    	5 9	; "end"
+	30	[11]	CALL     	2 4 1	; 3 in 0 out
+	31	[14]	NEWTABLE 	2 1 0	; 0
+	32	[14]	EXTRAARG 	0
+	33	[14]	NEWTABLE 	3 1 0	; 0
+	34	[14]	EXTRAARG 	0
+	35	[14]	SETFIELD 	3 11 12k	; "greeting" "hello"
+	36	[14]	SETFIELD 	2 10 3	; "__index"
+	37	[15]	CLOSURE  	3 1
+	38	[15]	SETFIELD 	2 0 3	; "__tostring"
+	39	[16]	GETTABUP 	3 0 6	; _ENV "print"
+	40	[16]	GETTABUP 	4 0 1	; _ENV "setmetatable"
+	41	[16]	NEWTABLE 	5 1 0	; 0
+	42	[16]	EXTRAARG 	0
+	43	[16]	SETFIELD 	5 13 14k	; "name" "world"
+	44	[16]	MOVE     	6 2
+	45	[16]	CALL     	4 3 0	; 2 in all out
+	46	[16]	CALL     	3 0 1	; all in 0 out
+	47	[19]	GETTABUP 	3 0 1	; _ENV "setmetatable"
+	48	[19]	NEWTABLE 	4 0 0	; 0
+	49	[19]	EXTRAARG 	0
+	50	[19]	NEWTABLE 	5 2 0	; 0
+	51	[19]	EXTRAARG 	0
+	52	[19]	CLOSURE  	6 2
+	53	[19]	SETFIELD 	5 0 6	; "__tostring"
+	54	[19]	SETFIELD 	5 15 16k	; "__name" "MyType"
+	55	[19]	CALL     	3 3 2	; 2 in 1 out
+	56	[20]	GETTABUP 	4 0 6	; _ENV "print"
+	57	[20]	MOVE     	5 3
+	58	[20]	GETTABUP 	6 0 7	; _ENV "tostring"
+	59	[20]	MOVE     	7 3
+	60	[20]	CALL     	6 2 0	; 1 in all out
+	61	[20]	CALL     	4 0 1	; all in 0 out
+	62	[23]	GETTABUP 	4 0 1	; _ENV "setmetatable"
+	63	[23]	NEWTABLE 	5 0 0	; 0
+	64	[23]	EXTRAARG 	0
+	65	[23]	NEWTABLE 	6 1 0	; 0
+	66	[23]	EXTRAARG 	0
+	67	[23]	SETFIELD 	6 15 16k	; "__name" "MyType"
+	68	[23]	CALL     	4 3 2	; 2 in 1 out
+	69	[24]	GETTABUP 	5 0 6	; _ENV "print"
+	70	[24]	GETTABUP 	6 0 17	; _ENV "type"
+	71	[24]	GETTABUP 	7 0 7	; _ENV "tostring"
+	72	[24]	MOVE     	8 4
+	73	[24]	CALL     	7 2 0	; 1 in all out
+	74	[24]	CALL     	6 0 0	; all in all out
+	75	[24]	CALL     	5 0 1	; all in 0 out
+	76	[26]	GETTABUP 	5 0 1	; _ENV "setmetatable"
+	77	[26]	NEWTABLE 	6 0 0	; 0
+	78	[26]	EXTRAARG 	0
+	79	[26]	NEWTABLE 	7 1 0	; 0
+	80	[26]	EXTRAARG 	0
+	81	[26]	SETFIELD 	7 15 18k	; "__name" 42
+	82	[26]	CALL     	5 3 2	; 2 in 1 out
+	83	[27]	GETTABUP 	6 0 6	; _ENV "print"
+	84	[27]	GETTABUP 	7 0 17	; _ENV "type"
+	85	[27]	GETTABUP 	8 0 7	; _ENV "tostring"
+	86	[27]	MOVE     	9 5
+	87	[27]	CALL     	8 2 0	; 1 in all out
+	88	[27]	CALL     	7 0 0	; all in all out
+	89	[27]	CALL     	6 0 1	; all in 0 out
+	90	[31]	GETTABUP 	6 0 1	; _ENV "setmetatable"
+	91	[31]	NEWTABLE 	7 0 0	; 0
+	92	[31]	EXTRAARG 	0
+	93	[31]	NEWTABLE 	8 1 0	; 0
+	94	[31]	EXTRAARG 	0
+	95	[31]	CLOSURE  	9 3
+	96	[31]	SETFIELD 	8 0 9	; "__tostring"
+	97	[31]	CALL     	6 3 2	; 2 in 1 out
+	98	[32]	GETTABUP 	7 0 6	; _ENV "print"
+	99	[32]	GETTABUP 	8 0 19	; _ENV "pcall"
+	100	[32]	GETTABUP 	9 0 7	; _ENV "tostring"
+	101	[32]	MOVE     	10 6
+	102	[32]	CALL     	8 3 0	; 2 in all out
+	103	[32]	CALL     	7 0 1	; all in 0 out
+	104	[33]	GETTABUP 	7 0 1	; _ENV "setmetatable"
+	105	[33]	NEWTABLE 	8 0 0	; 0
+	106	[33]	EXTRAARG 	0
+	107	[33]	NEWTABLE 	9 1 0	; 0
+	108	[33]	EXTRAARG 	0
+	109	[33]	CLOSURE  	10 4
+	110	[33]	SETFIELD 	9 0 10	; "__tostring"
+	111	[33]	CALL     	7 3 2	; 2 in 1 out
+	112	[34]	GETTABUP 	8 0 6	; _ENV "print"
+	113	[34]	GETTABUP 	9 0 19	; _ENV "pcall"
+	114	[34]	GETTABUP 	10 0 7	; _ENV "tostring"
+	115	[34]	MOVE     	11 7
+	116	[34]	CALL     	9 3 0	; 2 in all out
+	117	[34]	CALL     	8 0 1	; all in 0 out
+	118	[35]	GETTABUP 	8 0 6	; _ENV "print"
+	119	[35]	GETTABUP 	9 0 19	; _ENV "pcall"
+	120	[35]	GETTABUP 	10 0 6	; _ENV "print"
+	121	[35]	MOVE     	11 6
+	122	[35]	CALL     	9 3 0	; 2 in all out
+	123	[35]	CALL     	8 0 1	; all in 0 out
+	124	[38]	GETTABUP 	8 0 1	; _ENV "setmetatable"
+	125	[38]	NEWTABLE 	9 0 0	; 0
+	126	[38]	EXTRAARG 	0
+	127	[38]	NEWTABLE 	10 1 0	; 0
+	128	[38]	EXTRAARG 	0
+	129	[38]	CLOSURE  	11 5
+	130	[38]	SETFIELD 	10 0 11	; "__tostring"
+	131	[38]	CALL     	8 3 2	; 2 in 1 out
+	132	[39]	GETTABUP 	9 0 6	; _ENV "print"
+	133	[39]	GETTABUP 	10 0 19	; _ENV "pcall"
+	134	[39]	GETTABUP 	11 0 7	; _ENV "tostring"
+	135	[39]	MOVE     	12 8
+	136	[39]	CALL     	10 3 0	; 2 in all out
+	137	[39]	CALL     	9 0 1	; all in 0 out
+	138	[42]	GETTABUP 	9 0 6	; _ENV "print"
+	139	[42]	GETTABUP 	10 0 7	; _ENV "tostring"
+	140	[42]	LOADNIL  	11 0	; 1 out
+	141	[42]	CALL     	10 2 2	; 1 in 1 out
+	142	[42]	GETTABUP 	11 0 7	; _ENV "tostring"
+	143	[42]	LOADTRUE 	12
+	144	[42]	CALL     	11 2 2	; 1 in 1 out
+	145	[42]	GETTABUP 	12 0 7	; _ENV "tostring"
+	146	[42]	LOADFALSE	13
+	147	[42]	CALL     	12 2 2	; 1 in 1 out
+	148	[42]	GETTABUP 	13 0 7	; _ENV "tostring"
+	149	[42]	LOADI    	14 12
+	150	[42]	CALL     	13 2 2	; 1 in 1 out
+	151	[42]	GETTABUP 	14 0 7	; _ENV "tostring"
+	152	[42]	LOADF    	15 0
+	153	[42]	UNM      	15 15
+	154	[42]	CALL     	14 2 0	; 1 in all out
+	155	[42]	CALL     	9 0 1	; all in 0 out
+	156	[43]	GETTABUP 	9 0 6	; _ENV "print"
+	157	[43]	GETTABUP 	10 0 7	; _ENV "tostring"
+	158	[43]	LOADK    	11 20	; 1e+15
+	159	[43]	CALL     	10 2 2	; 1 in 1 out
+	160	[43]	GETTABUP 	11 0 7	; _ENV "tostring"
+	161	[43]	LOADK    	12 21	; 1e+16
+	162	[43]	CALL     	11 2 2	; 1 in 1 out
+	163	[43]	GETTABUP 	12 0 7	; _ENV "tostring"
+	164	[43]	LOADK    	13 22	; 9.2233720368548e+18
+	165	[43]	CALL     	12 2 2	; 1 in 1 out
+	166	[43]	GETTABUP 	13 0 7	; _ENV "tostring"
+	167	[43]	LOADI    	14 -4
+	168	[43]	CALL     	13 2 2	; 1 in 1 out
+	169	[43]	GETTABUP 	14 0 7	; _ENV "tostring"
+	170	[43]	LOADK    	15 23	; 3.5
+	171	[43]	CALL     	14 2 0	; 1 in all out
+	172	[43]	CALL     	9 0 1	; all in 0 out
+	173	[44]	GETTABUP 	9 0 6	; _ENV "print"
+	174	[44]	GETTABUP 	10 0 7	; _ENV "tostring"
+	175	[44]	LOADK    	11 24	; "str"
+	176	[44]	CALL     	10 2 2	; 1 in 1 out
+	177	[44]	GETTABUP 	11 0 7	; _ENV "tostring"
+	178	[44]	LOADK    	12 25	; ""
+	179	[44]	CALL     	11 2 2	; 1 in 1 out
+	180	[44]	GETTABUP 	12 0 19	; _ENV "pcall"
+	181	[44]	GETTABUP 	13 0 7	; _ENV "tostring"
+	182	[44]	CALL     	12 2 0	; 1 in all out
+	183	[44]	CALL     	9 0 1	; all in 0 out
+	184	[47]	NEWTABLE 	9 0 0	; 0
+	185	[47]	EXTRAARG 	0
+	186	[55]	CLOSURE  	10 6
+	187	[55]	SETFIELD 	9 0 10	; "__tostring"
+	188	[56]	CLOSURE  	10 7
+	189	[57]	GETTABUP 	11 0 6	; _ENV "print"
+	190	[57]	MOVE     	12 10
+	191	[57]	LOADI    	13 1
+	192	[57]	LOADK    	14 26	; "two"
+	193	[57]	MOVE     	15 1
+	194	[57]	MOVE     	16 10
+	195	[57]	LOADTRUE 	17
+	196	[57]	LOADFALSE	18
+	197	[57]	CALL     	16 3 2	; 2 in 1 out
+	198	[57]	MOVE     	17 10
+	199	[57]	CALL     	17 1 0	; 0 in all out
+	200	[57]	CALL     	12 0 0	; all in all out
+	201	[57]	CALL     	11 0 1	; all in 0 out
+	202	[59]	GETTABUP 	11 0 27	; _ENV "tostring"
+	203	[59]	MOVE     	12 1
+	204	[59]	CALL     	11 2 2	; 1 in 1 out
+	205	[59]	GETFIELD 	12 1 2	; "x"
+	206	[59]	RETURN   	11 3 1k	; 2 out
+	207	[59]	RETURN   	11 1 1k	; 0 out
+constants (28):
+	0	S	"__tostring"
+	1	S	"setmetatable"
+	2	S	"x"
+	3	I	1
+	4	S	"y"
+	5	I	2
+	6	S	"print"
+	7	S	"tostring"
+	8	S	"in "
+	9	S	"end"
+	10	S	"__index"
+	11	S	"greeting"
+	12	S	"hello"
+	13	S	"name"
+	14	S	"world"
+	15	S	"__name"
+	16	S	"MyType"
+	17	S	"type"
+	18	I	42
+	19	S	"pcall"
+	20	F	1e+15
+	21	F	1e+16
+	22	F	9.2233720368548e+18
+	23	F	3.5
+	24	S	"str"
+	25	S	""
+	26	S	"two"
+	27	S	"tostring"
+locals (11):
+	0	Point	4	208
+	1	p	13	208
+	2	Named	37	208
+	3	both	56	208
+	4	named_only	69	208
+	5	bad_name	83	208
+	6	wrong	98	208
+	7	wrong_nil	112	208
+	8	failing	132	208
+	9	List	186	208
+	10	list	189	208
+upvalues (1):
+	0	_ENV	1	0
+
+function <meta_tostring.lua:7,7> (8 instructions)
+1 param, 6 slots, 0 upvalues, 1 local, 5 constants, 0 functions
+	1	[7]	LOADK    	1 0	; "Point("
+	2	[7]	GETFIELD 	2 0 1	; "x"
+	3	[7]	LOADK    	3 2	; ", "
+	4	[7]	GETFIELD 	4 0 3	; "y"
+	5	[7]	LOADK    	5 4	; ")"
+	6	[7]	CONCAT   	1 5
+	7	[7]	RETURN1  	1
+	8	[7]	RETURN0  	
+constants (5):
+	0	S	"Point("
+	1	S	"x"
+	2	S	", "
+	3	S	"y"
+	4	S	")"
+locals (1):
+	0	p	1	9
+upvalues (0):
+
+function <meta_tostring.lua:15,15> (6 instructions)
+1 param, 4 slots, 0 upvalues, 1 local, 3 constants, 0 functions
+	1	[15]	GETFIELD 	1 0 0	; "greeting"
+	2	[15]	LOADK    	2 1	; " "
+	3	[15]	GETFIELD 	3 0 2	; "name"
+	4	[15]	CONCAT   	1 3
+	5	[15]	RETURN1  	1
+	6	[15]	RETURN0  	
+constants (3):
+	0	S	"greeting"
+	1	S	" "
+	2	S	"name"
+locals (1):
+	0	self	1	7
+upvalues (0):
+
+function <meta_tostring.lua:19,19> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[19]	LOADK    	0 0	; "custom"
+	2	[19]	RETURN1  	0
+	3	[19]	RETURN0  	
+constants (1):
+	0	S	"custom"
+locals (0):
+upvalues (0):
+
+function <meta_tostring.lua:31,31> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[31]	LOADI    	0 42
+	2	[31]	RETURN1  	0
+	3	[31]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_tostring.lua:33,33> (1 instruction)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[33]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_tostring.lua:38,38> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[38]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[38]	LOADK    	1 1	; "no text"
+	3	[38]	LOADI    	2 0
+	4	[38]	CALL     	0 3 1	; 2 in 0 out
+	5	[38]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"no text"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_tostring.lua:48,55> (25 instructions)
+1 param, 11 slots, 1 upvalue, 8 locals, 5 constants, 0 functions
+	1	[49]	LOADK    	1 0	; "{"
+	2	[50]	GETTABUP 	2 0 1	; _ENV "ipairs"
+	3	[50]	MOVE     	3 0
+	4	[50]	CALL     	2 2 5	; 1 in 4 out
+	5	[50]	TFORPREP 	2 12	; to 18
+	6	[51]	GTI      	6 1 0
+	7	[51]	JMP      	4	; to 12
+	8	[51]	MOVE     	8 1
+	9	[51]	LOADK    	9 2	; ", "
+	10	[51]	CONCAT   	8 2
+	11	[51]	MOVE     	1 8
+	12	[52]	MOVE     	8 1
+	13	[52]	GETTABUP 	9 0 3	; _ENV "tostring"
+	14	[52]	MOVE     	10 7
+	15	[52]	CALL     	9 2 2	; 1 in 1 out
+	16	[52]	CONCAT   	8 2
+	17	[52]	MOVE     	1 8
+	18	[50]	TFORCALL 	2 2
+	19	[50]	TFORLOOP 	2 14	; to 6
+	20	[53]	CLOSE    	2
+	21	[54]	MOVE     	2 1
+	22	[54]	LOADK    	3 4	; "}"
+	23	[54]	CONCAT   	2 2
+	24	[54]	RETURN   	2 2 0k	; 1 out
+	25	[55]	RETURN   	2 1 0k	; 0 out
+constants (5):
+	0	S	"{"
+	1	S	"ipairs"
+	2	S	", "
+	3	S	"tostring"
+	4	S	"}"
+locals (8):
+	0	l	1	26
+	1	s	2	26
+	2	(for state)	5	20
+	3	(for state)	5	20
+	4	(for state)	5	20
+	5	(for state)	5	20
+	6	i	6	18
+	7	v	6	18
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_tostring.lua:56,56> (10 instructions)
+0+ params, 3 slots, 2 upvalues, 0 locals, 1 constant, 0 functions
+	1	[56]	VARARGPREP	0
+	2	[56]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	3	[56]	NEWTABLE 	1 0 0	; 0
+	4	[56]	EXTRAARG 	0
+	5	[56]	VARARG   	2 0	; all out
+	6	[56]	SETLIST  	1 0 0
+	7	[56]	GETUPVAL 	2 1	; List
+	8	[56]	TAILCALL 	0 3 1	; 2 in
+	9	[56]	RETURN   	0 0 1	; all out
+	10	[56]	RETURN   	0 1 1	; 0 out
+constants (1):
+	0	S	"setmetatable"
+locals (0):
+upvalues (2):
+	0	_ENV	0	0
+	1	List	1	9

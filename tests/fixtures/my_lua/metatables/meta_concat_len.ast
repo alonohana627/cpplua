@@ -1,0 +1,382 @@
+Chunk
+  LocalFunction name
+    Function(x) [upvalues: _ENV]
+      If
+        If
+          Binary ==
+            Call
+              Name type
+              Name x (local 0)
+            String "table"
+          Then
+            Return
+              Index
+                Name x (local 0)
+                String "name"
+      Return
+        Call
+          Name tostring
+          Name x (local 0)
+  Local mt
+    Table
+      Field __concat
+        Function(a, b) [upvalues: name]
+          Return
+            Binary ..
+              String "["
+              Binary ..
+                Call
+                  Name name (upvalue 0)
+                  Name a (local 0)
+                Binary ..
+                  String "+"
+                  Binary ..
+                    Call
+                      Name name (upvalue 0)
+                      Name b (local 1)
+                    String "]"
+  LocalFunction V
+    Function(n) [upvalues: _ENV, mt]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field name
+              Name n (local 0)
+          Name mt (upvalue 1)
+  Local a, b
+    Call
+      Name V (local 2)
+      String "a"
+    Call
+      Name V (local 2)
+      String "b"
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        Name a (local 3)
+        Name b (local 4)
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        Name a (local 3)
+        String "s"
+      Binary ..
+        String "s"
+        Name a (local 3)
+      Binary ..
+        Name a (local 3)
+        Integer 1
+      Binary ..
+        Integer 2
+        Name a (local 3)
+      Binary ..
+        Name a (local 3)
+        Float 1.5
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        String "x"
+        Binary ..
+          String "y"
+          Name a (local 3)
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        Name a (local 3)
+        Binary ..
+          String "x"
+          String "y"
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        String "x"
+        Binary ..
+          Name a (local 3)
+          String "y"
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        Name a (local 3)
+        Binary ..
+          Name b (local 4)
+          Name a (local 3)
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        String "p"
+        Binary ..
+          String "q"
+          Binary ..
+            Name a (local 3)
+            Binary ..
+              String "r"
+              String "s"
+  CallStatement
+    Call
+      Name print
+      Binary ..
+        Integer 1
+        Binary ..
+          Integer 2
+          Binary ..
+            Name a (local 3)
+            Binary ..
+              Integer 3
+              Integer 4
+  Local Rope
+    Table
+  LocalFunction rope
+    Function(s) [upvalues: _ENV, Rope]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field s
+              Name s (local 0)
+          Name Rope (upvalue 1)
+  LocalFunction str
+    Function(x) [upvalues: _ENV]
+      If
+        If
+          Binary ==
+            Call
+              Name type
+              Name x (local 0)
+            String "table"
+          Then
+            Return
+              Index
+                Name x (local 0)
+                String "s"
+      Return
+        Call
+          Name tostring
+          Name x (local 0)
+  Assign
+    Targets
+      Index
+        Name Rope (local 5)
+        String "__concat"
+    Values
+      Function(p, q) [upvalues: rope, str]
+        Return
+          Call
+            Name rope (upvalue 0)
+            Binary ..
+              Call
+                Name str (upvalue 1)
+                Name p (local 0)
+              Call
+                Name str (upvalue 1)
+                Name q (local 1)
+  Local r
+    Binary ..
+      Call
+        Name rope (local 6)
+        String "ab"
+      Binary ..
+        String "cd"
+        Binary ..
+          Call
+            Name rope (local 6)
+            String "ef"
+          Integer 7
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Name getmetatable
+          Name r (local 8)
+        Name Rope (local 5)
+      Index
+        Name r (local 8)
+        String "s"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary ..
+              String "a"
+              Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local t
+            Table
+          Return
+            Binary ..
+              Name t (local 0)
+              String "a"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary ..
+              String "a"
+              Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local f
+            True
+          Return
+            Binary ..
+              Integer 1
+              Name f (local 0)
+  Local sized
+    Call
+      Name setmetatable
+      Table
+        Item
+          Integer 1
+        Item
+          Integer 2
+        Item
+          Integer 3
+      Table
+        Field __len
+          Function(t)
+            Return
+              Integer 42
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name sized (local 9)
+      Call
+        Name rawlen
+        Name sized (local 9)
+  Local stringy
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __len
+          Function()
+            Return
+              String "long"
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name stringy (local 10)
+  Local multi
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __len
+          Function()
+            Return
+              Integer 1
+              Integer 2
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name multi (local 11)
+  Local got
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __len
+          Function(t, u) [upvalues: _ENV]
+            Return
+              Call
+                Name rawequal
+                Name t (local 0)
+                Name u (local 1)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name got (local 12)
+  Local data
+    Table
+      Item
+        Integer 10
+      Item
+        Integer 20
+      Item
+        Integer 30
+      Item
+        Integer 40
+  Local proxy
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Name data (local 13)
+        Field __len
+          Function() [upvalues: data]
+            Return
+              Unary #
+                Name data (upvalue 0)
+  Local s
+    Integer 0
+  NumericFor i
+    Integer 1
+    Unary #
+      Name proxy (local 14)
+    Body
+      Assign
+        Targets
+          Name s (local 15)
+        Values
+          Binary +
+            Name s (local 15)
+            Index
+              Name proxy (local 14)
+              Name i (local 19)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name proxy (local 14)
+      Name s (local 15)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name rawlen
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+      Call
+        Name rawlen
+        String "abc"
+      Call
+        Name pcall
+        Name rawlen
+        Integer 5
+  Return
+    Unary #
+      Name sized (local 9)
+    Binary ..
+      Name a (local 3)
+      String "end"

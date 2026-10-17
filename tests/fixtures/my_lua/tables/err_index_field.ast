@@ -1,0 +1,21 @@
+Chunk
+  Local a
+    Table
+      Field x
+        Table
+          Field y
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Index
+        Index
+          Name a (local 0)
+          String "x"
+        String "y"
+  Return
+    Index
+      Index
+        Name a (local 0)
+        String "b"
+      String "c"

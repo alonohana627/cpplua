@@ -18,7 +18,8 @@ part is not a value rule.
 ## V1. Types
 
 - **V1.1** Lua has eight types: `nil`, `boolean`, `number`, `string`, `function`, `userdata`,
-  `thread` and `table`. Stage 4 builds the first four; the others arrive with their stages.
+  `thread` and `table`. Stage 4 builds the first four; the others arrive with their stages
+  (userdata, full and light, comes with the C++ API: only C++ code makes userdata).
 - **V1.2** The type name of a value is one of those eight words exactly (what `type(v)`
   returns, and what error messages say: `a nil value`, `a string value`).
 - **V1.3** `number` has two subtypes, **integer** and **float**. A value is always exactly one

@@ -1,0 +1,13 @@
+2	nil	3	nil	one	nil
+3	a=1	10=ten	b=nil	2	ten
+mon	wed	3
+false	meta_newindex.lua:37: attempt to update a read-only table (key 4)
+nil	nil
+true	v
+changed
+nil	nil	deep
+3	1	1	0	3
+20	400
+false	table index is nil
+false	table index is NaN
+3	deep	3

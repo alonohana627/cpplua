@@ -1,0 +1,758 @@
+
+main <meta_compare.lua:0,0> (346 instructions)
+0+ params, 33 slots, 1 upvalue, 36 locals, 17 constants, 20 functions
+	1	[1]	VARARGPREP	0
+	2	[8]	LOADI    	0 0
+	3	[9]	NEWTABLE 	1 0 0	; 0
+	4	[9]	EXTRAARG 	0
+	5	[13]	CLOSURE  	2 0
+	6	[13]	SETFIELD 	1 0 2	; "__eq"
+	7	[14]	CLOSURE  	2 1
+	8	[15]	MOVE     	3 2
+	9	[15]	LOADI    	4 1
+	10	[15]	CALL     	3 2 2	; 1 in 1 out
+	11	[15]	MOVE     	4 2
+	12	[15]	LOADI    	5 1
+	13	[15]	CALL     	4 2 2	; 1 in 1 out
+	14	[15]	MOVE     	5 2
+	15	[15]	LOADI    	6 2
+	16	[15]	CALL     	5 2 2	; 1 in 1 out
+	17	[17]	GETTABUP 	6 0 1	; _ENV "print"
+	18	[17]	EQ       	3 4 1
+	19	[17]	JMP      	1	; to 21
+	20	[17]	LFALSESKIP	7
+	21	[17]	LOADTRUE 	7
+	22	[17]	EQ       	3 5 1
+	23	[17]	JMP      	1	; to 25
+	24	[17]	LFALSESKIP	8
+	25	[17]	LOADTRUE 	8
+	26	[17]	EQ       	3 4 0
+	27	[17]	JMP      	1	; to 29
+	28	[17]	LFALSESKIP	9
+	29	[17]	LOADTRUE 	9
+	30	[17]	EQ       	3 5 0
+	31	[17]	JMP      	1	; to 33
+	32	[17]	LFALSESKIP	10
+	33	[17]	LOADTRUE 	10
+	34	[17]	MOVE     	11 0
+	35	[17]	CALL     	6 6 1	; 5 in 0 out
+	36	[18]	GETTABUP 	6 0 1	; _ENV "print"
+	37	[18]	EQ       	3 3 1
+	38	[18]	JMP      	1	; to 40
+	39	[18]	LFALSESKIP	7
+	40	[18]	LOADTRUE 	7
+	41	[18]	GETTABUP 	8 0 2	; _ENV "rawequal"
+	42	[18]	MOVE     	9 3
+	43	[18]	MOVE     	10 4
+	44	[18]	CALL     	8 3 2	; 2 in 1 out
+	45	[18]	GETTABUP 	9 0 2	; _ENV "rawequal"
+	46	[18]	MOVE     	10 3
+	47	[18]	MOVE     	11 3
+	48	[18]	CALL     	9 3 2	; 2 in 1 out
+	49	[18]	MOVE     	10 0
+	50	[18]	CALL     	6 5 1	; 4 in 0 out
+	51	[19]	GETTABUP 	6 0 1	; _ENV "print"
+	52	[19]	EQI      	3 1 1
+	53	[19]	JMP      	1	; to 55
+	54	[19]	LFALSESKIP	7
+	55	[19]	LOADTRUE 	7
+	56	[19]	EQI      	3 1 1
+	57	[19]	JMP      	1	; to 59
+	58	[19]	LFALSESKIP	8
+	59	[19]	LOADTRUE 	8
+	60	[19]	EQK      	3 3 1	; "1"
+	61	[19]	JMP      	1	; to 63
+	62	[19]	LFALSESKIP	9
+	63	[19]	LOADTRUE 	9
+	64	[19]	EQK      	3 4 1	; nil
+	65	[19]	JMP      	1	; to 67
+	66	[19]	LFALSESKIP	10
+	67	[19]	LOADTRUE 	10
+	68	[19]	MOVE     	11 0
+	69	[19]	CALL     	6 6 1	; 5 in 0 out
+	70	[21]	NEWTABLE 	6 1 0	; 0
+	71	[21]	EXTRAARG 	0
+	72	[21]	SETFIELD 	6 5 6k	; "v" 1
+	73	[22]	GETTABUP 	7 0 1	; _ENV "print"
+	74	[22]	EQ       	3 6 1
+	75	[22]	JMP      	1	; to 77
+	76	[22]	LFALSESKIP	8
+	77	[22]	LOADTRUE 	8
+	78	[22]	EQ       	6 3 1
+	79	[22]	JMP      	1	; to 81
+	80	[22]	LFALSESKIP	9
+	81	[22]	LOADTRUE 	9
+	82	[22]	MOVE     	10 0
+	83	[22]	CALL     	7 4 1	; 3 in 0 out
+	84	[23]	NEWTABLE 	7 1 0	; 0
+	85	[23]	EXTRAARG 	0
+	86	[23]	CLOSURE  	8 2
+	87	[23]	SETFIELD 	7 0 8	; "__eq"
+	88	[24]	GETTABUP 	8 0 7	; _ENV "setmetatable"
+	89	[24]	NEWTABLE 	9 0 0	; 0
+	90	[24]	EXTRAARG 	0
+	91	[24]	MOVE     	10 7
+	92	[24]	CALL     	8 3 2	; 2 in 1 out
+	93	[25]	GETTABUP 	9 0 1	; _ENV "print"
+	94	[25]	EQ       	8 3 1
+	95	[25]	JMP      	1	; to 97
+	96	[25]	LFALSESKIP	10
+	97	[25]	LOADTRUE 	10
+	98	[25]	EQ       	3 8 1
+	99	[25]	JMP      	1	; to 101
+	100	[25]	LFALSESKIP	11
+	101	[25]	LOADTRUE 	11
+	102	[25]	CALL     	9 3 1	; 2 in 0 out
+	103	[28]	NEWTABLE 	9 0 2	; 2
+	104	[28]	EXTRAARG 	0
+	105	[28]	MOVE     	10 2
+	106	[28]	LOADI    	11 5
+	107	[28]	CALL     	10 2 2	; 1 in 1 out
+	108	[28]	MOVE     	11 2
+	109	[28]	LOADI    	12 6
+	110	[28]	CALL     	11 2 2	; 1 in 1 out
+	111	[28]	MOVE     	12 2
+	112	[28]	LOADI    	13 7
+	113	[28]	CALL     	12 2 0	; 1 in all out
+	114	[28]	SETLIST  	9 0 0
+	115	[32]	CLOSURE  	10 3
+	116	[33]	GETTABUP 	11 0 1	; _ENV "print"
+	117	[33]	MOVE     	12 10
+	118	[33]	MOVE     	13 9
+	119	[33]	MOVE     	14 2
+	120	[33]	LOADI    	15 6
+	121	[33]	CALL     	14 2 0	; 1 in all out
+	122	[33]	CALL     	12 0 2	; all in 1 out
+	123	[33]	MOVE     	13 10
+	124	[33]	MOVE     	14 9
+	125	[33]	MOVE     	15 2
+	126	[33]	LOADI    	16 9
+	127	[33]	CALL     	15 2 0	; 1 in all out
+	128	[33]	CALL     	13 0 0	; all in all out
+	129	[33]	CALL     	11 0 1	; all in 0 out
+	130	[36]	NEWTABLE 	11 0 0	; 0
+	131	[36]	EXTRAARG 	0
+	132	[37]	NEWTABLE 	12 0 0	; 0
+	133	[37]	EXTRAARG 	0
+	134	[38]	CLOSURE  	13 4
+	135	[38]	SETFIELD 	12 8 13	; "__lt"
+	136	[39]	CLOSURE  	13 5
+	137	[39]	SETFIELD 	12 9 13	; "__le"
+	138	[40]	CLOSURE  	13 6
+	139	[41]	MOVE     	14 13
+	140	[41]	LOADI    	15 1
+	141	[41]	CALL     	14 2 2	; 1 in 1 out
+	142	[41]	MOVE     	15 13
+	143	[41]	LOADI    	16 2
+	144	[41]	CALL     	15 2 2	; 1 in 1 out
+	145	[41]	MOVE     	16 13
+	146	[41]	LOADI    	17 2
+	147	[41]	CALL     	16 2 2	; 1 in 1 out
+	148	[42]	GETTABUP 	17 0 1	; _ENV "print"
+	149	[42]	LT       	14 15 1
+	150	[42]	JMP      	1	; to 152
+	151	[42]	LFALSESKIP	18
+	152	[42]	LOADTRUE 	18
+	153	[42]	LT       	15 14 1
+	154	[42]	JMP      	1	; to 156
+	155	[42]	LFALSESKIP	19
+	156	[42]	LOADTRUE 	19
+	157	[42]	LE       	14 15 1
+	158	[42]	JMP      	1	; to 160
+	159	[42]	LFALSESKIP	20
+	160	[42]	LOADTRUE 	20
+	161	[42]	LE       	15 16 1
+	162	[42]	JMP      	1	; to 164
+	163	[42]	LFALSESKIP	21
+	164	[42]	LOADTRUE 	21
+	165	[42]	LT       	14 15 1
+	166	[42]	JMP      	1	; to 168
+	167	[42]	LFALSESKIP	22
+	168	[42]	LOADTRUE 	22
+	169	[42]	LE       	15 14 1
+	170	[42]	JMP      	1	; to 172
+	171	[42]	LFALSESKIP	23
+	172	[42]	LOADTRUE 	23
+	173	[42]	CALL     	17 7 1	; 6 in 0 out
+	174	[43]	GETTABUP 	17 0 1	; _ENV "print"
+	175	[43]	LEN      	18 11
+	176	[43]	GETI     	19 11 1
+	177	[43]	GETI     	20 11 2
+	178	[43]	GETI     	21 11 3
+	179	[43]	GETI     	22 11 4
+	180	[43]	GETI     	23 11 5
+	181	[43]	GETI     	24 11 6
+	182	[43]	CALL     	17 8 1	; 7 in 0 out
+	183	[46]	GETTABUP 	17 0 10	; _ENV "setmetatable"
+	184	[46]	NEWTABLE 	18 0 0	; 0
+	185	[46]	EXTRAARG 	0
+	186	[46]	NEWTABLE 	19 2 0	; 0
+	187	[46]	EXTRAARG 	0
+	188	[47]	CLOSURE  	20 7
+	189	[47]	SETFIELD 	19 8 20	; "__lt"
+	190	[48]	CLOSURE  	20 8
+	191	[48]	SETFIELD 	19 9 20	; "__le"
+	192	[46]	CALL     	17 3 2	; 2 in 1 out
+	193	[50]	GETTABUP 	18 0 1	; _ENV "print"
+	194	[50]	LTI      	17 1 1
+	195	[50]	JMP      	1	; to 197
+	196	[50]	LFALSESKIP	19
+	197	[50]	LOADTRUE 	19
+	198	[50]	GTI      	17 1 1
+	199	[50]	JMP      	1	; to 201
+	200	[50]	LFALSESKIP	20
+	201	[50]	LOADTRUE 	20
+	202	[50]	LEI      	17 1 1
+	203	[50]	JMP      	1	; to 205
+	204	[50]	LFALSESKIP	21
+	205	[50]	LOADTRUE 	21
+	206	[50]	LEI      	17 1 1
+	207	[50]	JMP      	1	; to 209
+	208	[50]	LFALSESKIP	22
+	209	[50]	LOADTRUE 	22
+	210	[50]	CALL     	18 5 1	; 4 in 0 out
+	211	[53]	NEWTABLE 	18 1 0	; 0
+	212	[53]	EXTRAARG 	0
+	213	[53]	CLOSURE  	19 9
+	214	[53]	SETFIELD 	18 8 19	; "__lt"
+	215	[54]	GETTABUP 	19 0 10	; _ENV "setmetatable"
+	216	[54]	NEWTABLE 	20 1 0	; 0
+	217	[54]	EXTRAARG 	0
+	218	[54]	SETFIELD 	20 11 6k	; "v" 1
+	219	[54]	MOVE     	21 18
+	220	[54]	CALL     	19 3 2	; 2 in 1 out
+	221	[54]	GETTABUP 	20 0 10	; _ENV "setmetatable"
+	222	[54]	NEWTABLE 	21 1 0	; 0
+	223	[54]	EXTRAARG 	0
+	224	[54]	SETFIELD 	21 11 12k	; "v" 2
+	225	[54]	MOVE     	22 18
+	226	[54]	CALL     	20 3 2	; 2 in 1 out
+	227	[55]	GETTABUP 	21 0 1	; _ENV "print"
+	228	[55]	GETTABUP 	22 0 13	; _ENV "pcall"
+	229	[55]	CLOSURE  	23 10
+	230	[55]	CALL     	22 2 0	; 1 in all out
+	231	[55]	CALL     	21 0 1	; all in 0 out
+	232	[58]	GETTABUP 	21 0 10	; _ENV "setmetatable"
+	233	[58]	NEWTABLE 	22 0 0	; 0
+	234	[58]	EXTRAARG 	0
+	235	[58]	NEWTABLE 	23 1 0	; 0
+	236	[58]	EXTRAARG 	0
+	237	[58]	CLOSURE  	24 11
+	238	[58]	SETFIELD 	23 0 24	; "__eq"
+	239	[58]	CALL     	21 3 2	; 2 in 1 out
+	240	[59]	GETTABUP 	22 0 1	; _ENV "print"
+	241	[59]	GETTABUP 	23 0 13	; _ENV "pcall"
+	242	[59]	CLOSURE  	24 12
+	243	[59]	CALL     	23 2 0	; 1 in all out
+	244	[59]	CALL     	22 0 1	; all in 0 out
+	245	[60]	GETTABUP 	22 0 1	; _ENV "print"
+	246	[60]	GETTABUP 	23 0 13	; _ENV "pcall"
+	247	[60]	CLOSURE  	24 13
+	248	[60]	CALL     	23 2 0	; 1 in all out
+	249	[60]	CALL     	22 0 1	; all in 0 out
+	250	[63]	GETTABUP 	22 0 1	; _ENV "print"
+	251	[63]	GETTABUP 	23 0 13	; _ENV "pcall"
+	252	[63]	CLOSURE  	24 14
+	253	[63]	CALL     	23 2 0	; 1 in all out
+	254	[63]	CALL     	22 0 1	; all in 0 out
+	255	[64]	GETTABUP 	22 0 1	; _ENV "print"
+	256	[64]	GETTABUP 	23 0 13	; _ENV "pcall"
+	257	[64]	CLOSURE  	24 15
+	258	[64]	CALL     	23 2 0	; 1 in all out
+	259	[64]	CALL     	22 0 1	; all in 0 out
+	260	[65]	GETTABUP 	22 0 1	; _ENV "print"
+	261	[65]	GETTABUP 	23 0 13	; _ENV "pcall"
+	262	[65]	CLOSURE  	24 16
+	263	[65]	CALL     	23 2 0	; 1 in all out
+	264	[65]	CALL     	22 0 1	; all in 0 out
+	265	[66]	GETTABUP 	22 0 1	; _ENV "print"
+	266	[66]	GETTABUP 	23 0 13	; _ENV "pcall"
+	267	[66]	CLOSURE  	24 17
+	268	[66]	CALL     	23 2 0	; 1 in all out
+	269	[66]	CALL     	22 0 1	; all in 0 out
+	270	[67]	GETTABUP 	22 0 1	; _ENV "print"
+	271	[67]	GETTABUP 	23 0 13	; _ENV "pcall"
+	272	[67]	CLOSURE  	24 18
+	273	[67]	CALL     	23 2 0	; 1 in all out
+	274	[67]	CALL     	22 0 1	; all in 0 out
+	275	[68]	GETTABUP 	22 0 1	; _ENV "print"
+	276	[68]	GETTABUP 	23 0 13	; _ENV "pcall"
+	277	[68]	CLOSURE  	24 19
+	278	[68]	CALL     	23 2 0	; 1 in all out
+	279	[68]	CALL     	22 0 1	; all in 0 out
+	280	[71]	NEWTABLE 	22 0 4	; 4
+	281	[71]	EXTRAARG 	0
+	282	[71]	MOVE     	23 13
+	283	[71]	LOADI    	24 5
+	284	[71]	CALL     	23 2 2	; 1 in 1 out
+	285	[71]	MOVE     	24 13
+	286	[71]	LOADI    	25 3
+	287	[71]	CALL     	24 2 2	; 1 in 1 out
+	288	[71]	MOVE     	25 13
+	289	[71]	LOADI    	26 9
+	290	[71]	CALL     	25 2 2	; 1 in 1 out
+	291	[71]	MOVE     	26 13
+	292	[71]	LOADI    	27 1
+	293	[71]	CALL     	26 2 2	; 1 in 1 out
+	294	[71]	MOVE     	27 13
+	295	[71]	LOADI    	28 7
+	296	[71]	CALL     	27 2 0	; 1 in all out
+	297	[71]	SETLIST  	22 0 0
+	298	[72]	LOADI    	23 2
+	299	[72]	LEN      	24 22
+	300	[72]	LOADI    	25 1
+	301	[72]	FORPREP  	23 18	; exit to 321
+	302	[73]	GETTABLE 	27 22 26
+	303	[73]	ADDI     	28 26 -1
+	304	[73]	MMBINI   	26 1 7 0	; __sub
+	305	[74]	GEI      	28 1 0
+	306	[74]	JMP      	10	; to 317
+	307	[74]	GETTABLE 	29 22 28
+	308	[74]	LT       	27 29 0
+	309	[74]	JMP      	7	; to 317
+	310	[74]	ADDI     	29 28 1
+	311	[74]	MMBINI   	28 1 6 0	; __add
+	312	[74]	GETTABLE 	30 22 28
+	313	[74]	SETTABLE 	22 29 30
+	314	[74]	ADDI     	28 28 -1
+	315	[74]	MMBINI   	28 1 7 0	; __sub
+	316	[74]	JMP      	-12	; to 305
+	317	[75]	ADDI     	29 28 1
+	318	[75]	MMBINI   	28 1 6 0	; __add
+	319	[75]	SETTABLE 	22 29 27
+	320	[72]	FORLOOP  	23 19	; to 302
+	321	[77]	LOADK    	23 14	; ""
+	322	[78]	GETTABUP 	24 0 15	; _ENV "ipairs"
+	323	[78]	MOVE     	25 22
+	324	[78]	CALL     	24 2 5	; 1 in 4 out
+	325	[78]	TFORPREP 	24 5	; to 331
+	326	[78]	MOVE     	30 23
+	327	[78]	GETFIELD 	31 29 11	; "v"
+	328	[78]	LOADK    	32 16	; " "
+	329	[78]	CONCAT   	30 3
+	330	[78]	MOVE     	23 30
+	331	[78]	TFORCALL 	24 2
+	332	[78]	TFORLOOP 	24 7	; to 326
+	333	[78]	CLOSE    	24
+	334	[79]	GETTABUP 	24 0 1	; _ENV "print"
+	335	[79]	MOVE     	25 23
+	336	[79]	CALL     	24 2 1	; 1 in 0 out
+	337	[81]	EQ       	3 4 1
+	338	[81]	JMP      	1	; to 340
+	339	[81]	LFALSESKIP	24
+	340	[81]	LOADTRUE 	24
+	341	[81]	LT       	14 15 1
+	342	[81]	JMP      	1	; to 344
+	343	[81]	LFALSESKIP	25
+	344	[81]	LOADTRUE 	25
+	345	[81]	RETURN   	24 3 1k	; 2 out
+	346	[81]	RETURN   	24 1 1k	; 0 out
+constants (17):
+	0	S	"__eq"
+	1	S	"print"
+	2	S	"rawequal"
+	3	S	"1"
+	4	N	nil
+	5	S	"v"
+	6	I	1
+	7	S	"setmetatable"
+	8	S	"__lt"
+	9	S	"__le"
+	10	S	"setmetatable"
+	11	S	"v"
+	12	I	2
+	13	S	"pcall"
+	14	S	""
+	15	S	"ipairs"
+	16	S	" "
+locals (36):
+	0	eq_calls	3	347
+	1	mt	5	347
+	2	V	8	347
+	3	a	17	347
+	4	b	17	347
+	5	c	17	347
+	6	plain	73	347
+	7	other_mt	88	347
+	8	o	93	347
+	9	list	115	347
+	10	index_of	116	347
+	11	log	132	347
+	12	ord	134	347
+	13	N	139	347
+	14	one	148	347
+	15	two	148	347
+	16	two2	148	347
+	17	mixed	193	347
+	18	only_lt	215	347
+	19	p	227	347
+	20	q	227	347
+	21	nothing	240	347
+	22	items	298	347
+	23	(for state)	301	321
+	24	(for state)	301	321
+	25	(for state)	301	321
+	26	i	302	320
+	27	x	305	320
+	28	j	305	320
+	29	out	322	347
+	30	(for state)	325	333
+	31	(for state)	325	333
+	32	(for state)	325	333
+	33	(for state)	325	333
+	34	_	326	331
+	35	it	326	331
+upvalues (1):
+	0	_ENV	1	0
+
+function <meta_compare.lua:10,13> (14 instructions)
+2 params, 4 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[11]	GETUPVAL 	2 0	; eq_calls
+	2	[11]	ADDI     	2 2 1
+	3	[11]	MMBINI   	2 1 6 0	; __add
+	4	[11]	SETUPVAL 	2 0	; eq_calls
+	5	[12]	GETFIELD 	2 0 0	; "v"
+	6	[12]	GETFIELD 	3 1 0	; "v"
+	7	[12]	EQ       	2 3 0
+	8	[12]	JMP      	3	; to 12
+	9	[12]	LOADK    	2 1	; "yes"
+	10	[12]	TEST     	2 1
+	11	[12]	JMP      	1	; to 13
+	12	[12]	LOADNIL  	2 0	; 1 out
+	13	[12]	RETURN1  	2
+	14	[13]	RETURN0  	
+constants (2):
+	0	S	"v"
+	1	S	"yes"
+locals (2):
+	0	x	1	15
+	1	y	1	15
+upvalues (1):
+	0	eq_calls	1	0
+
+function <meta_compare.lua:14,14> (8 instructions)
+1 param, 4 slots, 2 upvalues, 1 local, 2 constants, 0 functions
+	1	[14]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	2	[14]	NEWTABLE 	2 1 0	; 0
+	3	[14]	EXTRAARG 	0
+	4	[14]	SETFIELD 	2 1 0	; "v"
+	5	[14]	GETUPVAL 	3 1	; mt
+	6	[14]	TAILCALL 	1 3 0	; 2 in
+	7	[14]	RETURN   	1 0 0	; all out
+	8	[14]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"v"
+locals (1):
+	0	v	1	9
+upvalues (2):
+	0	_ENV	0	0
+	1	mt	1	1
+
+function <meta_compare.lua:23,23> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[23]	LOADTRUE 	0
+	2	[23]	RETURN1  	0
+	3	[23]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_compare.lua:29,32> (13 instructions)
+2 params, 9 slots, 1 upvalue, 8 locals, 1 constant, 0 functions
+	1	[30]	GETTABUP 	2 0 0	; _ENV "ipairs"
+	2	[30]	MOVE     	3 0
+	3	[30]	CALL     	2 2 5	; 1 in 4 out
+	4	[30]	TFORPREP 	2 3	; to 8
+	5	[30]	EQ       	7 1 0
+	6	[30]	JMP      	1	; to 8
+	7	[30]	RETURN   	6 2 0k	; 1 out
+	8	[30]	TFORCALL 	2 2
+	9	[30]	TFORLOOP 	2 5	; to 5
+	10	[30]	CLOSE    	2
+	11	[31]	LOADNIL  	2 0	; 1 out
+	12	[31]	RETURN   	2 2 0k	; 1 out
+	13	[32]	RETURN   	2 1 0k	; 0 out
+constants (1):
+	0	S	"ipairs"
+locals (8):
+	0	t	1	14
+	1	x	1	14
+	2	(for state)	4	10
+	3	(for state)	4	10
+	4	(for state)	4	10
+	5	(for state)	4	10
+	6	i	5	8
+	7	e	5	8
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_compare.lua:38,38> (14 instructions)
+2 params, 4 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[38]	GETUPVAL 	2 0	; log
+	2	[38]	LEN      	2 2
+	3	[38]	ADDI     	3 2 1
+	4	[38]	MMBINI   	2 1 6 0	; __add
+	5	[38]	GETUPVAL 	2 0	; log
+	6	[38]	SETTABLE 	2 3 0k	; "lt"
+	7	[38]	GETFIELD 	2 0 1	; "v"
+	8	[38]	GETFIELD 	3 1 1	; "v"
+	9	[38]	LT       	2 3 1
+	10	[38]	JMP      	1	; to 12
+	11	[38]	LFALSESKIP	2
+	12	[38]	LOADTRUE 	2
+	13	[38]	RETURN1  	2
+	14	[38]	RETURN0  	
+constants (2):
+	0	S	"lt"
+	1	S	"v"
+locals (2):
+	0	x	1	15
+	1	y	1	15
+upvalues (1):
+	0	log	1	11
+
+function <meta_compare.lua:39,39> (14 instructions)
+2 params, 4 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[39]	GETUPVAL 	2 0	; log
+	2	[39]	LEN      	2 2
+	3	[39]	ADDI     	3 2 1
+	4	[39]	MMBINI   	2 1 6 0	; __add
+	5	[39]	GETUPVAL 	2 0	; log
+	6	[39]	SETTABLE 	2 3 0k	; "le"
+	7	[39]	GETFIELD 	2 0 1	; "v"
+	8	[39]	GETFIELD 	3 1 1	; "v"
+	9	[39]	LE       	2 3 1
+	10	[39]	JMP      	1	; to 12
+	11	[39]	LFALSESKIP	2
+	12	[39]	LOADTRUE 	2
+	13	[39]	RETURN1  	2
+	14	[39]	RETURN0  	
+constants (2):
+	0	S	"le"
+	1	S	"v"
+locals (2):
+	0	x	1	15
+	1	y	1	15
+upvalues (1):
+	0	log	1	11
+
+function <meta_compare.lua:40,40> (8 instructions)
+1 param, 4 slots, 2 upvalues, 1 local, 2 constants, 0 functions
+	1	[40]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	2	[40]	NEWTABLE 	2 1 0	; 0
+	3	[40]	EXTRAARG 	0
+	4	[40]	SETFIELD 	2 1 0	; "v"
+	5	[40]	GETUPVAL 	3 1	; ord
+	6	[40]	TAILCALL 	1 3 0	; 2 in
+	7	[40]	RETURN   	1 0 0	; all out
+	8	[40]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"v"
+locals (1):
+	0	v	1	9
+upvalues (2):
+	0	_ENV	0	0
+	1	ord	1	12
+
+function <meta_compare.lua:47,47> (10 instructions)
+2 params, 6 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[47]	GETTABUP 	2 0 0	; _ENV "type"
+	2	[47]	MOVE     	3 0
+	3	[47]	CALL     	2 2 2	; 1 in 1 out
+	4	[47]	LOADK    	3 1	; "<"
+	5	[47]	GETTABUP 	4 0 0	; _ENV "type"
+	6	[47]	MOVE     	5 1
+	7	[47]	CALL     	4 2 2	; 1 in 1 out
+	8	[47]	CONCAT   	2 3
+	9	[47]	RETURN1  	2
+	10	[47]	RETURN0  	
+constants (2):
+	0	S	"type"
+	1	S	"<"
+locals (2):
+	0	x	1	11
+	1	y	1	11
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_compare.lua:48,48> (3 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[48]	LOADFALSE	2
+	2	[48]	RETURN1  	2
+	3	[48]	RETURN0  	
+constants (0):
+locals (2):
+	0	x	1	4
+	1	y	1	4
+upvalues (0):
+
+function <meta_compare.lua:53,53> (8 instructions)
+2 params, 4 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[53]	GETFIELD 	2 0 0	; "v"
+	2	[53]	GETFIELD 	3 1 0	; "v"
+	3	[53]	LT       	2 3 1
+	4	[53]	JMP      	1	; to 6
+	5	[53]	LFALSESKIP	2
+	6	[53]	LOADTRUE 	2
+	7	[53]	RETURN1  	2
+	8	[53]	RETURN0  	
+constants (1):
+	0	S	"v"
+locals (2):
+	0	x	1	9
+	1	y	1	9
+upvalues (0):
+
+function <meta_compare.lua:55,55> (20 instructions)
+0 params, 4 slots, 2 upvalues, 0 locals, 0 constants, 0 functions
+	1	[55]	GETUPVAL 	0 0	; p
+	2	[55]	GETUPVAL 	1 1	; q
+	3	[55]	LE       	0 1 1
+	4	[55]	JMP      	1	; to 6
+	5	[55]	LFALSESKIP	0
+	6	[55]	LOADTRUE 	0
+	7	[55]	GETUPVAL 	1 1	; q
+	8	[55]	GETUPVAL 	2 0	; p
+	9	[55]	LE       	1 2 1
+	10	[55]	JMP      	1	; to 12
+	11	[55]	LFALSESKIP	1
+	12	[55]	LOADTRUE 	1
+	13	[55]	GETUPVAL 	2 0	; p
+	14	[55]	GETUPVAL 	3 1	; q
+	15	[55]	LE       	3 2 1
+	16	[55]	JMP      	1	; to 18
+	17	[55]	LFALSESKIP	2
+	18	[55]	LOADTRUE 	2
+	19	[55]	RETURN   	0 4 0	; 3 out
+	20	[55]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (2):
+	0	p	1	19
+	1	q	1	20
+
+function <meta_compare.lua:58,58> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[58]	LOADTRUE 	0
+	2	[58]	RETURN1  	0
+	3	[58]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_compare.lua:59,59> (8 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[59]	GETUPVAL 	0 0	; nothing
+	2	[59]	GETUPVAL 	1 0	; nothing
+	3	[59]	LT       	0 1 1
+	4	[59]	JMP      	1	; to 6
+	5	[59]	LFALSESKIP	0
+	6	[59]	LOADTRUE 	0
+	7	[59]	RETURN1  	0
+	8	[59]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	nothing	1	21
+
+function <meta_compare.lua:60,60> (9 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[60]	GETUPVAL 	0 0	; nothing
+	2	[60]	NEWTABLE 	1 0 0	; 0
+	3	[60]	EXTRAARG 	0
+	4	[60]	LE       	0 1 1
+	5	[60]	JMP      	1	; to 7
+	6	[60]	LFALSESKIP	0
+	7	[60]	LOADTRUE 	0
+	8	[60]	RETURN1  	0
+	9	[60]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	nothing	1	21
+
+function <meta_compare.lua:63,63> (7 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[63]	LOADK    	0 0	; "2"
+	2	[63]	GTI      	0 1 1
+	3	[63]	JMP      	1	; to 5
+	4	[63]	LFALSESKIP	0
+	5	[63]	LOADTRUE 	0
+	6	[63]	RETURN1  	0
+	7	[63]	RETURN0  	
+constants (1):
+	0	S	"2"
+locals (0):
+upvalues (0):
+
+function <meta_compare.lua:64,64> (7 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[64]	LOADK    	0 0	; "a"
+	2	[64]	LEI      	0 1 1
+	3	[64]	JMP      	1	; to 5
+	4	[64]	LFALSESKIP	0
+	5	[64]	LOADTRUE 	0
+	6	[64]	RETURN1  	0
+	7	[64]	RETURN0  	
+constants (1):
+	0	S	"a"
+locals (0):
+upvalues (0):
+
+function <meta_compare.lua:65,65> (8 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[65]	NEWTABLE 	0 0 0	; 0
+	2	[65]	EXTRAARG 	0
+	3	[65]	LTI      	0 1 1
+	4	[65]	JMP      	1	; to 6
+	5	[65]	LFALSESKIP	0
+	6	[65]	LOADTRUE 	0
+	7	[65]	RETURN1  	0
+	8	[65]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_compare.lua:66,66> (8 instructions)
+0 params, 2 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[66]	NEWTABLE 	0 0 0	; 0
+	2	[66]	EXTRAARG 	0
+	3	[66]	LT       	0 0 1
+	4	[66]	JMP      	1	; to 6
+	5	[66]	LFALSESKIP	1
+	6	[66]	LOADTRUE 	1
+	7	[66]	RETURN1  	1
+	8	[66]	RETURN0  	
+constants (0):
+locals (1):
+	0	t	3	9
+upvalues (0):
+
+function <meta_compare.lua:67,67> (7 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[67]	LOADNIL  	0 0	; 1 out
+	2	[67]	LTI      	0 1 1
+	3	[67]	JMP      	1	; to 5
+	4	[67]	LFALSESKIP	0
+	5	[67]	LOADTRUE 	0
+	6	[67]	RETURN1  	0
+	7	[67]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_compare.lua:68,68> (8 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[68]	LOADTRUE 	0
+	2	[68]	LOADFALSE	1
+	3	[68]	LE       	0 1 1
+	4	[68]	JMP      	1	; to 6
+	5	[68]	LFALSESKIP	0
+	6	[68]	LOADTRUE 	0
+	7	[68]	RETURN1  	0
+	8	[68]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):

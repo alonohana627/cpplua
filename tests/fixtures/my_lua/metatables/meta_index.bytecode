@@ -1,0 +1,560 @@
+
+main <meta_index.lua:0,0> (277 instructions)
+0+ params, 25 slots, 1 upvalue, 22 locals, 38 constants, 12 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	NEWTABLE 	0 2 0	; 0
+	3	[6]	EXTRAARG 	0
+	4	[6]	SETFIELD 	0 0 1k	; "color" "red"
+	5	[6]	SETFIELD 	0 2 3k	; "size" 10
+	6	[7]	GETTABUP 	1 0 4	; _ENV "setmetatable"
+	7	[7]	NEWTABLE 	2 1 0	; 0
+	8	[7]	EXTRAARG 	0
+	9	[7]	SETFIELD 	2 2 5k	; "size" 3
+	10	[7]	NEWTABLE 	3 1 0	; 0
+	11	[7]	EXTRAARG 	0
+	12	[7]	SETFIELD 	3 6 0	; "__index"
+	13	[7]	CALL     	1 3 2	; 2 in 1 out
+	14	[8]	GETTABUP 	2 0 7	; _ENV "print"
+	15	[8]	GETFIELD 	3 1 0	; "color"
+	16	[8]	GETFIELD 	4 1 2	; "size"
+	17	[8]	GETFIELD 	5 1 8	; "weight"
+	18	[8]	GETTABUP 	6 0 9	; _ENV "rawget"
+	19	[8]	MOVE     	7 1
+	20	[8]	LOADK    	8 0	; "color"
+	21	[8]	CALL     	6 3 2	; 2 in 1 out
+	22	[8]	GETTABUP 	7 0 9	; _ENV "rawget"
+	23	[8]	MOVE     	8 1
+	24	[8]	LOADK    	9 2	; "size"
+	25	[8]	CALL     	7 3 0	; 2 in all out
+	26	[8]	CALL     	2 0 1	; all in 0 out
+	27	[11]	NEWTABLE 	2 2 0	; 0
+	28	[11]	EXTRAARG 	0
+	29	[11]	SETFIELD 	2 10 11k	; "kind" "base"
+	30	[11]	SETFIELD 	2 12 13k	; "level" 1
+	31	[12]	GETTABUP 	3 0 4	; _ENV "setmetatable"
+	32	[12]	NEWTABLE 	4 1 0	; 0
+	33	[12]	EXTRAARG 	0
+	34	[12]	SETFIELD 	4 12 14k	; "level" 2
+	35	[12]	NEWTABLE 	5 1 0	; 0
+	36	[12]	EXTRAARG 	0
+	37	[12]	SETFIELD 	5 6 2	; "__index"
+	38	[12]	CALL     	3 3 2	; 2 in 1 out
+	39	[13]	GETTABUP 	4 0 4	; _ENV "setmetatable"
+	40	[13]	NEWTABLE 	5 0 0	; 0
+	41	[13]	EXTRAARG 	0
+	42	[13]	NEWTABLE 	6 1 0	; 0
+	43	[13]	EXTRAARG 	0
+	44	[13]	SETFIELD 	6 6 3	; "__index"
+	45	[13]	CALL     	4 3 2	; 2 in 1 out
+	46	[14]	GETTABUP 	5 0 7	; _ENV "print"
+	47	[14]	GETFIELD 	6 4 10	; "kind"
+	48	[14]	GETFIELD 	7 4 12	; "level"
+	49	[14]	GETFIELD 	8 4 15	; "missing"
+	50	[14]	GETTABUP 	9 0 9	; _ENV "rawget"
+	51	[14]	MOVE     	10 4
+	52	[14]	LOADK    	11 12	; "level"
+	53	[14]	CALL     	9 3 0	; 2 in all out
+	54	[14]	CALL     	5 0 1	; all in 0 out
+	55	[15]	SETFIELD 	3 12 16k	; "level" nil
+	56	[16]	GETTABUP 	5 0 7	; _ENV "print"
+	57	[16]	GETFIELD 	6 4 12	; "level"
+	58	[16]	CALL     	5 2 1	; 1 in 0 out
+	59	[17]	SETFIELD 	2 10 17k	; "kind" "changed"
+	60	[18]	GETTABUP 	5 0 7	; _ENV "print"
+	61	[18]	GETFIELD 	6 4 10	; "kind"
+	62	[18]	CALL     	5 2 1	; 1 in 0 out
+	63	[21]	NEWTABLE 	5 0 0	; 0
+	64	[21]	EXTRAARG 	0
+	65	[22]	SETFIELD 	5 6 5	; "__index"
+	66	[25]	CLOSURE  	6 0
+	67	[23]	SETFIELD 	5 18 6	; "new"
+	68	[26]	CLOSURE  	6 1
+	69	[26]	SETFIELD 	5 19 6	; "speak"
+	70	[27]	CLOSURE  	6 2
+	71	[27]	SETFIELD 	5 10 6	; "kind"
+	72	[29]	GETTABUP 	6 0 20	; _ENV "setmetatable"
+	73	[29]	NEWTABLE 	7 0 0	; 0
+	74	[29]	EXTRAARG 	0
+	75	[29]	NEWTABLE 	8 1 0	; 0
+	76	[29]	EXTRAARG 	0
+	77	[29]	SETFIELD 	8 6 5	; "__index"
+	78	[29]	CALL     	6 3 2	; 2 in 1 out
+	79	[30]	SETFIELD 	6 6 6	; "__index"
+	80	[31]	CLOSURE  	7 3
+	81	[31]	SETFIELD 	6 18 7	; "new"
+	82	[32]	CLOSURE  	7 4
+	83	[32]	SETFIELD 	6 10 7	; "kind"
+	84	[33]	CLOSURE  	7 5
+	85	[33]	SETFIELD 	6 21 7	; "fetch"
+	86	[35]	GETFIELD 	7 5 22	; "new"
+	87	[35]	LOADK    	8 23	; "cat"
+	88	[35]	LOADK    	9 24	; "meow"
+	89	[35]	CALL     	7 3 2	; 2 in 1 out
+	90	[36]	GETFIELD 	8 6 22	; "new"
+	91	[36]	LOADK    	9 25	; "rex"
+	92	[36]	CALL     	8 2 2	; 1 in 1 out
+	93	[37]	GETTABUP 	9 0 7	; _ENV "print"
+	94	[37]	SELF     	10 7 19k	; "speak"
+	95	[37]	CALL     	10 2 2	; 1 in 1 out
+	96	[37]	SELF     	11 7 10k	; "kind"
+	97	[37]	CALL     	11 2 2	; 1 in 1 out
+	98	[37]	GETFIELD 	12 7 21	; "fetch"
+	99	[37]	CALL     	9 4 1	; 3 in 0 out
+	100	[38]	GETTABUP 	9 0 7	; _ENV "print"
+	101	[38]	SELF     	10 8 19k	; "speak"
+	102	[38]	CALL     	10 2 2	; 1 in 1 out
+	103	[38]	SELF     	11 8 10k	; "kind"
+	104	[38]	CALL     	11 2 2	; 1 in 1 out
+	105	[38]	SELF     	12 8 21k	; "fetch"
+	106	[38]	CALL     	12 2 0	; 1 in all out
+	107	[38]	CALL     	9 0 1	; all in 0 out
+	108	[39]	GETTABUP 	9 0 7	; _ENV "print"
+	109	[39]	GETTABUP 	10 0 26	; _ENV "getmetatable"
+	110	[39]	MOVE     	11 8
+	111	[39]	CALL     	10 2 2	; 1 in 1 out
+	112	[39]	EQ       	10 6 1
+	113	[39]	JMP      	1	; to 115
+	114	[39]	LFALSESKIP	10
+	115	[39]	LOADTRUE 	10
+	116	[39]	GETTABUP 	11 0 9	; _ENV "rawget"
+	117	[39]	MOVE     	12 8
+	118	[39]	LOADK    	13 19	; "speak"
+	119	[39]	CALL     	11 3 2	; 2 in 1 out
+	120	[39]	GETFIELD 	12 6 19	; "speak"
+	121	[39]	GETFIELD 	13 5 19	; "speak"
+	122	[39]	EQ       	12 13 1
+	123	[39]	JMP      	1	; to 125
+	124	[39]	LFALSESKIP	12
+	125	[39]	LOADTRUE 	12
+	126	[39]	CALL     	9 4 1	; 3 in 0 out
+	127	[42]	NEWTABLE 	9 0 0	; 0
+	128	[42]	EXTRAARG 	0
+	129	[43]	GETTABUP 	10 0 27	; _ENV "setmetatable"
+	130	[43]	NEWTABLE 	11 0 0	; 0
+	131	[43]	EXTRAARG 	0
+	132	[43]	NEWTABLE 	12 1 0	; 0
+	133	[43]	EXTRAARG 	0
+	134	[48]	CLOSURE  	13 6
+	135	[48]	SETFIELD 	12 6 13	; "__index"
+	136	[43]	CALL     	10 3 2	; 2 in 1 out
+	137	[50]	GETTABUP 	11 0 7	; _ENV "print"
+	138	[50]	GETI     	12 10 4
+	139	[50]	GETFIELD 	13 10 28	; "name"
+	140	[50]	LOADK    	14 29	; 2.5
+	141	[50]	GETTABLE 	14 10 14
+	142	[50]	LOADTRUE 	15
+	143	[50]	GETTABLE 	15 10 15
+	144	[50]	CALL     	11 5 1	; 4 in 0 out
+	145	[51]	SETI     	10 4 30k	; "stored"
+	146	[52]	GETTABUP 	11 0 7	; _ENV "print"
+	147	[52]	GETI     	12 10 4
+	148	[52]	LEN      	13 9
+	149	[52]	GETI     	14 9 1
+	150	[52]	GETI     	15 9 2
+	151	[52]	CALL     	11 5 1	; 4 in 0 out
+	152	[55]	LOADNIL  	11 0	; 1 out
+	153	[56]	GETTABUP 	12 0 27	; _ENV "setmetatable"
+	154	[56]	NEWTABLE 	13 0 0	; 0
+	155	[56]	EXTRAARG 	0
+	156	[56]	NEWTABLE 	14 1 0	; 0
+	157	[56]	EXTRAARG 	0
+	158	[56]	CLOSURE  	15 7
+	159	[56]	SETFIELD 	14 6 15	; "__index"
+	160	[56]	CALL     	12 3 2	; 2 in 1 out
+	161	[57]	GETFIELD 	13 12 31	; "anything"
+	162	[58]	GETTABUP 	14 0 7	; _ENV "print"
+	163	[58]	EQ       	11 12 1
+	164	[58]	JMP      	1	; to 166
+	165	[58]	LFALSESKIP	15
+	166	[58]	LOADTRUE 	15
+	167	[58]	CALL     	14 2 1	; 1 in 0 out
+	168	[61]	GETTABUP 	14 0 27	; _ENV "setmetatable"
+	169	[61]	NEWTABLE 	15 0 3	; 3
+	170	[61]	EXTRAARG 	0
+	171	[61]	LOADI    	16 10
+	172	[61]	LOADI    	17 20
+	173	[61]	LOADI    	18 30
+	174	[61]	SETLIST  	15 3 0
+	175	[61]	NEWTABLE 	16 1 0	; 0
+	176	[61]	EXTRAARG 	0
+	177	[61]	CLOSURE  	17 8
+	178	[61]	SETFIELD 	16 6 17	; "__index"
+	179	[61]	CALL     	14 3 2	; 2 in 1 out
+	180	[62]	GETTABUP 	15 0 7	; _ENV "print"
+	181	[62]	GETI     	16 14 1
+	182	[62]	GETI     	17 14 3
+	183	[62]	GETI     	18 14 4
+	184	[62]	GETI     	19 14 0
+	185	[62]	LOADI    	20 -2
+	186	[62]	GETTABLE 	20 14 20
+	187	[62]	LEN      	21 14
+	188	[62]	CALL     	15 7 1	; 6 in 0 out
+	189	[65]	GETTABUP 	15 0 27	; _ENV "setmetatable"
+	190	[65]	NEWTABLE 	16 0 0	; 0
+	191	[65]	EXTRAARG 	0
+	192	[65]	NEWTABLE 	17 1 0	; 0
+	193	[65]	EXTRAARG 	0
+	194	[65]	CLOSURE  	18 9
+	195	[65]	SETFIELD 	17 6 18	; "__index"
+	196	[65]	CALL     	15 3 2	; 2 in 1 out
+	197	[66]	GETTABUP 	16 0 27	; _ENV "setmetatable"
+	198	[66]	NEWTABLE 	17 1 0	; 0
+	199	[66]	EXTRAARG 	0
+	200	[66]	SETFIELD 	17 32 32k	; "own" "own"
+	201	[66]	NEWTABLE 	18 1 0	; 0
+	202	[66]	EXTRAARG 	0
+	203	[66]	SETFIELD 	18 6 15	; "__index"
+	204	[66]	CALL     	16 3 2	; 2 in 1 out
+	205	[67]	GETTABUP 	17 0 7	; _ENV "print"
+	206	[67]	GETFIELD 	18 16 32	; "own"
+	207	[67]	GETFIELD 	19 16 33	; "other"
+	208	[67]	CALL     	17 3 1	; 2 in 0 out
+	209	[70]	GETTABUP 	17 0 7	; _ENV "print"
+	210	[70]	GETTABUP 	18 0 9	; _ENV "rawget"
+	211	[70]	MOVE     	19 10
+	212	[70]	LOADK    	20 34	; "nothing"
+	213	[70]	CALL     	18 3 2	; 2 in 1 out
+	214	[70]	GETTABUP 	19 0 9	; _ENV "rawget"
+	215	[70]	MOVE     	20 14
+	216	[70]	LOADI    	21 4
+	217	[70]	CALL     	19 3 2	; 2 in 1 out
+	218	[70]	GETTABUP 	20 0 9	; _ENV "rawget"
+	219	[70]	MOVE     	21 14
+	220	[70]	LOADI    	22 1
+	221	[70]	CALL     	20 3 0	; 2 in all out
+	222	[70]	CALL     	17 0 1	; all in 0 out
+	223	[73]	LOADI    	17 0
+	224	[74]	GETTABUP 	18 0 27	; _ENV "setmetatable"
+	225	[74]	NEWTABLE 	19 0 0	; 0
+	226	[74]	EXTRAARG 	0
+	227	[74]	NEWTABLE 	20 1 0	; 0
+	228	[74]	EXTRAARG 	0
+	229	[79]	CLOSURE  	21 10
+	230	[79]	SETFIELD 	20 6 21	; "__index"
+	231	[74]	CALL     	18 3 2	; 2 in 1 out
+	232	[80]	GETTABUP 	19 0 7	; _ENV "print"
+	233	[80]	GETI     	20 18 12
+	234	[80]	GETI     	21 18 12
+	235	[80]	GETI     	22 18 13
+	236	[80]	MOVE     	23 17
+	237	[80]	CALL     	19 5 1	; 4 in 0 out
+	238	[83]	NEWTABLE 	19 0 0	; 0
+	239	[83]	EXTRAARG 	0
+	240	[84]	SETFIELD 	19 6 19	; "__index"
+	241	[85]	CLOSURE  	20 11
+	242	[85]	SETFIELD 	19 35 20	; "len2"
+	243	[86]	GETTABUP 	20 0 7	; _ENV "print"
+	244	[86]	GETTABUP 	21 0 27	; _ENV "setmetatable"
+	245	[86]	NEWTABLE 	22 0 2	; 2
+	246	[86]	EXTRAARG 	0
+	247	[86]	LOADI    	23 3
+	248	[86]	LOADI    	24 4
+	249	[86]	SETLIST  	22 2 0
+	250	[86]	MOVE     	23 19
+	251	[86]	CALL     	21 3 2	; 2 in 1 out
+	252	[86]	SELF     	21 21 35k	; "len2"
+	253	[86]	CALL     	21 2 0	; 1 in all out
+	254	[86]	CALL     	20 0 1	; all in 0 out
+	255	[89]	NEWTABLE 	20 0 0	; 0
+	256	[89]	EXTRAARG 	0
+	257	[90]	GETTABUP 	21 0 27	; _ENV "setmetatable"
+	258	[90]	NEWTABLE 	22 0 0	; 0
+	259	[90]	EXTRAARG 	0
+	260	[90]	MOVE     	23 20
+	261	[90]	CALL     	21 3 2	; 2 in 1 out
+	262	[91]	GETTABUP 	22 0 7	; _ENV "print"
+	263	[91]	GETFIELD 	23 21 36	; "x"
+	264	[91]	CALL     	22 2 1	; 1 in 0 out
+	265	[92]	NEWTABLE 	22 1 0	; 0
+	266	[92]	EXTRAARG 	0
+	267	[92]	SETFIELD 	22 36 37k	; "x" "now"
+	268	[92]	SETFIELD 	20 6 22	; "__index"
+	269	[93]	GETTABUP 	22 0 7	; _ENV "print"
+	270	[93]	GETFIELD 	23 21 36	; "x"
+	271	[93]	CALL     	22 2 1	; 1 in 0 out
+	272	[95]	GETFIELD 	22 4 10	; "kind"
+	273	[95]	SELF     	23 8 10k	; "kind"
+	274	[95]	CALL     	23 2 2	; 1 in 1 out
+	275	[95]	GETI     	24 10 3
+	276	[95]	RETURN   	22 4 1k	; 3 out
+	277	[95]	RETURN   	22 1 1k	; 0 out
+constants (38):
+	0	S	"color"
+	1	S	"red"
+	2	S	"size"
+	3	I	10
+	4	S	"setmetatable"
+	5	I	3
+	6	S	"__index"
+	7	S	"print"
+	8	S	"weight"
+	9	S	"rawget"
+	10	S	"kind"
+	11	S	"base"
+	12	S	"level"
+	13	I	1
+	14	I	2
+	15	S	"missing"
+	16	N	nil
+	17	S	"changed"
+	18	S	"new"
+	19	S	"speak"
+	20	S	"setmetatable"
+	21	S	"fetch"
+	22	S	"new"
+	23	S	"cat"
+	24	S	"meow"
+	25	S	"rex"
+	26	S	"getmetatable"
+	27	S	"setmetatable"
+	28	S	"name"
+	29	F	2.5
+	30	S	"stored"
+	31	S	"anything"
+	32	S	"own"
+	33	S	"other"
+	34	S	"nothing"
+	35	S	"len2"
+	36	S	"x"
+	37	S	"now"
+locals (22):
+	0	defaults	6	278
+	1	item	14	278
+	2	base	31	278
+	3	middle	39	278
+	4	top	46	278
+	5	Animal	65	278
+	6	Dog	79	278
+	7	cat	90	278
+	8	rex	93	278
+	9	log	129	278
+	10	computed	137	278
+	11	seen_self	153	278
+	12	proxy	161	278
+	13	_	162	278
+	14	seq	180	278
+	15	fallback	197	278
+	16	chained	205	278
+	17	calls	224	278
+	18	squares	232	278
+	19	Vec	240	278
+	20	mt	257	278
+	21	late	262	278
+upvalues (1):
+	0	_ENV	1	0
+
+function <meta_index.lua:23,25> (9 instructions)
+2 params, 5 slots, 2 upvalues, 2 locals, 3 constants, 0 functions
+	1	[24]	GETTABUP 	2 0 0	; _ENV "setmetatable"
+	2	[24]	NEWTABLE 	3 2 0	; 0
+	3	[24]	EXTRAARG 	0
+	4	[24]	SETFIELD 	3 1 0	; "name"
+	5	[24]	SETFIELD 	3 2 1	; "sound"
+	6	[24]	GETUPVAL 	4 1	; Animal
+	7	[24]	TAILCALL 	2 3 0	; 2 in
+	8	[24]	RETURN   	2 0 0	; all out
+	9	[25]	RETURN0  	
+constants (3):
+	0	S	"setmetatable"
+	1	S	"name"
+	2	S	"sound"
+locals (2):
+	0	name	1	10
+	1	sound	1	10
+upvalues (2):
+	0	_ENV	0	0
+	1	Animal	1	5
+
+function <meta_index.lua:26,26> (6 instructions)
+1 param, 4 slots, 0 upvalues, 1 local, 3 constants, 0 functions
+	1	[26]	GETFIELD 	1 0 0	; "name"
+	2	[26]	LOADK    	2 1	; " says "
+	3	[26]	GETFIELD 	3 0 2	; "sound"
+	4	[26]	CONCAT   	1 3
+	5	[26]	RETURN1  	1
+	6	[26]	RETURN0  	
+constants (3):
+	0	S	"name"
+	1	S	" says "
+	2	S	"sound"
+locals (1):
+	0	self	1	7
+upvalues (0):
+
+function <meta_index.lua:27,27> (3 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[27]	LOADK    	1 0	; "animal"
+	2	[27]	RETURN1  	1
+	3	[27]	RETURN0  	
+constants (1):
+	0	S	"animal"
+locals (1):
+	0	self	1	4
+upvalues (0):
+
+function <meta_index.lua:31,31> (10 instructions)
+1 param, 5 slots, 3 upvalues, 2 locals, 3 constants, 0 functions
+	1	[31]	GETTABUP 	1 0 0	; Animal "new"
+	2	[31]	MOVE     	2 0
+	3	[31]	LOADK    	3 1	; "woof"
+	4	[31]	CALL     	1 3 2	; 2 in 1 out
+	5	[31]	GETTABUP 	2 1 2	; _ENV "setmetatable"
+	6	[31]	MOVE     	3 1
+	7	[31]	GETUPVAL 	4 2	; Dog
+	8	[31]	TAILCALL 	2 3 0	; 2 in
+	9	[31]	RETURN   	2 0 0	; all out
+	10	[31]	RETURN0  	
+constants (3):
+	0	S	"new"
+	1	S	"woof"
+	2	S	"setmetatable"
+locals (2):
+	0	name	1	11
+	1	d	5	11
+upvalues (3):
+	0	Animal	1	5
+	1	_ENV	0	0
+	2	Dog	1	6
+
+function <meta_index.lua:32,32> (3 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[32]	LOADK    	1 0	; "dog"
+	2	[32]	RETURN1  	1
+	3	[32]	RETURN0  	
+constants (1):
+	0	S	"dog"
+locals (1):
+	0	self	1	4
+upvalues (0):
+
+function <meta_index.lua:33,33> (5 instructions)
+1 param, 3 slots, 0 upvalues, 1 local, 2 constants, 0 functions
+	1	[33]	GETFIELD 	1 0 0	; "name"
+	2	[33]	LOADK    	2 1	; " fetches"
+	3	[33]	CONCAT   	1 2
+	4	[33]	RETURN1  	1
+	5	[33]	RETURN0  	
+constants (2):
+	0	S	"name"
+	1	S	" fetches"
+locals (1):
+	0	self	1	6
+upvalues (0):
+
+function <meta_index.lua:44,48> (22 instructions)
+2 params, 5 slots, 2 upvalues, 2 locals, 5 constants, 0 functions
+	1	[45]	GETUPVAL 	2 0	; log
+	2	[45]	LEN      	2 2
+	3	[45]	ADDI     	3 2 1
+	4	[45]	MMBINI   	2 1 6 0	; __add
+	5	[45]	GETUPVAL 	2 0	; log
+	6	[45]	SETTABLE 	2 3 1
+	7	[46]	GETTABUP 	2 1 0	; _ENV "type"
+	8	[46]	MOVE     	3 1
+	9	[46]	CALL     	2 2 2	; 1 in 1 out
+	10	[46]	EQK      	2 1 0	; "number"
+	11	[46]	JMP      	3	; to 15
+	12	[46]	MUL      	2 1 1
+	13	[46]	MMBIN    	1 1 8	; __mul
+	14	[46]	RETURN1  	2
+	15	[47]	LOADK    	2 2	; "<"
+	16	[47]	GETTABUP 	3 1 3	; _ENV "tostring"
+	17	[47]	MOVE     	4 1
+	18	[47]	CALL     	3 2 2	; 1 in 1 out
+	19	[47]	LOADK    	4 4	; ">"
+	20	[47]	CONCAT   	2 3
+	21	[47]	RETURN1  	2
+	22	[48]	RETURN0  	
+constants (5):
+	0	S	"type"
+	1	S	"number"
+	2	S	"<"
+	3	S	"tostring"
+	4	S	">"
+locals (2):
+	0	t	1	23
+	1	k	1	23
+upvalues (2):
+	0	log	1	9
+	1	_ENV	0	0
+
+function <meta_index.lua:56,56> (3 instructions)
+2 params, 2 slots, 1 upvalue, 2 locals, 0 constants, 0 functions
+	1	[56]	SETUPVAL 	0 0	; seen_self
+	2	[56]	RETURN1  	1
+	3	[56]	RETURN0  	
+constants (0):
+locals (2):
+	0	t	1	4
+	1	k	1	4
+upvalues (1):
+	0	seen_self	1	11
+
+function <meta_index.lua:61,61> (3 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[61]	UNM      	2 1
+	2	[61]	RETURN1  	2
+	3	[61]	RETURN0  	
+constants (0):
+locals (2):
+	0	_	1	4
+	1	i	1	4
+upvalues (0):
+
+function <meta_index.lua:65,65> (5 instructions)
+2 params, 4 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[65]	LOADK    	2 0	; "fallback "
+	2	[65]	MOVE     	3 1
+	3	[65]	CONCAT   	2 2
+	4	[65]	RETURN1  	2
+	5	[65]	RETURN0  	
+constants (1):
+	0	S	"fallback "
+locals (2):
+	0	_	1	6
+	1	k	1	6
+upvalues (0):
+
+function <meta_index.lua:74,79> (13 instructions)
+2 params, 7 slots, 2 upvalues, 3 locals, 1 constant, 0 functions
+	1	[75]	GETUPVAL 	2 0	; calls
+	2	[75]	ADDI     	2 2 1
+	3	[75]	MMBINI   	2 1 6 0	; __add
+	4	[75]	SETUPVAL 	2 0	; calls
+	5	[76]	MUL      	2 1 1
+	6	[76]	MMBIN    	1 1 8	; __mul
+	7	[77]	GETTABUP 	3 1 0	; _ENV "rawset"
+	8	[77]	MOVE     	4 0
+	9	[77]	MOVE     	5 1
+	10	[77]	MOVE     	6 2
+	11	[77]	CALL     	3 4 1	; 3 in 0 out
+	12	[78]	RETURN1  	2
+	13	[79]	RETURN0  	
+constants (1):
+	0	S	"rawset"
+locals (3):
+	0	t	1	14
+	1	n	1	14
+	2	v	7	14
+upvalues (2):
+	0	calls	1	17
+	1	_ENV	0	0
+
+function <meta_index.lua:85,85> (12 instructions)
+1 param, 4 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[85]	GETI     	1 0 1
+	2	[85]	GETI     	2 0 1
+	3	[85]	MUL      	1 1 2
+	4	[85]	MMBIN    	1 2 8	; __mul
+	5	[85]	GETI     	2 0 2
+	6	[85]	GETI     	3 0 2
+	7	[85]	MUL      	2 2 3
+	8	[85]	MMBIN    	2 3 8	; __mul
+	9	[85]	ADD      	1 1 2
+	10	[85]	MMBIN    	1 2 6	; __add
+	11	[85]	RETURN1  	1
+	12	[85]	RETURN0  	
+constants (0):
+locals (1):
+	0	self	1	13
+upvalues (0):

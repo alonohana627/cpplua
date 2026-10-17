@@ -1,0 +1,19 @@
+add(a, b)	sub(a, b)	mul(a, b)
+div(a, b)	mod(a, b)	pow(a, b)	idiv(a, b)
+unm(a, same: true)	unm(b, same: true)
+add(a, number 1)	add(number 1, a)	sub(a, number 2.5)	sub(number 2.5, a)
+mul(a, number 3)	idiv(number 3, a)	mod(a, number 4)	pow(number 4, a)
+add(a, string 10)	add(string 10, a)	mul(string 2, b)	div(b, string x)
+true	add(plain, a)
+mul(plain, b)
+add(a, other)	other's add
+3	7	3	4.0
+(4, 6)	(-2, -2)	11	(2, 4)	(9, 12)
+(-1, -2)	(1.5, 2.0)	(1, 2)	(0, 1)	(1.0, 4.0)
+(8, 12)	(-1, 0)
+(5, 6)	12
+1	nil	false
+false	meta_arith.lua:78: attempt to perform arithmetic on a table value
+false	meta_arith.lua:79: attempt to perform arithmetic on a table value (local 't')
+false	meta_arith.lua:80: attempt to perform arithmetic on a table value (local 't')
+add(a, b)	4

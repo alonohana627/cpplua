@@ -1,0 +1,593 @@
+
+main <table_constructors.lua:0,0> (469 instructions)
+0+ params, 75 slots, 1 upvalue, 36 locals, 28 constants, 4 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	NEWTABLE 	0 0 0	; 0
+	3	[6]	EXTRAARG 	0
+	4	[7]	GETTABUP 	1 0 0	; _ENV "print"
+	5	[7]	LEN      	2 0
+	6	[7]	GETTABUP 	3 0 1	; _ENV "next"
+	7	[7]	MOVE     	4 0
+	8	[7]	CALL     	3 2 0	; 1 in all out
+	9	[7]	CALL     	1 0 1	; all in 0 out
+	10	[9]	NEWTABLE 	1 0 3	; 3
+	11	[9]	EXTRAARG 	0
+	12	[9]	LOADI    	2 10
+	13	[9]	LOADI    	3 20
+	14	[9]	LOADI    	4 30
+	15	[9]	SETLIST  	1 3 0
+	16	[10]	GETTABUP 	2 0 0	; _ENV "print"
+	17	[10]	LEN      	3 1
+	18	[10]	GETI     	4 1 1
+	19	[10]	GETI     	5 1 2
+	20	[10]	GETI     	6 1 3
+	21	[10]	GETI     	7 1 4
+	22	[10]	CALL     	2 6 1	; 5 in 0 out
+	23	[12]	NEWTABLE 	2 3 0	; 0
+	24	[12]	EXTRAARG 	0
+	25	[12]	SETFIELD 	2 2 3k	; "x" 1
+	26	[12]	SETFIELD 	2 4 5k	; "y" "two"
+	27	[12]	SETFIELD 	2 6 7k	; "z" true
+	28	[13]	GETTABUP 	3 0 0	; _ENV "print"
+	29	[13]	GETFIELD 	4 2 2	; "x"
+	30	[13]	GETFIELD 	5 2 4	; "y"
+	31	[13]	GETFIELD 	6 2 6	; "z"
+	32	[13]	GETFIELD 	7 2 8	; "w"
+	33	[13]	CALL     	3 5 1	; 4 in 0 out
+	34	[15]	LOADK    	3 9	; "computed"
+	35	[16]	NEWTABLE 	4 3 0	; 0
+	36	[16]	EXTRAARG 	0
+	37	[16]	SETI     	4 2 5k	; "two"
+	38	[16]	SETTABLE 	4 3 10k	; "c"
+	39	[16]	SETFIELD 	4 11 12k	; "with space" 5
+	40	[16]	LOADTRUE 	5
+	41	[16]	SETTABLE 	4 5 13k	; "yes"
+	42	[17]	GETTABUP 	5 0 0	; _ENV "print"
+	43	[17]	GETI     	6 4 2
+	44	[17]	GETFIELD 	7 4 9	; "computed"
+	45	[17]	GETFIELD 	8 4 11	; "with space"
+	46	[17]	LOADTRUE 	9
+	47	[17]	GETTABLE 	9 4 9
+	48	[17]	LEN      	10 4
+	49	[17]	EQI      	10 0 1
+	50	[17]	JMP      	4	; to 55
+	51	[17]	LEN      	10 4
+	52	[17]	EQI      	10 2 1
+	53	[17]	JMP      	1	; to 55
+	54	[17]	LFALSESKIP	10
+	55	[17]	LOADTRUE 	10
+	56	[17]	CALL     	5 6 1	; 5 in 0 out
+	57	[20]	NEWTABLE 	5 3 4	; 4
+	58	[20]	EXTRAARG 	0
+	59	[20]	LOADK    	6 14	; "a"
+	60	[20]	SETFIELD 	5 2 15k	; "x" "X"
+	61	[20]	LOADK    	7 16	; "b"
+	62	[20]	SETI     	5 10 17k	; "ten"
+	63	[20]	LOADK    	8 10	; "c"
+	64	[20]	SETFIELD 	5 4 18k	; "y" "Y"
+	65	[20]	LOADK    	9 19	; "d"
+	66	[20]	SETLIST  	5 4 0
+	67	[21]	GETTABUP 	6 0 0	; _ENV "print"
+	68	[21]	GETI     	7 5 1
+	69	[21]	GETI     	8 5 2
+	70	[21]	GETI     	9 5 3
+	71	[21]	GETI     	10 5 4
+	72	[21]	GETFIELD 	11 5 2	; "x"
+	73	[21]	GETFIELD 	12 5 4	; "y"
+	74	[21]	GETI     	13 5 10
+	75	[21]	LEN      	14 5
+	76	[21]	CALL     	6 9 1	; 8 in 0 out
+	77	[24]	NEWTABLE 	6 1 1	; 1
+	78	[24]	EXTRAARG 	0
+	79	[24]	SETI     	6 1 20k	; "keyed"
+	80	[24]	LOADK    	7 21	; "positional"
+	81	[24]	SETLIST  	6 1 0
+	82	[25]	GETTABUP 	7 0 0	; _ENV "print"
+	83	[25]	GETI     	8 6 1
+	84	[25]	CALL     	7 2 1	; 1 in 0 out
+	85	[27]	NEWTABLE 	7 2 0	; 0
+	86	[27]	EXTRAARG 	0
+	87	[27]	SETFIELD 	7 22 23k	; "name" "outer"
+	88	[27]	NEWTABLE 	8 2 0	; 0
+	89	[27]	EXTRAARG 	0
+	90	[27]	SETFIELD 	8 22 24k	; "name" "inner"
+	91	[27]	NEWTABLE 	9 0 3	; 3
+	92	[27]	EXTRAARG 	0
+	93	[27]	LOADI    	10 1
+	94	[27]	LOADI    	11 2
+	95	[27]	NEWTABLE 	12 0 1	; 1
+	96	[27]	EXTRAARG 	0
+	97	[27]	LOADI    	13 3
+	98	[27]	SETLIST  	12 1 0
+	99	[27]	SETLIST  	9 3 0
+	100	[27]	SETFIELD 	8 25 9	; "deeper"
+	101	[27]	SETFIELD 	7 24 8	; "inner"
+	102	[28]	GETTABUP 	8 0 0	; _ENV "print"
+	103	[28]	GETFIELD 	9 7 22	; "name"
+	104	[28]	GETFIELD 	10 7 24	; "inner"
+	105	[28]	GETFIELD 	10 10 22	; "name"
+	106	[28]	GETFIELD 	11 7 24	; "inner"
+	107	[28]	GETFIELD 	11 11 25	; "deeper"
+	108	[28]	GETI     	11 11 3
+	109	[28]	GETI     	11 11 1
+	110	[28]	GETFIELD 	12 7 24	; "inner"
+	111	[28]	GETFIELD 	12 12 25	; "deeper"
+	112	[28]	LEN      	12 12
+	113	[28]	CALL     	8 5 1	; 4 in 0 out
+	114	[31]	CLOSURE  	8 0
+	115	[32]	NEWTABLE 	9 0 0	; 0
+	116	[32]	EXTRAARG 	0
+	117	[32]	MOVE     	10 8
+	118	[32]	CALL     	10 1 0	; 0 in all out
+	119	[32]	SETLIST  	9 0 0
+	120	[33]	NEWTABLE 	10 0 2	; 2
+	121	[33]	EXTRAARG 	0
+	122	[33]	MOVE     	11 8
+	123	[33]	CALL     	11 1 2	; 0 in 1 out
+	124	[33]	LOADI    	12 10
+	125	[33]	SETLIST  	10 2 0
+	126	[34]	NEWTABLE 	11 0 1	; 1
+	127	[34]	EXTRAARG 	0
+	128	[34]	MOVE     	12 8
+	129	[34]	CALL     	12 1 2	; 0 in 1 out
+	130	[34]	SETLIST  	11 1 0
+	131	[35]	GETTABUP 	12 0 0	; _ENV "print"
+	132	[35]	LEN      	13 9
+	133	[35]	GETI     	14 9 3
+	134	[35]	LEN      	15 10
+	135	[35]	GETI     	16 10 1
+	136	[35]	GETI     	17 10 2
+	137	[35]	LEN      	18 11
+	138	[35]	CALL     	12 7 1	; 6 in 0 out
+	139	[37]	CLOSURE  	12 1
+	140	[38]	NEWTABLE 	13 0 0	; 0
+	141	[38]	EXTRAARG 	0
+	142	[38]	MOVE     	14 12
+	143	[38]	CALL     	14 1 0	; 0 in all out
+	144	[38]	SETLIST  	13 0 0
+	145	[39]	NEWTABLE 	14 0 2	; 2
+	146	[39]	EXTRAARG 	0
+	147	[39]	MOVE     	15 12
+	148	[39]	CALL     	15 1 2	; 0 in 1 out
+	149	[39]	LOADI    	16 5
+	150	[39]	SETLIST  	14 2 0
+	151	[40]	GETTABUP 	15 0 0	; _ENV "print"
+	152	[40]	LEN      	16 13
+	153	[40]	GETI     	17 14 1
+	154	[40]	GETI     	18 14 2
+	155	[40]	CALL     	15 4 1	; 3 in 0 out
+	156	[43]	CLOSURE  	15 2
+	157	[44]	MOVE     	16 15
+	158	[44]	LOADK    	17 14	; "a"
+	159	[44]	LOADK    	18 16	; "b"
+	160	[44]	LOADK    	19 10	; "c"
+	161	[44]	CALL     	16 4 3	; 3 in 2 out
+	162	[45]	GETTABUP 	18 0 0	; _ENV "print"
+	163	[45]	MOVE     	19 17
+	164	[45]	LEN      	20 16
+	165	[45]	GETI     	21 16 1
+	166	[45]	GETI     	22 16 3
+	167	[45]	CALL     	18 5 1	; 4 in 0 out
+	168	[46]	MOVE     	18 15
+	169	[46]	CALL     	18 1 3	; 0 in 2 out
+	170	[47]	GETTABUP 	20 0 0	; _ENV "print"
+	171	[47]	MOVE     	21 19
+	172	[47]	LEN      	22 18
+	173	[47]	CALL     	20 3 1	; 2 in 0 out
+	174	[48]	CLOSURE  	20 3
+	175	[49]	MOVE     	21 20
+	176	[49]	LOADI    	22 7
+	177	[49]	LOADI    	23 8
+	178	[49]	LOADI    	24 9
+	179	[49]	CALL     	21 4 2	; 3 in 1 out
+	180	[50]	GETTABUP 	22 0 0	; _ENV "print"
+	181	[50]	GETI     	23 21 1
+	182	[50]	GETI     	24 21 2
+	183	[50]	GETI     	25 21 3
+	184	[50]	CALL     	22 4 1	; 3 in 0 out
+	185	[53]	NEWTABLE 	22 1 130	; 130
+	186	[53]	EXTRAARG 	0
+	187	[54]	LOADI    	23 1
+	188	[54]	LOADI    	24 2
+	189	[54]	LOADI    	25 3
+	190	[54]	LOADI    	26 4
+	191	[54]	LOADI    	27 5
+	192	[54]	LOADI    	28 6
+	193	[54]	LOADI    	29 7
+	194	[54]	LOADI    	30 8
+	195	[54]	LOADI    	31 9
+	196	[54]	LOADI    	32 10
+	197	[54]	LOADI    	33 11
+	198	[54]	LOADI    	34 12
+	199	[54]	LOADI    	35 13
+	200	[54]	LOADI    	36 14
+	201	[54]	LOADI    	37 15
+	202	[54]	LOADI    	38 16
+	203	[54]	LOADI    	39 17
+	204	[54]	LOADI    	40 18
+	205	[54]	LOADI    	41 19
+	206	[54]	LOADI    	42 20
+	207	[55]	LOADI    	43 21
+	208	[55]	LOADI    	44 22
+	209	[55]	LOADI    	45 23
+	210	[55]	LOADI    	46 24
+	211	[55]	LOADI    	47 25
+	212	[55]	LOADI    	48 26
+	213	[55]	LOADI    	49 27
+	214	[55]	LOADI    	50 28
+	215	[55]	LOADI    	51 29
+	216	[55]	LOADI    	52 30
+	217	[55]	LOADI    	53 31
+	218	[55]	LOADI    	54 32
+	219	[55]	LOADI    	55 33
+	220	[55]	LOADI    	56 34
+	221	[55]	LOADI    	57 35
+	222	[55]	LOADI    	58 36
+	223	[55]	LOADI    	59 37
+	224	[55]	LOADI    	60 38
+	225	[55]	LOADI    	61 39
+	226	[55]	LOADI    	62 40
+	227	[56]	LOADI    	63 41
+	228	[56]	LOADI    	64 42
+	229	[56]	LOADI    	65 43
+	230	[56]	LOADI    	66 44
+	231	[56]	LOADI    	67 45
+	232	[56]	LOADI    	68 46
+	233	[56]	LOADI    	69 47
+	234	[56]	LOADI    	70 48
+	235	[56]	LOADI    	71 49
+	236	[56]	LOADI    	72 50
+	237	[56]	SETLIST  	22 50 0
+	238	[56]	LOADI    	23 51
+	239	[56]	LOADI    	24 52
+	240	[56]	LOADI    	25 53
+	241	[56]	LOADI    	26 54
+	242	[56]	LOADI    	27 55
+	243	[56]	LOADI    	28 56
+	244	[56]	LOADI    	29 57
+	245	[56]	LOADI    	30 58
+	246	[56]	LOADI    	31 59
+	247	[56]	LOADI    	32 60
+	248	[57]	LOADI    	33 61
+	249	[57]	LOADI    	34 62
+	250	[57]	LOADI    	35 63
+	251	[57]	LOADI    	36 64
+	252	[57]	LOADI    	37 65
+	253	[57]	LOADI    	38 66
+	254	[57]	LOADI    	39 67
+	255	[57]	LOADI    	40 68
+	256	[57]	LOADI    	41 69
+	257	[57]	LOADI    	42 70
+	258	[57]	LOADI    	43 71
+	259	[57]	LOADI    	44 72
+	260	[57]	LOADI    	45 73
+	261	[57]	LOADI    	46 74
+	262	[57]	LOADI    	47 75
+	263	[57]	LOADI    	48 76
+	264	[57]	LOADI    	49 77
+	265	[57]	LOADI    	50 78
+	266	[57]	LOADI    	51 79
+	267	[57]	LOADI    	52 80
+	268	[58]	LOADI    	53 81
+	269	[58]	LOADI    	54 82
+	270	[58]	LOADI    	55 83
+	271	[58]	LOADI    	56 84
+	272	[58]	LOADI    	57 85
+	273	[58]	LOADI    	58 86
+	274	[58]	LOADI    	59 87
+	275	[58]	LOADI    	60 88
+	276	[58]	LOADI    	61 89
+	277	[58]	LOADI    	62 90
+	278	[58]	LOADI    	63 91
+	279	[58]	LOADI    	64 92
+	280	[58]	LOADI    	65 93
+	281	[58]	LOADI    	66 94
+	282	[58]	LOADI    	67 95
+	283	[58]	LOADI    	68 96
+	284	[58]	LOADI    	69 97
+	285	[58]	LOADI    	70 98
+	286	[58]	LOADI    	71 99
+	287	[58]	LOADI    	72 100
+	288	[58]	SETLIST  	22 50 50
+	289	[59]	LOADI    	23 101
+	290	[59]	LOADI    	24 102
+	291	[59]	LOADI    	25 103
+	292	[59]	LOADI    	26 104
+	293	[59]	LOADI    	27 105
+	294	[59]	LOADI    	28 106
+	295	[59]	LOADI    	29 107
+	296	[59]	LOADI    	30 108
+	297	[59]	LOADI    	31 109
+	298	[59]	LOADI    	32 110
+	299	[59]	LOADI    	33 111
+	300	[59]	LOADI    	34 112
+	301	[59]	LOADI    	35 113
+	302	[59]	LOADI    	36 114
+	303	[59]	LOADI    	37 115
+	304	[59]	LOADI    	38 116
+	305	[60]	LOADI    	39 117
+	306	[60]	LOADI    	40 118
+	307	[60]	LOADI    	41 119
+	308	[60]	LOADI    	42 120
+	309	[60]	LOADI    	43 121
+	310	[60]	LOADI    	44 122
+	311	[60]	LOADI    	45 123
+	312	[60]	LOADI    	46 124
+	313	[60]	LOADI    	47 125
+	314	[60]	LOADI    	48 126
+	315	[60]	LOADI    	49 127
+	316	[60]	LOADI    	50 128
+	317	[60]	LOADI    	51 129
+	318	[60]	LOADI    	52 130
+	319	[61]	SETFIELD 	22 26 27k	; "label" "big"
+	320	[62]	SETLIST  	22 30 100
+	321	[63]	LOADI    	23 0
+	322	[64]	LOADI    	24 1
+	323	[64]	LEN      	25 22
+	324	[64]	LOADI    	26 1
+	325	[64]	FORPREP  	24 3	; exit to 330
+	326	[64]	GETTABLE 	28 22 27
+	327	[64]	ADD      	23 23 28
+	328	[64]	MMBIN    	23 28 6	; __add
+	329	[64]	FORLOOP  	24 4	; to 326
+	330	[65]	GETTABUP 	24 0 0	; _ENV "print"
+	331	[65]	LEN      	25 22
+	332	[65]	GETI     	26 22 1
+	333	[65]	GETI     	27 22 50
+	334	[65]	GETI     	28 22 51
+	335	[65]	GETI     	29 22 100
+	336	[65]	GETI     	30 22 130
+	337	[65]	GETI     	31 22 131
+	338	[65]	MOVE     	32 23
+	339	[65]	GETFIELD 	33 22 26	; "label"
+	340	[65]	CALL     	24 10 1	; 9 in 0 out
+	341	[68]	NEWTABLE 	24 0 60	; 60
+	342	[68]	EXTRAARG 	0
+	343	[69]	LOADI    	25 1
+	344	[69]	LOADI    	26 2
+	345	[69]	LOADI    	27 3
+	346	[69]	LOADI    	28 4
+	347	[69]	LOADI    	29 5
+	348	[69]	LOADI    	30 6
+	349	[69]	LOADI    	31 7
+	350	[69]	LOADI    	32 8
+	351	[69]	LOADI    	33 9
+	352	[69]	LOADI    	34 10
+	353	[69]	LOADI    	35 11
+	354	[69]	LOADI    	36 12
+	355	[69]	LOADI    	37 13
+	356	[69]	LOADI    	38 14
+	357	[69]	LOADI    	39 15
+	358	[69]	LOADI    	40 16
+	359	[69]	LOADI    	41 17
+	360	[69]	LOADI    	42 18
+	361	[69]	LOADI    	43 19
+	362	[69]	LOADI    	44 20
+	363	[70]	LOADI    	45 21
+	364	[70]	LOADI    	46 22
+	365	[70]	LOADI    	47 23
+	366	[70]	LOADI    	48 24
+	367	[70]	LOADI    	49 25
+	368	[70]	LOADI    	50 26
+	369	[70]	LOADI    	51 27
+	370	[70]	LOADI    	52 28
+	371	[70]	LOADI    	53 29
+	372	[70]	LOADI    	54 30
+	373	[70]	LOADI    	55 31
+	374	[70]	LOADI    	56 32
+	375	[70]	LOADI    	57 33
+	376	[70]	LOADI    	58 34
+	377	[70]	LOADI    	59 35
+	378	[70]	LOADI    	60 36
+	379	[70]	LOADI    	61 37
+	380	[70]	LOADI    	62 38
+	381	[70]	LOADI    	63 39
+	382	[70]	LOADI    	64 40
+	383	[71]	LOADI    	65 41
+	384	[71]	LOADI    	66 42
+	385	[71]	LOADI    	67 43
+	386	[71]	LOADI    	68 44
+	387	[71]	LOADI    	69 45
+	388	[71]	LOADI    	70 46
+	389	[71]	LOADI    	71 47
+	390	[71]	LOADI    	72 48
+	391	[71]	LOADI    	73 49
+	392	[71]	LOADI    	74 50
+	393	[71]	SETLIST  	24 50 0
+	394	[71]	LOADI    	25 51
+	395	[71]	LOADI    	26 52
+	396	[71]	LOADI    	27 53
+	397	[71]	LOADI    	28 54
+	398	[71]	LOADI    	29 55
+	399	[71]	LOADI    	30 56
+	400	[71]	LOADI    	31 57
+	401	[71]	LOADI    	32 58
+	402	[71]	LOADI    	33 59
+	403	[71]	LOADI    	34 60
+	404	[72]	MOVE     	35 8
+	405	[72]	CALL     	35 1 0	; 0 in all out
+	406	[73]	SETLIST  	24 0 50
+	407	[74]	GETTABUP 	25 0 0	; _ENV "print"
+	408	[74]	LEN      	26 24
+	409	[74]	GETI     	27 24 60
+	410	[74]	GETI     	28 24 61
+	411	[74]	GETI     	29 24 63
+	412	[74]	CALL     	25 5 1	; 4 in 0 out
+	413	[77]	NEWTABLE 	25 0 5	; 5
+	414	[77]	EXTRAARG 	0
+	415	[77]	LOADI    	26 1
+	416	[77]	LOADNIL  	27 0	; 1 out
+	417	[77]	LOADI    	28 3
+	418	[77]	LOADNIL  	29 0	; 1 out
+	419	[77]	LOADI    	30 5
+	420	[77]	SETLIST  	25 5 0
+	421	[78]	GETTABUP 	26 0 0	; _ENV "print"
+	422	[78]	GETI     	27 25 1
+	423	[78]	GETI     	28 25 2
+	424	[78]	GETI     	29 25 3
+	425	[78]	GETI     	30 25 4
+	426	[78]	GETI     	31 25 5
+	427	[78]	CALL     	26 6 1	; 5 in 0 out
+	428	[79]	NEWTABLE 	26 0 4	; 4
+	429	[79]	EXTRAARG 	0
+	430	[79]	LOADI    	27 1
+	431	[79]	LOADI    	28 2
+	432	[79]	LOADNIL  	29 1	; 2 out
+	433	[79]	SETLIST  	26 4 0
+	434	[80]	GETTABUP 	27 0 0	; _ENV "print"
+	435	[80]	GETI     	28 26 1
+	436	[80]	GETI     	29 26 2
+	437	[80]	GETI     	30 26 3
+	438	[80]	CALL     	27 4 1	; 3 in 0 out
+	439	[83]	NEWTABLE 	27 0 0	; 0
+	440	[83]	EXTRAARG 	0
+	441	[84]	LOADI    	28 1
+	442	[84]	LOADI    	29 3
+	443	[84]	LOADI    	30 1
+	444	[84]	FORPREP  	28 7	; exit to 453
+	445	[84]	NEWTABLE 	32 0 2	; 2
+	446	[84]	EXTRAARG 	0
+	447	[84]	MOVE     	33 31
+	448	[84]	MUL      	34 31 31
+	449	[84]	MMBIN    	31 31 8	; __mul
+	450	[84]	SETLIST  	32 2 0
+	451	[84]	SETTABLE 	27 31 32
+	452	[84]	FORLOOP  	28 8	; to 445
+	453	[85]	GETTABUP 	28 0 0	; _ENV "print"
+	454	[85]	GETI     	29 27 1
+	455	[85]	GETI     	30 27 2
+	456	[85]	EQ       	29 30 0
+	457	[85]	JMP      	1	; to 459
+	458	[85]	LFALSESKIP	29
+	459	[85]	LOADTRUE 	29
+	460	[85]	GETI     	30 27 2
+	461	[85]	GETI     	30 30 2
+	462	[85]	GETI     	31 27 3
+	463	[85]	GETI     	31 31 2
+	464	[85]	CALL     	28 4 1	; 3 in 0 out
+	465	[87]	LEN      	28 22
+	466	[87]	LEN      	29 22
+	467	[87]	GETTABLE 	29 22 29
+	468	[87]	RETURN   	28 3 1	; 2 out
+	469	[87]	RETURN   	28 1 1	; 0 out
+constants (28):
+	0	S	"print"
+	1	S	"next"
+	2	S	"x"
+	3	I	1
+	4	S	"y"
+	5	S	"two"
+	6	S	"z"
+	7	B	true
+	8	S	"w"
+	9	S	"computed"
+	10	S	"c"
+	11	S	"with space"
+	12	I	5
+	13	S	"yes"
+	14	S	"a"
+	15	S	"X"
+	16	S	"b"
+	17	S	"ten"
+	18	S	"Y"
+	19	S	"d"
+	20	S	"keyed"
+	21	S	"positional"
+	22	S	"name"
+	23	S	"outer"
+	24	S	"inner"
+	25	S	"deeper"
+	26	S	"label"
+	27	S	"big"
+locals (36):
+	0	empty	4	470
+	1	pos	16	470
+	2	named	28	470
+	3	k	35	470
+	4	keyed	42	470
+	5	mixed	67	470
+	6	clash	82	470
+	7	nested	102	470
+	8	three	115	470
+	9	last	120	470
+	10	middle	126	470
+	11	paren	131	470
+	12	none	140	470
+	13	after_none	145	470
+	14	first_none	151	470
+	15	pack	157	470
+	16	p	162	470
+	17	n	162	470
+	18	p2	170	470
+	19	n2	170	470
+	20	first_and_rest	175	470
+	21	fr	180	470
+	22	big	321	470
+	23	sum	322	470
+	24	(for state)	325	330
+	25	(for state)	325	330
+	26	(for state)	325	330
+	27	i	326	329
+	28	tail	407	470
+	29	holes	421	470
+	30	trailing_nils	434	470
+	31	list	441	470
+	32	(for state)	444	453
+	33	(for state)	444	453
+	34	(for state)	444	453
+	35	i	445	452
+upvalues (1):
+	0	_ENV	1	0
+
+function <table_constructors.lua:31,31> (5 instructions)
+0 params, 3 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[31]	LOADI    	0 1
+	2	[31]	LOADI    	1 2
+	3	[31]	LOADI    	2 3
+	4	[31]	RETURN   	0 4 0	; 3 out
+	5	[31]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <table_constructors.lua:37,37> (1 instruction)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[37]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <table_constructors.lua:43,43> (11 instructions)
+0+ params, 4 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[43]	VARARGPREP	0
+	2	[43]	NEWTABLE 	0 0 0	; 0
+	3	[43]	EXTRAARG 	0
+	4	[43]	VARARG   	1 0	; all out
+	5	[43]	SETLIST  	0 0 0
+	6	[43]	GETTABUP 	1 0 0	; _ENV "select"
+	7	[43]	LOADK    	2 1	; "#"
+	8	[43]	VARARG   	3 0	; all out
+	9	[43]	CALL     	1 0 0	; all in all out
+	10	[43]	RETURN   	0 0 1	; all out
+	11	[43]	RETURN   	0 1 1	; 0 out
+constants (2):
+	0	S	"select"
+	1	S	"#"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <table_constructors.lua:48,48> (8 instructions)
+0+ params, 3 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[48]	VARARGPREP	0
+	2	[48]	NEWTABLE 	0 0 2	; 2
+	3	[48]	EXTRAARG 	0
+	4	[48]	VARARG   	1 2	; 1 out
+	5	[48]	LOADK    	2 0	; "end"
+	6	[48]	SETLIST  	0 2 0
+	7	[48]	RETURN   	0 2 1	; 1 out
+	8	[48]	RETURN   	0 1 1	; 0 out
+constants (1):
+	0	S	"end"
+locals (0):
+upvalues (0):

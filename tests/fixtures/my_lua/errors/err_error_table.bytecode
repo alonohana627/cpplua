@@ -1,0 +1,17 @@
+
+main <err_error_table.lua:0,0> (7 instructions)
+0+ params, 2 slots, 1 upvalue, 0 locals, 3 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[3]	GETTABUP 	0 0 0	; _ENV "error"
+	3	[3]	NEWTABLE 	1 1 0	; 0
+	4	[3]	EXTRAARG 	0
+	5	[3]	SETFIELD 	1 1 2k	; "code" 1
+	6	[3]	CALL     	0 2 1	; 1 in 0 out
+	7	[3]	RETURN   	0 1 1	; 0 out
+constants (3):
+	0	S	"error"
+	1	S	"code"
+	2	I	1
+locals (0):
+upvalues (1):
+	0	_ENV	1	0

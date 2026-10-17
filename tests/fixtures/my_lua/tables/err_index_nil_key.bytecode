@@ -1,0 +1,21 @@
+
+main <err_index_nil_key.lua:0,0> (10 instructions)
+0+ params, 3 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	NEWTABLE 	0 0 0	; 0
+	3	[2]	EXTRAARG 	0
+	4	[3]	GETTABUP 	1 0 0	; _ENV "print"
+	5	[3]	LOADNIL  	2 0	; 1 out
+	6	[3]	GETTABLE 	2 0 2
+	7	[3]	CALL     	1 2 1	; 1 in 0 out
+	8	[4]	LOADNIL  	1 0	; 1 out
+	9	[5]	SETTABLE 	0 1 1k	; 1
+	10	[5]	RETURN   	2 1 1	; 0 out
+constants (2):
+	0	S	"print"
+	1	I	1
+locals (2):
+	0	t	4	11
+	1	key	9	11
+upvalues (1):
+	0	_ENV	1	0

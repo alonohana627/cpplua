@@ -1,0 +1,426 @@
+Chunk
+  Local store
+    Table
+  Local front
+    Call
+      Name setmetatable
+      Table
+        Field existing
+          Integer 1
+      Table
+        Field __newindex
+          Name store (local 0)
+  Assign
+    Targets
+      Index
+        Name front (local 1)
+        String "existing"
+    Values
+      Integer 2
+  Assign
+    Targets
+      Index
+        Name front (local 1)
+        String "fresh"
+    Values
+      Integer 3
+  Assign
+    Targets
+      Index
+        Name front (local 1)
+        Integer 1
+    Values
+      String "one"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name front (local 1)
+        String "existing"
+      Index
+        Name front (local 1)
+        String "fresh"
+      Index
+        Name store (local 0)
+        String "fresh"
+      Call
+        Name rawget
+        Name front (local 1)
+        String "fresh"
+      Index
+        Name store (local 0)
+        Integer 1
+      Index
+        Name front (local 1)
+        Integer 1
+  Local log
+    Table
+  Local tracked
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __newindex
+          Function(t, k, v) [upvalues: log, _ENV]
+            Assign
+              Targets
+                Index
+                  Name log (upvalue 0)
+                  Binary +
+                    Unary #
+                      Name log (upvalue 0)
+                    Integer 1
+              Values
+                Binary ..
+                  Call
+                    Name tostring
+                    Name k (local 1)
+                  Binary ..
+                    String "="
+                    Call
+                      Name tostring
+                      Name v (local 2)
+            CallStatement
+              Call
+                Name rawset
+                Name t (local 0)
+                Name k (local 1)
+                Name v (local 2)
+  Assign
+    Targets
+      Index
+        Name tracked (local 3)
+        String "a"
+    Values
+      Integer 1
+  Assign
+    Targets
+      Index
+        Name tracked (local 3)
+        String "a"
+    Values
+      Integer 2
+  Assign
+    Targets
+      Index
+        Name tracked (local 3)
+        Integer 10
+    Values
+      String "ten"
+  Assign
+    Targets
+      Index
+        Name tracked (local 3)
+        String "b"
+    Values
+      Nil
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name log (local 2)
+      Index
+        Name log (local 2)
+        Integer 1
+      Index
+        Name log (local 2)
+        Integer 2
+      Index
+        Name log (local 2)
+        Integer 3
+      Index
+        Name tracked (local 3)
+        String "a"
+      Index
+        Name tracked (local 3)
+        Integer 10
+  LocalFunction readonly
+    Function(t) [upvalues: _ENV]
+      Return
+        Call
+          Name setmetatable
+          Table
+          Table
+            Field __index
+              Name t (local 0)
+            Field __newindex
+              Function(_, k) [upvalues: _ENV]
+                CallStatement
+                  Call
+                    Name error
+                    Binary ..
+                      String "attempt to update a read-only table (key "
+                      Binary ..
+                        Call
+                          Name tostring
+                          Name k (local 1)
+                        String ")"
+                    Integer 2
+            Field __len
+              Function() [upvalues: t]
+                Return
+                  Unary #
+                    Name t (upvalue 0)
+  Local days
+    Call
+      Name readonly (local 4)
+      Table
+        Item
+          String "mon"
+        Item
+          String "tue"
+        Item
+          String "wed"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name days (local 5)
+        Integer 1
+      Index
+        Name days (local 5)
+        Integer 3
+      Unary #
+        Name days (local 5)
+  Local ok, msg
+    Call
+      Name pcall
+      Function() [upvalues: days]
+        Assign
+          Targets
+            Index
+              Name days (upvalue 0)
+              Integer 4
+          Values
+            String "thu"
+  CallStatement
+    Call
+      Name print
+      Name ok (local 6)
+      Name msg (local 7)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name rawget
+        Name days (local 5)
+        Integer 4
+      Index
+        Name days (local 5)
+        Integer 4
+  Local guarded
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __newindex
+          Function() [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                String "no!"
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Name rawset
+          Name guarded (local 8)
+          String "k"
+          String "v"
+        Name guarded (local 8)
+      Index
+        Name guarded (local 8)
+        String "k"
+  Assign
+    Targets
+      Index
+        Name guarded (local 8)
+        String "k"
+    Values
+      String "changed"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name guarded (local 8)
+        String "k"
+  Local final
+    Table
+  Local mid
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __newindex
+          Name final (local 9)
+  Local outer
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __newindex
+          Name mid (local 10)
+  Assign
+    Targets
+      Index
+        Name outer (local 11)
+        String "x"
+    Values
+      String "deep"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name rawget
+        Name outer (local 11)
+        String "x"
+      Call
+        Name rawget
+        Name mid (local 10)
+        String "x"
+      Index
+        Name final (local 9)
+        String "x"
+  Local writes
+    Integer 0
+  Local counted
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function()
+            Return
+              Integer 0
+        Field __newindex
+          Function(t, k, v) [upvalues: writes, _ENV]
+            Assign
+              Targets
+                Name writes (upvalue 0)
+              Values
+                Binary +
+                  Name writes (upvalue 0)
+                  Integer 1
+            CallStatement
+              Call
+                Name rawset
+                Name t (local 0)
+                Name k (local 1)
+                Name v (local 2)
+  GenericFor _, w
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            String "a"
+          Item
+            String "b"
+          Item
+            String "a"
+          Item
+            String "c"
+          Item
+            String "a"
+    Body
+      Assign
+        Targets
+          Index
+            Name counted (local 13)
+            Name w (local 19)
+        Values
+          Binary +
+            Index
+              Name counted (local 13)
+              Name w (local 19)
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Index
+        Name counted (local 13)
+        String "a"
+      Index
+        Name counted (local 13)
+        String "b"
+      Index
+        Name counted (local 13)
+        String "c"
+      Index
+        Name counted (local 13)
+        String "d"
+      Name writes (local 12)
+  Local ints
+    Call
+      Name setmetatable
+      Table
+        Item
+          Integer 1
+        Item
+          Integer 2
+        Item
+          Integer 3
+      Table
+        Field __newindex
+          Function(t, k, v) [upvalues: _ENV]
+            CallStatement
+              Call
+                Name rawset
+                Name t (local 0)
+                Name k (local 1)
+                Binary *
+                  Name v (local 2)
+                  Integer 100
+  Assign
+    Targets
+      Index
+        Name ints (local 14)
+        Integer 2
+    Values
+      Integer 20
+  Assign
+    Targets
+      Index
+        Name ints (local 14)
+        Integer 4
+    Values
+      Integer 4
+  CallStatement
+    Call
+      Name print
+      Index
+        Name ints (local 14)
+        Integer 2
+      Index
+        Name ints (local 14)
+        Integer 4
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name rawset
+        Table
+        Nil
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name rawset
+        Table
+        Binary /
+          Integer 0
+          Integer 0
+        Integer 1
+  Return
+    Index
+      Name store (local 0)
+      String "fresh"
+    Index
+      Name final (local 9)
+      String "x"
+    Unary #
+      Name log (local 2)

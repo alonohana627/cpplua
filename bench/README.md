@@ -1,8 +1,8 @@
 # Benchmarks
 
-Lua programs that time the VM and the garbage collector (docs/plan/vm.md). Each uses only what
-stage 5 builds: locals, arithmetic, strings, functions and closures (no tables, no standard
-library), and returns its result, so lua2 and the reference Lua can run the same file.
+Lua programs that time the VM and the garbage collector (docs/plan/vm.md), then tables,
+metatables and errors (stages 6 to 8). Each uses only the language and the base library, and
+returns its result, so lua2 and the reference Lua can run the same file.
 
 | File                | What it stresses                                         |
 | ------------------- | -------------------------------------------------------- |
@@ -12,6 +12,12 @@ library), and returns its result, so lua2 and the reference Lua can run the same
 | `closures.lua`      | making closures, upvalue reads and writes                |
 | `strings.lua`       | short concatenations, number to string, string garbage   |
 | `varargs.lua`       | varargs and multiple results                             |
+| `tables_array.lua`  | filling and reading arrays, `#`, `ipairs`                |
+| `tables_hash.lua`   | small records from constructors, string keys, `pairs`    |
+| `sort.lua`          | quicksort in Lua over integer arrays                     |
+| `methods.lua`       | classes through `__index` chains, method calls           |
+| `metamethods.lua`   | `__add`, `__mul`, `__eq`, `__len`, an `__index` function |
+| `pcall.lua`         | `pcall` that succeeds and fails, to-be-closed variables  |
 
 Run them with the runner, built with the project:
 

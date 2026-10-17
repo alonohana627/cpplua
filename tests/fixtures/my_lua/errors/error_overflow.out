@@ -1,0 +1,13 @@
+false	error_overflow.lua:7: stack overflow
+false	error_overflow.lua:12: stack overflow
+false	error_overflow.lua:15: stack overflow
+false	error_overflow.lua:20: C stack overflow
+false	error_overflow.lua:24: C stack overflow
+false	error_overflow.lua:26: C stack overflow
+false	error_overflow.lua:32: '__index' chain too long; possible loop
+false	error_overflow.lua:36: '__index' chain too long; possible loop
+false	error_overflow.lua:39: '__newindex' chain too long; possible loop
+10000
+bottom
+false	error_overflow.lua:7: stack overflow
+recovered

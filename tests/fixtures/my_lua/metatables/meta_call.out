@@ -1,0 +1,14 @@
+1	6	6
+0
+3	1	nil	3
+3	2	a	b
+me
+3	4	7	true
+15
+true	16
+116
+me
+true	true	x
+false	attempt to call a table value
+false	meta_call.lua:59: attempt to call a table value (local 't')
+116	7

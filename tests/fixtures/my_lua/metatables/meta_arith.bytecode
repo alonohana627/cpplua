@@ -1,0 +1,781 @@
+
+main <meta_arith.lua:0,0> (278 instructions)
+0+ params, 18 slots, 1 upvalue, 18 locals, 39 constants, 22 functions
+	1	[1]	VARARGPREP	0
+	2	[9]	CLOSURE  	0 0
+	3	[11]	NEWTABLE 	1 0 0	; 0
+	4	[11]	EXTRAARG 	0
+	5	[12]	CLOSURE  	2 1
+	6	[13]	GETTABUP 	3 0 0	; _ENV "ipairs"
+	7	[13]	NEWTABLE 	4 0 7	; 7
+	8	[13]	EXTRAARG 	0
+	9	[13]	LOADK    	5 1	; "add"
+	10	[13]	LOADK    	6 2	; "sub"
+	11	[13]	LOADK    	7 3	; "mul"
+	12	[13]	LOADK    	8 4	; "div"
+	13	[13]	LOADK    	9 5	; "mod"
+	14	[13]	LOADK    	10 6	; "pow"
+	15	[13]	LOADK    	11 7	; "idiv"
+	16	[13]	SETLIST  	4 7 0
+	17	[13]	CALL     	3 2 5	; 1 in 4 out
+	18	[13]	TFORPREP 	3 6	; to 25
+	19	[14]	LOADK    	9 8	; "__"
+	20	[14]	MOVE     	10 8
+	21	[14]	CONCAT   	9 2
+	22	[14]	CLOSURE  	10 2
+	23	[14]	SETTABLE 	1 9 10
+	24	[14]	CLOSE    	7
+	25	[13]	TFORCALL 	3 2
+	26	[13]	TFORLOOP 	3 8	; to 19
+	27	[15]	CLOSE    	3
+	28	[16]	CLOSURE  	3 3
+	29	[16]	SETFIELD 	1 9 3	; "__unm"
+	30	[18]	MOVE     	3 2
+	31	[18]	LOADK    	4 10	; "a"
+	32	[18]	CALL     	3 2 2	; 1 in 1 out
+	33	[18]	MOVE     	4 2
+	34	[18]	LOADK    	5 11	; "b"
+	35	[18]	CALL     	4 2 2	; 1 in 1 out
+	36	[19]	GETTABUP 	5 0 12	; _ENV "print"
+	37	[19]	ADD      	6 3 4
+	38	[19]	MMBIN    	3 4 6	; __add
+	39	[19]	SUB      	7 3 4
+	40	[19]	MMBIN    	3 4 7	; __sub
+	41	[19]	MUL      	8 3 4
+	42	[19]	MMBIN    	3 4 8	; __mul
+	43	[19]	CALL     	5 4 1	; 3 in 0 out
+	44	[20]	GETTABUP 	5 0 12	; _ENV "print"
+	45	[20]	DIV      	6 3 4
+	46	[20]	MMBIN    	3 4 11	; __div
+	47	[20]	MOD      	7 3 4
+	48	[20]	MMBIN    	3 4 9	; __mod
+	49	[20]	POW      	8 3 4
+	50	[20]	MMBIN    	3 4 10	; __pow
+	51	[20]	IDIV     	9 3 4
+	52	[20]	MMBIN    	3 4 12	; __idiv
+	53	[20]	CALL     	5 5 1	; 4 in 0 out
+	54	[21]	GETTABUP 	5 0 12	; _ENV "print"
+	55	[21]	UNM      	6 3
+	56	[21]	UNM      	7 4
+	57	[21]	CALL     	5 3 1	; 2 in 0 out
+	58	[24]	GETTABUP 	5 0 12	; _ENV "print"
+	59	[24]	ADDI     	6 3 1
+	60	[24]	MMBINI   	3 1 6 0	; __add
+	61	[24]	ADDI     	7 3 1
+	62	[24]	MMBINI   	3 1 6 1	; __add flip
+	63	[24]	SUBK     	8 3 13	; 2.5
+	64	[24]	MMBINK   	3 13 7 0	; __sub 2.5
+	65	[24]	LOADK    	9 13	; 2.5
+	66	[24]	SUB      	9 9 3
+	67	[24]	MMBIN    	9 3 7	; __sub
+	68	[24]	CALL     	5 5 1	; 4 in 0 out
+	69	[25]	GETTABUP 	5 0 12	; _ENV "print"
+	70	[25]	MULK     	6 3 14	; 3
+	71	[25]	MMBINK   	3 14 8 0	; __mul 3
+	72	[25]	LOADI    	7 3
+	73	[25]	IDIV     	7 7 3
+	74	[25]	MMBIN    	7 3 12	; __idiv
+	75	[25]	MODK     	8 3 15	; 4
+	76	[25]	MMBINK   	3 15 9 0	; __mod 4
+	77	[25]	LOADI    	9 4
+	78	[25]	POW      	9 9 3
+	79	[25]	MMBIN    	9 3 10	; __pow
+	80	[25]	CALL     	5 5 1	; 4 in 0 out
+	81	[28]	GETTABUP 	5 0 12	; _ENV "print"
+	82	[28]	LOADK    	6 16	; "10"
+	83	[28]	ADD      	6 3 6
+	84	[28]	MMBIN    	3 6 6	; __add
+	85	[28]	LOADK    	7 16	; "10"
+	86	[28]	ADD      	7 7 3
+	87	[28]	MMBIN    	7 3 6	; __add
+	88	[28]	LOADK    	8 17	; "2"
+	89	[28]	MUL      	8 8 4
+	90	[28]	MMBIN    	8 4 8	; __mul
+	91	[28]	LOADK    	9 18	; "x"
+	92	[28]	DIV      	9 4 9
+	93	[28]	MMBIN    	4 9 11	; __div
+	94	[28]	CALL     	5 5 1	; 4 in 0 out
+	95	[31]	NEWTABLE 	5 1 0	; 0
+	96	[31]	EXTRAARG 	0
+	97	[31]	SETFIELD 	5 19 20k	; "name" "plain"
+	98	[32]	GETTABUP 	6 0 12	; _ENV "print"
+	99	[32]	GETTABUP 	7 0 21	; _ENV "pcall"
+	100	[32]	CLOSURE  	8 4
+	101	[32]	CALL     	7 2 0	; 1 in all out
+	102	[32]	CALL     	6 0 1	; all in 0 out
+	103	[33]	GETTABUP 	6 0 12	; _ENV "print"
+	104	[33]	MUL      	7 5 4
+	105	[33]	MMBIN    	5 4 8	; __mul
+	106	[33]	CALL     	6 2 1	; 1 in 0 out
+	107	[36]	GETTABUP 	6 0 22	; _ENV "setmetatable"
+	108	[36]	NEWTABLE 	7 1 0	; 0
+	109	[36]	EXTRAARG 	0
+	110	[36]	SETFIELD 	7 19 23k	; "name" "other"
+	111	[36]	NEWTABLE 	8 1 0	; 0
+	112	[36]	EXTRAARG 	0
+	113	[36]	CLOSURE  	9 5
+	114	[36]	SETFIELD 	8 24 9	; "__add"
+	115	[36]	CALL     	6 3 2	; 2 in 1 out
+	116	[37]	GETTABUP 	7 0 12	; _ENV "print"
+	117	[37]	ADD      	8 3 6
+	118	[37]	MMBIN    	3 6 6	; __add
+	119	[37]	ADD      	9 6 3
+	120	[37]	MMBIN    	6 3 6	; __add
+	121	[37]	CALL     	7 3 1	; 2 in 0 out
+	122	[40]	GETTABUP 	7 0 12	; _ENV "print"
+	123	[40]	LOADI    	8 3
+	124	[40]	LOADK    	9 25	; "3"
+	125	[40]	ADDI     	9 9 4
+	126	[40]	MMBINI   	9 4 6 0	; __add
+	127	[40]	LOADK    	10 25	; "3"
+	128	[40]	LOADI    	11 10
+	129	[40]	IDIV     	10 11 10
+	130	[40]	MMBIN    	11 10 12	; __idiv
+	131	[40]	LOADK    	11 17	; "2"
+	132	[40]	POWK     	11 11 26	; 2
+	133	[40]	MMBINK   	11 26 10 0	; __pow 2
+	134	[40]	CALL     	7 5 1	; 4 in 0 out
+	135	[43]	NEWTABLE 	7 0 0	; 0
+	136	[43]	EXTRAARG 	0
+	137	[44]	SETFIELD 	7 27 7	; "__index"
+	138	[45]	CLOSURE  	8 6
+	139	[46]	CLOSURE  	9 7
+	140	[46]	SETFIELD 	7 24 9	; "__add"
+	141	[47]	CLOSURE  	9 8
+	142	[47]	SETFIELD 	7 28 9	; "__sub"
+	143	[52]	CLOSURE  	9 9
+	144	[52]	SETFIELD 	7 29 9	; "__mul"
+	145	[53]	CLOSURE  	9 10
+	146	[53]	SETFIELD 	7 9 9	; "__unm"
+	147	[54]	CLOSURE  	9 11
+	148	[54]	SETFIELD 	7 30 9	; "__div"
+	149	[55]	CLOSURE  	9 12
+	150	[55]	SETFIELD 	7 31 9	; "__idiv"
+	151	[56]	CLOSURE  	9 13
+	152	[56]	SETFIELD 	7 32 9	; "__mod"
+	153	[57]	CLOSURE  	9 14
+	154	[57]	SETFIELD 	7 33 9	; "__pow"
+	155	[58]	CLOSURE  	9 15
+	156	[58]	SETFIELD 	7 34 9	; "str"
+	157	[60]	MOVE     	9 8
+	158	[60]	LOADI    	10 1
+	159	[60]	LOADI    	11 2
+	160	[60]	CALL     	9 3 2	; 2 in 1 out
+	161	[60]	MOVE     	10 8
+	162	[60]	LOADI    	11 3
+	163	[60]	LOADI    	12 4
+	164	[60]	CALL     	10 3 2	; 2 in 1 out
+	165	[61]	GETTABUP 	11 0 12	; _ENV "print"
+	166	[61]	ADD      	12 9 10
+	167	[61]	MMBIN    	9 10 6	; __add
+	168	[61]	SELF     	12 12 34k	; "str"
+	169	[61]	CALL     	12 2 2	; 1 in 1 out
+	170	[61]	SUB      	13 9 10
+	171	[61]	MMBIN    	9 10 7	; __sub
+	172	[61]	SELF     	13 13 34k	; "str"
+	173	[61]	CALL     	13 2 2	; 1 in 1 out
+	174	[61]	MUL      	14 9 10
+	175	[61]	MMBIN    	9 10 8	; __mul
+	176	[61]	MULK     	15 9 26	; 2
+	177	[61]	MMBINK   	9 26 8 1	; __mul 2 flip
+	178	[61]	SELF     	15 15 34k	; "str"
+	179	[61]	CALL     	15 2 2	; 1 in 1 out
+	180	[61]	MULK     	16 10 14	; 3
+	181	[61]	MMBINK   	10 14 8 0	; __mul 3
+	182	[61]	SELF     	16 16 34k	; "str"
+	183	[61]	CALL     	16 2 0	; 1 in all out
+	184	[61]	CALL     	11 0 1	; all in 0 out
+	185	[62]	GETTABUP 	11 0 12	; _ENV "print"
+	186	[62]	UNM      	12 9
+	187	[62]	SELF     	12 12 34k	; "str"
+	188	[62]	CALL     	12 2 2	; 1 in 1 out
+	189	[62]	DIVK     	13 10 26	; 2
+	190	[62]	MMBINK   	10 26 11 0	; __div 2
+	191	[62]	SELF     	13 13 34k	; "str"
+	192	[62]	CALL     	13 2 2	; 1 in 1 out
+	193	[62]	IDIVK    	14 10 26	; 2
+	194	[62]	MMBINK   	10 26 12 0	; __idiv 2
+	195	[62]	SELF     	14 14 34k	; "str"
+	196	[62]	CALL     	14 2 2	; 1 in 1 out
+	197	[62]	MODK     	15 10 14	; 3
+	198	[62]	MMBINK   	10 14 9 0	; __mod 3
+	199	[62]	SELF     	15 15 34k	; "str"
+	200	[62]	CALL     	15 2 2	; 1 in 1 out
+	201	[62]	POWK     	16 9 26	; 2
+	202	[62]	MMBINK   	9 26 10 0	; __pow 2
+	203	[62]	SELF     	16 16 34k	; "str"
+	204	[62]	CALL     	16 2 0	; 1 in all out
+	205	[62]	CALL     	11 0 1	; all in 0 out
+	206	[63]	GETTABUP 	11 0 12	; _ENV "print"
+	207	[63]	ADD      	12 9 10
+	208	[63]	MMBIN    	9 10 6	; __add
+	209	[63]	ADD      	12 12 9
+	210	[63]	MMBIN    	12 9 6	; __add
+	211	[63]	ADD      	12 12 10
+	212	[63]	MMBIN    	12 10 6	; __add
+	213	[63]	SELF     	12 12 34k	; "str"
+	214	[63]	CALL     	12 2 2	; 1 in 1 out
+	215	[63]	MULK     	13 9 26	; 2
+	216	[63]	MMBINK   	9 26 8 0	; __mul 2
+	217	[63]	MULK     	14 10 35	; -1
+	218	[63]	MMBINK   	10 35 8 0	; __mul -1
+	219	[63]	ADD      	13 13 14
+	220	[63]	MMBIN    	13 14 6	; __add
+	221	[63]	SELF     	13 13 34k	; "str"
+	222	[63]	CALL     	13 2 0	; 1 in all out
+	223	[63]	CALL     	11 0 1	; all in 0 out
+	224	[66]	GETTABUP 	11 0 12	; _ENV "print"
+	225	[66]	UNM      	12 9
+	226	[66]	MULK     	13 10 26	; 2
+	227	[66]	MMBINK   	10 26 8 0	; __mul 2
+	228	[66]	ADD      	12 12 13
+	229	[66]	MMBIN    	12 13 6	; __add
+	230	[66]	SELF     	12 12 34k	; "str"
+	231	[66]	CALL     	12 2 2	; 1 in 1 out
+	232	[66]	MUL      	13 9 10
+	233	[66]	MMBIN    	9 10 8	; __mul
+	234	[66]	ADDI     	13 13 1
+	235	[66]	MMBINI   	13 1 6 0	; __add
+	236	[66]	CALL     	11 3 1	; 2 in 0 out
+	237	[70]	GETTABUP 	11 0 36	; _ENV "setmetatable"
+	238	[70]	NEWTABLE 	12 0 0	; 0
+	239	[70]	EXTRAARG 	0
+	240	[70]	NEWTABLE 	13 3 0	; 0
+	241	[70]	EXTRAARG 	0
+	242	[71]	CLOSURE  	14 16
+	243	[71]	SETFIELD 	13 24 14	; "__add"
+	244	[72]	CLOSURE  	14 17
+	245	[72]	SETFIELD 	13 28 14	; "__sub"
+	246	[73]	CLOSURE  	14 18
+	247	[73]	SETFIELD 	13 29 14	; "__mul"
+	248	[70]	CALL     	11 3 2	; 2 in 1 out
+	249	[75]	GETTABUP 	12 0 12	; _ENV "print"
+	250	[75]	ADDI     	13 11 1
+	251	[75]	MMBINI   	11 1 6 0	; __add
+	252	[75]	ADDI     	14 11 -1
+	253	[75]	MMBINI   	11 1 7 0	; __sub
+	254	[75]	MULK     	15 11 37	; 1
+	255	[75]	MMBINK   	11 37 8 0	; __mul 1
+	256	[75]	CALL     	12 4 1	; 3 in 0 out
+	257	[78]	GETTABUP 	12 0 12	; _ENV "print"
+	258	[78]	GETTABUP 	13 0 21	; _ENV "pcall"
+	259	[78]	CLOSURE  	14 19
+	260	[78]	CALL     	13 2 0	; 1 in all out
+	261	[78]	CALL     	12 0 1	; all in 0 out
+	262	[79]	GETTABUP 	12 0 12	; _ENV "print"
+	263	[79]	GETTABUP 	13 0 21	; _ENV "pcall"
+	264	[79]	CLOSURE  	14 20
+	265	[79]	CALL     	13 2 0	; 1 in all out
+	266	[79]	CALL     	12 0 1	; all in 0 out
+	267	[80]	GETTABUP 	12 0 12	; _ENV "print"
+	268	[80]	GETTABUP 	13 0 21	; _ENV "pcall"
+	269	[80]	CLOSURE  	14 21
+	270	[80]	CALL     	13 2 0	; 1 in all out
+	271	[80]	CALL     	12 0 1	; all in 0 out
+	272	[82]	ADD      	12 3 4
+	273	[82]	MMBIN    	3 4 6	; __add
+	274	[82]	ADD      	13 9 10
+	275	[82]	MMBIN    	9 10 6	; __add
+	276	[82]	GETFIELD 	13 13 38	; "x"
+	277	[82]	RETURN   	12 3 1k	; 2 out
+	278	[82]	RETURN   	12 1 1k	; 0 out
+constants (39):
+	0	S	"ipairs"
+	1	S	"add"
+	2	S	"sub"
+	3	S	"mul"
+	4	S	"div"
+	5	S	"mod"
+	6	S	"pow"
+	7	S	"idiv"
+	8	S	"__"
+	9	S	"__unm"
+	10	S	"a"
+	11	S	"b"
+	12	S	"print"
+	13	F	2.5
+	14	I	3
+	15	I	4
+	16	S	"10"
+	17	S	"2"
+	18	S	"x"
+	19	S	"name"
+	20	S	"plain"
+	21	S	"pcall"
+	22	S	"setmetatable"
+	23	S	"other"
+	24	S	"__add"
+	25	S	"3"
+	26	I	2
+	27	S	"__index"
+	28	S	"__sub"
+	29	S	"__mul"
+	30	S	"__div"
+	31	S	"__idiv"
+	32	S	"__mod"
+	33	S	"__pow"
+	34	S	"str"
+	35	I	-1
+	36	S	"setmetatable"
+	37	I	1
+	38	S	"x"
+locals (18):
+	0	name	3	279
+	1	mt	5	279
+	2	V	6	279
+	3	(for state)	18	27
+	4	(for state)	18	27
+	5	(for state)	18	27
+	6	(for state)	18	27
+	7	_	19	24
+	8	event	19	24
+	9	a	36	279
+	10	b	36	279
+	11	plain	98	279
+	12	other	116	279
+	13	Vec	137	279
+	14	vec	139	279
+	15	u	165	279
+	16	v	165	279
+	17	odd	249	279
+upvalues (1):
+	0	_ENV	1	0
+
+function <meta_arith.lua:6,9> (17 instructions)
+1 param, 5 slots, 1 upvalue, 1 local, 5 constants, 0 functions
+	1	[7]	GETTABUP 	1 0 0	; _ENV "type"
+	2	[7]	MOVE     	2 0
+	3	[7]	CALL     	1 2 2	; 1 in 1 out
+	4	[7]	EQK      	1 1 0	; "table"
+	5	[7]	JMP      	2	; to 8
+	6	[7]	GETFIELD 	1 0 2	; "name"
+	7	[7]	RETURN1  	1
+	8	[8]	GETTABUP 	1 0 0	; _ENV "type"
+	9	[8]	MOVE     	2 0
+	10	[8]	CALL     	1 2 2	; 1 in 1 out
+	11	[8]	LOADK    	2 3	; " "
+	12	[8]	GETTABUP 	3 0 4	; _ENV "tostring"
+	13	[8]	MOVE     	4 0
+	14	[8]	CALL     	3 2 2	; 1 in 1 out
+	15	[8]	CONCAT   	1 3
+	16	[8]	RETURN1  	1
+	17	[9]	RETURN0  	
+constants (5):
+	0	S	"type"
+	1	S	"table"
+	2	S	"name"
+	3	S	" "
+	4	S	"tostring"
+locals (1):
+	0	x	1	18
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_arith.lua:12,12> (8 instructions)
+1 param, 4 slots, 2 upvalues, 1 local, 2 constants, 0 functions
+	1	[12]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	2	[12]	NEWTABLE 	2 1 0	; 0
+	3	[12]	EXTRAARG 	0
+	4	[12]	SETFIELD 	2 1 0	; "name"
+	5	[12]	GETUPVAL 	3 1	; mt
+	6	[12]	TAILCALL 	1 3 0	; 2 in
+	7	[12]	RETURN   	1 0 0	; all out
+	8	[12]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"name"
+locals (1):
+	0	n	1	9
+upvalues (2):
+	0	_ENV	0	0
+	1	mt	1	1
+
+function <meta_arith.lua:14,14> (13 instructions)
+2 params, 8 slots, 2 upvalues, 2 locals, 3 constants, 0 functions
+	1	[14]	GETUPVAL 	2 0	; event
+	2	[14]	LOADK    	3 0	; "("
+	3	[14]	GETUPVAL 	4 1	; name
+	4	[14]	MOVE     	5 0
+	5	[14]	CALL     	4 2 2	; 1 in 1 out
+	6	[14]	LOADK    	5 1	; ", "
+	7	[14]	GETUPVAL 	6 1	; name
+	8	[14]	MOVE     	7 1
+	9	[14]	CALL     	6 2 2	; 1 in 1 out
+	10	[14]	LOADK    	7 2	; ")"
+	11	[14]	CONCAT   	2 6
+	12	[14]	RETURN1  	2
+	13	[14]	RETURN0  	
+constants (3):
+	0	S	"("
+	1	S	", "
+	2	S	")"
+locals (2):
+	0	a	1	14
+	1	b	1	14
+upvalues (2):
+	0	event	1	8
+	1	name	1	0
+
+function <meta_arith.lua:16,16> (15 instructions)
+2 params, 7 slots, 2 upvalues, 2 locals, 4 constants, 0 functions
+	1	[16]	LOADK    	2 0	; "unm("
+	2	[16]	GETUPVAL 	3 0	; name
+	3	[16]	MOVE     	4 0
+	4	[16]	CALL     	3 2 2	; 1 in 1 out
+	5	[16]	LOADK    	4 1	; ", same: "
+	6	[16]	GETTABUP 	5 1 2	; _ENV "tostring"
+	7	[16]	EQ       	0 1 1
+	8	[16]	JMP      	1	; to 10
+	9	[16]	LFALSESKIP	6
+	10	[16]	LOADTRUE 	6
+	11	[16]	CALL     	5 2 2	; 1 in 1 out
+	12	[16]	LOADK    	6 3	; ")"
+	13	[16]	CONCAT   	2 5
+	14	[16]	RETURN1  	2
+	15	[16]	RETURN0  	
+constants (4):
+	0	S	"unm("
+	1	S	", same: "
+	2	S	"tostring"
+	3	S	")"
+locals (2):
+	0	a	1	16
+	1	b	1	16
+upvalues (2):
+	0	name	1	0
+	1	_ENV	0	0
+
+function <meta_arith.lua:32,32> (6 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 0 constants, 0 functions
+	1	[32]	GETUPVAL 	0 0	; plain
+	2	[32]	GETUPVAL 	1 1	; a
+	3	[32]	ADD      	0 0 1
+	4	[32]	MMBIN    	0 1 6	; __add
+	5	[32]	RETURN1  	0
+	6	[32]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (2):
+	0	plain	1	5
+	1	a	1	3
+
+function <meta_arith.lua:36,36> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[36]	LOADK    	0 0	; "other's add"
+	2	[36]	RETURN1  	0
+	3	[36]	RETURN0  	
+constants (1):
+	0	S	"other's add"
+locals (0):
+upvalues (0):
+
+function <meta_arith.lua:45,45> (9 instructions)
+2 params, 5 slots, 2 upvalues, 2 locals, 3 constants, 0 functions
+	1	[45]	GETTABUP 	2 0 0	; _ENV "setmetatable"
+	2	[45]	NEWTABLE 	3 2 0	; 0
+	3	[45]	EXTRAARG 	0
+	4	[45]	SETFIELD 	3 1 0	; "x"
+	5	[45]	SETFIELD 	3 2 1	; "y"
+	6	[45]	GETUPVAL 	4 1	; Vec
+	7	[45]	TAILCALL 	2 3 0	; 2 in
+	8	[45]	RETURN   	2 0 0	; all out
+	9	[45]	RETURN0  	
+constants (3):
+	0	S	"setmetatable"
+	1	S	"x"
+	2	S	"y"
+locals (2):
+	0	x	1	10
+	1	y	1	10
+upvalues (2):
+	0	_ENV	0	0
+	1	Vec	1	7
+
+function <meta_arith.lua:46,46> (12 instructions)
+2 params, 6 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[46]	GETUPVAL 	2 0	; vec
+	2	[46]	GETFIELD 	3 0 0	; "x"
+	3	[46]	GETFIELD 	4 1 0	; "x"
+	4	[46]	ADD      	3 3 4
+	5	[46]	MMBIN    	3 4 6	; __add
+	6	[46]	GETFIELD 	4 0 1	; "y"
+	7	[46]	GETFIELD 	5 1 1	; "y"
+	8	[46]	ADD      	4 4 5
+	9	[46]	MMBIN    	4 5 6	; __add
+	10	[46]	TAILCALL 	2 3 0	; 2 in
+	11	[46]	RETURN   	2 0 0	; all out
+	12	[46]	RETURN0  	
+constants (2):
+	0	S	"x"
+	1	S	"y"
+locals (2):
+	0	p	1	13
+	1	q	1	13
+upvalues (1):
+	0	vec	1	8
+
+function <meta_arith.lua:47,47> (12 instructions)
+2 params, 6 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[47]	GETUPVAL 	2 0	; vec
+	2	[47]	GETFIELD 	3 0 0	; "x"
+	3	[47]	GETFIELD 	4 1 0	; "x"
+	4	[47]	SUB      	3 3 4
+	5	[47]	MMBIN    	3 4 7	; __sub
+	6	[47]	GETFIELD 	4 0 1	; "y"
+	7	[47]	GETFIELD 	5 1 1	; "y"
+	8	[47]	SUB      	4 4 5
+	9	[47]	MMBIN    	4 5 7	; __sub
+	10	[47]	TAILCALL 	2 3 0	; 2 in
+	11	[47]	RETURN   	2 0 0	; all out
+	12	[47]	RETURN0  	
+constants (2):
+	0	S	"x"
+	1	S	"y"
+locals (2):
+	0	p	1	13
+	1	q	1	13
+upvalues (1):
+	0	vec	1	8
+
+function <meta_arith.lua:48,52> (40 instructions)
+2 params, 5 slots, 2 upvalues, 2 locals, 4 constants, 0 functions
+	1	[49]	GETTABUP 	2 0 0	; _ENV "type"
+	2	[49]	MOVE     	3 0
+	3	[49]	CALL     	2 2 2	; 1 in 1 out
+	4	[49]	EQK      	2 1 0	; "number"
+	5	[49]	JMP      	9	; to 15
+	6	[49]	GETUPVAL 	2 1	; vec
+	7	[49]	GETFIELD 	3 1 2	; "x"
+	8	[49]	MUL      	3 0 3
+	9	[49]	MMBIN    	0 3 8	; __mul
+	10	[49]	GETFIELD 	4 1 3	; "y"
+	11	[49]	MUL      	4 0 4
+	12	[49]	MMBIN    	0 4 8	; __mul
+	13	[49]	TAILCALL 	2 3 0	; 2 in
+	14	[49]	RETURN   	2 0 0	; all out
+	15	[50]	GETTABUP 	2 0 0	; _ENV "type"
+	16	[50]	MOVE     	3 1
+	17	[50]	CALL     	2 2 2	; 1 in 1 out
+	18	[50]	EQK      	2 1 0	; "number"
+	19	[50]	JMP      	9	; to 29
+	20	[50]	GETUPVAL 	2 1	; vec
+	21	[50]	GETFIELD 	3 0 2	; "x"
+	22	[50]	MUL      	3 3 1
+	23	[50]	MMBIN    	3 1 8	; __mul
+	24	[50]	GETFIELD 	4 0 3	; "y"
+	25	[50]	MUL      	4 4 1
+	26	[50]	MMBIN    	4 1 8	; __mul
+	27	[50]	TAILCALL 	2 3 0	; 2 in
+	28	[50]	RETURN   	2 0 0	; all out
+	29	[51]	GETFIELD 	2 0 2	; "x"
+	30	[51]	GETFIELD 	3 1 2	; "x"
+	31	[51]	MUL      	2 2 3
+	32	[51]	MMBIN    	2 3 8	; __mul
+	33	[51]	GETFIELD 	3 0 3	; "y"
+	34	[51]	GETFIELD 	4 1 3	; "y"
+	35	[51]	MUL      	3 3 4
+	36	[51]	MMBIN    	3 4 8	; __mul
+	37	[51]	ADD      	2 2 3
+	38	[51]	MMBIN    	2 3 6	; __add
+	39	[51]	RETURN1  	2
+	40	[52]	RETURN0  	
+constants (4):
+	0	S	"type"
+	1	S	"number"
+	2	S	"x"
+	3	S	"y"
+locals (2):
+	0	p	1	41
+	1	q	1	41
+upvalues (2):
+	0	_ENV	0	0
+	1	vec	1	8
+
+function <meta_arith.lua:53,53> (8 instructions)
+1 param, 4 slots, 1 upvalue, 1 local, 2 constants, 0 functions
+	1	[53]	GETUPVAL 	1 0	; vec
+	2	[53]	GETFIELD 	2 0 0	; "x"
+	3	[53]	UNM      	2 2
+	4	[53]	GETFIELD 	3 0 1	; "y"
+	5	[53]	UNM      	3 3
+	6	[53]	TAILCALL 	1 3 0	; 2 in
+	7	[53]	RETURN   	1 0 0	; all out
+	8	[53]	RETURN0  	
+constants (2):
+	0	S	"x"
+	1	S	"y"
+locals (1):
+	0	p	1	9
+upvalues (1):
+	0	vec	1	8
+
+function <meta_arith.lua:54,54> (10 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[54]	GETUPVAL 	2 0	; vec
+	2	[54]	GETFIELD 	3 0 0	; "x"
+	3	[54]	DIV      	3 3 1
+	4	[54]	MMBIN    	3 1 11	; __div
+	5	[54]	GETFIELD 	4 0 1	; "y"
+	6	[54]	DIV      	4 4 1
+	7	[54]	MMBIN    	4 1 11	; __div
+	8	[54]	TAILCALL 	2 3 0	; 2 in
+	9	[54]	RETURN   	2 0 0	; all out
+	10	[54]	RETURN0  	
+constants (2):
+	0	S	"x"
+	1	S	"y"
+locals (2):
+	0	p	1	11
+	1	k	1	11
+upvalues (1):
+	0	vec	1	8
+
+function <meta_arith.lua:55,55> (10 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[55]	GETUPVAL 	2 0	; vec
+	2	[55]	GETFIELD 	3 0 0	; "x"
+	3	[55]	IDIV     	3 3 1
+	4	[55]	MMBIN    	3 1 12	; __idiv
+	5	[55]	GETFIELD 	4 0 1	; "y"
+	6	[55]	IDIV     	4 4 1
+	7	[55]	MMBIN    	4 1 12	; __idiv
+	8	[55]	TAILCALL 	2 3 0	; 2 in
+	9	[55]	RETURN   	2 0 0	; all out
+	10	[55]	RETURN0  	
+constants (2):
+	0	S	"x"
+	1	S	"y"
+locals (2):
+	0	p	1	11
+	1	k	1	11
+upvalues (1):
+	0	vec	1	8
+
+function <meta_arith.lua:56,56> (10 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[56]	GETUPVAL 	2 0	; vec
+	2	[56]	GETFIELD 	3 0 0	; "x"
+	3	[56]	MOD      	3 3 1
+	4	[56]	MMBIN    	3 1 9	; __mod
+	5	[56]	GETFIELD 	4 0 1	; "y"
+	6	[56]	MOD      	4 4 1
+	7	[56]	MMBIN    	4 1 9	; __mod
+	8	[56]	TAILCALL 	2 3 0	; 2 in
+	9	[56]	RETURN   	2 0 0	; all out
+	10	[56]	RETURN0  	
+constants (2):
+	0	S	"x"
+	1	S	"y"
+locals (2):
+	0	p	1	11
+	1	k	1	11
+upvalues (1):
+	0	vec	1	8
+
+function <meta_arith.lua:57,57> (10 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[57]	GETUPVAL 	2 0	; vec
+	2	[57]	GETFIELD 	3 0 0	; "x"
+	3	[57]	POW      	3 3 1
+	4	[57]	MMBIN    	3 1 10	; __pow
+	5	[57]	GETFIELD 	4 0 1	; "y"
+	6	[57]	POW      	4 4 1
+	7	[57]	MMBIN    	4 1 10	; __pow
+	8	[57]	TAILCALL 	2 3 0	; 2 in
+	9	[57]	RETURN   	2 0 0	; all out
+	10	[57]	RETURN0  	
+constants (2):
+	0	S	"x"
+	1	S	"y"
+locals (2):
+	0	p	1	11
+	1	k	1	11
+upvalues (1):
+	0	vec	1	8
+
+function <meta_arith.lua:58,58> (8 instructions)
+1 param, 6 slots, 0 upvalues, 1 local, 5 constants, 0 functions
+	1	[58]	LOADK    	1 0	; "("
+	2	[58]	GETFIELD 	2 0 1	; "x"
+	3	[58]	LOADK    	3 2	; ", "
+	4	[58]	GETFIELD 	4 0 3	; "y"
+	5	[58]	LOADK    	5 4	; ")"
+	6	[58]	CONCAT   	1 5
+	7	[58]	RETURN1  	1
+	8	[58]	RETURN0  	
+constants (5):
+	0	S	"("
+	1	S	"x"
+	2	S	", "
+	3	S	"y"
+	4	S	")"
+locals (1):
+	0	self	1	9
+upvalues (0):
+
+function <meta_arith.lua:71,71> (5 instructions)
+0 params, 3 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[71]	LOADI    	0 1
+	2	[71]	LOADI    	1 2
+	3	[71]	LOADI    	2 3
+	4	[71]	RETURN   	0 4 0	; 3 out
+	5	[71]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_arith.lua:72,72> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[72]	LOADNIL  	0 0	; 1 out
+	2	[72]	RETURN1  	0
+	3	[72]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_arith.lua:73,73> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[73]	LOADFALSE	0
+	2	[73]	RETURN1  	0
+	3	[73]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_arith.lua:78,78> (6 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[78]	NEWTABLE 	0 0 0	; 0
+	2	[78]	EXTRAARG 	0
+	3	[78]	ADDI     	0 0 1
+	4	[78]	MMBINI   	0 1 6 0	; __add
+	5	[78]	RETURN1  	0
+	6	[78]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_arith.lua:79,79> (7 instructions)
+0 params, 2 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[79]	NEWTABLE 	0 0 0	; 0
+	2	[79]	EXTRAARG 	0
+	3	[79]	LOADI    	1 1
+	4	[79]	SUB      	1 1 0
+	5	[79]	MMBIN    	1 0 7	; __sub
+	6	[79]	RETURN1  	1
+	7	[79]	RETURN0  	
+constants (0):
+locals (1):
+	0	t	3	8
+upvalues (0):
+
+function <meta_arith.lua:80,80> (5 instructions)
+0 params, 2 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[80]	NEWTABLE 	0 0 0	; 0
+	2	[80]	EXTRAARG 	0
+	3	[80]	UNM      	1 0
+	4	[80]	RETURN1  	1
+	5	[80]	RETURN0  	
+constants (0):
+locals (1):
+	0	t	3	6
+upvalues (0):

@@ -1,0 +1,253 @@
+Chunk
+  CallStatement
+    Call
+      Name collectgarbage
+      String "generational"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "incremental"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "incremental"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "generational"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "generational"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "incremental"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+      Call
+        Name collectgarbage
+        String "collect"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Call
+          Name collectgarbage
+          String "count"
+      Binary >
+        Call
+          Name collectgarbage
+          String "count"
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Call
+          Name collectgarbage
+          String "step"
+      Call
+        Name type
+        Call
+          Name collectgarbage
+          String "step"
+          Integer 100
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "isrunning"
+  CallStatement
+    Call
+      Name collectgarbage
+      String "stop"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "isrunning"
+  CallStatement
+    Call
+      Name collectgarbage
+      String "restart"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name collectgarbage
+        String "isrunning"
+  CallStatement
+    Call
+      Name collectgarbage
+      String "stop"
+  LocalFunction allocate
+    Function()
+      Local t
+        Table
+      NumericFor i
+        Integer 1
+        Integer 20000
+        Body
+          Assign
+            Targets
+              Index
+                Name t (local 0)
+                Name i (local 4)
+            Values
+              Table
+                Item
+                  Name i (local 4)
+      Return
+        Name t (local 0)
+  Local big
+    Call
+      Name allocate (local 0)
+  Local with_big
+    Call
+      Name collectgarbage
+      String "count"
+  Assign
+    Targets
+      Name big (local 1)
+    Values
+      Nil
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      Binary <
+        Call
+          Name collectgarbage
+          String "count"
+        Name with_big (local 2)
+  CallStatement
+    Call
+      Name collectgarbage
+      String "restart"
+  LocalFunction weak_survivors
+    Function(mode) [upvalues: _ENV]
+      CallStatement
+        Call
+          Name collectgarbage
+          Name mode (local 0)
+      CallStatement
+        Call
+          Name collectgarbage
+          String "stop"
+      Local w
+        Call
+          Name setmetatable
+          Table
+          Table
+            Field __mode
+              String "v"
+      LocalFunction fill
+        Function() [upvalues: w]
+          NumericFor i
+            Integer 1
+            Integer 100
+            Body
+              Assign
+                Targets
+                  Index
+                    Name w (upvalue 0)
+                    Name i (local 3)
+                Values
+                  Table
+      CallStatement
+        Call
+          Name fill (local 2)
+      Local keep
+        Table
+      Assign
+        Targets
+          Index
+            Name w (local 1)
+            Integer 101
+        Values
+          Name keep (local 3)
+      CallStatement
+        Call
+          Name collectgarbage
+      Local n
+        Integer 0
+      GenericFor _
+        In
+          Call
+            Name pairs
+            Name w (local 1)
+        Body
+          Assign
+            Targets
+              Name n (local 4)
+            Values
+              Binary +
+                Name n (local 4)
+                Integer 1
+      CallStatement
+        Call
+          Name collectgarbage
+          String "restart"
+      Return
+        Name n (local 4)
+        Binary ==
+          Index
+            Name w (local 1)
+            Integer 101
+          Name keep (local 3)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name weak_survivors (local 3)
+        String "incremental"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name weak_survivors (local 3)
+        String "generational"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name weak_survivors (local 3)
+        String "incremental"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name collectgarbage
+        String "nonsense"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name collectgarbage
+        Integer 42
+  Return
+    Call
+      Name collectgarbage
+      String "isrunning"

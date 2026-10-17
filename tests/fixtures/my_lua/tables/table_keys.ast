@@ -1,0 +1,526 @@
+Chunk
+  Local t
+    Table
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Integer 1
+    Values
+      String "one"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Integer 1
+      Index
+        Name t (local 0)
+        Float 1.0
+      Index
+        Name t (local 0)
+        Binary /
+          Integer 2
+          Integer 2
+      Index
+        Name t (local 0)
+        Binary //
+          Integer 3
+          Integer 3
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Float 2.0
+    Values
+      String "two"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Integer 2
+      Index
+        Name t (local 0)
+        Float 2.0
+      Name math_is_missing
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Unary -
+          Float 0.0
+    Values
+      String "zero"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Integer 0
+      Index
+        Name t (local 0)
+        Float 0.0
+      Index
+        Name t (local 0)
+        Unary -
+          Integer 0
+  Local big
+    Binary ^
+      Integer 2
+      Integer 53
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Name big (local 1)
+    Values
+      String "two^53"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Integer 9007199254740992
+      Index
+        Name t (local 0)
+        Name big (local 1)
+      Index
+        Name t (local 0)
+        Binary <<
+          Integer 1
+          Integer 53
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Binary ^
+          Integer 2
+          Integer 63
+    Values
+      String "float 2^63"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Binary ^
+          Integer 2
+          Integer 63
+      Index
+        Name t (local 0)
+        Binary or
+          Name math_is_missing
+          Integer 9223372036854775807
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Float 1.5
+    Values
+      String "one and a half"
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Unary -
+          Float 2.25
+    Values
+      String "minus"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Float 1.5
+      Index
+        Name t (local 0)
+        Binary /
+          Integer 3
+          Integer 2
+      Index
+        Name t (local 0)
+        Unary -
+          Float 2.25
+      Index
+        Name t (local 0)
+        Integer 1
+      Index
+        Name t (local 0)
+        Integer 2
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        String "1"
+    Values
+      String "string one"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Integer 1
+      Index
+        Name t (local 0)
+        String "1"
+      Index
+        Name t (local 0)
+        Binary ..
+          Binary //
+            Integer 10
+            Integer 10
+          String ""
+  Local short
+    String "name"
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Name short (local 2)
+    Values
+      String "short"
+  Local long
+    String "this string is longer than forty bytes, so it is a long string"
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Name long (local 3)
+    Values
+      String "long"
+  Local built
+    Binary ..
+      String "this string is longer than forty bytes, "
+      String "so it is a long string"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        String "name"
+      Index
+        Name t (local 0)
+        Binary ..
+          String "na"
+          String "me"
+      Index
+        Name t (local 0)
+        Name long (local 3)
+      Index
+        Name t (local 0)
+        Name built (local 4)
+      Unary #
+        Name long (local 3)
+  Local long2
+    String "another long string key, also over forty characters in length!!"
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Name long2 (local 5)
+    Values
+      Integer 1
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Name long2 (local 5)
+    Values
+      Binary +
+        Index
+          Name t (local 0)
+          Name long2 (local 5)
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Name long2 (local 5)
+      Index
+        Name t (local 0)
+        String "another long string key, also over forty characters in length!!"
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        String ""
+    Values
+      String "empty"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        String ""
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        True
+    Values
+      String "T"
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        False
+    Values
+      String "F"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        True
+      Index
+        Name t (local 0)
+        False
+      Index
+        Name t (local 0)
+        Binary ==
+          Integer 1
+          Integer 1
+      Index
+        Name t (local 0)
+        Binary ==
+          Integer 1
+          Integer 2
+  Local k1, k2
+    Table
+    Table
+  LocalFunction f
+    Function()
+  LocalFunction g
+    Function()
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Name k1 (local 6)
+    Values
+      String "table one"
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Name k2 (local 7)
+    Values
+      String "table two"
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Name f (local 8)
+    Values
+      String "function f"
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Name print
+    Values
+      String "builtin print"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Name k1 (local 6)
+      Index
+        Name t (local 0)
+        Name k2 (local 7)
+      Index
+        Name t (local 0)
+        Table
+      Index
+        Name t (local 0)
+        Name f (local 8)
+      Index
+        Name t (local 0)
+        Name g (local 9)
+      Index
+        Name t (local 0)
+        Name print
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        String "missing"
+      Index
+        Name t (local 0)
+        Integer 12345
+      Index
+        Name t (local 0)
+        Unary -
+          Integer 1
+      Index
+        Name t (local 0)
+        Float 0.5
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Name k1 (local 6)
+    Values
+      Nil
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        String "name"
+    Values
+      Nil
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Float 1.5
+    Values
+      Nil
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Name k1 (local 6)
+      Index
+        Name t (local 0)
+        String "name"
+      Index
+        Name t (local 0)
+        Float 1.5
+      Index
+        Name t (local 0)
+        Name k2 (local 7)
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        String "name"
+    Values
+      String "back"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        String "name"
+  Local count
+    Integer 0
+  GenericFor _
+    In
+      Call
+        Name pairs
+        Name t (local 0)
+    Body
+      Assign
+        Targets
+          Name count (local 10)
+        Values
+          Binary +
+            Name count (local 10)
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      String "entries"
+      Name count (local 10)
+  Local values
+    Table
+      Field n
+        Nil
+      Field b
+        False
+      Field i
+        Integer 3
+      Field f
+        Float 0.5
+      Field s
+        String "s"
+      Field t
+        Table
+      Field fn
+        Name f (local 8)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name values (local 11)
+        String "n"
+      Index
+        Name values (local 11)
+        String "b"
+      Index
+        Name values (local 11)
+        String "i"
+      Index
+        Name values (local 11)
+        String "f"
+      Index
+        Name values (local 11)
+        String "s"
+      Call
+        Name type
+        Index
+          Name values (local 11)
+          String "t"
+      Call
+        Name type
+        Index
+          Name values (local 11)
+          String "fn"
+  Local u
+    Table
+  Assign
+    Targets
+      Index
+        Name u (local 12)
+        Integer 3
+    Values
+      Integer 1
+  Assign
+    Targets
+      Index
+        Name u (local 12)
+        Float 3.0
+    Values
+      Binary +
+        Index
+          Name u (local 12)
+          Integer 3
+        Integer 1
+  Assign
+    Targets
+      Index
+        Name u (local 12)
+        Binary /
+          Integer 6
+          Integer 2
+    Values
+      Binary +
+        Index
+          Name u (local 12)
+          Float 3.0
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Index
+        Name u (local 12)
+        Integer 3
+  Return
+    Index
+      Name t (local 0)
+      Integer 1
+    Index
+      Name t (local 0)
+      Float 2.0
+    Index
+      Name t (local 0)
+      True
+    Index
+      Name t (local 0)
+      Name long (local 3)

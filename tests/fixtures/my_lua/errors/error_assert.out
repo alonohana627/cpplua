@@ -1,0 +1,21 @@
+1	unused	3
+true
+0	nil	nil
+true
+4
+false	assertion failed!
+false	assertion failed!
+false	custom message
+false	custom
+false	bad argument #1 to 'assert' (value expected)
+false	error_assert.lua:19: assertion failed!
+false	error_assert.lua:20: math is broken
+false	42
+false	true
+false	custom object
+false	nil
+false	false
+1
+false	error_assert.lua:40: no key b
+10
+returned	unused

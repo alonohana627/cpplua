@@ -1,0 +1,13 @@
+
+main <err_error_nil.lua:0,0> (5 instructions)
+0+ params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "error"
+	3	[2]	LOADNIL  	1 0	; 1 out
+	4	[2]	CALL     	0 2 1	; 1 in 0 out
+	5	[2]	RETURN   	0 1 1	; 0 out
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (1):
+	0	_ENV	1	0

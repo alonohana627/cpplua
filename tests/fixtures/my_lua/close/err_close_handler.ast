@@ -1,0 +1,23 @@
+Chunk
+  Local resource
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __close
+          Function() [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                String "could not release the resource"
+  Do
+    Local r <close>
+      Name resource (local 0)
+    CallStatement
+      Call
+        Name print
+        String "using the resource"
+  CallStatement
+    Call
+      Name print
+      String "not reached"

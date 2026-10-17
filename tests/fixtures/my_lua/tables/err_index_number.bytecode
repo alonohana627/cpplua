@@ -1,0 +1,19 @@
+
+main <err_index_number.lua:0,0> (8 instructions)
+0+ params, 2 slots, 1 upvalue, 1 local, 3 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	NEWTABLE 	0 1 0	; 0
+	3	[2]	EXTRAARG 	0
+	4	[2]	SETFIELD 	0 0 1k	; "count" 3
+	5	[3]	GETFIELD 	1 0 0	; "count"
+	6	[3]	GETFIELD 	1 1 2	; "value"
+	7	[3]	RETURN   	1 2 1	; 1 out
+	8	[3]	RETURN   	1 1 1	; 0 out
+constants (3):
+	0	S	"count"
+	1	I	3
+	2	S	"value"
+locals (1):
+	0	t	5	9
+upvalues (1):
+	0	_ENV	1	0

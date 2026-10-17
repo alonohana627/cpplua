@@ -1,0 +1,1 @@
+err_arith_field.lua:4: attempt to perform arithmetic on a table value (field 'pos')

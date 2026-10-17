@@ -7,11 +7,15 @@
 #include <string_view>
 #include <type_traits>
 
+#include <lua2/type.hpp>
+
 namespace lua2 {
 
 class String;     // value/string.hpp
 class LuaClosure; // vm/function.hpp
+class CClosure;   // vm/function.hpp
 class Table;      // value/table.hpp
+class Userdata;   // value/userdata.hpp
 class State;      // vm/state.hpp
 struct GcObject;  // gc/object.hpp
 
@@ -20,35 +24,6 @@ struct GcObject;  // gc/object.hpp
 // the top; it pushes its results and returns how many there are. (Errors
 // from C++ functions come with stage 8.)
 using CFunction = int (*)(State& state);
-
-// The eight types of Lua (V1.1), in the order of Lua's LUA_T* constants.
-// Stage 4 makes values of the first four; the others come with their stages.
-enum class Type : std::uint8_t {
-    Nil,
-    Boolean,
-    Number,
-    String,
-    Table,
-    Function,
-    Userdata,
-    Thread,
-};
-
-// The name of a type as Lua spells it (V1.2): what `type(v)` returns and what
-// error messages say, as in "attempt to perform arithmetic on a nil value".
-constexpr std::string_view type_name(Type type) {
-    switch (type) {
-    case Type::Nil: return "nil";
-    case Type::Boolean: return "boolean";
-    case Type::Number: return "number";
-    case Type::String: return "string";
-    case Type::Table: return "table";
-    case Type::Function: return "function";
-    case Type::Userdata: return "userdata";
-    case Type::Thread: return "thread";
-    }
-    return "?"; // not reached: every Type is handled above
-}
 
 // What a Value holds, finer than Type: like Lua's variant tags, a number is
 // an integer or a float (V1.3), false and true have their own tags, so
@@ -60,12 +35,18 @@ enum class Tag : std::uint8_t {
     True,
     Integer,
     Float,
-    CFunction, // a function written in C++ (Lua's light C function): not collectable
+    CFunction,     // a function written in C++ (Lua's light C function): not collectable
+    LightUserdata, // a C++ pointer as a value (Lua's light userdata): not collectable
     ShortString,
     LongString,
     LuaClosure, // a function written in Lua
-    Table,      // a table; only the globals table exists until stage 6
+    CClosure,   // a C++ function with upvalues (Lua's C closure)
+    Table,
+    Userdata, // a block of memory with a metatable (Lua's full userdata)
 };
+
+// The largest tag (the VM packs two tags in a byte).
+inline constexpr Tag last_tag = Tag::Userdata;
 
 // Tags from here on hold a pointer to an object the collector manages.
 inline constexpr Tag first_collectable_tag = Tag::ShortString;
@@ -117,6 +98,17 @@ public:
     // A table (value/table.hpp, where this is defined).
     static Value table(const Table* t);
 
+    // A C++ function with upvalues (vm/function.hpp).
+    static Value c_closure(const CClosure* f);
+
+    // A full userdata (value/userdata.hpp).
+    static Value userdata(const Userdata* u);
+
+    // A C++ pointer, compared by address (light userdata).
+    static Value light_userdata(const void* p) {
+        return Value{Tag::LightUserdata, std::bit_cast<std::uint64_t>(p)};
+    }
+
     // Rebuilds a value from what tag() and payload() returned. For the
     // containers that store tags and payloads apart.
     static constexpr Value from_parts(Tag tag, std::uint64_t payload) {
@@ -142,8 +134,11 @@ public:
         case Tag::ShortString:
         case Tag::LongString: return Type::String;
         case Tag::CFunction:
-        case Tag::LuaClosure: return Type::Function;
+        case Tag::LuaClosure:
+        case Tag::CClosure: return Type::Function;
         case Tag::Table: return Type::Table;
+        case Tag::LightUserdata:
+        case Tag::Userdata: return Type::Userdata;
         }
         return Type::Nil; // not reached: every Tag is handled above
     }
@@ -169,8 +164,14 @@ public:
     [[nodiscard]] constexpr bool is_closure() const { return tag_ == Tag::LuaClosure; }
 
     [[nodiscard]] constexpr bool is_function() const {
-        return tag_ == Tag::LuaClosure || tag_ == Tag::CFunction;
+        return tag_ == Tag::LuaClosure || tag_ == Tag::CFunction || tag_ == Tag::CClosure;
     }
+
+    [[nodiscard]] constexpr bool is_c_closure() const { return tag_ == Tag::CClosure; }
+
+    [[nodiscard]] constexpr bool is_userdata() const { return tag_ == Tag::Userdata; }
+
+    [[nodiscard]] constexpr bool is_light_userdata() const { return tag_ == Tag::LightUserdata; }
 
     [[nodiscard]] constexpr bool is_c_function() const { return tag_ == Tag::CFunction; }
 
@@ -241,6 +242,30 @@ public:
             wrong_access("table", caller);
         }
         return std::bit_cast<const Table*>(payload_);
+    }
+
+    [[nodiscard]] const CClosure*
+    as_c_closure(std::source_location caller = std::source_location::current()) const {
+        if (!is_c_closure()) [[unlikely]] {
+            wrong_access("C++ closure", caller);
+        }
+        return std::bit_cast<const CClosure*>(payload_);
+    }
+
+    [[nodiscard]] Userdata*
+    as_userdata(std::source_location caller = std::source_location::current()) const {
+        if (!is_userdata()) [[unlikely]] {
+            wrong_access("userdata", caller);
+        }
+        return std::bit_cast<Userdata*>(payload_);
+    }
+
+    [[nodiscard]] void*
+    as_light_userdata(std::source_location caller = std::source_location::current()) const {
+        if (!is_light_userdata()) [[unlikely]] {
+            wrong_access("light userdata", caller);
+        }
+        return std::bit_cast<void*>(payload_);
     }
 
     // The collectable object a value refers to, for the collector.

@@ -1,0 +1,669 @@
+Chunk
+  LocalFunction name
+    Function(x) [upvalues: _ENV]
+      If
+        If
+          Binary ==
+            Call
+              Name type
+              Name x (local 0)
+            String "table"
+          Then
+            Return
+              Index
+                Name x (local 0)
+                String "name"
+      Return
+        Binary ..
+          Call
+            Name type
+            Name x (local 0)
+          Binary ..
+            String " "
+            Call
+              Name tostring
+              Name x (local 0)
+  Local mt
+    Table
+  LocalFunction V
+    Function(n) [upvalues: _ENV, mt]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field name
+              Name n (local 0)
+          Name mt (upvalue 1)
+  GenericFor _, event
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            String "add"
+          Item
+            String "sub"
+          Item
+            String "mul"
+          Item
+            String "div"
+          Item
+            String "mod"
+          Item
+            String "pow"
+          Item
+            String "idiv"
+    Body
+      Assign
+        Targets
+          Index
+            Name mt (local 1)
+            Binary ..
+              String "__"
+              Name event (local 8)
+        Values
+          Function(a, b) [upvalues: event, name]
+            Return
+              Binary ..
+                Name event (upvalue 0)
+                Binary ..
+                  String "("
+                  Binary ..
+                    Call
+                      Name name (upvalue 1)
+                      Name a (local 0)
+                    Binary ..
+                      String ", "
+                      Binary ..
+                        Call
+                          Name name (upvalue 1)
+                          Name b (local 1)
+                        String ")"
+  Assign
+    Targets
+      Index
+        Name mt (local 1)
+        String "__unm"
+    Values
+      Function(a, b) [upvalues: name, _ENV]
+        Return
+          Binary ..
+            String "unm("
+            Binary ..
+              Call
+                Name name (upvalue 0)
+                Name a (local 0)
+              Binary ..
+                String ", same: "
+                Binary ..
+                  Call
+                    Name tostring
+                    Binary ==
+                      Name a (local 0)
+                      Name b (local 1)
+                  String ")"
+  Local a, b
+    Call
+      Name V (local 2)
+      String "a"
+    Call
+      Name V (local 2)
+      String "b"
+  CallStatement
+    Call
+      Name print
+      Binary +
+        Name a (local 3)
+        Name b (local 4)
+      Binary -
+        Name a (local 3)
+        Name b (local 4)
+      Binary *
+        Name a (local 3)
+        Name b (local 4)
+  CallStatement
+    Call
+      Name print
+      Binary /
+        Name a (local 3)
+        Name b (local 4)
+      Binary %
+        Name a (local 3)
+        Name b (local 4)
+      Binary ^
+        Name a (local 3)
+        Name b (local 4)
+      Binary //
+        Name a (local 3)
+        Name b (local 4)
+  CallStatement
+    Call
+      Name print
+      Unary -
+        Name a (local 3)
+      Unary -
+        Name b (local 4)
+  CallStatement
+    Call
+      Name print
+      Binary +
+        Name a (local 3)
+        Integer 1
+      Binary +
+        Integer 1
+        Name a (local 3)
+      Binary -
+        Name a (local 3)
+        Float 2.5
+      Binary -
+        Float 2.5
+        Name a (local 3)
+  CallStatement
+    Call
+      Name print
+      Binary *
+        Name a (local 3)
+        Integer 3
+      Binary //
+        Integer 3
+        Name a (local 3)
+      Binary %
+        Name a (local 3)
+        Integer 4
+      Binary ^
+        Integer 4
+        Name a (local 3)
+  CallStatement
+    Call
+      Name print
+      Binary +
+        Name a (local 3)
+        String "10"
+      Binary +
+        String "10"
+        Name a (local 3)
+      Binary *
+        String "2"
+        Name b (local 4)
+      Binary /
+        Name b (local 4)
+        String "x"
+  Local plain
+    Table
+      Field name
+        String "plain"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: plain, a]
+          Return
+            Binary +
+              Name plain (upvalue 0)
+              Name a (upvalue 1)
+  CallStatement
+    Call
+      Name print
+      Binary *
+        Name plain (local 5)
+        Name b (local 4)
+  Local other
+    Call
+      Name setmetatable
+      Table
+        Field name
+          String "other"
+      Table
+        Field __add
+          Function()
+            Return
+              String "other's add"
+  CallStatement
+    Call
+      Name print
+      Binary +
+        Name a (local 3)
+        Name other (local 6)
+      Binary +
+        Name other (local 6)
+        Name a (local 3)
+  CallStatement
+    Call
+      Name print
+      Binary +
+        Integer 1
+        Integer 2
+      Binary +
+        String "3"
+        Integer 4
+      Binary //
+        Integer 10
+        String "3"
+      Binary ^
+        String "2"
+        Integer 2
+  Local Vec
+    Table
+  Assign
+    Targets
+      Index
+        Name Vec (local 7)
+        String "__index"
+    Values
+      Name Vec (local 7)
+  LocalFunction vec
+    Function(x, y) [upvalues: _ENV, Vec]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field x
+              Name x (local 0)
+            Field y
+              Name y (local 1)
+          Name Vec (upvalue 1)
+  Assign
+    Targets
+      Index
+        Name Vec (local 7)
+        String "__add"
+    Values
+      Function(p, q) [upvalues: vec]
+        Return
+          Call
+            Name vec (upvalue 0)
+            Binary +
+              Index
+                Name p (local 0)
+                String "x"
+              Index
+                Name q (local 1)
+                String "x"
+            Binary +
+              Index
+                Name p (local 0)
+                String "y"
+              Index
+                Name q (local 1)
+                String "y"
+  Assign
+    Targets
+      Index
+        Name Vec (local 7)
+        String "__sub"
+    Values
+      Function(p, q) [upvalues: vec]
+        Return
+          Call
+            Name vec (upvalue 0)
+            Binary -
+              Index
+                Name p (local 0)
+                String "x"
+              Index
+                Name q (local 1)
+                String "x"
+            Binary -
+              Index
+                Name p (local 0)
+                String "y"
+              Index
+                Name q (local 1)
+                String "y"
+  Assign
+    Targets
+      Index
+        Name Vec (local 7)
+        String "__mul"
+    Values
+      Function(p, q) [upvalues: _ENV, vec]
+        If
+          If
+            Binary ==
+              Call
+                Name type
+                Name p (local 0)
+              String "number"
+            Then
+              Return
+                Call
+                  Name vec (upvalue 1)
+                  Binary *
+                    Name p (local 0)
+                    Index
+                      Name q (local 1)
+                      String "x"
+                  Binary *
+                    Name p (local 0)
+                    Index
+                      Name q (local 1)
+                      String "y"
+        If
+          If
+            Binary ==
+              Call
+                Name type
+                Name q (local 1)
+              String "number"
+            Then
+              Return
+                Call
+                  Name vec (upvalue 1)
+                  Binary *
+                    Index
+                      Name p (local 0)
+                      String "x"
+                    Name q (local 1)
+                  Binary *
+                    Index
+                      Name p (local 0)
+                      String "y"
+                    Name q (local 1)
+        Return
+          Binary +
+            Binary *
+              Index
+                Name p (local 0)
+                String "x"
+              Index
+                Name q (local 1)
+                String "x"
+            Binary *
+              Index
+                Name p (local 0)
+                String "y"
+              Index
+                Name q (local 1)
+                String "y"
+  Assign
+    Targets
+      Index
+        Name Vec (local 7)
+        String "__unm"
+    Values
+      Function(p) [upvalues: vec]
+        Return
+          Call
+            Name vec (upvalue 0)
+            Unary -
+              Index
+                Name p (local 0)
+                String "x"
+            Unary -
+              Index
+                Name p (local 0)
+                String "y"
+  Assign
+    Targets
+      Index
+        Name Vec (local 7)
+        String "__div"
+    Values
+      Function(p, k) [upvalues: vec]
+        Return
+          Call
+            Name vec (upvalue 0)
+            Binary /
+              Index
+                Name p (local 0)
+                String "x"
+              Name k (local 1)
+            Binary /
+              Index
+                Name p (local 0)
+                String "y"
+              Name k (local 1)
+  Assign
+    Targets
+      Index
+        Name Vec (local 7)
+        String "__idiv"
+    Values
+      Function(p, k) [upvalues: vec]
+        Return
+          Call
+            Name vec (upvalue 0)
+            Binary //
+              Index
+                Name p (local 0)
+                String "x"
+              Name k (local 1)
+            Binary //
+              Index
+                Name p (local 0)
+                String "y"
+              Name k (local 1)
+  Assign
+    Targets
+      Index
+        Name Vec (local 7)
+        String "__mod"
+    Values
+      Function(p, k) [upvalues: vec]
+        Return
+          Call
+            Name vec (upvalue 0)
+            Binary %
+              Index
+                Name p (local 0)
+                String "x"
+              Name k (local 1)
+            Binary %
+              Index
+                Name p (local 0)
+                String "y"
+              Name k (local 1)
+  Assign
+    Targets
+      Index
+        Name Vec (local 7)
+        String "__pow"
+    Values
+      Function(p, k) [upvalues: vec]
+        Return
+          Call
+            Name vec (upvalue 0)
+            Binary ^
+              Index
+                Name p (local 0)
+                String "x"
+              Name k (local 1)
+            Binary ^
+              Index
+                Name p (local 0)
+                String "y"
+              Name k (local 1)
+  FunctionStatement (method)
+    Index
+      Name Vec (local 7)
+      String "str"
+    Function(self)
+      Return
+        Binary ..
+          String "("
+          Binary ..
+            Index
+              Name self (local 0)
+              String "x"
+            Binary ..
+              String ", "
+              Binary ..
+                Index
+                  Name self (local 0)
+                  String "y"
+                String ")"
+  Local u, v
+    Call
+      Name vec (local 8)
+      Integer 1
+      Integer 2
+    Call
+      Name vec (local 8)
+      Integer 3
+      Integer 4
+  CallStatement
+    Call
+      Name print
+      MethodCall str
+        Paren
+          Binary +
+            Name u (local 9)
+            Name v (local 10)
+      MethodCall str
+        Paren
+          Binary -
+            Name u (local 9)
+            Name v (local 10)
+      Binary *
+        Name u (local 9)
+        Name v (local 10)
+      MethodCall str
+        Paren
+          Binary *
+            Integer 2
+            Name u (local 9)
+      MethodCall str
+        Paren
+          Binary *
+            Name v (local 10)
+            Integer 3
+  CallStatement
+    Call
+      Name print
+      MethodCall str
+        Paren
+          Unary -
+            Name u (local 9)
+      MethodCall str
+        Paren
+          Binary /
+            Name v (local 10)
+            Integer 2
+      MethodCall str
+        Paren
+          Binary //
+            Name v (local 10)
+            Integer 2
+      MethodCall str
+        Paren
+          Binary %
+            Name v (local 10)
+            Integer 3
+      MethodCall str
+        Paren
+          Binary ^
+            Name u (local 9)
+            Integer 2
+  CallStatement
+    Call
+      Name print
+      MethodCall str
+        Paren
+          Binary +
+            Binary +
+              Binary +
+                Name u (local 9)
+                Name v (local 10)
+              Name u (local 9)
+            Name v (local 10)
+      MethodCall str
+        Paren
+          Binary +
+            Binary *
+              Name u (local 9)
+              Integer 2
+            Binary *
+              Name v (local 10)
+              Unary -
+                Integer 1
+  CallStatement
+    Call
+      Name print
+      MethodCall str
+        Paren
+          Binary +
+            Unary -
+              Name u (local 9)
+            Binary *
+              Name v (local 10)
+              Integer 2
+      Binary +
+        Binary *
+          Name u (local 9)
+          Name v (local 10)
+        Integer 1
+  Local odd
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __add
+          Function()
+            Return
+              Integer 1
+              Integer 2
+              Integer 3
+        Field __sub
+          Function()
+            Return
+              Nil
+        Field __mul
+          Function()
+            Return
+              False
+  CallStatement
+    Call
+      Name print
+      Binary +
+        Name odd (local 11)
+        Integer 1
+      Binary -
+        Name odd (local 11)
+        Integer 1
+      Binary *
+        Name odd (local 11)
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary +
+              Table
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local t
+            Table
+          Return
+            Binary -
+              Integer 1
+              Name t (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local t
+            Table
+          Return
+            Unary -
+              Name t (local 0)
+  Return
+    Binary +
+      Name a (local 3)
+      Name b (local 4)
+    Index
+      Paren
+        Binary +
+          Name u (local 9)
+          Name v (local 10)
+      String "x"

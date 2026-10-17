@@ -1,0 +1,393 @@
+Chunk
+  Local strict
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(_, k) [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                Binary ..
+                  String "undefined field '"
+                  Binary ..
+                    Call
+                      Name tostring
+                      Name k (local 1)
+                    String "'"
+                Integer 2
+        Field __newindex
+          Function(_, k) [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                Binary ..
+                  String "cannot add field '"
+                  Binary ..
+                    Call
+                      Name tostring
+                      Name k (local 1)
+                    String "'"
+                Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: strict]
+          Return
+            Index
+              Name strict (upvalue 0)
+              String "missing"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: strict]
+          Assign
+            Targets
+              Index
+                Name strict (upvalue 0)
+                String "new"
+            Values
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: strict]
+          Return
+            Index
+              Name strict (upvalue 0)
+              Integer 1
+  Local m
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __add
+          Function() [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                String "no adding"
+        Field __lt
+          Function() [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                String "no comparing"
+                Integer 0
+        Field __concat
+          Function() [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                Table
+                  Field reason
+                    String "concat"
+        Field __len
+          Function() [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                String "no length"
+                Integer 0
+        Field __call
+          Function(_, x) [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                Binary ..
+                  String "called with "
+                  Call
+                    Name tostring
+                    Name x (local 1)
+                Integer 0
+        Field __eq
+          Function() [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                String "no equality"
+                Integer 0
+        Field __unm
+          Function()
+            Local z
+              Nil
+            Return
+              Index
+                Name z (local 0)
+                String "field"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: m]
+          Return
+            Binary +
+              Name m (upvalue 0)
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: m]
+          Return
+            Binary +
+              Integer 1
+              Name m (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: m]
+          Return
+            Binary <
+              Name m (upvalue 0)
+              Name m (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: m]
+          Return
+            Binary >
+              Name m (upvalue 0)
+              Integer 1
+  Local ok, e
+    Call
+      Name pcall
+      Function() [upvalues: m]
+        Return
+          Binary ..
+            String "a"
+            Name m (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Name ok (local 2)
+      Call
+        Name type
+        Name e (local 3)
+      Index
+        Name e (local 3)
+        String "reason"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: m]
+          Return
+            Unary #
+              Name m (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name m (local 1)
+        Integer 99
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: m, _ENV]
+          Return
+            Binary ==
+              Name m (upvalue 0)
+              Call
+                Name setmetatable
+                Table
+                Call
+                  Name getmetatable
+                  Name m (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: m]
+          Return
+            Binary ==
+              Name m (upvalue 0)
+              Name m (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: m]
+          Return
+            Unary -
+              Name m (upvalue 0)
+  Local bad
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __tostring
+          Function() [upvalues: _ENV]
+            CallStatement
+              Call
+                Name error
+                String "cannot show"
+                Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name tostring
+        Name bad (local 4)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name print
+        String "before"
+        Name bad (local 4)
+  Local lazy
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(t, k) [upvalues: _ENV]
+            If
+              If
+                Binary ~=
+                  Call
+                    Name type
+                    Name k (local 1)
+                  String "number"
+                Then
+                  CallStatement
+                    Call
+                      Name error
+                      Binary ..
+                        String "only numbers, got "
+                        Call
+                          Name type
+                          Name k (local 1)
+                      Integer 0
+            Return
+              Binary *
+                Name k (local 1)
+                Integer 2
+  CallStatement
+    Call
+      Name print
+      Index
+        Name lazy (local 5)
+        Integer 21
+      Call
+        Name pcall
+        Function() [upvalues: lazy]
+          Return
+            Index
+              Name lazy (upvalue 0)
+              String "name"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: lazy]
+          Return
+            Index
+              Name lazy (upvalue 0)
+              True
+  Local acc
+    Call
+      Name setmetatable
+      Table
+        Field total
+          Integer 0
+      Table
+        Field __add
+          Function(a, n) [upvalues: _ENV]
+            If
+              If
+                Binary <
+                  Name n (local 1)
+                  Integer 0
+                Then
+                  CallStatement
+                    Call
+                      Name error
+                      String "negative"
+                      Integer 0
+            Assign
+              Targets
+                Index
+                  Name a (local 0)
+                  String "total"
+              Values
+                Binary +
+                  Index
+                    Name a (local 0)
+                    String "total"
+                  Name n (local 1)
+            Return
+              Name a (local 0)
+  Local _
+    Binary +
+      Name acc (local 6)
+      Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: acc]
+          Return
+            Binary +
+              Name acc (upvalue 0)
+              Unary -
+                Integer 1
+  Assign
+    Targets
+      Name _ (local 7)
+    Values
+      Binary +
+        Name acc (local 6)
+        Integer 10
+  CallStatement
+    Call
+      Name print
+      Index
+        Name acc (local 6)
+        String "total"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV, m]
+          Local inner_ok, inner_e
+            Call
+              Name pcall
+              Function() [upvalues: m]
+                Return
+                  Binary +
+                    Name m (upvalue 0)
+                    Integer 1
+          Return
+            String "outer fine"
+            Name inner_ok (local 0)
+            Name inner_e (local 1)
+  Return
+    Index
+      Name acc (local 6)
+      String "total"

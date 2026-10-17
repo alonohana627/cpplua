@@ -74,7 +74,7 @@ bool State::grow_stack(std::uint32_t n) {
     const std::uint32_t size = stack_last;
     if (size > max_stack) {
         // Already using the extra room: an error while handling an error.
-        error_message = "error in error handling";
+        set_error("error in error handling");
         return false;
     }
     if (n < max_stack) {
@@ -88,7 +88,7 @@ bool State::grow_stack(std::uint32_t n) {
         }
     }
     resize_stack(error_stack_size);
-    error_message = "stack overflow";
+    set_error("stack overflow");
     return false;
 }
 
@@ -104,6 +104,19 @@ void State::shrink_stack() {
         resize_stack(in_use > max_stack / 2 ? max_stack : in_use * 2);
     }
     shrink_call_infos();
+}
+
+void State::set_error(std::string_view message) {
+    error_value = Value::string(heap_->new_string(message));
+}
+
+const CallInfo* State::frame_at(int level) const {
+    // lua_getstack: the base frame is not a level.
+    const CallInfo* frame = ci;
+    for (; level > 0 && frame != &base_ci; frame = frame->previous) {
+        --level;
+    }
+    return level == 0 && frame != &base_ci ? frame : nullptr;
 }
 
 // ---- Frames (lstate.c) ----

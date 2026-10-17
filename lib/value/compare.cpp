@@ -60,6 +60,9 @@ bool equals(Value a, Value b) {
     case Tag::LongString: return a.as_string()->view() == b.as_string()->view();
     case Tag::CFunction:
     case Tag::LuaClosure:
+    case Tag::CClosure:
+    case Tag::LightUserdata:
+    case Tag::Userdata:
     case Tag::Table: return a.payload() == b.payload(); // by identity (V7.5)
     }
     return false; // not reached: every Tag is handled above

@@ -1,0 +1,1 @@
+err_index_global.lua:3: attempt to index a nil value (global 'config')

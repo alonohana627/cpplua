@@ -1,0 +1,24 @@
+true	fine	2
+false	handled: broken
+false	handled: error_xpcall.lua:11: broken
+false	handled: error_xpcall.lua:12: attempt to index a nil value (local 't')
+true	3	2
+false	handled: error_xpcall.lua:16: attempt to index a nil value (local 'a')
+false	table	with table	true
+false	first only
+false	true
+false	number 12
+false	got nil
+false	true
+false	x
+handler	close
+3
+false	error in error handling
+false	error in error handling
+false	bad argument #2 to 'xpcall' (function expected, got number)
+false	bad argument #2 to 'xpcall' (function expected, got nil)
+false	bad argument #2 to 'xpcall' (function expected, got no value)
+true	false	handled: inner
+true	false	deep
+false	handled: escaped
+true	r1	r2

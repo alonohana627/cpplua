@@ -1,0 +1,35 @@
+true	1	2	3
+true
+3
+true	3	a	nil	c
+false	error_pcall.lua:13: attempt to index a nil value (local 'x')
+false	error_pcall.lua:14: attempt to perform arithmetic on a table value
+false	error_pcall.lua:15: attempt to get length of a number value
+false	error_pcall.lua:16: attempt to compare number with string
+false	error_pcall.lua:17: attempt to call a string value (constant 'x')
+false	error_pcall.lua:18: attempt to divide by zero
+false	error_pcall.lua:19: number has no integer representation
+false	direct
+false	error_pcall.lua:23: level one
+false	error_pcall.lua:24: level one
+false	no position
+false	nil
+false	error_pcall.lua:29: bad argument #1 to 'setmetatable' (table expected, got number)
+false	error_pcall.lua:30: bad argument #1 to 'select' (index out of range)
+false	bad argument #1 to 'setmetatable' (table expected, got number)
+false	x	boolean	string
+true
+false	attempt to call a number value
+false	attempt to call a nil value
+false	attempt to call a table value
+false	attempt to call a string value
+false	bad argument #1 to 'pcall' (value expected)
+true	false	bad argument #1 to 'pcall' (value expected)
+false	error_pcall.lua:47: bad argument #1 to 'pcall' (value expected)
+inside	false	inner
+false	outer
+true	false	twice
+true	false	nil
+false	51
+3	false	fail 4
+true	last

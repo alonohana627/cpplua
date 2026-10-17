@@ -1,0 +1,218 @@
+Chunk
+  Local t
+    Table
+  Local mt
+    Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name getmetatable
+        Name t (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Name setmetatable
+          Name t (local 0)
+          Name mt (local 1)
+        Name t (local 0)
+      Binary ==
+        Call
+          Name getmetatable
+          Name t (local 0)
+        Name mt (local 1)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Name setmetatable
+          Name t (local 0)
+          Nil
+        Name t (local 0)
+      Call
+        Name getmetatable
+        Name t (local 0)
+  Local a
+    Call
+      Name setmetatable
+      Table
+      Name mt (local 1)
+  Local b
+    Call
+      Name setmetatable
+      Table
+      Name mt (local 1)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Name getmetatable
+          Name a (local 2)
+        Call
+          Name getmetatable
+          Name b (local 3)
+  Local mt2
+    Table
+  CallStatement
+    Call
+      Name setmetatable
+      Name a (local 2)
+      Name mt2 (local 4)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Name getmetatable
+          Name a (local 2)
+        Name mt2 (local 4)
+      Binary ==
+        Call
+          Name getmetatable
+          Name b (local 3)
+        Name mt (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name getmetatable
+        Integer 1
+      Call
+        Name getmetatable
+        True
+      Call
+        Name getmetatable
+        Nil
+  Local protected
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __metatable
+          String "locked"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name getmetatable
+        Name protected (local 5)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name setmetatable
+        Name protected (local 5)
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name setmetatable
+        Name protected (local 5)
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name getmetatable
+        Name protected (local 5)
+  Local hidden
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __metatable
+          False
+  CallStatement
+    Call
+      Name print
+      Call
+        Name getmetatable
+        Name hidden (local 6)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name setmetatable
+        Name hidden (local 6)
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name setmetatable
+        Integer 1
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name setmetatable
+        Table
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name setmetatable
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name getmetatable
+  Local self_mt
+    Table
+  CallStatement
+    Call
+      Name setmetatable
+      Name self_mt (local 7)
+      Name self_mt (local 7)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Name getmetatable
+          Name self_mt (local 7)
+        Name self_mt (local 7)
+  Local plain
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field x
+          Integer 1
+        Field __index
+          Nil
+  CallStatement
+    Call
+      Name print
+      Index
+        Name plain (local 8)
+        String "x"
+      Index
+        Call
+          Name getmetatable
+          Name plain (local 8)
+        String "x"
+  Return
+    Call
+      Name getmetatable
+      Name protected (local 5)
+    Binary ==
+      Call
+        Name getmetatable
+        Name b (local 3)
+      Name mt (local 1)

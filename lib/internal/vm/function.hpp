@@ -109,6 +109,55 @@ private:
 
 static_assert(sizeof(LuaClosure) % alignof(Upvalue*) == 0);
 
+// A C++ function with upvalues, as a value (Lua's CClosure): the function
+// and `n` values it keeps, which follow the closure in its allocation. The
+// function reads them through its own frame (`upvalue` in std/auxlib.hpp).
+class CClosure : public GcObject {
+public:
+    CClosure(const CClosure&) = delete;
+    CClosure& operator=(const CClosure&) = delete;
+    CClosure(CClosure&&) = delete;
+    CClosure& operator=(CClosure&&) = delete;
+    ~CClosure() = default;
+
+    static constexpr std::size_t size_for(std::size_t n) {
+        return sizeof(CClosure) + (n * sizeof(Value));
+    }
+
+    [[nodiscard]] std::size_t upvalue_count() const { return upvalue_count_; }
+
+    [[nodiscard]] std::span<Value> upvalues() {
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+        return {reinterpret_cast<Value*>(this + 1), upvalue_count_};
+    }
+
+    [[nodiscard]] std::span<const Value> upvalues() const {
+        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+        return {reinterpret_cast<const Value*>(this + 1), upvalue_count_};
+    }
+
+    // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes): the VM's fast path
+    CFunction function = nullptr;
+    GcObject* gc_list = nullptr; // the collector's gray lists
+    // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
+
+private:
+    friend class Heap;
+
+    explicit CClosure(std::size_t upvalue_count)
+        : upvalue_count_(static_cast<std::uint8_t>(upvalue_count)) {
+        type = ObjectType::CClosure;
+    }
+
+    std::uint8_t upvalue_count_;
+};
+
+static_assert(sizeof(CClosure) % alignof(Value) == 0);
+
+inline Value Value::c_closure(const CClosure* f) {
+    return Value{Tag::CClosure, std::bit_cast<std::uint64_t>(f)};
+}
+
 inline Value Value::closure(const LuaClosure* f) {
     return Value{Tag::LuaClosure, std::bit_cast<std::uint64_t>(f)};
 }

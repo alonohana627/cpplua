@@ -1,0 +1,7 @@
+program body done
+returned	true
+sum at exit	6
+finalizing global (alive)
+finalizing second (alive)
+finalizing garbage, never collected
+finalizing first (alive)

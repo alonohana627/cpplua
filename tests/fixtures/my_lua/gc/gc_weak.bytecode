@@ -1,0 +1,640 @@
+
+main <gc_weak.lua:0,0> (308 instructions)
+0+ params, 31 slots, 1 upvalue, 33 locals, 43 constants, 9 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	GETTABUP 	0 0 0	; _ENV "collectgarbage"
+	3	[7]	LOADK    	1 1	; "stop"
+	4	[7]	CALL     	0 2 1	; 1 in 0 out
+	5	[13]	CLOSURE  	0 0
+	6	[16]	GETTABUP 	1 0 2	; _ENV "setmetatable"
+	7	[16]	NEWTABLE 	2 0 0	; 0
+	8	[16]	EXTRAARG 	0
+	9	[16]	NEWTABLE 	3 1 0	; 0
+	10	[16]	EXTRAARG 	0
+	11	[16]	SETFIELD 	3 3 4k	; "__mode" "k"
+	12	[16]	CALL     	1 3 2	; 2 in 1 out
+	13	[17]	NEWTABLE 	2 0 0	; 0
+	14	[17]	EXTRAARG 	0
+	15	[18]	SETTABLE 	1 2 5k	; "live"
+	16	[19]	CLOSURE  	3 1
+	17	[20]	MOVE     	4 3
+	18	[20]	MOVE     	5 1
+	19	[20]	LOADI    	6 10
+	20	[20]	CALL     	4 3 1	; 2 in 0 out
+	21	[21]	NEWTABLE 	4 0 0	; 0
+	22	[21]	EXTRAARG 	0
+	23	[21]	SETFIELD 	1 6 4	; "str"
+	24	[22]	NEWTABLE 	4 0 0	; 0
+	25	[22]	EXTRAARG 	0
+	26	[22]	SETI     	1 1 4
+	27	[23]	LOADTRUE 	4
+	28	[23]	NEWTABLE 	5 0 0	; 0
+	29	[23]	EXTRAARG 	0
+	30	[23]	SETTABLE 	1 4 5
+	31	[24]	GETTABUP 	4 0 7	; _ENV "print"
+	32	[24]	LOADK    	5 8	; "weak k before"
+	33	[24]	MOVE     	6 0
+	34	[24]	MOVE     	7 1
+	35	[24]	CALL     	6 2 0	; 1 in all out
+	36	[24]	CALL     	4 0 1	; all in 0 out
+	37	[25]	GETTABUP 	4 0 0	; _ENV "collectgarbage"
+	38	[25]	CALL     	4 1 1	; 0 in 0 out
+	39	[26]	GETTABUP 	4 0 7	; _ENV "print"
+	40	[26]	LOADK    	5 9	; "weak k after"
+	41	[26]	MOVE     	6 0
+	42	[26]	MOVE     	7 1
+	43	[26]	CALL     	6 2 2	; 1 in 1 out
+	44	[26]	GETTABLE 	7 1 2
+	45	[26]	GETTABUP 	8 0 10	; _ENV "type"
+	46	[26]	GETFIELD 	9 1 6	; "str"
+	47	[26]	CALL     	8 2 2	; 1 in 1 out
+	48	[26]	GETTABUP 	9 0 10	; _ENV "type"
+	49	[26]	GETI     	10 1 1
+	50	[26]	CALL     	9 2 2	; 1 in 1 out
+	51	[26]	GETTABUP 	10 0 10	; _ENV "type"
+	52	[26]	LOADTRUE 	11
+	53	[26]	GETTABLE 	11 1 11
+	54	[26]	CALL     	10 2 0	; 1 in all out
+	55	[26]	CALL     	4 0 1	; all in 0 out
+	56	[29]	GETTABUP 	4 0 2	; _ENV "setmetatable"
+	57	[29]	NEWTABLE 	5 0 0	; 0
+	58	[29]	EXTRAARG 	0
+	59	[29]	NEWTABLE 	6 1 0	; 0
+	60	[29]	EXTRAARG 	0
+	61	[29]	SETFIELD 	6 3 11k	; "__mode" "v"
+	62	[29]	CALL     	4 3 2	; 2 in 1 out
+	63	[30]	NEWTABLE 	5 0 0	; 0
+	64	[30]	EXTRAARG 	0
+	65	[31]	SETFIELD 	4 5 5	; "live"
+	66	[32]	CLOSURE  	6 2
+	67	[33]	MOVE     	7 6
+	68	[33]	MOVE     	8 4
+	69	[33]	LOADI    	9 10
+	70	[33]	CALL     	7 3 1	; 2 in 0 out
+	71	[34]	SETFIELD 	4 12 13k	; "s" "a string value"
+	72	[35]	SETFIELD 	4 14 15k	; "n" 42
+	73	[36]	SETFIELD 	4 16 17k	; "f" 1.5
+	74	[37]	GETTABUP 	7 0 7	; _ENV "print"
+	75	[37]	LOADK    	8 18	; "weak v before"
+	76	[37]	MOVE     	9 0
+	77	[37]	MOVE     	10 4
+	78	[37]	CALL     	9 2 0	; 1 in all out
+	79	[37]	CALL     	7 0 1	; all in 0 out
+	80	[38]	GETTABUP 	7 0 0	; _ENV "collectgarbage"
+	81	[38]	CALL     	7 1 1	; 0 in 0 out
+	82	[39]	GETTABUP 	7 0 7	; _ENV "print"
+	83	[39]	LOADK    	8 19	; "weak v after"
+	84	[39]	MOVE     	9 0
+	85	[39]	MOVE     	10 4
+	86	[39]	CALL     	9 2 2	; 1 in 1 out
+	87	[39]	GETFIELD 	10 4 5	; "live"
+	88	[39]	EQ       	10 5 1
+	89	[39]	JMP      	1	; to 91
+	90	[39]	LFALSESKIP	10
+	91	[39]	LOADTRUE 	10
+	92	[39]	GETFIELD 	11 4 12	; "s"
+	93	[39]	GETFIELD 	12 4 14	; "n"
+	94	[39]	GETFIELD 	13 4 16	; "f"
+	95	[39]	GETI     	14 4 1
+	96	[39]	CALL     	7 8 1	; 7 in 0 out
+	97	[42]	GETTABUP 	7 0 2	; _ENV "setmetatable"
+	98	[42]	NEWTABLE 	8 0 0	; 0
+	99	[42]	EXTRAARG 	0
+	100	[42]	NEWTABLE 	9 1 0	; 0
+	101	[42]	EXTRAARG 	0
+	102	[42]	SETFIELD 	9 3 20k	; "__mode" "kv"
+	103	[42]	CALL     	7 3 2	; 2 in 1 out
+	104	[43]	NEWTABLE 	8 0 0	; 0
+	105	[43]	EXTRAARG 	0
+	106	[43]	NEWTABLE 	9 0 0	; 0
+	107	[43]	EXTRAARG 	0
+	108	[44]	SETTABLE 	7 8 21k	; "strong key, string value"
+	109	[45]	SETFIELD 	7 22 9	; "strong value"
+	110	[50]	CLOSURE  	10 3
+	111	[51]	MOVE     	11 10
+	112	[51]	MOVE     	12 7
+	113	[51]	CALL     	11 2 1	; 1 in 0 out
+	114	[52]	SETFIELD 	7 23 24k	; "both strings" "kept"
+	115	[53]	GETTABUP 	11 0 0	; _ENV "collectgarbage"
+	116	[53]	CALL     	11 1 1	; 0 in 0 out
+	117	[54]	GETTABUP 	11 0 7	; _ENV "print"
+	118	[54]	LOADK    	12 25	; "weak kv"
+	119	[54]	MOVE     	13 0
+	120	[54]	MOVE     	14 7
+	121	[54]	CALL     	13 2 2	; 1 in 1 out
+	122	[54]	GETTABLE 	14 7 8
+	123	[54]	GETFIELD 	15 7 22	; "strong value"
+	124	[54]	EQ       	15 9 1
+	125	[54]	JMP      	1	; to 127
+	126	[54]	LFALSESKIP	15
+	127	[54]	LOADTRUE 	15
+	128	[54]	GETFIELD 	16 7 26	; "dead value"
+	129	[54]	GETFIELD 	17 7 23	; "both strings"
+	130	[54]	CALL     	11 7 1	; 6 in 0 out
+	131	[57]	LOADNIL  	2 0	; 1 out
+	132	[58]	LOADNIL  	5 0	; 1 out
+	133	[59]	GETTABUP 	11 0 0	; _ENV "collectgarbage"
+	134	[59]	CALL     	11 1 1	; 0 in 0 out
+	135	[60]	GETTABUP 	11 0 7	; _ENV "print"
+	136	[60]	LOADK    	12 27	; "after dropping"
+	137	[60]	MOVE     	13 0
+	138	[60]	MOVE     	14 1
+	139	[60]	CALL     	13 2 2	; 1 in 1 out
+	140	[60]	MOVE     	14 0
+	141	[60]	MOVE     	15 4
+	142	[60]	CALL     	14 2 2	; 1 in 1 out
+	143	[60]	GETFIELD 	15 4 5	; "live"
+	144	[60]	CALL     	11 5 1	; 4 in 0 out
+	145	[63]	NEWTABLE 	11 0 0	; 0
+	146	[63]	EXTRAARG 	0
+	147	[64]	GETTABUP 	12 0 2	; _ENV "setmetatable"
+	148	[64]	NEWTABLE 	13 0 0	; 0
+	149	[64]	EXTRAARG 	0
+	150	[64]	NEWTABLE 	14 1 0	; 0
+	151	[64]	EXTRAARG 	0
+	152	[64]	SETFIELD 	14 3 11k	; "__mode" "v"
+	153	[64]	CALL     	12 3 2	; 2 in 1 out
+	154	[71]	CLOSURE  	13 4
+	155	[72]	MOVE     	14 13
+	156	[72]	CALL     	14 1 1	; 0 in 0 out
+	157	[73]	GETTABUP 	14 0 0	; _ENV "collectgarbage"
+	158	[73]	CALL     	14 1 1	; 0 in 0 out
+	159	[74]	LOADI    	14 0
+	160	[75]	GETTABUP 	15 0 28	; _ENV "pairs"
+	161	[75]	MOVE     	16 12
+	162	[75]	CALL     	15 2 5	; 1 in 4 out
+	163	[75]	TFORPREP 	15 3	; to 167
+	164	[75]	GETFIELD 	21 20 29	; "id"
+	165	[75]	ADD      	14 14 21
+	166	[75]	MMBIN    	14 21 6	; __add
+	167	[75]	TFORCALL 	15 2
+	168	[75]	TFORLOOP 	15 5	; to 164
+	169	[75]	CLOSE    	15
+	170	[76]	GETTABUP 	15 0 7	; _ENV "print"
+	171	[76]	LOADK    	16 30	; "cache"
+	172	[76]	MOVE     	17 0
+	173	[76]	MOVE     	18 12
+	174	[76]	CALL     	17 2 2	; 1 in 1 out
+	175	[76]	MOVE     	18 14
+	176	[76]	CALL     	15 4 1	; 3 in 0 out
+	177	[80]	GETTABUP 	15 0 2	; _ENV "setmetatable"
+	178	[80]	NEWTABLE 	16 0 0	; 0
+	179	[80]	EXTRAARG 	0
+	180	[80]	NEWTABLE 	17 1 0	; 0
+	181	[80]	EXTRAARG 	0
+	182	[80]	SETFIELD 	17 3 4k	; "__mode" "k"
+	183	[80]	CALL     	15 3 2	; 2 in 1 out
+	184	[86]	CLOSURE  	16 5
+	185	[87]	MOVE     	17 16
+	186	[87]	CALL     	17 1 1	; 0 in 0 out
+	187	[88]	NEWTABLE 	17 0 0	; 0
+	188	[88]	EXTRAARG 	0
+	189	[89]	NEWTABLE 	18 1 0	; 0
+	190	[89]	EXTRAARG 	0
+	191	[89]	SETFIELD 	18 31 17	; "owner"
+	192	[89]	SETTABLE 	15 17 18
+	193	[90]	GETTABUP 	18 0 7	; _ENV "print"
+	194	[90]	LOADK    	19 32	; "ephemerons before"
+	195	[90]	MOVE     	20 0
+	196	[90]	MOVE     	21 15
+	197	[90]	CALL     	20 2 0	; 1 in all out
+	198	[90]	CALL     	18 0 1	; all in 0 out
+	199	[91]	GETTABUP 	18 0 0	; _ENV "collectgarbage"
+	200	[91]	CALL     	18 1 1	; 0 in 0 out
+	201	[92]	GETTABUP 	18 0 7	; _ENV "print"
+	202	[92]	LOADK    	19 33	; "ephemerons after"
+	203	[92]	MOVE     	20 0
+	204	[92]	MOVE     	21 15
+	205	[92]	CALL     	20 2 2	; 1 in 1 out
+	206	[92]	GETTABLE 	21 15 17
+	207	[92]	GETFIELD 	21 21 31	; "owner"
+	208	[92]	EQ       	21 17 1
+	209	[92]	JMP      	1	; to 211
+	210	[92]	LFALSESKIP	21
+	211	[92]	LOADTRUE 	21
+	212	[92]	CALL     	18 4 1	; 3 in 0 out
+	213	[96]	GETTABUP 	18 0 2	; _ENV "setmetatable"
+	214	[96]	NEWTABLE 	19 0 0	; 0
+	215	[96]	EXTRAARG 	0
+	216	[96]	NEWTABLE 	20 1 0	; 0
+	217	[96]	EXTRAARG 	0
+	218	[96]	SETFIELD 	20 3 4k	; "__mode" "k"
+	219	[96]	CALL     	18 3 2	; 2 in 1 out
+	220	[97]	NEWTABLE 	19 0 0	; 0
+	221	[97]	EXTRAARG 	0
+	222	[105]	CLOSURE  	20 6
+	223	[106]	MOVE     	21 20
+	224	[106]	CALL     	21 1 1	; 0 in 0 out
+	225	[107]	GETTABUP 	21 0 0	; _ENV "collectgarbage"
+	226	[107]	CALL     	21 1 1	; 0 in 0 out
+	227	[108]	GETTABUP 	21 0 7	; _ENV "print"
+	228	[108]	LOADK    	22 34	; "chain kept"
+	229	[108]	MOVE     	23 0
+	230	[108]	MOVE     	24 18
+	231	[108]	CALL     	23 2 0	; 1 in all out
+	232	[108]	CALL     	21 0 1	; all in 0 out
+	233	[109]	LOADNIL  	19 0	; 1 out
+	234	[110]	GETTABUP 	21 0 0	; _ENV "collectgarbage"
+	235	[110]	CALL     	21 1 1	; 0 in 0 out
+	236	[111]	GETTABUP 	21 0 7	; _ENV "print"
+	237	[111]	LOADK    	22 35	; "chain dropped"
+	238	[111]	MOVE     	23 0
+	239	[111]	MOVE     	24 18
+	240	[111]	CALL     	23 2 0	; 1 in all out
+	241	[111]	CALL     	21 0 1	; all in 0 out
+	242	[115]	GETTABUP 	21 0 2	; _ENV "setmetatable"
+	243	[115]	NEWTABLE 	22 0 0	; 0
+	244	[115]	EXTRAARG 	0
+	245	[115]	NEWTABLE 	23 1 0	; 0
+	246	[115]	EXTRAARG 	0
+	247	[115]	SETFIELD 	23 3 11k	; "__mode" "v"
+	248	[115]	CALL     	21 3 2	; 2 in 1 out
+	249	[116]	GETTABUP 	22 0 2	; _ENV "setmetatable"
+	250	[116]	NEWTABLE 	23 0 0	; 0
+	251	[116]	EXTRAARG 	0
+	252	[116]	NEWTABLE 	24 1 0	; 0
+	253	[116]	EXTRAARG 	0
+	254	[116]	SETFIELD 	24 3 4k	; "__mode" "k"
+	255	[116]	CALL     	22 3 2	; 2 in 1 out
+	256	[117]	LOADNIL  	23 0	; 1 out
+	257	[124]	CLOSURE  	24 7
+	258	[125]	MOVE     	25 24
+	259	[125]	CALL     	25 1 1	; 0 in 0 out
+	260	[126]	GETTABUP 	25 0 0	; _ENV "collectgarbage"
+	261	[126]	CALL     	25 1 1	; 0 in 0 out
+	262	[127]	GETTABUP 	25 0 7	; _ENV "print"
+	263	[127]	LOADK    	26 36	; "in finalizer"
+	264	[127]	GETI     	27 23 1
+	265	[127]	GETI     	28 23 2
+	266	[127]	CALL     	25 4 1	; 3 in 0 out
+	267	[128]	GETTABUP 	25 0 7	; _ENV "print"
+	268	[128]	LOADK    	26 37	; "after first"
+	269	[128]	GETFIELD 	27 21 38	; "obj"
+	270	[128]	MOVE     	28 0
+	271	[128]	MOVE     	29 22
+	272	[128]	CALL     	28 2 0	; 1 in all out
+	273	[128]	CALL     	25 0 1	; all in 0 out
+	274	[129]	GETTABUP 	25 0 0	; _ENV "collectgarbage"
+	275	[129]	CALL     	25 1 1	; 0 in 0 out
+	276	[130]	GETTABUP 	25 0 7	; _ENV "print"
+	277	[130]	LOADK    	26 39	; "after second"
+	278	[130]	MOVE     	27 0
+	279	[130]	MOVE     	28 22
+	280	[130]	CALL     	27 2 0	; 1 in all out
+	281	[130]	CALL     	25 0 1	; all in 0 out
+	282	[133]	GETTABUP 	25 0 40	; _ENV "setmetatable"
+	283	[133]	NEWTABLE 	26 0 0	; 0
+	284	[133]	EXTRAARG 	0
+	285	[133]	NEWTABLE 	27 1 0	; 0
+	286	[133]	EXTRAARG 	0
+	287	[133]	SETFIELD 	27 3 41k	; "__mode" "x"
+	288	[133]	CALL     	25 3 2	; 2 in 1 out
+	289	[134]	CLOSURE  	26 8
+	290	[135]	MOVE     	27 26
+	291	[135]	MOVE     	28 25
+	292	[135]	CALL     	27 2 1	; 1 in 0 out
+	293	[136]	GETTABUP 	27 0 0	; _ENV "collectgarbage"
+	294	[136]	CALL     	27 1 1	; 0 in 0 out
+	295	[137]	GETTABUP 	27 0 7	; _ENV "print"
+	296	[137]	LOADK    	28 42	; "mode x"
+	297	[137]	MOVE     	29 0
+	298	[137]	MOVE     	30 25
+	299	[137]	CALL     	29 2 0	; 1 in all out
+	300	[137]	CALL     	27 0 1	; all in 0 out
+	301	[139]	MOVE     	27 0
+	302	[139]	MOVE     	28 1
+	303	[139]	CALL     	27 2 2	; 1 in 1 out
+	304	[139]	MOVE     	28 0
+	305	[139]	MOVE     	29 4
+	306	[139]	CALL     	28 2 0	; 1 in all out
+	307	[139]	RETURN   	27 0 1k	; all out
+	308	[139]	RETURN   	27 1 1k	; 0 out
+constants (43):
+	0	S	"collectgarbage"
+	1	S	"stop"
+	2	S	"setmetatable"
+	3	S	"__mode"
+	4	S	"k"
+	5	S	"live"
+	6	S	"str"
+	7	S	"print"
+	8	S	"weak k before"
+	9	S	"weak k after"
+	10	S	"type"
+	11	S	"v"
+	12	S	"s"
+	13	S	"a string value"
+	14	S	"n"
+	15	I	42
+	16	S	"f"
+	17	F	1.5
+	18	S	"weak v before"
+	19	S	"weak v after"
+	20	S	"kv"
+	21	S	"strong key, string value"
+	22	S	"strong value"
+	23	S	"both strings"
+	24	S	"kept"
+	25	S	"weak kv"
+	26	S	"dead value"
+	27	S	"after dropping"
+	28	S	"pairs"
+	29	S	"id"
+	30	S	"cache"
+	31	S	"owner"
+	32	S	"ephemerons before"
+	33	S	"ephemerons after"
+	34	S	"chain kept"
+	35	S	"chain dropped"
+	36	S	"in finalizer"
+	37	S	"after first"
+	38	S	"obj"
+	39	S	"after second"
+	40	S	"setmetatable"
+	41	S	"x"
+	42	S	"mode x"
+locals (33):
+	0	count	6	309
+	1	wk	13	309
+	2	live_key	15	309
+	3	add_dead_keys	17	309
+	4	wv	63	309
+	5	live_value	65	309
+	6	add_dead_values	67	309
+	7	wkv	104	309
+	8	k1	108	309
+	9	v1	108	309
+	10	add_dead	111	309
+	11	strong	147	309
+	12	cache	154	309
+	13	fill_cache	155	309
+	14	ids	160	309
+	15	(for state)	163	169
+	16	(for state)	163	169
+	17	(for state)	163	169
+	18	(for state)	163	169
+	19	_	164	167
+	20	v	164	167
+	21	eph	184	309
+	22	add_ephemerons	185	309
+	23	kept	189	309
+	24	chain	220	309
+	25	head	222	309
+	26	build_chain	223	309
+	27	wv2	249	309
+	28	wk2	256	309
+	29	in_finalizer	257	309
+	30	finalizable	258	309
+	31	strong_mode	289	309
+	32	add_strong	290	309
+upvalues (1):
+	0	_ENV	1	0
+
+function <gc_weak.lua:9,13> (12 instructions)
+1 param, 9 slots, 1 upvalue, 7 locals, 1 constant, 0 functions
+	1	[10]	LOADI    	1 0
+	2	[11]	GETTABUP 	2 0 0	; _ENV "pairs"
+	3	[11]	MOVE     	3 0
+	4	[11]	CALL     	2 2 5	; 1 in 4 out
+	5	[11]	TFORPREP 	2 2	; to 8
+	6	[11]	ADDI     	1 1 1
+	7	[11]	MMBINI   	1 1 6 0	; __add
+	8	[11]	TFORCALL 	2 1
+	9	[11]	TFORLOOP 	2 4	; to 6
+	10	[11]	CLOSE    	2
+	11	[12]	RETURN   	1 2 0k	; 1 out
+	12	[13]	RETURN   	2 1 0k	; 0 out
+constants (1):
+	0	S	"pairs"
+locals (7):
+	0	t	1	13
+	1	n	2	13
+	2	(for state)	5	10
+	3	(for state)	5	10
+	4	(for state)	5	10
+	5	(for state)	5	10
+	6	_	6	8
+upvalues (1):
+	0	_ENV	0	0
+
+function <gc_weak.lua:19,19> (9 instructions)
+2 params, 7 slots, 0 upvalues, 6 locals, 0 constants, 0 functions
+	1	[19]	LOADI    	2 1
+	2	[19]	MOVE     	3 1
+	3	[19]	LOADI    	4 1
+	4	[19]	FORPREP  	2 3	; exit to 9
+	5	[19]	NEWTABLE 	6 0 0	; 0
+	6	[19]	EXTRAARG 	0
+	7	[19]	SETTABLE 	0 6 5
+	8	[19]	FORLOOP  	2 4	; to 5
+	9	[19]	RETURN0  	
+constants (0):
+locals (6):
+	0	t	1	10
+	1	n	1	10
+	2	(for state)	4	9
+	3	(for state)	4	9
+	4	(for state)	4	9
+	5	i	5	8
+upvalues (0):
+
+function <gc_weak.lua:32,32> (9 instructions)
+2 params, 7 slots, 0 upvalues, 6 locals, 0 constants, 0 functions
+	1	[32]	LOADI    	2 1
+	2	[32]	MOVE     	3 1
+	3	[32]	LOADI    	4 1
+	4	[32]	FORPREP  	2 3	; exit to 9
+	5	[32]	NEWTABLE 	6 0 0	; 0
+	6	[32]	EXTRAARG 	0
+	7	[32]	SETTABLE 	0 5 6
+	8	[32]	FORLOOP  	2 4	; to 5
+	9	[32]	RETURN0  	
+constants (0):
+locals (6):
+	0	t	1	10
+	1	n	1	10
+	2	(for state)	4	9
+	3	(for state)	4	9
+	4	(for state)	4	9
+	5	i	5	8
+upvalues (0):
+
+function <gc_weak.lua:46,50> (12 instructions)
+1 param, 3 slots, 0 upvalues, 1 local, 2 constants, 0 functions
+	1	[47]	NEWTABLE 	1 0 0	; 0
+	2	[47]	EXTRAARG 	0
+	3	[47]	SETTABLE 	0 1 0k	; "dead key"
+	4	[48]	NEWTABLE 	1 0 0	; 0
+	5	[48]	EXTRAARG 	0
+	6	[48]	SETFIELD 	0 1 1	; "dead value"
+	7	[49]	NEWTABLE 	1 0 0	; 0
+	8	[49]	EXTRAARG 	0
+	9	[49]	NEWTABLE 	2 0 0	; 0
+	10	[49]	EXTRAARG 	0
+	11	[49]	SETTABLE 	0 1 2
+	12	[50]	RETURN0  	
+constants (2):
+	0	S	"dead key"
+	1	S	"dead value"
+locals (1):
+	0	t	1	13
+upvalues (0):
+
+function <gc_weak.lua:65,71> (21 instructions)
+0 params, 7 slots, 2 upvalues, 5 locals, 2 constants, 0 functions
+	1	[66]	LOADI    	0 1
+	2	[66]	LOADI    	1 5
+	3	[66]	LOADI    	2 1
+	4	[66]	FORPREP  	0 15	; exit to 21
+	5	[67]	NEWTABLE 	4 1 0	; 0
+	6	[67]	EXTRAARG 	0
+	7	[67]	SETFIELD 	4 0 3	; "id"
+	8	[68]	GETUPVAL 	5 0	; cache
+	9	[68]	SETTABLE 	5 3 4
+	10	[69]	MODK     	5 3 1	; 2
+	11	[69]	MMBINK   	3 1 9 0	; __mod 2
+	12	[69]	EQI      	5 0 0
+	13	[69]	JMP      	6	; to 20
+	14	[69]	GETUPVAL 	5 1	; strong
+	15	[69]	LEN      	5 5
+	16	[69]	ADDI     	6 5 1
+	17	[69]	MMBINI   	5 1 6 0	; __add
+	18	[69]	GETUPVAL 	5 1	; strong
+	19	[69]	SETTABLE 	5 6 4
+	20	[66]	FORLOOP  	0 16	; to 5
+	21	[71]	RETURN0  	
+constants (2):
+	0	S	"id"
+	1	I	2
+locals (5):
+	0	(for state)	4	21
+	1	(for state)	4	21
+	2	(for state)	4	21
+	3	i	5	20
+	4	obj	8	20
+upvalues (2):
+	0	cache	1	12
+	1	strong	1	11
+
+function <gc_weak.lua:81,86> (14 instructions)
+0 params, 7 slots, 1 upvalue, 5 locals, 2 constants, 0 functions
+	1	[82]	LOADI    	0 1
+	2	[82]	LOADI    	1 5
+	3	[82]	LOADI    	2 1
+	4	[82]	FORPREP  	0 8	; exit to 14
+	5	[83]	NEWTABLE 	4 0 0	; 0
+	6	[83]	EXTRAARG 	0
+	7	[84]	GETUPVAL 	5 0	; eph
+	8	[84]	NEWTABLE 	6 2 0	; 0
+	9	[84]	EXTRAARG 	0
+	10	[84]	SETFIELD 	6 0 4	; "owner"
+	11	[84]	SETFIELD 	6 1 3	; "n"
+	12	[84]	SETTABLE 	5 4 6
+	13	[82]	FORLOOP  	0 9	; to 5
+	14	[86]	RETURN0  	
+constants (2):
+	0	S	"owner"
+	1	S	"n"
+locals (5):
+	0	(for state)	4	14
+	1	(for state)	4	14
+	2	(for state)	4	14
+	3	i	5	13
+	4	key	7	13
+upvalues (1):
+	0	eph	1	15
+
+function <gc_weak.lua:98,105> (16 instructions)
+0 params, 8 slots, 2 upvalues, 6 locals, 2 constants, 0 functions
+	1	[99]	GETUPVAL 	0 0	; head
+	2	[100]	LOADI    	1 1
+	3	[100]	LOADI    	2 4
+	4	[100]	LOADI    	3 1
+	5	[100]	FORPREP  	1 9	; exit to 16
+	6	[101]	NEWTABLE 	5 0 0	; 0
+	7	[101]	EXTRAARG 	0
+	8	[102]	GETUPVAL 	6 1	; chain
+	9	[102]	NEWTABLE 	7 2 0	; 0
+	10	[102]	EXTRAARG 	0
+	11	[102]	SETFIELD 	7 0 5	; "next"
+	12	[102]	SETFIELD 	7 1 4	; "i"
+	13	[102]	SETTABLE 	6 0 7
+	14	[103]	MOVE     	0 5
+	15	[100]	FORLOOP  	1 10	; to 6
+	16	[105]	RETURN0  	
+constants (2):
+	0	S	"next"
+	1	S	"i"
+locals (6):
+	0	key	2	17
+	1	(for state)	5	16
+	2	(for state)	5	16
+	3	(for state)	5	16
+	4	i	6	15
+	5	nextkey	8	15
+upvalues (2):
+	0	head	1	19
+	1	chain	1	18
+
+function <gc_weak.lua:118,124> (12 instructions)
+0 params, 4 slots, 4 upvalues, 1 local, 4 constants, 1 function
+	1	[119]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[119]	NEWTABLE 	1 0 0	; 0
+	3	[119]	EXTRAARG 	0
+	4	[119]	NEWTABLE 	2 1 0	; 0
+	5	[119]	EXTRAARG 	0
+	6	[121]	CLOSURE  	3 0
+	7	[121]	SETFIELD 	2 1 3	; "__gc"
+	8	[119]	CALL     	0 3 2	; 2 in 1 out
+	9	[122]	SETTABUP 	2 2 0	; wv2 "obj"
+	10	[123]	GETUPVAL 	1 3	; wk2
+	11	[123]	SETTABLE 	1 0 3k	; "key entry"
+	12	[124]	RETURN0  	
+constants (4):
+	0	S	"setmetatable"
+	1	S	"__gc"
+	2	S	"obj"
+	3	S	"key entry"
+locals (1):
+	0	o	9	13
+upvalues (4):
+	0	_ENV	0	0
+	1	in_finalizer	1	23
+	2	wv2	1	21
+	3	wk2	1	22
+
+function <gc_weak.lua:119,121> (12 instructions)
+1 param, 4 slots, 3 upvalues, 1 local, 1 constant, 0 functions
+	1	[120]	NEWTABLE 	1 0 2	; 2
+	2	[120]	EXTRAARG 	0
+	3	[120]	GETTABUP 	2 1 0	; wv2 "obj"
+	4	[120]	EQ       	2 0 1
+	5	[120]	JMP      	1	; to 7
+	6	[120]	LFALSESKIP	2
+	7	[120]	LOADTRUE 	2
+	8	[120]	GETUPVAL 	3 2	; wk2
+	9	[120]	GETTABLE 	3 3 0
+	10	[120]	SETLIST  	1 2 0
+	11	[120]	SETUPVAL 	1 0	; in_finalizer
+	12	[121]	RETURN0  	
+constants (1):
+	0	S	"obj"
+locals (1):
+	0	obj	1	13
+upvalues (3):
+	0	in_finalizer	0	1
+	1	wv2	0	2
+	2	wk2	0	3
+
+function <gc_weak.lua:134,134> (6 instructions)
+1 param, 3 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[134]	NEWTABLE 	1 0 0	; 0
+	2	[134]	EXTRAARG 	0
+	3	[134]	NEWTABLE 	2 0 0	; 0
+	4	[134]	EXTRAARG 	0
+	5	[134]	SETTABLE 	0 1 2
+	6	[134]	RETURN0  	
+constants (0):
+locals (1):
+	0	t	1	7
+upvalues (0):

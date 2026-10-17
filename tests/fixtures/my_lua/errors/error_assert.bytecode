@@ -1,0 +1,311 @@
+
+main <error_assert.lua:0,0> (158 instructions)
+0+ params, 12 slots, 1 upvalue, 8 locals, 19 constants, 6 functions
+	1	[1]	VARARGPREP	0
+	2	[8]	GETTABUP 	0 0 0	; _ENV "print"
+	3	[8]	GETTABUP 	1 0 1	; _ENV "assert"
+	4	[8]	LOADI    	2 1
+	5	[8]	LOADK    	3 2	; "unused"
+	6	[8]	LOADI    	4 3
+	7	[8]	CALL     	1 4 0	; 3 in all out
+	8	[8]	CALL     	0 0 1	; all in 0 out
+	9	[9]	GETTABUP 	0 0 0	; _ENV "print"
+	10	[9]	GETTABUP 	1 0 1	; _ENV "assert"
+	11	[9]	LOADTRUE 	2
+	12	[9]	CALL     	1 2 0	; 1 in all out
+	13	[9]	CALL     	0 0 1	; all in 0 out
+	14	[10]	GETTABUP 	0 0 0	; _ENV "print"
+	15	[10]	GETTABUP 	1 0 1	; _ENV "assert"
+	16	[10]	LOADI    	2 0
+	17	[10]	LOADNIL  	3 1	; 2 out
+	18	[10]	CALL     	1 4 0	; 3 in all out
+	19	[10]	CALL     	0 0 1	; all in 0 out
+	20	[11]	GETTABUP 	0 0 0	; _ENV "print"
+	21	[11]	GETTABUP 	1 0 1	; _ENV "assert"
+	22	[11]	LOADK    	2 3	; ""
+	23	[11]	NEWTABLE 	3 0 0	; 0
+	24	[11]	EXTRAARG 	0
+	25	[11]	CALL     	1 3 2	; 2 in 1 out
+	26	[11]	EQK      	1 3 1	; ""
+	27	[11]	JMP      	1	; to 29
+	28	[11]	LFALSESKIP	1
+	29	[11]	LOADTRUE 	1
+	30	[11]	CALL     	0 2 1	; 1 in 0 out
+	31	[12]	GETTABUP 	0 0 0	; _ENV "print"
+	32	[12]	GETTABUP 	1 0 4	; _ENV "select"
+	33	[12]	LOADK    	2 5	; "#"
+	34	[12]	GETTABUP 	3 0 1	; _ENV "assert"
+	35	[12]	LOADI    	4 1
+	36	[12]	LOADNIL  	5 2	; 3 out
+	37	[12]	CALL     	3 5 0	; 4 in all out
+	38	[12]	CALL     	1 0 0	; all in all out
+	39	[12]	CALL     	0 0 1	; all in 0 out
+	40	[14]	GETTABUP 	0 0 0	; _ENV "print"
+	41	[14]	GETTABUP 	1 0 6	; _ENV "pcall"
+	42	[14]	GETTABUP 	2 0 1	; _ENV "assert"
+	43	[14]	LOADFALSE	3
+	44	[14]	CALL     	1 3 0	; 2 in all out
+	45	[14]	CALL     	0 0 1	; all in 0 out
+	46	[15]	GETTABUP 	0 0 0	; _ENV "print"
+	47	[15]	GETTABUP 	1 0 6	; _ENV "pcall"
+	48	[15]	GETTABUP 	2 0 1	; _ENV "assert"
+	49	[15]	LOADNIL  	3 0	; 1 out
+	50	[15]	CALL     	1 3 0	; 2 in all out
+	51	[15]	CALL     	0 0 1	; all in 0 out
+	52	[16]	GETTABUP 	0 0 0	; _ENV "print"
+	53	[16]	GETTABUP 	1 0 6	; _ENV "pcall"
+	54	[16]	GETTABUP 	2 0 1	; _ENV "assert"
+	55	[16]	LOADFALSE	3
+	56	[16]	LOADK    	4 7	; "custom message"
+	57	[16]	CALL     	1 4 0	; 3 in all out
+	58	[16]	CALL     	0 0 1	; all in 0 out
+	59	[17]	GETTABUP 	0 0 0	; _ENV "print"
+	60	[17]	GETTABUP 	1 0 6	; _ENV "pcall"
+	61	[17]	GETTABUP 	2 0 1	; _ENV "assert"
+	62	[17]	LOADNIL  	3 0	; 1 out
+	63	[17]	LOADK    	4 8	; "custom"
+	64	[17]	CALL     	1 4 0	; 3 in all out
+	65	[17]	CALL     	0 0 1	; all in 0 out
+	66	[18]	GETTABUP 	0 0 0	; _ENV "print"
+	67	[18]	GETTABUP 	1 0 6	; _ENV "pcall"
+	68	[18]	GETTABUP 	2 0 1	; _ENV "assert"
+	69	[18]	CALL     	1 2 0	; 1 in all out
+	70	[18]	CALL     	0 0 1	; all in 0 out
+	71	[19]	GETTABUP 	0 0 0	; _ENV "print"
+	72	[19]	GETTABUP 	1 0 6	; _ENV "pcall"
+	73	[19]	CLOSURE  	2 0
+	74	[19]	CALL     	1 2 0	; 1 in all out
+	75	[19]	CALL     	0 0 1	; all in 0 out
+	76	[20]	GETTABUP 	0 0 0	; _ENV "print"
+	77	[20]	GETTABUP 	1 0 6	; _ENV "pcall"
+	78	[20]	CLOSURE  	2 1
+	79	[20]	CALL     	1 2 0	; 1 in all out
+	80	[20]	CALL     	0 0 1	; all in 0 out
+	81	[21]	GETTABUP 	0 0 0	; _ENV "print"
+	82	[21]	GETTABUP 	1 0 6	; _ENV "pcall"
+	83	[21]	CLOSURE  	2 2
+	84	[21]	CALL     	1 2 0	; 1 in all out
+	85	[21]	CALL     	0 0 1	; all in 0 out
+	86	[24]	NEWTABLE 	0 0 0	; 0
+	87	[24]	EXTRAARG 	0
+	88	[25]	GETTABUP 	1 0 6	; _ENV "pcall"
+	89	[25]	GETTABUP 	2 0 9	; _ENV "assert"
+	90	[25]	LOADFALSE	3
+	91	[25]	MOVE     	4 0
+	92	[25]	CALL     	1 4 3	; 3 in 2 out
+	93	[26]	GETTABUP 	3 0 0	; _ENV "print"
+	94	[26]	MOVE     	4 1
+	95	[26]	EQ       	2 0 1
+	96	[26]	JMP      	1	; to 98
+	97	[26]	LFALSESKIP	5
+	98	[26]	LOADTRUE 	5
+	99	[26]	CALL     	3 3 1	; 2 in 0 out
+	100	[27]	GETTABUP 	3 0 6	; _ENV "pcall"
+	101	[27]	CLOSURE  	4 3
+	102	[27]	CALL     	3 2 3	; 1 in 2 out
+	103	[28]	GETTABUP 	5 0 0	; _ENV "print"
+	104	[28]	MOVE     	6 3
+	105	[28]	GETTABUP 	7 0 10	; _ENV "tostring"
+	106	[28]	MOVE     	8 4
+	107	[28]	CALL     	7 2 0	; 1 in all out
+	108	[28]	CALL     	5 0 1	; all in 0 out
+	109	[29]	GETTABUP 	5 0 0	; _ENV "print"
+	110	[29]	GETTABUP 	6 0 6	; _ENV "pcall"
+	111	[29]	GETTABUP 	7 0 11	; _ENV "assert"
+	112	[29]	LOADFALSE	8
+	113	[29]	LOADNIL  	9 0	; 1 out
+	114	[29]	CALL     	6 4 0	; 3 in all out
+	115	[29]	CALL     	5 0 1	; all in 0 out
+	116	[30]	GETTABUP 	5 0 0	; _ENV "print"
+	117	[30]	GETTABUP 	6 0 6	; _ENV "pcall"
+	118	[30]	GETTABUP 	7 0 11	; _ENV "assert"
+	119	[30]	LOADFALSE	8
+	120	[30]	LOADFALSE	9
+	121	[30]	CALL     	6 4 0	; 3 in all out
+	122	[30]	CALL     	5 0 1	; all in 0 out
+	123	[37]	CLOSURE  	5 4
+	124	[38]	NEWTABLE 	6 1 0	; 0
+	125	[38]	EXTRAARG 	0
+	126	[38]	SETFIELD 	6 12 13k	; "a" 1
+	127	[39]	GETTABUP 	7 0 0	; _ENV "print"
+	128	[39]	GETTABUP 	8 0 11	; _ENV "assert"
+	129	[39]	MOVE     	9 5
+	130	[39]	MOVE     	10 6
+	131	[39]	LOADK    	11 12	; "a"
+	132	[39]	CALL     	9 3 0	; 2 in all out
+	133	[39]	CALL     	8 0 0	; all in all out
+	134	[39]	CALL     	7 0 1	; all in 0 out
+	135	[40]	GETTABUP 	7 0 0	; _ENV "print"
+	136	[40]	GETTABUP 	8 0 6	; _ENV "pcall"
+	137	[40]	CLOSURE  	9 5
+	138	[40]	CALL     	8 2 0	; 1 in all out
+	139	[40]	CALL     	7 0 1	; all in 0 out
+	140	[43]	GETTABUP 	7 0 14	; _ENV "assert"
+	141	[43]	GETTABUP 	8 0 15	; _ENV "tonumber_missing"
+	142	[43]	EQK      	8 16 0	; nil
+	143	[43]	JMP      	2	; to 146
+	144	[43]	LOADI    	8 5
+	145	[43]	JMP      	2	; to 148
+	146	[43]	LFALSESKIP	8
+	147	[43]	LOADTRUE 	8
+	148	[43]	CALL     	7 2 2	; 1 in 1 out
+	149	[44]	GETTABUP 	8 0 0	; _ENV "print"
+	150	[44]	MULK     	9 7 17	; 2
+	151	[44]	MMBINK   	7 17 8 0	; __mul 2
+	152	[44]	CALL     	8 2 1	; 1 in 0 out
+	153	[46]	GETTABUP 	8 0 14	; _ENV "assert"
+	154	[46]	LOADK    	9 18	; "returned"
+	155	[46]	LOADK    	10 2	; "unused"
+	156	[46]	TAILCALL 	8 3 1k	; 2 in
+	157	[46]	RETURN   	8 0 1k	; all out
+	158	[46]	RETURN   	8 1 1k	; 0 out
+constants (19):
+	0	S	"print"
+	1	S	"assert"
+	2	S	"unused"
+	3	S	""
+	4	S	"select"
+	5	S	"#"
+	6	S	"pcall"
+	7	S	"custom message"
+	8	S	"custom"
+	9	S	"assert"
+	10	S	"tostring"
+	11	S	"assert"
+	12	S	"a"
+	13	I	1
+	14	S	"assert"
+	15	S	"tonumber_missing"
+	16	N	nil
+	17	I	2
+	18	S	"returned"
+locals (8):
+	0	obj	88	159
+	1	ok	93	159
+	2	e	93	159
+	3	ok2	103	159
+	4	e2	103	159
+	5	lookup	124	159
+	6	t	127	159
+	7	n	149	159
+upvalues (1):
+	0	_ENV	1	0
+
+function <error_assert.lua:19,19> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[19]	GETTABUP 	0 0 0	; _ENV "assert"
+	2	[19]	LOADFALSE	1
+	3	[19]	CALL     	0 2 1	; 1 in 0 out
+	4	[19]	RETURN0  	
+constants (1):
+	0	S	"assert"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_assert.lua:20,20> (9 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[20]	GETTABUP 	0 0 0	; _ENV "assert"
+	2	[20]	LOADI    	1 2
+	3	[20]	EQI      	1 1 1
+	4	[20]	JMP      	1	; to 6
+	5	[20]	LFALSESKIP	1
+	6	[20]	LOADTRUE 	1
+	7	[20]	LOADK    	2 1	; "math is broken"
+	8	[20]	CALL     	0 3 1	; 2 in 0 out
+	9	[20]	RETURN0  	
+constants (2):
+	0	S	"assert"
+	1	S	"math is broken"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_assert.lua:21,21> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[21]	GETTABUP 	0 0 0	; _ENV "assert"
+	2	[21]	LOADNIL  	1 0	; 1 out
+	3	[21]	LOADI    	2 42
+	4	[21]	CALL     	0 3 1	; 2 in 0 out
+	5	[21]	RETURN0  	
+constants (1):
+	0	S	"assert"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_assert.lua:27,27> (12 instructions)
+0 params, 6 slots, 1 upvalue, 0 locals, 3 constants, 1 function
+	1	[27]	GETTABUP 	0 0 0	; _ENV "assert"
+	2	[27]	LOADFALSE	1
+	3	[27]	GETTABUP 	2 0 1	; _ENV "setmetatable"
+	4	[27]	NEWTABLE 	3 0 0	; 0
+	5	[27]	EXTRAARG 	0
+	6	[27]	NEWTABLE 	4 1 0	; 0
+	7	[27]	EXTRAARG 	0
+	8	[27]	CLOSURE  	5 0
+	9	[27]	SETFIELD 	4 2 5	; "__tostring"
+	10	[27]	CALL     	2 3 0	; 2 in all out
+	11	[27]	CALL     	0 0 1	; all in 0 out
+	12	[27]	RETURN0  	
+constants (3):
+	0	S	"assert"
+	1	S	"setmetatable"
+	2	S	"__tostring"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_assert.lua:27,27> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[27]	LOADK    	0 0	; "custom object"
+	2	[27]	RETURN1  	0
+	3	[27]	RETURN0  	
+constants (1):
+	0	S	"custom object"
+locals (0):
+upvalues (0):
+
+function <error_assert.lua:33,37> (12 instructions)
+2 params, 7 slots, 1 upvalue, 3 locals, 3 constants, 0 functions
+	1	[34]	GETTABLE 	2 0 1
+	2	[35]	EQK      	2 0 0	; nil
+	3	[35]	JMP      	7	; to 11
+	4	[35]	LOADNIL  	3 0	; 1 out
+	5	[35]	LOADK    	4 1	; "no key "
+	6	[35]	GETTABUP 	5 0 2	; _ENV "tostring"
+	7	[35]	MOVE     	6 1
+	8	[35]	CALL     	5 2 2	; 1 in 1 out
+	9	[35]	CONCAT   	4 2
+	10	[35]	RETURN   	3 3 0	; 2 out
+	11	[36]	RETURN1  	2
+	12	[37]	RETURN0  	
+constants (3):
+	0	N	nil
+	1	S	"no key "
+	2	S	"tostring"
+locals (3):
+	0	t	1	13
+	1	k	1	13
+	2	v	2	13
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_assert.lua:40,40> (8 instructions)
+0 params, 4 slots, 3 upvalues, 0 locals, 2 constants, 0 functions
+	1	[40]	GETTABUP 	0 0 0	; _ENV "assert"
+	2	[40]	GETUPVAL 	1 1	; lookup
+	3	[40]	GETUPVAL 	2 2	; t
+	4	[40]	LOADK    	3 1	; "b"
+	5	[40]	CALL     	1 3 0	; 2 in all out
+	6	[40]	TAILCALL 	0 0 0	; -1 in
+	7	[40]	RETURN   	0 0 0	; all out
+	8	[40]	RETURN0  	
+constants (2):
+	0	S	"assert"
+	1	S	"b"
+locals (0):
+upvalues (3):
+	0	_ENV	0	0
+	1	lookup	1	5
+	2	t	1	6

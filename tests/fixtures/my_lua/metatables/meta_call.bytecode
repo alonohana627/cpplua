@@ -1,0 +1,369 @@
+
+main <meta_call.lua:0,0> (177 instructions)
+0+ params, 18 slots, 1 upvalue, 20 locals, 17 constants, 9 functions
+	1	[1]	VARARGPREP	0
+	2	[5]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	3	[5]	NEWTABLE 	1 1 0	; 0
+	4	[5]	EXTRAARG 	0
+	5	[5]	SETFIELD 	1 1 2k	; "count" 0
+	6	[5]	NEWTABLE 	2 1 0	; 0
+	7	[5]	EXTRAARG 	0
+	8	[9]	CLOSURE  	3 0
+	9	[9]	SETFIELD 	2 3 3	; "__call"
+	10	[5]	CALL     	0 3 2	; 2 in 1 out
+	11	[11]	GETTABUP 	1 0 4	; _ENV "print"
+	12	[11]	MOVE     	2 0
+	13	[11]	CALL     	2 1 2	; 0 in 1 out
+	14	[11]	MOVE     	3 0
+	15	[11]	LOADI    	4 5
+	16	[11]	CALL     	3 2 2	; 1 in 1 out
+	17	[11]	GETFIELD 	4 0 5	; "count"
+	18	[11]	CALL     	1 4 1	; 3 in 0 out
+	19	[14]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	20	[14]	NEWTABLE 	2 0 0	; 0
+	21	[14]	EXTRAARG 	0
+	22	[14]	NEWTABLE 	3 1 0	; 0
+	23	[14]	EXTRAARG 	0
+	24	[16]	CLOSURE  	4 1
+	25	[16]	SETFIELD 	3 3 4	; "__call"
+	26	[14]	CALL     	1 3 2	; 2 in 1 out
+	27	[17]	GETTABUP 	2 0 4	; _ENV "print"
+	28	[17]	MOVE     	3 1
+	29	[17]	CALL     	3 1 0	; 0 in all out
+	30	[17]	CALL     	2 0 1	; all in 0 out
+	31	[18]	GETTABUP 	2 0 4	; _ENV "print"
+	32	[18]	MOVE     	3 1
+	33	[18]	LOADI    	4 1
+	34	[18]	LOADNIL  	5 0	; 1 out
+	35	[18]	LOADI    	6 3
+	36	[18]	CALL     	3 4 0	; 3 in all out
+	37	[18]	CALL     	2 0 1	; all in 0 out
+	38	[19]	NEWTABLE 	2 0 0	; 0
+	39	[19]	EXTRAARG 	0
+	40	[19]	MOVE     	3 1
+	41	[19]	LOADK    	4 6	; "a"
+	42	[19]	LOADK    	5 7	; "b"
+	43	[19]	CALL     	3 3 0	; 2 in all out
+	44	[19]	SETLIST  	2 0 0
+	45	[20]	GETTABUP 	3 0 4	; _ENV "print"
+	46	[20]	LEN      	4 2
+	47	[20]	GETI     	5 2 1
+	48	[20]	GETI     	6 2 2
+	49	[20]	GETI     	7 2 3
+	50	[20]	CALL     	3 5 1	; 4 in 0 out
+	51	[23]	GETTABUP 	3 0 0	; _ENV "setmetatable"
+	52	[23]	NEWTABLE 	4 1 0	; 0
+	53	[23]	EXTRAARG 	0
+	54	[23]	SETFIELD 	4 8 9k	; "name" "me"
+	55	[23]	NEWTABLE 	5 1 0	; 0
+	56	[23]	EXTRAARG 	0
+	57	[23]	CLOSURE  	6 2
+	58	[23]	SETFIELD 	5 3 6	; "__call"
+	59	[23]	CALL     	3 3 2	; 2 in 1 out
+	60	[24]	GETTABUP 	4 0 4	; _ENV "print"
+	61	[24]	MOVE     	5 3
+	62	[24]	CALL     	5 1 0	; 0 in all out
+	63	[24]	CALL     	4 0 1	; all in 0 out
+	64	[27]	GETTABUP 	4 0 0	; _ENV "setmetatable"
+	65	[27]	NEWTABLE 	5 0 0	; 0
+	66	[27]	EXTRAARG 	0
+	67	[27]	NEWTABLE 	6 1 0	; 0
+	68	[27]	EXTRAARG 	0
+	69	[29]	CLOSURE  	7 3
+	70	[29]	SETFIELD 	6 3 7	; "__call"
+	71	[27]	CALL     	4 3 2	; 2 in 1 out
+	72	[30]	SETFIELD 	4 10 4	; "__index"
+	73	[31]	CLOSURE  	5 4
+	74	[31]	SETFIELD 	4 11 5	; "sum"
+	75	[32]	MOVE     	5 4
+	76	[32]	LOADI    	6 3
+	77	[32]	LOADI    	7 4
+	78	[32]	CALL     	5 3 2	; 2 in 1 out
+	79	[33]	GETTABUP 	6 0 4	; _ENV "print"
+	80	[33]	GETFIELD 	7 5 12	; "x"
+	81	[33]	GETFIELD 	8 5 13	; "y"
+	82	[33]	SELF     	9 5 11k	; "sum"
+	83	[33]	CALL     	9 2 2	; 1 in 1 out
+	84	[33]	GETTABUP 	10 0 14	; _ENV "getmetatable"
+	85	[33]	MOVE     	11 5
+	86	[33]	CALL     	10 2 2	; 1 in 1 out
+	87	[33]	EQ       	10 4 1
+	88	[33]	JMP      	1	; to 90
+	89	[33]	LFALSESKIP	10
+	90	[33]	LOADTRUE 	10
+	91	[33]	CALL     	6 5 1	; 4 in 0 out
+	92	[36]	GETTABUP 	6 0 0	; _ENV "setmetatable"
+	93	[36]	NEWTABLE 	7 0 0	; 0
+	94	[36]	EXTRAARG 	0
+	95	[36]	NEWTABLE 	8 1 0	; 0
+	96	[36]	EXTRAARG 	0
+	97	[38]	CLOSURE  	9 5
+	98	[38]	SETFIELD 	8 3 9	; "__call"
+	99	[36]	CALL     	6 3 2	; 2 in 1 out
+	100	[39]	LOADI    	7 0
+	101	[40]	MOVE     	8 6
+	102	[40]	LOADI    	9 5
+	103	[40]	LOADI    	10 0
+	104	[40]	LOADNIL  	11 0	; 1 out
+	105	[40]	TFORPREP 	8 2	; to 108
+	106	[40]	ADD      	7 7 12
+	107	[40]	MMBIN    	7 12 6	; __add
+	108	[40]	TFORCALL 	8 1
+	109	[40]	TFORLOOP 	8 4	; to 106
+	110	[40]	CLOSE    	8
+	111	[41]	GETTABUP 	8 0 4	; _ENV "print"
+	112	[41]	MOVE     	9 7
+	113	[41]	CALL     	8 2 1	; 1 in 0 out
+	114	[44]	GETTABUP 	8 0 4	; _ENV "print"
+	115	[44]	GETTABUP 	9 0 15	; _ENV "pcall"
+	116	[44]	MOVE     	10 0
+	117	[44]	LOADI    	11 10
+	118	[44]	CALL     	9 3 0	; 2 in all out
+	119	[44]	CALL     	8 0 1	; all in 0 out
+	120	[45]	CLOSURE  	8 6
+	121	[46]	GETTABUP 	9 0 4	; _ENV "print"
+	122	[46]	MOVE     	10 8
+	123	[46]	CALL     	10 1 0	; 0 in all out
+	124	[46]	CALL     	9 0 1	; all in 0 out
+	125	[47]	NEWTABLE 	9 1 0	; 0
+	126	[47]	EXTRAARG 	0
+	127	[47]	SETFIELD 	9 16 3	; "f"
+	128	[48]	GETTABUP 	10 0 4	; _ENV "print"
+	129	[48]	GETFIELD 	11 9 16	; "f"
+	130	[48]	CALL     	11 1 0	; 0 in all out
+	131	[48]	CALL     	10 0 1	; all in 0 out
+	132	[51]	LOADNIL  	10 1	; 2 out
+	133	[52]	GETTABUP 	12 0 0	; _ENV "setmetatable"
+	134	[52]	NEWTABLE 	13 0 0	; 0
+	135	[52]	EXTRAARG 	0
+	136	[52]	NEWTABLE 	14 1 0	; 0
+	137	[52]	EXTRAARG 	0
+	138	[52]	CLOSURE  	15 7
+	139	[52]	SETFIELD 	14 3 15	; "__call"
+	140	[52]	CALL     	12 3 2	; 2 in 1 out
+	141	[52]	MOVE     	10 12
+	142	[53]	GETTABUP 	12 0 0	; _ENV "setmetatable"
+	143	[53]	NEWTABLE 	13 0 0	; 0
+	144	[53]	EXTRAARG 	0
+	145	[53]	NEWTABLE 	14 1 0	; 0
+	146	[53]	EXTRAARG 	0
+	147	[53]	SETFIELD 	14 3 10	; "__call"
+	148	[53]	CALL     	12 3 2	; 2 in 1 out
+	149	[53]	MOVE     	11 12
+	150	[54]	GETTABUP 	12 0 4	; _ENV "print"
+	151	[54]	MOVE     	13 11
+	152	[54]	LOADK    	14 12	; "x"
+	153	[54]	CALL     	13 2 0	; 1 in all out
+	154	[54]	CALL     	12 0 1	; all in 0 out
+	155	[57]	GETTABUP 	12 0 0	; _ENV "setmetatable"
+	156	[57]	NEWTABLE 	13 0 0	; 0
+	157	[57]	EXTRAARG 	0
+	158	[57]	NEWTABLE 	14 0 0	; 0
+	159	[57]	EXTRAARG 	0
+	160	[57]	CALL     	12 3 2	; 2 in 1 out
+	161	[58]	GETTABUP 	13 0 4	; _ENV "print"
+	162	[58]	GETTABUP 	14 0 15	; _ENV "pcall"
+	163	[58]	MOVE     	15 12
+	164	[58]	CALL     	14 2 0	; 1 in all out
+	165	[58]	CALL     	13 0 1	; all in 0 out
+	166	[59]	GETTABUP 	13 0 15	; _ENV "pcall"
+	167	[59]	CLOSURE  	14 8
+	168	[59]	CALL     	13 2 3	; 1 in 2 out
+	169	[60]	GETTABUP 	15 0 4	; _ENV "print"
+	170	[60]	MOVE     	16 13
+	171	[60]	MOVE     	17 14
+	172	[60]	CALL     	15 3 1	; 2 in 0 out
+	173	[62]	GETFIELD 	15 0 5	; "count"
+	174	[62]	SELF     	16 5 11k	; "sum"
+	175	[62]	CALL     	16 2 0	; 1 in all out
+	176	[62]	RETURN   	15 0 1k	; all out
+	177	[62]	RETURN   	15 1 1k	; 0 out
+constants (17):
+	0	S	"setmetatable"
+	1	S	"count"
+	2	I	0
+	3	S	"__call"
+	4	S	"print"
+	5	S	"count"
+	6	S	"a"
+	7	S	"b"
+	8	S	"name"
+	9	S	"me"
+	10	S	"__index"
+	11	S	"sum"
+	12	S	"x"
+	13	S	"y"
+	14	S	"getmetatable"
+	15	S	"pcall"
+	16	S	"f"
+locals (20):
+	0	counter	11	178
+	1	multi	27	178
+	2	packed	45	178
+	3	who	60	178
+	4	Point	72	178
+	5	p	79	178
+	6	range	100	178
+	7	seen	101	178
+	8	(for state)	105	110
+	9	(for state)	105	110
+	10	(for state)	105	110
+	11	(for state)	105	110
+	12	i	106	108
+	13	tail	121	178
+	14	holder	128	178
+	15	inner	133	178
+	16	outer	133	178
+	17	plain	161	178
+	18	ok	169	178
+	19	msg	169	178
+upvalues (1):
+	0	_ENV	1	0
+
+function <meta_call.lua:6,9> (10 instructions)
+2 params, 4 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[7]	GETFIELD 	2 0 0	; "count"
+	2	[7]	TESTSET  	3 1 1
+	3	[7]	JMP      	1	; to 5
+	4	[7]	LOADI    	3 1
+	5	[7]	ADD      	2 2 3
+	6	[7]	MMBIN    	2 3 6	; __add
+	7	[7]	SETFIELD 	0 0 2	; "count"
+	8	[8]	GETFIELD 	2 0 0	; "count"
+	9	[8]	RETURN1  	2
+	10	[9]	RETURN0  	
+constants (1):
+	0	S	"count"
+locals (2):
+	0	self	1	11
+	1	by	1	11
+upvalues (0):
+
+function <meta_call.lua:14,16> (8 instructions)
+1+ param, 4 slots, 1 upvalue, 1 local, 2 constants, 0 functions
+	1	[14]	VARARGPREP	1
+	2	[15]	GETTABUP 	1 0 0	; _ENV "select"
+	3	[15]	LOADK    	2 1	; "#"
+	4	[15]	VARARG   	3 0	; all out
+	5	[15]	CALL     	1 0 2	; all in 1 out
+	6	[15]	VARARG   	2 0	; all out
+	7	[15]	RETURN   	1 0 2	; all out
+	8	[16]	RETURN   	1 1 2	; 0 out
+constants (2):
+	0	S	"select"
+	1	S	"#"
+locals (1):
+	0	self	1	9
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_call.lua:23,23> (3 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[23]	GETFIELD 	1 0 0	; "name"
+	2	[23]	RETURN1  	1
+	3	[23]	RETURN0  	
+constants (1):
+	0	S	"name"
+locals (1):
+	0	self	1	4
+upvalues (0):
+
+function <meta_call.lua:27,29> (9 instructions)
+3 params, 6 slots, 1 upvalue, 3 locals, 3 constants, 0 functions
+	1	[28]	GETTABUP 	3 0 0	; _ENV "setmetatable"
+	2	[28]	NEWTABLE 	4 2 0	; 0
+	3	[28]	EXTRAARG 	0
+	4	[28]	SETFIELD 	4 1 1	; "x"
+	5	[28]	SETFIELD 	4 2 2	; "y"
+	6	[28]	MOVE     	5 0
+	7	[28]	TAILCALL 	3 3 0	; 2 in
+	8	[28]	RETURN   	3 0 0	; all out
+	9	[29]	RETURN0  	
+constants (3):
+	0	S	"setmetatable"
+	1	S	"x"
+	2	S	"y"
+locals (3):
+	0	cls	1	10
+	1	x	1	10
+	2	y	1	10
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_call.lua:31,31> (6 instructions)
+1 param, 3 slots, 0 upvalues, 1 local, 2 constants, 0 functions
+	1	[31]	GETFIELD 	1 0 0	; "x"
+	2	[31]	GETFIELD 	2 0 1	; "y"
+	3	[31]	ADD      	1 1 2
+	4	[31]	MMBIN    	1 2 6	; __add
+	5	[31]	RETURN1  	1
+	6	[31]	RETURN0  	
+constants (2):
+	0	S	"x"
+	1	S	"y"
+locals (1):
+	0	self	1	7
+upvalues (0):
+
+function <meta_call.lua:36,38> (6 instructions)
+3 params, 4 slots, 0 upvalues, 3 locals, 0 constants, 0 functions
+	1	[37]	LT       	2 1 0
+	2	[37]	JMP      	3	; to 6
+	3	[37]	ADDI     	3 2 1
+	4	[37]	MMBINI   	2 1 6 0	; __add
+	5	[37]	RETURN1  	3
+	6	[38]	RETURN0  	
+constants (0):
+locals (3):
+	0	_	1	7
+	1	limit	1	7
+	2	i	1	7
+upvalues (0):
+
+function <meta_call.lua:45,45> (5 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[45]	GETUPVAL 	0 0	; counter
+	2	[45]	LOADI    	1 100
+	3	[45]	TAILCALL 	0 2 0	; 1 in
+	4	[45]	RETURN   	0 0 0	; all out
+	5	[45]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	counter	1	0
+
+function <meta_call.lua:52,52> (13 instructions)
+3 params, 6 slots, 2 upvalues, 3 locals, 0 constants, 0 functions
+	1	[52]	GETUPVAL 	3 0	; inner
+	2	[52]	EQ       	0 3 1
+	3	[52]	JMP      	1	; to 5
+	4	[52]	LFALSESKIP	3
+	5	[52]	LOADTRUE 	3
+	6	[52]	GETUPVAL 	4 1	; outer
+	7	[52]	EQ       	1 4 1
+	8	[52]	JMP      	1	; to 10
+	9	[52]	LFALSESKIP	4
+	10	[52]	LOADTRUE 	4
+	11	[52]	MOVE     	5 2
+	12	[52]	RETURN   	3 4 0	; 3 out
+	13	[52]	RETURN0  	
+constants (0):
+locals (3):
+	0	self	1	14
+	1	a	1	14
+	2	b	1	14
+upvalues (2):
+	0	inner	1	10
+	1	outer	1	11
+
+function <meta_call.lua:59,59> (5 instructions)
+0 params, 2 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[59]	NEWTABLE 	0 0 0	; 0
+	2	[59]	EXTRAARG 	0
+	3	[59]	MOVE     	1 0
+	4	[59]	CALL     	1 1 1	; 0 in 0 out
+	5	[59]	RETURN0  	
+constants (0):
+locals (1):
+	0	t	3	6
+upvalues (0):

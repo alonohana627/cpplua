@@ -42,7 +42,10 @@ std::string_view tag_name(Tag tag) {
     case Tag::LongString: return "long string";
     case Tag::CFunction: return "C++ function";
     case Tag::LuaClosure: return "Lua function";
+    case Tag::CClosure: return "C++ closure";
     case Tag::Table: return "table";
+    case Tag::LightUserdata: return "light userdata";
+    case Tag::Userdata: return "userdata";
     }
     return "?"; // not reached: every Tag is handled above
 }
@@ -58,6 +61,9 @@ std::string debug_text(Value value) {
     case Tag::LongString: return quoted(value.as_string()->view());
     case Tag::CFunction:
     case Tag::LuaClosure:
+    case Tag::CClosure:
+    case Tag::LightUserdata:
+    case Tag::Userdata:
     case Tag::Table: return std::format("{}: 0x{:x}", type_name(value.type()), value.payload());
     }
     return "?"; // not reached: every Tag is handled above

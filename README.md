@@ -1,7 +1,7 @@
 # lua2
 
 A Lua 5.4 interpreter written from scratch in C++26, built step by step.
-The plan is in [docs/ROADMAP.md](docs/ROADMAP.md); background reading for each step is in [docs/learn/](docs/learn/), and the exact rules we implement are in [docs/spec/](docs/spec/).
+The plan is in [docs/ROADMAP.md](docs/ROADMAP.md); background reading for each step is in [docs/learn/](docs/learn/), and the exact rules we implement are in [docs/spec/](docs/spec/). To call C++ from Lua and Lua from C++ (functions, classes, callbacks), see [docs/how_to_put_cpp_functions_and_classes_into_lua.md](docs/how_to_put_cpp_functions_and_classes_into_lua.md).
 
 ## Requirements
 
@@ -48,9 +48,13 @@ dot -Tsvg tree.dot -o tree.svg          # draw it (needs Graphviz: pacman -S min
 ./build/debug/lua2 --bytecode file.lua  # the compiled bytecode, listed like `luac -l -l`
 ```
 
-The standard library so far is `print`; the rest comes in stage 9. Globals work (they live in
-the globals table), but until tables (stage 6) that is the only table: `{}` is an error, and so
-is a key that is not a string. Errors go to stderr as `lua2: file.lua:3: message`.
+The whole language runs, with tables, metatables, `<close>`, finalizers and weak tables. The
+standard library so far is the base library (`print`, `type`, `tostring`, `tonumber`, `pairs`,
+`ipairs`, `next`, `select`, `rawget`, `rawset`, `rawequal`, `rawlen`, `setmetatable`,
+`getmetatable`, `error`, `assert`, `pcall`, `xpcall`, `collectgarbage`) and `debug.traceback`;
+the `string`, `table`, `math`, `io` and `os` libraries come in stage 9
+([docs/final_docs/stdlib.md](docs/final_docs/stdlib.md)). An uncaught error goes to stderr as
+`lua2: file.lua:3: message` followed by a stack traceback, as the real `lua` prints it.
 
 ## Test
 
@@ -70,6 +74,10 @@ returns or the error it stops with (see `tests/fixtures/my_lua/README.md`).
 ```sh
 ./build/debug/lua2_tests "[vm]"              # the compiler and the VM
 ./build/debug/lua2_tests "[gc]"              # the garbage collector (and GC stress runs)
+./build/debug/lua2_tests "[table]"           # tables (docs/spec/tables.md)
+./build/debug/lua2_tests "[meta]"            # metatables, <close>, finalizers, weak tables
+./build/debug/lua2_tests "[error]"           # error, pcall, xpcall, tracebacks
+./build/debug/lua2_api_tests                 # the public C++ API, with the embedding guide's examples
 ./build/debug/lua2_tests "[my_lua]"          # the my_lua programs: parse, compile, run, stress
 ```
 

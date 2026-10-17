@@ -1,0 +1,18 @@
+0	nil
+3	10	20	30	nil
+1	two	true	nil
+two	c	5	yes	true
+a	b	c	d	X	Y	ten	4
+positional
+outer	inner	3	3
+3	3	2	1	10	1
+0	nil	5
+3	3	a	c
+0	0
+7	end	nil
+130	1	50	51	100	130	nil	8515	big
+63	60	1	3
+1	nil	3	nil	5
+1	2	nil
+true	4	9
+130	130

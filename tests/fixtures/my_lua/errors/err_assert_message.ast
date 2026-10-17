@@ -1,0 +1,10 @@
+Chunk
+  Local config
+    Table
+  Local port
+    Call
+      Name assert
+      Index
+        Name config (local 0)
+        String "port"
+      String "port is not configured"

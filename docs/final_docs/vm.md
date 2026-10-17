@@ -5,12 +5,13 @@ in [../spec/execution.md](../spec/execution.md), the background and measurements
 [../learn/vm_gc.md](../learn/vm_gc.md), and how the stage was planned in
 [../plan/vm.md](../plan/vm.md).
 
-**Status:** stage 5 is done (version 0.0.5). lua2 compiles Lua to Lua 5.4's bytecode and runs it:
-locals, arithmetic, strings, control flow, functions, varargs, tail calls, closures and upvalues,
-with a garbage collector in both of Lua's modes, and, ahead of their stages, globals and
-`print`. Tables come in stage 6: until then the only table is the globals table, with string
-keys only, and every table constructor fails. On the six benchmarks lua2 takes between 0.45 and
-0.88 of the time of the real Lua 5.4.9.
+**Status:** stage 5 is done (version 0.0.5), and stages 6 to 8 build on it (0.0.8): lua2 compiles
+Lua to Lua 5.4's bytecode and runs it: locals, arithmetic, strings, control flow, functions,
+varargs, tail calls, closures and upvalues, with a garbage collector in both of Lua's modes.
+Tables ([tables.md](tables.md)), metatables, finalizers and weak tables
+([metatables.md](metatables.md)) and errors with `pcall` and tracebacks ([errors.md](errors.md))
+have their own pages; this one is the VM and the collector they build on. On all twelve
+benchmarks lua2 takes between 0.20 and 0.98 of the time of the real Lua 5.4.9.
 
 ## The pipeline
 
@@ -48,10 +49,12 @@ source text --Parser--> Ast --compile()--> Proto --load()--> LuaClosure on the s
 | `lib/internal/vm/execute.hpp`, `lib/vm/execute.cpp` | `call()`, the dispatch, the cold paths    |
 | `lib/vm/handlers.inc`                | the body of every instruction, written once                   |
 | `lib/internal/vm/debug_info.hpp`, `lib/vm/debug_info.cpp` | names for error messages, from `ldebug.c` |
-| `lib/internal/vm/run.hpp`, `lib/vm/run.cpp` | `load()`, `run()`, `display_text()`                     |
-| `lib/internal/value/table.hpp`, `lib/value/table.cpp` | `Table`, for now only the globals table   |
-| `lib/internal/std/base.hpp`, `lib/std/base.cpp` | `open_base()`: `print` (the standard library) |
-| `include/lua2/interpreter.hpp`, `lib/interpreter.cpp` | `lua2::Interpreter`, the public entry   |
+| `lib/internal/vm/run.hpp`, `lib/vm/run.cpp` | `load()`, `run_text()`, `run()`, `display_text()`       |
+| `lib/internal/vm/metamethods.hpp`, `lib/vm/metamethods.cpp` | metamethod lookup ([metatables.md](metatables.md)) |
+| `lib/internal/value/table.hpp`, `lib/value/table.cpp` | `Table` ([tables.md](tables.md))          |
+| `lib/internal/std/`, `lib/std/`      | the standard library so far ([stdlib.md](stdlib.md))          |
+| `include/lua2/interpreter.hpp`, `include/lua2/api.hpp`, `lib/api.cpp` | the public API: `Interpreter`, `Context`, `Ref`, `Class` |
+| `lib/internal/value/userdata.hpp`    | `Userdata`, a block of C++ memory as a Lua value               |
 | `tests/vm_test.cpp`, `tests/gc_test.cpp`, `tests/my_lua_test.cpp` | tests: `[vm]`, `[gc]`, `[my_lua]` |
 
 ## Objects and the heap
@@ -60,7 +63,8 @@ source text --Parser--> Ast --compile()--> Proto --load()--> LuaClosure on the s
 
 Every collectable object starts with a `GcObject` (Lua's `CommonHeader`): the link in the list
 of all objects, its `ObjectType` (short string, long string, upvalue, proto, Lua closure,
-thread, table), and the collector's `marked` byte. As in `lgc.h`, the low three bits of `marked` are the
+thread, table), the collector's `marked` byte, and six bytes that would be padding, which tables
+use for their flags and sizes (as Lua's `Table` does after its `CommonHeader`). As in `lgc.h`, the low three bits of `marked` are the
 object's **age** (generational mode) and then come two **white** bits, a **black** bit and a
 finalization bit (stage 7). An object is *white* (not yet marked), *gray* (marked, but what it
 refers to may not be) or *black* (marked, and everything it refers to too).
@@ -88,6 +92,22 @@ bytes) are interned in the string table: an array of buckets, a power of two lon
 it holds as many strings as buckets and halved by the collector when under a quarter full. A
 short string found in the table but already dead (the collector has not swept it yet) is brought
 back to life, as Lua's `internshrstr` does.
+
+### Userdata and C++ closures
+
+- **`Userdata`** (`value/userdata.hpp`, Lua's `Udata`): a block of memory as a Lua value, with a
+  metatable, user value slots, and, for the public API, the tag of the C++ class living in the
+  block and the destructor to run when the collector frees it (after any `__gc`). One
+  allocation: the header, the user values, then the data aligned to 16 bytes. Equality is by
+  identity, with `__eq` for two different ones, like tables.
+- **Light userdata** (`Tag::LightUserdata`): a C++ pointer as a value, compared by address, not
+  collectable.
+- **`CClosure`** (`vm/function.hpp`): a C++ function with upvalues (Lua's C closure), called like
+  a `CFunction`; the public API's bound functions are C++ closures whose upvalue is a userdata
+  holding the `std::function`.
+
+The public API on top of these (`include/lua2/api.hpp`, `lib/api.cpp`) is described in
+[../how_to_put_cpp_functions_and_classes_into_lua.md](../how_to_put_cpp_functions_and_classes_into_lua.md).
 
 ### Protos, closures, upvalues
 
@@ -234,31 +254,33 @@ strings the way Lua's string library does. Its errors follow `luaT_trybinTM`: st
 keeps the string library's message; otherwise `luaG_opinterror` or `luaG_tointerror` name the
 operand at fault.
 
-### The globals table
+### The globals and the registry
 
-Until stage 6 brings real tables, `Table` (`value/table.hpp`) is only what the globals need: a
-hash of string keys to values, with open addressing, that doubles when three quarters full and
-drops `nil` entries when it grows. The heap creates it with the main thread (`Heap::globals()`),
-and it is a root of the collector, which marks its keys and values like Lua's `traversetable`.
-Storing into it is a backward barrier (`barrier_back`), as `luaH_set` does: a black globals
-table turns gray again, so a fresh string stored in it while the collector runs is not freed.
-`load()` gives every chunk this table as its `_ENV` (E1.2), so a global `x` is `GETTABUP` /
-`SETTABUP` on it, and `_ENV.x` is `GETFIELD` / `SETFIELD`. A key that is not a string is an error
-for now (E8.4).
+The heap creates the globals table with the main thread (`Heap::globals()`), and a table of
+loaded modules (`Heap::loaded()`, Lua's `registry._LOADED`, holding `_G` and `debug`), both
+roots of the collector. `load()` gives every chunk the globals as its `_ENV` (E1.2), so a global
+`x` is `GETTABUP` / `SETTABUP` on it. The heap also keeps the metamethod names (fixed strings)
+and the per-type metatables ([metatables.md](metatables.md)).
 
-### C++ functions and `print`
+### C++ functions
 
 A function written in C++ is a `CFunction`, `int (*)(State&)`: `Tag::CFunction` holds the pointer
 itself, so it is not a collectable object (Lua's light C function). It finds its arguments from
-`ci->func + 1` up to `top`, pushes its results and returns how many. `CALL` of anything but a
-Lua closure goes to the cold handler `CallOther`, which either calls the C++ function
-(`call_c`, Lua's `precallC` and `luaD_poscall`: a frame of its own, `min_stack` (20) free slots,
-results moved to where the caller wants them) or raises "attempt to call a ... value".
+`ci->func + 1` up to `top`, pushes its results and returns how many, or `c_function_error`
+([stdlib.md](stdlib.md)). `CALL` of anything but a Lua closure goes to `CallOther`, which calls
+the C++ function (`call_c`, Lua's `precallC` and `luaD_poscall`: a frame of its own, `min_stack`
+(20) free slots, results moved to where the caller wants them), or calls through `__call`, or
+raises "attempt to call a ... value". `print` writes through `Heap::write_output()`: stdout,
+flushed at each newline, unless `Heap::set_output()` gives it somewhere else (the tests capture
+it that way).
 
-`open_base()` (`std/base.cpp`) puts `print` in the globals table; `lua2::Interpreter` calls it.
-`print` writes each argument as `display_text()` shows it, separated by tabs, then a newline
-(Lua's `luaB_print`), through `Heap::write_output()`: stdout, flushed at each newline, unless
-`Heap::set_output()` gives it somewhere else (the tests capture it that way).
+### Warm and cold paths
+
+Hot handlers jump (tail calls) to continuations for anything unusual. Rare ones (errors, stack
+growth, barriers) are `VM_COLD_HANDLER`s, in the program's cold section. Slow paths that some
+programs take all the time (`__index` lookups through classes, calls of C++ functions, the
+iterators of `pairs` and `ipairs`) are `VM_WARM_HANDLER`s: still out of the hot bodies, so those
+stay frameless, but next to them in memory (measured: 5% on `methods`).
 
 ### Calls and returns
 
@@ -283,59 +305,68 @@ function and its fixed parameters above the extra arguments, which stay where th
   overflows (E5.4); limits are clipped; a float loop counts in floats; numeric strings are
   converted.
 - `TFORCALL` calls the iterator like `CALL` (in the VM, without recursion), and `TFORLOOP` tests the
-  result.
+  result. The iterators of `pairs` and `ipairs` over plain tables run inline ([tables.md](tables.md)).
 - `CLOSURE` creates the closure, puts it in its register at once (so it is anchored), then finds
   each upvalue: an open upvalue of this frame's register, or one of this closure's upvalues.
-- `CONCAT` joins a whole chain at once (`concatenate`, stage 4); `LEN` measures strings.
-- The table instructions work on the globals table with string keys (see above); indexing
-  anything that is not a table fails as in Lua, "attempt to index a nil value (local 't')".
-  `NEWTABLE` says "tables are not supported yet" (E8.4).
-- `TBC` and the closing value of a generic `for` accept only `nil` and `false` until metatables
-  bring `__close`.
+- `CONCAT` joins a whole chain of strings and numbers at once (`concatenate`, stage 4), and
+  goes pairwise with `__concat` otherwise; `LEN` measures strings inline.
+- The table instructions, `NEWTABLE`, `SETLIST` and `LEN` on tables are in [tables.md](tables.md);
+  metamethods, `TBC` and `CLOSE` in [metatables.md](metatables.md).
 
 ### Errors
 
-A runtime error stops the VM with `Status::Error` and the message in `State::error_message`; no
-C++ exceptions. `raise()` prefixes the position, `chunk:line:` (E8.1): the chunk name the way Lua
-shows it (`chunk_id()`, Lua's `luaO_chunkid`) and the line of the instruction. `debug_info.cpp`
+A runtime error stops the VM with `Status::Error` and the error object in `State::error_value`; no
+C++ exceptions ([errors.md](errors.md)). `raise()` prefixes the position, `chunk:line:` (E8.1): the
+chunk name the way Lua shows it (`chunk_id()`, Lua's `luaO_chunkid`) and the line of the
+instruction. `debug_info.cpp`
 ports `ldebug.c`'s symbolic execution to name the value at fault (E8.2): a local still active at
 that instruction, or the instruction that last set the register (an upvalue read, a constant, a
 global or field access, a method lookup), giving "(local 'x')", "(upvalue 'x')", "(global
 'x')", "(field 'x')", "(method 'x')", "(constant 'x')", and "(for iterator 'for iterator')" for a
 generic `for`. Every message in the `err_*` fixtures is the real Lua's, word for word.
 
-After an error, `run()` closes the upvalues of the dead frames and resets the stack and frames;
-catching errors in Lua (`pcall`) comes with stage 8.
+Errors are caught by protected calls (`pcall`, `xpcall`, and `run()` itself), which close the
+dead frames' upvalues and to-be-closed variables ([errors.md](errors.md)).
 
 ## Running chunks
 
-- `load(L, source, chunk_name)` compiles a chunk and pushes its closure; `run(L, source, chunk_name)`
-  loads and calls it and returns its results (E1.1). The chunk's source name is `"@" + chunk_name`,
-  as Lua names a file.
+- `load(L, source, chunk_name)` compiles a chunk and pushes its closure; `run_text(L, source,
+  chunk_name)` runs it in protected mode, the way `lua.c` does, and returns its results as `print`
+  shows them, or the error as text, with a traceback when asked (`run()` returns the values). The
+  chunk's source name is `"@" + chunk_name`, as Lua names a file.
 - `display_text(value)` writes a value as `print` does (`luaL_tolstring`): numbers as V6 says,
   strings as they are, `true`, `nil`, and `function: 00007ff6929ebd90` with the address the way
   the C library's `%p` writes it (16 hex digits on Windows, `0x...` elsewhere).
 - `lua2::Interpreter` (`include/lua2/interpreter.hpp`) is the public entry: `run(source,
-  chunk_name)` returns the results as text or the error message; `collect()`,
-  `set_generational()`, `memory_in_use()`.
+  chunk_name, traceback)` returns the results as text or the error message; `collect()`,
+  `set_generational()`, `memory_in_use()`. Destroying it closes it like `lua_close`.
 - `lua2 file.lua` runs a file (its `print`s go to stdout), then prints what it returns, if
   anything, separated by tabs; `lua2 --generational file.lua` runs it in generational mode;
-  errors go to stderr.
+  errors go to stderr with a traceback, as the real `lua` prints them.
 
 ## Benchmarks
 
-`bench/` holds six programs that only use what this stage builds; each returns its result, the
-same under lua2 and the real Lua. `lua2_bench` takes the best of N runs of each. Release build,
-best of 5, on the development machine:
+`bench/` holds twelve programs; each returns its result, the same under lua2 and the real Lua.
+`lua2_bench` takes the best of N runs of each (whole processes, so about 30 ms of process start
+is in every time). Release build, best of 5, on the development machine, after stages 6 to 8:
 
 | Benchmark       | lua2     | Real Lua 5.4.9 | Ratio |
 | --------------- | -------: | -------------: | ----: |
-| `closures`      | 114.4 ms |       234.1 ms | 0.49x |
-| `fib`           |  69.7 ms |        80.8 ms | 0.86x |
-| `loop_floats`   | 443.0 ms |       500.9 ms | 0.88x |
-| `loop_integers` | 606.9 ms |       851.1 ms | 0.71x |
-| `strings`       | 210.1 ms |       471.5 ms | 0.45x |
-| `varargs`       | 172.9 ms |       236.3 ms | 0.73x |
+| `closures`      | 113.2 ms |       236.4 ms | 0.48x |
+| `fib`           |  66.7 ms |        80.2 ms | 0.83x |
+| `loop_floats`   | 433.4 ms |       496.6 ms | 0.87x |
+| `loop_integers` | 610.2 ms |       841.3 ms | 0.73x |
+| `metamethods`   |  96.3 ms |       122.0 ms | 0.79x |
+| `methods`       | 159.2 ms |       162.2 ms | 0.98x |
+| `pcall`         |  35.0 ms |       177.1 ms | 0.20x |
+| `sort`          | 115.8 ms |       137.4 ms | 0.84x |
+| `strings`       | 216.9 ms |       472.9 ms | 0.46x |
+| `tables_array`  |  45.8 ms |        76.0 ms | 0.60x |
+| `tables_hash`   | 108.4 ms |       113.2 ms | 0.96x |
+| `varargs`       | 172.6 ms |       235.9 ms | 0.73x |
+
+The release `lua2` links the C++ runtime statically: loading `libc++.dll` cost one or two
+milliseconds per run, which the reference Lua (plain C) does not pay.
 
 Where the time goes:
 
@@ -354,10 +385,12 @@ ms, `strings` 191 against 483, `fib` 87 against 99, `varargs` 190 against 249.
 ## Testing
 
 - `tests/fixtures/my_lua/`: every Lua program written for the VM, with its golden output (`.out`:
-  what it prints, then what it returns, from the real Lua), runtime error (`.runerror`, the real Lua's message) and bytecode
+  what it prints, then what it returns, then what finalizers print when the interpreter closes,
+  from the real Lua), runtime error (`.runerror`, the real Lua's message) and bytecode
   (`.bytecode`, the real `luac`'s listing). `[my_lua]` runs them in both modes, then again under
   both stress modes; every `.lua` there that parses must also compile.
-- `tests/vm_test.cpp` names the rules of `execution.md` one by one; `tests/gc_test.cpp` checks the
+- `tests/vm_test.cpp` names the rules of `execution.md` one by one, as `table_test.cpp`,
+  `meta_test.cpp` and `error_test.cpp` do for the other specs; `tests/gc_test.cpp` checks the
   collector's promises: unreachable objects die, reachable ones stay and do not move, the string
   table forgets dead strings, memory stays bounded, modes switch, a stopped collector does not
   collect, upvalues follow a moving stack.

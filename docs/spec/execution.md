@@ -81,7 +81,7 @@ Every rule has an id like `E5.3`. Tests should name the rule they check, for exa
   the iterator function, the state, the initial control value, and a closing value. Each
   iteration calls `f(state, control)`; if the first result is `nil` the loop ends, otherwise
   the results are assigned to the loop variables and the first becomes the next control value.
-  **(The closing value is to-be-closed, stage 7.)**
+  The closing value is a to-be-closed variable ([metatables.md](metatables.md), M6.4).
 - **E5.8** `break` leaves the innermost loop. `goto` jumps to a visible label (G8).
 
 ## E6. Functions and calls
@@ -92,7 +92,8 @@ Every rule has an id like `E5.3`. Tests should name the rule they check, for exa
   to the parameters (E3.1), and runs the body with them as fresh locals. Extra arguments go to
   `...` in a vararg function, and are dropped otherwise.
 - **E6.3** Calling a value that is not a function is an error: `attempt to call a X value`, with
-  variable information (E8.2). **(Tables and userdata with `__call`: stage 7.)**
+  variable information (E8.2), unless it has a `__call` metamethod ([metatables.md](metatables.md),
+  M4.1).
 - **E6.4** `return` ends the function with the values of its expression list; a function that
   ends without `return` returns no values.
 - **E6.5** `return f(args)` is a **tail call**: the caller's frame is reused, so there is no
@@ -129,11 +130,9 @@ Every rule has an id like `E5.3`. Tests should name the rule they check, for exa
   work backwards from the instruction to find where the value came from)**
 - **E8.3** Errors from operators use the messages of [values.md](values.md) (V3.12, V4.5, V8.6,
   V9.2, V9.4), with E8.1 and E8.2 added.
-- **E8.4** Until tables exist (stage 6), the main chunk's `_ENV` is the globals table, the
-  only table there is, and it takes only string keys: globals, `_ENV.name` and `_ENV["name"]`
-  work as in Lua; any other key is the error `table keys other than strings are not supported
-  yet`, and a table constructor is `tables are not supported yet`. The globals table starts
-  with one function of the standard library, `print` (stage 9 brings the rest).
+- **E8.4** The main chunk's `_ENV` is the globals table, an ordinary table
+  ([tables.md](tables.md)) holding the standard library so far. Catching errors, error objects
+  and tracebacks are in [errors.md](errors.md).
 
 ## E9. Garbage collection
 

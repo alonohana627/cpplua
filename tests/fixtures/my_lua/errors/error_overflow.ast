@@ -1,0 +1,273 @@
+Chunk
+  LocalFunction rec
+    Function(n) [upvalues: rec]
+      Return
+        Binary +
+          Integer 1
+          Call
+            Name rec (upvalue 0)
+            Binary +
+              Name n (local 0)
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name rec (local 0)
+        Integer 1
+  Local obj
+    Table
+  FunctionStatement (method)
+    Index
+      Name obj (local 1)
+      String "loop"
+    Function(self)
+      Return
+        Binary +
+          MethodCall loop
+            Name self (local 0)
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name obj (local 1)
+          String "loop"
+        Name obj (local 1)
+  Local ping
+  LocalFunction pong
+    Function(n) [upvalues: ping]
+      Return
+        Binary +
+          Call
+            Name ping (upvalue 0)
+            Name n (local 0)
+          Integer 1
+  FunctionStatement
+    Name ping (local 2)
+    Function(n) [upvalues: pong]
+      Return
+        Binary +
+          Call
+            Name pong (upvalue 0)
+            Name n (local 0)
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name ping (local 2)
+        Integer 0
+  Local t
+    Call
+      Name setmetatable
+      Table
+      Table
+  Assign
+    Targets
+      Index
+        Call
+          Name getmetatable
+          Name t (local 4)
+        String "__index"
+    Values
+      Function(self, k)
+        Return
+          Index
+            Name self (local 0)
+            Name k (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: t]
+          Return
+            Index
+              Name t (upvalue 0)
+              String "x"
+  Local cat
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __concat
+          Function(x, y)
+            Return
+              Binary ..
+                Name x (local 0)
+                Name y (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: cat]
+          Return
+            Binary ..
+              Name cat (upvalue 0)
+              String "s"
+  Local num
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __add
+          Function(x, y)
+            Return
+              Binary +
+                Name x (local 0)
+                Name y (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: num]
+          Return
+            Binary +
+              Name num (upvalue 0)
+              Integer 1
+  Local u
+    Call
+      Name setmetatable
+      Table
+      Table
+  Assign
+    Targets
+      Index
+        Call
+          Name getmetatable
+          Name u (local 7)
+        String "__index"
+    Values
+      Name u (local 7)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: u]
+          Return
+            Index
+              Name u (upvalue 0)
+              String "x"
+  Local a
+    Call
+      Name setmetatable
+      Table
+      Table
+  Local b
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Name a (local 8)
+  Assign
+    Targets
+      Index
+        Call
+          Name getmetatable
+          Name a (local 8)
+        String "__index"
+    Values
+      Name b (local 9)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: a]
+          Return
+            Index
+              Name a (upvalue 0)
+              String "x"
+  Local w
+    Call
+      Name setmetatable
+      Table
+      Table
+  Assign
+    Targets
+      Index
+        Call
+          Name getmetatable
+          Name w (local 10)
+        String "__newindex"
+    Values
+      Name w (local 10)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: w]
+          Assign
+            Targets
+              Index
+                Name w (upvalue 0)
+                String "x"
+            Values
+              Integer 1
+  LocalFunction depth
+    Function(n) [upvalues: depth]
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              Integer 0
+      Return
+        Binary +
+          Integer 1
+          Call
+            Name depth (upvalue 0)
+            Binary -
+              Name n (local 0)
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name depth (local 11)
+        Integer 10000
+  Local chain
+    Table
+      Field value
+        String "bottom"
+  NumericFor _
+    Integer 1
+    Integer 100
+    Body
+      Assign
+        Targets
+          Name chain (local 12)
+        Values
+          Call
+            Name setmetatable
+            Table
+            Table
+              Field __index
+                Name chain (local 12)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name chain (local 12)
+        String "value"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name rec (local 0)
+        Integer 1
+  Return
+    String "recovered"

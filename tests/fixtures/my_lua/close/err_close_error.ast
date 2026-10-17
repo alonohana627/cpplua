@@ -1,0 +1,35 @@
+Chunk
+  LocalFunction cleanup
+    Function() [upvalues: _ENV]
+      Return
+        Call
+          Name setmetatable
+          Table
+          Table
+            Field __close
+              Function(_, err) [upvalues: _ENV]
+                CallStatement
+                  Call
+                    Name print
+                    Binary ..
+                      String "closing after an error of type "
+                      Call
+                        Name type
+                        Name err (local 1)
+                CallStatement
+                  Call
+                    Name error
+                    String "cleanup failed"
+                    Integer 0
+  LocalFunction work
+    Function() [upvalues: cleanup, _ENV]
+      Local c <close>
+        Call
+          Name cleanup (upvalue 0)
+      CallStatement
+        Call
+          Name error
+          String "work failed"
+  CallStatement
+    Call
+      Name work (local 1)

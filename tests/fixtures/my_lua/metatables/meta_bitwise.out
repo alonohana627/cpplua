@@ -1,0 +1,13 @@
+band(a, b)	bor(a, b)	bxor(a, b)
+shl(a, b)	shr(a, b)	bnot(a, same: true)
+band(a, number 1)	bor(number 1, a)	bxor(a, number 255)	shl(number 2, a)	shr(a, number 3)
+band(a, string 7)	bor(string 7, a)	bxor(a, number 1.5)	shl(number 1.5, a)
+2	7	5	16	16	-1	3
+false	meta_bitwise.lua:26: attempt to perform bitwise operation on a string value (constant '12')
+8	14	6	48	3	-13
+13	240	12
+false	meta_bitwise.lua:44: attempt to perform bitwise operation on a table value
+false	meta_bitwise.lua:45: attempt to perform bitwise operation on a table value (local 't')
+false	meta_bitwise.lua:46: attempt to perform bitwise operation on a table value (local 't')
+false	meta_bitwise.lua:47: number has no integer representation
+8	bor(a, b)

@@ -1,0 +1,234 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Name assert
+        Integer 1
+        String "unused"
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name assert
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Name assert
+        Integer 0
+        Nil
+        Nil
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Name assert
+          String ""
+          Table
+        String ""
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Name assert
+          Integer 1
+          Nil
+          Nil
+          Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name assert
+        False
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name assert
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name assert
+        False
+        String "custom message"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name assert
+        Nil
+        String "custom"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name assert
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name assert
+              False
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name assert
+              Binary ==
+                Integer 1
+                Integer 2
+              String "math is broken"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name assert
+              Nil
+              Integer 42
+  Local obj
+    Table
+  Local ok, e
+    Call
+      Name pcall
+      Name assert
+      False
+      Name obj (local 0)
+  CallStatement
+    Call
+      Name print
+      Name ok (local 1)
+      Binary ==
+        Name e (local 2)
+        Name obj (local 0)
+  Local ok2, e2
+    Call
+      Name pcall
+      Function() [upvalues: _ENV]
+        CallStatement
+          Call
+            Name assert
+            False
+            Call
+              Name setmetatable
+              Table
+              Table
+                Field __tostring
+                  Function()
+                    Return
+                      String "custom object"
+  CallStatement
+    Call
+      Name print
+      Name ok2 (local 3)
+      Call
+        Name tostring
+        Name e2 (local 4)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name assert
+        False
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name assert
+        False
+        False
+  LocalFunction lookup
+    Function(t, k) [upvalues: _ENV]
+      Local v
+        Index
+          Name t (local 0)
+          Name k (local 1)
+      If
+        If
+          Binary ==
+            Name v (local 2)
+            Nil
+          Then
+            Return
+              Nil
+              Binary ..
+                String "no key "
+                Call
+                  Name tostring
+                  Name k (local 1)
+      Return
+        Name v (local 2)
+  Local t
+    Table
+      Field a
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name assert
+        Call
+          Name lookup (local 5)
+          Name t (local 6)
+          String "a"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV, lookup, t]
+          Return
+            Call
+              Name assert
+              Call
+                Name lookup (upvalue 1)
+                Name t (upvalue 2)
+                String "b"
+  Local n
+    Call
+      Name assert
+      Binary and
+        Binary ==
+          Name tonumber_missing
+          Nil
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Binary *
+        Name n (local 7)
+        Integer 2
+  Return
+    Call
+      Name assert
+      String "returned"
+      String "unused"

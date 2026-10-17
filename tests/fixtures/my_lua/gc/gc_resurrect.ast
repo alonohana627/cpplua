@@ -1,0 +1,306 @@
+Chunk
+  CallStatement
+    Call
+      Name collectgarbage
+      String "stop"
+  Local saved
+    Table
+  Local runs
+    Integer 0
+  Local mt
+    Table
+      Field __gc
+        Function(o) [upvalues: runs, saved]
+          Assign
+            Targets
+              Name runs (upvalue 0)
+            Values
+              Binary +
+                Name runs (upvalue 0)
+                Integer 1
+          Assign
+            Targets
+              Index
+                Name saved (upvalue 1)
+                Binary +
+                  Unary #
+                    Name saved (upvalue 1)
+                  Integer 1
+            Values
+              Name o (local 0)
+  LocalFunction create
+    Function() [upvalues: _ENV, mt]
+      Local o
+        Call
+          Name setmetatable
+          Table
+            Field name
+              String "phoenix"
+            Field data
+              Table
+                Item
+                  Integer 10
+                Item
+                  Integer 20
+                Item
+                  Integer 30
+          Name mt (upvalue 1)
+      Assign
+        Targets
+          Index
+            Index
+              Name o (local 0)
+              String "data"
+            String "back"
+        Values
+          Name o (local 0)
+  CallStatement
+    Call
+      Name create (local 3)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name saved (local 0)
+      Name runs (local 1)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name saved (local 0)
+      Name runs (local 1)
+  Local o
+    Index
+      Name saved (local 0)
+      Integer 1
+  CallStatement
+    Call
+      Name print
+      Index
+        Name o (local 4)
+        String "name"
+      Index
+        Index
+          Name o (local 4)
+          String "data"
+        Integer 3
+      Binary ==
+        Index
+          Index
+            Name o (local 4)
+            String "data"
+          String "back"
+        Name o (local 4)
+      Binary ==
+        Call
+          Name getmetatable
+          Name o (local 4)
+        Name mt (local 2)
+  Assign
+    Targets
+      Index
+        Name saved (local 0)
+        Integer 1
+    Values
+      Nil
+  Assign
+    Targets
+      Name o (local 4)
+    Values
+      Nil
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name saved (local 0)
+      Name runs (local 1)
+  Local second
+    Integer 0
+  LocalFunction create_again
+    Function() [upvalues: _ENV, mt, saved]
+      Local obj
+        Call
+          Name setmetatable
+          Table
+          Name mt (upvalue 1)
+      Assign
+        Targets
+          Index
+            Name saved (upvalue 2)
+            Integer 1
+        Values
+          Name obj (local 0)
+  CallStatement
+    Call
+      Name create_again (local 6)
+  Assign
+    Targets
+      Index
+        Name saved (local 0)
+        Integer 1
+    Values
+      Nil
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name saved (local 0)
+      Name runs (local 1)
+  LocalFunction register_again
+    Function() [upvalues: saved, _ENV, second]
+      Local back
+        Index
+          Name saved (upvalue 0)
+          Integer 1
+      Assign
+        Targets
+          Index
+            Name saved (upvalue 0)
+            Integer 1
+        Values
+          Nil
+      CallStatement
+        Call
+          Name setmetatable
+          Name back (local 0)
+          Table
+            Field __gc
+              Function() [upvalues: second]
+                Assign
+                  Targets
+                    Name second (upvalue 0)
+                  Values
+                    Binary +
+                      Name second (upvalue 0)
+                      Integer 1
+  CallStatement
+    Call
+      Name register_again (local 7)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      Name runs (local 1)
+      Name second (local 5)
+  Local rescued
+  LocalFunction holder
+    Function() [upvalues: _ENV, rescued]
+      Local child
+        Table
+          Field value
+            String "child value"
+      CallStatement
+        Call
+          Name setmetatable
+          Table
+            Field child
+              Name child (local 0)
+          Table
+            Field __gc
+              Function(h) [upvalues: rescued]
+                Assign
+                  Targets
+                    Name rescued (upvalue 0)
+                  Values
+                    Index
+                      Name h (local 0)
+                      String "child"
+  CallStatement
+    Call
+      Name holder (local 9)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      Binary and
+        Name rescued (local 8)
+        Index
+          Name rescued (local 8)
+          String "value"
+  Local order
+    Table
+  LocalFunction spawner
+    Function() [upvalues: _ENV, order]
+      CallStatement
+        Call
+          Name setmetatable
+          Table
+          Table
+            Field __gc
+              Function() [upvalues: order, _ENV]
+                Assign
+                  Targets
+                    Index
+                      Name order (upvalue 0)
+                      Binary +
+                        Unary #
+                          Name order (upvalue 0)
+                        Integer 1
+                  Values
+                    String "parent"
+                CallStatement
+                  Call
+                    Name setmetatable
+                    Table
+                    Table
+                      Field __gc
+                        Function() [upvalues: order]
+                          Assign
+                            Targets
+                              Index
+                                Name order (upvalue 0)
+                                Binary +
+                                  Unary #
+                                    Name order (upvalue 0)
+                                  Integer 1
+                            Values
+                              String "child"
+  CallStatement
+    Call
+      Name spawner (local 11)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name order (local 10)
+      Index
+        Name order (local 10)
+        Integer 1
+      Index
+        Name order (local 10)
+        Integer 2
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name order (local 10)
+      Index
+        Name order (local 10)
+        Integer 1
+      Index
+        Name order (local 10)
+        Integer 2
+  Return
+    Name runs (local 1)

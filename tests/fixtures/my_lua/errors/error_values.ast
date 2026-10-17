@@ -1,0 +1,424 @@
+Chunk
+  LocalFunction catch
+    Function(v, level) [upvalues: _ENV]
+      Return
+        Call
+          Name select
+          Integer 2
+          Call
+            Name pcall
+            Name error
+            Name v (local 0)
+            Name level (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name catch (local 0)
+        Integer 42
+      Call
+        Name catch (local 0)
+        Unary -
+          Float 1.5
+      Call
+        Name catch (local 0)
+        Binary ^
+          Integer 2
+          Integer 63
+  CallStatement
+    Call
+      Name print
+      Call
+        Name catch (local 0)
+        True
+      Call
+        Name catch (local 0)
+        False
+      Call
+        Name catch (local 0)
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Call
+          Name catch (local 0)
+          Integer 42
+      Call
+        Name type
+        Call
+          Name catch (local 0)
+          Nil
+      Call
+        Name type
+        Call
+          Name catch (local 0)
+          String "s"
+  Local err
+    Table
+      Field code
+        Integer 404
+      Field reason
+        String "not found"
+  Local got
+    Call
+      Name catch (local 0)
+      Name err (local 1)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name got (local 2)
+        Name err (local 1)
+      Index
+        Name got (local 2)
+        String "code"
+      Index
+        Name got (local 2)
+        String "reason"
+  Local Error
+    Table
+  Assign
+    Targets
+      Index
+        Name Error (local 3)
+        String "__index"
+    Values
+      Name Error (local 3)
+  Assign
+    Targets
+      Index
+        Name Error (local 3)
+        String "__tostring"
+    Values
+      Function(e)
+        Return
+          Binary ..
+            String "Error["
+            Binary ..
+              Index
+                Name e (local 0)
+                String "code"
+              Binary ..
+                String "]: "
+                Index
+                  Name e (local 0)
+                  String "msg"
+  LocalFunction throw
+    Function(code, msg) [upvalues: _ENV, Error]
+      CallStatement
+        Call
+          Name error
+          Call
+            Name setmetatable
+            Table
+              Field code
+                Name code (local 0)
+              Field msg
+                Name msg (local 1)
+            Name Error (upvalue 1)
+  Local ok, e
+    Call
+      Name pcall
+      Name throw (local 4)
+      Integer 500
+      String "server failure"
+  CallStatement
+    Call
+      Name print
+      Name ok (local 5)
+      Call
+        Name tostring
+        Name e (local 6)
+      Index
+        Name e (local 6)
+        String "code"
+      Binary ==
+        Call
+          Name getmetatable
+          Name e (local 6)
+        Name Error (local 3)
+  CallStatement
+    Call
+      Name print
+      Name e (local 6)
+  Local ok2, e2
+    Call
+      Name pcall
+      Function() [upvalues: _ENV, throw]
+        Local _, inner
+          Call
+            Name pcall
+            Name throw (upvalue 1)
+            Integer 1
+            String "first"
+        CallStatement
+          Call
+            Name error
+            Name inner (local 1)
+  CallStatement
+    Call
+      Name print
+      Name ok2 (local 7)
+      Index
+        Name e2 (local 8)
+        String "msg"
+      Call
+        Name tostring
+        Name e2 (local 8)
+  LocalFunction handle
+    Function(f) [upvalues: _ENV, Error]
+      Local ok3, x
+        Call
+          Name pcall
+          Name f (local 0)
+      If
+        If
+          Name ok3 (local 1)
+          Then
+            Return
+              String "ok"
+      If
+        If
+          Binary and
+            Binary ==
+              Call
+                Name type
+                Name x (local 2)
+              String "table"
+            Binary ==
+              Call
+                Name getmetatable
+                Name x (local 2)
+              Name Error (upvalue 1)
+          Then
+            Return
+              Binary ..
+                String "Error "
+                Index
+                  Name x (local 2)
+                  String "code"
+      If
+        If
+          Binary ==
+            Call
+              Name type
+              Name x (local 2)
+            String "string"
+          Then
+            Return
+              Binary ..
+                String "string: "
+                Name x (local 2)
+      Return
+        Binary ..
+          String "other: "
+          Call
+            Name tostring
+            Name x (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name handle (local 9)
+        Function()
+  CallStatement
+    Call
+      Name print
+      Call
+        Name handle (local 9)
+        Function() [upvalues: throw]
+          CallStatement
+            Call
+              Name throw (upvalue 0)
+              Integer 7
+              String "seven"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name handle (local 9)
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "plain"
+              Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name handle (local 9)
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              Float 3.25
+  CallStatement
+    Call
+      Name print
+      Call
+        Name handle (local 9)
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+  CallStatement
+    Call
+      Name print
+      Call
+        Name handle (local 9)
+        Function()
+          Local n
+            Nil
+          Return
+            Index
+              Name n (local 0)
+              String "x"
+  LocalFunction describe
+    Function(v) [upvalues: _ENV]
+      CallStatement
+        Call
+          Name error
+          Binary ..
+            String "bad value: "
+            Call
+              Name tostring
+              Name v (local 0)
+          Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name describe (local 10)
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name describe (local 10)
+        True
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name describe (local 10)
+        Integer 10
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name describe (local 10)
+        Float 10.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name describe (local 10)
+        Unary -
+          Float 0.0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name describe (local 10)
+        Binary *
+          Float 1e+308
+          Integer 10
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name describe (local 10)
+        Unary -
+          Paren
+            Binary *
+              Float 1e+308
+              Integer 10
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name describe (local 10)
+        Binary ^
+          Integer 2
+          Unary -
+            Integer 1074
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name describe (local 10)
+        Integer 9007199254740993
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name describe (local 10)
+        String "text"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              Binary ..
+                String "count: "
+                Binary ..
+                  Integer 3
+                  Binary ..
+                    String ", ratio: "
+                    Float 0.5
+              Integer 0
+  Local seen
+  Local ok4, e4
+    Call
+      Name pcall
+      Function() [upvalues: _ENV, seen, err]
+        Local c <close>
+          Call
+            Name setmetatable
+            Table
+            Table
+              Field __close
+                Function(_, x) [upvalues: seen]
+                  Assign
+                    Targets
+                      Name seen (upvalue 0)
+                    Values
+                      Name x (local 1)
+        CallStatement
+          Call
+            Name error
+            Name err (upvalue 2)
+  CallStatement
+    Call
+      Name print
+      Name ok4 (local 12)
+      Binary ==
+        Name e4 (local 13)
+        Name err (local 1)
+      Binary ==
+        Name seen (local 11)
+        Name err (local 1)
+  Return
+    Call
+      Name catch (local 0)
+      Nil
+    Call
+      Name catch (local 0)
+      Integer 0

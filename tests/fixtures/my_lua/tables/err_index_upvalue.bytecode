@@ -1,0 +1,27 @@
+
+main <err_index_upvalue.lua:0,0> (7 instructions)
+0+ params, 3 slots, 1 upvalue, 2 locals, 0 constants, 1 function
+	1	[1]	VARARGPREP	0
+	2	[2]	LOADNIL  	0 0	; 1 out
+	3	[3]	CLOSURE  	1 0
+	4	[4]	MOVE     	2 1
+	5	[4]	TAILCALL 	2 1 1k	; 0 in
+	6	[4]	RETURN   	2 0 1k	; all out
+	7	[4]	RETURN   	2 1 1k	; 0 out
+constants (0):
+locals (2):
+	0	settings	3	8
+	1	get	4	8
+upvalues (1):
+	0	_ENV	1	0
+
+function <err_index_upvalue.lua:3,3> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[3]	GETTABUP 	0 0 0	; settings "size"
+	2	[3]	RETURN1  	0
+	3	[3]	RETURN0  	
+constants (1):
+	0	S	"size"
+locals (0):
+upvalues (1):
+	0	settings	1	0

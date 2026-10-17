@@ -83,6 +83,9 @@ char constant_kind(Value k) {
     case Tag::LongString: return 'S';
     case Tag::CFunction:
     case Tag::LuaClosure:
+    case Tag::CClosure:
+    case Tag::LightUserdata:
+    case Tag::Userdata:
     case Tag::Table: break; // never a constant
     }
     return '?';

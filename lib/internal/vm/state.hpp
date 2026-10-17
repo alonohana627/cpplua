@@ -2,7 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <string>
+#include <vector>
 
 #include "gc/heap.hpp"
 #include "gc/object.hpp"
@@ -38,11 +38,17 @@ struct CallInfo {
 
     // Entered from C++ (Lua's CIST_FRESH): returning from it leaves execute().
     bool fresh = false;
+    // Entered by a tail call (CIST_TAIL): tracebacks cannot name it.
+    bool tail_call = false;
+    // Running a finalizer called from here (CIST_FIN): the finalizer's frame
+    // is named "metamethod '__gc'".
+    bool finalizer = false;
 };
 
 // A thread of execution (Lua's lua_State): the stack, the frames, the open
-// upvalues. Stage 5 has only the main thread, which the Heap owns;
-// coroutines (stage 10) will make more.
+// upvalues and to-be-closed variables, and the error being raised. Only
+// the main thread exists, which the Heap owns; coroutines (stage 10) will
+// make more.
 //
 // The stack stores tags and payloads in two arrays (docs/plan/vm.md). Both
 // are allocated through the Heap, so they count toward its pacing.
@@ -68,9 +74,10 @@ public:
 
     void push(Value v) { set(top++, v); }
 
-    // Makes room for `n` more slots above top (luaD_checkstack): false
-    // after setting error_message to "stack overflow" when the stack would
-    // pass max_stack.
+    // Makes room for `n` more slots above top (luaD_checkstack): false when
+    // the stack would pass max_stack, with the error ("stack overflow",
+    // still without its position, or "error in error handling" when the
+    // stack is already past the limit) in error_value.
     [[nodiscard]] bool check_stack(std::uint32_t n) {
         if (stack_last - top > n) [[likely]] {
             return true;
@@ -115,6 +122,23 @@ public:
     // Closes every open upvalue at `level` or above (luaF_closeupval).
     void close_upvalues(std::uint32_t level);
 
+    // ---- Frames, for errors and tracebacks ----
+
+    // Whether a frame runs a Lua function (Lua's isLua).
+    [[nodiscard]] bool is_lua(const CallInfo* frame) const {
+        return frame != &base_ci && stack_tags[frame->func] == Tag::LuaClosure;
+    }
+
+    // The frame at `level`: 0 is the running function, 1 the one that called
+    // it, and so on; nullptr past the last (lua_getstack).
+    [[nodiscard]] const CallInfo* frame_at(int level) const;
+
+    // The error being raised (Lua keeps it on the stack top): a string for
+    // runtime errors, any value for error().
+    void set_error(Value v) { error_value = v; }
+
+    void set_error(std::string_view message);
+
     // ---- The stack, public for the VM ----
     // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes): the VM's fast path
 
@@ -133,8 +157,13 @@ public:
     // How many C++ calls into the VM are active (Lua's nCcalls).
     int c_calls = 0;
 
-    // The message of the error that stopped execute() (E8.1).
-    std::string error_message;
+    // The error that stopped execute(), until a protected call takes it
+    // (R1.1). A root of the collector.
+    Value error_value;
+
+    // The stack slots of the to-be-closed variables (M6), lowest first
+    // (Lua's tbclist).
+    std::vector<std::uint32_t> to_be_closed;
 
     // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
 

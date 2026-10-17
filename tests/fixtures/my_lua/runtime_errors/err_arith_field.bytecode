@@ -1,0 +1,29 @@
+
+main <err_arith_field.lua:0,0> (17 instructions)
+0+ params, 3 slots, 1 upvalue, 1 local, 4 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	NEWTABLE 	0 2 0	; 0
+	3	[2]	EXTRAARG 	0
+	4	[2]	SETFIELD 	0 0 1k	; "x" 1
+	5	[2]	NEWTABLE 	1 0 0	; 0
+	6	[2]	EXTRAARG 	0
+	7	[2]	SETFIELD 	0 2 1	; "pos"
+	8	[3]	GETTABUP 	1 0 3	; _ENV "print"
+	9	[3]	GETFIELD 	2 0 0	; "x"
+	10	[3]	ADDI     	2 2 1
+	11	[3]	MMBINI   	2 1 6 0	; __add
+	12	[3]	CALL     	1 2 1	; 1 in 0 out
+	13	[4]	GETFIELD 	1 0 2	; "pos"
+	14	[4]	ADDI     	1 1 1
+	15	[4]	MMBINI   	1 1 6 0	; __add
+	16	[4]	RETURN   	1 2 1	; 1 out
+	17	[4]	RETURN   	1 1 1	; 0 out
+constants (4):
+	0	S	"x"
+	1	I	1
+	2	S	"pos"
+	3	S	"print"
+locals (1):
+	0	point	8	18
+upvalues (1):
+	0	_ENV	1	0

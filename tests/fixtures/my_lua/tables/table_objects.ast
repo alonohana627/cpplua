@@ -1,0 +1,837 @@
+Chunk
+  Local account
+    Table
+      Field balance
+        Integer 0
+      Field owner
+        String "ann"
+  FunctionStatement
+    Index
+      Name account (local 0)
+      String "deposit"
+    Function(self, amount)
+      Assign
+        Targets
+          Index
+            Name self (local 0)
+            String "balance"
+        Values
+          Binary +
+            Index
+              Name self (local 0)
+              String "balance"
+            Name amount (local 1)
+      Return
+        Name self (local 0)
+  FunctionStatement (method)
+    Index
+      Name account (local 0)
+      String "withdraw"
+    Function(self, amount)
+      If
+        If
+          Binary >
+            Name amount (local 1)
+            Index
+              Name self (local 0)
+              String "balance"
+          Then
+            Return
+              False
+              String "insufficient funds"
+      Assign
+        Targets
+          Index
+            Name self (local 0)
+            String "balance"
+        Values
+          Binary -
+            Index
+              Name self (local 0)
+              String "balance"
+            Name amount (local 1)
+      Return
+        True
+  FunctionStatement (method)
+    Index
+      Name account (local 0)
+      String "report"
+    Function(self)
+      Return
+        Binary ..
+          Index
+            Name self (local 0)
+            String "owner"
+          Binary ..
+            String ": "
+            Index
+              Name self (local 0)
+              String "balance"
+  CallStatement
+    MethodCall deposit
+      MethodCall deposit
+        Name account (local 0)
+        Integer 100
+      Integer 50
+  CallStatement
+    Call
+      Name print
+      MethodCall report
+        Name account (local 0)
+  CallStatement
+    Call
+      Name print
+      MethodCall withdraw
+        Name account (local 0)
+        Integer 500
+  CallStatement
+    Call
+      Name print
+      MethodCall withdraw
+        Name account (local 0)
+        Integer 30
+      Index
+        Name account (local 0)
+        String "balance"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name account (local 0)
+          String "report"
+        Name account (local 0)
+      Call
+        Index
+          Name account (local 0)
+          String "report"
+        Table
+          Field owner
+            String "bob"
+          Field balance
+            Integer 7
+  Local Point
+    Table
+  FunctionStatement
+    Index
+      Name Point (local 1)
+      String "new"
+    Function(x, y) [upvalues: Point]
+      Return
+        Table
+          Field x
+            Name x (local 0)
+          Field y
+            Name y (local 1)
+          Field add
+            Index
+              Name Point (upvalue 0)
+              String "add"
+          Field str
+            Index
+              Name Point (upvalue 0)
+              String "str"
+  FunctionStatement
+    Index
+      Name Point (local 1)
+      String "add"
+    Function(a, b) [upvalues: Point]
+      Return
+        Call
+          Index
+            Name Point (upvalue 0)
+            String "new"
+          Binary +
+            Index
+              Name a (local 0)
+              String "x"
+            Index
+              Name b (local 1)
+              String "x"
+          Binary +
+            Index
+              Name a (local 0)
+              String "y"
+            Index
+              Name b (local 1)
+              String "y"
+  FunctionStatement
+    Index
+      Name Point (local 1)
+      String "str"
+    Function(p)
+      Return
+        Binary ..
+          String "("
+          Binary ..
+            Index
+              Name p (local 0)
+              String "x"
+            Binary ..
+              String ", "
+              Binary ..
+                Index
+                  Name p (local 0)
+                  String "y"
+                String ")"
+  Local p
+    MethodCall add
+      MethodCall add
+        Call
+          Index
+            Name Point (local 1)
+            String "new"
+          Integer 1
+          Integer 2
+        Call
+          Index
+            Name Point (local 1)
+            String "new"
+          Integer 10
+          Integer 20
+      Call
+        Index
+          Name Point (local 1)
+          String "new"
+        Integer 100
+        Integer 200
+  CallStatement
+    Call
+      Name print
+      MethodCall str
+        Name p (local 2)
+      Binary ==
+        Index
+          Name p (local 2)
+          String "add"
+        Index
+          Name Point (local 1)
+          String "add"
+  Local ops
+    Table
+      Field
+        String "+"
+        Function(a, b)
+          Return
+            Binary +
+              Name a (local 0)
+              Name b (local 1)
+      Field
+        String "-"
+        Function(a, b)
+          Return
+            Binary -
+              Name a (local 0)
+              Name b (local 1)
+      Field
+        String "*"
+        Function(a, b)
+          Return
+            Binary *
+              Name a (local 0)
+              Name b (local 1)
+  LocalFunction calc
+    Function(a, op, b) [upvalues: ops]
+      Return
+        Call
+          Index
+            Name ops (upvalue 0)
+            Name op (local 1)
+          Name a (local 0)
+          Name b (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name calc (local 4)
+        Integer 6
+        String "+"
+        Integer 7
+      Call
+        Name calc (local 4)
+        Integer 6
+        String "-"
+        Integer 7
+      Call
+        Name calc (local 4)
+        Integer 6
+        String "*"
+        Integer 7
+  Local list
+    Nil
+  NumericFor i
+    Integer 1
+    Integer 5
+    Body
+      Assign
+        Targets
+          Name list (local 5)
+        Values
+          Table
+            Field value
+              Name i (local 9)
+            Field next
+              Name list (local 5)
+  Local node, parts
+    Name list (local 5)
+    String ""
+  While
+    Name node (local 6)
+    Body
+      Assign
+        Targets
+          Name parts (local 7)
+        Values
+          Binary ..
+            Name parts (local 7)
+            Binary ..
+              Index
+                Name node (local 6)
+                String "value"
+              String " "
+      Assign
+        Targets
+          Name node (local 6)
+        Values
+          Index
+            Name node (local 6)
+            String "next"
+  CallStatement
+    Call
+      Name print
+      Name parts (local 7)
+  Local prev
+    Nil
+  Assign
+    Targets
+      Name node (local 6)
+    Values
+      Name list (local 5)
+  While
+    Name node (local 6)
+    Body
+      Local nxt
+        Index
+          Name node (local 6)
+          String "next"
+      Assign
+        Targets
+          Index
+            Name node (local 6)
+            String "next"
+        Values
+          Name prev (local 8)
+      Assign
+        Targets
+          Name prev (local 8)
+          Name node (local 6)
+        Values
+          Name node (local 6)
+          Name nxt (local 9)
+  Assign
+    Targets
+      Name list (local 5)
+    Values
+      Name prev (local 8)
+  Assign
+    Targets
+      Name parts (local 7)
+    Values
+      String ""
+  Assign
+    Targets
+      Name node (local 6)
+    Values
+      Name list (local 5)
+  While
+    Name node (local 6)
+    Body
+      Assign
+        Targets
+          Name parts (local 7)
+        Values
+          Binary ..
+            Name parts (local 7)
+            Binary ..
+              Index
+                Name node (local 6)
+                String "value"
+              String " "
+      Assign
+        Targets
+          Name node (local 6)
+        Values
+          Index
+            Name node (local 6)
+            String "next"
+  CallStatement
+    Call
+      Name print
+      Name parts (local 7)
+  Local stack
+    Table
+      Field n
+        Integer 0
+  FunctionStatement (method)
+    Index
+      Name stack (local 9)
+      String "push"
+    Function(self, v)
+      Assign
+        Targets
+          Index
+            Name self (local 0)
+            String "n"
+        Values
+          Binary +
+            Index
+              Name self (local 0)
+              String "n"
+            Integer 1
+      Assign
+        Targets
+          Index
+            Name self (local 0)
+            Index
+              Name self (local 0)
+              String "n"
+        Values
+          Name v (local 1)
+  FunctionStatement (method)
+    Index
+      Name stack (local 9)
+      String "pop"
+    Function(self)
+      If
+        If
+          Binary ==
+            Index
+              Name self (local 0)
+              String "n"
+            Integer 0
+          Then
+            Return
+              Nil
+      Local v
+        Index
+          Name self (local 0)
+          Index
+            Name self (local 0)
+            String "n"
+      Assign
+        Targets
+          Index
+            Name self (local 0)
+            Index
+              Name self (local 0)
+              String "n"
+        Values
+          Nil
+      Assign
+        Targets
+          Index
+            Name self (local 0)
+            String "n"
+        Values
+          Binary -
+            Index
+              Name self (local 0)
+              String "n"
+            Integer 1
+      Return
+        Name v (local 1)
+  GenericFor _, w
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            String "x"
+          Item
+            String "y"
+          Item
+            String "z"
+    Body
+      CallStatement
+        MethodCall push
+          Name stack (local 9)
+          Name w (local 15)
+  CallStatement
+    Call
+      Name print
+      MethodCall pop
+        Name stack (local 9)
+      MethodCall pop
+        Name stack (local 9)
+      Index
+        Name stack (local 9)
+        String "n"
+      MethodCall pop
+        Name stack (local 9)
+      MethodCall pop
+        Name stack (local 9)
+      Index
+        Name stack (local 9)
+        String "n"
+  Local queue
+    Table
+      Field first
+        Integer 1
+      Field last
+        Integer 0
+  LocalFunction enqueue
+    Function(q, v)
+      Assign
+        Targets
+          Index
+            Name q (local 0)
+            String "last"
+        Values
+          Binary +
+            Index
+              Name q (local 0)
+              String "last"
+            Integer 1
+      Assign
+        Targets
+          Index
+            Name q (local 0)
+            Index
+              Name q (local 0)
+              String "last"
+        Values
+          Name v (local 1)
+  LocalFunction dequeue
+    Function(q)
+      If
+        If
+          Binary >
+            Index
+              Name q (local 0)
+              String "first"
+            Index
+              Name q (local 0)
+              String "last"
+          Then
+            Return
+              Nil
+      Local v
+        Index
+          Name q (local 0)
+          Index
+            Name q (local 0)
+            String "first"
+      Assign
+        Targets
+          Index
+            Name q (local 0)
+            Index
+              Name q (local 0)
+              String "first"
+        Values
+          Nil
+      Assign
+        Targets
+          Index
+            Name q (local 0)
+            String "first"
+        Values
+          Binary +
+            Index
+              Name q (local 0)
+              String "first"
+            Integer 1
+      Return
+        Name v (local 1)
+  NumericFor i
+    Integer 1
+    Integer 100
+    Body
+      CallStatement
+        Call
+          Name enqueue (local 11)
+          Name queue (local 10)
+          Name i (local 16)
+  Local qsum
+    Integer 0
+  NumericFor _
+    Integer 1
+    Integer 60
+    Body
+      Assign
+        Targets
+          Name qsum (local 13)
+        Values
+          Binary +
+            Name qsum (local 13)
+            Call
+              Name dequeue (local 12)
+              Name queue (local 10)
+  NumericFor i
+    Integer 101
+    Integer 110
+    Body
+      CallStatement
+        Call
+          Name enqueue (local 11)
+          Name queue (local 10)
+          Name i (local 17)
+  Local rest
+    Integer 0
+  While
+    True
+    Body
+      Local v
+        Call
+          Name dequeue (local 12)
+          Name queue (local 10)
+      If
+        If
+          Binary ==
+            Name v (local 15)
+            Nil
+          Then
+            Break
+      Assign
+        Targets
+          Name rest (local 14)
+        Values
+          Binary +
+            Name rest (local 14)
+            Name v (local 15)
+  CallStatement
+    Call
+      Name print
+      Name qsum (local 13)
+      Name rest (local 14)
+      Index
+        Name queue (local 10)
+        String "first"
+      Index
+        Name queue (local 10)
+        String "last"
+  Local calls
+    Integer 0
+  LocalFunction memoize
+    Function(f)
+      Local cache
+        Table
+      Return
+        Function(n) [upvalues: cache, f]
+          Local v
+            Index
+              Name cache (upvalue 0)
+              Name n (local 0)
+          If
+            If
+              Binary ==
+                Name v (local 1)
+                Nil
+              Then
+                Assign
+                  Targets
+                    Name v (local 1)
+                  Values
+                    Call
+                      Name f (upvalue 1)
+                      Name n (local 0)
+                Assign
+                  Targets
+                    Index
+                      Name cache (upvalue 0)
+                      Name n (local 0)
+                  Values
+                    Name v (local 1)
+          Return
+            Name v (local 1)
+  Local fib
+  Assign
+    Targets
+      Name fib (local 17)
+    Values
+      Call
+        Name memoize (local 16)
+        Function(n) [upvalues: calls, fib]
+          Assign
+            Targets
+              Name calls (upvalue 0)
+            Values
+              Binary +
+                Name calls (upvalue 0)
+                Integer 1
+          If
+            If
+              Binary <
+                Name n (local 0)
+                Integer 2
+              Then
+                Return
+                  Name n (local 0)
+          Return
+            Binary +
+              Call
+                Name fib (upvalue 1)
+                Binary -
+                  Name n (local 0)
+                  Integer 1
+              Call
+                Name fib (upvalue 1)
+                Binary -
+                  Name n (local 0)
+                  Integer 2
+  CallStatement
+    Call
+      Name print
+      Call
+        Name fib (local 17)
+        Integer 80
+      Name calls (local 15)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name fib (local 17)
+        Integer 80
+      Call
+        Name fib (local 17)
+        Integer 40
+      Name calls (local 15)
+  Local words
+    Table
+      Item
+        String "the"
+      Item
+        String "cat"
+      Item
+        String "and"
+      Item
+        String "the"
+      Item
+        String "hat"
+      Item
+        String "and"
+      Item
+        String "the"
+      Item
+        String "bat"
+  Local counts, distinct
+    Table
+    Integer 0
+  GenericFor _, w
+    In
+      Call
+        Name ipairs
+        Name words (local 18)
+    Body
+      If
+        If
+          Binary ==
+            Index
+              Name counts (local 19)
+              Name w (local 26)
+            Nil
+          Then
+            Assign
+              Targets
+                Name distinct (local 20)
+              Values
+                Binary +
+                  Name distinct (local 20)
+                  Integer 1
+            Assign
+              Targets
+                Index
+                  Name counts (local 19)
+                  Name w (local 26)
+              Values
+                Integer 0
+      Assign
+        Targets
+          Index
+            Name counts (local 19)
+            Name w (local 26)
+        Values
+          Binary +
+            Index
+              Name counts (local 19)
+              Name w (local 26)
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Name distinct (local 20)
+      Index
+        Name counts (local 19)
+        String "the"
+      Index
+        Name counts (local 19)
+        String "and"
+      Index
+        Name counts (local 19)
+        String "cat"
+      Index
+        Name counts (local 19)
+        String "dog"
+  Local total
+    Integer 0
+  GenericFor _, c
+    In
+      Call
+        Name pairs
+        Name counts (local 19)
+    Body
+      Assign
+        Targets
+          Name total (local 21)
+        Values
+          Binary +
+            Name total (local 21)
+            Name c (local 27)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name total (local 21)
+        Unary #
+          Name words (local 18)
+  Local set
+    Table
+  GenericFor _, w
+    In
+      Call
+        Name ipairs
+        Name words (local 18)
+    Body
+      Assign
+        Targets
+          Index
+            Name set (local 22)
+            Name w (local 28)
+        Values
+          True
+  CallStatement
+    Call
+      Name print
+      Index
+        Name set (local 22)
+        String "cat"
+      Index
+        Name set (local 22)
+        String "dog"
+      Binary or
+        Binary and
+          Index
+            Name set (local 22)
+            String "hat"
+          String "yes"
+        String "no"
+  Return
+    Index
+      Name account (local 0)
+      String "balance"
+    Index
+      Name p (local 2)
+      String "x"
+    Call
+      Name fib (local 17)
+      Integer 10

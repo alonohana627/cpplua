@@ -1,0 +1,639 @@
+Chunk
+  CallStatement
+    Call
+      Name collectgarbage
+      String "stop"
+  LocalFunction count
+    Function(t) [upvalues: _ENV]
+      Local n
+        Integer 0
+      GenericFor _
+        In
+          Call
+            Name pairs
+            Name t (local 0)
+        Body
+          Assign
+            Targets
+              Name n (local 1)
+            Values
+              Binary +
+                Name n (local 1)
+                Integer 1
+      Return
+        Name n (local 1)
+  Local wk
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __mode
+          String "k"
+  Local live_key
+    Table
+  Assign
+    Targets
+      Index
+        Name wk (local 1)
+        Name live_key (local 2)
+    Values
+      String "live"
+  LocalFunction add_dead_keys
+    Function(t, n)
+      NumericFor i
+        Integer 1
+        Name n (local 1)
+        Body
+          Assign
+            Targets
+              Index
+                Name t (local 0)
+                Table
+            Values
+              Name i (local 5)
+  CallStatement
+    Call
+      Name add_dead_keys (local 3)
+      Name wk (local 1)
+      Integer 10
+  Assign
+    Targets
+      Index
+        Name wk (local 1)
+        String "str"
+    Values
+      Table
+  Assign
+    Targets
+      Index
+        Name wk (local 1)
+        Integer 1
+    Values
+      Table
+  Assign
+    Targets
+      Index
+        Name wk (local 1)
+        True
+    Values
+      Table
+  CallStatement
+    Call
+      Name print
+      String "weak k before"
+      Call
+        Name count (local 0)
+        Name wk (local 1)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      String "weak k after"
+      Call
+        Name count (local 0)
+        Name wk (local 1)
+      Index
+        Name wk (local 1)
+        Name live_key (local 2)
+      Call
+        Name type
+        Index
+          Name wk (local 1)
+          String "str"
+      Call
+        Name type
+        Index
+          Name wk (local 1)
+          Integer 1
+      Call
+        Name type
+        Index
+          Name wk (local 1)
+          True
+  Local wv
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __mode
+          String "v"
+  Local live_value
+    Table
+  Assign
+    Targets
+      Index
+        Name wv (local 4)
+        String "live"
+    Values
+      Name live_value (local 5)
+  LocalFunction add_dead_values
+    Function(t, n)
+      NumericFor i
+        Integer 1
+        Name n (local 1)
+        Body
+          Assign
+            Targets
+              Index
+                Name t (local 0)
+                Name i (local 5)
+            Values
+              Table
+  CallStatement
+    Call
+      Name add_dead_values (local 6)
+      Name wv (local 4)
+      Integer 10
+  Assign
+    Targets
+      Index
+        Name wv (local 4)
+        String "s"
+    Values
+      String "a string value"
+  Assign
+    Targets
+      Index
+        Name wv (local 4)
+        String "n"
+    Values
+      Integer 42
+  Assign
+    Targets
+      Index
+        Name wv (local 4)
+        String "f"
+    Values
+      Float 1.5
+  CallStatement
+    Call
+      Name print
+      String "weak v before"
+      Call
+        Name count (local 0)
+        Name wv (local 4)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      String "weak v after"
+      Call
+        Name count (local 0)
+        Name wv (local 4)
+      Binary ==
+        Index
+          Name wv (local 4)
+          String "live"
+        Name live_value (local 5)
+      Index
+        Name wv (local 4)
+        String "s"
+      Index
+        Name wv (local 4)
+        String "n"
+      Index
+        Name wv (local 4)
+        String "f"
+      Index
+        Name wv (local 4)
+        Integer 1
+  Local wkv
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __mode
+          String "kv"
+  Local k1, v1
+    Table
+    Table
+  Assign
+    Targets
+      Index
+        Name wkv (local 7)
+        Name k1 (local 8)
+    Values
+      String "strong key, string value"
+  Assign
+    Targets
+      Index
+        Name wkv (local 7)
+        String "strong value"
+    Values
+      Name v1 (local 9)
+  LocalFunction add_dead
+    Function(t)
+      Assign
+        Targets
+          Index
+            Name t (local 0)
+            Table
+        Values
+          String "dead key"
+      Assign
+        Targets
+          Index
+            Name t (local 0)
+            String "dead value"
+        Values
+          Table
+      Assign
+        Targets
+          Index
+            Name t (local 0)
+            Table
+        Values
+          Table
+  CallStatement
+    Call
+      Name add_dead (local 10)
+      Name wkv (local 7)
+  Assign
+    Targets
+      Index
+        Name wkv (local 7)
+        String "both strings"
+    Values
+      String "kept"
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      String "weak kv"
+      Call
+        Name count (local 0)
+        Name wkv (local 7)
+      Index
+        Name wkv (local 7)
+        Name k1 (local 8)
+      Binary ==
+        Index
+          Name wkv (local 7)
+          String "strong value"
+        Name v1 (local 9)
+      Index
+        Name wkv (local 7)
+        String "dead value"
+      Index
+        Name wkv (local 7)
+        String "both strings"
+  Assign
+    Targets
+      Name live_key (local 2)
+    Values
+      Nil
+  Assign
+    Targets
+      Name live_value (local 5)
+    Values
+      Nil
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      String "after dropping"
+      Call
+        Name count (local 0)
+        Name wk (local 1)
+      Call
+        Name count (local 0)
+        Name wv (local 4)
+      Index
+        Name wv (local 4)
+        String "live"
+  Local strong
+    Table
+  Local cache
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __mode
+          String "v"
+  LocalFunction fill_cache
+    Function() [upvalues: cache, strong]
+      NumericFor i
+        Integer 1
+        Integer 5
+        Body
+          Local obj
+            Table
+              Field id
+                Name i (local 3)
+          Assign
+            Targets
+              Index
+                Name cache (upvalue 0)
+                Name i (local 3)
+            Values
+              Name obj (local 4)
+          If
+            If
+              Binary ==
+                Binary %
+                  Name i (local 3)
+                  Integer 2
+                Integer 0
+              Then
+                Assign
+                  Targets
+                    Index
+                      Name strong (upvalue 1)
+                      Binary +
+                        Unary #
+                          Name strong (upvalue 1)
+                        Integer 1
+                  Values
+                    Name obj (local 4)
+  CallStatement
+    Call
+      Name fill_cache (local 13)
+  CallStatement
+    Call
+      Name collectgarbage
+  Local ids
+    Integer 0
+  GenericFor _, v
+    In
+      Call
+        Name pairs
+        Name cache (local 12)
+    Body
+      Assign
+        Targets
+          Name ids (local 14)
+        Values
+          Binary +
+            Name ids (local 14)
+            Index
+              Name v (local 20)
+              String "id"
+  CallStatement
+    Call
+      Name print
+      String "cache"
+      Call
+        Name count (local 0)
+        Name cache (local 12)
+      Name ids (local 14)
+  Local eph
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __mode
+          String "k"
+  LocalFunction add_ephemerons
+    Function() [upvalues: eph]
+      NumericFor i
+        Integer 1
+        Integer 5
+        Body
+          Local key
+            Table
+          Assign
+            Targets
+              Index
+                Name eph (upvalue 0)
+                Name key (local 4)
+            Values
+              Table
+                Field owner
+                  Name key (local 4)
+                Field n
+                  Name i (local 3)
+  CallStatement
+    Call
+      Name add_ephemerons (local 16)
+  Local kept
+    Table
+  Assign
+    Targets
+      Index
+        Name eph (local 15)
+        Name kept (local 17)
+    Values
+      Table
+        Field owner
+          Name kept (local 17)
+  CallStatement
+    Call
+      Name print
+      String "ephemerons before"
+      Call
+        Name count (local 0)
+        Name eph (local 15)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      String "ephemerons after"
+      Call
+        Name count (local 0)
+        Name eph (local 15)
+      Binary ==
+        Index
+          Index
+            Name eph (local 15)
+            Name kept (local 17)
+          String "owner"
+        Name kept (local 17)
+  Local chain
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __mode
+          String "k"
+  Local head
+    Table
+  LocalFunction build_chain
+    Function() [upvalues: head, chain]
+      Local key
+        Name head (upvalue 0)
+      NumericFor i
+        Integer 1
+        Integer 4
+        Body
+          Local nextkey
+            Table
+          Assign
+            Targets
+              Index
+                Name chain (upvalue 1)
+                Name key (local 0)
+            Values
+              Table
+                Field next
+                  Name nextkey (local 5)
+                Field i
+                  Name i (local 4)
+          Assign
+            Targets
+              Name key (local 0)
+            Values
+              Name nextkey (local 5)
+  CallStatement
+    Call
+      Name build_chain (local 20)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      String "chain kept"
+      Call
+        Name count (local 0)
+        Name chain (local 18)
+  Assign
+    Targets
+      Name head (local 19)
+    Values
+      Nil
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      String "chain dropped"
+      Call
+        Name count (local 0)
+        Name chain (local 18)
+  Local wv2
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __mode
+          String "v"
+  Local wk2
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __mode
+          String "k"
+  Local in_finalizer
+  LocalFunction finalizable
+    Function() [upvalues: _ENV, in_finalizer, wv2, wk2]
+      Local o
+        Call
+          Name setmetatable
+          Table
+          Table
+            Field __gc
+              Function(obj) [upvalues: in_finalizer, wv2, wk2]
+                Assign
+                  Targets
+                    Name in_finalizer (upvalue 0)
+                  Values
+                    Table
+                      Item
+                        Binary ==
+                          Index
+                            Name wv2 (upvalue 1)
+                            String "obj"
+                          Name obj (local 0)
+                      Item
+                        Index
+                          Name wk2 (upvalue 2)
+                          Name obj (local 0)
+      Assign
+        Targets
+          Index
+            Name wv2 (upvalue 2)
+            String "obj"
+        Values
+          Name o (local 0)
+      Assign
+        Targets
+          Index
+            Name wk2 (upvalue 3)
+            Name o (local 0)
+        Values
+          String "key entry"
+  CallStatement
+    Call
+      Name finalizable (local 24)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      String "in finalizer"
+      Index
+        Name in_finalizer (local 23)
+        Integer 1
+      Index
+        Name in_finalizer (local 23)
+        Integer 2
+  CallStatement
+    Call
+      Name print
+      String "after first"
+      Index
+        Name wv2 (local 21)
+        String "obj"
+      Call
+        Name count (local 0)
+        Name wk2 (local 22)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      String "after second"
+      Call
+        Name count (local 0)
+        Name wk2 (local 22)
+  Local strong_mode
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __mode
+          String "x"
+  LocalFunction add_strong
+    Function(t)
+      Assign
+        Targets
+          Index
+            Name t (local 0)
+            Table
+        Values
+          Table
+  CallStatement
+    Call
+      Name add_strong (local 26)
+      Name strong_mode (local 25)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      String "mode x"
+      Call
+        Name count (local 0)
+        Name strong_mode (local 25)
+  Return
+    Call
+      Name count (local 0)
+      Name wk (local 1)
+    Call
+      Name count (local 0)
+      Name wv (local 4)

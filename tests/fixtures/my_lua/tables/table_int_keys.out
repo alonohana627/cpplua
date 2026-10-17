@@ -1,0 +1,11 @@
+100	true	nil	nil
+20	2870	1	2	20	nil	nil
+10	0	-10	-770
+max	min	max-1	2^40	nil	2^40
+min	max
+300	45150	-45150	42	150	-150	true	nil
+342	nil	2	nil	-2	300
+5	5
+6
+10	10	10
+100	20	342

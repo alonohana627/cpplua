@@ -1,0 +1,500 @@
+
+main <meta_pairs.lua:0,0> (217 instructions)
+0+ params, 25 slots, 1 upvalue, 58 locals, 27 constants, 7 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	NEWTABLE 	0 0 0	; 0
+	3	[6]	EXTRAARG 	0
+	4	[14]	CLOSURE  	1 0
+	5	[14]	SETFIELD 	0 0 1	; "__pairs"
+	6	[15]	GETTABUP 	1 0 1	; _ENV "setmetatable"
+	7	[15]	NEWTABLE 	2 2 0	; 0
+	8	[15]	EXTRAARG 	0
+	9	[15]	NEWTABLE 	3 0 3	; 3
+	10	[15]	EXTRAARG 	0
+	11	[15]	LOADK    	4 3	; "z"
+	12	[15]	LOADK    	5 4	; "a"
+	13	[15]	LOADK    	6 5	; "m"
+	14	[15]	SETLIST  	3 3 0
+	15	[15]	SETFIELD 	2 2 3	; "__keys"
+	16	[15]	NEWTABLE 	3 3 0	; 0
+	17	[15]	EXTRAARG 	0
+	18	[15]	SETFIELD 	3 3 7k	; "z" 26
+	19	[15]	SETFIELD 	3 4 8k	; "a" 1
+	20	[15]	SETFIELD 	3 5 9k	; "m" 13
+	21	[15]	SETFIELD 	2 6 3	; "__data"
+	22	[15]	MOVE     	3 0
+	23	[15]	CALL     	1 3 2	; 2 in 1 out
+	24	[16]	GETTABUP 	2 0 10	; _ENV "pairs"
+	25	[16]	MOVE     	3 1
+	26	[16]	CALL     	2 2 5	; 1 in 4 out
+	27	[16]	TFORPREP 	2 4	; to 32
+	28	[16]	GETTABUP 	8 0 11	; _ENV "print"
+	29	[16]	MOVE     	9 6
+	30	[16]	MOVE     	10 7
+	31	[16]	CALL     	8 3 1	; 2 in 0 out
+	32	[16]	TFORCALL 	2 2
+	33	[16]	TFORLOOP 	2 6	; to 28
+	34	[16]	CLOSE    	2
+	35	[19]	LOADNIL  	2 1	; 2 out
+	36	[20]	GETTABUP 	4 0 1	; _ENV "setmetatable"
+	37	[20]	NEWTABLE 	5 0 0	; 0
+	38	[20]	EXTRAARG 	0
+	39	[20]	NEWTABLE 	6 1 0	; 0
+	40	[20]	EXTRAARG 	0
+	41	[25]	CLOSURE  	7 1
+	42	[25]	SETFIELD 	6 0 7	; "__pairs"
+	43	[20]	CALL     	4 3 2	; 2 in 1 out
+	44	[26]	GETTABUP 	5 0 10	; _ENV "pairs"
+	45	[26]	MOVE     	6 4
+	46	[26]	CALL     	5 2 5	; 1 in 4 out
+	47	[26]	TFORPREP 	5 0	; to 48
+	48	[26]	TFORCALL 	5 1
+	49	[26]	TFORLOOP 	5 2	; to 48
+	50	[26]	CLOSE    	5
+	51	[27]	GETTABUP 	5 0 11	; _ENV "print"
+	52	[27]	MOVE     	6 2
+	53	[27]	MOVE     	7 3
+	54	[27]	CALL     	5 3 1	; 2 in 0 out
+	55	[30]	GETTABUP 	5 0 1	; _ENV "setmetatable"
+	56	[30]	NEWTABLE 	6 1 0	; 0
+	57	[30]	EXTRAARG 	0
+	58	[30]	SETFIELD 	6 12 8k	; "real" 1
+	59	[30]	NEWTABLE 	7 1 0	; 0
+	60	[30]	EXTRAARG 	0
+	61	[30]	CLOSURE  	8 2
+	62	[30]	SETFIELD 	7 0 8	; "__pairs"
+	63	[30]	CALL     	5 3 2	; 2 in 1 out
+	64	[31]	LOADI    	6 0
+	65	[32]	GETTABUP 	7 0 10	; _ENV "pairs"
+	66	[32]	MOVE     	8 5
+	67	[32]	CALL     	7 2 5	; 1 in 4 out
+	68	[32]	TFORPREP 	7 2	; to 71
+	69	[32]	ADDI     	6 6 1
+	70	[32]	MMBINI   	6 1 6 0	; __add
+	71	[32]	TFORCALL 	7 1
+	72	[32]	TFORLOOP 	7 4	; to 69
+	73	[32]	CLOSE    	7
+	74	[33]	GETTABUP 	7 0 11	; _ENV "print"
+	75	[33]	MOVE     	8 6
+	76	[33]	GETTABUP 	9 0 13	; _ENV "next"
+	77	[33]	MOVE     	10 5
+	78	[33]	CALL     	9 2 0	; 1 in all out
+	79	[33]	CALL     	7 0 1	; all in 0 out
+	80	[36]	GETTABUP 	7 0 1	; _ENV "setmetatable"
+	81	[36]	NEWTABLE 	8 3 0	; 0
+	82	[36]	EXTRAARG 	0
+	83	[36]	SETFIELD 	8 14 8k	; "_secret" 1
+	84	[36]	SETFIELD 	8 4 8k	; "a" 1
+	85	[36]	SETFIELD 	8 15 16k	; "b" 2
+	86	[36]	SETFIELD 	8 17 18k	; "_x" 3
+	87	[36]	NEWTABLE 	9 1 0	; 0
+	88	[36]	EXTRAARG 	0
+	89	[43]	CLOSURE  	10 3
+	90	[43]	SETFIELD 	9 0 10	; "__pairs"
+	91	[36]	CALL     	7 3 2	; 2 in 1 out
+	92	[44]	LOADI    	8 0
+	93	[44]	LOADI    	9 0
+	94	[45]	GETTABUP 	10 0 10	; _ENV "pairs"
+	95	[45]	MOVE     	11 7
+	96	[45]	CALL     	10 2 5	; 1 in 4 out
+	97	[45]	TFORPREP 	10 4	; to 102
+	98	[45]	ADDI     	8 8 1
+	99	[45]	MMBINI   	8 1 6 0	; __add
+	100	[45]	ADD      	9 9 15
+	101	[45]	MMBIN    	9 15 6	; __add
+	102	[45]	TFORCALL 	10 2
+	103	[45]	TFORLOOP 	10 6	; to 98
+	104	[45]	CLOSE    	10
+	105	[46]	GETTABUP 	10 0 11	; _ENV "print"
+	106	[46]	MOVE     	11 8
+	107	[46]	MOVE     	12 9
+	108	[46]	CALL     	10 3 1	; 2 in 0 out
+	109	[49]	NEWTABLE 	10 0 3	; 3
+	110	[49]	EXTRAARG 	0
+	111	[49]	LOADK    	11 4	; "a"
+	112	[49]	LOADK    	12 15	; "b"
+	113	[49]	LOADK    	13 19	; "c"
+	114	[49]	SETLIST  	10 3 0
+	115	[50]	GETTABUP 	11 0 1	; _ENV "setmetatable"
+	116	[50]	NEWTABLE 	12 0 0	; 0
+	117	[50]	EXTRAARG 	0
+	118	[50]	NEWTABLE 	13 1 0	; 0
+	119	[50]	EXTRAARG 	0
+	120	[50]	SETFIELD 	13 20 10	; "__index"
+	121	[50]	CALL     	11 3 2	; 2 in 1 out
+	122	[51]	LOADK    	12 21	; ""
+	123	[52]	GETTABUP 	13 0 22	; _ENV "ipairs"
+	124	[52]	MOVE     	14 11
+	125	[52]	CALL     	13 2 5	; 1 in 4 out
+	126	[52]	TFORPREP 	13 6	; to 133
+	127	[52]	MOVE     	19 12
+	128	[52]	MOVE     	20 17
+	129	[52]	MOVE     	21 18
+	130	[52]	LOADK    	22 23	; " "
+	131	[52]	CONCAT   	19 4
+	132	[52]	MOVE     	12 19
+	133	[52]	TFORCALL 	13 2
+	134	[52]	TFORLOOP 	13 8	; to 127
+	135	[52]	CLOSE    	13
+	136	[53]	GETTABUP 	13 0 11	; _ENV "print"
+	137	[53]	MOVE     	14 12
+	138	[53]	GETTABUP 	15 0 24	; _ENV "rawlen"
+	139	[53]	MOVE     	16 11
+	140	[53]	CALL     	15 2 0	; 1 in all out
+	141	[53]	CALL     	13 0 1	; all in 0 out
+	142	[56]	GETTABUP 	13 0 1	; _ENV "setmetatable"
+	143	[56]	NEWTABLE 	14 0 0	; 0
+	144	[56]	EXTRAARG 	0
+	145	[56]	NEWTABLE 	15 1 0	; 0
+	146	[56]	EXTRAARG 	0
+	147	[56]	CLOSURE  	16 4
+	148	[56]	SETFIELD 	15 20 16	; "__index"
+	149	[56]	CALL     	13 3 2	; 2 in 1 out
+	150	[57]	LOADI    	14 0
+	151	[58]	GETTABUP 	15 0 22	; _ENV "ipairs"
+	152	[58]	MOVE     	16 13
+	153	[58]	CALL     	15 2 5	; 1 in 4 out
+	154	[58]	TFORPREP 	15 2	; to 157
+	155	[58]	ADD      	14 14 20
+	156	[58]	MMBIN    	14 20 6	; __add
+	157	[58]	TFORCALL 	15 2
+	158	[58]	TFORLOOP 	15 4	; to 155
+	159	[58]	CLOSE    	15
+	160	[59]	GETTABUP 	15 0 11	; _ENV "print"
+	161	[59]	MOVE     	16 14
+	162	[59]	CALL     	15 2 1	; 1 in 0 out
+	163	[62]	GETTABUP 	15 0 1	; _ENV "setmetatable"
+	164	[62]	NEWTABLE 	16 0 2	; 2
+	165	[62]	EXTRAARG 	0
+	166	[62]	LOADI    	17 1
+	167	[62]	LOADI    	18 2
+	168	[62]	SETLIST  	16 2 0
+	169	[62]	NEWTABLE 	17 1 0	; 0
+	170	[62]	EXTRAARG 	0
+	171	[62]	CLOSURE  	18 5
+	172	[62]	SETFIELD 	17 20 18	; "__index"
+	173	[62]	CALL     	15 3 2	; 2 in 1 out
+	174	[63]	LOADK    	12 21	; ""
+	175	[64]	GETTABUP 	16 0 22	; _ENV "ipairs"
+	176	[64]	MOVE     	17 15
+	177	[64]	CALL     	16 2 5	; 1 in 4 out
+	178	[64]	TFORPREP 	16 5	; to 184
+	179	[64]	MOVE     	22 12
+	180	[64]	MOVE     	23 21
+	181	[64]	LOADK    	24 23	; " "
+	182	[64]	CONCAT   	22 3
+	183	[64]	MOVE     	12 22
+	184	[64]	TFORCALL 	16 2
+	185	[64]	TFORLOOP 	16 7	; to 179
+	186	[64]	CLOSE    	16
+	187	[65]	GETTABUP 	16 0 11	; _ENV "print"
+	188	[65]	MOVE     	17 12
+	189	[65]	CALL     	16 2 1	; 1 in 0 out
+	190	[69]	GETTABUP 	16 0 10	; _ENV "pairs"
+	191	[69]	LOADNIL  	17 0	; 1 out
+	192	[69]	CALL     	16 2 3	; 1 in 2 out
+	193	[70]	GETTABUP 	18 0 11	; _ENV "print"
+	194	[70]	GETTABUP 	19 0 25	; _ENV "next"
+	195	[70]	EQ       	16 19 1
+	196	[70]	JMP      	1	; to 198
+	197	[70]	LFALSESKIP	19
+	198	[70]	LOADTRUE 	19
+	199	[70]	MOVE     	20 17
+	200	[70]	GETTABUP 	21 0 26	; _ENV "pcall"
+	201	[70]	GETTABUP 	22 0 10	; _ENV "pairs"
+	202	[70]	CALL     	21 2 0	; 1 in all out
+	203	[70]	CALL     	18 0 1	; all in 0 out
+	204	[71]	GETTABUP 	18 0 11	; _ENV "print"
+	205	[71]	GETTABUP 	19 0 26	; _ENV "pcall"
+	206	[71]	CLOSURE  	20 6
+	207	[71]	CALL     	19 2 0	; 1 in all out
+	208	[71]	CALL     	18 0 1	; all in 0 out
+	209	[72]	GETTABUP 	18 0 11	; _ENV "print"
+	210	[72]	GETTABUP 	19 0 26	; _ENV "pcall"
+	211	[72]	GETTABUP 	20 0 22	; _ENV "ipairs"
+	212	[72]	CALL     	19 2 0	; 1 in all out
+	213	[72]	CALL     	18 0 1	; all in 0 out
+	214	[74]	MOVE     	18 6
+	215	[74]	MOVE     	19 14
+	216	[74]	RETURN   	18 3 1k	; 2 out
+	217	[74]	RETURN   	18 1 1k	; 0 out
+constants (27):
+	0	S	"__pairs"
+	1	S	"setmetatable"
+	2	S	"__keys"
+	3	S	"z"
+	4	S	"a"
+	5	S	"m"
+	6	S	"__data"
+	7	I	26
+	8	I	1
+	9	I	13
+	10	S	"pairs"
+	11	S	"print"
+	12	S	"real"
+	13	S	"next"
+	14	S	"_secret"
+	15	S	"b"
+	16	I	2
+	17	S	"_x"
+	18	I	3
+	19	S	"c"
+	20	S	"__index"
+	21	S	""
+	22	S	"ipairs"
+	23	S	" "
+	24	S	"rawlen"
+	25	S	"next"
+	26	S	"pcall"
+locals (58):
+	0	ordered	4	218
+	1	o	24	218
+	2	(for state)	27	34
+	3	(for state)	27	34
+	4	(for state)	27	34
+	5	(for state)	27	34
+	6	k	28	32
+	7	v	28	32
+	8	state_seen	36	218
+	9	init_seen	36	218
+	10	custom	44	218
+	11	(for state)	47	50
+	12	(for state)	47	50
+	13	(for state)	47	50
+	14	(for state)	47	50
+	15	_	48	48
+	16	hidden	64	218
+	17	count	65	218
+	18	(for state)	68	73
+	19	(for state)	68	73
+	20	(for state)	68	73
+	21	(for state)	68	73
+	22	_	69	71
+	23	private	92	218
+	24	visible	94	218
+	25	total	94	218
+	26	(for state)	97	104
+	27	(for state)	97	104
+	28	(for state)	97	104
+	29	(for state)	97	104
+	30	k	98	102
+	31	v	98	102
+	32	backing	115	218
+	33	proxy	122	218
+	34	parts	123	218
+	35	(for state)	126	135
+	36	(for state)	126	135
+	37	(for state)	126	135
+	38	(for state)	126	135
+	39	i	127	133
+	40	v	127	133
+	41	gen	150	218
+	42	s	151	218
+	43	(for state)	154	159
+	44	(for state)	154	159
+	45	(for state)	154	159
+	46	(for state)	154	159
+	47	_	155	157
+	48	v	155	157
+	49	partial	174	218
+	50	(for state)	178	186
+	51	(for state)	178	186
+	52	(for state)	178	186
+	53	(for state)	178	186
+	54	_	179	184
+	55	v	179	184
+	56	f	193	218
+	57	st	193	218
+upvalues (1):
+	0	_ENV	1	0
+
+function <meta_pairs.lua:7,14> (6 instructions)
+1 param, 5 slots, 0 upvalues, 2 locals, 0 constants, 1 function
+	1	[8]	LOADI    	1 0
+	2	[13]	CLOSURE  	2 0
+	3	[13]	MOVE     	3 0
+	4	[13]	LOADNIL  	4 0	; 1 out
+	5	[13]	RETURN   	2 4 0k	; 3 out
+	6	[14]	RETURN   	2 1 0k	; 0 out
+constants (0):
+locals (2):
+	0	t	1	7
+	1	i	2	7
+upvalues (0):
+
+function <meta_pairs.lua:9,13> (14 instructions)
+2 params, 5 slots, 2 upvalues, 3 locals, 3 constants, 0 functions
+	1	[10]	GETUPVAL 	2 0	; i
+	2	[10]	ADDI     	2 2 1
+	3	[10]	MMBINI   	2 1 6 0	; __add
+	4	[10]	SETUPVAL 	2 0	; i
+	5	[11]	GETTABUP 	2 1 0	; t "__keys"
+	6	[11]	GETUPVAL 	3 0	; i
+	7	[11]	GETTABLE 	2 2 3
+	8	[12]	EQK      	2 1 1	; nil
+	9	[12]	JMP      	4	; to 14
+	10	[12]	MOVE     	3 2
+	11	[12]	GETTABUP 	4 1 2	; t "__data"
+	12	[12]	GETTABLE 	4 4 2
+	13	[12]	RETURN   	3 3 0	; 2 out
+	14	[13]	RETURN0  	
+constants (3):
+	0	S	"__keys"
+	1	N	nil
+	2	S	"__data"
+locals (3):
+	0	_	1	15
+	1	_	1	15
+	2	k	8	15
+upvalues (2):
+	0	i	1	1
+	1	t	1	0
+
+function <meta_pairs.lua:20,25> (5 instructions)
+1 param, 4 slots, 2 upvalues, 1 local, 2 constants, 1 function
+	1	[24]	CLOSURE  	1 0
+	2	[24]	LOADK    	2 0	; "state"
+	3	[24]	LOADK    	3 1	; "init"
+	4	[24]	RETURN   	1 4 0	; 3 out
+	5	[25]	RETURN0  	
+constants (2):
+	0	S	"state"
+	1	S	"init"
+locals (1):
+	0	t	1	6
+upvalues (2):
+	0	state_seen	1	2
+	1	init_seen	1	3
+
+function <meta_pairs.lua:21,24> (6 instructions)
+2 params, 3 slots, 2 upvalues, 2 locals, 0 constants, 0 functions
+	1	[22]	MOVE     	2 0
+	2	[22]	SETUPVAL 	1 1	; init_seen
+	3	[22]	SETUPVAL 	2 0	; state_seen
+	4	[23]	LOADNIL  	2 0	; 1 out
+	5	[23]	RETURN1  	2
+	6	[24]	RETURN0  	
+constants (0):
+locals (2):
+	0	s	1	7
+	1	c	1	7
+upvalues (2):
+	0	state_seen	0	0
+	1	init_seen	0	1
+
+function <meta_pairs.lua:30,30> (4 instructions)
+0 params, 3 slots, 0 upvalues, 0 locals, 0 constants, 1 function
+	1	[30]	CLOSURE  	0 0
+	2	[30]	LOADNIL  	1 1	; 2 out
+	3	[30]	RETURN   	0 4 0	; 3 out
+	4	[30]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_pairs.lua:30,30> (1 instruction)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[30]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <meta_pairs.lua:36,43> (6 instructions)
+1 param, 5 slots, 1 upvalue, 2 locals, 0 constants, 1 function
+	1	[41]	CLOSURE  	1 0
+	2	[42]	MOVE     	2 1
+	3	[42]	MOVE     	3 0
+	4	[42]	LOADNIL  	4 0	; 1 out
+	5	[42]	RETURN   	2 4 0	; 3 out
+	6	[43]	RETURN0  	
+constants (0):
+locals (2):
+	0	t	1	7
+	1	iter	2	7
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_pairs.lua:37,41> (21 instructions)
+2 params, 7 slots, 1 upvalue, 4 locals, 4 constants, 0 functions
+	1	[38]	GETTABUP 	2 0 0	; _ENV "next"
+	2	[38]	MOVE     	3 0
+	3	[38]	MOVE     	4 1
+	4	[38]	CALL     	2 3 3	; 2 in 2 out
+	5	[39]	EQK      	2 1 1	; nil
+	6	[39]	JMP      	11	; to 18
+	7	[39]	EQK      	2 2 1	; "_secret"
+	8	[39]	JMP      	2	; to 11
+	9	[39]	EQK      	2 3 0	; "_x"
+	10	[39]	JMP      	7	; to 18
+	11	[39]	GETTABUP 	4 0 0	; _ENV "next"
+	12	[39]	MOVE     	5 0
+	13	[39]	MOVE     	6 2
+	14	[39]	CALL     	4 3 3	; 2 in 2 out
+	15	[39]	MOVE     	3 5
+	16	[39]	MOVE     	2 4
+	17	[39]	JMP      	-13	; to 5
+	18	[40]	MOVE     	4 2
+	19	[40]	MOVE     	5 3
+	20	[40]	RETURN   	4 3 0	; 2 out
+	21	[41]	RETURN0  	
+constants (4):
+	0	S	"next"
+	1	N	nil
+	2	S	"_secret"
+	3	S	"_x"
+locals (4):
+	0	tbl	1	22
+	1	k	1	22
+	2	nk	5	22
+	3	nv	5	22
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_pairs.lua:56,56> (6 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[56]	LEI      	1 5 0
+	2	[56]	JMP      	3	; to 6
+	3	[56]	MULK     	2 1 0	; 10
+	4	[56]	MMBINK   	1 0 8 0	; __mul 10
+	5	[56]	RETURN1  	2
+	6	[56]	RETURN0  	
+constants (1):
+	0	I	10
+locals (2):
+	0	_	1	7
+	1	i	1	7
+upvalues (0):
+
+function <meta_pairs.lua:62,62> (5 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[62]	LEI      	1 4 0
+	2	[62]	JMP      	2	; to 5
+	3	[62]	UNM      	2 1
+	4	[62]	RETURN1  	2
+	5	[62]	RETURN0  	
+constants (0):
+locals (2):
+	0	_	1	6
+	1	i	1	6
+upvalues (0):
+
+function <meta_pairs.lua:71,71> (8 instructions)
+0 params, 7 slots, 1 upvalue, 5 locals, 1 constant, 0 functions
+	1	[71]	GETTABUP 	0 0 0	; _ENV "pairs"
+	2	[71]	LOADNIL  	1 0	; 1 out
+	3	[71]	CALL     	0 2 5	; 1 in 4 out
+	4	[71]	TFORPREP 	0 0	; to 5
+	5	[71]	TFORCALL 	0 1
+	6	[71]	TFORLOOP 	0 2	; to 5
+	7	[71]	CLOSE    	0
+	8	[71]	RETURN   	0 1 0k	; 0 out
+constants (1):
+	0	S	"pairs"
+locals (5):
+	0	(for state)	4	7
+	1	(for state)	4	7
+	2	(for state)	4	7
+	3	(for state)	4	7
+	4	_	5	5
+upvalues (1):
+	0	_ENV	0	0

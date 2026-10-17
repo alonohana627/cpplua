@@ -1,0 +1,17 @@
+Chunk
+  Local t
+    Table
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Nil
+  Local key
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Name key (local 1)
+    Values
+      Integer 1

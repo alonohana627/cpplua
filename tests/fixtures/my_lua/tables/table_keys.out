@@ -1,0 +1,19 @@
+one	one	one	one
+two	two	nil
+zero	zero	zero
+two^53	two^53	two^53
+float 2^63	nil
+one and a half	one and a half	minus	one	two
+one	string one	string one
+short	short	long	long	62
+2	2
+empty
+T	F	T	F
+table one	table two	nil	function f	nil	builtin print
+nil	nil	nil	nil
+nil	nil	nil	table two
+back
+entries	16
+nil	false	3	0.5	s	table	function
+3
+one	two	T	long

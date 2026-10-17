@@ -1,0 +1,383 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Integer 1
+            Integer 2
+            Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Name pcall
+          Function()
+            Return
+              Nil
+              Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function(...) [upvalues: _ENV]
+          Return
+            Call
+              Name select
+              String "#"
+              Vararg
+            Vararg
+        String "a"
+        Nil
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local x
+            Nil
+          Return
+            Index
+              Name x (local 0)
+              String "y"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary +
+              Integer 1
+              Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Unary #
+              Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary <
+              Integer 1
+              String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Call
+              Paren
+                String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary //
+              Integer 1
+              Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary |
+              Binary ^
+                Integer 2
+                Integer 53
+              Integer 0
+            Binary |
+              Float 1.5
+              Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name error
+        String "direct"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "level one"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "level one"
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "no position"
+              Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          Return
+            Call
+              Name setmetatable
+              Integer 1
+              Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          Return
+            Call
+              Name select
+              Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name setmetatable
+        Integer 1
+        Table
+  Local ok, msg
+    Call
+      Name pcall
+      Name error
+      String "x"
+      Integer 0
+  CallStatement
+    Call
+      Name print
+      Name ok (local 0)
+      Name msg (local 1)
+      Call
+        Name type
+        Name ok (local 0)
+      Call
+        Name type
+        Name msg (local 1)
+  Local ok2
+    Call
+      Name pcall
+      Function()
+  CallStatement
+    Call
+      Name print
+      Name ok2 (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        String "string"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name pcall
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name pcall
+        Name pcall
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          Return
+            Call
+              Name pcall
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          Local inner_ok, inner_msg
+            Call
+              Name pcall
+              Name error
+              String "inner"
+              Integer 0
+          CallStatement
+            Call
+              Name print
+              String "inside"
+              Name inner_ok (local 0)
+              Name inner_msg (local 1)
+          CallStatement
+            Call
+              Name error
+              String "outer"
+              Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name pcall
+        Name error
+        String "twice"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name pcall
+        Name error
+  Local depth
+    Integer 0
+  LocalFunction dive
+    Function(n) [upvalues: depth, _ENV, dive]
+      Assign
+        Targets
+          Name depth (upvalue 0)
+        Values
+          Binary +
+            Name depth (upvalue 0)
+            Integer 1
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            CallStatement
+              Call
+                Name error
+                String "bottom"
+                Integer 0
+      Return
+        Binary +
+          Call
+            Name dive (upvalue 2)
+            Binary -
+              Name n (local 0)
+              Integer 1
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name dive (local 4)
+        Integer 50
+      Name depth (local 3)
+  Local counter
+    Integer 0
+  LocalFunction bump_and_fail
+    Function() [upvalues: counter, _ENV]
+      Assign
+        Targets
+          Name counter (upvalue 0)
+        Values
+          Binary +
+            Name counter (upvalue 0)
+            Integer 1
+      CallStatement
+        Call
+          Name error
+          Binary ..
+            String "fail "
+            Name counter (upvalue 0)
+          Integer 0
+  NumericFor _
+    Integer 1
+    Integer 3
+    Body
+      CallStatement
+        Call
+          Name pcall
+          Name bump_and_fail (local 6)
+  CallStatement
+    Call
+      Name print
+      Name counter (local 5)
+      Call
+        Name pcall
+        Name bump_and_fail (local 6)
+  Return
+    Call
+      Name pcall
+      Function()
+        Return
+          String "last"

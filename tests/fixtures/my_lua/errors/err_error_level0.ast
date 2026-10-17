@@ -1,0 +1,6 @@
+Chunk
+  CallStatement
+    Call
+      Name error
+      String "no position at all"
+      Integer 0

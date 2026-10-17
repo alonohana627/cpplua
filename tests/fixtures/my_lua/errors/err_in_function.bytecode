@@ -1,0 +1,59 @@
+
+main <err_in_function.lua:0,0> (24 instructions)
+0+ params, 7 slots, 1 upvalue, 1 local, 1 constant, 1 function
+	1	[1]	VARARGPREP	0
+	2	[7]	CLOSURE  	0 0
+	3	[8]	GETTABUP 	1 0 0	; _ENV "print"
+	4	[8]	MOVE     	2 0
+	5	[8]	NEWTABLE 	3 0 3	; 3
+	6	[8]	EXTRAARG 	0
+	7	[8]	LOADI    	4 1
+	8	[8]	LOADI    	5 2
+	9	[8]	LOADI    	6 3
+	10	[8]	SETLIST  	3 3 0
+	11	[8]	CALL     	2 2 0	; 1 in all out
+	12	[8]	CALL     	1 0 1	; all in 0 out
+	13	[9]	GETTABUP 	1 0 0	; _ENV "print"
+	14	[9]	MOVE     	2 0
+	15	[9]	NEWTABLE 	3 0 3	; 3
+	16	[9]	EXTRAARG 	0
+	17	[9]	LOADI    	4 1
+	18	[9]	NEWTABLE 	5 0 0	; 0
+	19	[9]	EXTRAARG 	0
+	20	[9]	LOADI    	6 3
+	21	[9]	SETLIST  	3 3 0
+	22	[9]	CALL     	2 2 0	; 1 in all out
+	23	[9]	CALL     	1 0 1	; all in 0 out
+	24	[9]	RETURN   	1 1 1	; 0 out
+constants (1):
+	0	S	"print"
+locals (1):
+	0	average	3	25
+upvalues (1):
+	0	_ENV	1	0
+
+function <err_in_function.lua:3,7> (14 instructions)
+1 param, 7 slots, 0 upvalues, 6 locals, 0 constants, 0 functions
+	1	[4]	LOADI    	1 0
+	2	[5]	LOADI    	2 1
+	3	[5]	LEN      	3 0
+	4	[5]	LOADI    	4 1
+	5	[5]	FORPREP  	2 3	; exit to 10
+	6	[5]	GETTABLE 	6 0 5
+	7	[5]	ADD      	1 1 6
+	8	[5]	MMBIN    	1 6 6	; __add
+	9	[5]	FORLOOP  	2 4	; to 6
+	10	[6]	LEN      	2 0
+	11	[6]	DIV      	2 1 2
+	12	[6]	MMBIN    	1 2 11	; __div
+	13	[6]	RETURN1  	2
+	14	[7]	RETURN0  	
+constants (0):
+locals (6):
+	0	list	1	15
+	1	sum	2	15
+	2	(for state)	5	10
+	3	(for state)	5	10
+	4	(for state)	5	10
+	5	i	6	9
+upvalues (0):

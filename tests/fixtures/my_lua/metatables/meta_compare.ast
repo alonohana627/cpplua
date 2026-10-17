@@ -1,0 +1,565 @@
+Chunk
+  Local eq_calls
+    Integer 0
+  Local mt
+    Table
+  Assign
+    Targets
+      Index
+        Name mt (local 1)
+        String "__eq"
+    Values
+      Function(x, y) [upvalues: eq_calls]
+        Assign
+          Targets
+            Name eq_calls (upvalue 0)
+          Values
+            Binary +
+              Name eq_calls (upvalue 0)
+              Integer 1
+        Return
+          Binary or
+            Binary and
+              Binary ==
+                Index
+                  Name x (local 0)
+                  String "v"
+                Index
+                  Name y (local 1)
+                  String "v"
+              String "yes"
+            Nil
+  LocalFunction V
+    Function(v) [upvalues: _ENV, mt]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field v
+              Name v (local 0)
+          Name mt (upvalue 1)
+  Local a, b, c
+    Call
+      Name V (local 2)
+      Integer 1
+    Call
+      Name V (local 2)
+      Integer 1
+    Call
+      Name V (local 2)
+      Integer 2
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name a (local 3)
+        Name b (local 4)
+      Binary ==
+        Name a (local 3)
+        Name c (local 5)
+      Binary ~=
+        Name a (local 3)
+        Name b (local 4)
+      Binary ~=
+        Name a (local 3)
+        Name c (local 5)
+      Name eq_calls (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name a (local 3)
+        Name a (local 3)
+      Call
+        Name rawequal
+        Name a (local 3)
+        Name b (local 4)
+      Call
+        Name rawequal
+        Name a (local 3)
+        Name a (local 3)
+      Name eq_calls (local 0)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name a (local 3)
+        Integer 1
+      Binary ==
+        Integer 1
+        Name a (local 3)
+      Binary ==
+        Name a (local 3)
+        String "1"
+      Binary ==
+        Name a (local 3)
+        Nil
+      Name eq_calls (local 0)
+  Local plain
+    Table
+      Field v
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name a (local 3)
+        Name plain (local 6)
+      Binary ==
+        Name plain (local 6)
+        Name a (local 3)
+      Name eq_calls (local 0)
+  Local other_mt
+    Table
+      Field __eq
+        Function()
+          Return
+            True
+  Local o
+    Call
+      Name setmetatable
+      Table
+      Name other_mt (local 7)
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name o (local 8)
+        Name a (local 3)
+      Binary ==
+        Name a (local 3)
+        Name o (local 8)
+  Local list
+    Table
+      Item
+        Call
+          Name V (local 2)
+          Integer 5
+      Item
+        Call
+          Name V (local 2)
+          Integer 6
+      Item
+        Call
+          Name V (local 2)
+          Integer 7
+  LocalFunction index_of
+    Function(t, x) [upvalues: _ENV]
+      GenericFor i, e
+        In
+          Call
+            Name ipairs
+            Name t (local 0)
+        Body
+          If
+            If
+              Binary ==
+                Name e (local 7)
+                Name x (local 1)
+              Then
+                Return
+                  Name i (local 6)
+      Return
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name index_of (local 10)
+        Name list (local 9)
+        Call
+          Name V (local 2)
+          Integer 6
+      Call
+        Name index_of (local 10)
+        Name list (local 9)
+        Call
+          Name V (local 2)
+          Integer 9
+  Local log
+    Table
+  Local ord
+    Table
+  Assign
+    Targets
+      Index
+        Name ord (local 12)
+        String "__lt"
+    Values
+      Function(x, y) [upvalues: log]
+        Assign
+          Targets
+            Index
+              Name log (upvalue 0)
+              Binary +
+                Unary #
+                  Name log (upvalue 0)
+                Integer 1
+          Values
+            String "lt"
+        Return
+          Binary <
+            Index
+              Name x (local 0)
+              String "v"
+            Index
+              Name y (local 1)
+              String "v"
+  Assign
+    Targets
+      Index
+        Name ord (local 12)
+        String "__le"
+    Values
+      Function(x, y) [upvalues: log]
+        Assign
+          Targets
+            Index
+              Name log (upvalue 0)
+              Binary +
+                Unary #
+                  Name log (upvalue 0)
+                Integer 1
+          Values
+            String "le"
+        Return
+          Binary <=
+            Index
+              Name x (local 0)
+              String "v"
+            Index
+              Name y (local 1)
+              String "v"
+  LocalFunction N
+    Function(v) [upvalues: _ENV, ord]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field v
+              Name v (local 0)
+          Name ord (upvalue 1)
+  Local one, two, two2
+    Call
+      Name N (local 13)
+      Integer 1
+    Call
+      Name N (local 13)
+      Integer 2
+    Call
+      Name N (local 13)
+      Integer 2
+  CallStatement
+    Call
+      Name print
+      Binary <
+        Name one (local 14)
+        Name two (local 15)
+      Binary <
+        Name two (local 15)
+        Name one (local 14)
+      Binary <=
+        Name one (local 14)
+        Name two (local 15)
+      Binary <=
+        Name two (local 15)
+        Name two2 (local 16)
+      Binary >
+        Name two (local 15)
+        Name one (local 14)
+      Binary >=
+        Name one (local 14)
+        Name two (local 15)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name log (local 11)
+      Index
+        Name log (local 11)
+        Integer 1
+      Index
+        Name log (local 11)
+        Integer 2
+      Index
+        Name log (local 11)
+        Integer 3
+      Index
+        Name log (local 11)
+        Integer 4
+      Index
+        Name log (local 11)
+        Integer 5
+      Index
+        Name log (local 11)
+        Integer 6
+  Local mixed
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __lt
+          Function(x, y) [upvalues: _ENV]
+            Return
+              Binary ..
+                Call
+                  Name type
+                  Name x (local 0)
+                Binary ..
+                  String "<"
+                  Call
+                    Name type
+                    Name y (local 1)
+        Field __le
+          Function(x, y)
+            Return
+              False
+  CallStatement
+    Call
+      Name print
+      Binary <
+        Name mixed (local 17)
+        Integer 1
+      Binary <
+        Integer 1
+        Name mixed (local 17)
+      Binary <=
+        Name mixed (local 17)
+        Integer 1
+      Binary >=
+        Integer 1
+        Name mixed (local 17)
+  Local only_lt
+    Table
+      Field __lt
+        Function(x, y)
+          Return
+            Binary <
+              Index
+                Name x (local 0)
+                String "v"
+              Index
+                Name y (local 1)
+                String "v"
+  Local p, q
+    Call
+      Name setmetatable
+      Table
+        Field v
+          Integer 1
+      Name only_lt (local 18)
+    Call
+      Name setmetatable
+      Table
+        Field v
+          Integer 2
+      Name only_lt (local 18)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: p, q]
+          Return
+            Binary <=
+              Name p (upvalue 0)
+              Name q (upvalue 1)
+            Binary <=
+              Name q (upvalue 1)
+              Name p (upvalue 0)
+            Binary >=
+              Name p (upvalue 0)
+              Name q (upvalue 1)
+  Local nothing
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __eq
+          Function()
+            Return
+              True
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: nothing]
+          Return
+            Binary <
+              Name nothing (upvalue 0)
+              Name nothing (upvalue 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: nothing]
+          Return
+            Binary <=
+              Name nothing (upvalue 0)
+              Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary <
+              Integer 1
+              String "2"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary <=
+              String "a"
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary <
+              Table
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local t
+            Table
+          Return
+            Binary >
+              Name t (local 0)
+              Name t (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary <
+              Nil
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary <=
+              True
+              False
+  Local items
+    Table
+      Item
+        Call
+          Name N (local 13)
+          Integer 5
+      Item
+        Call
+          Name N (local 13)
+          Integer 3
+      Item
+        Call
+          Name N (local 13)
+          Integer 9
+      Item
+        Call
+          Name N (local 13)
+          Integer 1
+      Item
+        Call
+          Name N (local 13)
+          Integer 7
+  NumericFor i
+    Integer 2
+    Unary #
+      Name items (local 22)
+    Body
+      Local x, j
+        Index
+          Name items (local 22)
+          Name i (local 26)
+        Binary -
+          Name i (local 26)
+          Integer 1
+      While
+        Binary and
+          Binary >=
+            Name j (local 28)
+            Integer 1
+          Binary <
+            Name x (local 27)
+            Index
+              Name items (local 22)
+              Name j (local 28)
+        Body
+          Assign
+            Targets
+              Index
+                Name items (local 22)
+                Binary +
+                  Name j (local 28)
+                  Integer 1
+            Values
+              Index
+                Name items (local 22)
+                Name j (local 28)
+          Assign
+            Targets
+              Name j (local 28)
+            Values
+              Binary -
+                Name j (local 28)
+                Integer 1
+      Assign
+        Targets
+          Index
+            Name items (local 22)
+            Binary +
+              Name j (local 28)
+              Integer 1
+        Values
+          Name x (local 27)
+  Local out
+    String ""
+  GenericFor _, it
+    In
+      Call
+        Name ipairs
+        Name items (local 22)
+    Body
+      Assign
+        Targets
+          Name out (local 23)
+        Values
+          Binary ..
+            Name out (local 23)
+            Binary ..
+              Index
+                Name it (local 29)
+                String "v"
+              String " "
+  CallStatement
+    Call
+      Name print
+      Name out (local 23)
+  Return
+    Binary ==
+      Name a (local 3)
+      Name b (local 4)
+    Binary <
+      Name one (local 14)
+      Name two (local 15)

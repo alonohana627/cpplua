@@ -7,6 +7,7 @@
 #include <format>
 #include <string_view>
 
+#include "vm/metamethods.hpp"
 #include "vm/opcodes.hpp"
 
 namespace lua2 {
@@ -199,14 +200,53 @@ std::string upvalue_info(const Proto& proto, int index_up) {
     return std::format(" (upvalue '{}')", upvalue_name(proto, index_up));
 }
 
-std::string called_info(const Proto& proto, int pc) {
+NameInfo called_name(const Proto& proto, int pc) {
+    // funcnamefromcode
     const Instruction i = code_at(proto, pc);
+    Event event = Event::Index;
     switch (get_op(i)) {
     case OpCode::Call:
-    case OpCode::TailCall: return format_info(object_name(proto, pc, get_a(i)));
-    case OpCode::TForCall: return " (for iterator 'for iterator')";
+    case OpCode::TailCall: {
+        const ObjectName found = object_name(proto, pc, get_a(i));
+        return {.kind = found.kind, .name = found.name};
+    }
+    case OpCode::TForCall: return {.kind = "for iterator", .name = "for iterator"};
+    case OpCode::Self:
+    case OpCode::GetTabUp:
+    case OpCode::GetTable:
+    case OpCode::GetI:
+    case OpCode::GetField: event = Event::Index; break;
+    case OpCode::SetTabUp:
+    case OpCode::SetTable:
+    case OpCode::SetI:
+    case OpCode::SetField: event = Event::NewIndex; break;
+    case OpCode::MmBin:
+    case OpCode::MmBinI:
+    case OpCode::MmBinK: event = static_cast<Event>(get_c(i)); break;
+    case OpCode::Unm: event = Event::Unm; break;
+    case OpCode::BNot: event = Event::BNot; break;
+    case OpCode::Len: event = Event::Len; break;
+    case OpCode::Concat: event = Event::Concat; break;
+    case OpCode::Eq: event = Event::Eq; break;
+    case OpCode::Lt:
+    case OpCode::LtI:
+    case OpCode::GtI: event = Event::Lt; break;
+    case OpCode::Le:
+    case OpCode::LeI:
+    case OpCode::GeI: event = Event::Le; break;
+    case OpCode::Close:
+    case OpCode::Return: event = Event::Close; break;
     default: return {};
     }
+    return {.kind = "metamethod", .name = event_name(event).substr(2)};
+}
+
+std::string format_name(NameInfo found) {
+    return format_info({.kind = found.kind, .name = found.name});
+}
+
+std::string called_info(const Proto& proto, int pc) {
+    return format_name(called_name(proto, pc));
 }
 
 } // namespace lua2

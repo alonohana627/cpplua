@@ -1,0 +1,13 @@
+z	26
+a	1
+m	13
+state	init
+0	real	1
+2	3
+1a 2b 3c 	0
+150
+1 2 -3 -4 
+true	nil	false	bad argument #1 to 'pairs' (value expected)
+false	meta_pairs.lua:71: bad argument #1 to 'for iterator' (table expected, got nil)
+false	bad argument #1 to 'ipairs' (value expected)
+0	150

@@ -1,0 +1,20 @@
+Chunk
+  Local E
+    Table
+      Field __tostring
+        Function(e)
+          Return
+            Binary ..
+              String "MyError: "
+              Index
+                Name e (local 0)
+                String "msg"
+  CallStatement
+    Call
+      Name error
+      Call
+        Name setmetatable
+        Table
+          Field msg
+            String "something went wrong"
+        Name E (local 0)

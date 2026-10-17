@@ -1,0 +1,25 @@
+false	boom
+1	b got boom
+2	a got boom
+false	close_errors.lua:31: attempt to index a nil value (local 't')
+1	c got close_errors.lua:31: attempt to index a nil value (local 't')
+false	true	true	7
+false	early
+1	first got early
+false	deep
+1	l3 got deep
+2	l2 got deep
+3	l1 got deep
+false	from close
+1	bad got original
+2	outer got from close
+false	close failed
+1	after got close failed
+false	close_errors.lua:80: variable 'x' got a non-closable value
+false	close_errors.lua:81: variable 'y' got a non-closable value
+false	close_errors.lua:84: variable 'z' got a non-closable value
+1	good got close_errors.lua:84: variable 'z' got a non-closable value
+false	inner
+1	still running
+2	keep got nil
+done

@@ -62,6 +62,9 @@ TEST_CASE("V10.1 a string holds any bytes", "[value][string]") {
 
 TEST_CASE("V10.2 short strings are interned, long ones are not", "[value][string]") {
     Heap heap{test_seed};
+    // The heap's own strings ("__index" and the other metamethod names).
+    const std::size_t own = heap.string_count();
+    const std::size_t own_short = heap.short_string_count();
     const std::string short_bytes(lua2::max_short_length, 'x');
     const std::string long_bytes(lua2::max_short_length + 1, 'x');
 
@@ -70,14 +73,14 @@ TEST_CASE("V10.2 short strings are interned, long ones are not", "[value][string
     const auto* b = heap.new_string(copy);
     CHECK(a == b);
     CHECK(a->is_short());
-    CHECK(heap.string_count() == 1);
+    CHECK(heap.string_count() == own + 1);
 
     const auto* c = heap.new_string(long_bytes);
     const auto* d = heap.new_string(long_bytes);
     CHECK(c != d);
     CHECK_FALSE(c->is_short());
-    CHECK(heap.string_count() == 3);
-    CHECK(heap.short_string_count() == 1);
+    CHECK(heap.string_count() == own + 3);
+    CHECK(heap.short_string_count() == own_short + 1);
 
     // Different bytes are different strings, even with the same length.
     CHECK(heap.new_string("ab") != heap.new_string("ba"));
@@ -87,6 +90,7 @@ TEST_CASE("V10.2 short strings are interned, long ones are not", "[value][string
 
 TEST_CASE("V10.2 interning survives the table growing", "[value][string]") {
     Heap heap{test_seed};
+    const std::size_t own = heap.string_count(); // the heap's own strings
     // Far more strings than the 128 first buckets, so the table doubles
     // several times.
     std::vector<const lua2::String*> made;
@@ -97,8 +101,8 @@ TEST_CASE("V10.2 interning survives the table growing", "[value][string]") {
     for (int n = 0; n < 5000; ++n) {
         CHECK(heap.new_string(std::to_string(n)) == made[static_cast<std::size_t>(n)]);
     }
-    CHECK(heap.short_string_count() == 5000);
-    CHECK(heap.string_count() == 5000);
+    CHECK(heap.short_string_count() == own + 5000);
+    CHECK(heap.string_count() == own + 5000);
 }
 
 TEST_CASE("V10.3 Lua's hash function", "[value][string]") {

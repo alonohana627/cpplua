@@ -1,0 +1,875 @@
+Chunk
+  Local empty
+    Table
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name empty (local 0)
+      Call
+        Name next
+        Name empty (local 0)
+  Local pos
+    Table
+      Item
+        Integer 10
+      Item
+        Integer 20
+      Item
+        Integer 30
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name pos (local 1)
+      Index
+        Name pos (local 1)
+        Integer 1
+      Index
+        Name pos (local 1)
+        Integer 2
+      Index
+        Name pos (local 1)
+        Integer 3
+      Index
+        Name pos (local 1)
+        Integer 4
+  Local named
+    Table
+      Field x
+        Integer 1
+      Field y
+        String "two"
+      Field z
+        True
+  CallStatement
+    Call
+      Name print
+      Index
+        Name named (local 2)
+        String "x"
+      Index
+        Name named (local 2)
+        String "y"
+      Index
+        Name named (local 2)
+        String "z"
+      Index
+        Name named (local 2)
+        String "w"
+  Local k
+    String "computed"
+  Local keyed
+    Table
+      Field
+        Binary +
+          Integer 1
+          Integer 1
+        String "two"
+      Field
+        Name k (local 3)
+        String "c"
+      Field
+        String "with space"
+        Integer 5
+      Field
+        True
+        String "yes"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name keyed (local 4)
+        Integer 2
+      Index
+        Name keyed (local 4)
+        String "computed"
+      Index
+        Name keyed (local 4)
+        String "with space"
+      Index
+        Name keyed (local 4)
+        True
+      Binary or
+        Binary ==
+          Unary #
+            Name keyed (local 4)
+          Integer 0
+        Binary ==
+          Unary #
+            Name keyed (local 4)
+          Integer 2
+  Local mixed
+    Table
+      Item
+        String "a"
+      Field x
+        String "X"
+      Item
+        String "b"
+      Field
+        Integer 10
+        String "ten"
+      Item
+        String "c"
+      Field y
+        String "Y"
+      Item
+        String "d"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name mixed (local 5)
+        Integer 1
+      Index
+        Name mixed (local 5)
+        Integer 2
+      Index
+        Name mixed (local 5)
+        Integer 3
+      Index
+        Name mixed (local 5)
+        Integer 4
+      Index
+        Name mixed (local 5)
+        String "x"
+      Index
+        Name mixed (local 5)
+        String "y"
+      Index
+        Name mixed (local 5)
+        Integer 10
+      Unary #
+        Name mixed (local 5)
+  Local clash
+    Table
+      Field
+        Integer 1
+        String "keyed"
+      Item
+        String "positional"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name clash (local 6)
+        Integer 1
+  Local nested
+    Table
+      Field name
+        String "outer"
+      Field inner
+        Table
+          Field name
+            String "inner"
+          Field deeper
+            Table
+              Item
+                Integer 1
+              Item
+                Integer 2
+              Item
+                Table
+                  Item
+                    Integer 3
+  CallStatement
+    Call
+      Name print
+      Index
+        Name nested (local 7)
+        String "name"
+      Index
+        Index
+          Name nested (local 7)
+          String "inner"
+        String "name"
+      Index
+        Index
+          Index
+            Index
+              Name nested (local 7)
+              String "inner"
+            String "deeper"
+          Integer 3
+        Integer 1
+      Unary #
+        Index
+          Index
+            Name nested (local 7)
+            String "inner"
+          String "deeper"
+  LocalFunction three
+    Function()
+      Return
+        Integer 1
+        Integer 2
+        Integer 3
+  Local last
+    Table
+      Item
+        Call
+          Name three (local 8)
+  Local middle
+    Table
+      Item
+        Call
+          Name three (local 8)
+      Item
+        Integer 10
+  Local paren
+    Table
+      Item
+        Paren
+          Call
+            Name three (local 8)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name last (local 9)
+      Index
+        Name last (local 9)
+        Integer 3
+      Unary #
+        Name middle (local 10)
+      Index
+        Name middle (local 10)
+        Integer 1
+      Index
+        Name middle (local 10)
+        Integer 2
+      Unary #
+        Name paren (local 11)
+  LocalFunction none
+    Function()
+  Local after_none
+    Table
+      Item
+        Call
+          Name none (local 12)
+  Local first_none
+    Table
+      Item
+        Call
+          Name none (local 12)
+      Item
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name after_none (local 13)
+      Index
+        Name first_none (local 14)
+        Integer 1
+      Index
+        Name first_none (local 14)
+        Integer 2
+  LocalFunction pack
+    Function(...) [upvalues: _ENV]
+      Return
+        Table
+          Item
+            Vararg
+        Call
+          Name select
+          String "#"
+          Vararg
+  Local p, n
+    Call
+      Name pack (local 15)
+      String "a"
+      String "b"
+      String "c"
+  CallStatement
+    Call
+      Name print
+      Name n (local 17)
+      Unary #
+        Name p (local 16)
+      Index
+        Name p (local 16)
+        Integer 1
+      Index
+        Name p (local 16)
+        Integer 3
+  Local p2, n2
+    Call
+      Name pack (local 15)
+  CallStatement
+    Call
+      Name print
+      Name n2 (local 19)
+      Unary #
+        Name p2 (local 18)
+  LocalFunction first_and_rest
+    Function(...)
+      Return
+        Table
+          Item
+            Vararg
+          Item
+            String "end"
+  Local fr
+    Call
+      Name first_and_rest (local 20)
+      Integer 7
+      Integer 8
+      Integer 9
+  CallStatement
+    Call
+      Name print
+      Index
+        Name fr (local 21)
+        Integer 1
+      Index
+        Name fr (local 21)
+        Integer 2
+      Index
+        Name fr (local 21)
+        Integer 3
+  Local big
+    Table
+      Item
+        Integer 1
+      Item
+        Integer 2
+      Item
+        Integer 3
+      Item
+        Integer 4
+      Item
+        Integer 5
+      Item
+        Integer 6
+      Item
+        Integer 7
+      Item
+        Integer 8
+      Item
+        Integer 9
+      Item
+        Integer 10
+      Item
+        Integer 11
+      Item
+        Integer 12
+      Item
+        Integer 13
+      Item
+        Integer 14
+      Item
+        Integer 15
+      Item
+        Integer 16
+      Item
+        Integer 17
+      Item
+        Integer 18
+      Item
+        Integer 19
+      Item
+        Integer 20
+      Item
+        Integer 21
+      Item
+        Integer 22
+      Item
+        Integer 23
+      Item
+        Integer 24
+      Item
+        Integer 25
+      Item
+        Integer 26
+      Item
+        Integer 27
+      Item
+        Integer 28
+      Item
+        Integer 29
+      Item
+        Integer 30
+      Item
+        Integer 31
+      Item
+        Integer 32
+      Item
+        Integer 33
+      Item
+        Integer 34
+      Item
+        Integer 35
+      Item
+        Integer 36
+      Item
+        Integer 37
+      Item
+        Integer 38
+      Item
+        Integer 39
+      Item
+        Integer 40
+      Item
+        Integer 41
+      Item
+        Integer 42
+      Item
+        Integer 43
+      Item
+        Integer 44
+      Item
+        Integer 45
+      Item
+        Integer 46
+      Item
+        Integer 47
+      Item
+        Integer 48
+      Item
+        Integer 49
+      Item
+        Integer 50
+      Item
+        Integer 51
+      Item
+        Integer 52
+      Item
+        Integer 53
+      Item
+        Integer 54
+      Item
+        Integer 55
+      Item
+        Integer 56
+      Item
+        Integer 57
+      Item
+        Integer 58
+      Item
+        Integer 59
+      Item
+        Integer 60
+      Item
+        Integer 61
+      Item
+        Integer 62
+      Item
+        Integer 63
+      Item
+        Integer 64
+      Item
+        Integer 65
+      Item
+        Integer 66
+      Item
+        Integer 67
+      Item
+        Integer 68
+      Item
+        Integer 69
+      Item
+        Integer 70
+      Item
+        Integer 71
+      Item
+        Integer 72
+      Item
+        Integer 73
+      Item
+        Integer 74
+      Item
+        Integer 75
+      Item
+        Integer 76
+      Item
+        Integer 77
+      Item
+        Integer 78
+      Item
+        Integer 79
+      Item
+        Integer 80
+      Item
+        Integer 81
+      Item
+        Integer 82
+      Item
+        Integer 83
+      Item
+        Integer 84
+      Item
+        Integer 85
+      Item
+        Integer 86
+      Item
+        Integer 87
+      Item
+        Integer 88
+      Item
+        Integer 89
+      Item
+        Integer 90
+      Item
+        Integer 91
+      Item
+        Integer 92
+      Item
+        Integer 93
+      Item
+        Integer 94
+      Item
+        Integer 95
+      Item
+        Integer 96
+      Item
+        Integer 97
+      Item
+        Integer 98
+      Item
+        Integer 99
+      Item
+        Integer 100
+      Item
+        Integer 101
+      Item
+        Integer 102
+      Item
+        Integer 103
+      Item
+        Integer 104
+      Item
+        Integer 105
+      Item
+        Integer 106
+      Item
+        Integer 107
+      Item
+        Integer 108
+      Item
+        Integer 109
+      Item
+        Integer 110
+      Item
+        Integer 111
+      Item
+        Integer 112
+      Item
+        Integer 113
+      Item
+        Integer 114
+      Item
+        Integer 115
+      Item
+        Integer 116
+      Item
+        Integer 117
+      Item
+        Integer 118
+      Item
+        Integer 119
+      Item
+        Integer 120
+      Item
+        Integer 121
+      Item
+        Integer 122
+      Item
+        Integer 123
+      Item
+        Integer 124
+      Item
+        Integer 125
+      Item
+        Integer 126
+      Item
+        Integer 127
+      Item
+        Integer 128
+      Item
+        Integer 129
+      Item
+        Integer 130
+      Field label
+        String "big"
+  Local sum
+    Integer 0
+  NumericFor i
+    Integer 1
+    Unary #
+      Name big (local 22)
+    Body
+      Assign
+        Targets
+          Name sum (local 23)
+        Values
+          Binary +
+            Name sum (local 23)
+            Index
+              Name big (local 22)
+              Name i (local 27)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name big (local 22)
+      Index
+        Name big (local 22)
+        Integer 1
+      Index
+        Name big (local 22)
+        Integer 50
+      Index
+        Name big (local 22)
+        Integer 51
+      Index
+        Name big (local 22)
+        Integer 100
+      Index
+        Name big (local 22)
+        Integer 130
+      Index
+        Name big (local 22)
+        Integer 131
+      Name sum (local 23)
+      Index
+        Name big (local 22)
+        String "label"
+  Local tail
+    Table
+      Item
+        Integer 1
+      Item
+        Integer 2
+      Item
+        Integer 3
+      Item
+        Integer 4
+      Item
+        Integer 5
+      Item
+        Integer 6
+      Item
+        Integer 7
+      Item
+        Integer 8
+      Item
+        Integer 9
+      Item
+        Integer 10
+      Item
+        Integer 11
+      Item
+        Integer 12
+      Item
+        Integer 13
+      Item
+        Integer 14
+      Item
+        Integer 15
+      Item
+        Integer 16
+      Item
+        Integer 17
+      Item
+        Integer 18
+      Item
+        Integer 19
+      Item
+        Integer 20
+      Item
+        Integer 21
+      Item
+        Integer 22
+      Item
+        Integer 23
+      Item
+        Integer 24
+      Item
+        Integer 25
+      Item
+        Integer 26
+      Item
+        Integer 27
+      Item
+        Integer 28
+      Item
+        Integer 29
+      Item
+        Integer 30
+      Item
+        Integer 31
+      Item
+        Integer 32
+      Item
+        Integer 33
+      Item
+        Integer 34
+      Item
+        Integer 35
+      Item
+        Integer 36
+      Item
+        Integer 37
+      Item
+        Integer 38
+      Item
+        Integer 39
+      Item
+        Integer 40
+      Item
+        Integer 41
+      Item
+        Integer 42
+      Item
+        Integer 43
+      Item
+        Integer 44
+      Item
+        Integer 45
+      Item
+        Integer 46
+      Item
+        Integer 47
+      Item
+        Integer 48
+      Item
+        Integer 49
+      Item
+        Integer 50
+      Item
+        Integer 51
+      Item
+        Integer 52
+      Item
+        Integer 53
+      Item
+        Integer 54
+      Item
+        Integer 55
+      Item
+        Integer 56
+      Item
+        Integer 57
+      Item
+        Integer 58
+      Item
+        Integer 59
+      Item
+        Integer 60
+      Item
+        Call
+          Name three (local 8)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name tail (local 24)
+      Index
+        Name tail (local 24)
+        Integer 60
+      Index
+        Name tail (local 24)
+        Integer 61
+      Index
+        Name tail (local 24)
+        Integer 63
+  Local holes
+    Table
+      Item
+        Integer 1
+      Item
+        Nil
+      Item
+        Integer 3
+      Item
+        Nil
+      Item
+        Integer 5
+  CallStatement
+    Call
+      Name print
+      Index
+        Name holes (local 25)
+        Integer 1
+      Index
+        Name holes (local 25)
+        Integer 2
+      Index
+        Name holes (local 25)
+        Integer 3
+      Index
+        Name holes (local 25)
+        Integer 4
+      Index
+        Name holes (local 25)
+        Integer 5
+  Local trailing_nils
+    Table
+      Item
+        Integer 1
+      Item
+        Integer 2
+      Item
+        Nil
+      Item
+        Nil
+  CallStatement
+    Call
+      Name print
+      Index
+        Name trailing_nils (local 26)
+        Integer 1
+      Index
+        Name trailing_nils (local 26)
+        Integer 2
+      Index
+        Name trailing_nils (local 26)
+        Integer 3
+  Local list
+    Table
+  NumericFor i
+    Integer 1
+    Integer 3
+    Body
+      Assign
+        Targets
+          Index
+            Name list (local 27)
+            Name i (local 31)
+        Values
+          Table
+            Item
+              Name i (local 31)
+            Item
+              Binary *
+                Name i (local 31)
+                Name i (local 31)
+  CallStatement
+    Call
+      Name print
+      Binary ~=
+        Index
+          Name list (local 27)
+          Integer 1
+        Index
+          Name list (local 27)
+          Integer 2
+      Index
+        Index
+          Name list (local 27)
+          Integer 2
+        Integer 2
+      Index
+        Index
+          Name list (local 27)
+          Integer 3
+        Integer 2
+  Return
+    Unary #
+      Name big (local 22)
+    Index
+      Name big (local 22)
+      Unary #
+        Name big (local 22)

@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "value/table.hpp"
+#include "value/userdata.hpp"
 #include "vm/function.hpp"
 #include "vm/proto.hpp"
 #include "vm/state.hpp"
@@ -38,11 +39,26 @@ Heap::Heap(std::uint32_t seed)
     // made in the member initializers.)
     // NOLINTNEXTLINE(cppcoreguidelines-prefer-member-initializer)
     main_thread_ = link_new<State>(allocate(sizeof(State)), ObjectType::Thread);
+    // The names of the metamethods, kept forever (luaT_init).
+    for (std::size_t e = 0; e < event_count; ++e) {
+        event_strings_.at(e) = new_string(event_names.at(e));
+        fix(event_strings_.at(e));
+    }
+    name_string_ = new_string("__name");
+    fix(name_string_);
+    // The registry's tables: the globals, and the loaded modules with the
+    // globals as "_G" (luaL_openlibs does that through luaopen_base).
     // NOLINTNEXTLINE(cppcoreguidelines-prefer-member-initializer): the same
     globals_ = new_table();
+    // NOLINTNEXTLINE(cppcoreguidelines-prefer-member-initializer): the same
+    loaded_ = new_table();
+    loaded_->set(*this, Value::string(new_string("_G")), Value::table(globals_));
+    // NOLINTNEXTLINE(cppcoreguidelines-prefer-member-initializer): the same
+    references_ = new_table();
 }
 
 Heap::~Heap() {
+    close();
     // Free everything (luaC_freeallobjects): the objects, then the main
     // thread, which is the last one in the list.
     GcObject* o = all_;
@@ -53,6 +69,13 @@ Heap::~Heap() {
     }
     main_thread_->~State();
     free(main_thread_, sizeof(State));
+    for (GcObject* list : {finalizable_, to_be_finalized_}) { // empty after close()
+        while (list != nullptr) {
+            GcObject* next = list->next;
+            free_object(list);
+            list = next;
+        }
+    }
     o = fixed_;
     while (o != nullptr) {
         GcObject* next = o->next;
@@ -251,6 +274,71 @@ Table* Heap::new_table() {
     return link_new<Table>(allocate(sizeof(Table)), ObjectType::Table);
 }
 
+Userdata* Heap::new_userdata(std::size_t size, std::size_t user_values) {
+    void* memory = allocate(Userdata::size_for(size, user_values));
+    // NOLINTNEXTLINE(cppcoreguidelines-owning-memory): owned by the collector
+    auto* u = new (memory) Userdata(size, static_cast<std::uint16_t>(user_values));
+    u->marked = current_white();
+    u->next = all_;
+    all_ = u;
+    for (Value& v : u->user_values()) {
+        v = Value::nil();
+    }
+    return u;
+}
+
+CClosure* Heap::new_c_closure(CFunction function, std::size_t upvalue_count) {
+    void* memory = allocate(CClosure::size_for(upvalue_count));
+    // NOLINTNEXTLINE(cppcoreguidelines-owning-memory): owned by the collector
+    auto* closure = new (memory) CClosure(upvalue_count);
+    closure->marked = current_white();
+    closure->next = all_;
+    all_ = closure;
+    closure->function = function;
+    for (Value& v : closure->upvalues()) {
+        v = Value::nil();
+    }
+    return closure;
+}
+
+std::int64_t Heap::reference(Value v) {
+    std::int64_t key = 0;
+    if (free_references_.empty()) {
+        key = next_reference_++;
+    } else {
+        key = free_references_.back();
+        free_references_.pop_back();
+    }
+    references_->set_int(*this, key, v);
+    return key;
+}
+
+void Heap::release_reference(std::int64_t key) {
+    references_->set_int(*this, key, Value::nil());
+    free_references_.push_back(key);
+}
+
+Value Heap::referenced(std::int64_t key) {
+    return references_->get_int(key).value();
+}
+
+void Heap::set_metatable(Userdata* u, Table* mt) {
+    u->metatable = mt;
+    if (mt != nullptr) {
+        object_barrier(u, mt);
+        check_finalizer(u, mt);
+    }
+}
+
+void Heap::set_metatable(Table* t, Table* mt) {
+    // lua_setmetatable for a table.
+    t->metatable = mt;
+    if (mt != nullptr) {
+        object_barrier(t, mt);
+        check_finalizer(t, mt);
+    }
+}
+
 void Heap::write_output(std::string_view text) {
     if (output_) {
         output_(text);
@@ -312,6 +400,23 @@ void Heap::free_object(GcObject* o) {
         table->release(*this);
         table->~Table();
         free(table, sizeof(Table));
+        break;
+    }
+    case ObjectType::CClosure: {
+        auto* closure = object_cast<CClosure>(o);
+        const std::size_t size = CClosure::size_for(closure->upvalue_count());
+        closure->~CClosure();
+        free(closure, size);
+        break;
+    }
+    case ObjectType::Userdata: {
+        auto* u = object_cast<Userdata>(o);
+        if (u->destructor != nullptr) {
+            u->destructor(u->data()); // the C++ object in the block
+        }
+        const std::size_t size = Userdata::size_for(u->size(), u->user_values().size());
+        u->~Userdata();
+        free(u, size);
         break;
     }
     case ObjectType::Thread:

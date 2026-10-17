@@ -6,6 +6,9 @@
 //                          VM_COLD(Name): an instruction's slow path, kept
 //                          out of the hot body so that the body needs no
 //                          stack frame
+//   VM_WARM_HANDLER(Name)  the same for a continuation some programs run
+//                          all the time (__index lookups, calls of C++
+//                          functions), kept with the hot code
 //   VM_NEXT()              goes on with the instruction at pc
 //   VM_RETRY()             runs the current instruction again
 //
@@ -22,34 +25,77 @@
 // closure (CLOSURE, its payload), its arguments are above it up to TOP
 // (exclusive). A stack too small, or no free frame, takes the cold path,
 // which makes room and runs the call again.
-#define VM_ENTER_LUA(FUNC, CLOSURE, TOP, WANTED)                                                            \
+#define VM_ENTER_LUA(FUNC, CLOSURE, TOP, WANTED)                                                   \
+    do {                                                                                           \
+        const std::uint32_t check_top_ = (TOP);                                                    \
+        const Proto* check_proto_ = std::bit_cast<const LuaClosure*>(CLOSURE)->proto;              \
+        if (state->stack_last - check_top_ <= check_proto_->max_stack_size ||                      \
+            state->ci->next == nullptr) [[unlikely]] {                                             \
+            state->top = check_top_;                                                               \
+            VM_COLD(GrowAndRetry);                                                                 \
+        }                                                                                          \
+        VM_ENTER_LUA_WITH_ROOM(FUNC, CLOSURE, check_top_, WANTED);                                 \
+    } while (false)
+
+// The rest of VM_ENTER_LUA, once there is room on the stack and a free frame.
+#define VM_ENTER_LUA_WITH_ROOM(FUNC, CLOSURE, TOP, WANTED)                                         \
     do {                                                                                           \
         const std::uint32_t enter_func_ = (FUNC);                                                  \
         std::uint32_t enter_top_ = (TOP);                                                          \
         const Proto* enter_proto_ = std::bit_cast<const LuaClosure*>(CLOSURE)->proto;              \
-        const std::uint32_t enter_size_ = enter_proto_->max_stack_size;                            \
-        CallInfo* enter_ci_ = state->ci->next;                                                         \
-        if (state->stack_last - enter_top_ <= enter_size_ || enter_ci_ == nullptr) [[unlikely]] {     \
-            state->top = enter_top_;                                                                   \
-            VM_COLD(GrowAndRetry);                                                                 \
-        }                                                                                          \
-        state->ci = enter_ci_;                                                                         \
+        CallInfo* enter_ci_ = state->ci->next;                                                     \
+        state->ci = enter_ci_;                                                                     \
         enter_ci_->func = enter_func_;                                                             \
-        enter_ci_->top = enter_func_ + 1 + enter_size_;                                            \
+        enter_ci_->top = enter_func_ + 1 + enter_proto_->max_stack_size;                           \
         enter_ci_->wanted = (WANTED);                                                              \
         enter_ci_->fresh = false;                                                                  \
+        enter_ci_->tail_call = false;                                                              \
+        enter_ci_->finalizer = false;                                                              \
         k = enter_proto_->constants.data();                                                        \
         enter_ci_->constants = k;                                                                  \
-        tags = state->stack_tags + enter_func_ + 1;                                                    \
-        vals = state->stack_values + enter_func_ + 1;                                                  \
+        tags = state->stack_tags + enter_func_ + 1;                                                \
+        vals = state->stack_values + enter_func_ + 1;                                              \
         /* missing arguments are nil (E3.1) */                                                     \
         const std::uint32_t enter_params_ = enter_func_ + 1 + enter_proto_->parameter_count;       \
         for (; enter_top_ < enter_params_; ++enter_top_) {                                         \
-            state->stack_tags[enter_top_] = Tag::Nil;                                                  \
-            state->stack_values[enter_top_] = 0;                                                       \
+            state->stack_tags[enter_top_] = Tag::Nil;                                              \
+            state->stack_values[enter_top_] = 0;                                                   \
         }                                                                                          \
-        state->top = enter_top_;                                                                       \
+        state->top = enter_top_;                                                                   \
         pc = enter_proto_->code.data();                                                            \
+        VM_NEXT();                                                                                 \
+    } while (false)
+
+// A tail call of the Lua function in slot FUNC, with NARG1 values (the
+// function and its arguments) there, once there is room (luaD_pretailcall):
+// the function and its arguments move down to the frame's own slot.
+#define VM_TAIL_CALL_LUA(FUNC, NARG1)                                                              \
+    do {                                                                                           \
+        CallInfo* tail_ci_ = state->ci;                                                            \
+        const std::uint32_t tail_func_ = (FUNC);                                                   \
+        const Proto* tail_p_ =                                                                     \
+            std::bit_cast<const LuaClosure*>(state->stack_values[tail_func_])->proto;              \
+        const int tail_c_ = get_c(i);                                                              \
+        const int tail_delta_ = tail_c_ != 0 ? tail_ci_->extra_args + tail_c_ : 0;                 \
+        tail_ci_->func -= u32(tail_delta_);                                                        \
+        const std::uint32_t tail_new_ = tail_ci_->func;                                            \
+        int tail_n_ = (NARG1);                                                                     \
+        for (int j = 0; j < tail_n_; ++j) {                                                        \
+            state->stack_tags[tail_new_ + u32(j)] = state->stack_tags[tail_func_ + u32(j)];        \
+            state->stack_values[tail_new_ + u32(j)] = state->stack_values[tail_func_ + u32(j)];    \
+        }                                                                                          \
+        for (; std::cmp_less_equal(tail_n_, tail_p_->parameter_count); ++tail_n_) {                \
+            state->stack_tags[tail_new_ + u32(tail_n_)] = Tag::Nil;                                \
+            state->stack_values[tail_new_ + u32(tail_n_)] = 0;                                     \
+        }                                                                                          \
+        tail_ci_->top = tail_new_ + 1 + u32(tail_p_->max_stack_size);                              \
+        tail_ci_->tail_call = true;                                                                \
+        state->top = tail_new_ + u32(tail_n_);                                                     \
+        tags = state->stack_tags + tail_new_ + 1;                                                  \
+        vals = state->stack_values + tail_new_ + 1;                                                \
+        k = tail_p_->constants.data();                                                             \
+        tail_ci_->constants = k;                                                                   \
+        pc = tail_p_->code.data();                                                                 \
         VM_NEXT();                                                                                 \
     } while (false)
 
@@ -60,44 +106,54 @@
         if ((RETURNING)->fresh) {                                                                  \
             return Status::Ok;                                                                     \
         }                                                                                          \
-        const CallInfo* caller_ = state->ci;                                                           \
-        tags = state->stack_tags + caller_->func + 1;                                                  \
-        vals = state->stack_values + caller_->func + 1;                                                \
+        const CallInfo* caller_ = state->ci;                                                       \
+        tags = state->stack_tags + caller_->func + 1;                                              \
+        vals = state->stack_values + caller_->func + 1;                                            \
         k = caller_->constants;                                                                    \
         pc = caller_->saved_pc;                                                                    \
         VM_NEXT();                                                                                 \
     } while (false)
 
-// The end of OP_RETURN (luaD_poscall), after any upvalues are closed.
-#define VM_FINISH_RETURN()                                                                         \
+// The end of OP_RETURN (luaD_poscall) for N results from register A.
+#define VM_FINISH_RETURN(N)                                                                        \
     do {                                                                                           \
-        CallInfo* ret_ci_ = state->ci;                                                                 \
-        const std::uint32_t ret_first_ = ret_ci_->func + 1 + u32(get_a(i));                        \
-        int ret_n_ = get_b(i) - 1;                                                                 \
-        if (ret_n_ < 0) {                                                                          \
-            ret_n_ = static_cast<int>(state->top - ret_first_); /* up to the top */                    \
-        }                                                                                          \
+        CallInfo* ret_ci_ = state->ci;                                                             \
+        const std::uint32_t ret_first_ = ret_ci_->func + 1 + u32(get_a(i));                       \
+        const int ret_n_ = (N);                                                                    \
         if (get_c(i) != 0) { /* a vararg function: back to the real function slot */              \
             ret_ci_->func -= u32(ret_ci_->extra_args + get_c(i));                                  \
         }                                                                                          \
-        state->top = ret_first_ + u32(ret_n_);                                                         \
-        move_results(state, ret_ci_->func, ret_n_, ret_ci_->wanted);                                   \
-        state->ci = ret_ci_->previous;                                                                 \
+        state->top = ret_first_ + u32(ret_n_);                                                     \
+        move_results(state, ret_ci_->func, ret_n_, ret_ci_->wanted);                               \
+        state->ci = ret_ci_->previous;                                                             \
         VM_RETURN_TO_CALLER(ret_ci_);                                                              \
     } while (false)
 
+// How many values OP_RETURN returns: B - 1, or up to the top.
+#define VM_RETURN_COUNT()                                                                          \
+    (get_b(i) != 0 ? get_b(i) - 1                                                                  \
+                   : static_cast<int>(state->top - (state->ci->func + 1 + u32(get_a(i)))))
+
 // checkGC: a collection step, if one is due, with the stack's live part
-// ending at slot LIMIT. The stack may shrink, so the registers move.
+// ending at slot LIMIT. The stack may move (finalizers run Lua code), so
+// the registers are found again.
 #define VM_CHECK_GC(LIMIT)                                                                         \
     do {                                                                                           \
-        if (state->heap().wants_step()) [[unlikely]] {                                                 \
-            const std::uint32_t base_ = base_index(state, tags);                                       \
-            state->ci->saved_pc = pc;                                                                  \
-            state->top = (LIMIT);                                                                      \
-            collect_step(state);                                                                       \
-            tags = state->stack_tags + base_;                                                          \
-            vals = state->stack_values + base_;                                                        \
+        if (state->heap().wants_step()) [[unlikely]] {                                             \
+            const std::uint32_t base_ = base_index(state, tags);                                   \
+            state->ci->saved_pc = pc;                                                              \
+            state->top = (LIMIT);                                                                  \
+            collect_step(state);                                                                   \
+            tags = state->stack_tags + base_;                                                      \
+            vals = state->stack_values + base_;                                                    \
         }                                                                                          \
+    } while (false)
+
+// After a call into C++ or Lua from a cold path: the stack may have moved.
+#define VM_RELOAD(BASE)                                                                            \
+    do {                                                                                           \
+        tags = state->stack_tags + (BASE);                                                         \
+        vals = state->stack_values + (BASE);                                                       \
     } while (false)
 
 // docondjump: the next instruction is a jump, taken when cond == k.
@@ -121,27 +177,19 @@ VM_COLD_HANDLER(GrowAndRetry) {
     const std::uint32_t base = base_index(state, tags);
     const int offset = get_op(i) == OpCode::TForCall ? 4 : 0;
     const std::uint32_t func = base + u32(get_a(i) + offset);
-    const Proto* p = std::bit_cast<const LuaClosure*>(state->stack_values[func])->proto;
-    // One more than the frame needs: the check before the retry wants
-    // strictly more room than the frame (stack_last - top > size).
-    const std::uint32_t needed = p->max_stack_size + 1U;
-    if (state->stack_last - state->top < needed && !grow_for_call(state, needed)) {
+    if (!room_for_lua(state, func, state->top)) {
         return stack_overflow(state, pc);
     }
-    state->reserve_call_info();
-    tags = state->stack_tags + base;
-    vals = state->stack_values + base;
+    VM_RELOAD(base);
     VM_RETRY();
 }
 
-VM_COLD_HANDLER(CallOther) {
+VM_WARM_HANDLER(CallOther) {
     // CALL, TAILCALL or TFORCALL of something that is not a Lua function: a
-    // C++ function (precallC), or the error (luaG_callerror, E6.3).
+    // C++ function (precallC), or a value with __call (tryfuncTM, M4.1), or
+    // the error (luaG_callerror, E6.3).
     const OpCode op = get_op(i);
     const int a = get_a(i) + (op == OpCode::TForCall ? 4 : 0);
-    if (tags[a] != Tag::CFunction) {
-        return call_error(state, pc, register_value(tags, vals, a));
-    }
     const std::uint32_t base = base_index(state, tags);
     const std::uint32_t func = base + u32(a);
     std::uint32_t top = 0;
@@ -155,11 +203,24 @@ VM_COLD_HANDLER(CallOther) {
             wanted = get_c(i) - 1;
         }
     }
-    if (!call_c(state, func, top, wanted)) {
-        return stack_overflow(state, pc);
+    if (!is_function_tag(tags[a]) && resolve_callable(state, func, top) != Status::Ok) {
+        return Status::Error;
     }
-    tags = state->stack_tags + base; // the stack may have moved
-    vals = state->stack_values + base;
+    if (state->stack_tags[func] == Tag::LuaClosure) {
+        // A callable value whose __call is a Lua function.
+        if (!room_for_lua(state, func, top)) {
+            return stack_error(state);
+        }
+        VM_RELOAD(base);
+        if (op == OpCode::TailCall) {
+            VM_TAIL_CALL_LUA(func, static_cast<int>(top - func));
+        }
+        VM_ENTER_LUA_WITH_ROOM(func, state->stack_values[func], top, wanted);
+    }
+    if (call_c(state, func, top, wanted) != Status::Ok) {
+        return Status::Error;
+    }
+    VM_RELOAD(base);
     if (op != OpCode::TailCall) {
         VM_NEXT();
     }
@@ -175,10 +236,156 @@ VM_COLD_HANDLER(CallOther) {
     VM_RETURN_TO_CALLER(ci);
 }
 
+VM_WARM_HANDLER(ForIterator) {
+    // TFORCALL of a C++ function. The iterators of pairs and ipairs over
+    // plain tables run here without a call, with the same results as the
+    // library's functions (luaB_next, ipairsaux); anything else is a call.
+    const int a = get_a(i);
+    const auto iterator = std::bit_cast<CFunction>(vals[a + 4]);
+    if (tags[a + 4] == Tag::CFunction && tags[a + 5] == Tag::Table) {
+        Table* t = table_of(vals[a + 5]);
+        std::array<Value, 2> results{};
+        int n = -1;
+        if (iterator == &base_ipairs_step && tags[a + 6] == Tag::Integer &&
+            t->metatable == nullptr) {
+            const auto index = static_cast<std::int64_t>(vals[a + 6] + 1U);
+            const Value v = t->get_int(index).value();
+            results = {Value::integer(index), v};
+            n = 2;
+            if (v.is_nil()) {
+                results[0] = v;
+                n = 1;
+            }
+        } else if (iterator == &base_next) {
+            Value key = register_value(tags, vals, a + 6);
+            Value value;
+            switch (t->next_entry(key, value)) {
+            case Table::NextResult::Found:
+                results = {key, value};
+                n = 2;
+                break;
+            case Table::NextResult::End: n = 1; break;
+            case Table::NextResult::InvalidKey: break; // the call raises the error
+            }
+        }
+        if (n >= 0) {
+            const int wanted = get_c(i);
+            for (int j = 0; j < wanted; ++j) {
+                set_register(tags, vals, a + 4 + j,
+                             j < n ? results.at(static_cast<std::size_t>(j)) : Value::nil());
+            }
+            VM_NEXT();
+        }
+    }
+    VM_COLD(CallOther);
+}
+
 VM_COLD_HANDLER(SetUpvalBarrier) {
     const int a = get_a(i);
     Upvalue* upvalue = closure_of(vals)->upvalue(static_cast<std::size_t>(get_b(i)));
     state->heap().barrier(upvalue, register_value(tags, vals, a));
+    VM_NEXT();
+}
+
+VM_COLD_HANDLER(TableBarrier) {
+    // luaC_barrierback after a fast table store: a black table got a white
+    // value.
+    Value t;
+    if (get_op(i) == OpCode::SetTabUp) {
+        t = closure_of(vals)->upvalue(static_cast<std::size_t>(get_a(i)))->value();
+    } else {
+        t = register_value(tags, vals, get_a(i));
+    }
+    state->heap().barrier_back(table_of(t), rk_value(tags, vals, k, i));
+    VM_NEXT();
+}
+
+VM_WARM_HANDLER(Index) {
+    // GETTABUP, GETTABLE, GETI, GETFIELD and SELF when the value is absent or
+    // not a table: luaV_finishget, with __index (M2.1).
+    const int b = get_b(i);
+    Value t = register_value(tags, vals, b);
+    Value key;
+    Source source{.kind = Source::Kind::Register, .index = b};
+    switch (get_op(i)) {
+    case OpCode::GetTabUp:
+        t = closure_of(vals)->upvalue(static_cast<std::size_t>(b))->value();
+        key = k[get_c(i)];
+        source.kind = Source::Kind::Upvalue;
+        break;
+    case OpCode::GetTable: key = register_value(tags, vals, get_c(i)); break;
+    case OpCode::GetI: key = Value::integer(get_c(i)); break;
+    case OpCode::GetField: key = k[get_c(i)]; break;
+    default: key = rk_value(tags, vals, k, i); break; // SELF
+    }
+    // The common case first: tables whose metatables' __index are tables
+    // (classes and inheritance), with no call to make.
+    Value h = t;
+    for (int loop = 0; loop < max_tag_loop && h.is_table(); ++loop) {
+        Table* table = table_of(h);
+        const Table::Slot slot = key.tag() == Tag::ShortString
+                                     ? table->get_short_string(key.as_string())
+                                     : table->get(key);
+        if (!slot.empty()) {
+            set_register(tags, vals, get_a(i), slot.value());
+            VM_NEXT();
+        }
+        const Value tm = fast_metamethod(state->heap(), table->metatable, Event::Index);
+        if (tm.is_nil()) {
+            set_register(tags, vals, get_a(i), Value::nil());
+            VM_NEXT();
+        }
+        if (!tm.is_table()) {
+            break;
+        }
+        h = tm;
+    }
+    const std::uint32_t base = base_index(state, tags);
+    protect(state, pc);
+    if (finish_get(state, t, key, base + u32(get_a(i)), source) != Status::Ok) {
+        return Status::Error;
+    }
+    VM_RELOAD(base);
+    VM_NEXT();
+}
+
+VM_WARM_HANDLER(NewIndex) {
+    // SETTABUP, SETTABLE, SETI and SETFIELD when the key is absent or the
+    // value not a table: luaV_finishset, with __newindex (M2.2).
+    const int a = get_a(i);
+    Value t = register_value(tags, vals, a);
+    Value key;
+    Source source{.kind = Source::Kind::Register, .index = a};
+    switch (get_op(i)) {
+    case OpCode::SetTabUp:
+        t = closure_of(vals)->upvalue(static_cast<std::size_t>(a))->value();
+        key = k[get_b(i)];
+        source.kind = Source::Kind::Upvalue;
+        break;
+    case OpCode::SetTable: key = register_value(tags, vals, get_b(i)); break;
+    case OpCode::SetI: key = Value::integer(get_b(i)); break;
+    default: key = k[get_b(i)]; break; // SETFIELD
+    }
+    const Value value = rk_value(tags, vals, k, i);
+    // The common case first: a new key in a table without __newindex.
+    if (t.is_table()) {
+        Table* table = table_of(t);
+        if ((table->metatable == nullptr ||
+             fast_metamethod(state->heap(), table->metatable, Event::NewIndex).is_nil()) &&
+            Table::check_key(key) == nullptr) {
+            const Table::Slot slot = key.tag() == Tag::ShortString
+                                         ? table->get_short_string(key.as_string())
+                                         : table->get(key);
+            table->finish_set(state->heap(), key, slot, value);
+            VM_NEXT();
+        }
+    }
+    const std::uint32_t base = base_index(state, tags);
+    protect(state, pc);
+    if (finish_set(state, t, key, value, source) != Status::Ok) {
+        return Status::Error;
+    }
+    VM_RELOAD(base);
     VM_NEXT();
 }
 
@@ -206,55 +413,77 @@ VM_COLD_HANDLER(FloatArith) {
 }
 
 VM_COLD_HANDLER(Unary) {
-    // UNM and BNOT on anything but plain numbers.
+    // UNM and BNOT on anything but plain numbers: the operand twice to
+    // __unm or __bnot (M3.2).
     const int event = get_op(i) == OpCode::Unm ? tm_unm : tm_bnot;
-    if (unary_slow(state, pc, tags, vals, get_a(i), get_b(i), event) != Status::Ok) {
+    const int b = get_b(i);
+    const Operand operand{.value = register_value(tags, vals, b), .reg = b};
+    const std::uint32_t base = base_index(state, tags);
+    if (arith_slow(state, pc, operand, operand, event, base + u32(get_a(i))) != Status::Ok) {
         return Status::Error;
     }
+    VM_RELOAD(base);
     VM_NEXT();
 }
 
-VM_COLD_HANDLER(LengthError) {
+VM_COLD_HANDLER(Length) {
+    // LEN on anything but a string: a table's border, or __len (M3.6).
     const int b = get_b(i);
-    return type_error(state, pc, register_value(tags, vals, b), "get length of",
-                      register_info_here(state, pc, b));
+    const std::uint32_t base = base_index(state, tags);
+    if (length_slow(state, pc, register_value(tags, vals, b), b, base + u32(get_a(i))) !=
+        Status::Ok) {
+        return Status::Error;
+    }
+    VM_RELOAD(base);
+    VM_NEXT();
 }
 
 VM_COLD_HANDLER(Compare) {
-    // EQ between numbers of different kinds or long strings, EQK likewise,
-    // LT and LE between anything but two integers or two floats.
+    // EQ between numbers of different kinds, long strings or tables, EQK
+    // likewise, LT and LE between anything but two integers or two floats,
+    // and LTI and friends with something that is not a number.
     const int a = get_a(i);
     const Value left = register_value(tags, vals, a);
+    const std::uint32_t base = base_index(state, tags);
     bool cond = false;
+    Status status = Status::Ok;
     switch (get_op(i)) {
-    case OpCode::Eq: cond = equals(left, register_value(tags, vals, get_b(i))); break;
+    case OpCode::Eq: status = equal_slow(state, pc, left, register_value(tags, vals, get_b(i)), cond); break;
     case OpCode::EqK: cond = equals(left, k[get_b(i)]); break;
     case OpCode::Lt:
     case OpCode::Le:
-        if (!order_slow(state, pc, left, register_value(tags, vals, get_b(i)),
-                        get_op(i) == OpCode::Le, cond)) {
-            return Status::Error;
-        }
+        status = order_slow(state, pc, left, register_value(tags, vals, get_b(i)),
+                            get_op(i) == OpCode::Le, cond);
         break;
-    default: { // LTI, LEI, GTI, GEI with something that is not a number
+    default: { // luaT_callorderiTM
         const OpCode op = get_op(i);
         const bool flip = op == OpCode::GtI || op == OpCode::GeI;
         const bool less_or_equal = op == OpCode::LeI || op == OpCode::GeI;
-        if (!order_immediate_slow(state, pc, left, get_sb(i), get_c(i) != 0, flip, less_or_equal,
-                                  cond)) {
-            return Status::Error;
-        }
+        const Value number = get_c(i) != 0 ? Value::number(static_cast<double>(get_sb(i)))
+                                           : Value::integer(get_sb(i));
+        status = flip ? order_slow(state, pc, number, left, less_or_equal, cond)
+                      : order_slow(state, pc, left, number, less_or_equal, cond);
         break;
     }
     }
+    if (status != Status::Ok) {
+        return Status::Error;
+    }
+    VM_RELOAD(base);
     VM_COND_JUMP(cond);
 }
 
 VM_COLD_HANDLER(ReturnClose) {
-    // OP_RETURN in a function with upvalues to close (k set).
-    state->ci->saved_pc = pc;
-    state->close_upvalues(state->ci->func + 1); // (and to-be-closed variables: stage 7)
-    VM_FINISH_RETURN();
+    // OP_RETURN in a function with upvalues or to-be-closed variables to
+    // close (k set): they are closed above the results (M6.2).
+    const int n = VM_RETURN_COUNT();
+    CallInfo* ci = state->ci;
+    ci->saved_pc = pc;
+    state->top = std::max(state->top, ci->top);
+    if (close_variables(*state, ci->func + 1) != Status::Ok) {
+        return Status::Error;
+    }
+    VM_FINISH_RETURN(n);
 }
 
 // ==== Instructions ====
@@ -357,95 +586,173 @@ VM_HANDLER(SetUpval) {
 
 // ---- Tables ----
 //
-// Until stage 6 the only table is the globals table, and keys are strings:
-// globals (GETTABUP, SETTABUP) and `_ENV.name` work; anything else that is
-// not a string key is an error, and indexing anything but a table fails as
-// in Lua.
+// The fast paths read and write a table's existing entries (luaV_fastget,
+// luaV_fastgeti, luaV_finishfastset); anything else, an absent key (which
+// may need __index or __newindex) or a value that is not a table, goes to
+// the cold Index and NewIndex paths.
 
 VM_HANDLER(GetTabUp) {
     const Upvalue* upvalue = closure_of(vals)->upvalue(static_cast<std::size_t>(get_b(i)));
-    if (*upvalue->tag != Tag::Table) [[unlikely]] {
-        return index_error_upvalue(state, pc, vals, get_b(i));
+    if (*upvalue->tag == Tag::Table) [[likely]] {
+        const Table::Slot slot =
+            table_of(*upvalue->payload)->get_short_string(string_constant(k, get_c(i)));
+        if (!slot.empty()) [[likely]] {
+            const int a = get_a(i);
+            tags[a] = *slot.tag;
+            vals[a] = *slot.payload;
+            VM_NEXT();
+        }
     }
-    const auto* table = std::bit_cast<const Table*>(*upvalue->payload);
-    set_register(tags, vals, get_a(i), table->get(string_constant(k, get_c(i))));
-    VM_NEXT();
+    VM_COLD(Index);
 }
 
 VM_HANDLER(GetTable) {
     const int b = get_b(i);
     const int c = get_c(i);
-    if (tags[b] != Tag::Table) [[unlikely]] {
-        return index_error_register(state, pc, tags, vals, b);
+    if (tags[b] == Tag::Table) [[likely]] {
+        Table::Slot slot;
+        if (tags[c] == Tag::Integer) [[likely]] {
+            slot = table_of(vals[b])->get_int(as_int(vals[c]));
+        } else if (tags[c] == Tag::ShortString) {
+            slot = table_of(vals[b])->get_short_string(std::bit_cast<const String*>(vals[c]));
+        }
+        if (!slot.empty()) [[likely]] {
+            const int a = get_a(i);
+            tags[a] = *slot.tag;
+            vals[a] = *slot.payload;
+            VM_NEXT();
+        }
     }
-    if (tags[c] != Tag::ShortString && tags[c] != Tag::LongString) [[unlikely]] {
-        return raise(state, pc, not_string_key);
-    }
-    const auto* table = std::bit_cast<const Table*>(vals[b]);
-    set_register(tags, vals, get_a(i), table->get(std::bit_cast<const String*>(vals[c])));
-    VM_NEXT();
+    VM_COLD(Index);
 }
 
 VM_HANDLER(GetI) {
-    if (tags[get_b(i)] == Tag::Table) {
-        return raise(state, pc, not_string_key);
+    const int b = get_b(i);
+    if (tags[b] == Tag::Table) [[likely]] {
+        const Table::Slot slot = table_of(vals[b])->get_int(get_c(i));
+        if (!slot.empty()) [[likely]] {
+            const int a = get_a(i);
+            tags[a] = *slot.tag;
+            vals[a] = *slot.payload;
+            VM_NEXT();
+        }
     }
-    return index_error_register(state, pc, tags, vals, get_b(i));
+    VM_COLD(Index);
 }
 
 VM_HANDLER(GetField) {
     const int b = get_b(i);
-    if (tags[b] != Tag::Table) [[unlikely]] {
-        return index_error_register(state, pc, tags, vals, b);
+    if (tags[b] == Tag::Table) [[likely]] {
+        const Table::Slot slot = table_of(vals[b])->get_short_string(string_constant(k, get_c(i)));
+        if (!slot.empty()) [[likely]] {
+            const int a = get_a(i);
+            tags[a] = *slot.tag;
+            vals[a] = *slot.payload;
+            VM_NEXT();
+        }
     }
-    const auto* table = std::bit_cast<const Table*>(vals[b]);
-    set_register(tags, vals, get_a(i), table->get(string_constant(k, get_c(i))));
-    VM_NEXT();
+    VM_COLD(Index);
 }
+
+// luaV_finishfastset: the store, and the backward barrier when a black
+// table gets a collectable (possibly white) value. Besides a present value
+// (Lua's fast path), it takes a present slot holding nil in a table without
+// a metatable, where no __newindex can apply (Lua's finishset would store
+// there too).
+#define VM_CAN_STORE(TABLE, SLOT)                                                                  \
+    (!(SLOT).absent() && (*(SLOT).tag != Tag::Nil || (TABLE)->metatable == nullptr))
+
+#define VM_FAST_STORE(TABLE, SLOT)                                                                 \
+    do {                                                                                           \
+        (TABLE)->invalidate_metamethod_cache();                                                    \
+        const Tag store_tag_ = get_k(i) ? k[get_c(i)].tag() : tags[get_c(i)];                      \
+        *(SLOT).tag = store_tag_;                                                                  \
+        *(SLOT).payload = get_k(i) ? k[get_c(i)].payload() : vals[get_c(i)];                       \
+        if (store_tag_ >= first_collectable_tag && is_black(TABLE)) [[unlikely]] {                 \
+            VM_COLD(TableBarrier);                                                                 \
+        }                                                                                          \
+        VM_NEXT();                                                                                 \
+    } while (false)
 
 VM_HANDLER(SetTabUp) {
     const Upvalue* upvalue = closure_of(vals)->upvalue(static_cast<std::size_t>(get_a(i)));
-    if (*upvalue->tag != Tag::Table) [[unlikely]] {
-        return index_error_upvalue(state, pc, vals, get_a(i));
+    if (*upvalue->tag == Tag::Table) [[likely]] {
+        Table* t = table_of(*upvalue->payload);
+        const Table::Slot slot = t->get_short_string(string_constant(k, get_b(i)));
+        if (VM_CAN_STORE(t, slot)) [[likely]] {
+            VM_FAST_STORE(t, slot);
+        }
     }
-    auto* table = std::bit_cast<Table*>(*upvalue->payload);
-    table->set(state->heap(), string_constant(k, get_b(i)), rk_value(tags, vals, k, i));
-    VM_NEXT();
+    VM_COLD(NewIndex);
 }
 
 VM_HANDLER(SetTable) {
     const int a = get_a(i);
     const int b = get_b(i);
-    if (tags[a] != Tag::Table) [[unlikely]] {
-        return index_error_register(state, pc, tags, vals, a);
+    if (tags[a] == Tag::Table) [[likely]] {
+        Table* t = table_of(vals[a]);
+        Table::Slot slot;
+        if (tags[b] == Tag::Integer) [[likely]] {
+            slot = t->get_int(as_int(vals[b]));
+        } else if (tags[b] == Tag::ShortString) {
+            slot = t->get_short_string(std::bit_cast<const String*>(vals[b]));
+        }
+        if (VM_CAN_STORE(t, slot)) [[likely]] {
+            VM_FAST_STORE(t, slot);
+        }
     }
-    if (tags[b] != Tag::ShortString && tags[b] != Tag::LongString) [[unlikely]] {
-        return raise(state, pc, not_string_key);
-    }
-    auto* table = std::bit_cast<Table*>(vals[a]);
-    table->set(state->heap(), std::bit_cast<const String*>(vals[b]), rk_value(tags, vals, k, i));
-    VM_NEXT();
+    VM_COLD(NewIndex);
 }
 
 VM_HANDLER(SetI) {
-    if (tags[get_a(i)] == Tag::Table) {
-        return raise(state, pc, not_string_key);
+    const int a = get_a(i);
+    if (tags[a] == Tag::Table) [[likely]] {
+        Table* t = table_of(vals[a]);
+        const Table::Slot slot = t->get_int(get_b(i));
+        if (VM_CAN_STORE(t, slot)) [[likely]] {
+            VM_FAST_STORE(t, slot);
+        }
     }
-    return index_error_register(state, pc, tags, vals, get_a(i));
+    VM_COLD(NewIndex);
 }
 
 VM_HANDLER(SetField) {
     const int a = get_a(i);
-    if (tags[a] != Tag::Table) [[unlikely]] {
-        return index_error_register(state, pc, tags, vals, a);
+    if (tags[a] == Tag::Table) [[likely]] {
+        Table* t = table_of(vals[a]);
+        const Table::Slot slot = t->get_short_string(string_constant(k, get_b(i)));
+        if (VM_CAN_STORE(t, slot)) [[likely]] {
+            VM_FAST_STORE(t, slot);
+        }
     }
-    auto* table = std::bit_cast<Table*>(vals[a]);
-    table->set(state->heap(), string_constant(k, get_b(i)), rk_value(tags, vals, k, i));
-    VM_NEXT();
+    VM_COLD(NewIndex);
 }
 
+#undef VM_FAST_STORE
+#undef VM_CAN_STORE
+
 VM_HANDLER(NewTable) {
-    return raise(state, pc, "tables are not supported yet");
+    // A new table, presized from the constructor: B is log2 of the hash
+    // size plus 1 (or 0), C the array size, plus EXTRAARG's Ax times 256
+    // when k is set (T2).
+    const int a = get_a(i);
+    int b = get_b(i);
+    if (b > 0) {
+        b = static_cast<int>(1U << static_cast<unsigned>(b - 1));
+    }
+    std::uint32_t c = u32(get_c(i));
+    if (get_k(i)) {
+        c += u32(get_ax(*pc)) * (u32(max_c) + 1);
+    }
+    ++pc; // skip the extra argument
+    Table* t = state->heap().new_table();
+    tags[a] = Tag::Table; // anchored before any other allocation
+    vals[a] = std::bit_cast<std::uint64_t>(t);
+    if (b != 0 || c != 0) {
+        t->resize(state->heap(), c, u32(b));
+    }
+    VM_CHECK_GC(base_index(state, tags) + u32(a) + 1);
+    VM_NEXT();
 }
 
 VM_HANDLER(Self) {
@@ -454,16 +761,16 @@ VM_HANDLER(Self) {
     const int b = get_b(i);
     tags[a + 1] = tags[b];
     vals[a + 1] = vals[b];
-    if (tags[b] != Tag::Table) [[unlikely]] {
-        return index_error_register(state, pc, tags, vals, b);
+    if (tags[b] == Tag::Table) [[likely]] {
+        const Value key = rk_value(tags, vals, k, i);
+        const Table::Slot slot = table_of(vals[b])->get_string(key.as_string());
+        if (!slot.empty()) [[likely]] {
+            tags[a] = *slot.tag;
+            vals[a] = *slot.payload;
+            VM_NEXT();
+        }
     }
-    const Value key = rk_value(tags, vals, k, i);
-    if (!key.is_string()) [[unlikely]] {
-        return raise(state, pc, not_string_key);
-    }
-    const auto* table = std::bit_cast<const Table*>(vals[b]);
-    set_register(tags, vals, a, table->get(key.as_string()));
-    VM_NEXT();
+    VM_COLD(Index);
 }
 
 // ---- Arithmetic with an immediate or constant operand ----
@@ -747,15 +1054,24 @@ VM_HANDLER(Shr) {
 
 // ---- The slow paths of arithmetic (luaT_trybinTM) ----
 
+// The result goes to the A register of the instruction before the MMBIN.
+#define VM_ARITH_SLOW(P1, P2)                                                                      \
+    do {                                                                                           \
+        const std::uint32_t slow_base_ = base_index(state, tags);                                  \
+        if (arith_slow(state, pc, (P1), (P2), get_c(i), slow_base_ + u32(get_a(pc[-2]))) !=        \
+            Status::Ok) {                                                                          \
+            return Status::Error;                                                                  \
+        }                                                                                          \
+        VM_RELOAD(slow_base_);                                                                     \
+        VM_NEXT();                                                                                 \
+    } while (false)
+
 VM_HANDLER(MmBin) {
     const int a = get_a(i);
     const int b = get_b(i);
     const Operand p1{.value = register_value(tags, vals, a), .reg = a};
     const Operand p2{.value = register_value(tags, vals, b), .reg = b};
-    if (binary_slow(state, pc, tags, vals, p1, p2, get_c(i)) != Status::Ok) {
-        return Status::Error;
-    }
-    VM_NEXT();
+    VM_ARITH_SLOW(p1, p2);
 }
 
 VM_HANDLER(MmBinI) {
@@ -765,10 +1081,7 @@ VM_HANDLER(MmBinI) {
     if (get_k(i)) {
         std::swap(p1, p2); // the operands were exchanged (luaT_trybinassocTM)
     }
-    if (binary_slow(state, pc, tags, vals, p1, p2, get_c(i)) != Status::Ok) {
-        return Status::Error;
-    }
-    VM_NEXT();
+    VM_ARITH_SLOW(p1, p2);
 }
 
 VM_HANDLER(MmBinK) {
@@ -778,11 +1091,10 @@ VM_HANDLER(MmBinK) {
     if (get_k(i)) {
         std::swap(p1, p2);
     }
-    if (binary_slow(state, pc, tags, vals, p1, p2, get_c(i)) != Status::Ok) {
-        return Status::Error;
-    }
-    VM_NEXT();
+    VM_ARITH_SLOW(p1, p2);
 }
+
+#undef VM_ARITH_SLOW
 
 // ---- Unary operators ----
 
@@ -822,7 +1134,7 @@ VM_HANDLER(Len) {
     const int a = get_a(i);
     const int b = get_b(i);
     if (tags[b] != Tag::ShortString && tags[b] != Tag::LongString) [[unlikely]] {
-        VM_COLD(LengthError);
+        VM_COLD(Length); // tables, and __len
     }
     const auto* s = std::bit_cast<const String*>(vals[b]);
     set_integer(tags, vals, a, static_cast<std::int64_t>(s->length()));
@@ -832,28 +1144,39 @@ VM_HANDLER(Len) {
 VM_HANDLER(Concat) {
     const int a = get_a(i);
     const int n = get_b(i);
+    const std::uint32_t base = base_index(state, tags);
     if (concat_registers(state, pc, tags, vals, a, n) != Status::Ok) {
         return Status::Error;
     }
-    VM_CHECK_GC(base_index(state, tags) + u32(a) + 1);
+    VM_RELOAD(base); // __concat may have moved the stack
+    VM_CHECK_GC(base + u32(a) + 1);
     VM_NEXT();
 }
 
 // ---- Upvalues and to-be-closed variables ----
 
 VM_HANDLER(Close) {
-    state->close_upvalues(base_index(state, tags) + u32(get_a(i)));
+    // Upvalues and to-be-closed variables from R[A] up (M6.2).
+    const std::uint32_t base = base_index(state, tags);
+    if (state->to_be_closed.empty() || state->to_be_closed.back() < base + u32(get_a(i))) {
+        state->close_upvalues(base + u32(get_a(i)));
+        VM_NEXT();
+    }
+    protect(state, pc);
+    if (close_variables(*state, base + u32(get_a(i))) != Status::Ok) {
+        return Status::Error;
+    }
+    VM_RELOAD(base);
     VM_NEXT();
 }
 
 VM_HANDLER(Tbc) {
-    // luaF_newtbcupval: false and nil need no closing; anything else needs
-    // a __close metamethod, and metatables come in stage 7.
+    // luaF_newtbcupval: R[A] becomes a to-be-closed variable (M6.1).
     const int a = get_a(i);
-    if (tags[a] == Tag::Nil || tags[a] == Tag::False) {
-        VM_NEXT();
+    if (new_to_be_closed(state, pc, base_index(state, tags) + u32(a), a) != Status::Ok) {
+        return Status::Error;
     }
-    return not_closable(state, pc, a);
+    VM_NEXT();
 }
 
 // ---- Jumps and tests ----
@@ -864,22 +1187,22 @@ VM_HANDLER(Jmp) {
 }
 
 VM_HANDLER(Eq) {
-    // luaV_equalobj without metamethods (they come in stage 7): same tags
-    // compare their payloads, except floats and long strings.
+    // luaV_equalobj: same tags compare their payloads, except floats, long
+    // strings, and different tables, which may have __eq (M3.4).
     const int a = get_a(i);
     const int b = get_b(i);
     const Tag ta = tags[a];
     const Tag tb = tags[b];
     bool cond = false;
     if (ta == tb) {
-        if (ta <= Tag::True) {
-            cond = true; // nil, false, true: the tag is the value
-        } else if (ta == Tag::Float) {
+        if (ta == Tag::Float) {
             cond = load_float(&vals[a]) == load_float(&vals[b]); // nan, -0.0 as floats compare
-        } else if (ta != Tag::LongString) {
-            cond = vals[a] == vals[b]; // integers, interned strings, functions
-        } else {
-            VM_COLD(Compare); // long strings compare their bytes
+        } else if (ta <= Tag::True || vals[a] == vals[b]) {
+            // nil, false, true (the tag is the value), or the same integer,
+            // interned string, function or table
+            cond = true;
+        } else if (ta == Tag::LongString || ta == Tag::Table || ta == Tag::Userdata) {
+            VM_COLD(Compare); // long strings compare their bytes; tables and userdata try __eq
         }
     } else if ((ta == Tag::Integer || ta == Tag::Float) && (tb == Tag::Integer || tb == Tag::Float)) {
         VM_COLD(Compare); // an integer and a float
@@ -1068,32 +1391,14 @@ VM_HANDLER(TailCall) {
     if (static_cast<std::int64_t>(state->stack_last) - state->top <= size - delta) [[unlikely]] {
         VM_COLD(GrowAndRetry);
     }
-    ci->func -= u32(delta);
-    const std::uint32_t new_func = ci->func;
-    for (int j = 0; j < b; ++j) { // the function and its arguments move down
-        state->stack_tags[new_func + u32(j)] = state->stack_tags[func + u32(j)];
-        state->stack_values[new_func + u32(j)] = state->stack_values[func + u32(j)];
-    }
-    int narg1 = b;
-    for (; std::cmp_less_equal(narg1, p->parameter_count); ++narg1) {
-        state->stack_tags[new_func + u32(narg1)] = Tag::Nil;
-        state->stack_values[new_func + u32(narg1)] = 0;
-    }
-    ci->top = new_func + 1 + u32(size);
-    state->top = new_func + u32(narg1);
-    tags = state->stack_tags + new_func + 1;
-    vals = state->stack_values + new_func + 1;
-    k = p->constants.data();
-    ci->constants = k;
-    pc = p->code.data();
-    VM_NEXT();
+    VM_TAIL_CALL_LUA(func, b);
 }
 
 VM_HANDLER(Return) {
     if (get_k(i)) {
         VM_COLD(ReturnClose);
     }
-    VM_FINISH_RETURN();
+    VM_FINISH_RETURN(VM_RETURN_COUNT());
 }
 
 VM_HANDLER(Return0) {
@@ -1159,11 +1464,13 @@ VM_HANDLER(ForPrep) {
 }
 
 VM_HANDLER(TForPrep) {
-    // The closing value (the fourth) is to be closed (stage 7): only nil
-    // and false are closable yet.
+    // The closing value (the fourth) is a to-be-closed variable (M6.4).
     const int a = get_a(i);
     if (tags[a + 3] != Tag::Nil && tags[a + 3] != Tag::False) [[unlikely]] {
-        return not_closable(state, pc, a + 3);
+        if (new_to_be_closed(state, pc, base_index(state, tags) + u32(a + 3), a + 3) !=
+            Status::Ok) {
+            return Status::Error;
+        }
     }
     pc += get_bx(i);
     VM_NEXT();
@@ -1180,7 +1487,7 @@ VM_HANDLER(TForCall) {
     const std::uint32_t func = base_index(state, tags) + u32(a + 4);
     state->ci->saved_pc = pc;
     if (tags[a + 4] != Tag::LuaClosure) [[unlikely]] {
-        VM_COLD(CallOther);
+        VM_COLD(ForIterator);
     }
     VM_ENTER_LUA(func, vals[a + 4], func + 3, get_c(i));
 }
@@ -1196,7 +1503,36 @@ VM_HANDLER(TForLoop) {
 }
 
 VM_HANDLER(SetList) {
-    return raise(state, pc, "tables are not supported yet");
+    // The positional values of a constructor: R[A][C+j] = R[A+j] for j = 1
+    // to B, or up to the top when B is 0 (T2). The array part is made big
+    // enough at once.
+    const int a = get_a(i);
+    int n = get_b(i);
+    std::uint32_t last = u32(get_c(i));
+    const std::uint32_t ra = base_index(state, tags) + u32(a);
+    if (n == 0) {
+        n = static_cast<int>(state->top - ra) - 1;
+    } else {
+        state->top = state->ci->top;
+    }
+    last += u32(n);
+    if (get_k(i)) {
+        last += u32(get_ax(*pc)) * (u32(max_c) + 1);
+        ++pc;
+    }
+    Table* t = table_of(vals[a]);
+    if (last > t->real_array_size()) {
+        t->resize_array(state->heap(), last);
+    }
+    Tag* array_tags = t->array_tags();
+    std::uint64_t* array_values = t->array_values();
+    for (; n > 0; --n) {
+        array_tags[last - 1] = tags[a + n];
+        array_values[last - 1] = vals[a + n];
+        state->heap().barrier_back(t, register_value(tags, vals, a + n));
+        --last;
+    }
+    VM_NEXT();
 }
 
 // ---- Functions ----
@@ -1289,9 +1625,13 @@ VM_HANDLER(ExtraArg) {
 }
 
 #undef VM_ENTER_LUA
+#undef VM_ENTER_LUA_WITH_ROOM
+#undef VM_TAIL_CALL_LUA
 #undef VM_RETURN_TO_CALLER
 #undef VM_FINISH_RETURN
+#undef VM_RETURN_COUNT
 #undef VM_CHECK_GC
+#undef VM_RELOAD
 #undef VM_COND_JUMP
 
 // NOLINTEND(cppcoreguidelines-macro-usage,cppcoreguidelines-avoid-goto)

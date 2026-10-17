@@ -1,0 +1,581 @@
+
+main <gc_finalizers.lua:0,0> (160 instructions)
+0+ params, 21 slots, 1 upvalue, 18 locals, 26 constants, 10 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	GETTABUP 	0 0 0	; _ENV "collectgarbage"
+	3	[7]	LOADK    	1 1	; "stop"
+	4	[7]	CALL     	0 2 1	; 1 in 0 out
+	5	[8]	GETTABUP 	0 0 2	; _ENV "print"
+	6	[8]	GETTABUP 	1 0 0	; _ENV "collectgarbage"
+	7	[8]	LOADK    	2 3	; "isrunning"
+	8	[8]	CALL     	1 2 0	; 1 in all out
+	9	[8]	CALL     	0 0 1	; all in 0 out
+	10	[10]	NEWTABLE 	0 0 0	; 0
+	11	[10]	EXTRAARG 	0
+	12	[13]	CLOSURE  	1 0
+	13	[19]	CLOSURE  	2 1
+	14	[24]	CLOSURE  	3 2
+	15	[25]	MOVE     	4 3
+	16	[25]	LOADK    	5 4	; "g"
+	17	[25]	LOADI    	6 5
+	18	[25]	CALL     	4 3 1	; 2 in 0 out
+	19	[26]	MOVE     	4 2
+	20	[26]	LOADK    	5 5	; "before collect"
+	21	[26]	CALL     	4 2 1	; 1 in 0 out
+	22	[27]	GETTABUP 	4 0 0	; _ENV "collectgarbage"
+	23	[27]	CALL     	4 1 1	; 0 in 0 out
+	24	[28]	MOVE     	4 2
+	25	[28]	LOADK    	5 6	; "after collect"
+	26	[28]	CALL     	4 2 1	; 1 in 0 out
+	27	[29]	GETTABUP 	4 0 0	; _ENV "collectgarbage"
+	28	[29]	CALL     	4 1 1	; 0 in 0 out
+	29	[30]	MOVE     	4 2
+	30	[30]	LOADK    	5 7	; "again (nothing)"
+	31	[30]	CALL     	4 2 1	; 1 in 0 out
+	32	[33]	NEWTABLE 	4 0 1	; 1
+	33	[33]	EXTRAARG 	0
+	34	[33]	MOVE     	5 1
+	35	[33]	LOADK    	6 8	; "kept1"
+	36	[33]	CALL     	5 2 2	; 1 in 1 out
+	37	[33]	MOVE     	6 1
+	38	[33]	LOADK    	7 9	; "kept2"
+	39	[33]	CALL     	6 2 0	; 1 in all out
+	40	[33]	SETLIST  	4 0 0
+	41	[34]	MOVE     	5 1
+	42	[34]	LOADK    	6 10	; "single"
+	43	[34]	CALL     	5 2 2	; 1 in 1 out
+	44	[35]	MOVE     	6 3
+	45	[35]	LOADK    	7 11	; "x"
+	46	[35]	LOADI    	8 2
+	47	[35]	CALL     	6 3 1	; 2 in 0 out
+	48	[36]	GETTABUP 	6 0 0	; _ENV "collectgarbage"
+	49	[36]	CALL     	6 1 1	; 0 in 0 out
+	50	[37]	MOVE     	6 2
+	51	[37]	LOADK    	7 12	; "with live objects"
+	52	[37]	CALL     	6 2 1	; 1 in 0 out
+	53	[38]	LOADNIL  	5 0	; 1 out
+	54	[39]	GETTABUP 	6 0 0	; _ENV "collectgarbage"
+	55	[39]	CALL     	6 1 1	; 0 in 0 out
+	56	[40]	MOVE     	6 2
+	57	[40]	LOADK    	7 13	; "single dropped"
+	58	[40]	CALL     	6 2 1	; 1 in 0 out
+	59	[41]	SETI     	4 1 14k	; nil
+	60	[42]	GETTABUP 	6 0 0	; _ENV "collectgarbage"
+	61	[42]	CALL     	6 1 1	; 0 in 0 out
+	62	[43]	MOVE     	6 2
+	63	[43]	LOADK    	7 15	; "kept1 dropped"
+	64	[43]	CALL     	6 2 1	; 1 in 0 out
+	65	[46]	LOADNIL  	6 1	; 2 out
+	66	[52]	CLOSURE  	8 3
+	67	[53]	MOVE     	9 8
+	68	[53]	CALL     	9 1 1	; 0 in 0 out
+	69	[55]	GETTABUP 	8 0 0	; _ENV "collectgarbage"
+	70	[55]	CALL     	8 1 1	; 0 in 0 out
+	71	[56]	GETTABUP 	8 0 16	; _ENV "print"
+	72	[56]	MOVE     	9 6
+	73	[56]	MOVE     	10 7
+	74	[56]	CALL     	8 3 1	; 2 in 0 out
+	75	[59]	LOADFALSE	8
+	76	[64]	CLOSURE  	9 4
+	77	[65]	MOVE     	10 9
+	78	[65]	CALL     	10 1 1	; 0 in 0 out
+	79	[66]	GETTABUP 	10 0 0	; _ENV "collectgarbage"
+	80	[66]	CALL     	10 1 1	; 0 in 0 out
+	81	[67]	GETTABUP 	10 0 16	; _ENV "print"
+	82	[67]	LOADK    	11 17	; "late __gc called:"
+	83	[67]	MOVE     	12 8
+	84	[67]	CALL     	10 3 1	; 2 in 0 out
+	85	[70]	LOADFALSE	10
+	86	[76]	CLOSURE  	11 5
+	87	[77]	MOVE     	12 11
+	88	[77]	CALL     	12 1 1	; 0 in 0 out
+	89	[78]	GETTABUP 	12 0 0	; _ENV "collectgarbage"
+	90	[78]	CALL     	12 1 1	; 0 in 0 out
+	91	[79]	GETTABUP 	12 0 16	; _ENV "print"
+	92	[79]	LOADK    	13 18	; "re-set __gc called:"
+	93	[79]	MOVE     	14 10
+	94	[79]	CALL     	12 3 1	; 2 in 0 out
+	95	[87]	CLOSURE  	12 6
+	96	[88]	MOVE     	13 12
+	97	[88]	CALL     	13 1 1	; 0 in 0 out
+	98	[89]	GETTABUP 	13 0 0	; _ENV "collectgarbage"
+	99	[89]	CALL     	13 1 1	; 0 in 0 out
+	100	[90]	MOVE     	13 2
+	101	[90]	LOADK    	14 19	; "replaced"
+	102	[90]	CALL     	13 2 1	; 1 in 0 out
+	103	[98]	CLOSURE  	13 7
+	104	[99]	MOVE     	14 13
+	105	[99]	CALL     	14 1 1	; 0 in 0 out
+	106	[100]	GETTABUP 	14 0 0	; _ENV "collectgarbage"
+	107	[100]	CALL     	14 1 1	; 0 in 0 out
+	108	[101]	MOVE     	14 2
+	109	[101]	LOADK    	15 20	; "cycle"
+	110	[101]	CALL     	14 2 1	; 1 in 0 out
+	111	[105]	CLOSURE  	14 8
+	112	[106]	MOVE     	15 14
+	113	[106]	CALL     	15 1 1	; 0 in 0 out
+	114	[107]	GETTABUP 	15 0 0	; _ENV "collectgarbage"
+	115	[107]	CALL     	15 1 1	; 0 in 0 out
+	116	[108]	GETTABUP 	15 0 16	; _ENV "print"
+	117	[108]	LOADK    	16 21	; "still running"
+	118	[108]	CALL     	15 2 1	; 1 in 0 out
+	119	[111]	LOADI    	15 0
+	120	[114]	CLOSURE  	16 9
+	121	[115]	MOVE     	17 16
+	122	[115]	CALL     	17 1 1	; 0 in 0 out
+	123	[116]	GETTABUP 	17 0 0	; _ENV "collectgarbage"
+	124	[116]	CALL     	17 1 1	; 0 in 0 out
+	125	[117]	GETTABUP 	17 0 16	; _ENV "print"
+	126	[117]	LOADK    	18 22	; "finalized"
+	127	[117]	MOVE     	19 15
+	128	[117]	CALL     	17 3 1	; 2 in 0 out
+	129	[119]	GETTABUP 	17 0 16	; _ENV "print"
+	130	[119]	GETTABUP 	18 0 0	; _ENV "collectgarbage"
+	131	[119]	LOADK    	19 3	; "isrunning"
+	132	[119]	CALL     	18 2 2	; 1 in 1 out
+	133	[119]	GETTABUP 	19 0 0	; _ENV "collectgarbage"
+	134	[119]	LOADK    	20 23	; "count"
+	135	[119]	CALL     	19 2 2	; 1 in 1 out
+	136	[119]	GTI      	19 0 1
+	137	[119]	JMP      	1	; to 139
+	138	[119]	LFALSESKIP	19
+	139	[119]	LOADTRUE 	19
+	140	[119]	CALL     	17 3 1	; 2 in 0 out
+	141	[120]	GETTABUP 	17 0 0	; _ENV "collectgarbage"
+	142	[120]	LOADK    	18 24	; "restart"
+	143	[120]	CALL     	17 2 1	; 1 in 0 out
+	144	[121]	GETTABUP 	17 0 16	; _ENV "print"
+	145	[121]	GETTABUP 	18 0 0	; _ENV "collectgarbage"
+	146	[121]	LOADK    	19 3	; "isrunning"
+	147	[121]	CALL     	18 2 0	; 1 in all out
+	148	[121]	CALL     	17 0 1	; all in 0 out
+	149	[122]	GETTABUP 	17 0 0	; _ENV "collectgarbage"
+	150	[122]	LOADK    	18 1	; "stop"
+	151	[122]	CALL     	17 2 1	; 1 in 0 out
+	152	[123]	GETTABUP 	17 0 16	; _ENV "print"
+	153	[123]	GETTABUP 	18 0 0	; _ENV "collectgarbage"
+	154	[123]	LOADK    	19 3	; "isrunning"
+	155	[123]	CALL     	18 2 0	; 1 in all out
+	156	[123]	CALL     	17 0 1	; all in 0 out
+	157	[125]	GETI     	17 4 2
+	158	[125]	GETFIELD 	17 17 25	; "name"
+	159	[125]	RETURN   	17 2 1k	; 1 out
+	160	[125]	RETURN   	17 1 1k	; 0 out
+constants (26):
+	0	S	"collectgarbage"
+	1	S	"stop"
+	2	S	"print"
+	3	S	"isrunning"
+	4	S	"g"
+	5	S	"before collect"
+	6	S	"after collect"
+	7	S	"again (nothing)"
+	8	S	"kept1"
+	9	S	"kept2"
+	10	S	"single"
+	11	S	"x"
+	12	S	"with live objects"
+	13	S	"single dropped"
+	14	N	nil
+	15	S	"kept1 dropped"
+	16	S	"print"
+	17	S	"late __gc called:"
+	18	S	"re-set __gc called:"
+	19	S	"replaced"
+	20	S	"cycle"
+	21	S	"still running"
+	22	S	"finalized"
+	23	S	"count"
+	24	S	"restart"
+	25	S	"name"
+locals (18):
+	0	log	12	161
+	1	make	13	161
+	2	flush	14	161
+	3	garbage	15	161
+	4	keep	41	161
+	5	single	44	161
+	6	seen_name	66	161
+	7	seen_extra	66	161
+	8	f	67	69
+	9	late_called	76	161
+	10	late	77	161
+	11	again_called	86	161
+	12	again	87	161
+	13	replaced	96	161
+	14	pair	104	161
+	15	failing	112	161
+	16	count	120	161
+	17	many	121	161
+upvalues (1):
+	0	_ENV	1	0
+
+function <gc_finalizers.lua:11,13> (11 instructions)
+1 param, 5 slots, 2 upvalues, 1 local, 3 constants, 1 function
+	1	[12]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	2	[12]	NEWTABLE 	2 1 0	; 0
+	3	[12]	EXTRAARG 	0
+	4	[12]	SETFIELD 	2 1 0	; "name"
+	5	[12]	NEWTABLE 	3 1 0	; 0
+	6	[12]	EXTRAARG 	0
+	7	[12]	CLOSURE  	4 0
+	8	[12]	SETFIELD 	3 2 4	; "__gc"
+	9	[12]	TAILCALL 	1 3 0	; 2 in
+	10	[12]	RETURN   	1 0 0	; all out
+	11	[13]	RETURN0  	
+constants (3):
+	0	S	"setmetatable"
+	1	S	"name"
+	2	S	"__gc"
+locals (1):
+	0	name	1	12
+upvalues (2):
+	0	_ENV	0	0
+	1	log	1	0
+
+function <gc_finalizers.lua:12,12> (8 instructions)
+1 param, 4 slots, 1 upvalue, 1 local, 1 constant, 0 functions
+	1	[12]	GETUPVAL 	1 0	; log
+	2	[12]	LEN      	1 1
+	3	[12]	ADDI     	2 1 1
+	4	[12]	MMBINI   	1 1 6 0	; __add
+	5	[12]	GETUPVAL 	1 0	; log
+	6	[12]	GETFIELD 	3 0 0	; "name"
+	7	[12]	SETTABLE 	1 2 3
+	8	[12]	RETURN0  	
+constants (1):
+	0	S	"name"
+locals (1):
+	0	o	1	9
+upvalues (1):
+	0	log	0	1
+
+function <gc_finalizers.lua:14,19> (22 instructions)
+1 param, 11 slots, 2 upvalues, 8 locals, 4 constants, 0 functions
+	1	[15]	MOVE     	1 0
+	2	[15]	LOADK    	2 0	; ":"
+	3	[15]	CONCAT   	1 2
+	4	[16]	GETTABUP 	2 0 1	; _ENV "ipairs"
+	5	[16]	GETUPVAL 	3 1	; log
+	6	[16]	CALL     	2 2 5	; 1 in 4 out
+	7	[16]	TFORPREP 	2 5	; to 13
+	8	[16]	MOVE     	8 1
+	9	[16]	LOADK    	9 2	; " "
+	10	[16]	MOVE     	10 7
+	11	[16]	CONCAT   	8 3
+	12	[16]	MOVE     	1 8
+	13	[16]	TFORCALL 	2 2
+	14	[16]	TFORLOOP 	2 7	; to 8
+	15	[16]	CLOSE    	2
+	16	[17]	GETTABUP 	2 0 3	; _ENV "print"
+	17	[17]	MOVE     	3 1
+	18	[17]	CALL     	2 2 1	; 1 in 0 out
+	19	[18]	NEWTABLE 	2 0 0	; 0
+	20	[18]	EXTRAARG 	0
+	21	[18]	SETUPVAL 	2 1	; log
+	22	[19]	RETURN   	2 1 0k	; 0 out
+constants (4):
+	0	S	":"
+	1	S	"ipairs"
+	2	S	" "
+	3	S	"print"
+locals (8):
+	0	label	1	23
+	1	s	4	23
+	2	(for state)	7	15
+	3	(for state)	7	15
+	4	(for state)	7	15
+	5	(for state)	7	15
+	6	_	8	13
+	7	name	8	13
+upvalues (2):
+	0	_ENV	0	0
+	1	log	1	0
+
+function <gc_finalizers.lua:22,24> (11 instructions)
+2 params, 9 slots, 1 upvalue, 6 locals, 0 constants, 0 functions
+	1	[23]	LOADI    	2 1
+	2	[23]	MOVE     	3 1
+	3	[23]	LOADI    	4 1
+	4	[23]	FORPREP  	2 5	; exit to 11
+	5	[23]	GETUPVAL 	6 0	; make
+	6	[23]	MOVE     	7 0
+	7	[23]	MOVE     	8 5
+	8	[23]	CONCAT   	7 2
+	9	[23]	CALL     	6 2 1	; 1 in 0 out
+	10	[23]	FORLOOP  	2 6	; to 5
+	11	[24]	RETURN0  	
+constants (0):
+locals (6):
+	0	prefix	1	12
+	1	n	1	12
+	2	(for state)	4	11
+	3	(for state)	4	11
+	4	(for state)	4	11
+	5	i	5	10
+upvalues (1):
+	0	make	1	1
+
+function <gc_finalizers.lua:48,52> (17 instructions)
+0 params, 6 slots, 3 upvalues, 1 local, 5 constants, 1 function
+	1	[49]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[49]	NEWTABLE 	1 2 0	; 0
+	3	[49]	EXTRAARG 	0
+	4	[49]	SETFIELD 	1 1 2k	; "name" "self"
+	5	[49]	NEWTABLE 	2 0 3	; 3
+	6	[49]	EXTRAARG 	0
+	7	[49]	LOADI    	3 1
+	8	[49]	LOADI    	4 2
+	9	[49]	LOADI    	5 3
+	10	[49]	SETLIST  	2 3 0
+	11	[49]	SETFIELD 	1 3 2	; "extra"
+	12	[49]	NEWTABLE 	2 1 0	; 0
+	13	[49]	EXTRAARG 	0
+	14	[51]	CLOSURE  	3 0
+	15	[51]	SETFIELD 	2 4 3	; "__gc"
+	16	[49]	CALL     	0 3 2	; 2 in 1 out
+	17	[52]	RETURN0  	
+constants (5):
+	0	S	"setmetatable"
+	1	S	"name"
+	2	S	"self"
+	3	S	"extra"
+	4	S	"__gc"
+locals (1):
+	0	o	17	18
+upvalues (3):
+	0	_ENV	0	0
+	1	seen_name	1	6
+	2	seen_extra	1	7
+
+function <gc_finalizers.lua:49,51> (6 instructions)
+1 param, 3 slots, 2 upvalues, 1 local, 2 constants, 0 functions
+	1	[50]	GETFIELD 	1 0 0	; "name"
+	2	[50]	GETFIELD 	2 0 1	; "extra"
+	3	[50]	LEN      	2 2
+	4	[50]	SETUPVAL 	2 1	; seen_extra
+	5	[50]	SETUPVAL 	1 0	; seen_name
+	6	[51]	RETURN0  	
+constants (2):
+	0	S	"name"
+	1	S	"extra"
+locals (1):
+	0	o	1	7
+upvalues (2):
+	0	seen_name	0	1
+	1	seen_extra	0	2
+
+function <gc_finalizers.lua:60,64> (10 instructions)
+0 params, 4 slots, 2 upvalues, 2 locals, 2 constants, 1 function
+	1	[61]	NEWTABLE 	0 0 0	; 0
+	2	[61]	EXTRAARG 	0
+	3	[62]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	4	[62]	NEWTABLE 	2 0 0	; 0
+	5	[62]	EXTRAARG 	0
+	6	[62]	MOVE     	3 0
+	7	[62]	CALL     	1 3 2	; 2 in 1 out
+	8	[63]	CLOSURE  	2 0
+	9	[63]	SETFIELD 	0 1 2	; "__gc"
+	10	[64]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"__gc"
+locals (2):
+	0	mt	3	11
+	1	o	8	11
+upvalues (2):
+	0	_ENV	0	0
+	1	late_called	1	8
+
+function <gc_finalizers.lua:63,63> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[63]	LOADTRUE 	0
+	2	[63]	SETUPVAL 	0 0	; late_called
+	3	[63]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	late_called	0	1
+
+function <gc_finalizers.lua:71,76> (14 instructions)
+0 params, 5 slots, 2 upvalues, 2 locals, 2 constants, 1 function
+	1	[72]	NEWTABLE 	0 0 0	; 0
+	2	[72]	EXTRAARG 	0
+	3	[73]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	4	[73]	NEWTABLE 	2 0 0	; 0
+	5	[73]	EXTRAARG 	0
+	6	[73]	MOVE     	3 0
+	7	[73]	CALL     	1 3 2	; 2 in 1 out
+	8	[74]	CLOSURE  	2 0
+	9	[74]	SETFIELD 	0 1 2	; "__gc"
+	10	[75]	GETTABUP 	2 0 0	; _ENV "setmetatable"
+	11	[75]	MOVE     	3 1
+	12	[75]	MOVE     	4 0
+	13	[75]	CALL     	2 3 1	; 2 in 0 out
+	14	[76]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"__gc"
+locals (2):
+	0	mt	3	15
+	1	o	8	15
+upvalues (2):
+	0	_ENV	0	0
+	1	again_called	1	10
+
+function <gc_finalizers.lua:74,74> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[74]	LOADTRUE 	0
+	2	[74]	SETUPVAL 	0 0	; again_called
+	3	[74]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	again_called	0	1
+
+function <gc_finalizers.lua:83,87> (12 instructions)
+0 params, 4 slots, 2 upvalues, 2 locals, 2 constants, 2 functions
+	1	[84]	NEWTABLE 	0 1 0	; 0
+	2	[84]	EXTRAARG 	0
+	3	[84]	CLOSURE  	1 0
+	4	[84]	SETFIELD 	0 0 1	; "__gc"
+	5	[85]	GETTABUP 	1 1 1	; _ENV "setmetatable"
+	6	[85]	NEWTABLE 	2 0 0	; 0
+	7	[85]	EXTRAARG 	0
+	8	[85]	MOVE     	3 0
+	9	[85]	CALL     	1 3 2	; 2 in 1 out
+	10	[86]	CLOSURE  	2 1
+	11	[86]	SETFIELD 	0 0 2	; "__gc"
+	12	[87]	RETURN0  	
+constants (2):
+	0	S	"__gc"
+	1	S	"setmetatable"
+locals (2):
+	0	mt	5	13
+	1	o	10	13
+upvalues (2):
+	0	log	1	0
+	1	_ENV	0	0
+
+function <gc_finalizers.lua:84,84> (7 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[84]	GETUPVAL 	0 0	; log
+	2	[84]	LEN      	0 0
+	3	[84]	ADDI     	1 0 1
+	4	[84]	MMBINI   	0 1 6 0	; __add
+	5	[84]	GETUPVAL 	0 0	; log
+	6	[84]	SETTABLE 	0 1 0k	; "old"
+	7	[84]	RETURN0  	
+constants (1):
+	0	S	"old"
+locals (0):
+upvalues (1):
+	0	log	0	0
+
+function <gc_finalizers.lua:86,86> (7 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[86]	GETUPVAL 	0 0	; log
+	2	[86]	LEN      	0 0
+	3	[86]	ADDI     	1 0 1
+	4	[86]	MMBINI   	0 1 6 0	; __add
+	5	[86]	GETUPVAL 	0 0	; log
+	6	[86]	SETTABLE 	0 1 0k	; "new"
+	7	[86]	RETURN0  	
+constants (1):
+	0	S	"new"
+locals (0):
+upvalues (1):
+	0	log	0	0
+
+function <gc_finalizers.lua:94,98> (10 instructions)
+0 params, 3 slots, 1 upvalue, 2 locals, 3 constants, 0 functions
+	1	[95]	GETUPVAL 	0 0	; make
+	2	[95]	LOADK    	1 0	; "pa"
+	3	[95]	CALL     	0 2 2	; 1 in 1 out
+	4	[96]	GETUPVAL 	1 0	; make
+	5	[96]	LOADK    	2 1	; "pb"
+	6	[96]	CALL     	1 2 2	; 1 in 1 out
+	7	[97]	MOVE     	2 1
+	8	[97]	SETFIELD 	1 2 0	; "other"
+	9	[97]	SETFIELD 	0 2 2	; "other"
+	10	[98]	RETURN0  	
+constants (3):
+	0	S	"pa"
+	1	S	"pb"
+	2	S	"other"
+locals (2):
+	0	a	4	11
+	1	b	7	11
+upvalues (1):
+	0	make	1	1
+
+function <gc_finalizers.lua:105,105> (9 instructions)
+0 params, 4 slots, 1 upvalue, 0 locals, 2 constants, 1 function
+	1	[105]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[105]	NEWTABLE 	1 0 0	; 0
+	3	[105]	EXTRAARG 	0
+	4	[105]	NEWTABLE 	2 1 0	; 0
+	5	[105]	EXTRAARG 	0
+	6	[105]	CLOSURE  	3 0
+	7	[105]	SETFIELD 	2 1 3	; "__gc"
+	8	[105]	CALL     	0 3 1	; 2 in 0 out
+	9	[105]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"__gc"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <gc_finalizers.lua:105,105> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[105]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[105]	LOADK    	1 1	; "in gc"
+	3	[105]	CALL     	0 2 1	; 1 in 0 out
+	4	[105]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"in gc"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <gc_finalizers.lua:112,114> (14 instructions)
+0 params, 8 slots, 2 upvalues, 4 locals, 2 constants, 1 function
+	1	[113]	LOADI    	0 1
+	2	[113]	LOADI    	1 200
+	3	[113]	LOADI    	2 1
+	4	[113]	FORPREP  	0 8	; exit to 14
+	5	[113]	GETTABUP 	4 0 0	; _ENV "setmetatable"
+	6	[113]	NEWTABLE 	5 0 0	; 0
+	7	[113]	EXTRAARG 	0
+	8	[113]	NEWTABLE 	6 1 0	; 0
+	9	[113]	EXTRAARG 	0
+	10	[113]	CLOSURE  	7 0
+	11	[113]	SETFIELD 	6 1 7	; "__gc"
+	12	[113]	CALL     	4 3 1	; 2 in 0 out
+	13	[113]	FORLOOP  	0 9	; to 5
+	14	[114]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"__gc"
+locals (4):
+	0	(for state)	4	14
+	1	(for state)	4	14
+	2	(for state)	4	14
+	3	_	5	13
+upvalues (2):
+	0	_ENV	0	0
+	1	count	1	15
+
+function <gc_finalizers.lua:113,113> (5 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[113]	GETUPVAL 	0 0	; count
+	2	[113]	ADDI     	0 0 1
+	3	[113]	MMBINI   	0 1 6 0	; __add
+	4	[113]	SETUPVAL 	0 0	; count
+	5	[113]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	count	0	1

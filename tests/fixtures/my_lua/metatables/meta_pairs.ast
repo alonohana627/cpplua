@@ -1,0 +1,377 @@
+Chunk
+  Local ordered
+    Table
+  Assign
+    Targets
+      Index
+        Name ordered (local 0)
+        String "__pairs"
+    Values
+      Function(t)
+        Local i
+          Integer 0
+        Return
+          Function(_, _) [upvalues: i, t]
+            Assign
+              Targets
+                Name i (upvalue 0)
+              Values
+                Binary +
+                  Name i (upvalue 0)
+                  Integer 1
+            Local k
+              Index
+                Index
+                  Name t (upvalue 1)
+                  String "__keys"
+                Name i (upvalue 0)
+            If
+              If
+                Binary ~=
+                  Name k (local 2)
+                  Nil
+                Then
+                  Return
+                    Name k (local 2)
+                    Index
+                      Index
+                        Name t (upvalue 1)
+                        String "__data"
+                      Name k (local 2)
+          Name t (local 0)
+          Nil
+  Local o
+    Call
+      Name setmetatable
+      Table
+        Field __keys
+          Table
+            Item
+              String "z"
+            Item
+              String "a"
+            Item
+              String "m"
+        Field __data
+          Table
+            Field z
+              Integer 26
+            Field a
+              Integer 1
+            Field m
+              Integer 13
+      Name ordered (local 0)
+  GenericFor k, v
+    In
+      Call
+        Name pairs
+        Name o (local 1)
+    Body
+      CallStatement
+        Call
+          Name print
+          Name k (local 6)
+          Name v (local 7)
+  Local state_seen, init_seen
+  Local custom
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __pairs
+          Function(t) [upvalues: state_seen, init_seen]
+            Return
+              Function(s, c) [upvalues: state_seen, init_seen]
+                Assign
+                  Targets
+                    Name state_seen (upvalue 0)
+                    Name init_seen (upvalue 1)
+                  Values
+                    Name s (local 0)
+                    Name c (local 1)
+                Return
+                  Nil
+              String "state"
+              String "init"
+  GenericFor _
+    In
+      Call
+        Name pairs
+        Name custom (local 4)
+    Body
+  CallStatement
+    Call
+      Name print
+      Name state_seen (local 2)
+      Name init_seen (local 3)
+  Local hidden
+    Call
+      Name setmetatable
+      Table
+        Field real
+          Integer 1
+      Table
+        Field __pairs
+          Function()
+            Return
+              Function()
+              Nil
+              Nil
+  Local count
+    Integer 0
+  GenericFor _
+    In
+      Call
+        Name pairs
+        Name hidden (local 5)
+    Body
+      Assign
+        Targets
+          Name count (local 6)
+        Values
+          Binary +
+            Name count (local 6)
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Name count (local 6)
+      Call
+        Name next
+        Name hidden (local 5)
+  Local private
+    Call
+      Name setmetatable
+      Table
+        Field _secret
+          Integer 1
+        Field a
+          Integer 1
+        Field b
+          Integer 2
+        Field _x
+          Integer 3
+      Table
+        Field __pairs
+          Function(t) [upvalues: _ENV]
+            LocalFunction iter
+              Function(tbl, k) [upvalues: _ENV]
+                Local nk, nv
+                  Call
+                    Name next
+                    Name tbl (local 0)
+                    Name k (local 1)
+                While
+                  Binary and
+                    Binary ~=
+                      Name nk (local 2)
+                      Nil
+                    Paren
+                      Binary or
+                        Binary ==
+                          Name nk (local 2)
+                          String "_secret"
+                        Binary ==
+                          Name nk (local 2)
+                          String "_x"
+                  Body
+                    Assign
+                      Targets
+                        Name nk (local 2)
+                        Name nv (local 3)
+                      Values
+                        Call
+                          Name next
+                          Name tbl (local 0)
+                          Name nk (local 2)
+                Return
+                  Name nk (local 2)
+                  Name nv (local 3)
+            Return
+              Name iter (local 1)
+              Name t (local 0)
+              Nil
+  Local visible, total
+    Integer 0
+    Integer 0
+  GenericFor k, v
+    In
+      Call
+        Name pairs
+        Name private (local 7)
+    Body
+      Assign
+        Targets
+          Name visible (local 8)
+        Values
+          Binary +
+            Name visible (local 8)
+            Integer 1
+      Assign
+        Targets
+          Name total (local 9)
+        Values
+          Binary +
+            Name total (local 9)
+            Name v (local 15)
+  CallStatement
+    Call
+      Name print
+      Name visible (local 8)
+      Name total (local 9)
+  Local backing
+    Table
+      Item
+        String "a"
+      Item
+        String "b"
+      Item
+        String "c"
+  Local proxy
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Name backing (local 10)
+  Local parts
+    String ""
+  GenericFor i, v
+    In
+      Call
+        Name ipairs
+        Name proxy (local 11)
+    Body
+      Assign
+        Targets
+          Name parts (local 12)
+        Values
+          Binary ..
+            Name parts (local 12)
+            Binary ..
+              Name i (local 17)
+              Binary ..
+                Name v (local 18)
+                String " "
+  CallStatement
+    Call
+      Name print
+      Name parts (local 12)
+      Call
+        Name rawlen
+        Name proxy (local 11)
+  Local gen
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(_, i)
+            If
+              If
+                Binary <=
+                  Name i (local 1)
+                  Integer 5
+                Then
+                  Return
+                    Binary *
+                      Name i (local 1)
+                      Integer 10
+  Local s
+    Integer 0
+  GenericFor _, v
+    In
+      Call
+        Name ipairs
+        Name gen (local 13)
+    Body
+      Assign
+        Targets
+          Name s (local 14)
+        Values
+          Binary +
+            Name s (local 14)
+            Name v (local 20)
+  CallStatement
+    Call
+      Name print
+      Name s (local 14)
+  Local partial
+    Call
+      Name setmetatable
+      Table
+        Item
+          Integer 1
+        Item
+          Integer 2
+      Table
+        Field __index
+          Function(_, i)
+            If
+              If
+                Binary <=
+                  Name i (local 1)
+                  Integer 4
+                Then
+                  Return
+                    Unary -
+                      Name i (local 1)
+  Assign
+    Targets
+      Name parts (local 12)
+    Values
+      String ""
+  GenericFor _, v
+    In
+      Call
+        Name ipairs
+        Name partial (local 15)
+    Body
+      Assign
+        Targets
+          Name parts (local 12)
+        Values
+          Binary ..
+            Name parts (local 12)
+            Binary ..
+              Name v (local 21)
+              String " "
+  CallStatement
+    Call
+      Name print
+      Name parts (local 12)
+  Local f, st
+    Call
+      Name pairs
+      Nil
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Name f (local 16)
+        Name next
+      Name st (local 17)
+      Call
+        Name pcall
+        Name pairs
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          GenericFor _
+            In
+              Call
+                Name pairs
+                Nil
+            Body
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name ipairs
+  Return
+    Name count (local 6)
+    Name s (local 14)

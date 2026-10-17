@@ -1,0 +1,28 @@
+
+main <err_length_nil.lua:0,0> (17 instructions)
+0+ params, 4 slots, 1 upvalue, 1 local, 3 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	NEWTABLE 	0 1 0	; 0
+	3	[2]	EXTRAARG 	0
+	4	[2]	NEWTABLE 	1 0 2	; 2
+	5	[2]	EXTRAARG 	0
+	6	[2]	LOADI    	2 1
+	7	[2]	LOADI    	3 2
+	8	[2]	SETLIST  	1 2 0
+	9	[2]	SETFIELD 	0 0 1	; "items"
+	10	[3]	GETTABUP 	1 0 1	; _ENV "print"
+	11	[3]	GETFIELD 	2 0 0	; "items"
+	12	[3]	LEN      	2 2
+	13	[3]	CALL     	1 2 1	; 1 in 0 out
+	14	[4]	GETFIELD 	1 0 2	; "missing"
+	15	[4]	LEN      	1 1
+	16	[4]	RETURN   	1 2 1	; 1 out
+	17	[4]	RETURN   	1 1 1	; 0 out
+constants (3):
+	0	S	"items"
+	1	S	"print"
+	2	S	"missing"
+locals (1):
+	0	t	10	18
+upvalues (1):
+	0	_ENV	1	0

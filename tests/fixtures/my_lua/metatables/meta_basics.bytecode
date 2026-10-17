@@ -1,0 +1,244 @@
+
+main <meta_basics.lua:0,0> (217 instructions)
+0+ params, 13 slots, 1 upvalue, 9 locals, 11 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	NEWTABLE 	0 0 0	; 0
+	3	[6]	EXTRAARG 	0
+	4	[7]	NEWTABLE 	1 0 0	; 0
+	5	[7]	EXTRAARG 	0
+	6	[8]	GETTABUP 	2 0 0	; _ENV "print"
+	7	[8]	GETTABUP 	3 0 1	; _ENV "getmetatable"
+	8	[8]	MOVE     	4 0
+	9	[8]	CALL     	3 2 0	; 1 in all out
+	10	[8]	CALL     	2 0 1	; all in 0 out
+	11	[9]	GETTABUP 	2 0 0	; _ENV "print"
+	12	[9]	GETTABUP 	3 0 2	; _ENV "setmetatable"
+	13	[9]	MOVE     	4 0
+	14	[9]	MOVE     	5 1
+	15	[9]	CALL     	3 3 2	; 2 in 1 out
+	16	[9]	EQ       	3 0 1
+	17	[9]	JMP      	1	; to 19
+	18	[9]	LFALSESKIP	3
+	19	[9]	LOADTRUE 	3
+	20	[9]	GETTABUP 	4 0 1	; _ENV "getmetatable"
+	21	[9]	MOVE     	5 0
+	22	[9]	CALL     	4 2 2	; 1 in 1 out
+	23	[9]	EQ       	4 1 1
+	24	[9]	JMP      	1	; to 26
+	25	[9]	LFALSESKIP	4
+	26	[9]	LOADTRUE 	4
+	27	[9]	CALL     	2 3 1	; 2 in 0 out
+	28	[12]	GETTABUP 	2 0 0	; _ENV "print"
+	29	[12]	GETTABUP 	3 0 2	; _ENV "setmetatable"
+	30	[12]	MOVE     	4 0
+	31	[12]	LOADNIL  	5 0	; 1 out
+	32	[12]	CALL     	3 3 2	; 2 in 1 out
+	33	[12]	EQ       	3 0 1
+	34	[12]	JMP      	1	; to 36
+	35	[12]	LFALSESKIP	3
+	36	[12]	LOADTRUE 	3
+	37	[12]	GETTABUP 	4 0 1	; _ENV "getmetatable"
+	38	[12]	MOVE     	5 0
+	39	[12]	CALL     	4 2 0	; 1 in all out
+	40	[12]	CALL     	2 0 1	; all in 0 out
+	41	[15]	GETTABUP 	2 0 2	; _ENV "setmetatable"
+	42	[15]	NEWTABLE 	3 0 0	; 0
+	43	[15]	EXTRAARG 	0
+	44	[15]	MOVE     	4 1
+	45	[15]	CALL     	2 3 2	; 2 in 1 out
+	46	[16]	GETTABUP 	3 0 2	; _ENV "setmetatable"
+	47	[16]	NEWTABLE 	4 0 0	; 0
+	48	[16]	EXTRAARG 	0
+	49	[16]	MOVE     	5 1
+	50	[16]	CALL     	3 3 2	; 2 in 1 out
+	51	[17]	GETTABUP 	4 0 0	; _ENV "print"
+	52	[17]	GETTABUP 	5 0 1	; _ENV "getmetatable"
+	53	[17]	MOVE     	6 2
+	54	[17]	CALL     	5 2 2	; 1 in 1 out
+	55	[17]	GETTABUP 	6 0 1	; _ENV "getmetatable"
+	56	[17]	MOVE     	7 3
+	57	[17]	CALL     	6 2 2	; 1 in 1 out
+	58	[17]	EQ       	5 6 1
+	59	[17]	JMP      	1	; to 61
+	60	[17]	LFALSESKIP	5
+	61	[17]	LOADTRUE 	5
+	62	[17]	CALL     	4 2 1	; 1 in 0 out
+	63	[20]	NEWTABLE 	4 0 0	; 0
+	64	[20]	EXTRAARG 	0
+	65	[21]	GETTABUP 	5 0 2	; _ENV "setmetatable"
+	66	[21]	MOVE     	6 2
+	67	[21]	MOVE     	7 4
+	68	[21]	CALL     	5 3 1	; 2 in 0 out
+	69	[22]	GETTABUP 	5 0 0	; _ENV "print"
+	70	[22]	GETTABUP 	6 0 1	; _ENV "getmetatable"
+	71	[22]	MOVE     	7 2
+	72	[22]	CALL     	6 2 2	; 1 in 1 out
+	73	[22]	EQ       	6 4 1
+	74	[22]	JMP      	1	; to 76
+	75	[22]	LFALSESKIP	6
+	76	[22]	LOADTRUE 	6
+	77	[22]	GETTABUP 	7 0 1	; _ENV "getmetatable"
+	78	[22]	MOVE     	8 3
+	79	[22]	CALL     	7 2 2	; 1 in 1 out
+	80	[22]	EQ       	7 1 1
+	81	[22]	JMP      	1	; to 83
+	82	[22]	LFALSESKIP	7
+	83	[22]	LOADTRUE 	7
+	84	[22]	CALL     	5 3 1	; 2 in 0 out
+	85	[26]	GETTABUP 	5 0 0	; _ENV "print"
+	86	[26]	GETTABUP 	6 0 1	; _ENV "getmetatable"
+	87	[26]	LOADI    	7 1
+	88	[26]	CALL     	6 2 2	; 1 in 1 out
+	89	[26]	GETTABUP 	7 0 1	; _ENV "getmetatable"
+	90	[26]	LOADTRUE 	8
+	91	[26]	CALL     	7 2 2	; 1 in 1 out
+	92	[26]	GETTABUP 	8 0 1	; _ENV "getmetatable"
+	93	[26]	LOADNIL  	9 0	; 1 out
+	94	[26]	CALL     	8 2 0	; 1 in all out
+	95	[26]	CALL     	5 0 1	; all in 0 out
+	96	[29]	GETTABUP 	5 0 2	; _ENV "setmetatable"
+	97	[29]	NEWTABLE 	6 0 0	; 0
+	98	[29]	EXTRAARG 	0
+	99	[29]	NEWTABLE 	7 1 0	; 0
+	100	[29]	EXTRAARG 	0
+	101	[29]	SETFIELD 	7 3 4k	; "__metatable" "locked"
+	102	[29]	CALL     	5 3 2	; 2 in 1 out
+	103	[30]	GETTABUP 	6 0 0	; _ENV "print"
+	104	[30]	GETTABUP 	7 0 1	; _ENV "getmetatable"
+	105	[30]	MOVE     	8 5
+	106	[30]	CALL     	7 2 0	; 1 in all out
+	107	[30]	CALL     	6 0 1	; all in 0 out
+	108	[31]	GETTABUP 	6 0 0	; _ENV "print"
+	109	[31]	GETTABUP 	7 0 5	; _ENV "pcall"
+	110	[31]	GETTABUP 	8 0 2	; _ENV "setmetatable"
+	111	[31]	MOVE     	9 5
+	112	[31]	NEWTABLE 	10 0 0	; 0
+	113	[31]	EXTRAARG 	0
+	114	[31]	CALL     	7 4 0	; 3 in all out
+	115	[31]	CALL     	6 0 1	; all in 0 out
+	116	[32]	GETTABUP 	6 0 0	; _ENV "print"
+	117	[32]	GETTABUP 	7 0 5	; _ENV "pcall"
+	118	[32]	GETTABUP 	8 0 2	; _ENV "setmetatable"
+	119	[32]	MOVE     	9 5
+	120	[32]	LOADNIL  	10 0	; 1 out
+	121	[32]	CALL     	7 4 0	; 3 in all out
+	122	[32]	CALL     	6 0 1	; all in 0 out
+	123	[33]	GETTABUP 	6 0 0	; _ENV "print"
+	124	[33]	GETTABUP 	7 0 1	; _ENV "getmetatable"
+	125	[33]	MOVE     	8 5
+	126	[33]	CALL     	7 2 0	; 1 in all out
+	127	[33]	CALL     	6 0 1	; all in 0 out
+	128	[36]	GETTABUP 	6 0 2	; _ENV "setmetatable"
+	129	[36]	NEWTABLE 	7 0 0	; 0
+	130	[36]	EXTRAARG 	0
+	131	[36]	NEWTABLE 	8 1 0	; 0
+	132	[36]	EXTRAARG 	0
+	133	[36]	SETFIELD 	8 3 6k	; "__metatable" false
+	134	[36]	CALL     	6 3 2	; 2 in 1 out
+	135	[37]	GETTABUP 	7 0 0	; _ENV "print"
+	136	[37]	GETTABUP 	8 0 1	; _ENV "getmetatable"
+	137	[37]	MOVE     	9 6
+	138	[37]	CALL     	8 2 0	; 1 in all out
+	139	[37]	CALL     	7 0 1	; all in 0 out
+	140	[38]	GETTABUP 	7 0 0	; _ENV "print"
+	141	[38]	GETTABUP 	8 0 5	; _ENV "pcall"
+	142	[38]	GETTABUP 	9 0 2	; _ENV "setmetatable"
+	143	[38]	MOVE     	10 6
+	144	[38]	NEWTABLE 	11 0 0	; 0
+	145	[38]	EXTRAARG 	0
+	146	[38]	CALL     	8 4 0	; 3 in all out
+	147	[38]	CALL     	7 0 1	; all in 0 out
+	148	[41]	GETTABUP 	7 0 0	; _ENV "print"
+	149	[41]	GETTABUP 	8 0 5	; _ENV "pcall"
+	150	[41]	GETTABUP 	9 0 2	; _ENV "setmetatable"
+	151	[41]	LOADI    	10 1
+	152	[41]	NEWTABLE 	11 0 0	; 0
+	153	[41]	EXTRAARG 	0
+	154	[41]	CALL     	8 4 0	; 3 in all out
+	155	[41]	CALL     	7 0 1	; all in 0 out
+	156	[42]	GETTABUP 	7 0 0	; _ENV "print"
+	157	[42]	GETTABUP 	8 0 5	; _ENV "pcall"
+	158	[42]	GETTABUP 	9 0 2	; _ENV "setmetatable"
+	159	[42]	NEWTABLE 	10 0 0	; 0
+	160	[42]	EXTRAARG 	0
+	161	[42]	LOADI    	11 2
+	162	[42]	CALL     	8 4 0	; 3 in all out
+	163	[42]	CALL     	7 0 1	; all in 0 out
+	164	[43]	GETTABUP 	7 0 0	; _ENV "print"
+	165	[43]	GETTABUP 	8 0 5	; _ENV "pcall"
+	166	[43]	GETTABUP 	9 0 2	; _ENV "setmetatable"
+	167	[43]	NEWTABLE 	10 0 0	; 0
+	168	[43]	EXTRAARG 	0
+	169	[43]	CALL     	8 3 0	; 2 in all out
+	170	[43]	CALL     	7 0 1	; all in 0 out
+	171	[44]	GETTABUP 	7 0 0	; _ENV "print"
+	172	[44]	GETTABUP 	8 0 5	; _ENV "pcall"
+	173	[44]	GETTABUP 	9 0 1	; _ENV "getmetatable"
+	174	[44]	CALL     	8 2 0	; 1 in all out
+	175	[44]	CALL     	7 0 1	; all in 0 out
+	176	[47]	NEWTABLE 	7 0 0	; 0
+	177	[47]	EXTRAARG 	0
+	178	[48]	GETTABUP 	8 0 2	; _ENV "setmetatable"
+	179	[48]	MOVE     	9 7
+	180	[48]	MOVE     	10 7
+	181	[48]	CALL     	8 3 1	; 2 in 0 out
+	182	[49]	GETTABUP 	8 0 0	; _ENV "print"
+	183	[49]	GETTABUP 	9 0 1	; _ENV "getmetatable"
+	184	[49]	MOVE     	10 7
+	185	[49]	CALL     	9 2 2	; 1 in 1 out
+	186	[49]	EQ       	9 7 1
+	187	[49]	JMP      	1	; to 189
+	188	[49]	LFALSESKIP	9
+	189	[49]	LOADTRUE 	9
+	190	[49]	CALL     	8 2 1	; 1 in 0 out
+	191	[52]	GETTABUP 	8 0 2	; _ENV "setmetatable"
+	192	[52]	NEWTABLE 	9 0 0	; 0
+	193	[52]	EXTRAARG 	0
+	194	[52]	NEWTABLE 	10 2 0	; 0
+	195	[52]	EXTRAARG 	0
+	196	[52]	SETFIELD 	10 7 8k	; "x" 1
+	197	[52]	SETFIELD 	10 9 10k	; "__index" nil
+	198	[52]	CALL     	8 3 2	; 2 in 1 out
+	199	[53]	GETTABUP 	9 0 0	; _ENV "print"
+	200	[53]	GETFIELD 	10 8 7	; "x"
+	201	[53]	GETTABUP 	11 0 1	; _ENV "getmetatable"
+	202	[53]	MOVE     	12 8
+	203	[53]	CALL     	11 2 2	; 1 in 1 out
+	204	[53]	GETFIELD 	11 11 7	; "x"
+	205	[53]	CALL     	9 3 1	; 2 in 0 out
+	206	[55]	GETTABUP 	9 0 1	; _ENV "getmetatable"
+	207	[55]	MOVE     	10 5
+	208	[55]	CALL     	9 2 2	; 1 in 1 out
+	209	[55]	GETTABUP 	10 0 1	; _ENV "getmetatable"
+	210	[55]	MOVE     	11 3
+	211	[55]	CALL     	10 2 2	; 1 in 1 out
+	212	[55]	EQ       	10 1 1
+	213	[55]	JMP      	1	; to 215
+	214	[55]	LFALSESKIP	10
+	215	[55]	LOADTRUE 	10
+	216	[55]	RETURN   	9 3 1	; 2 out
+	217	[55]	RETURN   	9 1 1	; 0 out
+constants (11):
+	0	S	"print"
+	1	S	"getmetatable"
+	2	S	"setmetatable"
+	3	S	"__metatable"
+	4	S	"locked"
+	5	S	"pcall"
+	6	B	false
+	7	S	"x"
+	8	I	1
+	9	S	"__index"
+	10	N	nil
+locals (9):
+	0	t	4	218
+	1	mt	6	218
+	2	a	46	218
+	3	b	51	218
+	4	mt2	65	218
+	5	protected	103	218
+	6	hidden	135	218
+	7	self_mt	178	218
+	8	plain	199	218
+upvalues (1):
+	0	_ENV	1	0

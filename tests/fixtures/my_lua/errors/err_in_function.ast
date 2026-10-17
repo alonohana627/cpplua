@@ -1,0 +1,48 @@
+Chunk
+  LocalFunction average
+    Function(list)
+      Local sum
+        Integer 0
+      NumericFor i
+        Integer 1
+        Unary #
+          Name list (local 0)
+        Body
+          Assign
+            Targets
+              Name sum (local 1)
+            Values
+              Binary +
+                Name sum (local 1)
+                Index
+                  Name list (local 0)
+                  Name i (local 5)
+      Return
+        Binary /
+          Name sum (local 1)
+          Unary #
+            Name list (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name average (local 0)
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+          Item
+            Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name average (local 0)
+        Table
+          Item
+            Integer 1
+          Item
+            Table
+          Item
+            Integer 3

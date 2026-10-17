@@ -1,0 +1,13 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      String "before"
+  CallStatement
+    Call
+      Name error
+      String "boom"
+  CallStatement
+    Call
+      Name print
+      String "not reached"

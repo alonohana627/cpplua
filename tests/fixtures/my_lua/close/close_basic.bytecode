@@ -1,0 +1,443 @@
+
+main <close_basic.lua:0,0> (168 instructions)
+0+ params, 18 slots, 1 upvalue, 33 locals, 19 constants, 9 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	NEWTABLE 	0 0 0	; 0
+	3	[7]	EXTRAARG 	0
+	4	[8]	CLOSURE  	1 0
+	5	[13]	CLOSURE  	2 1
+	6	[17]	CLOSURE  	3 2
+	7	[21]	MOVE     	4 2
+	8	[21]	LOADK    	5 0	; "a"
+	9	[21]	CALL     	4 2 2	; 1 in 1 out
+	10	[21]	TBC      	4
+	11	[22]	MOVE     	5 2
+	12	[22]	LOADK    	6 1	; "b"
+	13	[22]	CALL     	5 2 2	; 1 in 1 out
+	14	[22]	TBC      	5
+	15	[23]	MOVE     	6 1
+	16	[23]	LOADK    	7 2	; "body"
+	17	[23]	CALL     	6 2 1	; 1 in 0 out
+	18	[23]	CLOSE    	4
+	19	[25]	MOVE     	4 1
+	20	[25]	LOADK    	5 3	; "after"
+	21	[25]	CALL     	4 2 1	; 1 in 0 out
+	22	[26]	MOVE     	4 3
+	23	[26]	CALL     	4 1 1	; 0 in 0 out
+	24	[30]	MOVE     	4 2
+	25	[30]	LOADK    	5 4	; "obj"
+	26	[30]	CALL     	4 2 2	; 1 in 1 out
+	27	[31]	LOADNIL  	5 0	; 1 out
+	28	[32]	GETTABUP 	6 0 5	; _ENV "getmetatable"
+	29	[32]	MOVE     	7 4
+	30	[32]	CALL     	6 2 2	; 1 in 1 out
+	31	[32]	CLOSURE  	7 3
+	32	[32]	SETFIELD 	6 6 7	; "__close"
+	33	[33]	MOVE     	6 4
+	34	[33]	TBC      	6
+	35	[33]	CLOSE    	6
+	36	[34]	GETTABUP 	6 0 7	; _ENV "print"
+	37	[34]	EQ       	5 4 1
+	38	[34]	JMP      	1	; to 40
+	39	[34]	LFALSESKIP	7
+	40	[34]	LOADTRUE 	7
+	41	[34]	CALL     	6 2 1	; 1 in 0 out
+	42	[34]	CLOSE    	4
+	43	[38]	LOADI    	4 1
+	44	[38]	LOADI    	5 5
+	45	[38]	LOADI    	6 1
+	46	[38]	FORPREP  	4 14	; exit to 62
+	47	[39]	MOVE     	8 2
+	48	[39]	LOADK    	9 8	; "loop"
+	49	[39]	MOVE     	10 7
+	50	[39]	CONCAT   	9 2
+	51	[39]	CALL     	8 2 2	; 1 in 1 out
+	52	[39]	TBC      	8
+	53	[40]	EQI      	7 3 1
+	54	[40]	JMP      	7	; to 62
+	55	[41]	MOVE     	9 1
+	56	[41]	LOADK    	10 9	; "iteration "
+	57	[41]	MOVE     	11 7
+	58	[41]	CONCAT   	10 2
+	59	[41]	CALL     	9 2 1	; 1 in 0 out
+	60	[41]	CLOSE    	8
+	61	[38]	FORLOOP  	4 15	; to 47
+	62	[42]	CLOSE    	4
+	63	[43]	MOVE     	4 3
+	64	[43]	CALL     	4 1 1	; 0 in 0 out
+	65	[46]	LOADI    	4 0
+	66	[47]	LTI      	4 2 0
+	67	[47]	JMP      	10	; to 78
+	68	[48]	ADDI     	4 4 1
+	69	[48]	MMBINI   	4 1 6 0	; __add
+	70	[49]	MOVE     	5 2
+	71	[49]	LOADK    	6 10	; "while"
+	72	[49]	MOVE     	7 4
+	73	[49]	CONCAT   	6 2
+	74	[49]	CALL     	5 2 2	; 1 in 1 out
+	75	[49]	TBC      	5
+	76	[49]	CLOSE    	5
+	77	[49]	JMP      	-12	; to 66
+	78	[51]	MOVE     	5 3
+	79	[51]	CALL     	5 1 1	; 0 in 0 out
+	80	[58]	CLOSURE  	5 4
+	81	[59]	GETTABUP 	6 0 7	; _ENV "print"
+	82	[59]	MOVE     	7 5
+	83	[59]	CALL     	7 1 0	; 0 in all out
+	84	[59]	CALL     	6 0 1	; all in 0 out
+	85	[60]	MOVE     	6 3
+	86	[60]	CALL     	6 1 1	; 0 in 0 out
+	87	[67]	CLOSURE  	6 5
+	88	[68]	GETTABUP 	7 0 7	; _ENV "print"
+	89	[68]	MOVE     	8 6
+	90	[68]	LOADI    	9 21
+	91	[68]	CALL     	8 2 0	; 1 in all out
+	92	[68]	CALL     	7 0 1	; all in 0 out
+	93	[69]	MOVE     	7 3
+	94	[69]	CALL     	7 1 1	; 0 in 0 out
+	95	[73]	LOADI    	7 1
+	96	[76]	MOVE     	8 2
+	97	[76]	LOADK    	9 11	; "goto"
+	98	[76]	MOVE     	10 7
+	99	[76]	CONCAT   	9 2
+	100	[76]	CALL     	8 2 2	; 1 in 1 out
+	101	[76]	TBC      	8
+	102	[77]	LTI      	7 3 0
+	103	[77]	JMP      	4	; to 108
+	104	[78]	ADDI     	7 7 1
+	105	[78]	MMBINI   	7 1 6 0	; __add
+	106	[79]	CLOSE    	8
+	107	[79]	JMP      	-12	; to 96
+	108	[80]	CLOSE    	8
+	109	[83]	MOVE     	7 3
+	110	[83]	CALL     	7 1 1	; 0 in 0 out
+	111	[87]	LOADNIL  	7 0	; 1 out
+	112	[87]	TBC      	7
+	113	[88]	LOADFALSE	8
+	114	[88]	TBC      	8
+	115	[89]	MOVE     	9 2
+	116	[89]	LOADK    	10 12	; "yes"
+	117	[89]	CALL     	9 2 2	; 1 in 1 out
+	118	[89]	TBC      	9
+	119	[90]	MOVE     	10 1
+	120	[90]	LOADK    	11 13	; "nil and false ok"
+	121	[90]	CALL     	10 2 1	; 1 in 0 out
+	122	[90]	CLOSE    	7
+	123	[92]	MOVE     	7 3
+	124	[92]	CALL     	7 1 1	; 0 in 0 out
+	125	[95]	CLOSURE  	7 6
+	126	[96]	CLOSURE  	8 7
+	127	[97]	MOVE     	9 8
+	128	[97]	CALL     	9 1 1	; 0 in 0 out
+	129	[98]	MOVE     	9 3
+	130	[98]	CALL     	9 1 1	; 0 in 0 out
+	131	[102]	MOVE     	9 2
+	132	[102]	LOADK    	10 14	; "res"
+	133	[102]	CALL     	9 2 2	; 1 in 1 out
+	134	[102]	TBC      	9
+	135	[103]	SETFIELD 	9 15 16k	; "name" "renamed"
+	136	[103]	CLOSE    	9
+	137	[105]	MOVE     	9 3
+	138	[105]	CALL     	9 1 1	; 0 in 0 out
+	139	[108]	LOADI    	9 0
+	140	[109]	NEWTABLE 	10 1 0	; 0
+	141	[109]	EXTRAARG 	0
+	142	[109]	GETTABUP 	11 0 17	; _ENV "setmetatable"
+	143	[109]	NEWTABLE 	12 0 0	; 0
+	144	[109]	EXTRAARG 	0
+	145	[109]	NEWTABLE 	13 1 0	; 0
+	146	[109]	EXTRAARG 	0
+	147	[109]	CLOSURE  	14 8
+	148	[109]	SETFIELD 	13 18 14	; "__call"
+	149	[109]	CALL     	11 3 2	; 2 in 1 out
+	150	[109]	SETFIELD 	10 6 11	; "__close"
+	151	[110]	LOADI    	11 1
+	152	[110]	LOADI    	12 4
+	153	[110]	LOADI    	13 1
+	154	[110]	FORPREP  	11 7	; exit to 163
+	155	[110]	GETTABUP 	15 0 17	; _ENV "setmetatable"
+	156	[110]	NEWTABLE 	16 0 0	; 0
+	157	[110]	EXTRAARG 	0
+	158	[110]	MOVE     	17 10
+	159	[110]	CALL     	15 3 2	; 2 in 1 out
+	160	[110]	TBC      	15
+	161	[110]	CLOSE    	15
+	162	[110]	FORLOOP  	11 8	; to 155
+	163	[111]	GETTABUP 	11 0 7	; _ENV "print"
+	164	[111]	MOVE     	12 9
+	165	[111]	CALL     	11 2 1	; 1 in 0 out
+	166	[113]	LEN      	11 0
+	167	[113]	RETURN   	11 2 1k	; 1 out
+	168	[113]	RETURN   	11 1 1k	; 0 out
+constants (19):
+	0	S	"a"
+	1	S	"b"
+	2	S	"body"
+	3	S	"after"
+	4	S	"obj"
+	5	S	"getmetatable"
+	6	S	"__close"
+	7	S	"print"
+	8	S	"loop"
+	9	S	"iteration "
+	10	S	"while"
+	11	S	"goto"
+	12	S	"yes"
+	13	S	"nil and false ok"
+	14	S	"res"
+	15	S	"name"
+	16	S	"renamed"
+	17	S	"setmetatable"
+	18	S	"__call"
+locals (33):
+	0	log	4	169
+	1	say	5	169
+	2	closer	6	169
+	3	flush	7	169
+	4	a	10	18
+	5	b	14	18
+	6	obj	27	42
+	7	got	28	42
+	8	x	34	35
+	9	(for state)	46	62
+	10	(for state)	46	62
+	11	(for state)	46	62
+	12	i	47	61
+	13	c	52	60
+	14	n	66	169
+	15	w	75	76
+	16	f	81	169
+	17	g	88	169
+	18	i	96	109
+	19	gt	101	108
+	20	none	112	122
+	21	no	114	122
+	22	yes	118	122
+	23	inner	126	169
+	24	outer	127	169
+	25	res	134	136
+	26	closed_count	140	169
+	27	counter_mt	151	169
+	28	(for state)	154	163
+	29	(for state)	154	163
+	30	(for state)	154	163
+	31	_	155	162
+	32	c	160	161
+upvalues (1):
+	0	_ENV	1	0
+
+function <close_basic.lua:8,8> (7 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[8]	GETUPVAL 	1 0	; log
+	2	[8]	LEN      	1 1
+	3	[8]	ADDI     	2 1 1
+	4	[8]	MMBINI   	1 1 6 0	; __add
+	5	[8]	GETUPVAL 	1 0	; log
+	6	[8]	SETTABLE 	1 2 0
+	7	[8]	RETURN0  	
+constants (0):
+locals (1):
+	0	s	1	8
+upvalues (1):
+	0	log	1	0
+
+function <close_basic.lua:9,13> (11 instructions)
+1 param, 5 slots, 2 upvalues, 1 local, 3 constants, 1 function
+	1	[10]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	2	[10]	NEWTABLE 	2 1 0	; 0
+	3	[10]	EXTRAARG 	0
+	4	[10]	SETFIELD 	2 1 0	; "name"
+	5	[10]	NEWTABLE 	3 1 0	; 0
+	6	[10]	EXTRAARG 	0
+	7	[12]	CLOSURE  	4 0
+	8	[12]	SETFIELD 	3 2 4	; "__close"
+	9	[10]	TAILCALL 	1 3 0	; 2 in
+	10	[12]	RETURN   	1 0 0	; all out
+	11	[13]	RETURN0  	
+constants (3):
+	0	S	"setmetatable"
+	1	S	"name"
+	2	S	"__close"
+locals (1):
+	0	name	1	12
+upvalues (2):
+	0	_ENV	0	0
+	1	say	1	1
+
+function <close_basic.lua:10,12> (10 instructions)
+2 params, 8 slots, 2 upvalues, 2 locals, 4 constants, 0 functions
+	1	[11]	GETUPVAL 	2 0	; say
+	2	[11]	LOADK    	3 0	; "close "
+	3	[11]	GETFIELD 	4 0 1	; "name"
+	4	[11]	LOADK    	5 2	; " err="
+	5	[11]	GETTABUP 	6 1 3	; _ENV "tostring"
+	6	[11]	MOVE     	7 1
+	7	[11]	CALL     	6 2 2	; 1 in 1 out
+	8	[11]	CONCAT   	3 4
+	9	[11]	CALL     	2 2 1	; 1 in 0 out
+	10	[12]	RETURN0  	
+constants (4):
+	0	S	"close "
+	1	S	"name"
+	2	S	" err="
+	3	S	"tostring"
+locals (2):
+	0	self	1	11
+	1	err	1	11
+upvalues (2):
+	0	say	0	1
+	1	_ENV	0	0
+
+function <close_basic.lua:14,17> (15 instructions)
+0 params, 9 slots, 2 upvalues, 6 locals, 2 constants, 0 functions
+	1	[15]	GETTABUP 	0 0 0	; _ENV "ipairs"
+	2	[15]	GETUPVAL 	1 1	; log
+	3	[15]	CALL     	0 2 5	; 1 in 4 out
+	4	[15]	TFORPREP 	0 4	; to 9
+	5	[15]	GETTABUP 	6 0 1	; _ENV "print"
+	6	[15]	MOVE     	7 4
+	7	[15]	MOVE     	8 5
+	8	[15]	CALL     	6 3 1	; 2 in 0 out
+	9	[15]	TFORCALL 	0 2
+	10	[15]	TFORLOOP 	0 6	; to 5
+	11	[15]	CLOSE    	0
+	12	[16]	NEWTABLE 	0 0 0	; 0
+	13	[16]	EXTRAARG 	0
+	14	[16]	SETUPVAL 	0 1	; log
+	15	[17]	RETURN   	0 1 0k	; 0 out
+constants (2):
+	0	S	"ipairs"
+	1	S	"print"
+locals (6):
+	0	(for state)	4	11
+	1	(for state)	4	11
+	2	(for state)	4	11
+	3	(for state)	4	11
+	4	i	5	9
+	5	s	5	9
+upvalues (2):
+	0	_ENV	0	0
+	1	log	1	0
+
+function <close_basic.lua:32,32> (2 instructions)
+1 param, 2 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[32]	SETUPVAL 	0 0	; got
+	2	[32]	RETURN0  	
+constants (0):
+locals (1):
+	0	v	1	3
+upvalues (1):
+	0	got	1	5
+
+function <close_basic.lua:54,58> (11 instructions)
+0 params, 3 slots, 2 upvalues, 1 local, 2 constants, 1 function
+	1	[55]	GETUPVAL 	0 0	; closer
+	2	[55]	LOADK    	1 0	; "r"
+	3	[55]	CALL     	0 2 2	; 1 in 1 out
+	4	[55]	TBC      	0
+	5	[56]	GETUPVAL 	1 1	; say
+	6	[56]	LOADK    	2 1	; "returning"
+	7	[56]	CALL     	1 2 1	; 1 in 0 out
+	8	[57]	CLOSURE  	1 0
+	9	[57]	CALL     	1 1 0	; 0 in all out
+	10	[57]	RETURN   	1 0 0k	; all out
+	11	[58]	RETURN   	1 1 0k	; 0 out
+constants (2):
+	0	S	"r"
+	1	S	"returning"
+locals (1):
+	0	r	4	12
+upvalues (2):
+	0	closer	1	2
+	1	say	1	1
+
+function <close_basic.lua:57,57> (6 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[57]	GETUPVAL 	0 0	; say
+	2	[57]	LOADK    	1 0	; "computing result"
+	3	[57]	CALL     	0 2 1	; 1 in 0 out
+	4	[57]	LOADK    	0 1	; "result"
+	5	[57]	RETURN1  	0
+	6	[57]	RETURN0  	
+constants (2):
+	0	S	"computing result"
+	1	S	"result"
+locals (0):
+upvalues (1):
+	0	say	0	1
+
+function <close_basic.lua:64,67> (11 instructions)
+1 param, 5 slots, 2 upvalues, 2 locals, 2 constants, 0 functions
+	1	[65]	GETUPVAL 	1 0	; closer
+	2	[65]	LOADK    	2 0	; "q"
+	3	[65]	CALL     	1 2 2	; 1 in 1 out
+	4	[65]	TBC      	1
+	5	[66]	MOVE     	2 0
+	6	[66]	MULK     	3 0 1	; 2
+	7	[66]	MMBINK   	0 1 8 0	; __mul 2
+	8	[66]	GETUPVAL 	4 1	; f
+	9	[66]	CALL     	4 1 0	; 0 in all out
+	10	[66]	RETURN   	2 0 0k	; all out
+	11	[67]	RETURN   	2 1 0k	; 0 out
+constants (2):
+	0	S	"q"
+	1	I	2
+locals (2):
+	0	x	1	12
+	1	q	4	12
+upvalues (2):
+	0	closer	1	2
+	1	f	1	5
+
+function <close_basic.lua:95,95> (8 instructions)
+0 params, 3 slots, 2 upvalues, 1 local, 2 constants, 0 functions
+	1	[95]	GETUPVAL 	0 0	; closer
+	2	[95]	LOADK    	1 0	; "inner"
+	3	[95]	CALL     	0 2 2	; 1 in 1 out
+	4	[95]	TBC      	0
+	5	[95]	GETUPVAL 	1 1	; say
+	6	[95]	LOADK    	2 1	; "in inner"
+	7	[95]	CALL     	1 2 1	; 1 in 0 out
+	8	[95]	RETURN   	1 1 0k	; 0 out
+constants (2):
+	0	S	"inner"
+	1	S	"in inner"
+locals (1):
+	0	i	4	9
+upvalues (2):
+	0	closer	1	2
+	1	say	1	1
+
+function <close_basic.lua:96,96> (10 instructions)
+0 params, 3 slots, 3 upvalues, 1 local, 2 constants, 0 functions
+	1	[96]	GETUPVAL 	0 0	; closer
+	2	[96]	LOADK    	1 0	; "outer"
+	3	[96]	CALL     	0 2 2	; 1 in 1 out
+	4	[96]	TBC      	0
+	5	[96]	GETUPVAL 	1 1	; inner
+	6	[96]	CALL     	1 1 1	; 0 in 0 out
+	7	[96]	GETUPVAL 	1 2	; say
+	8	[96]	LOADK    	2 1	; "back in outer"
+	9	[96]	CALL     	1 2 1	; 1 in 0 out
+	10	[96]	RETURN   	1 1 0k	; 0 out
+constants (2):
+	0	S	"outer"
+	1	S	"back in outer"
+locals (1):
+	0	o	4	11
+upvalues (3):
+	0	closer	1	2
+	1	inner	1	7
+	2	say	1	1
+
+function <close_basic.lua:109,109> (5 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[109]	GETUPVAL 	0 0	; closed_count
+	2	[109]	ADDI     	0 0 1
+	3	[109]	MMBINI   	0 1 6 0	; __add
+	4	[109]	SETUPVAL 	0 0	; closed_count
+	5	[109]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	closed_count	1	9

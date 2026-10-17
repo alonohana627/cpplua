@@ -1,0 +1,11 @@
+Chunk
+  Local t
+    Table
+      Field count
+        Integer 3
+  Return
+    Index
+      Index
+        Name t (local 0)
+        String "count"
+      String "value"

@@ -1,0 +1,18 @@
+generational
+incremental
+incremental
+generational
+generational
+0	0
+number	true
+boolean	boolean
+true
+false
+true
+true
+1	true
+1	true
+1	true
+false	bad argument #1 to 'collectgarbage' (invalid option 'nonsense')
+false	bad argument #1 to 'collectgarbage' (invalid option '42')
+true

@@ -1,0 +1,12 @@
+Chunk
+  Local obj
+    Table
+      Field name
+        String "thing"
+  CallStatement
+    Call
+      Index
+        Name obj (local 0)
+        String "f"
+      Integer 1
+      Integer 2

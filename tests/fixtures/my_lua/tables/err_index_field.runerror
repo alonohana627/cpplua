@@ -1,0 +1,1 @@
+err_index_field.lua:5: attempt to index a nil value (field 'b')

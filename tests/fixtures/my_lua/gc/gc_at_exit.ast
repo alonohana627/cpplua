@@ -1,0 +1,94 @@
+Chunk
+  CallStatement
+    Call
+      Name collectgarbage
+      String "stop"
+  LocalFunction finalizer
+    Function(name) [upvalues: _ENV]
+      Return
+        Table
+          Field __gc
+            Function() [upvalues: _ENV, name]
+              CallStatement
+                Call
+                  Name print
+                  Binary ..
+                    String "finalizing "
+                    Name name (upvalue 1)
+  Local first
+    Call
+      Name setmetatable
+      Table
+      Call
+        Name finalizer (local 0)
+        String "first (alive)"
+  CallStatement
+    Call
+      Name setmetatable
+      Table
+      Call
+        Name finalizer (local 0)
+        String "garbage, never collected"
+  Local second
+    Call
+      Name setmetatable
+      Table
+      Call
+        Name finalizer (local 0)
+        String "second (alive)"
+  Assign
+    Targets
+      Index
+        Name _ENV (upvalue 0)
+        String "global_obj"
+    Values
+      Call
+        Name setmetatable
+        Table
+        Call
+          Name finalizer (local 0)
+          String "global (alive)"
+  Local data
+    Table
+      Item
+        Integer 1
+      Item
+        Integer 2
+      Item
+        Integer 3
+  Local summer
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __gc
+          Function() [upvalues: _ENV, data]
+            Local s
+              Integer 0
+            GenericFor _, v
+              In
+                Call
+                  Name ipairs
+                  Name data (upvalue 1)
+              Body
+                Assign
+                  Targets
+                    Name s (local 0)
+                  Values
+                    Binary +
+                      Name s (local 0)
+                      Name v (local 6)
+            CallStatement
+              Call
+                Name print
+                String "sum at exit"
+                Name s (local 0)
+  CallStatement
+    Call
+      Name print
+      String "program body done"
+  Return
+    String "returned"
+    Binary ~=
+      Name first (local 1)
+      Name second (local 2)

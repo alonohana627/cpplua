@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
@@ -11,6 +12,7 @@
 #include "gc/pool.hpp"
 #include "value/string.hpp"
 #include "value/value.hpp"
+#include "vm/metamethods.hpp"
 
 namespace lua2 {
 
@@ -19,6 +21,8 @@ class LuaClosure; // vm/function.hpp
 struct Upvalue;   // vm/function.hpp
 class State;      // vm/state.hpp
 class Table;      // value/table.hpp
+class Userdata;   // value/userdata.hpp
+class CClosure;   // vm/function.hpp
 
 // The collector's two modes (E9.5, manual §2.5).
 enum class GcMode : std::uint8_t {
@@ -99,8 +103,16 @@ public:
     // A closed upvalue holding nil.
     Upvalue* new_upvalue();
 
-    // An empty table (only the globals until stage 6).
+    // An empty table.
     Table* new_table();
+
+    // A userdata of `size` bytes (uninitialized) with `user_values` nil
+    // slots, no metatable and no destructor (lua_newuserdatauv).
+    Userdata* new_userdata(std::size_t size, std::size_t user_values);
+
+    // A C++ closure of `function` with `upvalue_count` nil upvalues
+    // (lua_pushcclosure).
+    CClosure* new_c_closure(CFunction function, std::size_t upvalue_count);
 
     // Keeps the newest object alive forever, outside the collector's view
     // (Lua's luaC_fix), for strings the interpreter itself needs.
@@ -112,6 +124,57 @@ public:
     // The globals table, every chunk's _ENV (E1.2, E2.3). A root of the
     // collector, like Lua's registry that holds it.
     [[nodiscard]] Table& globals() { return *globals_; }
+
+    // The loaded modules (Lua's registry._LOADED: "_G" is the globals),
+    // where tracebacks look for the names of global functions. A root.
+    [[nodiscard]] Table& loaded() { return *loaded_; }
+
+    // ---- Metatables (stage 7) ----
+
+    // The interned "__index", "__add", ... (Lua's tmname), never collected.
+    [[nodiscard]] const String* event_string(Event e) const {
+        return event_strings_[static_cast<std::size_t>(e)];
+    }
+
+    // "__name", for luaT_objtypename.
+    [[nodiscard]] const String* name_string() const { return name_string_; }
+
+    // The metatable of every value of a type that is not a table (Lua's
+    // G(L)->mt): none until the string library (stage 9). Roots.
+    [[nodiscard]] Table* type_metatable(Type type) const {
+        return type_metatables_[static_cast<std::size_t>(type)];
+    }
+
+    void set_type_metatable(Type type, Table* mt) {
+        type_metatables_[static_cast<std::size_t>(type)] = mt;
+    }
+
+    // Gives table `t` the metatable `mt` (or none), with the barrier, and
+    // marks `t` for finalization if `mt` has __gc now (lua_setmetatable,
+    // luaC_checkfinalizer, M7.1).
+    void set_metatable(Table* t, Table* mt);
+
+    // The same for a userdata.
+    void set_metatable(Userdata* u, Table* mt);
+
+    // The registry's table of references (luaL_ref): C++ keeps Lua values
+    // alive by storing them here under integer keys. A root. It also maps
+    // each bound C++ class's tag (a light userdata) to its metatable.
+    [[nodiscard]] Table& references() { return *references_; }
+
+    // Stores `v` there and returns its key (luaL_ref); a key is reused once
+    // released (luaL_unref).
+    std::int64_t reference(Value v);
+    void release_reference(std::int64_t key);
+    [[nodiscard]] Value referenced(std::int64_t key);
+
+    // Ends the interpreter's life the way lua_close does: closes what is
+    // still open in the main thread, then runs the finalizer of every
+    // object marked for one (M7.2). Freeing comes in the destructor, which
+    // calls this first if nobody did.
+    void close();
+
+    [[nodiscard]] bool is_closed() const { return closed_; }
 
     // Where `print` writes (lua_writestring): stdout by default, flushed at
     // each line as Lua does; tests capture it.
@@ -168,6 +231,14 @@ public:
 
     [[nodiscard]] bool is_running() const { return !stopped_; }
 
+    // A finalizer is running: no collection may start (Lua's GCSTPGC), and
+    // collectgarbage() refuses.
+    [[nodiscard]] bool in_finalizer() const { return in_finalizer_; }
+
+    // collectgarbage("step", n): a basic step when n is 0, else as if n KB
+    // were allocated; true when a cycle ended (lua_gc's LUA_GCSTEP).
+    bool step_kilobytes(std::int64_t kilobytes);
+
     [[nodiscard]] GcParameters& parameters() { return parameters_; }
 
     void set_stress(GcStress stress);
@@ -212,16 +283,21 @@ public:
     // upvalues are never gray, and their value needs the barrier.
     void upvalue_closed(Upvalue* upvalue);
 
+    // Moves `o` to the objects marked for finalization if `mt` has __gc
+    // (luaC_checkfinalizer).
+    void check_finalizer(GcObject* o, Table* mt);
+
 private:
     friend class State;
 
-    // The collector's states (Lua's GCS*). Finalizers come in stage 7, so
-    // the finalizer sweeps and calls are absent.
+    // The collector's states (Lua's GCS*), in Lua's order.
     enum class Phase : std::uint8_t {
         Propagate,
         EnterAtomic,
         Atomic,
         SweepAll,
+        SweepFinalizable,
+        SweepToBeFinalized,
         SweepEnd,
         CallFinalizers,
         Pause,
@@ -263,6 +339,21 @@ private:
     std::size_t traverse_closure(LuaClosure* cl);
     std::size_t traverse_thread(State* thread);
     std::size_t traverse_table(Table* table);
+    std::size_t traverse_c_closure(CClosure* cl);
+    std::size_t traverse_userdata(Userdata* u);
+    void traverse_strong_table(Table* table);
+    void traverse_weak_value(Table* table);
+    bool traverse_ephemeron(Table* table, bool inverse);
+    void mark_key(const void* node);
+    bool is_cleared(Tag tag, std::uint64_t payload);
+    void converge_ephemerons();
+    void clear_by_keys(GcObject* list);
+    void clear_by_values(GcObject* list, GcObject* until);
+    void mark_type_metatables();
+    std::size_t mark_being_finalized();
+    void separate_to_be_finalized(bool all);
+    void correct_pointers(GcObject* o);
+    void clear_gray_lists();
     std::size_t propagate_mark();
     std::size_t propagate_all();
     std::size_t remark_upvalues();
@@ -306,6 +397,14 @@ private:
 
     void stress_step();
 
+    // ---- Finalizers ----
+
+    GcObject* next_to_finalize();
+    void call_finalizer();
+    std::size_t run_some_finalizers(int n);
+    void call_all_pending_finalizers();
+    [[nodiscard]] bool can_run_finalizers();
+
     // ---- State ----
 
     Pool pool_;
@@ -326,6 +425,13 @@ private:
 
     State* main_thread_ = nullptr;
     Table* globals_ = nullptr;
+    Table* loaded_ = nullptr;
+    Table* references_ = nullptr;
+    std::vector<std::int64_t> free_references_;
+    std::int64_t next_reference_ = 1;
+    std::array<Table*, 8> type_metatables_{};
+    std::array<const String*, event_count> event_strings_{};
+    const String* name_string_ = nullptr;
     std::function<void(std::string_view)> output_;
 
     // The object lists (Lua's allgc and fixedgc), newest first. In
@@ -340,10 +446,26 @@ private:
     GcObject* first_old1_ = nullptr;
     GcObject** sweep_ = nullptr; // where the sweep phase continues
 
+    // Objects marked for finalization (Lua's finobj, with its generational
+    // pointers like the ones above), and those found unreachable, waiting
+    // for their finalizers (tobefnz), oldest first.
+    GcObject* finalizable_ = nullptr;
+    GcObject* finalizable_survival_ = nullptr;
+    GcObject* finalizable_old1_ = nullptr;
+    GcObject* finalizable_really_old_ = nullptr;
+    GcObject* to_be_finalized_ = nullptr;
+
     // Gray objects to traverse; grayagain holds what must be traversed again
     // in the atomic phase (threads, touched old objects).
     GcObject* gray_ = nullptr;
     GcObject* gray_again_ = nullptr;
+
+    // Weak tables to clear in the atomic phase: weak values, ephemerons
+    // (weak keys), and all-weak ones, plus tables with white keys (Lua's
+    // weak, ephemeron and allweak).
+    GcObject* weak_ = nullptr;
+    GcObject* ephemeron_ = nullptr;
+    GcObject* all_weak_ = nullptr;
 
     State* threads_with_upvalues_ = nullptr; // Lua's twups
 
@@ -354,6 +476,9 @@ private:
     GcStress stress_ = GcStress::Off;
     bool stopped_ = false;    // by the program (collectgarbage("stop"))
     bool collecting_ = false; // a step is running: no reentry
+    bool in_finalizer_ = false;
+    bool closing_ = false; // no new objects marked for finalization (GCSTPCLS)
+    bool closed_ = false;
     std::size_t cycles_ = 0;
 };
 

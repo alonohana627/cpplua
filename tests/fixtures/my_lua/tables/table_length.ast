@@ -1,0 +1,273 @@
+Chunk
+  Local t
+    Table
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name t (local 0)
+  NumericFor i
+    Integer 1
+    Integer 20
+    Body
+      Assign
+        Targets
+          Index
+            Name t (local 0)
+            Binary +
+              Unary #
+                Name t (local 0)
+              Integer 1
+        Values
+          Binary *
+            Name i (local 4)
+            Integer 10
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name t (local 0)
+      Index
+        Name t (local 0)
+        Unary #
+          Name t (local 0)
+  NumericFor _
+    Integer 1
+    Integer 5
+    Body
+      Assign
+        Targets
+          Index
+            Name t (local 0)
+            Unary #
+              Name t (local 0)
+        Values
+          Nil
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name t (local 0)
+      Index
+        Name t (local 0)
+        Unary #
+          Name t (local 0)
+      Index
+        Name t (local 0)
+        Integer 16
+  While
+    Binary >
+      Unary #
+        Name t (local 0)
+      Integer 0
+    Body
+      Assign
+        Targets
+          Index
+            Name t (local 0)
+            Unary #
+              Name t (local 0)
+        Values
+          Nil
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name t (local 0)
+      Index
+        Name t (local 0)
+        Integer 1
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Integer 1
+    Values
+      String "again"
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name t (local 0)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Table
+      Unary #
+        Table
+          Item
+            Integer 1
+      Unary #
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+          Item
+            Integer 3
+      Unary #
+        Table
+          Item
+            String "a"
+          Item
+            String "b"
+          Field n
+            Integer 2
+      Unary #
+        Table
+          Field n
+            Integer 1
+  Local s
+    Table
+  Assign
+    Targets
+      Index
+        Name s (local 1)
+        Integer 3
+    Values
+      String "c"
+  Assign
+    Targets
+      Index
+        Name s (local 1)
+        Integer 1
+    Values
+      String "a"
+  Assign
+    Targets
+      Index
+        Name s (local 1)
+        Integer 2
+    Values
+      String "b"
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name s (local 1)
+  Local seq
+    Table
+  NumericFor i
+    Integer 1
+    Integer 1000
+    Body
+      Assign
+        Targets
+          Index
+            Name seq (local 2)
+            Binary +
+              Unary #
+                Name seq (local 2)
+              Integer 1
+        Values
+          Name i (local 6)
+  Local sum
+    Integer 0
+  NumericFor i
+    Integer 1
+    Unary #
+      Name seq (local 2)
+    Body
+      Assign
+        Targets
+          Name sum (local 3)
+        Values
+          Binary +
+            Name sum (local 3)
+            Index
+              Name seq (local 2)
+              Name i (local 7)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name seq (local 2)
+      Name sum (local 3)
+  NumericFor _
+    Integer 1
+    Integer 999
+    Body
+      Assign
+        Targets
+          Index
+            Name seq (local 2)
+            Unary #
+              Name seq (local 2)
+        Values
+          Nil
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name seq (local 2)
+      Index
+        Name seq (local 2)
+        Integer 1
+  Local any
+    Table
+      Item
+        False
+      Item
+        Integer 0
+      Item
+        String ""
+      Item
+        Table
+      Item
+        Name print
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name any (local 4)
+  Local str
+    String "hello"
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name str (local 5)
+      Unary #
+        String ""
+      Unary #
+        Paren
+          Binary ..
+            Name str (local 5)
+            Name str (local 5)
+      Unary #
+        String "\x00\x00"
+  Local q
+    Table
+      Item
+        Integer 1
+      Item
+        Integer 2
+      Item
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Binary *
+        Unary #
+          Name q (local 6)
+        Integer 2
+      Binary +
+        Unary #
+          Name q (local 6)
+        Unary #
+          Name q (local 6)
+      Unary -
+        Unary #
+          Name q (local 6)
+      Binary ==
+        Unary #
+          Name q (local 6)
+        Integer 3
+  Return
+    Unary #
+      Name t (local 0)
+    Unary #
+      Name seq (local 2)
+    Unary #
+      Name any (local 4)

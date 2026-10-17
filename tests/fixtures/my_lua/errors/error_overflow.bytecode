@@ -1,0 +1,378 @@
+
+main <error_overflow.lua:0,0> (156 instructions)
+0+ params, 20 slots, 1 upvalue, 17 locals, 13 constants, 14 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	CLOSURE  	0 0
+	3	[8]	GETTABUP 	1 0 0	; _ENV "print"
+	4	[8]	GETTABUP 	2 0 1	; _ENV "pcall"
+	5	[8]	MOVE     	3 0
+	6	[8]	LOADI    	4 1
+	7	[8]	CALL     	2 3 0	; 2 in all out
+	8	[8]	CALL     	1 0 1	; all in 0 out
+	9	[11]	NEWTABLE 	1 0 0	; 0
+	10	[11]	EXTRAARG 	0
+	11	[12]	CLOSURE  	2 1
+	12	[12]	SETFIELD 	1 2 2	; "loop"
+	13	[13]	GETTABUP 	2 0 0	; _ENV "print"
+	14	[13]	GETTABUP 	3 0 1	; _ENV "pcall"
+	15	[13]	GETFIELD 	4 1 3	; "loop"
+	16	[13]	MOVE     	5 1
+	17	[13]	CALL     	3 3 0	; 2 in all out
+	18	[13]	CALL     	2 0 1	; all in 0 out
+	19	[14]	LOADNIL  	2 0	; 1 out
+	20	[15]	CLOSURE  	3 2
+	21	[15]	CLOSURE  	4 3
+	22	[15]	MOVE     	2 4
+	23	[16]	GETTABUP 	4 0 0	; _ENV "print"
+	24	[16]	GETTABUP 	5 0 1	; _ENV "pcall"
+	25	[16]	MOVE     	6 2
+	26	[16]	LOADI    	7 0
+	27	[16]	CALL     	5 3 0	; 2 in all out
+	28	[16]	CALL     	4 0 1	; all in 0 out
+	29	[19]	GETTABUP 	4 0 4	; _ENV "setmetatable"
+	30	[19]	NEWTABLE 	5 0 0	; 0
+	31	[19]	EXTRAARG 	0
+	32	[19]	NEWTABLE 	6 0 0	; 0
+	33	[19]	EXTRAARG 	0
+	34	[19]	CALL     	4 3 2	; 2 in 1 out
+	35	[20]	GETTABUP 	5 0 5	; _ENV "getmetatable"
+	36	[20]	MOVE     	6 4
+	37	[20]	CALL     	5 2 2	; 1 in 1 out
+	38	[20]	CLOSURE  	6 4
+	39	[20]	SETFIELD 	5 6 6	; "__index"
+	40	[21]	GETTABUP 	5 0 0	; _ENV "print"
+	41	[21]	GETTABUP 	6 0 1	; _ENV "pcall"
+	42	[21]	CLOSURE  	7 5
+	43	[21]	CALL     	6 2 0	; 1 in all out
+	44	[21]	CALL     	5 0 1	; all in 0 out
+	45	[24]	GETTABUP 	5 0 4	; _ENV "setmetatable"
+	46	[24]	NEWTABLE 	6 0 0	; 0
+	47	[24]	EXTRAARG 	0
+	48	[24]	NEWTABLE 	7 1 0	; 0
+	49	[24]	EXTRAARG 	0
+	50	[24]	CLOSURE  	8 6
+	51	[24]	SETFIELD 	7 7 8	; "__concat"
+	52	[24]	CALL     	5 3 2	; 2 in 1 out
+	53	[25]	GETTABUP 	6 0 0	; _ENV "print"
+	54	[25]	GETTABUP 	7 0 1	; _ENV "pcall"
+	55	[25]	CLOSURE  	8 7
+	56	[25]	CALL     	7 2 0	; 1 in all out
+	57	[25]	CALL     	6 0 1	; all in 0 out
+	58	[26]	GETTABUP 	6 0 4	; _ENV "setmetatable"
+	59	[26]	NEWTABLE 	7 0 0	; 0
+	60	[26]	EXTRAARG 	0
+	61	[26]	NEWTABLE 	8 1 0	; 0
+	62	[26]	EXTRAARG 	0
+	63	[26]	CLOSURE  	9 8
+	64	[26]	SETFIELD 	8 8 9	; "__add"
+	65	[26]	CALL     	6 3 2	; 2 in 1 out
+	66	[27]	GETTABUP 	7 0 0	; _ENV "print"
+	67	[27]	GETTABUP 	8 0 1	; _ENV "pcall"
+	68	[27]	CLOSURE  	9 9
+	69	[27]	CALL     	8 2 0	; 1 in all out
+	70	[27]	CALL     	7 0 1	; all in 0 out
+	71	[30]	GETTABUP 	7 0 4	; _ENV "setmetatable"
+	72	[30]	NEWTABLE 	8 0 0	; 0
+	73	[30]	EXTRAARG 	0
+	74	[30]	NEWTABLE 	9 0 0	; 0
+	75	[30]	EXTRAARG 	0
+	76	[30]	CALL     	7 3 2	; 2 in 1 out
+	77	[31]	GETTABUP 	8 0 5	; _ENV "getmetatable"
+	78	[31]	MOVE     	9 7
+	79	[31]	CALL     	8 2 2	; 1 in 1 out
+	80	[31]	SETFIELD 	8 6 7	; "__index"
+	81	[32]	GETTABUP 	8 0 0	; _ENV "print"
+	82	[32]	GETTABUP 	9 0 1	; _ENV "pcall"
+	83	[32]	CLOSURE  	10 10
+	84	[32]	CALL     	9 2 0	; 1 in all out
+	85	[32]	CALL     	8 0 1	; all in 0 out
+	86	[33]	GETTABUP 	8 0 4	; _ENV "setmetatable"
+	87	[33]	NEWTABLE 	9 0 0	; 0
+	88	[33]	EXTRAARG 	0
+	89	[33]	NEWTABLE 	10 0 0	; 0
+	90	[33]	EXTRAARG 	0
+	91	[33]	CALL     	8 3 2	; 2 in 1 out
+	92	[34]	GETTABUP 	9 0 4	; _ENV "setmetatable"
+	93	[34]	NEWTABLE 	10 0 0	; 0
+	94	[34]	EXTRAARG 	0
+	95	[34]	NEWTABLE 	11 1 0	; 0
+	96	[34]	EXTRAARG 	0
+	97	[34]	SETFIELD 	11 6 8	; "__index"
+	98	[34]	CALL     	9 3 2	; 2 in 1 out
+	99	[35]	GETTABUP 	10 0 5	; _ENV "getmetatable"
+	100	[35]	MOVE     	11 8
+	101	[35]	CALL     	10 2 2	; 1 in 1 out
+	102	[35]	SETFIELD 	10 6 9	; "__index"
+	103	[36]	GETTABUP 	10 0 0	; _ENV "print"
+	104	[36]	GETTABUP 	11 0 1	; _ENV "pcall"
+	105	[36]	CLOSURE  	12 11
+	106	[36]	CALL     	11 2 0	; 1 in all out
+	107	[36]	CALL     	10 0 1	; all in 0 out
+	108	[37]	GETTABUP 	10 0 4	; _ENV "setmetatable"
+	109	[37]	NEWTABLE 	11 0 0	; 0
+	110	[37]	EXTRAARG 	0
+	111	[37]	NEWTABLE 	12 0 0	; 0
+	112	[37]	EXTRAARG 	0
+	113	[37]	CALL     	10 3 2	; 2 in 1 out
+	114	[38]	GETTABUP 	11 0 5	; _ENV "getmetatable"
+	115	[38]	MOVE     	12 10
+	116	[38]	CALL     	11 2 2	; 1 in 1 out
+	117	[38]	SETFIELD 	11 9 10	; "__newindex"
+	118	[39]	GETTABUP 	11 0 0	; _ENV "print"
+	119	[39]	GETTABUP 	12 0 1	; _ENV "pcall"
+	120	[39]	CLOSURE  	13 12
+	121	[39]	CALL     	12 2 0	; 1 in all out
+	122	[39]	CALL     	11 0 1	; all in 0 out
+	123	[42]	CLOSURE  	11 13
+	124	[43]	GETTABUP 	12 0 0	; _ENV "print"
+	125	[43]	MOVE     	13 11
+	126	[43]	LOADI    	14 10000
+	127	[43]	CALL     	13 2 0	; 1 in all out
+	128	[43]	CALL     	12 0 1	; all in 0 out
+	129	[46]	NEWTABLE 	12 1 0	; 0
+	130	[46]	EXTRAARG 	0
+	131	[46]	SETFIELD 	12 10 11k	; "value" "bottom"
+	132	[47]	LOADI    	13 1
+	133	[47]	LOADI    	14 100
+	134	[47]	LOADI    	15 1
+	135	[47]	FORPREP  	13 8	; exit to 145
+	136	[47]	GETTABUP 	17 0 4	; _ENV "setmetatable"
+	137	[47]	NEWTABLE 	18 0 0	; 0
+	138	[47]	EXTRAARG 	0
+	139	[47]	NEWTABLE 	19 1 0	; 0
+	140	[47]	EXTRAARG 	0
+	141	[47]	SETFIELD 	19 6 12	; "__index"
+	142	[47]	CALL     	17 3 2	; 2 in 1 out
+	143	[47]	MOVE     	12 17
+	144	[47]	FORLOOP  	13 9	; to 136
+	145	[48]	GETTABUP 	13 0 0	; _ENV "print"
+	146	[48]	GETFIELD 	14 12 10	; "value"
+	147	[48]	CALL     	13 2 1	; 1 in 0 out
+	148	[51]	GETTABUP 	13 0 0	; _ENV "print"
+	149	[51]	GETTABUP 	14 0 1	; _ENV "pcall"
+	150	[51]	MOVE     	15 0
+	151	[51]	LOADI    	16 1
+	152	[51]	CALL     	14 3 0	; 2 in all out
+	153	[51]	CALL     	13 0 1	; all in 0 out
+	154	[52]	LOADK    	13 12	; "recovered"
+	155	[52]	RETURN   	13 2 1k	; 1 out
+	156	[52]	RETURN   	13 1 1k	; 0 out
+constants (13):
+	0	S	"print"
+	1	S	"pcall"
+	2	S	"loop"
+	3	S	"loop"
+	4	S	"setmetatable"
+	5	S	"getmetatable"
+	6	S	"__index"
+	7	S	"__concat"
+	8	S	"__add"
+	9	S	"__newindex"
+	10	S	"value"
+	11	S	"bottom"
+	12	S	"recovered"
+locals (17):
+	0	rec	3	157
+	1	obj	11	157
+	2	ping	20	157
+	3	pong	21	157
+	4	t	35	157
+	5	cat	53	157
+	6	num	66	157
+	7	u	77	157
+	8	a	92	157
+	9	b	99	157
+	10	w	114	157
+	11	depth	124	157
+	12	chain	132	157
+	13	(for state)	135	145
+	14	(for state)	135	145
+	15	(for state)	135	145
+	16	_	136	144
+upvalues (1):
+	0	_ENV	1	0
+
+function <error_overflow.lua:7,7> (8 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[7]	GETUPVAL 	1 0	; rec
+	2	[7]	ADDI     	2 0 1
+	3	[7]	MMBINI   	0 1 6 0	; __add
+	4	[7]	CALL     	1 2 2	; 1 in 1 out
+	5	[7]	ADDI     	1 1 1
+	6	[7]	MMBINI   	1 1 6 1	; __add flip
+	7	[7]	RETURN1  	1
+	8	[7]	RETURN0  	
+constants (0):
+locals (1):
+	0	n	1	9
+upvalues (1):
+	0	rec	1	0
+
+function <error_overflow.lua:12,12> (6 instructions)
+1 param, 3 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[12]	SELF     	1 0 0k	; "loop"
+	2	[12]	CALL     	1 2 2	; 1 in 1 out
+	3	[12]	ADDI     	1 1 1
+	4	[12]	MMBINI   	1 1 6 0	; __add
+	5	[12]	RETURN1  	1
+	6	[12]	RETURN0  	
+constants (1):
+	0	S	"loop"
+locals (1):
+	0	self	1	7
+upvalues (0):
+
+function <error_overflow.lua:15,15> (7 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[15]	GETUPVAL 	1 0	; ping
+	2	[15]	MOVE     	2 0
+	3	[15]	CALL     	1 2 2	; 1 in 1 out
+	4	[15]	ADDI     	1 1 1
+	5	[15]	MMBINI   	1 1 6 0	; __add
+	6	[15]	RETURN1  	1
+	7	[15]	RETURN0  	
+constants (0):
+locals (1):
+	0	n	1	8
+upvalues (1):
+	0	ping	1	2
+
+function <error_overflow.lua:15,15> (7 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[15]	GETUPVAL 	1 0	; pong
+	2	[15]	MOVE     	2 0
+	3	[15]	CALL     	1 2 2	; 1 in 1 out
+	4	[15]	ADDI     	1 1 1
+	5	[15]	MMBINI   	1 1 6 0	; __add
+	6	[15]	RETURN1  	1
+	7	[15]	RETURN0  	
+constants (0):
+locals (1):
+	0	n	1	8
+upvalues (1):
+	0	pong	1	3
+
+function <error_overflow.lua:20,20> (3 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[20]	GETTABLE 	2 0 1
+	2	[20]	RETURN1  	2
+	3	[20]	RETURN0  	
+constants (0):
+locals (2):
+	0	self	1	4
+	1	k	1	4
+upvalues (0):
+
+function <error_overflow.lua:21,21> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[21]	GETTABUP 	0 0 0	; t "x"
+	2	[21]	RETURN1  	0
+	3	[21]	RETURN0  	
+constants (1):
+	0	S	"x"
+locals (0):
+upvalues (1):
+	0	t	1	4
+
+function <error_overflow.lua:24,24> (5 instructions)
+2 params, 4 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[24]	MOVE     	2 0
+	2	[24]	MOVE     	3 1
+	3	[24]	CONCAT   	2 2
+	4	[24]	RETURN1  	2
+	5	[24]	RETURN0  	
+constants (0):
+locals (2):
+	0	x	1	6
+	1	y	1	6
+upvalues (0):
+
+function <error_overflow.lua:25,25> (5 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[25]	GETUPVAL 	0 0	; cat
+	2	[25]	LOADK    	1 0	; "s"
+	3	[25]	CONCAT   	0 2
+	4	[25]	RETURN1  	0
+	5	[25]	RETURN0  	
+constants (1):
+	0	S	"s"
+locals (0):
+upvalues (1):
+	0	cat	1	5
+
+function <error_overflow.lua:26,26> (4 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[26]	ADD      	2 0 1
+	2	[26]	MMBIN    	0 1 6	; __add
+	3	[26]	RETURN1  	2
+	4	[26]	RETURN0  	
+constants (0):
+locals (2):
+	0	x	1	5
+	1	y	1	5
+upvalues (0):
+
+function <error_overflow.lua:27,27> (5 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[27]	GETUPVAL 	0 0	; num
+	2	[27]	ADDI     	0 0 1
+	3	[27]	MMBINI   	0 1 6 0	; __add
+	4	[27]	RETURN1  	0
+	5	[27]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	num	1	6
+
+function <error_overflow.lua:32,32> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[32]	GETTABUP 	0 0 0	; u "x"
+	2	[32]	RETURN1  	0
+	3	[32]	RETURN0  	
+constants (1):
+	0	S	"x"
+locals (0):
+upvalues (1):
+	0	u	1	7
+
+function <error_overflow.lua:36,36> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[36]	GETTABUP 	0 0 0	; a "x"
+	2	[36]	RETURN1  	0
+	3	[36]	RETURN0  	
+constants (1):
+	0	S	"x"
+locals (0):
+upvalues (1):
+	0	a	1	8
+
+function <error_overflow.lua:39,39> (2 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[39]	SETTABUP 	0 0 1k	; w "x" 1
+	2	[39]	RETURN0  	
+constants (2):
+	0	S	"x"
+	1	I	1
+locals (0):
+upvalues (1):
+	0	w	1	10
+
+function <error_overflow.lua:42,42> (12 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[42]	EQI      	0 0 0
+	2	[42]	JMP      	2	; to 5
+	3	[42]	LOADI    	1 0
+	4	[42]	RETURN1  	1
+	5	[42]	GETUPVAL 	1 0	; depth
+	6	[42]	ADDI     	2 0 -1
+	7	[42]	MMBINI   	0 1 7 0	; __sub
+	8	[42]	CALL     	1 2 2	; 1 in 1 out
+	9	[42]	ADDI     	1 1 1
+	10	[42]	MMBINI   	1 1 6 1	; __add flip
+	11	[42]	RETURN1  	1
+	12	[42]	RETURN0  	
+constants (0):
+locals (1):
+	0	n	1	13
+upvalues (1):
+	0	depth	1	11

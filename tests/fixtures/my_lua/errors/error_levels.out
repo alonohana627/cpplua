@@ -1,0 +1,17 @@
+false	expected a number, got string
+false	error_levels.lua:21: expected a number, got table
+false	error_levels.lua:30: invalid
+false	error_levels.lua:35: level 1
+false	error_levels.lua:37: level 2
+false	level 0
+false	level 2
+false	level 50
+false	42
+false	42
+false	true
+false	true
+false	error_levels.lua:57: 42
+false	error_levels.lua:61: method failed
+false	error_levels.lua:61: method failed
+false	error_levels.lua:70: attempt to perform arithmetic on a table value (local 'a')
+done

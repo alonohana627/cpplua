@@ -1,0 +1,21 @@
+Chunk
+  Local t
+    Table
+      Field items
+        Table
+          Item
+            Integer 1
+          Item
+            Integer 2
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Index
+          Name t (local 0)
+          String "items"
+  Return
+    Unary #
+      Index
+        Name t (local 0)
+        String "missing"

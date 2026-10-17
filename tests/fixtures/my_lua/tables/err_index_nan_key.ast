@@ -1,0 +1,20 @@
+Chunk
+  Local t
+    Table
+  CallStatement
+    Call
+      Name print
+      Index
+        Name t (local 0)
+        Binary /
+          Integer 0
+          Integer 0
+  Assign
+    Targets
+      Index
+        Name t (local 0)
+        Binary /
+          Integer 0
+          Integer 0
+    Values
+      Integer 1

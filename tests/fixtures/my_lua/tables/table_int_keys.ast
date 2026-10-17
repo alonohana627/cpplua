@@ -1,0 +1,483 @@
+Chunk
+  Local back
+    Table
+  NumericFor i
+    Integer 100
+    Integer 1
+    Unary -
+      Integer 1
+    Body
+      Assign
+        Targets
+          Index
+            Name back (local 0)
+            Name i (local 4)
+        Values
+          Binary *
+            Name i (local 4)
+            Integer 2
+  Local ok
+    True
+  NumericFor i
+    Integer 1
+    Integer 100
+    Body
+      If
+        If
+          Binary ~=
+            Index
+              Name back (local 0)
+              Name i (local 5)
+            Binary *
+              Name i (local 5)
+              Integer 2
+          Then
+            Assign
+              Targets
+                Name ok (local 1)
+              Values
+                False
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name back (local 0)
+      Name ok (local 1)
+      Index
+        Name back (local 0)
+        Integer 0
+      Index
+        Name back (local 0)
+        Integer 101
+  Local sparse
+    Table
+  NumericFor i
+    Integer 1
+    Integer 20
+    Body
+      Assign
+        Targets
+          Index
+            Name sparse (local 2)
+            Binary *
+              Name i (local 6)
+              Name i (local 6)
+        Values
+          Name i (local 6)
+  Local found, sum
+    Integer 0
+    Integer 0
+  GenericFor k, v
+    In
+      Call
+        Name pairs
+        Name sparse (local 2)
+    Body
+      Assign
+        Targets
+          Name found (local 3)
+        Values
+          Binary +
+            Name found (local 3)
+            Integer 1
+      Assign
+        Targets
+          Name sum (local 4)
+        Values
+          Binary +
+            Name sum (local 4)
+            Name k (local 9)
+  CallStatement
+    Call
+      Name print
+      Name found (local 3)
+      Name sum (local 4)
+      Index
+        Name sparse (local 2)
+        Integer 1
+      Index
+        Name sparse (local 2)
+        Integer 4
+      Index
+        Name sparse (local 2)
+        Integer 400
+      Index
+        Name sparse (local 2)
+        Integer 2
+      Index
+        Name sparse (local 2)
+        Integer 399
+  Local neg
+    Table
+  NumericFor i
+    Unary -
+      Integer 10
+    Integer 10
+    Body
+      Assign
+        Targets
+          Index
+            Name neg (local 5)
+            Name i (local 9)
+        Values
+          Unary -
+            Name i (local 9)
+  Local nsum
+    Integer 0
+  NumericFor i
+    Unary -
+      Integer 10
+    Integer 10
+    Body
+      Assign
+        Targets
+          Name nsum (local 6)
+        Values
+          Binary +
+            Name nsum (local 6)
+            Binary *
+              Index
+                Name neg (local 5)
+                Name i (local 10)
+              Name i (local 10)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name neg (local 5)
+        Unary -
+          Integer 10
+      Index
+        Name neg (local 5)
+        Integer 0
+      Index
+        Name neg (local 5)
+        Integer 10
+      Name nsum (local 6)
+  Local huge
+    Table
+  Local maxi
+    Integer 9223372036854775807
+  Local mini
+    Binary -
+      Unary -
+        Integer 9223372036854775807
+      Integer 1
+  Assign
+    Targets
+      Index
+        Name huge (local 7)
+        Name maxi (local 8)
+    Values
+      String "max"
+  Assign
+    Targets
+      Index
+        Name huge (local 7)
+        Name mini (local 9)
+    Values
+      String "min"
+  Assign
+    Targets
+      Index
+        Name huge (local 7)
+        Binary -
+          Name maxi (local 8)
+          Integer 1
+    Values
+      String "max-1"
+  Assign
+    Targets
+      Index
+        Name huge (local 7)
+        Binary <<
+          Integer 1
+          Integer 40
+    Values
+      String "2^40"
+  CallStatement
+    Call
+      Name print
+      Index
+        Name huge (local 7)
+        Name maxi (local 8)
+      Index
+        Name huge (local 7)
+        Name mini (local 9)
+      Index
+        Name huge (local 7)
+        Binary -
+          Name maxi (local 8)
+          Integer 1
+      Index
+        Name huge (local 7)
+        Binary <<
+          Integer 1
+          Integer 40
+      Index
+        Name huge (local 7)
+        Binary +
+          Paren
+            Binary <<
+              Integer 1
+              Integer 40
+          Integer 1
+      Index
+        Name huge (local 7)
+        Binary ^
+          Integer 2
+          Integer 40
+  CallStatement
+    Call
+      Name print
+      Index
+        Name huge (local 7)
+        Binary or
+          Name math_missing
+          Binary +
+            Name maxi (local 8)
+            Integer 1
+      Index
+        Name huge (local 7)
+        Binary -
+          Name mini (local 9)
+          Integer 1
+  Local grow
+    Table
+  NumericFor i
+    Integer 1
+    Integer 300
+    Body
+      Assign
+        Targets
+          Index
+            Name grow (local 10)
+            Name i (local 14)
+        Values
+          Name i (local 14)
+      Assign
+        Targets
+          Index
+            Name grow (local 10)
+            Binary ..
+              String "k"
+              Name i (local 14)
+        Values
+          Unary -
+            Name i (local 14)
+      If
+        If
+          Binary ==
+            Binary %
+              Name i (local 14)
+              Integer 7
+            Integer 0
+          Then
+            Assign
+              Targets
+                Index
+                  Name grow (local 10)
+                  Binary +
+                    Name i (local 14)
+                    Float 0.5
+              Values
+                True
+  Local isum, ssum, fcount
+    Integer 0
+    Integer 0
+    Integer 0
+  GenericFor k, v
+    In
+      Call
+        Name pairs
+        Name grow (local 10)
+    Body
+      If
+        If
+          Binary and
+            Binary ==
+              Call
+                Name type
+                Name k (local 18)
+              String "number"
+            Binary ==
+              Name v (local 19)
+              True
+          Then
+            Assign
+              Targets
+                Name fcount (local 13)
+              Values
+                Binary +
+                  Name fcount (local 13)
+                  Integer 1
+        ElseIf
+          Binary ==
+            Call
+              Name type
+              Name k (local 18)
+            String "number"
+          Then
+            Assign
+              Targets
+                Name isum (local 11)
+              Values
+                Binary +
+                  Name isum (local 11)
+                  Name v (local 19)
+        Else
+          Assign
+            Targets
+              Name ssum (local 12)
+            Values
+              Binary +
+                Name ssum (local 12)
+                Name v (local 19)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name grow (local 10)
+      Name isum (local 11)
+      Name ssum (local 12)
+      Name fcount (local 13)
+      Index
+        Name grow (local 10)
+        Integer 150
+      Index
+        Name grow (local 10)
+        String "k150"
+      Index
+        Name grow (local 10)
+        Float 7.5
+      Index
+        Name grow (local 10)
+        Float 8.5
+  NumericFor i
+    Integer 1
+    Integer 300
+    Integer 2
+    Body
+      Assign
+        Targets
+          Index
+            Name grow (local 10)
+            Name i (local 17)
+        Values
+          Nil
+      Assign
+        Targets
+          Index
+            Name grow (local 10)
+            Binary ..
+              String "k"
+              Name i (local 17)
+        Values
+          Nil
+  Local left
+    Integer 0
+  GenericFor _
+    In
+      Call
+        Name pairs
+        Name grow (local 10)
+    Body
+      Assign
+        Targets
+          Name left (local 14)
+        Values
+          Binary +
+            Name left (local 14)
+            Integer 1
+  CallStatement
+    Call
+      Name print
+      Name left (local 14)
+      Index
+        Name grow (local 10)
+        Integer 1
+      Index
+        Name grow (local 10)
+        Integer 2
+      Index
+        Name grow (local 10)
+        String "k1"
+      Index
+        Name grow (local 10)
+        String "k2"
+      Index
+        Name grow (local 10)
+        Integer 300
+  Local gap
+    Table
+      Item
+        Integer 1
+      Item
+        Integer 2
+      Item
+        Integer 3
+  Assign
+    Targets
+      Index
+        Name gap (local 15)
+        Integer 5
+    Values
+      Integer 5
+  Assign
+    Targets
+      Index
+        Name gap (local 15)
+        Integer 4
+    Values
+      Integer 4
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name gap (local 15)
+      Index
+        Name gap (local 15)
+        Integer 5
+  Assign
+    Targets
+      Index
+        Name gap (local 15)
+        Integer 6
+    Values
+      Integer 6
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name gap (local 15)
+  Local mixkeys
+    Table
+  NumericFor i
+    Integer 1
+    Integer 10
+    Body
+      Assign
+        Targets
+          Index
+            Name mixkeys (local 16)
+            Binary +
+              Name i (local 20)
+              Float 0.0
+        Values
+          Name i (local 20)
+  CallStatement
+    Call
+      Name print
+      Unary #
+        Name mixkeys (local 16)
+      Index
+        Name mixkeys (local 16)
+        Integer 10
+      Index
+        Name mixkeys (local 16)
+        Float 10.0
+  Return
+    Unary #
+      Name back (local 0)
+    Name found (local 3)
+    Name left (local 14)

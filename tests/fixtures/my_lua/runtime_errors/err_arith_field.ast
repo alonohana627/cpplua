@@ -1,0 +1,21 @@
+Chunk
+  Local point
+    Table
+      Field x
+        Integer 1
+      Field pos
+        Table
+  CallStatement
+    Call
+      Name print
+      Binary +
+        Index
+          Name point (local 0)
+          String "x"
+        Integer 1
+  Return
+    Binary +
+      Index
+        Name point (local 0)
+        String "pos"
+      Integer 1

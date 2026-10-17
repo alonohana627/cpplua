@@ -1,0 +1,552 @@
+
+main <error_values.lua:0,0> (215 instructions)
+0+ params, 18 slots, 1 upvalue, 14 locals, 23 constants, 14 functions
+	1	[1]	VARARGPREP	0
+	2	[8]	CLOSURE  	0 0
+	3	[10]	GETTABUP 	1 0 0	; _ENV "print"
+	4	[10]	MOVE     	2 0
+	5	[10]	LOADI    	3 42
+	6	[10]	CALL     	2 2 2	; 1 in 1 out
+	7	[10]	MOVE     	3 0
+	8	[10]	LOADK    	4 1	; -1.5
+	9	[10]	CALL     	3 2 2	; 1 in 1 out
+	10	[10]	MOVE     	4 0
+	11	[10]	LOADK    	5 2	; 9.2233720368548e+18
+	12	[10]	CALL     	4 2 0	; 1 in all out
+	13	[10]	CALL     	1 0 1	; all in 0 out
+	14	[11]	GETTABUP 	1 0 0	; _ENV "print"
+	15	[11]	MOVE     	2 0
+	16	[11]	LOADTRUE 	3
+	17	[11]	CALL     	2 2 2	; 1 in 1 out
+	18	[11]	MOVE     	3 0
+	19	[11]	LOADFALSE	4
+	20	[11]	CALL     	3 2 2	; 1 in 1 out
+	21	[11]	MOVE     	4 0
+	22	[11]	LOADNIL  	5 0	; 1 out
+	23	[11]	CALL     	4 2 0	; 1 in all out
+	24	[11]	CALL     	1 0 1	; all in 0 out
+	25	[12]	GETTABUP 	1 0 0	; _ENV "print"
+	26	[12]	GETTABUP 	2 0 3	; _ENV "type"
+	27	[12]	MOVE     	3 0
+	28	[12]	LOADI    	4 42
+	29	[12]	CALL     	3 2 0	; 1 in all out
+	30	[12]	CALL     	2 0 2	; all in 1 out
+	31	[12]	GETTABUP 	3 0 3	; _ENV "type"
+	32	[12]	MOVE     	4 0
+	33	[12]	LOADNIL  	5 0	; 1 out
+	34	[12]	CALL     	4 2 0	; 1 in all out
+	35	[12]	CALL     	3 0 2	; all in 1 out
+	36	[12]	GETTABUP 	4 0 3	; _ENV "type"
+	37	[12]	MOVE     	5 0
+	38	[12]	LOADK    	6 4	; "s"
+	39	[12]	CALL     	5 2 0	; 1 in all out
+	40	[12]	CALL     	4 0 0	; all in all out
+	41	[12]	CALL     	1 0 1	; all in 0 out
+	42	[15]	NEWTABLE 	1 2 0	; 0
+	43	[15]	EXTRAARG 	0
+	44	[15]	SETFIELD 	1 5 6k	; "code" 404
+	45	[15]	SETFIELD 	1 7 8k	; "reason" "not found"
+	46	[16]	MOVE     	2 0
+	47	[16]	MOVE     	3 1
+	48	[16]	CALL     	2 2 2	; 1 in 1 out
+	49	[17]	GETTABUP 	3 0 0	; _ENV "print"
+	50	[17]	EQ       	2 1 1
+	51	[17]	JMP      	1	; to 53
+	52	[17]	LFALSESKIP	4
+	53	[17]	LOADTRUE 	4
+	54	[17]	GETFIELD 	5 2 5	; "code"
+	55	[17]	GETFIELD 	6 2 7	; "reason"
+	56	[17]	CALL     	3 4 1	; 3 in 0 out
+	57	[20]	NEWTABLE 	3 0 0	; 0
+	58	[20]	EXTRAARG 	0
+	59	[21]	SETFIELD 	3 9 3	; "__index"
+	60	[22]	CLOSURE  	4 1
+	61	[22]	SETFIELD 	3 10 4	; "__tostring"
+	62	[23]	CLOSURE  	4 2
+	63	[24]	GETTABUP 	5 0 11	; _ENV "pcall"
+	64	[24]	MOVE     	6 4
+	65	[24]	LOADI    	7 500
+	66	[24]	LOADK    	8 12	; "server failure"
+	67	[24]	CALL     	5 4 3	; 3 in 2 out
+	68	[25]	GETTABUP 	7 0 0	; _ENV "print"
+	69	[25]	MOVE     	8 5
+	70	[25]	GETTABUP 	9 0 13	; _ENV "tostring"
+	71	[25]	MOVE     	10 6
+	72	[25]	CALL     	9 2 2	; 1 in 1 out
+	73	[25]	GETFIELD 	10 6 14	; "code"
+	74	[25]	GETTABUP 	11 0 15	; _ENV "getmetatable"
+	75	[25]	MOVE     	12 6
+	76	[25]	CALL     	11 2 2	; 1 in 1 out
+	77	[25]	EQ       	11 3 1
+	78	[25]	JMP      	1	; to 80
+	79	[25]	LFALSESKIP	11
+	80	[25]	LOADTRUE 	11
+	81	[25]	CALL     	7 5 1	; 4 in 0 out
+	82	[26]	GETTABUP 	7 0 0	; _ENV "print"
+	83	[26]	MOVE     	8 6
+	84	[26]	CALL     	7 2 1	; 1 in 0 out
+	85	[29]	GETTABUP 	7 0 11	; _ENV "pcall"
+	86	[32]	CLOSURE  	8 3
+	87	[29]	CALL     	7 2 3	; 1 in 2 out
+	88	[33]	GETTABUP 	9 0 0	; _ENV "print"
+	89	[33]	MOVE     	10 7
+	90	[33]	GETFIELD 	11 8 16	; "msg"
+	91	[33]	GETTABUP 	12 0 13	; _ENV "tostring"
+	92	[33]	MOVE     	13 8
+	93	[33]	CALL     	12 2 0	; 1 in all out
+	94	[33]	CALL     	9 0 1	; all in 0 out
+	95	[42]	CLOSURE  	9 4
+	96	[43]	GETTABUP 	10 0 0	; _ENV "print"
+	97	[43]	MOVE     	11 9
+	98	[43]	CLOSURE  	12 5
+	99	[43]	CALL     	11 2 0	; 1 in all out
+	100	[43]	CALL     	10 0 1	; all in 0 out
+	101	[44]	GETTABUP 	10 0 0	; _ENV "print"
+	102	[44]	MOVE     	11 9
+	103	[44]	CLOSURE  	12 6
+	104	[44]	CALL     	11 2 0	; 1 in all out
+	105	[44]	CALL     	10 0 1	; all in 0 out
+	106	[45]	GETTABUP 	10 0 0	; _ENV "print"
+	107	[45]	MOVE     	11 9
+	108	[45]	CLOSURE  	12 7
+	109	[45]	CALL     	11 2 0	; 1 in all out
+	110	[45]	CALL     	10 0 1	; all in 0 out
+	111	[46]	GETTABUP 	10 0 0	; _ENV "print"
+	112	[46]	MOVE     	11 9
+	113	[46]	CLOSURE  	12 8
+	114	[46]	CALL     	11 2 0	; 1 in all out
+	115	[46]	CALL     	10 0 1	; all in 0 out
+	116	[47]	GETTABUP 	10 0 0	; _ENV "print"
+	117	[47]	MOVE     	11 9
+	118	[47]	CLOSURE  	12 9
+	119	[47]	CALL     	11 2 0	; 1 in all out
+	120	[47]	CALL     	10 0 1	; all in 0 out
+	121	[48]	GETTABUP 	10 0 0	; _ENV "print"
+	122	[48]	MOVE     	11 9
+	123	[48]	CLOSURE  	12 10
+	124	[48]	CALL     	11 2 0	; 1 in all out
+	125	[48]	CALL     	10 0 1	; all in 0 out
+	126	[51]	CLOSURE  	10 11
+	127	[52]	GETTABUP 	11 0 0	; _ENV "print"
+	128	[52]	GETTABUP 	12 0 17	; _ENV "pcall"
+	129	[52]	MOVE     	13 10
+	130	[52]	LOADNIL  	14 0	; 1 out
+	131	[52]	CALL     	12 3 0	; 2 in all out
+	132	[52]	CALL     	11 0 1	; all in 0 out
+	133	[53]	GETTABUP 	11 0 0	; _ENV "print"
+	134	[53]	GETTABUP 	12 0 17	; _ENV "pcall"
+	135	[53]	MOVE     	13 10
+	136	[53]	LOADTRUE 	14
+	137	[53]	CALL     	12 3 0	; 2 in all out
+	138	[53]	CALL     	11 0 1	; all in 0 out
+	139	[54]	GETTABUP 	11 0 0	; _ENV "print"
+	140	[54]	GETTABUP 	12 0 17	; _ENV "pcall"
+	141	[54]	MOVE     	13 10
+	142	[54]	LOADI    	14 10
+	143	[54]	CALL     	12 3 0	; 2 in all out
+	144	[54]	CALL     	11 0 1	; all in 0 out
+	145	[55]	GETTABUP 	11 0 0	; _ENV "print"
+	146	[55]	GETTABUP 	12 0 17	; _ENV "pcall"
+	147	[55]	MOVE     	13 10
+	148	[55]	LOADF    	14 10
+	149	[55]	CALL     	12 3 0	; 2 in all out
+	150	[55]	CALL     	11 0 1	; all in 0 out
+	151	[56]	GETTABUP 	11 0 0	; _ENV "print"
+	152	[56]	GETTABUP 	12 0 17	; _ENV "pcall"
+	153	[56]	MOVE     	13 10
+	154	[56]	LOADF    	14 0
+	155	[56]	UNM      	14 14
+	156	[56]	CALL     	12 3 0	; 2 in all out
+	157	[56]	CALL     	11 0 1	; all in 0 out
+	158	[57]	GETTABUP 	11 0 0	; _ENV "print"
+	159	[57]	GETTABUP 	12 0 17	; _ENV "pcall"
+	160	[57]	MOVE     	13 10
+	161	[57]	LOADK    	14 18	; inf
+	162	[57]	CALL     	12 3 0	; 2 in all out
+	163	[57]	CALL     	11 0 1	; all in 0 out
+	164	[58]	GETTABUP 	11 0 0	; _ENV "print"
+	165	[58]	GETTABUP 	12 0 17	; _ENV "pcall"
+	166	[58]	MOVE     	13 10
+	167	[58]	LOADK    	14 19	; -inf
+	168	[58]	CALL     	12 3 0	; 2 in all out
+	169	[58]	CALL     	11 0 1	; all in 0 out
+	170	[59]	GETTABUP 	11 0 0	; _ENV "print"
+	171	[59]	GETTABUP 	12 0 17	; _ENV "pcall"
+	172	[59]	MOVE     	13 10
+	173	[59]	LOADK    	14 20	; 4.9406564584125e-324
+	174	[59]	CALL     	12 3 0	; 2 in all out
+	175	[59]	CALL     	11 0 1	; all in 0 out
+	176	[60]	GETTABUP 	11 0 0	; _ENV "print"
+	177	[60]	GETTABUP 	12 0 17	; _ENV "pcall"
+	178	[60]	MOVE     	13 10
+	179	[60]	LOADK    	14 21	; 9007199254740993
+	180	[60]	CALL     	12 3 0	; 2 in all out
+	181	[60]	CALL     	11 0 1	; all in 0 out
+	182	[61]	GETTABUP 	11 0 0	; _ENV "print"
+	183	[61]	GETTABUP 	12 0 17	; _ENV "pcall"
+	184	[61]	MOVE     	13 10
+	185	[61]	LOADK    	14 22	; "text"
+	186	[61]	CALL     	12 3 0	; 2 in all out
+	187	[61]	CALL     	11 0 1	; all in 0 out
+	188	[62]	GETTABUP 	11 0 0	; _ENV "print"
+	189	[62]	GETTABUP 	12 0 17	; _ENV "pcall"
+	190	[62]	CLOSURE  	13 12
+	191	[62]	CALL     	12 2 0	; 1 in all out
+	192	[62]	CALL     	11 0 1	; all in 0 out
+	193	[66]	LOADNIL  	11 0	; 1 out
+	194	[67]	GETTABUP 	12 0 17	; _ENV "pcall"
+	195	[70]	CLOSURE  	13 13
+	196	[67]	CALL     	12 2 3	; 1 in 2 out
+	197	[71]	GETTABUP 	14 0 0	; _ENV "print"
+	198	[71]	MOVE     	15 12
+	199	[71]	EQ       	13 1 1
+	200	[71]	JMP      	1	; to 202
+	201	[71]	LFALSESKIP	16
+	202	[71]	LOADTRUE 	16
+	203	[71]	EQ       	11 1 1
+	204	[71]	JMP      	1	; to 206
+	205	[71]	LFALSESKIP	17
+	206	[71]	LOADTRUE 	17
+	207	[71]	CALL     	14 4 1	; 3 in 0 out
+	208	[73]	MOVE     	14 0
+	209	[73]	LOADNIL  	15 0	; 1 out
+	210	[73]	CALL     	14 2 2	; 1 in 1 out
+	211	[73]	MOVE     	15 0
+	212	[73]	LOADI    	16 0
+	213	[73]	CALL     	15 2 0	; 1 in all out
+	214	[73]	RETURN   	14 0 1k	; all out
+	215	[73]	RETURN   	14 1 1k	; 0 out
+constants (23):
+	0	S	"print"
+	1	F	-1.5
+	2	F	9.2233720368548e+18
+	3	S	"type"
+	4	S	"s"
+	5	S	"code"
+	6	I	404
+	7	S	"reason"
+	8	S	"not found"
+	9	S	"__index"
+	10	S	"__tostring"
+	11	S	"pcall"
+	12	S	"server failure"
+	13	S	"tostring"
+	14	S	"code"
+	15	S	"getmetatable"
+	16	S	"msg"
+	17	S	"pcall"
+	18	F	inf
+	19	F	-inf
+	20	F	4.9406564584125e-324
+	21	I	9007199254740993
+	22	S	"text"
+locals (14):
+	0	catch	3	216
+	1	err	46	216
+	2	got	49	216
+	3	Error	59	216
+	4	throw	63	216
+	5	ok	68	216
+	6	e	68	216
+	7	ok2	88	216
+	8	e2	88	216
+	9	handle	96	216
+	10	describe	127	216
+	11	seen	194	216
+	12	ok4	197	216
+	13	e4	197	216
+upvalues (1):
+	0	_ENV	1	0
+
+function <error_values.lua:6,8> (10 instructions)
+2 params, 8 slots, 1 upvalue, 2 locals, 3 constants, 0 functions
+	1	[7]	GETTABUP 	2 0 0	; _ENV "select"
+	2	[7]	LOADI    	3 2
+	3	[7]	GETTABUP 	4 0 1	; _ENV "pcall"
+	4	[7]	GETTABUP 	5 0 2	; _ENV "error"
+	5	[7]	MOVE     	6 0
+	6	[7]	MOVE     	7 1
+	7	[7]	CALL     	4 4 0	; 3 in all out
+	8	[7]	TAILCALL 	2 0 0	; -1 in
+	9	[7]	RETURN   	2 0 0	; all out
+	10	[8]	RETURN0  	
+constants (3):
+	0	S	"select"
+	1	S	"pcall"
+	2	S	"error"
+locals (2):
+	0	v	1	11
+	1	level	1	11
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_values.lua:22,22> (7 instructions)
+1 param, 5 slots, 0 upvalues, 1 local, 4 constants, 0 functions
+	1	[22]	LOADK    	1 0	; "Error["
+	2	[22]	GETFIELD 	2 0 1	; "code"
+	3	[22]	LOADK    	3 2	; "]: "
+	4	[22]	GETFIELD 	4 0 3	; "msg"
+	5	[22]	CONCAT   	1 4
+	6	[22]	RETURN1  	1
+	7	[22]	RETURN0  	
+constants (4):
+	0	S	"Error["
+	1	S	"code"
+	2	S	"]: "
+	3	S	"msg"
+locals (1):
+	0	e	1	8
+upvalues (0):
+
+function <error_values.lua:23,23> (10 instructions)
+2 params, 6 slots, 2 upvalues, 2 locals, 4 constants, 0 functions
+	1	[23]	GETTABUP 	2 0 0	; _ENV "error"
+	2	[23]	GETTABUP 	3 0 1	; _ENV "setmetatable"
+	3	[23]	NEWTABLE 	4 2 0	; 0
+	4	[23]	EXTRAARG 	0
+	5	[23]	SETFIELD 	4 2 0	; "code"
+	6	[23]	SETFIELD 	4 3 1	; "msg"
+	7	[23]	GETUPVAL 	5 1	; Error
+	8	[23]	CALL     	3 3 0	; 2 in all out
+	9	[23]	CALL     	2 0 1	; all in 0 out
+	10	[23]	RETURN0  	
+constants (4):
+	0	S	"error"
+	1	S	"setmetatable"
+	2	S	"code"
+	3	S	"msg"
+locals (2):
+	0	code	1	11
+	1	msg	1	11
+upvalues (2):
+	0	_ENV	0	0
+	1	Error	1	3
+
+function <error_values.lua:29,32> (9 instructions)
+0 params, 4 slots, 2 upvalues, 2 locals, 3 constants, 0 functions
+	1	[30]	GETTABUP 	0 0 0	; _ENV "pcall"
+	2	[30]	GETUPVAL 	1 1	; throw
+	3	[30]	LOADI    	2 1
+	4	[30]	LOADK    	3 1	; "first"
+	5	[30]	CALL     	0 4 3	; 3 in 2 out
+	6	[31]	GETTABUP 	2 0 2	; _ENV "error"
+	7	[31]	MOVE     	3 1
+	8	[31]	CALL     	2 2 1	; 1 in 0 out
+	9	[32]	RETURN0  	
+constants (3):
+	0	S	"pcall"
+	1	S	"first"
+	2	S	"error"
+locals (2):
+	0	_	6	10
+	1	inner	6	10
+upvalues (2):
+	0	_ENV	0	0
+	1	throw	1	4
+
+function <error_values.lua:36,42> (38 instructions)
+1 param, 6 slots, 2 upvalues, 3 locals, 11 constants, 0 functions
+	1	[37]	GETTABUP 	1 0 0	; _ENV "pcall"
+	2	[37]	MOVE     	2 0
+	3	[37]	CALL     	1 2 3	; 1 in 2 out
+	4	[38]	TEST     	1 0
+	5	[38]	JMP      	2	; to 8
+	6	[38]	LOADK    	3 1	; "ok"
+	7	[38]	RETURN1  	3
+	8	[39]	GETTABUP 	3 0 2	; _ENV "type"
+	9	[39]	MOVE     	4 2
+	10	[39]	CALL     	3 2 2	; 1 in 1 out
+	11	[39]	EQK      	3 3 0	; "table"
+	12	[39]	JMP      	10	; to 23
+	13	[39]	GETTABUP 	3 0 4	; _ENV "getmetatable"
+	14	[39]	MOVE     	4 2
+	15	[39]	CALL     	3 2 2	; 1 in 1 out
+	16	[39]	GETUPVAL 	4 1	; Error
+	17	[39]	EQ       	3 4 0
+	18	[39]	JMP      	4	; to 23
+	19	[39]	LOADK    	3 5	; "Error "
+	20	[39]	GETFIELD 	4 2 6	; "code"
+	21	[39]	CONCAT   	3 2
+	22	[39]	RETURN1  	3
+	23	[40]	GETTABUP 	3 0 2	; _ENV "type"
+	24	[40]	MOVE     	4 2
+	25	[40]	CALL     	3 2 2	; 1 in 1 out
+	26	[40]	EQK      	3 7 0	; "string"
+	27	[40]	JMP      	4	; to 32
+	28	[40]	LOADK    	3 8	; "string: "
+	29	[40]	MOVE     	4 2
+	30	[40]	CONCAT   	3 2
+	31	[40]	RETURN1  	3
+	32	[41]	LOADK    	3 9	; "other: "
+	33	[41]	GETTABUP 	4 0 10	; _ENV "tostring"
+	34	[41]	MOVE     	5 2
+	35	[41]	CALL     	4 2 2	; 1 in 1 out
+	36	[41]	CONCAT   	3 2
+	37	[41]	RETURN1  	3
+	38	[42]	RETURN0  	
+constants (11):
+	0	S	"pcall"
+	1	S	"ok"
+	2	S	"type"
+	3	S	"table"
+	4	S	"getmetatable"
+	5	S	"Error "
+	6	S	"code"
+	7	S	"string"
+	8	S	"string: "
+	9	S	"other: "
+	10	S	"tostring"
+locals (3):
+	0	f	1	39
+	1	ok3	4	39
+	2	x	4	39
+upvalues (2):
+	0	_ENV	0	0
+	1	Error	1	3
+
+function <error_values.lua:43,43> (1 instruction)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[43]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <error_values.lua:44,44> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[44]	GETUPVAL 	0 0	; throw
+	2	[44]	LOADI    	1 7
+	3	[44]	LOADK    	2 0	; "seven"
+	4	[44]	CALL     	0 3 1	; 2 in 0 out
+	5	[44]	RETURN0  	
+constants (1):
+	0	S	"seven"
+locals (0):
+upvalues (1):
+	0	throw	1	4
+
+function <error_values.lua:45,45> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[45]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[45]	LOADK    	1 1	; "plain"
+	3	[45]	LOADI    	2 0
+	4	[45]	CALL     	0 3 1	; 2 in 0 out
+	5	[45]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"plain"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_values.lua:46,46> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[46]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[46]	LOADK    	1 1	; 3.25
+	3	[46]	CALL     	0 2 1	; 1 in 0 out
+	4	[46]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	F	3.25
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_values.lua:47,47> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[47]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[47]	CALL     	0 1 1	; 0 in 0 out
+	3	[47]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_values.lua:48,48> (4 instructions)
+0 params, 2 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[48]	LOADNIL  	0 0	; 1 out
+	2	[48]	GETFIELD 	1 0 0	; "x"
+	3	[48]	RETURN1  	1
+	4	[48]	RETURN0  	
+constants (1):
+	0	S	"x"
+locals (1):
+	0	n	2	5
+upvalues (0):
+
+function <error_values.lua:51,51> (9 instructions)
+1 param, 5 slots, 1 upvalue, 1 local, 3 constants, 0 functions
+	1	[51]	GETTABUP 	1 0 0	; _ENV "error"
+	2	[51]	LOADK    	2 1	; "bad value: "
+	3	[51]	GETTABUP 	3 0 2	; _ENV "tostring"
+	4	[51]	MOVE     	4 0
+	5	[51]	CALL     	3 2 2	; 1 in 1 out
+	6	[51]	CONCAT   	2 2
+	7	[51]	LOADI    	3 0
+	8	[51]	CALL     	1 3 1	; 2 in 0 out
+	9	[51]	RETURN0  	
+constants (3):
+	0	S	"error"
+	1	S	"bad value: "
+	2	S	"tostring"
+locals (1):
+	0	v	1	10
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_values.lua:62,62> (9 instructions)
+0 params, 5 slots, 1 upvalue, 0 locals, 4 constants, 0 functions
+	1	[62]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[62]	LOADK    	1 1	; "count: "
+	3	[62]	LOADI    	2 3
+	4	[62]	LOADK    	3 2	; ", ratio: "
+	5	[62]	LOADK    	4 3	; 0.5
+	6	[62]	CONCAT   	1 4
+	7	[62]	LOADI    	2 0
+	8	[62]	CALL     	0 3 1	; 2 in 0 out
+	9	[62]	RETURN0  	
+constants (4):
+	0	S	"error"
+	1	S	"count: "
+	2	S	", ratio: "
+	3	F	0.5
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_values.lua:67,70> (13 instructions)
+0 params, 4 slots, 3 upvalues, 1 local, 3 constants, 1 function
+	1	[68]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[68]	NEWTABLE 	1 0 0	; 0
+	3	[68]	EXTRAARG 	0
+	4	[68]	NEWTABLE 	2 1 0	; 0
+	5	[68]	EXTRAARG 	0
+	6	[68]	CLOSURE  	3 0
+	7	[68]	SETFIELD 	2 1 3	; "__close"
+	8	[68]	CALL     	0 3 2	; 2 in 1 out
+	9	[68]	TBC      	0
+	10	[69]	GETTABUP 	1 0 2	; _ENV "error"
+	11	[69]	GETUPVAL 	2 2	; err
+	12	[69]	CALL     	1 2 1	; 1 in 0 out
+	13	[70]	RETURN   	1 1 0k	; 0 out
+constants (3):
+	0	S	"setmetatable"
+	1	S	"__close"
+	2	S	"error"
+locals (1):
+	0	c	9	14
+upvalues (3):
+	0	_ENV	0	0
+	1	seen	1	11
+	2	err	1	1
+
+function <error_values.lua:68,68> (2 instructions)
+2 params, 2 slots, 1 upvalue, 2 locals, 0 constants, 0 functions
+	1	[68]	SETUPVAL 	1 0	; seen
+	2	[68]	RETURN0  	
+constants (0):
+locals (2):
+	0	_	1	3
+	1	x	1	3
+upvalues (1):
+	0	seen	0	1

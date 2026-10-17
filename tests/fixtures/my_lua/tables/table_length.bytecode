@@ -1,0 +1,218 @@
+
+main <table_length.lua:0,0> (171 instructions)
+0+ params, 12 slots, 1 upvalue, 27 locals, 13 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[5]	NEWTABLE 	0 0 0	; 0
+	3	[5]	EXTRAARG 	0
+	4	[6]	GETTABUP 	1 0 0	; _ENV "print"
+	5	[6]	LEN      	2 0
+	6	[6]	CALL     	1 2 1	; 1 in 0 out
+	7	[7]	LOADI    	1 1
+	8	[7]	LOADI    	2 20
+	9	[7]	LOADI    	3 1
+	10	[7]	FORPREP  	1 6	; exit to 18
+	11	[8]	LEN      	5 0
+	12	[8]	ADDI     	5 5 1
+	13	[8]	MMBINI   	5 1 6 0	; __add
+	14	[8]	MULK     	6 4 1	; 10
+	15	[8]	MMBINK   	4 1 8 0	; __mul 10
+	16	[8]	SETTABLE 	0 5 6
+	17	[7]	FORLOOP  	1 7	; to 11
+	18	[10]	GETTABUP 	1 0 0	; _ENV "print"
+	19	[10]	LEN      	2 0
+	20	[10]	LEN      	3 0
+	21	[10]	GETTABLE 	3 0 3
+	22	[10]	CALL     	1 3 1	; 2 in 0 out
+	23	[13]	LOADI    	1 1
+	24	[13]	LOADI    	2 5
+	25	[13]	LOADI    	3 1
+	26	[13]	FORPREP  	1 2	; exit to 30
+	27	[13]	LEN      	5 0
+	28	[13]	SETTABLE 	0 5 2k	; nil
+	29	[13]	FORLOOP  	1 3	; to 27
+	30	[14]	GETTABUP 	1 0 0	; _ENV "print"
+	31	[14]	LEN      	2 0
+	32	[14]	LEN      	3 0
+	33	[14]	GETTABLE 	3 0 3
+	34	[14]	GETI     	4 0 16
+	35	[14]	CALL     	1 4 1	; 3 in 0 out
+	36	[17]	LEN      	1 0
+	37	[17]	GTI      	1 0 0
+	38	[17]	JMP      	3	; to 42
+	39	[17]	LEN      	1 0
+	40	[17]	SETTABLE 	0 1 2k	; nil
+	41	[17]	JMP      	-6	; to 36
+	42	[18]	GETTABUP 	1 0 0	; _ENV "print"
+	43	[18]	LEN      	2 0
+	44	[18]	GETI     	3 0 1
+	45	[18]	CALL     	1 3 1	; 2 in 0 out
+	46	[19]	SETI     	0 1 3k	; "again"
+	47	[20]	GETTABUP 	1 0 0	; _ENV "print"
+	48	[20]	LEN      	2 0
+	49	[20]	CALL     	1 2 1	; 1 in 0 out
+	50	[23]	GETTABUP 	1 0 0	; _ENV "print"
+	51	[23]	NEWTABLE 	2 0 0	; 0
+	52	[23]	EXTRAARG 	0
+	53	[23]	LEN      	2 2
+	54	[23]	NEWTABLE 	3 0 1	; 1
+	55	[23]	EXTRAARG 	0
+	56	[23]	LOADI    	4 1
+	57	[23]	SETLIST  	3 1 0
+	58	[23]	LEN      	3 3
+	59	[23]	NEWTABLE 	4 0 3	; 3
+	60	[23]	EXTRAARG 	0
+	61	[23]	LOADI    	5 1
+	62	[23]	LOADI    	6 2
+	63	[23]	LOADI    	7 3
+	64	[23]	SETLIST  	4 3 0
+	65	[23]	LEN      	4 4
+	66	[23]	NEWTABLE 	5 1 2	; 2
+	67	[23]	EXTRAARG 	0
+	68	[23]	LOADK    	6 4	; "a"
+	69	[23]	LOADK    	7 5	; "b"
+	70	[23]	SETFIELD 	5 6 7k	; "n" 2
+	71	[23]	SETLIST  	5 2 0
+	72	[23]	LEN      	5 5
+	73	[23]	NEWTABLE 	6 1 0	; 0
+	74	[23]	EXTRAARG 	0
+	75	[23]	SETFIELD 	6 6 8k	; "n" 1
+	76	[23]	LEN      	6 6
+	77	[23]	CALL     	1 6 1	; 5 in 0 out
+	78	[26]	NEWTABLE 	1 0 0	; 0
+	79	[26]	EXTRAARG 	0
+	80	[27]	SETI     	1 3 9k	; "c"
+	81	[28]	SETI     	1 1 4k	; "a"
+	82	[29]	SETI     	1 2 5k	; "b"
+	83	[30]	GETTABUP 	2 0 0	; _ENV "print"
+	84	[30]	LEN      	3 1
+	85	[30]	CALL     	2 2 1	; 1 in 0 out
+	86	[33]	NEWTABLE 	2 0 0	; 0
+	87	[33]	EXTRAARG 	0
+	88	[34]	LOADI    	3 1
+	89	[34]	LOADI    	4 1000
+	90	[34]	LOADI    	5 1
+	91	[34]	FORPREP  	3 4	; exit to 97
+	92	[34]	LEN      	7 2
+	93	[34]	ADDI     	7 7 1
+	94	[34]	MMBINI   	7 1 6 0	; __add
+	95	[34]	SETTABLE 	2 7 6
+	96	[34]	FORLOOP  	3 5	; to 92
+	97	[35]	LOADI    	3 0
+	98	[36]	LOADI    	4 1
+	99	[36]	LEN      	5 2
+	100	[36]	LOADI    	6 1
+	101	[36]	FORPREP  	4 3	; exit to 106
+	102	[36]	GETTABLE 	8 2 7
+	103	[36]	ADD      	3 3 8
+	104	[36]	MMBIN    	3 8 6	; __add
+	105	[36]	FORLOOP  	4 4	; to 102
+	106	[37]	GETTABUP 	4 0 0	; _ENV "print"
+	107	[37]	LEN      	5 2
+	108	[37]	MOVE     	6 3
+	109	[37]	CALL     	4 3 1	; 2 in 0 out
+	110	[38]	LOADI    	4 1
+	111	[38]	LOADI    	5 999
+	112	[38]	LOADI    	6 1
+	113	[38]	FORPREP  	4 2	; exit to 117
+	114	[38]	LEN      	8 2
+	115	[38]	SETTABLE 	2 8 2k	; nil
+	116	[38]	FORLOOP  	4 3	; to 114
+	117	[39]	GETTABUP 	4 0 0	; _ENV "print"
+	118	[39]	LEN      	5 2
+	119	[39]	GETI     	6 2 1
+	120	[39]	CALL     	4 3 1	; 2 in 0 out
+	121	[42]	NEWTABLE 	4 0 5	; 5
+	122	[42]	EXTRAARG 	0
+	123	[42]	LOADFALSE	5
+	124	[42]	LOADI    	6 0
+	125	[42]	LOADK    	7 10	; ""
+	126	[42]	NEWTABLE 	8 0 0	; 0
+	127	[42]	EXTRAARG 	0
+	128	[42]	GETTABUP 	9 0 0	; _ENV "print"
+	129	[42]	SETLIST  	4 5 0
+	130	[43]	GETTABUP 	5 0 0	; _ENV "print"
+	131	[43]	LEN      	6 4
+	132	[43]	CALL     	5 2 1	; 1 in 0 out
+	133	[46]	LOADK    	5 11	; "hello"
+	134	[47]	GETTABUP 	6 0 0	; _ENV "print"
+	135	[47]	LEN      	7 5
+	136	[47]	LOADK    	8 10	; ""
+	137	[47]	LEN      	8 8
+	138	[47]	MOVE     	9 5
+	139	[47]	MOVE     	10 5
+	140	[47]	CONCAT   	9 2
+	141	[47]	LEN      	9 9
+	142	[47]	LOADK    	10 12	; "\000\000"
+	143	[47]	LEN      	10 10
+	144	[47]	CALL     	6 5 1	; 4 in 0 out
+	145	[50]	NEWTABLE 	6 0 3	; 3
+	146	[50]	EXTRAARG 	0
+	147	[50]	LOADI    	7 1
+	148	[50]	LOADI    	8 2
+	149	[50]	LOADI    	9 3
+	150	[50]	SETLIST  	6 3 0
+	151	[51]	GETTABUP 	7 0 0	; _ENV "print"
+	152	[51]	LEN      	8 6
+	153	[51]	MULK     	8 8 7	; 2
+	154	[51]	MMBINK   	8 7 8 0	; __mul 2
+	155	[51]	LEN      	9 6
+	156	[51]	LEN      	10 6
+	157	[51]	ADD      	9 9 10
+	158	[51]	MMBIN    	9 10 6	; __add
+	159	[51]	LEN      	10 6
+	160	[51]	UNM      	10 10
+	161	[51]	LEN      	11 6
+	162	[51]	EQI      	11 3 1
+	163	[51]	JMP      	1	; to 165
+	164	[51]	LFALSESKIP	11
+	165	[51]	LOADTRUE 	11
+	166	[51]	CALL     	7 5 1	; 4 in 0 out
+	167	[53]	LEN      	7 0
+	168	[53]	LEN      	8 2
+	169	[53]	LEN      	9 4
+	170	[53]	RETURN   	7 4 1	; 3 out
+	171	[53]	RETURN   	7 1 1	; 0 out
+constants (13):
+	0	S	"print"
+	1	I	10
+	2	N	nil
+	3	S	"again"
+	4	S	"a"
+	5	S	"b"
+	6	S	"n"
+	7	I	2
+	8	I	1
+	9	S	"c"
+	10	S	""
+	11	S	"hello"
+	12	S	"\000\000"
+locals (27):
+	0	t	4	172
+	1	(for state)	10	18
+	2	(for state)	10	18
+	3	(for state)	10	18
+	4	i	11	17
+	5	(for state)	26	30
+	6	(for state)	26	30
+	7	(for state)	26	30
+	8	_	27	29
+	9	s	80	172
+	10	seq	88	172
+	11	(for state)	91	97
+	12	(for state)	91	97
+	13	(for state)	91	97
+	14	i	92	96
+	15	sum	98	172
+	16	(for state)	101	106
+	17	(for state)	101	106
+	18	(for state)	101	106
+	19	i	102	105
+	20	(for state)	113	117
+	21	(for state)	113	117
+	22	(for state)	113	117
+	23	_	114	116
+	24	any	130	172
+	25	str	134	172
+	26	q	151	172
+upvalues (1):
+	0	_ENV	1	0

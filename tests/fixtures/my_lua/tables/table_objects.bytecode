@@ -1,0 +1,784 @@
+
+main <table_objects.lua:0,0> (342 instructions)
+0+ params, 30 slots, 1 upvalue, 65 locals, 48 constants, 16 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	NEWTABLE 	0 2 0	; 0
+	3	[6]	EXTRAARG 	0
+	4	[6]	SETFIELD 	0 0 1k	; "balance" 0
+	5	[6]	SETFIELD 	0 2 3k	; "owner" "ann"
+	6	[7]	CLOSURE  	1 0
+	7	[7]	SETFIELD 	0 4 1	; "deposit"
+	8	[12]	CLOSURE  	1 1
+	9	[8]	SETFIELD 	0 5 1	; "withdraw"
+	10	[13]	CLOSURE  	1 2
+	11	[13]	SETFIELD 	0 6 1	; "report"
+	12	[14]	SELF     	1 0 4k	; "deposit"
+	13	[14]	LOADI    	3 100
+	14	[14]	CALL     	1 3 2	; 2 in 1 out
+	15	[14]	SELF     	1 1 4k	; "deposit"
+	16	[14]	LOADI    	3 50
+	17	[14]	CALL     	1 3 1	; 2 in 0 out
+	18	[15]	GETTABUP 	1 0 7	; _ENV "print"
+	19	[15]	SELF     	2 0 6k	; "report"
+	20	[15]	CALL     	2 2 0	; 1 in all out
+	21	[15]	CALL     	1 0 1	; all in 0 out
+	22	[16]	GETTABUP 	1 0 7	; _ENV "print"
+	23	[16]	SELF     	2 0 5k	; "withdraw"
+	24	[16]	LOADI    	4 500
+	25	[16]	CALL     	2 3 0	; 2 in all out
+	26	[16]	CALL     	1 0 1	; all in 0 out
+	27	[17]	GETTABUP 	1 0 7	; _ENV "print"
+	28	[17]	SELF     	2 0 5k	; "withdraw"
+	29	[17]	LOADI    	4 30
+	30	[17]	CALL     	2 3 2	; 2 in 1 out
+	31	[17]	GETFIELD 	3 0 8	; "balance"
+	32	[17]	CALL     	1 3 1	; 2 in 0 out
+	33	[18]	GETTABUP 	1 0 7	; _ENV "print"
+	34	[18]	GETFIELD 	2 0 6	; "report"
+	35	[18]	MOVE     	3 0
+	36	[18]	CALL     	2 2 2	; 1 in 1 out
+	37	[18]	GETFIELD 	3 0 6	; "report"
+	38	[18]	NEWTABLE 	4 2 0	; 0
+	39	[18]	EXTRAARG 	0
+	40	[18]	SETFIELD 	4 9 10k	; "owner" "bob"
+	41	[18]	SETFIELD 	4 8 11k	; "balance" 7
+	42	[18]	CALL     	3 2 0	; 1 in all out
+	43	[18]	CALL     	1 0 1	; all in 0 out
+	44	[21]	NEWTABLE 	1 0 0	; 0
+	45	[21]	EXTRAARG 	0
+	46	[22]	CLOSURE  	2 3
+	47	[22]	SETFIELD 	1 12 2	; "new"
+	48	[23]	CLOSURE  	2 4
+	49	[23]	SETFIELD 	1 13 2	; "add"
+	50	[24]	CLOSURE  	2 5
+	51	[24]	SETFIELD 	1 14 2	; "str"
+	52	[25]	GETFIELD 	2 1 15	; "new"
+	53	[25]	LOADI    	3 1
+	54	[25]	LOADI    	4 2
+	55	[25]	CALL     	2 3 2	; 2 in 1 out
+	56	[25]	SELF     	2 2 13k	; "add"
+	57	[25]	GETFIELD 	4 1 15	; "new"
+	58	[25]	LOADI    	5 10
+	59	[25]	LOADI    	6 20
+	60	[25]	CALL     	4 3 0	; 2 in all out
+	61	[25]	CALL     	2 0 2	; all in 1 out
+	62	[25]	SELF     	2 2 13k	; "add"
+	63	[25]	GETFIELD 	4 1 15	; "new"
+	64	[25]	LOADI    	5 100
+	65	[25]	LOADI    	6 200
+	66	[25]	CALL     	4 3 0	; 2 in all out
+	67	[25]	CALL     	2 0 2	; all in 1 out
+	68	[26]	GETTABUP 	3 0 7	; _ENV "print"
+	69	[26]	SELF     	4 2 14k	; "str"
+	70	[26]	CALL     	4 2 2	; 1 in 1 out
+	71	[26]	GETFIELD 	5 2 13	; "add"
+	72	[26]	GETFIELD 	6 1 13	; "add"
+	73	[26]	EQ       	5 6 1
+	74	[26]	JMP      	1	; to 76
+	75	[26]	LFALSESKIP	5
+	76	[26]	LOADTRUE 	5
+	77	[26]	CALL     	3 3 1	; 2 in 0 out
+	78	[29]	NEWTABLE 	3 3 0	; 0
+	79	[29]	EXTRAARG 	0
+	80	[30]	CLOSURE  	4 6
+	81	[30]	SETFIELD 	3 16 4	; "+"
+	82	[31]	CLOSURE  	4 7
+	83	[31]	SETFIELD 	3 17 4	; "-"
+	84	[32]	CLOSURE  	4 8
+	85	[32]	SETFIELD 	3 18 4	; "*"
+	86	[34]	CLOSURE  	4 9
+	87	[35]	GETTABUP 	5 0 7	; _ENV "print"
+	88	[35]	MOVE     	6 4
+	89	[35]	LOADI    	7 6
+	90	[35]	LOADK    	8 16	; "+"
+	91	[35]	LOADI    	9 7
+	92	[35]	CALL     	6 4 2	; 3 in 1 out
+	93	[35]	MOVE     	7 4
+	94	[35]	LOADI    	8 6
+	95	[35]	LOADK    	9 17	; "-"
+	96	[35]	LOADI    	10 7
+	97	[35]	CALL     	7 4 2	; 3 in 1 out
+	98	[35]	MOVE     	8 4
+	99	[35]	LOADI    	9 6
+	100	[35]	LOADK    	10 18	; "*"
+	101	[35]	LOADI    	11 7
+	102	[35]	CALL     	8 4 0	; 3 in all out
+	103	[35]	CALL     	5 0 1	; all in 0 out
+	104	[38]	LOADNIL  	5 0	; 1 out
+	105	[39]	LOADI    	6 1
+	106	[39]	LOADI    	7 5
+	107	[39]	LOADI    	8 1
+	108	[39]	FORPREP  	6 5	; exit to 115
+	109	[39]	NEWTABLE 	10 2 0	; 0
+	110	[39]	EXTRAARG 	0
+	111	[39]	SETFIELD 	10 19 9	; "value"
+	112	[39]	SETFIELD 	10 20 5	; "next"
+	113	[39]	MOVE     	5 10
+	114	[39]	FORLOOP  	6 6	; to 109
+	115	[40]	MOVE     	6 5
+	116	[40]	LOADK    	7 21	; ""
+	117	[41]	TEST     	6 0
+	118	[41]	JMP      	7	; to 126
+	119	[42]	MOVE     	8 7
+	120	[42]	GETFIELD 	9 6 19	; "value"
+	121	[42]	LOADK    	10 22	; " "
+	122	[42]	CONCAT   	8 3
+	123	[42]	MOVE     	7 8
+	124	[43]	GETFIELD 	6 6 20	; "next"
+	125	[43]	JMP      	-9	; to 117
+	126	[45]	GETTABUP 	8 0 7	; _ENV "print"
+	127	[45]	MOVE     	9 7
+	128	[45]	CALL     	8 2 1	; 1 in 0 out
+	129	[47]	LOADNIL  	8 0	; 1 out
+	130	[48]	MOVE     	6 5
+	131	[49]	TEST     	6 0
+	132	[49]	JMP      	6	; to 139
+	133	[50]	GETFIELD 	9 6 20	; "next"
+	134	[51]	SETFIELD 	6 20 8	; "next"
+	135	[52]	MOVE     	10 6
+	136	[52]	MOVE     	6 9
+	137	[52]	MOVE     	8 10
+	138	[52]	JMP      	-8	; to 131
+	139	[54]	MOVE     	5 8
+	140	[55]	LOADK    	7 21	; ""
+	141	[56]	MOVE     	6 5
+	142	[57]	TEST     	6 0
+	143	[57]	JMP      	7	; to 151
+	144	[57]	MOVE     	9 7
+	145	[57]	GETFIELD 	10 6 19	; "value"
+	146	[57]	LOADK    	11 22	; " "
+	147	[57]	CONCAT   	9 3
+	148	[57]	MOVE     	7 9
+	149	[57]	GETFIELD 	6 6 20	; "next"
+	150	[57]	JMP      	-9	; to 142
+	151	[58]	GETTABUP 	9 0 7	; _ENV "print"
+	152	[58]	MOVE     	10 7
+	153	[58]	CALL     	9 2 1	; 1 in 0 out
+	154	[61]	NEWTABLE 	9 1 0	; 0
+	155	[61]	EXTRAARG 	0
+	156	[61]	SETFIELD 	9 23 1k	; "n" 0
+	157	[62]	CLOSURE  	10 10
+	158	[62]	SETFIELD 	9 24 10	; "push"
+	159	[69]	CLOSURE  	10 11
+	160	[63]	SETFIELD 	9 25 10	; "pop"
+	161	[70]	GETTABUP 	10 0 26	; _ENV "ipairs"
+	162	[70]	NEWTABLE 	11 0 3	; 3
+	163	[70]	EXTRAARG 	0
+	164	[70]	LOADK    	12 27	; "x"
+	165	[70]	LOADK    	13 28	; "y"
+	166	[70]	LOADK    	14 29	; "z"
+	167	[70]	SETLIST  	11 3 0
+	168	[70]	CALL     	10 2 5	; 1 in 4 out
+	169	[70]	TFORPREP 	10 3	; to 173
+	170	[70]	SELF     	16 9 24k	; "push"
+	171	[70]	MOVE     	18 15
+	172	[70]	CALL     	16 3 1	; 2 in 0 out
+	173	[70]	TFORCALL 	10 2
+	174	[70]	TFORLOOP 	10 5	; to 170
+	175	[70]	CLOSE    	10
+	176	[71]	GETTABUP 	10 0 7	; _ENV "print"
+	177	[71]	SELF     	11 9 25k	; "pop"
+	178	[71]	CALL     	11 2 2	; 1 in 1 out
+	179	[71]	SELF     	12 9 25k	; "pop"
+	180	[71]	CALL     	12 2 2	; 1 in 1 out
+	181	[71]	GETFIELD 	13 9 30	; "n"
+	182	[71]	SELF     	14 9 25k	; "pop"
+	183	[71]	CALL     	14 2 2	; 1 in 1 out
+	184	[71]	SELF     	15 9 25k	; "pop"
+	185	[71]	CALL     	15 2 2	; 1 in 1 out
+	186	[71]	GETFIELD 	16 9 30	; "n"
+	187	[71]	CALL     	10 7 1	; 6 in 0 out
+	188	[74]	NEWTABLE 	10 2 0	; 0
+	189	[74]	EXTRAARG 	0
+	190	[74]	SETFIELD 	10 31 32k	; "first" 1
+	191	[74]	SETFIELD 	10 33 1k	; "last" 0
+	192	[75]	CLOSURE  	11 12
+	193	[82]	CLOSURE  	12 13
+	194	[83]	LOADI    	13 1
+	195	[83]	LOADI    	14 100
+	196	[83]	LOADI    	15 1
+	197	[83]	FORPREP  	13 4	; exit to 203
+	198	[83]	MOVE     	17 11
+	199	[83]	MOVE     	18 10
+	200	[83]	MOVE     	19 16
+	201	[83]	CALL     	17 3 1	; 2 in 0 out
+	202	[83]	FORLOOP  	13 5	; to 198
+	203	[84]	LOADI    	13 0
+	204	[85]	LOADI    	14 1
+	205	[85]	LOADI    	15 60
+	206	[85]	LOADI    	16 1
+	207	[85]	FORPREP  	14 5	; exit to 214
+	208	[85]	MOVE     	18 12
+	209	[85]	MOVE     	19 10
+	210	[85]	CALL     	18 2 2	; 1 in 1 out
+	211	[85]	ADD      	13 13 18
+	212	[85]	MMBIN    	13 18 6	; __add
+	213	[85]	FORLOOP  	14 6	; to 208
+	214	[86]	LOADI    	14 101
+	215	[86]	LOADI    	15 110
+	216	[86]	LOADI    	16 1
+	217	[86]	FORPREP  	14 4	; exit to 223
+	218	[86]	MOVE     	18 11
+	219	[86]	MOVE     	19 10
+	220	[86]	MOVE     	20 17
+	221	[86]	CALL     	18 3 1	; 2 in 0 out
+	222	[86]	FORLOOP  	14 5	; to 218
+	223	[87]	LOADI    	14 0
+	224	[89]	MOVE     	15 12
+	225	[89]	MOVE     	16 10
+	226	[89]	CALL     	15 2 2	; 1 in 1 out
+	227	[90]	EQK      	15 34 1	; nil
+	228	[90]	JMP      	3	; to 232
+	229	[91]	ADD      	14 14 15
+	230	[91]	MMBIN    	14 15 6	; __add
+	231	[91]	JMP      	-8	; to 224
+	232	[93]	GETTABUP 	15 0 7	; _ENV "print"
+	233	[93]	MOVE     	16 13
+	234	[93]	MOVE     	17 14
+	235	[93]	GETFIELD 	18 10 35	; "first"
+	236	[93]	GETFIELD 	19 10 36	; "last"
+	237	[93]	CALL     	15 5 1	; 4 in 0 out
+	238	[96]	LOADI    	15 0
+	239	[104]	CLOSURE  	16 14
+	240	[105]	LOADNIL  	17 0	; 1 out
+	241	[106]	MOVE     	18 16
+	242	[110]	CLOSURE  	19 15
+	243	[106]	CALL     	18 2 2	; 1 in 1 out
+	244	[110]	MOVE     	17 18
+	245	[111]	GETTABUP 	18 0 7	; _ENV "print"
+	246	[111]	MOVE     	19 17
+	247	[111]	LOADI    	20 80
+	248	[111]	CALL     	19 2 2	; 1 in 1 out
+	249	[111]	MOVE     	20 15
+	250	[111]	CALL     	18 3 1	; 2 in 0 out
+	251	[112]	GETTABUP 	18 0 7	; _ENV "print"
+	252	[112]	MOVE     	19 17
+	253	[112]	LOADI    	20 80
+	254	[112]	CALL     	19 2 2	; 1 in 1 out
+	255	[112]	MOVE     	20 17
+	256	[112]	LOADI    	21 40
+	257	[112]	CALL     	20 2 2	; 1 in 1 out
+	258	[112]	MOVE     	21 15
+	259	[112]	CALL     	18 4 1	; 3 in 0 out
+	260	[115]	NEWTABLE 	18 0 8	; 8
+	261	[115]	EXTRAARG 	0
+	262	[115]	LOADK    	19 37	; "the"
+	263	[115]	LOADK    	20 38	; "cat"
+	264	[115]	LOADK    	21 39	; "and"
+	265	[115]	LOADK    	22 37	; "the"
+	266	[115]	LOADK    	23 40	; "hat"
+	267	[115]	LOADK    	24 39	; "and"
+	268	[115]	LOADK    	25 37	; "the"
+	269	[115]	LOADK    	26 41	; "bat"
+	270	[115]	SETLIST  	18 8 0
+	271	[116]	NEWTABLE 	19 0 0	; 0
+	272	[116]	EXTRAARG 	0
+	273	[116]	LOADI    	20 0
+	274	[117]	GETTABUP 	21 0 26	; _ENV "ipairs"
+	275	[117]	MOVE     	22 18
+	276	[117]	CALL     	21 2 5	; 1 in 4 out
+	277	[117]	TFORPREP 	21 10	; to 288
+	278	[118]	GETTABLE 	27 19 26
+	279	[118]	EQK      	27 42 0	; nil
+	280	[118]	JMP      	3	; to 284
+	281	[118]	ADDI     	20 20 1
+	282	[118]	MMBINI   	20 1 6 0	; __add
+	283	[118]	SETTABLE 	19 26 1k	; 0
+	284	[119]	GETTABLE 	27 19 26
+	285	[119]	ADDI     	27 27 1
+	286	[119]	MMBINI   	27 1 6 0	; __add
+	287	[119]	SETTABLE 	19 26 27
+	288	[117]	TFORCALL 	21 2
+	289	[117]	TFORLOOP 	21 12	; to 278
+	290	[120]	CLOSE    	21
+	291	[121]	GETTABUP 	21 0 7	; _ENV "print"
+	292	[121]	MOVE     	22 20
+	293	[121]	GETFIELD 	23 19 37	; "the"
+	294	[121]	GETFIELD 	24 19 39	; "and"
+	295	[121]	GETFIELD 	25 19 38	; "cat"
+	296	[121]	GETFIELD 	26 19 43	; "dog"
+	297	[121]	CALL     	21 6 1	; 5 in 0 out
+	298	[122]	LOADI    	21 0
+	299	[123]	GETTABUP 	22 0 44	; _ENV "pairs"
+	300	[123]	MOVE     	23 19
+	301	[123]	CALL     	22 2 5	; 1 in 4 out
+	302	[123]	TFORPREP 	22 2	; to 305
+	303	[123]	ADD      	21 21 27
+	304	[123]	MMBIN    	21 27 6	; __add
+	305	[123]	TFORCALL 	22 2
+	306	[123]	TFORLOOP 	22 4	; to 303
+	307	[123]	CLOSE    	22
+	308	[124]	GETTABUP 	22 0 7	; _ENV "print"
+	309	[124]	LEN      	23 18
+	310	[124]	EQ       	21 23 1
+	311	[124]	JMP      	1	; to 313
+	312	[124]	LFALSESKIP	23
+	313	[124]	LOADTRUE 	23
+	314	[124]	CALL     	22 2 1	; 1 in 0 out
+	315	[127]	NEWTABLE 	22 0 0	; 0
+	316	[127]	EXTRAARG 	0
+	317	[128]	GETTABUP 	23 0 26	; _ENV "ipairs"
+	318	[128]	MOVE     	24 18
+	319	[128]	CALL     	23 2 5	; 1 in 4 out
+	320	[128]	TFORPREP 	23 1	; to 322
+	321	[128]	SETTABLE 	22 28 45k	; true
+	322	[128]	TFORCALL 	23 2
+	323	[128]	TFORLOOP 	23 3	; to 321
+	324	[128]	CLOSE    	23
+	325	[129]	GETTABUP 	23 0 7	; _ENV "print"
+	326	[129]	GETFIELD 	24 22 38	; "cat"
+	327	[129]	GETFIELD 	25 22 43	; "dog"
+	328	[129]	GETFIELD 	26 22 40	; "hat"
+	329	[129]	TEST     	26 0
+	330	[129]	JMP      	3	; to 334
+	331	[129]	LOADK    	26 46	; "yes"
+	332	[129]	TEST     	26 1
+	333	[129]	JMP      	1	; to 335
+	334	[129]	LOADK    	26 47	; "no"
+	335	[129]	CALL     	23 4 1	; 3 in 0 out
+	336	[131]	GETFIELD 	23 0 8	; "balance"
+	337	[131]	GETFIELD 	24 2 27	; "x"
+	338	[131]	MOVE     	25 17
+	339	[131]	LOADI    	26 10
+	340	[131]	CALL     	25 2 0	; 1 in all out
+	341	[131]	RETURN   	23 0 1k	; all out
+	342	[131]	RETURN   	23 1 1k	; 0 out
+constants (48):
+	0	S	"balance"
+	1	I	0
+	2	S	"owner"
+	3	S	"ann"
+	4	S	"deposit"
+	5	S	"withdraw"
+	6	S	"report"
+	7	S	"print"
+	8	S	"balance"
+	9	S	"owner"
+	10	S	"bob"
+	11	I	7
+	12	S	"new"
+	13	S	"add"
+	14	S	"str"
+	15	S	"new"
+	16	S	"+"
+	17	S	"-"
+	18	S	"*"
+	19	S	"value"
+	20	S	"next"
+	21	S	""
+	22	S	" "
+	23	S	"n"
+	24	S	"push"
+	25	S	"pop"
+	26	S	"ipairs"
+	27	S	"x"
+	28	S	"y"
+	29	S	"z"
+	30	S	"n"
+	31	S	"first"
+	32	I	1
+	33	S	"last"
+	34	N	nil
+	35	S	"first"
+	36	S	"last"
+	37	S	"the"
+	38	S	"cat"
+	39	S	"and"
+	40	S	"hat"
+	41	S	"bat"
+	42	N	nil
+	43	S	"dog"
+	44	S	"pairs"
+	45	B	true
+	46	S	"yes"
+	47	S	"no"
+locals (65):
+	0	account	6	343
+	1	Point	46	343
+	2	p	68	343
+	3	ops	86	343
+	4	calc	87	343
+	5	list	105	343
+	6	(for state)	108	115
+	7	(for state)	108	115
+	8	(for state)	108	115
+	9	i	109	114
+	10	node	117	343
+	11	parts	117	343
+	12	prev	130	343
+	13	nxt	134	138
+	14	stack	157	343
+	15	(for state)	169	175
+	16	(for state)	169	175
+	17	(for state)	169	175
+	18	(for state)	169	175
+	19	_	170	173
+	20	w	170	173
+	21	queue	192	343
+	22	enqueue	193	343
+	23	dequeue	194	343
+	24	(for state)	197	203
+	25	(for state)	197	203
+	26	(for state)	197	203
+	27	i	198	202
+	28	qsum	204	343
+	29	(for state)	207	214
+	30	(for state)	207	214
+	31	(for state)	207	214
+	32	_	208	213
+	33	(for state)	217	223
+	34	(for state)	217	223
+	35	(for state)	217	223
+	36	i	218	222
+	37	rest	224	343
+	38	v	227	231
+	39	calls	239	343
+	40	memoize	240	343
+	41	fib	241	343
+	42	words	271	343
+	43	counts	274	343
+	44	distinct	274	343
+	45	(for state)	277	290
+	46	(for state)	277	290
+	47	(for state)	277	290
+	48	(for state)	277	290
+	49	_	278	288
+	50	w	278	288
+	51	total	299	343
+	52	(for state)	302	307
+	53	(for state)	302	307
+	54	(for state)	302	307
+	55	(for state)	302	307
+	56	_	303	305
+	57	c	303	305
+	58	set	317	343
+	59	(for state)	320	324
+	60	(for state)	320	324
+	61	(for state)	320	324
+	62	(for state)	320	324
+	63	_	321	322
+	64	w	321	322
+upvalues (1):
+	0	_ENV	1	0
+
+function <table_objects.lua:7,7> (6 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[7]	GETFIELD 	2 0 0	; "balance"
+	2	[7]	ADD      	2 2 1
+	3	[7]	MMBIN    	2 1 6	; __add
+	4	[7]	SETFIELD 	0 0 2	; "balance"
+	5	[7]	RETURN1  	0
+	6	[7]	RETURN0  	
+constants (1):
+	0	S	"balance"
+locals (2):
+	0	self	1	7
+	1	amount	1	7
+upvalues (0):
+
+function <table_objects.lua:8,12> (13 instructions)
+2 params, 4 slots, 0 upvalues, 2 locals, 2 constants, 0 functions
+	1	[9]	GETFIELD 	2 0 0	; "balance"
+	2	[9]	LT       	2 1 0
+	3	[9]	JMP      	3	; to 7
+	4	[9]	LOADFALSE	2
+	5	[9]	LOADK    	3 1	; "insufficient funds"
+	6	[9]	RETURN   	2 3 0	; 2 out
+	7	[10]	GETFIELD 	2 0 0	; "balance"
+	8	[10]	SUB      	2 2 1
+	9	[10]	MMBIN    	2 1 7	; __sub
+	10	[10]	SETFIELD 	0 0 2	; "balance"
+	11	[11]	LOADTRUE 	2
+	12	[11]	RETURN1  	2
+	13	[12]	RETURN0  	
+constants (2):
+	0	S	"balance"
+	1	S	"insufficient funds"
+locals (2):
+	0	self	1	14
+	1	amount	1	14
+upvalues (0):
+
+function <table_objects.lua:13,13> (6 instructions)
+1 param, 4 slots, 0 upvalues, 1 local, 3 constants, 0 functions
+	1	[13]	GETFIELD 	1 0 0	; "owner"
+	2	[13]	LOADK    	2 1	; ": "
+	3	[13]	GETFIELD 	3 0 2	; "balance"
+	4	[13]	CONCAT   	1 3
+	5	[13]	RETURN1  	1
+	6	[13]	RETURN0  	
+constants (3):
+	0	S	"owner"
+	1	S	": "
+	2	S	"balance"
+locals (1):
+	0	self	1	7
+upvalues (0):
+
+function <table_objects.lua:22,22> (10 instructions)
+2 params, 4 slots, 1 upvalue, 2 locals, 4 constants, 0 functions
+	1	[22]	NEWTABLE 	2 3 0	; 0
+	2	[22]	EXTRAARG 	0
+	3	[22]	SETFIELD 	2 0 0	; "x"
+	4	[22]	SETFIELD 	2 1 1	; "y"
+	5	[22]	GETTABUP 	3 0 2	; Point "add"
+	6	[22]	SETFIELD 	2 2 3	; "add"
+	7	[22]	GETTABUP 	3 0 3	; Point "str"
+	8	[22]	SETFIELD 	2 3 3	; "str"
+	9	[22]	RETURN1  	2
+	10	[22]	RETURN0  	
+constants (4):
+	0	S	"x"
+	1	S	"y"
+	2	S	"add"
+	3	S	"str"
+locals (2):
+	0	x	1	11
+	1	y	1	11
+upvalues (1):
+	0	Point	1	1
+
+function <table_objects.lua:23,23> (12 instructions)
+2 params, 6 slots, 1 upvalue, 2 locals, 3 constants, 0 functions
+	1	[23]	GETTABUP 	2 0 0	; Point "new"
+	2	[23]	GETFIELD 	3 0 1	; "x"
+	3	[23]	GETFIELD 	4 1 1	; "x"
+	4	[23]	ADD      	3 3 4
+	5	[23]	MMBIN    	3 4 6	; __add
+	6	[23]	GETFIELD 	4 0 2	; "y"
+	7	[23]	GETFIELD 	5 1 2	; "y"
+	8	[23]	ADD      	4 4 5
+	9	[23]	MMBIN    	4 5 6	; __add
+	10	[23]	TAILCALL 	2 3 0	; 2 in
+	11	[23]	RETURN   	2 0 0	; all out
+	12	[23]	RETURN0  	
+constants (3):
+	0	S	"new"
+	1	S	"x"
+	2	S	"y"
+locals (2):
+	0	a	1	13
+	1	b	1	13
+upvalues (1):
+	0	Point	1	1
+
+function <table_objects.lua:24,24> (8 instructions)
+1 param, 6 slots, 0 upvalues, 1 local, 5 constants, 0 functions
+	1	[24]	LOADK    	1 0	; "("
+	2	[24]	GETFIELD 	2 0 1	; "x"
+	3	[24]	LOADK    	3 2	; ", "
+	4	[24]	GETFIELD 	4 0 3	; "y"
+	5	[24]	LOADK    	5 4	; ")"
+	6	[24]	CONCAT   	1 5
+	7	[24]	RETURN1  	1
+	8	[24]	RETURN0  	
+constants (5):
+	0	S	"("
+	1	S	"x"
+	2	S	", "
+	3	S	"y"
+	4	S	")"
+locals (1):
+	0	p	1	9
+upvalues (0):
+
+function <table_objects.lua:30,30> (4 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[30]	ADD      	2 0 1
+	2	[30]	MMBIN    	0 1 6	; __add
+	3	[30]	RETURN1  	2
+	4	[30]	RETURN0  	
+constants (0):
+locals (2):
+	0	a	1	5
+	1	b	1	5
+upvalues (0):
+
+function <table_objects.lua:31,31> (4 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[31]	SUB      	2 0 1
+	2	[31]	MMBIN    	0 1 7	; __sub
+	3	[31]	RETURN1  	2
+	4	[31]	RETURN0  	
+constants (0):
+locals (2):
+	0	a	1	5
+	1	b	1	5
+upvalues (0):
+
+function <table_objects.lua:32,32> (4 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 0 constants, 0 functions
+	1	[32]	MUL      	2 0 1
+	2	[32]	MMBIN    	0 1 8	; __mul
+	3	[32]	RETURN1  	2
+	4	[32]	RETURN0  	
+constants (0):
+locals (2):
+	0	a	1	5
+	1	b	1	5
+upvalues (0):
+
+function <table_objects.lua:34,34> (7 instructions)
+3 params, 6 slots, 1 upvalue, 3 locals, 0 constants, 0 functions
+	1	[34]	GETUPVAL 	3 0	; ops
+	2	[34]	GETTABLE 	3 3 1
+	3	[34]	MOVE     	4 0
+	4	[34]	MOVE     	5 2
+	5	[34]	TAILCALL 	3 3 0	; 2 in
+	6	[34]	RETURN   	3 0 0	; all out
+	7	[34]	RETURN0  	
+constants (0):
+locals (3):
+	0	a	1	8
+	1	op	1	8
+	2	b	1	8
+upvalues (1):
+	0	ops	1	3
+
+function <table_objects.lua:62,62> (7 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[62]	GETFIELD 	2 0 0	; "n"
+	2	[62]	ADDI     	2 2 1
+	3	[62]	MMBINI   	2 1 6 0	; __add
+	4	[62]	SETFIELD 	0 0 2	; "n"
+	5	[62]	GETFIELD 	2 0 0	; "n"
+	6	[62]	SETTABLE 	0 2 1
+	7	[62]	RETURN0  	
+constants (1):
+	0	S	"n"
+locals (2):
+	0	self	1	8
+	1	v	1	8
+upvalues (0):
+
+function <table_objects.lua:63,69> (15 instructions)
+1 param, 3 slots, 0 upvalues, 2 locals, 2 constants, 0 functions
+	1	[64]	GETFIELD 	1 0 0	; "n"
+	2	[64]	EQI      	1 0 0
+	3	[64]	JMP      	2	; to 6
+	4	[64]	LOADNIL  	1 0	; 1 out
+	5	[64]	RETURN1  	1
+	6	[65]	GETFIELD 	1 0 0	; "n"
+	7	[65]	GETTABLE 	1 0 1
+	8	[66]	GETFIELD 	2 0 0	; "n"
+	9	[66]	SETTABLE 	0 2 1k	; nil
+	10	[67]	GETFIELD 	2 0 0	; "n"
+	11	[67]	ADDI     	2 2 -1
+	12	[67]	MMBINI   	2 1 7 0	; __sub
+	13	[67]	SETFIELD 	0 0 2	; "n"
+	14	[68]	RETURN1  	1
+	15	[69]	RETURN0  	
+constants (2):
+	0	S	"n"
+	1	N	nil
+locals (2):
+	0	self	1	16
+	1	v	8	16
+upvalues (0):
+
+function <table_objects.lua:75,75> (7 instructions)
+2 params, 3 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[75]	GETFIELD 	2 0 0	; "last"
+	2	[75]	ADDI     	2 2 1
+	3	[75]	MMBINI   	2 1 6 0	; __add
+	4	[75]	SETFIELD 	0 0 2	; "last"
+	5	[75]	GETFIELD 	2 0 0	; "last"
+	6	[75]	SETTABLE 	0 2 1
+	7	[75]	RETURN0  	
+constants (1):
+	0	S	"last"
+locals (2):
+	0	q	1	8
+	1	v	1	8
+upvalues (0):
+
+function <table_objects.lua:76,82> (16 instructions)
+1 param, 3 slots, 0 upvalues, 2 locals, 3 constants, 0 functions
+	1	[77]	GETFIELD 	1 0 0	; "first"
+	2	[77]	GETFIELD 	2 0 1	; "last"
+	3	[77]	LT       	2 1 0
+	4	[77]	JMP      	2	; to 7
+	5	[77]	LOADNIL  	1 0	; 1 out
+	6	[77]	RETURN1  	1
+	7	[78]	GETFIELD 	1 0 0	; "first"
+	8	[78]	GETTABLE 	1 0 1
+	9	[79]	GETFIELD 	2 0 0	; "first"
+	10	[79]	SETTABLE 	0 2 2k	; nil
+	11	[80]	GETFIELD 	2 0 0	; "first"
+	12	[80]	ADDI     	2 2 1
+	13	[80]	MMBINI   	2 1 6 0	; __add
+	14	[80]	SETFIELD 	0 0 2	; "first"
+	15	[81]	RETURN1  	1
+	16	[82]	RETURN0  	
+constants (3):
+	0	S	"first"
+	1	S	"last"
+	2	N	nil
+locals (2):
+	0	q	1	17
+	1	v	9	17
+upvalues (0):
+
+function <table_objects.lua:97,104> (5 instructions)
+1 param, 3 slots, 0 upvalues, 2 locals, 0 constants, 1 function
+	1	[98]	NEWTABLE 	1 0 0	; 0
+	2	[98]	EXTRAARG 	0
+	3	[103]	CLOSURE  	2 0
+	4	[103]	RETURN   	2 2 0k	; 1 out
+	5	[104]	RETURN   	2 1 0k	; 0 out
+constants (0):
+locals (2):
+	0	f	1	6
+	1	cache	3	6
+upvalues (0):
+
+function <table_objects.lua:99,103> (12 instructions)
+1 param, 4 slots, 2 upvalues, 2 locals, 1 constant, 0 functions
+	1	[100]	GETUPVAL 	1 0	; cache
+	2	[100]	GETTABLE 	1 1 0
+	3	[101]	EQK      	1 0 0	; nil
+	4	[101]	JMP      	6	; to 11
+	5	[101]	GETUPVAL 	2 1	; f
+	6	[101]	MOVE     	3 0
+	7	[101]	CALL     	2 2 2	; 1 in 1 out
+	8	[101]	MOVE     	1 2
+	9	[101]	GETUPVAL 	2 0	; cache
+	10	[101]	SETTABLE 	2 0 1
+	11	[102]	RETURN1  	1
+	12	[103]	RETURN0  	
+constants (1):
+	0	N	nil
+locals (2):
+	0	n	1	13
+	1	v	3	13
+upvalues (2):
+	0	cache	1	1
+	1	f	1	0
+
+function <table_objects.lua:106,110> (19 instructions)
+1 param, 4 slots, 2 upvalues, 1 local, 0 constants, 0 functions
+	1	[107]	GETUPVAL 	1 0	; calls
+	2	[107]	ADDI     	1 1 1
+	3	[107]	MMBINI   	1 1 6 0	; __add
+	4	[107]	SETUPVAL 	1 0	; calls
+	5	[108]	LTI      	0 2 0
+	6	[108]	JMP      	1	; to 8
+	7	[108]	RETURN1  	0
+	8	[109]	GETUPVAL 	1 1	; fib
+	9	[109]	ADDI     	2 0 -1
+	10	[109]	MMBINI   	0 1 7 0	; __sub
+	11	[109]	CALL     	1 2 2	; 1 in 1 out
+	12	[109]	GETUPVAL 	2 1	; fib
+	13	[109]	ADDI     	3 0 -2
+	14	[109]	MMBINI   	0 2 7 0	; __sub
+	15	[109]	CALL     	2 2 2	; 1 in 1 out
+	16	[109]	ADD      	1 1 2
+	17	[109]	MMBIN    	1 2 6	; __add
+	18	[109]	RETURN1  	1
+	19	[110]	RETURN0  	
+constants (0):
+locals (1):
+	0	n	1	20
+upvalues (2):
+	0	calls	1	15
+	1	fib	1	17

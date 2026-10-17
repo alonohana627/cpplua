@@ -14,6 +14,8 @@ enum class ObjectType : std::uint8_t {
     LuaClosure,
     Thread,
     Table,
+    CClosure,
+    Userdata,
 };
 
 // The header every collectable object starts with (Lua's CommonHeader): the
@@ -24,7 +26,15 @@ struct GcObject {
     GcObject* next = nullptr;
     ObjectType type = ObjectType::ShortString;
     std::uint8_t marked = 0;
+    // Room the header would waste as padding, for the object's own use, as
+    // Lua's Table keeps flags, lsizenode and alimit right after its
+    // CommonHeader: a table is 64 bytes instead of 72.
+    std::uint8_t own_flags = 0;
+    std::uint8_t own_byte = 0;
+    std::uint32_t own_word = 0;
 };
+
+static_assert(sizeof(GcObject) == 16);
 
 // The bits of GcObject::marked, as in Lua's lgc.h. The low three bits are the
 // object's age in generational mode; then two whites, black, and a bit for

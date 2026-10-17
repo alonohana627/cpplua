@@ -1,0 +1,376 @@
+
+main <table_garbage.lua:0,0> (220 instructions)
+0+ params, 19 slots, 1 upvalue, 69 locals, 18 constants, 2 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	LOADI    	0 0
+	3	[8]	LOADI    	1 1
+	4	[8]	LOADI    	2 20000
+	5	[8]	LOADI    	3 1
+	6	[8]	FORPREP  	1 17	; exit to 25
+	7	[9]	NEWTABLE 	5 1 2	; 2
+	8	[9]	EXTRAARG 	0
+	9	[9]	MOVE     	6 4
+	10	[9]	ADDI     	7 4 1
+	11	[9]	MMBINI   	4 1 6 0	; __add
+	12	[9]	LOADK    	8 1	; "t"
+	13	[9]	MODK     	9 4 2	; 10
+	14	[9]	MMBINK   	4 2 9 0	; __mod 10
+	15	[9]	CONCAT   	8 2
+	16	[9]	SETFIELD 	5 0 8	; "name"
+	17	[9]	SETLIST  	5 2 0
+	18	[10]	GETI     	6 5 2
+	19	[10]	ADD      	6 0 6
+	20	[10]	MMBIN    	0 6 6	; __add
+	21	[10]	GETI     	7 5 1
+	22	[10]	SUB      	0 6 7
+	23	[10]	MMBIN    	6 7 7	; __sub
+	24	[8]	FORLOOP  	1 18	; to 7
+	25	[12]	GETTABUP 	1 0 3	; _ENV "print"
+	26	[12]	MOVE     	2 0
+	27	[12]	CALL     	1 2 1	; 1 in 0 out
+	28	[18]	CLOSURE  	1 0
+	29	[22]	CLOSURE  	2 1
+	30	[23]	MOVE     	3 1
+	31	[23]	LOADI    	4 12
+	32	[23]	CALL     	3 2 2	; 1 in 1 out
+	33	[24]	LOADI    	4 1
+	34	[24]	LOADI    	5 3
+	35	[24]	LOADI    	6 1
+	36	[24]	FORPREP  	4 3	; exit to 41
+	37	[24]	MOVE     	8 1
+	38	[24]	LOADI    	9 10
+	39	[24]	CALL     	8 2 1	; 1 in 0 out
+	40	[24]	FORLOOP  	4 4	; to 37
+	41	[25]	GETTABUP 	4 0 3	; _ENV "print"
+	42	[25]	MOVE     	5 2
+	43	[25]	MOVE     	6 3
+	44	[25]	CALL     	5 2 2	; 1 in 1 out
+	45	[25]	GETFIELD 	6 3 4	; "depth"
+	46	[25]	GETFIELD 	7 3 5	; "left"
+	47	[25]	GETFIELD 	7 7 5	; "left"
+	48	[25]	GETFIELD 	7 7 4	; "depth"
+	49	[25]	CALL     	4 4 1	; 3 in 0 out
+	50	[28]	NEWTABLE 	4 0 0	; 0
+	51	[28]	EXTRAARG 	0
+	52	[29]	LOADI    	5 1
+	53	[29]	LOADI    	6 1000
+	54	[29]	LOADI    	7 1
+	55	[29]	FORPREP  	5 4	; exit to 61
+	56	[29]	NEWTABLE 	9 1 0	; 0
+	57	[29]	EXTRAARG 	0
+	58	[29]	SETFIELD 	9 6 8	; "id"
+	59	[29]	SETTABLE 	4 8 9
+	60	[29]	FORLOOP  	5 5	; to 56
+	61	[30]	LOADI    	5 1
+	62	[30]	LOADI    	6 1000
+	63	[30]	LOADI    	7 1
+	64	[30]	FORPREP  	5 7	; exit to 73
+	65	[30]	GETTABLE 	9 4 8
+	66	[30]	MODK     	10 8 8	; 1000
+	67	[30]	MMBINK   	8 8 9 0	; __mod 1000
+	68	[30]	ADDI     	10 10 1
+	69	[30]	MMBINI   	10 1 6 0	; __add
+	70	[30]	GETTABLE 	10 4 10
+	71	[30]	SETFIELD 	9 7 10	; "next"
+	72	[30]	FORLOOP  	5 8	; to 65
+	73	[31]	GETI     	5 4 1
+	74	[31]	LOADI    	6 0
+	75	[32]	GETFIELD 	5 5 7	; "next"
+	76	[32]	ADDI     	6 6 1
+	77	[32]	MMBINI   	6 1 6 0	; __add
+	78	[32]	GETI     	7 4 1
+	79	[32]	EQ       	5 7 0
+	80	[32]	JMP      	-6	; to 75
+	81	[33]	NEWTABLE 	7 0 1	; 1
+	82	[33]	EXTRAARG 	0
+	83	[33]	MOVE     	8 5
+	84	[33]	SETLIST  	7 1 0
+	85	[33]	MOVE     	4 7
+	86	[34]	GETFIELD 	7 5 7	; "next"
+	87	[34]	GETFIELD 	5 7 7	; "next"
+	88	[35]	GETTABUP 	7 0 3	; _ENV "print"
+	89	[35]	MOVE     	8 6
+	90	[35]	GETFIELD 	9 5 6	; "id"
+	91	[35]	GETFIELD 	10 5 7	; "next"
+	92	[35]	GETFIELD 	10 10 6	; "id"
+	93	[35]	CALL     	7 4 1	; 3 in 0 out
+	94	[38]	LOADI    	7 1
+	95	[38]	LOADI    	8 200
+	96	[38]	LOADI    	9 1
+	97	[38]	FORPREP  	7 8	; exit to 107
+	98	[39]	NEWTABLE 	11 0 0	; 0
+	99	[39]	EXTRAARG 	0
+	100	[39]	NEWTABLE 	12 0 0	; 0
+	101	[39]	EXTRAARG 	0
+	102	[40]	MOVE     	13 12
+	103	[40]	SETFIELD 	12 9 11	; "other"
+	104	[40]	SETFIELD 	11 9 13	; "other"
+	105	[41]	SETFIELD 	11 10 11	; "self"
+	106	[38]	FORLOOP  	7 9	; to 98
+	107	[45]	NEWTABLE 	7 0 0	; 0
+	108	[45]	EXTRAARG 	0
+	109	[46]	LOADI    	8 1
+	110	[46]	LOADI    	9 5000
+	111	[46]	LOADI    	10 1
+	112	[46]	FORPREP  	8 11	; exit to 125
+	113	[47]	NEWTABLE 	12 0 0	; 0
+	114	[47]	EXTRAARG 	0
+	115	[48]	MODK     	13 11 11	; 50
+	116	[48]	MMBINK   	11 11 9 0	; __mod 50
+	117	[48]	ADDI     	13 13 1
+	118	[48]	MMBINI   	13 1 6 0	; __add
+	119	[48]	NEWTABLE 	14 2 0	; 0
+	120	[48]	EXTRAARG 	0
+	121	[48]	SETFIELD 	14 12 12	; "key"
+	122	[48]	SETTABLE 	14 12 11
+	123	[48]	SETTABLE 	7 13 14
+	124	[46]	FORLOOP  	8 12	; to 113
+	125	[50]	LOADI    	8 0
+	126	[51]	LOADI    	9 1
+	127	[51]	LOADI    	10 50
+	128	[51]	LOADI    	11 1
+	129	[51]	FORPREP  	9 5	; exit to 136
+	130	[52]	GETTABLE 	13 7 12
+	131	[53]	GETFIELD 	14 13 12	; "key"
+	132	[53]	GETTABLE 	14 13 14
+	133	[53]	ADD      	8 8 14
+	134	[53]	MMBIN    	8 14 6	; __add
+	135	[51]	FORLOOP  	9 6	; to 130
+	136	[55]	GETTABUP 	9 0 3	; _ENV "print"
+	137	[55]	MOVE     	10 8
+	138	[55]	CALL     	9 2 1	; 1 in 0 out
+	139	[58]	NEWTABLE 	9 0 0	; 0
+	140	[58]	EXTRAARG 	0
+	141	[59]	LOADI    	10 1
+	142	[59]	LOADK    	11 13	; 100000
+	143	[59]	LOADI    	12 1
+	144	[59]	FORPREP  	10 1	; exit to 147
+	145	[59]	SETTABLE 	9 13 13
+	146	[59]	FORLOOP  	10 2	; to 145
+	147	[60]	LOADI    	10 0
+	148	[61]	LOADI    	11 1
+	149	[61]	LEN      	12 9
+	150	[61]	LOADI    	13 1
+	151	[61]	FORPREP  	11 3	; exit to 156
+	152	[61]	GETTABLE 	15 9 14
+	153	[61]	ADD      	10 10 15
+	154	[61]	MMBIN    	10 15 6	; __add
+	155	[61]	FORLOOP  	11 4	; to 152
+	156	[62]	GETTABUP 	11 0 3	; _ENV "print"
+	157	[62]	LEN      	12 9
+	158	[62]	MOVE     	13 10
+	159	[62]	CALL     	11 3 1	; 2 in 0 out
+	160	[63]	LOADI    	11 0
+	161	[64]	GETTABUP 	12 0 14	; _ENV "ipairs"
+	162	[64]	MOVE     	13 9
+	163	[64]	CALL     	12 2 5	; 1 in 4 out
+	164	[64]	TFORPREP 	12 2	; to 167
+	165	[64]	ADD      	11 11 17
+	166	[64]	MMBIN    	11 17 6	; __add
+	167	[64]	TFORCALL 	12 2
+	168	[64]	TFORLOOP 	12 4	; to 165
+	169	[64]	CLOSE    	12
+	170	[65]	GETTABUP 	12 0 3	; _ENV "print"
+	171	[65]	EQ       	11 10 1
+	172	[65]	JMP      	1	; to 174
+	173	[65]	LFALSESKIP	13
+	174	[65]	LOADTRUE 	13
+	175	[65]	CALL     	12 2 1	; 1 in 0 out
+	176	[68]	NEWTABLE 	12 0 0	; 0
+	177	[68]	EXTRAARG 	0
+	178	[69]	LOADI    	13 1
+	179	[69]	LOADI    	14 3000
+	180	[69]	LOADI    	15 1
+	181	[69]	FORPREP  	13 4	; exit to 187
+	182	[69]	LOADK    	17 15	; "s"
+	183	[69]	MOVE     	18 16
+	184	[69]	CONCAT   	17 2
+	185	[69]	SETTABLE 	12 16 17
+	186	[69]	FORLOOP  	13 5	; to 182
+	187	[70]	LOADI    	13 0
+	188	[71]	LOADI    	14 1
+	189	[71]	LEN      	15 12
+	190	[71]	LOADI    	16 1
+	191	[71]	FORPREP  	14 4	; exit to 197
+	192	[71]	GETTABLE 	18 12 17
+	193	[71]	LEN      	18 18
+	194	[71]	ADD      	13 13 18
+	195	[71]	MMBIN    	13 18 6	; __add
+	196	[71]	FORLOOP  	14 5	; to 192
+	197	[72]	GETTABUP 	14 0 3	; _ENV "print"
+	198	[72]	MOVE     	15 13
+	199	[72]	LOADI    	16 3000
+	200	[72]	GETTABLE 	16 12 16
+	201	[72]	CALL     	14 3 1	; 2 in 0 out
+	202	[74]	GETTABUP 	14 0 16	; _ENV "collectgarbage"
+	203	[74]	CALL     	14 1 1	; 0 in 0 out
+	204	[75]	GETTABUP 	14 0 3	; _ENV "print"
+	205	[75]	MOVE     	15 2
+	206	[75]	MOVE     	16 3
+	207	[75]	CALL     	15 2 2	; 1 in 1 out
+	208	[75]	LEN      	16 9
+	209	[75]	GETI     	17 12 1
+	210	[75]	CALL     	14 4 1	; 3 in 0 out
+	211	[76]	MOVE     	14 10
+	212	[76]	GETTABUP 	15 0 16	; _ENV "collectgarbage"
+	213	[76]	LOADK    	16 17	; "count"
+	214	[76]	CALL     	15 2 2	; 1 in 1 out
+	215	[76]	GTI      	15 0 1
+	216	[76]	JMP      	1	; to 218
+	217	[76]	LFALSESKIP	15
+	218	[76]	LOADTRUE 	15
+	219	[76]	RETURN   	14 3 1k	; 2 out
+	220	[76]	RETURN   	14 1 1k	; 0 out
+constants (18):
+	0	S	"name"
+	1	S	"t"
+	2	I	10
+	3	S	"print"
+	4	S	"depth"
+	5	S	"left"
+	6	S	"id"
+	7	S	"next"
+	8	I	1000
+	9	S	"other"
+	10	S	"self"
+	11	I	50
+	12	S	"key"
+	13	I	100000
+	14	S	"ipairs"
+	15	S	"s"
+	16	S	"collectgarbage"
+	17	S	"count"
+locals (69):
+	0	made	3	221
+	1	(for state)	6	25
+	2	(for state)	6	25
+	3	(for state)	6	25
+	4	i	7	24
+	5	t	18	24
+	6	build	29	221
+	7	count	30	221
+	8	tree	33	221
+	9	(for state)	36	41
+	10	(for state)	36	41
+	11	(for state)	36	41
+	12	_	37	40
+	13	ring	52	221
+	14	(for state)	55	61
+	15	(for state)	55	61
+	16	(for state)	55	61
+	17	i	56	60
+	18	(for state)	64	73
+	19	(for state)	64	73
+	20	(for state)	64	73
+	21	i	65	72
+	22	node	75	221
+	23	steps	75	221
+	24	(for state)	97	107
+	25	(for state)	97	107
+	26	(for state)	97	107
+	27	_	98	106
+	28	a	102	106
+	29	b	102	106
+	30	registry	109	221
+	31	(for state)	112	125
+	32	(for state)	112	125
+	33	(for state)	112	125
+	34	i	113	124
+	35	key	115	124
+	36	rsum	126	221
+	37	(for state)	129	136
+	38	(for state)	129	136
+	39	(for state)	129	136
+	40	i	130	135
+	41	entry	131	135
+	42	big	141	221
+	43	(for state)	144	147
+	44	(for state)	144	147
+	45	(for state)	144	147
+	46	i	145	146
+	47	sum	148	221
+	48	(for state)	151	156
+	49	(for state)	151	156
+	50	(for state)	151	156
+	51	i	152	155
+	52	psum	161	221
+	53	(for state)	164	169
+	54	(for state)	164	169
+	55	(for state)	164	169
+	56	(for state)	164	169
+	57	_	165	167
+	58	v	165	167
+	59	strs	178	221
+	60	(for state)	181	187
+	61	(for state)	181	187
+	62	(for state)	181	187
+	63	i	182	186
+	64	len	188	221
+	65	(for state)	191	197
+	66	(for state)	191	197
+	67	(for state)	191	197
+	68	i	192	196
+upvalues (1):
+	0	_ENV	1	0
+
+function <table_garbage.lua:15,18> (21 instructions)
+1 param, 4 slots, 1 upvalue, 1 local, 5 constants, 0 functions
+	1	[16]	EQI      	0 0 0
+	2	[16]	JMP      	4	; to 7
+	3	[16]	NEWTABLE 	1 1 0	; 0
+	4	[16]	EXTRAARG 	0
+	5	[16]	SETFIELD 	1 0 1k	; "leaf" true
+	6	[16]	RETURN1  	1
+	7	[17]	NEWTABLE 	1 3 0	; 0
+	8	[17]	EXTRAARG 	0
+	9	[17]	GETUPVAL 	2 0	; build
+	10	[17]	ADDI     	3 0 -1
+	11	[17]	MMBINI   	0 1 7 0	; __sub
+	12	[17]	CALL     	2 2 2	; 1 in 1 out
+	13	[17]	SETFIELD 	1 2 2	; "left"
+	14	[17]	GETUPVAL 	2 0	; build
+	15	[17]	ADDI     	3 0 -1
+	16	[17]	MMBINI   	0 1 7 0	; __sub
+	17	[17]	CALL     	2 2 2	; 1 in 1 out
+	18	[17]	SETFIELD 	1 3 2	; "right"
+	19	[17]	SETFIELD 	1 4 0	; "depth"
+	20	[17]	RETURN1  	1
+	21	[18]	RETURN0  	
+constants (5):
+	0	S	"leaf"
+	1	B	true
+	2	S	"left"
+	3	S	"right"
+	4	S	"depth"
+locals (1):
+	0	depth	1	22
+upvalues (1):
+	0	build	1	1
+
+function <table_garbage.lua:19,22> (17 instructions)
+1 param, 4 slots, 1 upvalue, 1 local, 3 constants, 0 functions
+	1	[20]	GETFIELD 	1 0 0	; "leaf"
+	2	[20]	TEST     	1 0
+	3	[20]	JMP      	2	; to 6
+	4	[20]	LOADI    	1 1
+	5	[20]	RETURN1  	1
+	6	[21]	GETUPVAL 	1 0	; count
+	7	[21]	GETFIELD 	2 0 1	; "left"
+	8	[21]	CALL     	1 2 2	; 1 in 1 out
+	9	[21]	ADDI     	1 1 1
+	10	[21]	MMBINI   	1 1 6 1	; __add flip
+	11	[21]	GETUPVAL 	2 0	; count
+	12	[21]	GETFIELD 	3 0 2	; "right"
+	13	[21]	CALL     	2 2 2	; 1 in 1 out
+	14	[21]	ADD      	1 1 2
+	15	[21]	MMBIN    	1 2 6	; __add
+	16	[21]	RETURN1  	1
+	17	[22]	RETURN0  	
+constants (3):
+	0	S	"leaf"
+	1	S	"left"
+	2	S	"right"
+locals (1):
+	0	node	1	18
+upvalues (1):
+	0	count	1	2

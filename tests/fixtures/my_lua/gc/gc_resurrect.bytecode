@@ -1,0 +1,339 @@
+
+main <gc_resurrect.lua:0,0> (105 instructions)
+0+ params, 16 slots, 1 upvalue, 12 locals, 10 constants, 6 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	GETTABUP 	0 0 0	; _ENV "collectgarbage"
+	3	[7]	LOADK    	1 1	; "stop"
+	4	[7]	CALL     	0 2 1	; 1 in 0 out
+	5	[9]	NEWTABLE 	0 0 0	; 0
+	6	[9]	EXTRAARG 	0
+	7	[10]	LOADI    	1 0
+	8	[11]	NEWTABLE 	2 1 0	; 0
+	9	[11]	EXTRAARG 	0
+	10	[14]	CLOSURE  	3 0
+	11	[14]	SETFIELD 	2 2 3	; "__gc"
+	12	[19]	CLOSURE  	3 1
+	13	[20]	MOVE     	4 3
+	14	[20]	CALL     	4 1 1	; 0 in 0 out
+	15	[21]	GETTABUP 	4 0 3	; _ENV "print"
+	16	[21]	LEN      	5 0
+	17	[21]	MOVE     	6 1
+	18	[21]	CALL     	4 3 1	; 2 in 0 out
+	19	[22]	GETTABUP 	4 0 0	; _ENV "collectgarbage"
+	20	[22]	CALL     	4 1 1	; 0 in 0 out
+	21	[23]	GETTABUP 	4 0 3	; _ENV "print"
+	22	[23]	LEN      	5 0
+	23	[23]	MOVE     	6 1
+	24	[23]	CALL     	4 3 1	; 2 in 0 out
+	25	[26]	GETI     	4 0 1
+	26	[27]	GETTABUP 	5 0 3	; _ENV "print"
+	27	[27]	GETFIELD 	6 4 4	; "name"
+	28	[27]	GETFIELD 	7 4 5	; "data"
+	29	[27]	GETI     	7 7 3
+	30	[27]	GETFIELD 	8 4 5	; "data"
+	31	[27]	GETFIELD 	8 8 6	; "back"
+	32	[27]	EQ       	8 4 1
+	33	[27]	JMP      	1	; to 35
+	34	[27]	LFALSESKIP	8
+	35	[27]	LOADTRUE 	8
+	36	[27]	GETTABUP 	9 0 7	; _ENV "getmetatable"
+	37	[27]	MOVE     	10 4
+	38	[27]	CALL     	9 2 2	; 1 in 1 out
+	39	[27]	EQ       	9 2 1
+	40	[27]	JMP      	1	; to 42
+	41	[27]	LFALSESKIP	9
+	42	[27]	LOADTRUE 	9
+	43	[27]	CALL     	5 5 1	; 4 in 0 out
+	44	[30]	SETI     	0 1 8k	; nil
+	45	[31]	LOADNIL  	4 0	; 1 out
+	46	[32]	GETTABUP 	5 0 0	; _ENV "collectgarbage"
+	47	[32]	CALL     	5 1 1	; 0 in 0 out
+	48	[33]	GETTABUP 	5 0 0	; _ENV "collectgarbage"
+	49	[33]	CALL     	5 1 1	; 0 in 0 out
+	50	[34]	GETTABUP 	5 0 3	; _ENV "print"
+	51	[34]	LEN      	6 0
+	52	[34]	MOVE     	7 1
+	53	[34]	CALL     	5 3 1	; 2 in 0 out
+	54	[37]	LOADI    	5 0
+	55	[41]	CLOSURE  	6 2
+	56	[42]	MOVE     	7 6
+	57	[42]	CALL     	7 1 1	; 0 in 0 out
+	58	[43]	SETI     	0 1 8k	; nil
+	59	[44]	GETTABUP 	7 0 0	; _ENV "collectgarbage"
+	60	[44]	CALL     	7 1 1	; 0 in 0 out
+	61	[45]	GETTABUP 	7 0 3	; _ENV "print"
+	62	[45]	LEN      	8 0
+	63	[45]	MOVE     	9 1
+	64	[45]	CALL     	7 3 1	; 2 in 0 out
+	65	[50]	CLOSURE  	7 3
+	66	[51]	MOVE     	8 7
+	67	[51]	CALL     	8 1 1	; 0 in 0 out
+	68	[52]	GETTABUP 	8 0 0	; _ENV "collectgarbage"
+	69	[52]	CALL     	8 1 1	; 0 in 0 out
+	70	[53]	GETTABUP 	8 0 3	; _ENV "print"
+	71	[53]	MOVE     	9 1
+	72	[53]	MOVE     	10 5
+	73	[53]	CALL     	8 3 1	; 2 in 0 out
+	74	[56]	LOADNIL  	8 0	; 1 out
+	75	[60]	CLOSURE  	9 4
+	76	[61]	MOVE     	10 9
+	77	[61]	CALL     	10 1 1	; 0 in 0 out
+	78	[62]	GETTABUP 	10 0 0	; _ENV "collectgarbage"
+	79	[62]	CALL     	10 1 1	; 0 in 0 out
+	80	[63]	GETTABUP 	10 0 3	; _ENV "print"
+	81	[63]	TESTSET  	11 8 0
+	82	[63]	JMP      	1	; to 84
+	83	[63]	GETFIELD 	11 8 9	; "value"
+	84	[63]	CALL     	10 2 1	; 1 in 0 out
+	85	[67]	NEWTABLE 	10 0 0	; 0
+	86	[67]	EXTRAARG 	0
+	87	[73]	CLOSURE  	11 5
+	88	[74]	MOVE     	12 11
+	89	[74]	CALL     	12 1 1	; 0 in 0 out
+	90	[75]	GETTABUP 	12 0 0	; _ENV "collectgarbage"
+	91	[75]	CALL     	12 1 1	; 0 in 0 out
+	92	[76]	GETTABUP 	12 0 3	; _ENV "print"
+	93	[76]	LEN      	13 10
+	94	[76]	GETI     	14 10 1
+	95	[76]	GETI     	15 10 2
+	96	[76]	CALL     	12 4 1	; 3 in 0 out
+	97	[77]	GETTABUP 	12 0 0	; _ENV "collectgarbage"
+	98	[77]	CALL     	12 1 1	; 0 in 0 out
+	99	[78]	GETTABUP 	12 0 3	; _ENV "print"
+	100	[78]	LEN      	13 10
+	101	[78]	GETI     	14 10 1
+	102	[78]	GETI     	15 10 2
+	103	[78]	CALL     	12 4 1	; 3 in 0 out
+	104	[80]	RETURN   	1 2 1k	; 1 out
+	105	[80]	RETURN   	12 1 1k	; 0 out
+constants (10):
+	0	S	"collectgarbage"
+	1	S	"stop"
+	2	S	"__gc"
+	3	S	"print"
+	4	S	"name"
+	5	S	"data"
+	6	S	"back"
+	7	S	"getmetatable"
+	8	N	nil
+	9	S	"value"
+locals (12):
+	0	saved	7	106
+	1	runs	8	106
+	2	mt	12	106
+	3	create	13	106
+	4	o	26	106
+	5	second	55	106
+	6	create_again	56	106
+	7	register_again	66	106
+	8	rescued	75	106
+	9	holder	76	106
+	10	order	87	106
+	11	spawner	88	106
+upvalues (1):
+	0	_ENV	1	0
+
+function <gc_resurrect.lua:11,14> (11 instructions)
+1 param, 3 slots, 2 upvalues, 1 local, 0 constants, 0 functions
+	1	[12]	GETUPVAL 	1 0	; runs
+	2	[12]	ADDI     	1 1 1
+	3	[12]	MMBINI   	1 1 6 0	; __add
+	4	[12]	SETUPVAL 	1 0	; runs
+	5	[13]	GETUPVAL 	1 1	; saved
+	6	[13]	LEN      	1 1
+	7	[13]	ADDI     	2 1 1
+	8	[13]	MMBINI   	1 1 6 0	; __add
+	9	[13]	GETUPVAL 	1 1	; saved
+	10	[13]	SETTABLE 	1 2 0
+	11	[14]	RETURN0  	
+constants (0):
+locals (1):
+	0	o	1	12
+upvalues (2):
+	0	runs	1	1
+	1	saved	1	0
+
+function <gc_resurrect.lua:16,19> (16 instructions)
+0 params, 6 slots, 2 upvalues, 1 local, 5 constants, 0 functions
+	1	[17]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[17]	NEWTABLE 	1 2 0	; 0
+	3	[17]	EXTRAARG 	0
+	4	[17]	SETFIELD 	1 1 2k	; "name" "phoenix"
+	5	[17]	NEWTABLE 	2 0 3	; 3
+	6	[17]	EXTRAARG 	0
+	7	[17]	LOADI    	3 10
+	8	[17]	LOADI    	4 20
+	9	[17]	LOADI    	5 30
+	10	[17]	SETLIST  	2 3 0
+	11	[17]	SETFIELD 	1 3 2	; "data"
+	12	[17]	GETUPVAL 	2 1	; mt
+	13	[17]	CALL     	0 3 2	; 2 in 1 out
+	14	[18]	GETFIELD 	1 0 3	; "data"
+	15	[18]	SETFIELD 	1 4 0	; "back"
+	16	[19]	RETURN0  	
+constants (5):
+	0	S	"setmetatable"
+	1	S	"name"
+	2	S	"phoenix"
+	3	S	"data"
+	4	S	"back"
+locals (1):
+	0	o	14	17
+upvalues (2):
+	0	_ENV	0	0
+	1	mt	1	2
+
+function <gc_resurrect.lua:38,41> (8 instructions)
+0 params, 3 slots, 3 upvalues, 1 local, 1 constant, 0 functions
+	1	[39]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[39]	NEWTABLE 	1 0 0	; 0
+	3	[39]	EXTRAARG 	0
+	4	[39]	GETUPVAL 	2 1	; mt
+	5	[39]	CALL     	0 3 2	; 2 in 1 out
+	6	[40]	GETUPVAL 	1 2	; saved
+	7	[40]	SETI     	1 1 0
+	8	[41]	RETURN0  	
+constants (1):
+	0	S	"setmetatable"
+locals (1):
+	0	obj	6	9
+upvalues (3):
+	0	_ENV	0	0
+	1	mt	1	2
+	2	saved	1	0
+
+function <gc_resurrect.lua:46,50> (12 instructions)
+0 params, 5 slots, 3 upvalues, 1 local, 3 constants, 1 function
+	1	[47]	GETUPVAL 	0 0	; saved
+	2	[47]	GETI     	0 0 1
+	3	[48]	GETUPVAL 	1 0	; saved
+	4	[48]	SETI     	1 1 0k	; nil
+	5	[49]	GETTABUP 	1 1 1	; _ENV "setmetatable"
+	6	[49]	MOVE     	2 0
+	7	[49]	NEWTABLE 	3 1 0	; 0
+	8	[49]	EXTRAARG 	0
+	9	[49]	CLOSURE  	4 0
+	10	[49]	SETFIELD 	3 2 4	; "__gc"
+	11	[49]	CALL     	1 3 1	; 2 in 0 out
+	12	[50]	RETURN0  	
+constants (3):
+	0	N	nil
+	1	S	"setmetatable"
+	2	S	"__gc"
+locals (1):
+	0	back	3	13
+upvalues (3):
+	0	saved	1	0
+	1	_ENV	0	0
+	2	second	1	5
+
+function <gc_resurrect.lua:49,49> (5 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[49]	GETUPVAL 	0 0	; second
+	2	[49]	ADDI     	0 0 1
+	3	[49]	MMBINI   	0 1 6 0	; __add
+	4	[49]	SETUPVAL 	0 0	; second
+	5	[49]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	second	0	2
+
+function <gc_resurrect.lua:57,60> (13 instructions)
+0 params, 5 slots, 2 upvalues, 1 local, 5 constants, 1 function
+	1	[58]	NEWTABLE 	0 1 0	; 0
+	2	[58]	EXTRAARG 	0
+	3	[58]	SETFIELD 	0 0 1k	; "value" "child value"
+	4	[59]	GETTABUP 	1 0 2	; _ENV "setmetatable"
+	5	[59]	NEWTABLE 	2 1 0	; 0
+	6	[59]	EXTRAARG 	0
+	7	[59]	SETFIELD 	2 3 0	; "child"
+	8	[59]	NEWTABLE 	3 1 0	; 0
+	9	[59]	EXTRAARG 	0
+	10	[59]	CLOSURE  	4 0
+	11	[59]	SETFIELD 	3 4 4	; "__gc"
+	12	[59]	CALL     	1 3 1	; 2 in 0 out
+	13	[60]	RETURN0  	
+constants (5):
+	0	S	"value"
+	1	S	"child value"
+	2	S	"setmetatable"
+	3	S	"child"
+	4	S	"__gc"
+locals (1):
+	0	child	4	14
+upvalues (2):
+	0	_ENV	0	0
+	1	rescued	1	8
+
+function <gc_resurrect.lua:59,59> (3 instructions)
+1 param, 2 slots, 1 upvalue, 1 local, 1 constant, 0 functions
+	1	[59]	GETFIELD 	1 0 0	; "child"
+	2	[59]	SETUPVAL 	1 0	; rescued
+	3	[59]	RETURN0  	
+constants (1):
+	0	S	"child"
+locals (1):
+	0	h	1	4
+upvalues (1):
+	0	rescued	0	1
+
+function <gc_resurrect.lua:68,73> (9 instructions)
+0 params, 4 slots, 2 upvalues, 0 locals, 2 constants, 1 function
+	1	[69]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[69]	NEWTABLE 	1 0 0	; 0
+	3	[69]	EXTRAARG 	0
+	4	[69]	NEWTABLE 	2 1 0	; 0
+	5	[69]	EXTRAARG 	0
+	6	[72]	CLOSURE  	3 0
+	7	[72]	SETFIELD 	2 1 3	; "__gc"
+	8	[69]	CALL     	0 3 1	; 2 in 0 out
+	9	[73]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"__gc"
+locals (0):
+upvalues (2):
+	0	_ENV	0	0
+	1	order	1	10
+
+function <gc_resurrect.lua:69,72> (15 instructions)
+0 params, 4 slots, 2 upvalues, 0 locals, 3 constants, 1 function
+	1	[70]	GETUPVAL 	0 0	; order
+	2	[70]	LEN      	0 0
+	3	[70]	ADDI     	1 0 1
+	4	[70]	MMBINI   	0 1 6 0	; __add
+	5	[70]	GETUPVAL 	0 0	; order
+	6	[70]	SETTABLE 	0 1 0k	; "parent"
+	7	[71]	GETTABUP 	0 1 1	; _ENV "setmetatable"
+	8	[71]	NEWTABLE 	1 0 0	; 0
+	9	[71]	EXTRAARG 	0
+	10	[71]	NEWTABLE 	2 1 0	; 0
+	11	[71]	EXTRAARG 	0
+	12	[71]	CLOSURE  	3 0
+	13	[71]	SETFIELD 	2 2 3	; "__gc"
+	14	[71]	CALL     	0 3 1	; 2 in 0 out
+	15	[72]	RETURN0  	
+constants (3):
+	0	S	"parent"
+	1	S	"setmetatable"
+	2	S	"__gc"
+locals (0):
+upvalues (2):
+	0	order	0	1
+	1	_ENV	0	0
+
+function <gc_resurrect.lua:71,71> (7 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[71]	GETUPVAL 	0 0	; order
+	2	[71]	LEN      	0 0
+	3	[71]	ADDI     	1 0 1
+	4	[71]	MMBINI   	0 1 6 0	; __add
+	5	[71]	GETUPVAL 	0 0	; order
+	6	[71]	SETTABLE 	0 1 0k	; "child"
+	7	[71]	RETURN0  	
+constants (1):
+	0	S	"child"
+locals (0):
+upvalues (1):
+	0	order	0	0

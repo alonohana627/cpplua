@@ -1,0 +1,16 @@
+weak k before	14
+weak k after	4	live	table	table	table
+weak v before	14
+weak v after	4	true	a string value	42	1.5	nil
+weak kv	3	strong key, string value	true	nil	kept
+after dropping	3	3	nil
+cache	2	6
+ephemerons before	6
+ephemerons after	1	true
+chain kept	4
+chain dropped	0
+in finalizer	false	key entry
+after first	nil	1
+after second	0
+mode x	1
+3	3

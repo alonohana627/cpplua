@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 # Pre-release: bump by 0.0.1 per step. The release becomes 5.4.
-project(lua2 VERSION 0.0.5 LANGUAGES CXX)
+project(lua2 VERSION 0.0.8 LANGUAGES CXX)
 
 # C++26 (clang spells it -std=c++2c), no compiler extensions.
 set(CMAKE_CXX_STANDARD 26)
@@ -48,9 +48,11 @@ add_library(lua2_lib
   lib/vm/debug_info.cpp
   lib/vm/execute.cpp
   lib/vm/run.cpp
+  lib/vm/metamethods.cpp
   lib/value/table.cpp
   lib/std/base.cpp
-  lib/interpreter.cpp
+  lib/std/auxlib.cpp
+  lib/api.cpp
 )
 add_library(lua2::lua2 ALIAS lua2_lib)
 target_include_directories(lua2_lib
@@ -72,6 +74,12 @@ endif()
 # The command-line front end, built on the public API only.
 add_executable(lua2 src/main.cpp)
 target_link_libraries(lua2 PRIVATE lua2::lua2 lua2_warnings)
+# Optimized builds link the C++ runtime in: loading libc++.dll costs a
+# millisecond or two at every start (measured against the reference Lua,
+# which needs no such DLL).
+if(MINGW AND CMAKE_BUILD_TYPE STREQUAL "Release")
+  target_link_options(lua2 PRIVATE -static)
+endif()
 
 # Tests
 include(CTest)
@@ -104,6 +112,9 @@ if(BUILD_TESTING)
     tests/opcodes_test.cpp
     tests/gc_test.cpp
     tests/vm_test.cpp
+    tests/table_test.cpp
+    tests/meta_test.cpp
+    tests/error_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
   # Tests may include internal headers from lib/internal/ to test internals directly.
@@ -112,8 +123,14 @@ if(BUILD_TESTING)
     LUA2_VERSION="${PROJECT_VERSION}"
     LUA2_FIXTURES_DIR="${PROJECT_SOURCE_DIR}/tests/fixtures")
 
+  # The public API's tests, which see only include/lua2 (no lib/internal):
+  # what a program embedding lua2 can use.
+  add_executable(lua2_api_tests tests/embedding_test.cpp)
+  target_link_libraries(lua2_api_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
+
   include(Catch)
   catch_discover_tests(lua2_tests)
+  catch_discover_tests(lua2_api_tests)
 endif()
 
 # The benchmark runner (bench/README.md).

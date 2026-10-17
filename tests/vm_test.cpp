@@ -163,7 +163,7 @@ TEST_CASE("E8.2 messages say where the value came from", "[vm]") {
     CHECK(run("local up local function f() return #up end return f()") ==
           "input:1: attempt to get length of a nil value (upvalue 'up')");
     CHECK(run("local t return t.x") == "input:1: attempt to index a nil value (local 't')");
-    CHECK(run("local x = 'a' .. {}") == "input:1: tables are not supported yet");
+    CHECK(run("local x = 'a' .. {}") == "input:1: attempt to concatenate a table value");
     CHECK(run("local a = true return a .. 'x'") ==
           "input:1: attempt to concatenate a boolean value (local 'a')");
     CHECK(run("local a = 1.5 return a & 1") ==
@@ -182,8 +182,8 @@ TEST_CASE("E2.3 globals are fields of _ENV, the globals table", "[vm]") {
           "input:1: attempt to index a number value (local '_ENV')");
     CHECK(run("local _ENV = nil return x") ==
           "input:1: attempt to index a nil value (local '_ENV')");
-    // Until stage 6 the globals table only takes string keys.
-    CHECK(run("_ENV[1] = 2") == "input:1: table keys other than strings are not supported yet");
+    // _ENV is an ordinary table.
+    CHECK(run("_ENV[1] = 2 return _ENV[1], #_ENV") == "2,1");
 }
 
 TEST_CASE("print writes its arguments like tostring, separated by tabs", "[vm][std]") {

@@ -1,0 +1,18 @@
+false
+before collect:
+after collect: g5 g4 g3 g2 g1
+again (nothing):
+with live objects: x2 x1
+single dropped: single
+kept1 dropped: kept1
+self	3
+late __gc called:	false
+re-set __gc called:	true
+replaced: new
+cycle: pb pa
+still running
+finalized	200
+false	true
+true
+false
+kept2

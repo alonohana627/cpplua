@@ -1,0 +1,679 @@
+
+main <error_xpcall.lua:0,0> (179 instructions)
+0+ params, 15 slots, 1 upvalue, 11 locals, 11 constants, 32 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	CLOSURE  	0 0
+	3	[9]	GETTABUP 	1 0 0	; _ENV "print"
+	4	[9]	GETTABUP 	2 0 1	; _ENV "xpcall"
+	5	[9]	CLOSURE  	3 1
+	6	[9]	MOVE     	4 0
+	7	[9]	CALL     	2 3 0	; 2 in all out
+	8	[9]	CALL     	1 0 1	; all in 0 out
+	9	[10]	GETTABUP 	1 0 0	; _ENV "print"
+	10	[10]	GETTABUP 	2 0 1	; _ENV "xpcall"
+	11	[10]	CLOSURE  	3 2
+	12	[10]	MOVE     	4 0
+	13	[10]	CALL     	2 3 0	; 2 in all out
+	14	[10]	CALL     	1 0 1	; all in 0 out
+	15	[11]	GETTABUP 	1 0 0	; _ENV "print"
+	16	[11]	GETTABUP 	2 0 1	; _ENV "xpcall"
+	17	[11]	CLOSURE  	3 3
+	18	[11]	MOVE     	4 0
+	19	[11]	CALL     	2 3 0	; 2 in all out
+	20	[11]	CALL     	1 0 1	; all in 0 out
+	21	[12]	GETTABUP 	1 0 0	; _ENV "print"
+	22	[12]	GETTABUP 	2 0 1	; _ENV "xpcall"
+	23	[12]	CLOSURE  	3 4
+	24	[12]	MOVE     	4 0
+	25	[12]	CALL     	2 3 0	; 2 in all out
+	26	[12]	CALL     	1 0 1	; all in 0 out
+	27	[15]	GETTABUP 	1 0 0	; _ENV "print"
+	28	[15]	GETTABUP 	2 0 1	; _ENV "xpcall"
+	29	[15]	CLOSURE  	3 5
+	30	[15]	MOVE     	4 0
+	31	[15]	LOADI    	5 1
+	32	[15]	LOADI    	6 2
+	33	[15]	LOADI    	7 3
+	34	[15]	LOADI    	8 4
+	35	[15]	CALL     	2 7 0	; 6 in all out
+	36	[15]	CALL     	1 0 1	; all in 0 out
+	37	[16]	GETTABUP 	1 0 0	; _ENV "print"
+	38	[16]	GETTABUP 	2 0 1	; _ENV "xpcall"
+	39	[16]	CLOSURE  	3 6
+	40	[16]	MOVE     	4 0
+	41	[16]	LOADNIL  	5 0	; 1 out
+	42	[16]	CALL     	2 4 0	; 3 in all out
+	43	[16]	CALL     	1 0 1	; all in 0 out
+	44	[19]	GETTABUP 	1 0 1	; _ENV "xpcall"
+	45	[19]	CLOSURE  	2 7
+	46	[21]	CLOSURE  	3 8
+	47	[19]	CALL     	1 3 3	; 2 in 2 out
+	48	[22]	GETTABUP 	3 0 0	; _ENV "print"
+	49	[22]	MOVE     	4 1
+	50	[22]	GETTABUP 	5 0 2	; _ENV "type"
+	51	[22]	MOVE     	6 2
+	52	[22]	CALL     	5 2 2	; 1 in 1 out
+	53	[22]	GETFIELD 	6 2 3	; "message"
+	54	[22]	GETFIELD 	7 2 4	; "handled"
+	55	[22]	CALL     	3 5 1	; 4 in 0 out
+	56	[25]	GETTABUP 	3 0 0	; _ENV "print"
+	57	[25]	GETTABUP 	4 0 1	; _ENV "xpcall"
+	58	[25]	GETTABUP 	5 0 5	; _ENV "error"
+	59	[25]	CLOSURE  	6 9
+	60	[25]	LOADK    	7 6	; "first only"
+	61	[25]	LOADI    	8 0
+	62	[25]	CALL     	4 5 0	; 4 in all out
+	63	[25]	CALL     	3 0 1	; all in 0 out
+	64	[28]	NEWTABLE 	3 0 0	; 0
+	65	[28]	EXTRAARG 	0
+	66	[29]	GETTABUP 	4 0 0	; _ENV "print"
+	67	[29]	GETTABUP 	5 0 1	; _ENV "xpcall"
+	68	[29]	CLOSURE  	6 10
+	69	[29]	CLOSURE  	7 11
+	70	[29]	CALL     	5 3 0	; 2 in all out
+	71	[29]	CALL     	4 0 1	; all in 0 out
+	72	[30]	GETTABUP 	4 0 0	; _ENV "print"
+	73	[30]	GETTABUP 	5 0 1	; _ENV "xpcall"
+	74	[30]	CLOSURE  	6 12
+	75	[30]	CLOSURE  	7 13
+	76	[30]	CALL     	5 3 0	; 2 in all out
+	77	[30]	CALL     	4 0 1	; all in 0 out
+	78	[31]	GETTABUP 	4 0 0	; _ENV "print"
+	79	[31]	GETTABUP 	5 0 1	; _ENV "xpcall"
+	80	[31]	CLOSURE  	6 14
+	81	[31]	CLOSURE  	7 15
+	82	[31]	CALL     	5 3 0	; 2 in all out
+	83	[31]	CALL     	4 0 1	; all in 0 out
+	84	[32]	GETTABUP 	4 0 0	; _ENV "print"
+	85	[32]	GETTABUP 	5 0 1	; _ENV "xpcall"
+	86	[32]	CLOSURE  	6 16
+	87	[32]	CLOSURE  	7 17
+	88	[32]	CALL     	5 3 0	; 2 in all out
+	89	[32]	CALL     	4 0 1	; all in 0 out
+	90	[36]	NEWTABLE 	4 0 0	; 0
+	91	[36]	EXTRAARG 	0
+	92	[37]	GETTABUP 	5 0 0	; _ENV "print"
+	93	[37]	GETTABUP 	6 0 1	; _ENV "xpcall"
+	94	[40]	CLOSURE  	7 18
+	95	[40]	CLOSURE  	8 19
+	96	[37]	CALL     	6 3 0	; 2 in all out
+	97	[37]	CALL     	5 0 1	; all in 0 out
+	98	[41]	GETTABUP 	5 0 0	; _ENV "print"
+	99	[41]	GETI     	6 4 1
+	100	[41]	GETI     	7 4 2
+	101	[41]	CALL     	5 3 1	; 2 in 0 out
+	102	[44]	LOADI    	5 0
+	103	[45]	CLOSURE  	6 20
+	104	[46]	LOADI    	7 1
+	105	[46]	LOADI    	8 3
+	106	[46]	LOADI    	9 1
+	107	[46]	FORPREP  	7 5	; exit to 114
+	108	[46]	GETTABUP 	11 0 1	; _ENV "xpcall"
+	109	[46]	GETTABUP 	12 0 7	; _ENV "error"
+	110	[46]	MOVE     	13 6
+	111	[46]	MOVE     	14 10
+	112	[46]	CALL     	11 4 1	; 3 in 0 out
+	113	[46]	FORLOOP  	7 6	; to 108
+	114	[47]	GETTABUP 	7 0 1	; _ENV "xpcall"
+	115	[47]	CLOSURE  	8 21
+	116	[47]	MOVE     	9 6
+	117	[47]	CALL     	7 3 1	; 2 in 0 out
+	118	[48]	GETTABUP 	7 0 0	; _ENV "print"
+	119	[48]	MOVE     	8 5
+	120	[48]	CALL     	7 2 1	; 1 in 0 out
+	121	[51]	GETTABUP 	7 0 0	; _ENV "print"
+	122	[51]	GETTABUP 	8 0 1	; _ENV "xpcall"
+	123	[51]	CLOSURE  	9 22
+	124	[51]	CLOSURE  	10 23
+	125	[51]	CALL     	8 3 0	; 2 in all out
+	126	[51]	CALL     	7 0 1	; all in 0 out
+	127	[52]	GETTABUP 	7 0 0	; _ENV "print"
+	128	[52]	GETTABUP 	8 0 1	; _ENV "xpcall"
+	129	[52]	CLOSURE  	9 24
+	130	[52]	CLOSURE  	10 25
+	131	[52]	CALL     	8 3 0	; 2 in all out
+	132	[52]	CALL     	7 0 1	; all in 0 out
+	133	[55]	GETTABUP 	7 0 0	; _ENV "print"
+	134	[55]	GETTABUP 	8 0 8	; _ENV "pcall"
+	135	[55]	GETTABUP 	9 0 1	; _ENV "xpcall"
+	136	[55]	CLOSURE  	10 26
+	137	[55]	LOADI    	11 42
+	138	[55]	CALL     	8 4 0	; 3 in all out
+	139	[55]	CALL     	7 0 1	; all in 0 out
+	140	[56]	GETTABUP 	7 0 0	; _ENV "print"
+	141	[56]	GETTABUP 	8 0 8	; _ENV "pcall"
+	142	[56]	GETTABUP 	9 0 1	; _ENV "xpcall"
+	143	[56]	CLOSURE  	10 27
+	144	[56]	LOADNIL  	11 0	; 1 out
+	145	[56]	CALL     	8 4 0	; 3 in all out
+	146	[56]	CALL     	7 0 1	; all in 0 out
+	147	[58]	GETTABUP 	7 0 0	; _ENV "print"
+	148	[58]	GETTABUP 	8 0 8	; _ENV "pcall"
+	149	[58]	GETTABUP 	9 0 1	; _ENV "xpcall"
+	150	[58]	GETTABUP 	10 0 0	; _ENV "print"
+	151	[58]	CALL     	8 3 0	; 2 in all out
+	152	[58]	CALL     	7 0 1	; all in 0 out
+	153	[61]	GETTABUP 	7 0 0	; _ENV "print"
+	154	[61]	GETTABUP 	8 0 8	; _ENV "pcall"
+	155	[61]	GETTABUP 	9 0 1	; _ENV "xpcall"
+	156	[61]	CLOSURE  	10 28
+	157	[61]	MOVE     	11 0
+	158	[61]	CALL     	8 4 0	; 3 in all out
+	159	[61]	CALL     	7 0 1	; all in 0 out
+	160	[62]	GETTABUP 	7 0 0	; _ENV "print"
+	161	[62]	GETTABUP 	8 0 1	; _ENV "xpcall"
+	162	[62]	CLOSURE  	9 29
+	163	[62]	MOVE     	10 0
+	164	[62]	CALL     	8 3 0	; 2 in all out
+	165	[62]	CALL     	7 0 1	; all in 0 out
+	166	[63]	GETTABUP 	7 0 0	; _ENV "print"
+	167	[63]	GETTABUP 	8 0 1	; _ENV "xpcall"
+	168	[63]	CLOSURE  	9 30
+	169	[63]	MOVE     	10 0
+	170	[63]	CALL     	8 3 0	; 2 in all out
+	171	[63]	CALL     	7 0 1	; all in 0 out
+	172	[65]	GETTABUP 	7 0 1	; _ENV "xpcall"
+	173	[65]	CLOSURE  	8 31
+	174	[65]	MOVE     	9 0
+	175	[65]	LOADK    	10 9	; "r1"
+	176	[65]	LOADK    	11 10	; "r2"
+	177	[65]	TAILCALL 	7 5 1k	; 4 in
+	178	[65]	RETURN   	7 0 1k	; all out
+	179	[65]	RETURN   	7 1 1k	; 0 out
+constants (11):
+	0	S	"print"
+	1	S	"xpcall"
+	2	S	"type"
+	3	S	"message"
+	4	S	"handled"
+	5	S	"error"
+	6	S	"first only"
+	7	S	"error"
+	8	S	"pcall"
+	9	S	"r1"
+	10	S	"r2"
+locals (11):
+	0	add_context	3	180
+	1	ok	48	180
+	2	info	48	180
+	3	obj	66	180
+	4	order	92	180
+	5	calls	103	180
+	6	counting	104	180
+	7	(for state)	107	114
+	8	(for state)	107	114
+	9	(for state)	107	114
+	10	i	108	113
+upvalues (1):
+	0	_ENV	1	0
+
+function <error_xpcall.lua:7,7> (7 instructions)
+1 param, 4 slots, 1 upvalue, 1 local, 2 constants, 0 functions
+	1	[7]	LOADK    	1 0	; "handled: "
+	2	[7]	GETTABUP 	2 0 1	; _ENV "tostring"
+	3	[7]	MOVE     	3 0
+	4	[7]	CALL     	2 2 2	; 1 in 1 out
+	5	[7]	CONCAT   	1 2
+	6	[7]	RETURN1  	1
+	7	[7]	RETURN0  	
+constants (2):
+	0	S	"handled: "
+	1	S	"tostring"
+locals (1):
+	0	msg	1	8
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:9,9> (4 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[9]	LOADK    	0 0	; "fine"
+	2	[9]	LOADI    	1 2
+	3	[9]	RETURN   	0 3 0	; 2 out
+	4	[9]	RETURN0  	
+constants (1):
+	0	S	"fine"
+locals (0):
+upvalues (0):
+
+function <error_xpcall.lua:10,10> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[10]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[10]	LOADK    	1 1	; "broken"
+	3	[10]	LOADI    	2 0
+	4	[10]	CALL     	0 3 1	; 2 in 0 out
+	5	[10]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"broken"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:11,11> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[11]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[11]	LOADK    	1 1	; "broken"
+	3	[11]	CALL     	0 2 1	; 1 in 0 out
+	4	[11]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"broken"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:12,12> (4 instructions)
+0 params, 2 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[12]	LOADNIL  	0 0	; 1 out
+	2	[12]	GETI     	1 0 1
+	3	[12]	RETURN1  	1
+	4	[12]	RETURN0  	
+constants (0):
+locals (1):
+	0	t	2	5
+upvalues (0):
+
+function <error_xpcall.lua:15,15> (9 instructions)
+2+ params, 6 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[15]	VARARGPREP	2
+	2	[15]	ADD      	2 0 1
+	3	[15]	MMBIN    	0 1 6	; __add
+	4	[15]	GETTABUP 	3 0 0	; _ENV "select"
+	5	[15]	LOADK    	4 1	; "#"
+	6	[15]	VARARG   	5 0	; all out
+	7	[15]	CALL     	3 0 0	; all in all out
+	8	[15]	RETURN   	2 0 3	; all out
+	9	[15]	RETURN   	2 1 3	; 0 out
+constants (2):
+	0	S	"select"
+	1	S	"#"
+locals (2):
+	0	a	1	10
+	1	b	1	10
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:16,16> (3 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[16]	GETFIELD 	1 0 0	; "x"
+	2	[16]	RETURN1  	1
+	3	[16]	RETURN0  	
+constants (1):
+	0	S	"x"
+locals (1):
+	0	a	1	4
+upvalues (0):
+
+function <error_xpcall.lua:19,19> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[19]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[19]	LOADK    	1 1	; "with table"
+	3	[19]	LOADI    	2 0
+	4	[19]	CALL     	0 3 1	; 2 in 0 out
+	5	[19]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"with table"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:19,21> (6 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 3 constants, 0 functions
+	1	[20]	NEWTABLE 	1 2 0	; 0
+	2	[20]	EXTRAARG 	0
+	3	[20]	SETFIELD 	1 0 0	; "message"
+	4	[20]	SETFIELD 	1 1 2k	; "handled" true
+	5	[20]	RETURN1  	1
+	6	[21]	RETURN0  	
+constants (3):
+	0	S	"message"
+	1	S	"handled"
+	2	B	true
+locals (1):
+	0	m	1	7
+upvalues (0):
+
+function <error_xpcall.lua:25,25> (4 instructions)
+1 param, 3 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[25]	MOVE     	1 0
+	2	[25]	LOADK    	2 0	; "dropped"
+	3	[25]	RETURN   	1 3 0	; 2 out
+	4	[25]	RETURN0  	
+constants (1):
+	0	S	"dropped"
+locals (1):
+	0	m	1	5
+upvalues (0):
+
+function <error_xpcall.lua:29,29> (4 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 1 constant, 0 functions
+	1	[29]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[29]	GETUPVAL 	1 1	; obj
+	3	[29]	CALL     	0 2 1	; 1 in 0 out
+	4	[29]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (2):
+	0	_ENV	0	0
+	1	obj	1	3
+
+function <error_xpcall.lua:29,29> (7 instructions)
+1 param, 2 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[29]	GETUPVAL 	1 0	; obj
+	2	[29]	EQ       	0 1 1
+	3	[29]	JMP      	1	; to 5
+	4	[29]	LFALSESKIP	1
+	5	[29]	LOADTRUE 	1
+	6	[29]	RETURN1  	1
+	7	[29]	RETURN0  	
+constants (0):
+locals (1):
+	0	e	1	8
+upvalues (1):
+	0	obj	1	3
+
+function <error_xpcall.lua:30,30> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[30]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[30]	LOADI    	1 12
+	3	[30]	CALL     	0 2 1	; 1 in 0 out
+	4	[30]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:30,30> (8 instructions)
+1 param, 4 slots, 1 upvalue, 1 local, 2 constants, 0 functions
+	1	[30]	GETTABUP 	1 0 0	; _ENV "type"
+	2	[30]	MOVE     	2 0
+	3	[30]	CALL     	1 2 2	; 1 in 1 out
+	4	[30]	LOADK    	2 1	; " "
+	5	[30]	MOVE     	3 0
+	6	[30]	CONCAT   	1 3
+	7	[30]	RETURN1  	1
+	8	[30]	RETURN0  	
+constants (2):
+	0	S	"type"
+	1	S	" "
+locals (1):
+	0	e	1	9
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:31,31> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[31]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[31]	CALL     	0 1 1	; 0 in 0 out
+	3	[31]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:31,31> (7 instructions)
+1 param, 4 slots, 1 upvalue, 1 local, 2 constants, 0 functions
+	1	[31]	LOADK    	1 0	; "got "
+	2	[31]	GETTABUP 	2 0 1	; _ENV "tostring"
+	3	[31]	MOVE     	3 0
+	4	[31]	CALL     	2 2 2	; 1 in 1 out
+	5	[31]	CONCAT   	1 2
+	6	[31]	RETURN1  	1
+	7	[31]	RETURN0  	
+constants (2):
+	0	S	"got "
+	1	S	"tostring"
+locals (1):
+	0	e	1	8
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:32,32> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[32]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[32]	LOADFALSE	1
+	3	[32]	CALL     	0 2 1	; 1 in 0 out
+	4	[32]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:32,32> (6 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[32]	EQK      	0 0 1	; false
+	2	[32]	JMP      	1	; to 4
+	3	[32]	LFALSESKIP	1
+	4	[32]	LOADTRUE 	1
+	5	[32]	RETURN1  	1
+	6	[32]	RETURN0  	
+constants (1):
+	0	B	false
+locals (1):
+	0	e	1	7
+upvalues (0):
+
+function <error_xpcall.lua:37,40> (14 instructions)
+0 params, 4 slots, 2 upvalues, 1 local, 4 constants, 1 function
+	1	[38]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[38]	NEWTABLE 	1 0 0	; 0
+	3	[38]	EXTRAARG 	0
+	4	[38]	NEWTABLE 	2 1 0	; 0
+	5	[38]	EXTRAARG 	0
+	6	[38]	CLOSURE  	3 0
+	7	[38]	SETFIELD 	2 1 3	; "__close"
+	8	[38]	CALL     	0 3 2	; 2 in 1 out
+	9	[38]	TBC      	0
+	10	[39]	GETTABUP 	1 0 2	; _ENV "error"
+	11	[39]	LOADK    	2 3	; "x"
+	12	[39]	LOADI    	3 0
+	13	[39]	CALL     	1 3 1	; 2 in 0 out
+	14	[40]	RETURN   	1 1 0k	; 0 out
+constants (4):
+	0	S	"setmetatable"
+	1	S	"__close"
+	2	S	"error"
+	3	S	"x"
+locals (1):
+	0	c	9	15
+upvalues (2):
+	0	_ENV	0	0
+	1	order	1	4
+
+function <error_xpcall.lua:38,38> (7 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[38]	GETUPVAL 	0 0	; order
+	2	[38]	LEN      	0 0
+	3	[38]	ADDI     	1 0 1
+	4	[38]	MMBINI   	0 1 6 0	; __add
+	5	[38]	GETUPVAL 	0 0	; order
+	6	[38]	SETTABLE 	0 1 0k	; "close"
+	7	[38]	RETURN0  	
+constants (1):
+	0	S	"close"
+locals (0):
+upvalues (1):
+	0	order	0	1
+
+function <error_xpcall.lua:40,40> (8 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 1 constant, 0 functions
+	1	[40]	GETUPVAL 	1 0	; order
+	2	[40]	LEN      	1 1
+	3	[40]	ADDI     	2 1 1
+	4	[40]	MMBINI   	1 1 6 0	; __add
+	5	[40]	GETUPVAL 	1 0	; order
+	6	[40]	SETTABLE 	1 2 0k	; "handler"
+	7	[40]	RETURN1  	0
+	8	[40]	RETURN0  	
+constants (1):
+	0	S	"handler"
+locals (1):
+	0	m	1	9
+upvalues (1):
+	0	order	1	4
+
+function <error_xpcall.lua:45,45> (6 instructions)
+1 param, 2 slots, 1 upvalue, 1 local, 0 constants, 0 functions
+	1	[45]	GETUPVAL 	1 0	; calls
+	2	[45]	ADDI     	1 1 1
+	3	[45]	MMBINI   	1 1 6 0	; __add
+	4	[45]	SETUPVAL 	1 0	; calls
+	5	[45]	RETURN1  	0
+	6	[45]	RETURN0  	
+constants (0):
+locals (1):
+	0	m	1	7
+upvalues (1):
+	0	calls	1	5
+
+function <error_xpcall.lua:47,47> (1 instruction)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[47]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <error_xpcall.lua:51,51> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[51]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[51]	LOADK    	1 1	; "original"
+	3	[51]	LOADI    	2 0
+	4	[51]	CALL     	0 3 1	; 2 in 0 out
+	5	[51]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"original"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:51,51> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[51]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[51]	LOADK    	1 1	; "in handler"
+	3	[51]	LOADI    	2 0
+	4	[51]	CALL     	0 3 1	; 2 in 0 out
+	5	[51]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"in handler"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:52,52> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[52]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[52]	LOADK    	1 1	; "original"
+	3	[52]	LOADI    	2 0
+	4	[52]	CALL     	0 3 1	; 2 in 0 out
+	5	[52]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"original"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:52,52> (4 instructions)
+1 param, 3 slots, 0 upvalues, 2 locals, 1 constant, 0 functions
+	1	[52]	LOADNIL  	1 0	; 1 out
+	2	[52]	GETFIELD 	2 1 0	; "x"
+	3	[52]	RETURN1  	2
+	4	[52]	RETURN0  	
+constants (1):
+	0	S	"x"
+locals (2):
+	0	m	1	5
+	1	t	2	5
+upvalues (0):
+
+function <error_xpcall.lua:55,55> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[55]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[55]	LOADK    	1 1	; "e"
+	3	[55]	LOADI    	2 0
+	4	[55]	CALL     	0 3 1	; 2 in 0 out
+	5	[55]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"e"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:56,56> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[56]	LOADK    	0 0	; "no error"
+	2	[56]	RETURN1  	0
+	3	[56]	RETURN0  	
+constants (1):
+	0	S	"no error"
+locals (0):
+upvalues (0):
+
+function <error_xpcall.lua:61,61> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[61]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[61]	LOADK    	1 1	; "inner"
+	3	[61]	LOADI    	2 0
+	4	[61]	CALL     	0 3 1	; 2 in 0 out
+	5	[61]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"inner"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:62,62> (7 instructions)
+0 params, 4 slots, 1 upvalue, 0 locals, 3 constants, 0 functions
+	1	[62]	GETTABUP 	0 0 0	; _ENV "pcall"
+	2	[62]	GETTABUP 	1 0 1	; _ENV "error"
+	3	[62]	LOADK    	2 2	; "deep"
+	4	[62]	LOADI    	3 0
+	5	[62]	TAILCALL 	0 4 0	; 3 in
+	6	[62]	RETURN   	0 0 0	; all out
+	7	[62]	RETURN0  	
+constants (3):
+	0	S	"pcall"
+	1	S	"error"
+	2	S	"deep"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:63,63> (9 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 4 constants, 0 functions
+	1	[63]	GETTABUP 	0 0 0	; _ENV "pcall"
+	2	[63]	GETTABUP 	1 0 1	; _ENV "error"
+	3	[63]	LOADK    	2 2	; "caught"
+	4	[63]	CALL     	0 3 1	; 2 in 0 out
+	5	[63]	GETTABUP 	0 0 1	; _ENV "error"
+	6	[63]	LOADK    	1 3	; "escaped"
+	7	[63]	LOADI    	2 0
+	8	[63]	CALL     	0 3 1	; 2 in 0 out
+	9	[63]	RETURN0  	
+constants (4):
+	0	S	"pcall"
+	1	S	"error"
+	2	S	"caught"
+	3	S	"escaped"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <error_xpcall.lua:65,65> (4 instructions)
+0+ params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[65]	VARARGPREP	0
+	2	[65]	VARARG   	0 0	; all out
+	3	[65]	RETURN   	0 0 1	; all out
+	4	[65]	RETURN   	0 1 1	; 0 out
+constants (0):
+locals (0):
+upvalues (0):

@@ -1,0 +1,33 @@
+1	body
+2	close b err=nil
+3	close a err=nil
+4	after
+true
+1	iteration 1
+2	close loop1 err=nil
+3	iteration 2
+4	close loop2 err=nil
+5	close loop3 err=nil
+1	close while1 err=nil
+2	close while2 err=nil
+result
+1	returning
+2	computing result
+3	close r err=nil
+21	42	result
+1	returning
+2	computing result
+3	close r err=nil
+4	close q err=nil
+1	close goto1 err=nil
+2	close goto2 err=nil
+3	close goto3 err=nil
+1	nil and false ok
+2	close yes err=nil
+1	in inner
+2	close inner err=nil
+3	back in outer
+4	close outer err=nil
+1	close renamed err=nil
+4
+0

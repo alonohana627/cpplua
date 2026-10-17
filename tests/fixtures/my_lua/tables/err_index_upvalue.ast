@@ -1,0 +1,11 @@
+Chunk
+  Local settings
+  LocalFunction get
+    Function() [upvalues: settings]
+      Return
+        Index
+          Name settings (upvalue 0)
+          String "size"
+  Return
+    Call
+      Name get (local 1)

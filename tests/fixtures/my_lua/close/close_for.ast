@@ -1,0 +1,269 @@
+Chunk
+  Local log
+    Table
+  LocalFunction say
+    Function(s) [upvalues: log]
+      Assign
+        Targets
+          Index
+            Name log (upvalue 0)
+            Binary +
+              Unary #
+                Name log (upvalue 0)
+              Integer 1
+        Values
+          Name s (local 0)
+  LocalFunction flush
+    Function() [upvalues: _ENV, log]
+      GenericFor i, s
+        In
+          Call
+            Name ipairs
+            Name log (upvalue 1)
+        Body
+          CallStatement
+            Call
+              Name print
+              Name i (local 4)
+              Name s (local 5)
+      Assign
+        Targets
+          Name log (upvalue 1)
+        Values
+          Table
+  LocalFunction counting
+    Function(n, name) [upvalues: _ENV, say]
+      Local closer
+        Call
+          Name setmetatable
+          Table
+          Table
+            Field __close
+              Function(_, err) [upvalues: say, name, _ENV]
+                CallStatement
+                  Call
+                    Name say (upvalue 0)
+                    Binary ..
+                      String "closed "
+                      Binary ..
+                        Name name (upvalue 1)
+                        Binary ..
+                          String " err="
+                          Call
+                            Name tostring
+                            Name err (local 1)
+      Return
+        Function(_, i) [upvalues: n]
+          If
+            If
+              Binary <
+                Name i (local 1)
+                Name n (upvalue 0)
+              Then
+                Return
+                  Binary +
+                    Name i (local 1)
+                    Integer 1
+        Nil
+        Integer 0
+        Name closer (local 2)
+  GenericFor i
+    In
+      Call
+        Name counting (local 3)
+        Integer 3
+        String "normal"
+    Body
+      CallStatement
+        Call
+          Name say (local 1)
+          Binary ..
+            String "i="
+            Name i (local 8)
+  CallStatement
+    Call
+      Name flush (local 2)
+  GenericFor i
+    In
+      Call
+        Name counting (local 3)
+        Integer 10
+        String "break"
+    Body
+      If
+        If
+          Binary ==
+            Name i (local 8)
+            Integer 2
+          Then
+            Break
+      CallStatement
+        Call
+          Name say (local 1)
+          Binary ..
+            String "i="
+            Name i (local 8)
+  CallStatement
+    Call
+      Name flush (local 2)
+  LocalFunction find
+    Function(target) [upvalues: counting]
+      GenericFor i
+        In
+          Call
+            Name counting (upvalue 0)
+            Integer 10
+            String "return"
+        Body
+          If
+            If
+              Binary ==
+                Name i (local 5)
+                Name target (local 0)
+              Then
+                Return
+                  Binary ..
+                    String "found "
+                    Name i (local 5)
+      Return
+        String "not found"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name find (local 4)
+        Integer 4
+  CallStatement
+    Call
+      Name print
+      Call
+        Name find (local 4)
+        Integer 40
+  CallStatement
+    Call
+      Name flush (local 2)
+  Do
+    GenericFor i
+      In
+        Call
+          Name counting (local 3)
+          Integer 10
+          String "goto"
+      Body
+        If
+          If
+            Binary ==
+              Name i (local 9)
+              Integer 2
+            Then
+              Goto out
+    Label out
+    CallStatement
+      Call
+        Name say (local 1)
+        String "after goto"
+  CallStatement
+    Call
+      Name flush (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: counting, _ENV]
+          GenericFor i
+            In
+              Call
+                Name counting (upvalue 0)
+                Integer 10
+                String "error"
+            Body
+              If
+                If
+                  Binary ==
+                    Name i (local 4)
+                    Integer 3
+                  Then
+                    CallStatement
+                      Call
+                        Name error
+                        String "stop at 3"
+                        Integer 0
+  CallStatement
+    Call
+      Name flush (local 2)
+  GenericFor i
+    In
+      Call
+        Name counting (local 3)
+        Integer 2
+        String "outer"
+    Body
+      GenericFor j
+        In
+          Call
+            Name counting (local 3)
+            Integer 2
+            Binary ..
+              String "inner"
+              Name i (local 9)
+        Body
+          CallStatement
+            Call
+              Name say (local 1)
+              Binary ..
+                Name i (local 9)
+                Binary ..
+                  String ","
+                  Name j (local 14)
+  CallStatement
+    Call
+      Name flush (local 2)
+  GenericFor _
+    In
+      Function(_, i)
+        If
+          If
+            Unary not
+              Name i (local 1)
+            Then
+              Return
+                Integer 1
+      Nil
+      Nil
+      Nil
+    Body
+      CallStatement
+        Call
+          Name say (local 1)
+          String "one pass"
+  GenericFor _, v
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            String "x"
+    Body
+      CallStatement
+        Call
+          Name say (local 1)
+          Name v (local 10)
+  CallStatement
+    Call
+      Name flush (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function() [upvalues: _ENV]
+          GenericFor _
+            In
+              Name next
+              Table
+              Nil
+              Integer 42
+            Body
+  Return
+    String "done"

@@ -1,0 +1,328 @@
+Chunk
+  Local log
+    Table
+  LocalFunction say
+    Function(s) [upvalues: log]
+      Assign
+        Targets
+          Index
+            Name log (upvalue 0)
+            Binary +
+              Unary #
+                Name log (upvalue 0)
+              Integer 1
+        Values
+          Name s (local 0)
+  LocalFunction closer
+    Function(name) [upvalues: _ENV, say]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field name
+              Name name (local 0)
+          Table
+            Field __close
+              Function(self, err) [upvalues: say, _ENV]
+                CallStatement
+                  Call
+                    Name say (upvalue 0)
+                    Binary ..
+                      String "close "
+                      Binary ..
+                        Index
+                          Name self (local 0)
+                          String "name"
+                        Binary ..
+                          String " err="
+                          Call
+                            Name tostring
+                            Name err (local 1)
+  LocalFunction flush
+    Function() [upvalues: _ENV, log]
+      GenericFor i, s
+        In
+          Call
+            Name ipairs
+            Name log (upvalue 1)
+        Body
+          CallStatement
+            Call
+              Name print
+              Name i (local 4)
+              Name s (local 5)
+      Assign
+        Targets
+          Name log (upvalue 1)
+        Values
+          Table
+  Do
+    Local a <close>
+      Call
+        Name closer (local 2)
+        String "a"
+    Local b <close>
+      Call
+        Name closer (local 2)
+        String "b"
+    CallStatement
+      Call
+        Name say (local 1)
+        String "body"
+  CallStatement
+    Call
+      Name say (local 1)
+      String "after"
+  CallStatement
+    Call
+      Name flush (local 3)
+  Do
+    Local obj
+      Call
+        Name closer (local 2)
+        String "obj"
+    Local got
+    Assign
+      Targets
+        Index
+          Call
+            Name getmetatable
+            Name obj (local 4)
+          String "__close"
+      Values
+        Function(v) [upvalues: got]
+          Assign
+            Targets
+              Name got (upvalue 0)
+            Values
+              Name v (local 0)
+    Do
+      Local x <close>
+        Name obj (local 4)
+    CallStatement
+      Call
+        Name print
+        Binary ==
+          Name got (local 5)
+          Name obj (local 4)
+  NumericFor i
+    Integer 1
+    Integer 5
+    Body
+      Local c <close>
+        Call
+          Name closer (local 2)
+          Binary ..
+            String "loop"
+            Name i (local 7)
+      If
+        If
+          Binary ==
+            Name i (local 7)
+            Integer 3
+          Then
+            Break
+      CallStatement
+        Call
+          Name say (local 1)
+          Binary ..
+            String "iteration "
+            Name i (local 7)
+  CallStatement
+    Call
+      Name flush (local 3)
+  Local n
+    Integer 0
+  While
+    Binary <
+      Name n (local 4)
+      Integer 2
+    Body
+      Assign
+        Targets
+          Name n (local 4)
+        Values
+          Binary +
+            Name n (local 4)
+            Integer 1
+      Local w <close>
+        Call
+          Name closer (local 2)
+          Binary ..
+            String "while"
+            Name n (local 4)
+  CallStatement
+    Call
+      Name flush (local 3)
+  LocalFunction f
+    Function() [upvalues: closer, say]
+      Local r <close>
+        Call
+          Name closer (upvalue 0)
+          String "r"
+      CallStatement
+        Call
+          Name say (upvalue 1)
+          String "returning"
+      Return
+        Call
+          Paren
+            Function() [upvalues: say]
+              CallStatement
+                Call
+                  Name say (upvalue 0)
+                  String "computing result"
+              Return
+                String "result"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name f (local 5)
+  CallStatement
+    Call
+      Name flush (local 3)
+  LocalFunction g
+    Function(x) [upvalues: closer, f]
+      Local q <close>
+        Call
+          Name closer (upvalue 0)
+          String "q"
+      Return
+        Name x (local 0)
+        Binary *
+          Name x (local 0)
+          Integer 2
+        Call
+          Name f (upvalue 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name g (local 6)
+        Integer 21
+  CallStatement
+    Call
+      Name flush (local 3)
+  Do
+    Local i
+      Integer 1
+    Label again
+    Do
+      Local gt <close>
+        Call
+          Name closer (local 2)
+          Binary ..
+            String "goto"
+            Name i (local 7)
+      If
+        If
+          Binary <
+            Name i (local 7)
+            Integer 3
+          Then
+            Assign
+              Targets
+                Name i (local 7)
+              Values
+                Binary +
+                  Name i (local 7)
+                  Integer 1
+            Goto again
+  CallStatement
+    Call
+      Name flush (local 3)
+  Do
+    Local none <close>
+      Nil
+    Local no <close>
+      False
+    Local yes <close>
+      Call
+        Name closer (local 2)
+        String "yes"
+    CallStatement
+      Call
+        Name say (local 1)
+        String "nil and false ok"
+  CallStatement
+    Call
+      Name flush (local 3)
+  LocalFunction inner
+    Function() [upvalues: closer, say]
+      Local i <close>
+        Call
+          Name closer (upvalue 0)
+          String "inner"
+      CallStatement
+        Call
+          Name say (upvalue 1)
+          String "in inner"
+  LocalFunction outer
+    Function() [upvalues: closer, inner, say]
+      Local o <close>
+        Call
+          Name closer (upvalue 0)
+          String "outer"
+      CallStatement
+        Call
+          Name inner (upvalue 1)
+      CallStatement
+        Call
+          Name say (upvalue 2)
+          String "back in outer"
+  CallStatement
+    Call
+      Name outer (local 8)
+  CallStatement
+    Call
+      Name flush (local 3)
+  Do
+    Local res <close>
+      Call
+        Name closer (local 2)
+        String "res"
+    Assign
+      Targets
+        Index
+          Name res (local 9)
+          String "name"
+      Values
+        String "renamed"
+  CallStatement
+    Call
+      Name flush (local 3)
+  Local closed_count
+    Integer 0
+  Local counter_mt
+    Table
+      Field __close
+        Call
+          Name setmetatable
+          Table
+          Table
+            Field __call
+              Function() [upvalues: closed_count]
+                Assign
+                  Targets
+                    Name closed_count (upvalue 0)
+                  Values
+                    Binary +
+                      Name closed_count (upvalue 0)
+                      Integer 1
+  NumericFor _
+    Integer 1
+    Integer 4
+    Body
+      Local c <close>
+        Call
+          Name setmetatable
+          Table
+          Name counter_mt (local 10)
+  CallStatement
+    Call
+      Name print
+      Name closed_count (local 9)
+  Return
+    Unary #
+      Name log (local 0)

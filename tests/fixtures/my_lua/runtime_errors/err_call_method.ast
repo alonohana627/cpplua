@@ -1,0 +1,24 @@
+Chunk
+  Local obj
+    Table
+      Field name
+        String "thing"
+  FunctionStatement (method)
+    Index
+      Name obj (local 0)
+      String "greet"
+    Function(self)
+      Return
+        Binary ..
+          String "hi "
+          Index
+            Name self (local 0)
+            String "name"
+  CallStatement
+    Call
+      Name print
+      MethodCall greet
+        Name obj (local 0)
+  CallStatement
+    MethodCall m
+      Name obj (local 0)

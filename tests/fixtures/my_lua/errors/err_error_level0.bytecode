@@ -1,0 +1,15 @@
+
+main <err_error_level0.lua:0,0> (6 instructions)
+0+ params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "error"
+	3	[2]	LOADK    	1 1	; "no position at all"
+	4	[2]	LOADI    	2 0
+	5	[2]	CALL     	0 3 1	; 2 in 0 out
+	6	[2]	RETURN   	0 1 1	; 0 out
+constants (2):
+	0	S	"error"
+	1	S	"no position at all"
+locals (0):
+upvalues (1):
+	0	_ENV	1	0

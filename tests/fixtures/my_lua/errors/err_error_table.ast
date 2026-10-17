@@ -1,0 +1,7 @@
+Chunk
+  CallStatement
+    Call
+      Name error
+      Table
+        Field code
+          Integer 1

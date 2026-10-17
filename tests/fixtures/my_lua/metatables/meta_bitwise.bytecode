@@ -1,0 +1,558 @@
+
+main <meta_bitwise.lua:0,0> (177 instructions)
+0+ params, 17 slots, 1 upvalue, 16 locals, 24 constants, 17 functions
+	1	[1]	VARARGPREP	0
+	2	[8]	CLOSURE  	0 0
+	3	[10]	NEWTABLE 	1 0 0	; 0
+	4	[10]	EXTRAARG 	0
+	5	[11]	CLOSURE  	2 1
+	6	[12]	GETTABUP 	3 0 0	; _ENV "ipairs"
+	7	[12]	NEWTABLE 	4 0 5	; 5
+	8	[12]	EXTRAARG 	0
+	9	[12]	LOADK    	5 1	; "band"
+	10	[12]	LOADK    	6 2	; "bor"
+	11	[12]	LOADK    	7 3	; "bxor"
+	12	[12]	LOADK    	8 4	; "shl"
+	13	[12]	LOADK    	9 5	; "shr"
+	14	[12]	SETLIST  	4 5 0
+	15	[12]	CALL     	3 2 5	; 1 in 4 out
+	16	[12]	TFORPREP 	3 6	; to 23
+	17	[13]	LOADK    	9 6	; "__"
+	18	[13]	MOVE     	10 8
+	19	[13]	CONCAT   	9 2
+	20	[13]	CLOSURE  	10 2
+	21	[13]	SETTABLE 	1 9 10
+	22	[13]	CLOSE    	7
+	23	[12]	TFORCALL 	3 2
+	24	[12]	TFORLOOP 	3 8	; to 17
+	25	[14]	CLOSE    	3
+	26	[15]	CLOSURE  	3 3
+	27	[15]	SETFIELD 	1 7 3	; "__bnot"
+	28	[17]	MOVE     	3 2
+	29	[17]	LOADK    	4 8	; "a"
+	30	[17]	CALL     	3 2 2	; 1 in 1 out
+	31	[17]	MOVE     	4 2
+	32	[17]	LOADK    	5 9	; "b"
+	33	[17]	CALL     	4 2 2	; 1 in 1 out
+	34	[18]	GETTABUP 	5 0 10	; _ENV "print"
+	35	[18]	BAND     	6 3 4
+	36	[18]	MMBIN    	3 4 13	; __band
+	37	[18]	BOR      	7 3 4
+	38	[18]	MMBIN    	3 4 14	; __bor
+	39	[18]	BXOR     	8 3 4
+	40	[18]	MMBIN    	3 4 15	; __bxor
+	41	[18]	CALL     	5 4 1	; 3 in 0 out
+	42	[19]	GETTABUP 	5 0 10	; _ENV "print"
+	43	[19]	SHL      	6 3 4
+	44	[19]	MMBIN    	3 4 16	; __shl
+	45	[19]	SHR      	7 3 4
+	46	[19]	MMBIN    	3 4 17	; __shr
+	47	[19]	BNOT     	8 3
+	48	[19]	CALL     	5 4 1	; 3 in 0 out
+	49	[20]	GETTABUP 	5 0 10	; _ENV "print"
+	50	[20]	BANDK    	6 3 11	; 1
+	51	[20]	MMBINK   	3 11 13 0	; __band 1
+	52	[20]	BORK     	7 3 11	; 1
+	53	[20]	MMBINK   	3 11 14 1	; __bor 1 flip
+	54	[20]	BXORK    	8 3 12	; 255
+	55	[20]	MMBINK   	3 12 15 0	; __bxor 255
+	56	[20]	SHLI     	9 3 2
+	57	[20]	MMBINI   	3 2 16 1	; __shl flip
+	58	[20]	SHRI     	10 3 3
+	59	[20]	MMBINI   	3 3 17 0	; __shr
+	60	[20]	CALL     	5 6 1	; 5 in 0 out
+	61	[21]	GETTABUP 	5 0 10	; _ENV "print"
+	62	[21]	LOADK    	6 13	; "7"
+	63	[21]	BAND     	6 3 6
+	64	[21]	MMBIN    	3 6 13	; __band
+	65	[21]	LOADK    	7 13	; "7"
+	66	[21]	BOR      	7 7 3
+	67	[21]	MMBIN    	7 3 14	; __bor
+	68	[21]	LOADK    	8 14	; 1.5
+	69	[21]	BXOR     	8 3 8
+	70	[21]	MMBIN    	3 8 15	; __bxor
+	71	[21]	LOADK    	9 14	; 1.5
+	72	[21]	SHL      	9 9 3
+	73	[21]	MMBIN    	9 3 16	; __shl
+	74	[21]	CALL     	5 5 1	; 4 in 0 out
+	75	[25]	GETTABUP 	5 0 10	; _ENV "print"
+	76	[25]	LOADI    	6 2
+	77	[25]	LOADI    	7 7
+	78	[25]	LOADI    	8 5
+	79	[25]	LOADI    	9 16
+	80	[25]	LOADI    	10 16
+	81	[25]	LOADI    	11 -1
+	82	[25]	LOADI    	12 3
+	83	[25]	CALL     	5 8 1	; 7 in 0 out
+	84	[26]	GETTABUP 	5 0 10	; _ENV "print"
+	85	[26]	GETTABUP 	6 0 15	; _ENV "pcall"
+	86	[26]	CLOSURE  	7 4
+	87	[26]	CALL     	6 2 0	; 1 in all out
+	88	[26]	CALL     	5 0 1	; all in 0 out
+	89	[29]	NEWTABLE 	5 0 0	; 0
+	90	[29]	EXTRAARG 	0
+	91	[30]	SETFIELD 	5 16 5	; "__index"
+	92	[31]	CLOSURE  	6 5
+	93	[32]	CLOSURE  	7 6
+	94	[33]	CLOSURE  	8 7
+	95	[33]	SETFIELD 	5 17 8	; "__band"
+	96	[34]	CLOSURE  	8 8
+	97	[34]	SETFIELD 	5 18 8	; "__bor"
+	98	[35]	CLOSURE  	8 9
+	99	[35]	SETFIELD 	5 19 8	; "__bxor"
+	100	[36]	CLOSURE  	8 10
+	101	[36]	SETFIELD 	5 20 8	; "__shl"
+	102	[37]	CLOSURE  	8 11
+	103	[37]	SETFIELD 	5 21 8	; "__shr"
+	104	[38]	CLOSURE  	8 12
+	105	[38]	SETFIELD 	5 7 8	; "__bnot"
+	106	[39]	MOVE     	8 6
+	107	[39]	LOADI    	9 12
+	108	[39]	CALL     	8 2 2	; 1 in 1 out
+	109	[39]	MOVE     	9 6
+	110	[39]	LOADI    	10 10
+	111	[39]	CALL     	9 2 2	; 1 in 1 out
+	112	[40]	GETTABUP 	10 0 10	; _ENV "print"
+	113	[40]	BAND     	11 8 9
+	114	[40]	MMBIN    	8 9 13	; __band
+	115	[40]	GETFIELD 	11 11 22	; "n"
+	116	[40]	BOR      	12 8 9
+	117	[40]	MMBIN    	8 9 14	; __bor
+	118	[40]	GETFIELD 	12 12 22	; "n"
+	119	[40]	BXOR     	13 8 9
+	120	[40]	MMBIN    	8 9 15	; __bxor
+	121	[40]	GETFIELD 	13 13 22	; "n"
+	122	[40]	SHRI     	14 8 -2
+	123	[40]	MMBINI   	8 2 16 0	; __shl
+	124	[40]	GETFIELD 	14 14 22	; "n"
+	125	[40]	SHRI     	15 8 2
+	126	[40]	MMBINI   	8 2 17 0	; __shr
+	127	[40]	GETFIELD 	15 15 22	; "n"
+	128	[40]	BNOT     	16 8
+	129	[40]	GETFIELD 	16 16 22	; "n"
+	130	[40]	CALL     	10 7 1	; 6 in 0 out
+	131	[41]	GETTABUP 	10 0 10	; _ENV "print"
+	132	[41]	BORK     	11 8 11	; 1
+	133	[41]	MMBINK   	8 11 14 1	; __bor 1 flip
+	134	[41]	GETFIELD 	11 11 22	; "n"
+	135	[41]	MOVE     	12 6
+	136	[41]	LOADI    	13 255
+	137	[41]	CALL     	12 2 2	; 1 in 1 out
+	138	[41]	BANDK    	12 12 23	; 240
+	139	[41]	MMBINK   	12 23 13 1	; __band 240 flip
+	140	[41]	GETFIELD 	12 12 22	; "n"
+	141	[41]	BOR      	13 8 9
+	142	[41]	MMBIN    	8 9 14	; __bor
+	143	[41]	MOVE     	14 6
+	144	[41]	LOADI    	15 2
+	145	[41]	CALL     	14 2 2	; 1 in 1 out
+	146	[41]	BNOT     	14 14
+	147	[41]	BAND     	13 13 14
+	148	[41]	MMBIN    	13 14 13	; __band
+	149	[41]	GETFIELD 	13 13 22	; "n"
+	150	[41]	CALL     	10 4 1	; 3 in 0 out
+	151	[44]	GETTABUP 	10 0 10	; _ENV "print"
+	152	[44]	GETTABUP 	11 0 15	; _ENV "pcall"
+	153	[44]	CLOSURE  	12 13
+	154	[44]	CALL     	11 2 0	; 1 in all out
+	155	[44]	CALL     	10 0 1	; all in 0 out
+	156	[45]	GETTABUP 	10 0 10	; _ENV "print"
+	157	[45]	GETTABUP 	11 0 15	; _ENV "pcall"
+	158	[45]	CLOSURE  	12 14
+	159	[45]	CALL     	11 2 0	; 1 in all out
+	160	[45]	CALL     	10 0 1	; all in 0 out
+	161	[46]	GETTABUP 	10 0 10	; _ENV "print"
+	162	[46]	GETTABUP 	11 0 15	; _ENV "pcall"
+	163	[46]	CLOSURE  	12 15
+	164	[46]	CALL     	11 2 0	; 1 in all out
+	165	[46]	CALL     	10 0 1	; all in 0 out
+	166	[47]	GETTABUP 	10 0 10	; _ENV "print"
+	167	[47]	GETTABUP 	11 0 15	; _ENV "pcall"
+	168	[47]	CLOSURE  	12 16
+	169	[47]	CALL     	11 2 0	; 1 in all out
+	170	[47]	CALL     	10 0 1	; all in 0 out
+	171	[49]	BAND     	10 8 9
+	172	[49]	MMBIN    	8 9 13	; __band
+	173	[49]	GETFIELD 	10 10 22	; "n"
+	174	[49]	BOR      	11 3 4
+	175	[49]	MMBIN    	3 4 14	; __bor
+	176	[49]	RETURN   	10 3 1k	; 2 out
+	177	[49]	RETURN   	10 1 1k	; 0 out
+constants (24):
+	0	S	"ipairs"
+	1	S	"band"
+	2	S	"bor"
+	3	S	"bxor"
+	4	S	"shl"
+	5	S	"shr"
+	6	S	"__"
+	7	S	"__bnot"
+	8	S	"a"
+	9	S	"b"
+	10	S	"print"
+	11	I	1
+	12	I	255
+	13	S	"7"
+	14	F	1.5
+	15	S	"pcall"
+	16	S	"__index"
+	17	S	"__band"
+	18	S	"__bor"
+	19	S	"__bxor"
+	20	S	"__shl"
+	21	S	"__shr"
+	22	S	"n"
+	23	I	240
+locals (16):
+	0	name	3	178
+	1	mt	5	178
+	2	V	6	178
+	3	(for state)	16	25
+	4	(for state)	16	25
+	5	(for state)	16	25
+	6	(for state)	16	25
+	7	_	17	22
+	8	event	17	22
+	9	a	34	178
+	10	b	34	178
+	11	Bits	91	178
+	12	bits	93	178
+	13	raw	94	178
+	14	x	112	178
+	15	y	112	178
+upvalues (1):
+	0	_ENV	1	0
+
+function <meta_bitwise.lua:5,8> (17 instructions)
+1 param, 5 slots, 1 upvalue, 1 local, 5 constants, 0 functions
+	1	[6]	GETTABUP 	1 0 0	; _ENV "type"
+	2	[6]	MOVE     	2 0
+	3	[6]	CALL     	1 2 2	; 1 in 1 out
+	4	[6]	EQK      	1 1 0	; "table"
+	5	[6]	JMP      	2	; to 8
+	6	[6]	GETFIELD 	1 0 2	; "name"
+	7	[6]	RETURN1  	1
+	8	[7]	GETTABUP 	1 0 0	; _ENV "type"
+	9	[7]	MOVE     	2 0
+	10	[7]	CALL     	1 2 2	; 1 in 1 out
+	11	[7]	LOADK    	2 3	; " "
+	12	[7]	GETTABUP 	3 0 4	; _ENV "tostring"
+	13	[7]	MOVE     	4 0
+	14	[7]	CALL     	3 2 2	; 1 in 1 out
+	15	[7]	CONCAT   	1 3
+	16	[7]	RETURN1  	1
+	17	[8]	RETURN0  	
+constants (5):
+	0	S	"type"
+	1	S	"table"
+	2	S	"name"
+	3	S	" "
+	4	S	"tostring"
+locals (1):
+	0	x	1	18
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_bitwise.lua:11,11> (8 instructions)
+1 param, 4 slots, 2 upvalues, 1 local, 2 constants, 0 functions
+	1	[11]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	2	[11]	NEWTABLE 	2 1 0	; 0
+	3	[11]	EXTRAARG 	0
+	4	[11]	SETFIELD 	2 1 0	; "name"
+	5	[11]	GETUPVAL 	3 1	; mt
+	6	[11]	TAILCALL 	1 3 0	; 2 in
+	7	[11]	RETURN   	1 0 0	; all out
+	8	[11]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"name"
+locals (1):
+	0	n	1	9
+upvalues (2):
+	0	_ENV	0	0
+	1	mt	1	1
+
+function <meta_bitwise.lua:13,13> (13 instructions)
+2 params, 8 slots, 2 upvalues, 2 locals, 3 constants, 0 functions
+	1	[13]	GETUPVAL 	2 0	; event
+	2	[13]	LOADK    	3 0	; "("
+	3	[13]	GETUPVAL 	4 1	; name
+	4	[13]	MOVE     	5 0
+	5	[13]	CALL     	4 2 2	; 1 in 1 out
+	6	[13]	LOADK    	5 1	; ", "
+	7	[13]	GETUPVAL 	6 1	; name
+	8	[13]	MOVE     	7 1
+	9	[13]	CALL     	6 2 2	; 1 in 1 out
+	10	[13]	LOADK    	7 2	; ")"
+	11	[13]	CONCAT   	2 6
+	12	[13]	RETURN1  	2
+	13	[13]	RETURN0  	
+constants (3):
+	0	S	"("
+	1	S	", "
+	2	S	")"
+locals (2):
+	0	a	1	14
+	1	b	1	14
+upvalues (2):
+	0	event	1	8
+	1	name	1	0
+
+function <meta_bitwise.lua:15,15> (15 instructions)
+2 params, 7 slots, 2 upvalues, 2 locals, 4 constants, 0 functions
+	1	[15]	LOADK    	2 0	; "bnot("
+	2	[15]	GETUPVAL 	3 0	; name
+	3	[15]	MOVE     	4 0
+	4	[15]	CALL     	3 2 2	; 1 in 1 out
+	5	[15]	LOADK    	4 1	; ", same: "
+	6	[15]	GETTABUP 	5 1 2	; _ENV "tostring"
+	7	[15]	EQ       	0 1 1
+	8	[15]	JMP      	1	; to 10
+	9	[15]	LFALSESKIP	6
+	10	[15]	LOADTRUE 	6
+	11	[15]	CALL     	5 2 2	; 1 in 1 out
+	12	[15]	LOADK    	6 3	; ")"
+	13	[15]	CONCAT   	2 5
+	14	[15]	RETURN1  	2
+	15	[15]	RETURN0  	
+constants (4):
+	0	S	"bnot("
+	1	S	", same: "
+	2	S	"tostring"
+	3	S	")"
+locals (2):
+	0	a	1	16
+	1	b	1	16
+upvalues (2):
+	0	name	1	0
+	1	_ENV	0	0
+
+function <meta_bitwise.lua:26,26> (5 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 2 constants, 0 functions
+	1	[26]	LOADK    	0 0	; "12"
+	2	[26]	BANDK    	0 0 1	; 4
+	3	[26]	MMBINK   	0 1 13 0	; __band 4
+	4	[26]	RETURN1  	0
+	5	[26]	RETURN0  	
+constants (2):
+	0	S	"12"
+	1	I	4
+locals (0):
+upvalues (0):
+
+function <meta_bitwise.lua:31,31> (8 instructions)
+1 param, 4 slots, 2 upvalues, 1 local, 2 constants, 0 functions
+	1	[31]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	2	[31]	NEWTABLE 	2 1 0	; 0
+	3	[31]	EXTRAARG 	0
+	4	[31]	SETFIELD 	2 1 0	; "n"
+	5	[31]	GETUPVAL 	3 1	; Bits
+	6	[31]	TAILCALL 	1 3 0	; 2 in
+	7	[31]	RETURN   	1 0 0	; all out
+	8	[31]	RETURN0  	
+constants (2):
+	0	S	"setmetatable"
+	1	S	"n"
+locals (1):
+	0	n	1	9
+upvalues (2):
+	0	_ENV	0	0
+	1	Bits	1	5
+
+function <meta_bitwise.lua:32,32> (9 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 3 constants, 0 functions
+	1	[32]	GETTABUP 	1 0 0	; _ENV "type"
+	2	[32]	MOVE     	2 0
+	3	[32]	CALL     	1 2 2	; 1 in 1 out
+	4	[32]	EQK      	1 1 0	; "table"
+	5	[32]	JMP      	2	; to 8
+	6	[32]	GETFIELD 	1 0 2	; "n"
+	7	[32]	RETURN1  	1
+	8	[32]	RETURN1  	0
+	9	[32]	RETURN0  	
+constants (3):
+	0	S	"type"
+	1	S	"table"
+	2	S	"n"
+locals (1):
+	0	x	1	10
+upvalues (1):
+	0	_ENV	0	0
+
+function <meta_bitwise.lua:33,33> (12 instructions)
+2 params, 6 slots, 2 upvalues, 2 locals, 0 constants, 0 functions
+	1	[33]	GETUPVAL 	2 0	; bits
+	2	[33]	GETUPVAL 	3 1	; raw
+	3	[33]	MOVE     	4 0
+	4	[33]	CALL     	3 2 2	; 1 in 1 out
+	5	[33]	GETUPVAL 	4 1	; raw
+	6	[33]	MOVE     	5 1
+	7	[33]	CALL     	4 2 2	; 1 in 1 out
+	8	[33]	BAND     	3 3 4
+	9	[33]	MMBIN    	3 4 13	; __band
+	10	[33]	TAILCALL 	2 2 0	; 1 in
+	11	[33]	RETURN   	2 0 0	; all out
+	12	[33]	RETURN0  	
+constants (0):
+locals (2):
+	0	p	1	13
+	1	q	1	13
+upvalues (2):
+	0	bits	1	6
+	1	raw	1	7
+
+function <meta_bitwise.lua:34,34> (12 instructions)
+2 params, 6 slots, 2 upvalues, 2 locals, 0 constants, 0 functions
+	1	[34]	GETUPVAL 	2 0	; bits
+	2	[34]	GETUPVAL 	3 1	; raw
+	3	[34]	MOVE     	4 0
+	4	[34]	CALL     	3 2 2	; 1 in 1 out
+	5	[34]	GETUPVAL 	4 1	; raw
+	6	[34]	MOVE     	5 1
+	7	[34]	CALL     	4 2 2	; 1 in 1 out
+	8	[34]	BOR      	3 3 4
+	9	[34]	MMBIN    	3 4 14	; __bor
+	10	[34]	TAILCALL 	2 2 0	; 1 in
+	11	[34]	RETURN   	2 0 0	; all out
+	12	[34]	RETURN0  	
+constants (0):
+locals (2):
+	0	p	1	13
+	1	q	1	13
+upvalues (2):
+	0	bits	1	6
+	1	raw	1	7
+
+function <meta_bitwise.lua:35,35> (12 instructions)
+2 params, 6 slots, 2 upvalues, 2 locals, 0 constants, 0 functions
+	1	[35]	GETUPVAL 	2 0	; bits
+	2	[35]	GETUPVAL 	3 1	; raw
+	3	[35]	MOVE     	4 0
+	4	[35]	CALL     	3 2 2	; 1 in 1 out
+	5	[35]	GETUPVAL 	4 1	; raw
+	6	[35]	MOVE     	5 1
+	7	[35]	CALL     	4 2 2	; 1 in 1 out
+	8	[35]	BXOR     	3 3 4
+	9	[35]	MMBIN    	3 4 15	; __bxor
+	10	[35]	TAILCALL 	2 2 0	; 1 in
+	11	[35]	RETURN   	2 0 0	; all out
+	12	[35]	RETURN0  	
+constants (0):
+locals (2):
+	0	p	1	13
+	1	q	1	13
+upvalues (2):
+	0	bits	1	6
+	1	raw	1	7
+
+function <meta_bitwise.lua:36,36> (12 instructions)
+2 params, 6 slots, 2 upvalues, 2 locals, 0 constants, 0 functions
+	1	[36]	GETUPVAL 	2 0	; bits
+	2	[36]	GETUPVAL 	3 1	; raw
+	3	[36]	MOVE     	4 0
+	4	[36]	CALL     	3 2 2	; 1 in 1 out
+	5	[36]	GETUPVAL 	4 1	; raw
+	6	[36]	MOVE     	5 1
+	7	[36]	CALL     	4 2 2	; 1 in 1 out
+	8	[36]	SHL      	3 3 4
+	9	[36]	MMBIN    	3 4 16	; __shl
+	10	[36]	TAILCALL 	2 2 0	; 1 in
+	11	[36]	RETURN   	2 0 0	; all out
+	12	[36]	RETURN0  	
+constants (0):
+locals (2):
+	0	p	1	13
+	1	q	1	13
+upvalues (2):
+	0	bits	1	6
+	1	raw	1	7
+
+function <meta_bitwise.lua:37,37> (12 instructions)
+2 params, 6 slots, 2 upvalues, 2 locals, 0 constants, 0 functions
+	1	[37]	GETUPVAL 	2 0	; bits
+	2	[37]	GETUPVAL 	3 1	; raw
+	3	[37]	MOVE     	4 0
+	4	[37]	CALL     	3 2 2	; 1 in 1 out
+	5	[37]	GETUPVAL 	4 1	; raw
+	6	[37]	MOVE     	5 1
+	7	[37]	CALL     	4 2 2	; 1 in 1 out
+	8	[37]	SHR      	3 3 4
+	9	[37]	MMBIN    	3 4 17	; __shr
+	10	[37]	TAILCALL 	2 2 0	; 1 in
+	11	[37]	RETURN   	2 0 0	; all out
+	12	[37]	RETURN0  	
+constants (0):
+locals (2):
+	0	p	1	13
+	1	q	1	13
+upvalues (2):
+	0	bits	1	6
+	1	raw	1	7
+
+function <meta_bitwise.lua:38,38> (8 instructions)
+1 param, 4 slots, 2 upvalues, 1 local, 0 constants, 0 functions
+	1	[38]	GETUPVAL 	1 0	; bits
+	2	[38]	GETUPVAL 	2 1	; raw
+	3	[38]	MOVE     	3 0
+	4	[38]	CALL     	2 2 2	; 1 in 1 out
+	5	[38]	BNOT     	2 2
+	6	[38]	TAILCALL 	1 2 0	; 1 in
+	7	[38]	RETURN   	1 0 0	; all out
+	8	[38]	RETURN0  	
+constants (0):
+locals (1):
+	0	p	1	9
+upvalues (2):
+	0	bits	1	6
+	1	raw	1	7
+
+function <meta_bitwise.lua:44,44> (6 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[44]	NEWTABLE 	0 0 0	; 0
+	2	[44]	EXTRAARG 	0
+	3	[44]	BANDK    	0 0 0	; 1
+	4	[44]	MMBINK   	0 0 13 0	; __band 1
+	5	[44]	RETURN1  	0
+	6	[44]	RETURN0  	
+constants (1):
+	0	I	1
+locals (0):
+upvalues (0):
+
+function <meta_bitwise.lua:45,45> (6 instructions)
+0 params, 2 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[45]	NEWTABLE 	0 0 0	; 0
+	2	[45]	EXTRAARG 	0
+	3	[45]	SHLI     	1 0 1
+	4	[45]	MMBINI   	0 1 16 1	; __shl flip
+	5	[45]	RETURN1  	1
+	6	[45]	RETURN0  	
+constants (0):
+locals (1):
+	0	t	3	7
+upvalues (0):
+
+function <meta_bitwise.lua:46,46> (5 instructions)
+0 params, 2 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[46]	NEWTABLE 	0 0 0	; 0
+	2	[46]	EXTRAARG 	0
+	3	[46]	BNOT     	1 0
+	4	[46]	RETURN1  	1
+	5	[46]	RETURN0  	
+constants (0):
+locals (1):
+	0	t	3	6
+upvalues (0):
+
+function <meta_bitwise.lua:47,47> (5 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 2 constants, 0 functions
+	1	[47]	LOADK    	0 1	; 1.5
+	2	[47]	BORK     	0 0 0	; 1
+	3	[47]	MMBINK   	0 0 14 0	; __bor 1
+	4	[47]	RETURN1  	0
+	5	[47]	RETURN0  	
+constants (2):
+	0	I	1
+	1	F	1.5
+locals (0):
+upvalues (0):

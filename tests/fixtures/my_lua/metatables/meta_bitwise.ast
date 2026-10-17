@@ -1,0 +1,456 @@
+Chunk
+  LocalFunction name
+    Function(x) [upvalues: _ENV]
+      If
+        If
+          Binary ==
+            Call
+              Name type
+              Name x (local 0)
+            String "table"
+          Then
+            Return
+              Index
+                Name x (local 0)
+                String "name"
+      Return
+        Binary ..
+          Call
+            Name type
+            Name x (local 0)
+          Binary ..
+            String " "
+            Call
+              Name tostring
+              Name x (local 0)
+  Local mt
+    Table
+  LocalFunction V
+    Function(n) [upvalues: _ENV, mt]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field name
+              Name n (local 0)
+          Name mt (upvalue 1)
+  GenericFor _, event
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            String "band"
+          Item
+            String "bor"
+          Item
+            String "bxor"
+          Item
+            String "shl"
+          Item
+            String "shr"
+    Body
+      Assign
+        Targets
+          Index
+            Name mt (local 1)
+            Binary ..
+              String "__"
+              Name event (local 8)
+        Values
+          Function(a, b) [upvalues: event, name]
+            Return
+              Binary ..
+                Name event (upvalue 0)
+                Binary ..
+                  String "("
+                  Binary ..
+                    Call
+                      Name name (upvalue 1)
+                      Name a (local 0)
+                    Binary ..
+                      String ", "
+                      Binary ..
+                        Call
+                          Name name (upvalue 1)
+                          Name b (local 1)
+                        String ")"
+  Assign
+    Targets
+      Index
+        Name mt (local 1)
+        String "__bnot"
+    Values
+      Function(a, b) [upvalues: name, _ENV]
+        Return
+          Binary ..
+            String "bnot("
+            Binary ..
+              Call
+                Name name (upvalue 0)
+                Name a (local 0)
+              Binary ..
+                String ", same: "
+                Binary ..
+                  Call
+                    Name tostring
+                    Binary ==
+                      Name a (local 0)
+                      Name b (local 1)
+                  String ")"
+  Local a, b
+    Call
+      Name V (local 2)
+      String "a"
+    Call
+      Name V (local 2)
+      String "b"
+  CallStatement
+    Call
+      Name print
+      Binary &
+        Name a (local 3)
+        Name b (local 4)
+      Binary |
+        Name a (local 3)
+        Name b (local 4)
+      Binary ~
+        Name a (local 3)
+        Name b (local 4)
+  CallStatement
+    Call
+      Name print
+      Binary <<
+        Name a (local 3)
+        Name b (local 4)
+      Binary >>
+        Name a (local 3)
+        Name b (local 4)
+      Unary ~
+        Name a (local 3)
+  CallStatement
+    Call
+      Name print
+      Binary &
+        Name a (local 3)
+        Integer 1
+      Binary |
+        Integer 1
+        Name a (local 3)
+      Binary ~
+        Name a (local 3)
+        Integer 255
+      Binary <<
+        Integer 2
+        Name a (local 3)
+      Binary >>
+        Name a (local 3)
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Binary &
+        Name a (local 3)
+        String "7"
+      Binary |
+        String "7"
+        Name a (local 3)
+      Binary ~
+        Name a (local 3)
+        Float 1.5
+      Binary <<
+        Float 1.5
+        Name a (local 3)
+  CallStatement
+    Call
+      Name print
+      Binary &
+        Integer 6
+        Integer 3
+      Binary |
+        Integer 6
+        Integer 3
+      Binary ~
+        Integer 6
+        Integer 3
+      Binary <<
+        Integer 1
+        Integer 4
+      Binary >>
+        Integer 256
+        Integer 4
+      Unary ~
+        Integer 0
+      Binary |
+        Float 3.0
+        Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary &
+              String "12"
+              Integer 4
+  Local Bits
+    Table
+  Assign
+    Targets
+      Index
+        Name Bits (local 5)
+        String "__index"
+    Values
+      Name Bits (local 5)
+  LocalFunction bits
+    Function(n) [upvalues: _ENV, Bits]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field n
+              Name n (local 0)
+          Name Bits (upvalue 1)
+  LocalFunction raw
+    Function(x) [upvalues: _ENV]
+      If
+        If
+          Binary ==
+            Call
+              Name type
+              Name x (local 0)
+            String "table"
+          Then
+            Return
+              Index
+                Name x (local 0)
+                String "n"
+      Return
+        Name x (local 0)
+  Assign
+    Targets
+      Index
+        Name Bits (local 5)
+        String "__band"
+    Values
+      Function(p, q) [upvalues: bits, raw]
+        Return
+          Call
+            Name bits (upvalue 0)
+            Binary &
+              Call
+                Name raw (upvalue 1)
+                Name p (local 0)
+              Call
+                Name raw (upvalue 1)
+                Name q (local 1)
+  Assign
+    Targets
+      Index
+        Name Bits (local 5)
+        String "__bor"
+    Values
+      Function(p, q) [upvalues: bits, raw]
+        Return
+          Call
+            Name bits (upvalue 0)
+            Binary |
+              Call
+                Name raw (upvalue 1)
+                Name p (local 0)
+              Call
+                Name raw (upvalue 1)
+                Name q (local 1)
+  Assign
+    Targets
+      Index
+        Name Bits (local 5)
+        String "__bxor"
+    Values
+      Function(p, q) [upvalues: bits, raw]
+        Return
+          Call
+            Name bits (upvalue 0)
+            Binary ~
+              Call
+                Name raw (upvalue 1)
+                Name p (local 0)
+              Call
+                Name raw (upvalue 1)
+                Name q (local 1)
+  Assign
+    Targets
+      Index
+        Name Bits (local 5)
+        String "__shl"
+    Values
+      Function(p, q) [upvalues: bits, raw]
+        Return
+          Call
+            Name bits (upvalue 0)
+            Binary <<
+              Call
+                Name raw (upvalue 1)
+                Name p (local 0)
+              Call
+                Name raw (upvalue 1)
+                Name q (local 1)
+  Assign
+    Targets
+      Index
+        Name Bits (local 5)
+        String "__shr"
+    Values
+      Function(p, q) [upvalues: bits, raw]
+        Return
+          Call
+            Name bits (upvalue 0)
+            Binary >>
+              Call
+                Name raw (upvalue 1)
+                Name p (local 0)
+              Call
+                Name raw (upvalue 1)
+                Name q (local 1)
+  Assign
+    Targets
+      Index
+        Name Bits (local 5)
+        String "__bnot"
+    Values
+      Function(p) [upvalues: bits, raw]
+        Return
+          Call
+            Name bits (upvalue 0)
+            Unary ~
+              Call
+                Name raw (upvalue 1)
+                Name p (local 0)
+  Local x, y
+    Call
+      Name bits (local 6)
+      Integer 12
+    Call
+      Name bits (local 6)
+      Integer 10
+  CallStatement
+    Call
+      Name print
+      Index
+        Paren
+          Binary &
+            Name x (local 8)
+            Name y (local 9)
+        String "n"
+      Index
+        Paren
+          Binary |
+            Name x (local 8)
+            Name y (local 9)
+        String "n"
+      Index
+        Paren
+          Binary ~
+            Name x (local 8)
+            Name y (local 9)
+        String "n"
+      Index
+        Paren
+          Binary <<
+            Name x (local 8)
+            Integer 2
+        String "n"
+      Index
+        Paren
+          Binary >>
+            Name x (local 8)
+            Integer 2
+        String "n"
+      Index
+        Paren
+          Unary ~
+            Name x (local 8)
+        String "n"
+  CallStatement
+    Call
+      Name print
+      Index
+        Paren
+          Binary |
+            Integer 1
+            Name x (local 8)
+        String "n"
+      Index
+        Paren
+          Binary &
+            Integer 240
+            Call
+              Name bits (local 6)
+              Integer 255
+        String "n"
+      Index
+        Paren
+          Binary &
+            Paren
+              Binary |
+                Name x (local 8)
+                Name y (local 9)
+            Unary ~
+              Call
+                Name bits (local 6)
+                Integer 2
+        String "n"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary &
+              Table
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local t
+            Table
+          Return
+            Binary <<
+              Integer 1
+              Name t (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local t
+            Table
+          Return
+            Unary ~
+              Name t (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary |
+              Float 1.5
+              Integer 1
+  Return
+    Index
+      Paren
+        Binary &
+          Name x (local 8)
+          Name y (local 9)
+      String "n"
+    Binary |
+      Name a (local 3)
+      Name b (local 4)

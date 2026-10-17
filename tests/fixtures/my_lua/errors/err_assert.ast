@@ -1,0 +1,22 @@
+Chunk
+  LocalFunction check
+    Function(n) [upvalues: _ENV]
+      CallStatement
+        Call
+          Name assert
+          Binary >
+            Name n (local 0)
+            Integer 0
+      Return
+        Name n (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name check (local 0)
+        Integer 1
+  CallStatement
+    Call
+      Name check (local 0)
+      Unary -
+        Integer 1

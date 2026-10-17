@@ -1,0 +1,17 @@
+Point(1, 2)
+Point(1, 2)	in Point(1, 2)
+Point(1, 2)	Point(1, 2)	end
+hello world
+custom	custom
+string
+string
+true	42
+false	'__tostring' must return a string
+42
+true
+false	no text
+nil	true	false	12	-0.0
+1e+15	1e+16	9.2233720368548e+18	-4	3.5
+str		false	bad argument #1 to 'tostring' (value expected)
+{1, two, Point(1, 2), {true, false}, {}}
+Point(1, 2)	1
