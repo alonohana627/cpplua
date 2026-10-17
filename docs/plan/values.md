@@ -46,11 +46,9 @@ Finishing part 9 completes the stage and bumps the version to 0.0.4.
   all when it is destroyed, and values hold plain `String*`. The garbage collector (stage 9)
   later takes the `Heap`'s place. No `std::shared_ptr`: it doubles the pointer, adds a
   reference count to every copy, and leaks cycles once tables exist.
-- **Interning and the hash.** **Recommended: like Lua**: short strings (up to 40 bytes)
-  interned, Lua's hash function (V10.3). Open question: the hash **seed**. Lua picks a random
-  one per state, so the order of `pairs` changes between runs. Choose between random (like
-  Lua) and a fixed seed (the same order every run, easier to debug).
-- **String order.** **Recommended: byte order** (V8.4), which is what Lua's `strcoll` gives in
+- **Interning and the hash.** **Decided: like Lua**: short strings (up to 40 bytes) interned,
+  Lua's hash function (V10.3), and a random seed per `Heap`, so the order of `pairs` can change
+  between runs, as in Lua. A `Heap` can also be given a fixed seed, which the tests use.- **String order.** **Recommended: byte order** (V8.4), which is what Lua's `strcoll` gives in
   the default C locale, on every platform.
 
 ## Where the code goes

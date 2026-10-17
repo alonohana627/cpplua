@@ -9,6 +9,8 @@
 
 namespace lua2 {
 
+class String; // value/string.hpp
+
 // The eight types of Lua (V1.1), in the order of Lua's LUA_T* constants.
 // Stage 4 makes values of the first four; the others come with their stages.
 enum class Type : std::uint8_t {
@@ -39,14 +41,17 @@ constexpr std::string_view type_name(Type type) {
 }
 
 // What a Value holds, finer than Type: like Lua's variant tags, a number is
-// an integer or a float (V1.3), and false and true have their own tags, so
-// booleans need no payload.
+// an integer or a float (V1.3), false and true have their own tags, so
+// booleans need no payload, and a string is short (interned) or long (V10.2),
+// so equality knows how to compare without looking inside.
 enum class Tag : std::uint8_t {
     Nil,
     False,
     True,
     Integer,
     Float,
+    ShortString,
+    LongString,
 };
 
 // One Lua value: a tag and an 8-byte payload (docs/plan/values.md, part 0).
@@ -81,6 +86,10 @@ public:
         return Value{Tag::Float, std::bit_cast<std::uint64_t>(d)};
     }
 
+    // A string made by a Heap (value/string.hpp, where this is defined).
+    // The value refers to the string; the Heap owns it.
+    static Value string(const String* s);
+
     // Rebuilds a value from what tag() and payload() returned. For the
     // containers that store tags and payloads apart.
     static constexpr Value from_parts(Tag tag, std::uint64_t payload) {
@@ -99,6 +108,8 @@ public:
         case Tag::True: return Type::Boolean;
         case Tag::Integer:
         case Tag::Float: return Type::Number;
+        case Tag::ShortString:
+        case Tag::LongString: return Type::String;
         }
         return Type::Nil; // not reached: every Tag is handled above
     }
@@ -116,6 +127,10 @@ public:
     [[nodiscard]] constexpr bool is_integer() const { return tag_ == Tag::Integer; }
 
     [[nodiscard]] constexpr bool is_float() const { return tag_ == Tag::Float; }
+
+    [[nodiscard]] constexpr bool is_string() const {
+        return tag_ == Tag::ShortString || tag_ == Tag::LongString;
+    }
 
     // Only nil and false are falsy (V1.4).
     [[nodiscard]] constexpr bool is_falsy() const { return tag_ == Tag::Nil || tag_ == Tag::False; }
@@ -149,6 +164,14 @@ public:
         return std::bit_cast<double>(payload_);
     }
 
+    [[nodiscard]] const String*
+    as_string(std::source_location caller = std::source_location::current()) const {
+        if (!is_string()) [[unlikely]] {
+            wrong_access("string", caller);
+        }
+        return std::bit_cast<const String*>(payload_);
+    }
+
     // Same tag and same payload bits. This is *not* Lua's == (part 4): 1 and
     // 1.0 are not identical, and a NaN is identical to itself. For tests and
     // containers.
@@ -168,15 +191,17 @@ private:
 };
 
 static_assert(sizeof(Value) == 16);
+static_assert(sizeof(const String*) == sizeof(std::uint64_t)); // a pointer fits the payload
 static_assert(std::is_trivially_copyable_v<Value>);
 
 // The name of the tag, for messages: "nil", "false", "true", "integer",
-// "float".
+// "float", "short string", "long string".
 std::string_view tag_name(Tag tag);
 
-// A value as text for tests and debugging: nil, true, false, 42, 1.0, inf.
-// Floats always show that they are floats (1.0, not 1). Lua's own conversion
-// of numbers to strings is part 6.
+// A value as text for tests and debugging: nil, true, false, 42, 1.0, inf,
+// "a\n". Floats always show that they are floats (1.0, not 1), and strings
+// are quoted with unprintable bytes escaped. Lua's own conversion of numbers
+// to strings is part 6.
 std::string debug_text(Value value);
 
 } // namespace lua2

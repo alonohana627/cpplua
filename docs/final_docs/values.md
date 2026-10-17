@@ -5,10 +5,11 @@ built. The rules are in [../spec/values.md](../spec/values.md), the background a
 in [../learn/values.md](../learn/values.md), and the remaining work in
 [../plan/values.md](../plan/values.md).
 
-**Status:** parts 0 to 4 of the plan. A `Value` holds `nil`, a boolean, an integer or a float,
-and knows its Lua type and its truthiness; numbers convert between integer and float; the
-arithmetic, bitwise and comparison operators work with Lua's rules and error messages. Still to
-come: strings (part 5) and conversions between strings and numbers (parts 6 to 8).
+**Status:** parts 0 to 5 of the plan. A `Value` holds `nil`, a boolean, an integer, a float or
+a string, and knows its Lua type and its truthiness; numbers convert between integer and
+float; the arithmetic, bitwise and comparison operators work with Lua's rules and error
+messages; strings are interned like Lua's and have a length. Still to come: conversions between
+strings and numbers (parts 6 to 8).
 
 ## Where it lives
 
@@ -23,10 +24,13 @@ come: strings (part 5) and conversions between strings and numbers (parts 6 to 8
 | `lib/value/bitwise.cpp`          | its implementation                                   |
 | `lib/internal/value/compare.hpp` | `==`, `<`, `<=`, and the exact integer/float comparisons |
 | `lib/value/compare.cpp`          | its implementation                                   |
+| `lib/internal/value/string.hpp`  | `String`, the `Heap` that owns strings, the hash, `length()` |
+| `lib/value/string.cpp`           | its implementation                                   |
 | `lib/internal/runtime_error.hpp` | `RuntimeError`, an error raised while Lua code runs  |
 | `tests/arith_test.cpp`           | arithmetic tests, tagged `[value][arith]`            |
 | `tests/bitwise_test.cpp`         | bitwise tests, tagged `[value][bitwise]`             |
 | `tests/compare_test.cpp`         | comparison tests, tagged `[value][compare]`          |
+| `tests/string_test.cpp`          | string tests, tagged `[value][string]`               |
 | `tests/value_printer.hpp`        | shows a `Value` in Catch2 failure messages           |
 | `tests/value_test.cpp`           | tests, tagged `[value]`                              |
 
@@ -46,6 +50,8 @@ Values are internal to the library for now.
 | `True`    | Boolean | unused                    |
 | `Integer` | Number  | the `std::int64_t`'s bits |
 | `Float`   | Number  | the `double`'s bits       |
+| `ShortString` | String | a `const String*`     |
+| `LongString`  | String | a `const String*`     |
 
 Booleans have a tag each, so they need no payload. Integer and float are two tags of one type,
 which is how a number can be an integer *or* a float (V1.3) while `type()` says `number` for
@@ -65,15 +71,16 @@ v.as_float();      // stops the program: v holds an integer
 ```
 
 **Made only through typed constructors**: `Value::nil()` (or `Value{}`),
-`Value::boolean(b)`, `Value::integer(i)`, `Value::number(d)`. The tag and payload are private,
+`Value::boolean(b)`, `Value::integer(i)`, `Value::number(d)`, and `Value::string(s)` for a
+string made by a `Heap` (defined in `string.hpp`, since it needs to know whether `s` is short). The tag and payload are private,
 so a value can never claim to be a float while holding an integer's bits.
 
 **The payload is raw bits.** It is a `std::uint64_t`, and the constructors and accessors convert
 with `std::bit_cast`. There is no union, so there is no "inactive member" that could be read by
 mistake, and everything works at compile time too (`constexpr`).
 
-**Every accessor checks the tag, in every build.** `as_boolean()`, `as_integer()` and
-`as_float()` first check that the value holds what is asked for. If not, that is a bug in lua2,
+**Every accessor checks the tag, in every build.** `as_boolean()`, `as_integer()`,
+`as_float()` and `as_string()` first check that the value holds what is asked for. If not, that is a bug in lua2,
 never in the Lua program, and `wrong_access()` prints where the accessor was called and stops
 the program:
 
@@ -87,7 +94,8 @@ free in practice: code calls an accessor right after testing the tag (`if (v.is_
 and the compiler removes the repeated test. That was measured in
 [../learn/values.md](../learn/values.md) section 3.
 
-**Predicates**: `is_nil()`, `is_boolean()`, `is_number()`, `is_integer()`, `is_float()`, and
+**Predicates**: `is_nil()`, `is_boolean()`, `is_number()`, `is_integer()`, `is_float()`,
+`is_string()`, and
 `is_falsy()`/`is_truthy()`. Only `nil` and `false` are falsy (V1.4); `0`, `0.0`, `-0.0` and
 `nan` are truthy.
 
@@ -253,12 +261,17 @@ interpreter.
   `maxint == maxint + 0.0` is false: the float is 2^63.
 - Same tag: nil and the booleans are equal (the tag says it all), integers compare as
   integers, floats as floats, so `nan` equals nothing, itself included, and `0.0 == -0.0`.
+  Short strings are interned, so two are equal exactly when they are the same `String`: one
+  pointer comparison. Long strings compare their bytes. A short and a long string have
+  different tags and lengths, so they are never equal.
 
 Metamethods (`__eq`) come with tables, in stage 8.
 
 **`less_than(a, b)` and `less_equal(a, b)`** return `CompareResult`, a
-`std::expected<bool, RuntimeError>`. Two numbers compare by value; anything else is an error
-(V8.6), for now, until strings (part 5) and metamethods (stage 8):
+`std::expected<bool, RuntimeError>`. Two numbers compare by value, and two strings byte by byte
+as unsigned bytes (V8.4, through `std::string_view::compare`, which compares like `memcmp`); a
+string is never ordered against a number (V8.5). Anything else is an error (V8.6), until
+metamethods (stage 8):
 
 - `attempt to compare two X values` when both type names are the same,
 - `attempt to compare X with Y` otherwise.
@@ -284,3 +297,65 @@ and `maxint < 2^63` would come out false. The four `constexpr` helpers, `int_les
 The tests use `math.lua`'s border cases (2^53, 2^63, `minint`), check every comparison with
 `nan`, and compare the helpers with plain integer comparison on 81 pairs around 2^53 and ±2^62,
 where every float is a whole number.
+## Strings
+
+`string.hpp` has the `String` class, the `Heap` that makes and owns strings, Lua's hash, and
+`length()`.
+
+### `String`
+
+An immutable sequence of bytes, `\0` included (V10.1): `length()`, `data()`, `view()`,
+`is_short()` and `hash()`. Only a `Heap` makes strings (the constructor is private), and values
+refer to them by `const String*`.
+
+The header and the bytes are **one allocation**, as in Lua: `Heap::allocate()` asks
+`::operator new` for `sizeof(String) + length + 1` bytes, constructs the header at the start
+with placement `new`, and copies the bytes right after it, followed by a `\0` for C functions.
+`data()` finds the bytes at `this + 1`. One allocation per string, and the bytes sit next to
+the length in memory.
+
+The header is 32 bytes: two links for the Heap (`next_object_`, `next_in_bucket_`), the
+length, the hash, and two flags.
+
+### The hash
+
+`string_hash(bytes, seed)` is Lua's `luaS_hash` (V10.3), `constexpr`: start from
+`seed ^ length`, then for each byte from the last to the first,
+`h ^= (h << 5) + (h >> 2) + byte`, all in `std::uint32_t`. A test checks it against a direct
+transcription of Lua's C code.
+
+A short string's hash is computed when it is made, since interning needs it. A long string's
+is computed the first time `hash()` is called, like Lua's `luaS_hashlongstr`: until then the
+`hash_` field holds the seed. Most long strings are never table keys, so most never pay for it.
+
+### `Heap`
+
+`heap.new_string(bytes)` returns the string for `bytes`:
+
+- **Short strings** (up to `max_short_length`, 40 bytes) are **interned** (V10.2), like Lua's
+  `internshrstr`: hash the bytes, look in the bucket `hash & (bucket_count - 1)`, and walk its
+  chain comparing bytes. If found, that string is returned; otherwise a new one is made and put
+  at the head of the chain. The table starts with 128 buckets (Lua's `MINSTRTABSIZE`) and
+  doubles when it holds as many strings as buckets (`grow_buckets()`, Lua's `luaS_resize`). The
+  bucket count is a power of two, so a mask finds the bucket instead of a division.
+- **Long strings** are made anew each time, and not hashed yet.
+
+**Ownership.** Every string is on the Heap's `objects_` list, newest first, and `~Heap()` frees
+them all. Until the garbage collector (stage 9) takes the Heap's place, a string lives as long
+as its Heap. Values only point at strings; they never own them.
+
+**The seed.** `Heap()` picks a random seed with `std::random_device`, so hashes, and later the
+order of `pairs`, change from run to run, as in Lua. `Heap(seed)` fixes it; the tests do that.
+
+The Heap is neither copyable nor movable: strings' links point into it.
+
+### Length
+
+`length(value)` is `#` (V9.3): a string's length in bytes, as an integer. Anything else is
+`attempt to get length of a X value` (V9.4), until tables (stage 6).
+
+### Memory checked
+
+Besides the tests, the string code was run under AddressSanitizer
+(`clang++ -fsanitize=address`) making 20,000 strings, short and long, through several table
+growths, with no errors.

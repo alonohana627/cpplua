@@ -7,6 +7,7 @@
 #include <format>
 
 #include "text_format.hpp"
+#include "value/string.hpp"
 
 namespace lua2 {
 
@@ -37,6 +38,8 @@ std::string_view tag_name(Tag tag) {
     case Tag::True: return "true";
     case Tag::Integer: return "integer";
     case Tag::Float: return "float";
+    case Tag::ShortString: return "short string";
+    case Tag::LongString: return "long string";
     }
     return "?"; // not reached: every Tag is handled above
 }
@@ -48,6 +51,8 @@ std::string debug_text(Value value) {
     case Tag::True: return "true";
     case Tag::Integer: return std::format("{}", value.as_integer());
     case Tag::Float: return format_float(value.as_float());
+    case Tag::ShortString:
+    case Tag::LongString: return quoted(value.as_string()->view());
     }
     return "?"; // not reached: every Tag is handled above
 }

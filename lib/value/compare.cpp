@@ -3,6 +3,8 @@
 #include <string>
 #include <string_view>
 
+#include "value/string.hpp"
+
 namespace lua2 {
 
 namespace {
@@ -26,6 +28,13 @@ RuntimeError order_error(Value a, Value b) {
     return RuntimeError{std::move(message)};
 }
 
+// Strings order byte by byte, as unsigned bytes (V8.4). std::string_view
+// compares through std::char_traits<char>, which compares chars as unsigned
+// char, like memcmp.
+int compare_strings(Value a, Value b) {
+    return a.as_string()->view().compare(b.as_string()->view());
+}
+
 } // namespace
 
 bool equals(Value a, Value b) {
@@ -44,7 +53,11 @@ bool equals(Value a, Value b) {
     case Tag::False:
     case Tag::True: return true;
     case Tag::Integer: return a.as_integer() == b.as_integer();
-    case Tag::Float: return a.as_float() == b.as_float(); // nan == nan is false
+    case Tag::Float:
+        return a.as_float() == b.as_float(); // nan == nan is false
+    // Interned: equal short strings are the same string.
+    case Tag::ShortString: return a.as_string() == b.as_string();
+    case Tag::LongString: return a.as_string()->view() == b.as_string()->view();
     }
     return false; // not reached: every Tag is handled above
 }
@@ -64,6 +77,8 @@ CompareResult less_than(Value a, Value b) {
         if (b.is_integer()) {
             return float_less_int(a.as_float(), b.as_integer());
         }
+    } else if (a.is_string() && b.is_string()) {
+        return compare_strings(a, b) < 0;
     }
     return std::unexpected(order_error(a, b));
 }
@@ -83,6 +98,8 @@ CompareResult less_equal(Value a, Value b) {
         if (b.is_integer()) {
             return float_less_equal_int(a.as_float(), b.as_integer());
         }
+    } else if (a.is_string() && b.is_string()) {
+        return compare_strings(a, b) <= 0;
     }
     return std::unexpected(order_error(a, b));
 }

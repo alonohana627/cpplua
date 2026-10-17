@@ -36,6 +36,7 @@ add_library(lua2_lib
   lib/value/arith.cpp
   lib/value/bitwise.cpp
   lib/value/compare.cpp
+  lib/value/string.cpp
 )
 add_library(lua2::lua2 ALIAS lua2_lib)
 target_include_directories(lua2_lib
@@ -73,6 +74,7 @@ if(BUILD_TESTING)
     tests/arith_test.cpp
     tests/bitwise_test.cpp
     tests/compare_test.cpp
+    tests/string_test.cpp
   )
   target_link_libraries(lua2_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
   # Tests may include internal headers from lib/internal/ to test internals directly.

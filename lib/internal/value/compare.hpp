@@ -9,8 +9,8 @@
 
 namespace lua2 {
 
-// Lua's comparison operators (docs/spec/values.md, V7 and V8). Strings join
-// in part 5, metamethods in stage 8.
+// Lua's comparison operators (docs/spec/values.md, V7 and V8). Metamethods
+// join in stage 8.
 
 // a == b (V7). Values of different types are never equal; numbers are equal
 // when their mathematical values are, whatever their subtypes, and nan is
@@ -20,9 +20,10 @@ bool equals(Value a, Value b);
 
 using CompareResult = std::expected<bool, RuntimeError>;
 
-// a < b and a <= b (V8). Numbers compare exactly by value; anything else is
-// an error. a > b is less_than(b, a), and a >= b is less_equal(b, a): the
-// operands swap, which is also the order the error message names them in.
+// a < b and a <= b (V8). Numbers compare exactly by value, strings byte by
+// byte; anything else is an error. a > b is less_than(b, a), and a >= b is
+// less_equal(b, a): the operands swap, which is also the order the error
+// message names them in.
 CompareResult less_than(Value a, Value b);
 CompareResult less_equal(Value a, Value b);
 
