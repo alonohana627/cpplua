@@ -57,7 +57,9 @@ jobs:
 
   ubuntu:
     name: Ubuntu (x86-64)
-    runs-on: ubuntu-latest
+    # Pinned: apt.llvm.org's packages come for an Ubuntu release some time
+    # after it is out, and ubuntu-latest moves to each new one.
+    runs-on: ubuntu-24.04
     env:
       LLVM_VERSION: 23
       CXX: clang++-23
