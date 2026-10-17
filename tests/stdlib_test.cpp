@@ -214,8 +214,16 @@ TEST_CASE("S7.2 os.remove, os.rename and os.getenv", "[stdlib]") {
                           b)) == "true,true,true");
     CHECK(run("return os.remove(" + b + ")").ends_with("b.txt: No such file or directory,2"));
     CHECK(run("return os.getenv('CPPLUA_SURELY_NOT_SET_VARIABLE')") == "nil");
+    // os.tmpname makes the file on POSIX (mkstemp) and only names it on
+    // Windows (tmpnam), as Lua does.
+#ifdef _WIN32
+    CHECK(run("local name = os.tmpname() local absent = io.open(name) == nil "
+              "local f = io.open(name, 'w') f:close() return absent, os.remove(name)") ==
+          "true,true");
+#else
     CHECK(run("local name = os.tmpname() local f = io.open(name) local ok = f ~= nil "
               "f:close() return ok, os.remove(name)") == "true,true");
+#endif
 }
 
 TEST_CASE("S6.4 io.popen is not supported", "[stdlib]") {
@@ -310,4 +318,36 @@ TEST_CASE("S10.1 warn writes only when switched on", "[stdlib]") {
     run(interpreter, "warn('not shown') warn('@on') warn('shown ', 'in ', 'parts') warn('@off') "
                      "warn('hidden')");
     CHECK(out == "Lua warning: shown in parts\n");
+}
+
+TEST_CASE("S6.9 a directory cannot be read as a file", "[stdlib]") {
+    // (POSIX opens a directory; Windows refuses to, in Lua too.)
+    const auto folder = temp_folder("directory");
+    const std::string path = lua_string(folder);
+#ifndef _WIN32
+    CHECK(run("local f = io.open(" + path + ") return f:read('a')") == "nil,Is a directory,21");
+    CHECK(run("local _, e = loadfile(" + path + ") return e") ==
+          "cannot read " + folder.generic_string() + ": Is a directory");
+#else
+    CHECK(run("return io.open(" + path + ") == nil") == "true");
+    CHECK(run("return loadfile(" + path + ") == nil") == "true");
+#endif
+}
+
+TEST_CASE("S6.10 os.remove and os.rename follow the C library of the system", "[stdlib]") {
+    const auto folder = temp_folder("remove_rename");
+    write_file(folder / "a.txt", "a");
+    write_file(folder / "b.txt", "b");
+    std::filesystem::create_directory(folder / "d");
+    const std::string a = lua_string(folder / "a.txt");
+    const std::string b = lua_string(folder / "b.txt");
+    const std::string d = lua_string(folder / "d");
+#ifdef _WIN32
+    // rename never replaces a file, remove never deletes a folder
+    CHECK(run(std::format("return os.rename({}, {})", a, b)) == "nil,File exists,17");
+    CHECK(run(std::format("return select(3, os.remove({}))", d)) == "13");
+#else
+    CHECK(run(std::format("return os.rename({}, {})", a, b)) == "true");
+    CHECK(run(std::format("return os.remove({})", d)) == "true");
+#endif
 }

@@ -1,0 +1,2 @@
+return:sethook call:f call:select return:select return:f call:pairs return:pairs call:for iterator return:for iterator call:for iterator return:for iterator call:ipairs return:ipairs call:for iterator return:for iterator call:for iterator return:for iterator call:sethook
+

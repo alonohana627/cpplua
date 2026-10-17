@@ -1,0 +1,111 @@
+Chunk
+  LocalFunction locals
+    Function(prefix, n, const) [upvalues: _ENV]
+      Local s
+        Table
+      NumericFor i
+        Integer 1
+        Name n (local 1)
+        Body
+          Assign
+            Targets
+              Index
+                Name s (local 3)
+                Binary +
+                  Unary #
+                    Name s (local 3)
+                  Integer 1
+            Values
+              MethodCall format
+                Paren
+                  String "local %s%d%s = %d\n"
+                Name prefix (local 0)
+                Name i (local 7)
+                Binary or
+                  Binary and
+                    Name const (local 2)
+                    String " <const>"
+                  String ""
+                Name i (local 7)
+      Return
+        Call
+          Index
+            Name table
+            String "concat"
+          Name s (local 3)
+  LocalFunction uses
+    Function(n) [upvalues: _ENV]
+      Local s
+        Table
+      NumericFor i
+        Integer 1
+        Name n (local 0)
+        Body
+          Assign
+            Targets
+              Index
+                Name s (local 1)
+                Binary +
+                  Unary #
+                    Name s (local 1)
+                  Integer 1
+            Values
+              Binary ..
+                String "a"
+                Binary ..
+                  Name i (local 5)
+                  Binary ..
+                    String " + b"
+                    Name i (local 5)
+      Return
+        Call
+          Index
+            Name table
+            String "concat"
+          Name s (local 1)
+          String " + "
+  LocalFunction program
+    Function(const) [upvalues: locals, uses]
+      Return
+        Binary ..
+          Call
+            Name locals (upvalue 0)
+            String "a"
+            Integer 130
+            Name const (local 0)
+          Binary ..
+            String "local function f()\n"
+            Binary ..
+              Call
+                Name locals (upvalue 0)
+                String "b"
+                Integer 130
+                Name const (local 0)
+              Binary ..
+                String "local function g() return "
+                Binary ..
+                  Call
+                    Name uses (upvalue 1)
+                    Integer 130
+                  String " end\nreturn g()\nend\nreturn f()"
+  CallStatement
+    Call
+      Name print
+      Call
+        Call
+          Name load
+          Call
+            Name program (local 2)
+            True
+  Local _, message
+    Call
+      Name load
+      Call
+        Name program (local 2)
+        False
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Name message (local 4)
+        String "too many upvalues %(limit is 255%) in function at line %d+"

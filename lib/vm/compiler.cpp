@@ -7,6 +7,7 @@
 
 #include "vm/compiler.hpp"
 
+#include <algorithm>
 #include <bit>
 #include <cmath>
 #include <cstdint>
@@ -20,7 +21,9 @@
 #include <variant>
 #include <vector>
 
+#include "lexer/lexer.hpp"
 #include "overloaded.hpp"
+#include "parser/parser.hpp"
 #include "value/arith.hpp"
 #include "value/bitwise.hpp"
 #include "value/compare.hpp"
@@ -31,13 +34,14 @@ namespace cpplua {
 
 namespace {
 
-constexpr int no_jump = -1;          // NO_JUMP: the end of a jump list
-constexpr int no_reg = max_a;        // NO_REG
-constexpr int max_registers = 255;   // MAXREGS
-constexpr int max_index_rk = max_b;  // MAXINDEXRK
-constexpr int fields_per_flush = 50; // LFIELDS_PER_FLUSH
-constexpr int max_upvalues = 255;    // MAXUPVAL
-constexpr int multiple_results = -1; // LUA_MULTRET
+constexpr int no_jump = -1;                     // NO_JUMP: the end of a jump list
+constexpr int no_reg = max_a;                   // NO_REG
+constexpr int max_registers = 255;              // MAXREGS
+constexpr int max_index_rk = max_b;             // MAXINDEXRK
+constexpr int fields_per_flush = 50;            // LFIELDS_PER_FLUSH
+constexpr int max_upvalues = 255;               // MAXUPVAL
+constexpr std::size_t max_debug_locals = 32767; // SHRT_MAX: the debug entries of one function
+constexpr int multiple_results = -1;            // LUA_MULTRET
 
 // What an expression is while being compiled (Lua's expkind). Code is
 // generated as late as possible, so the descriptor says where the value is
@@ -295,19 +299,44 @@ bool raw_equal(Value a, Value b) {
 
 class Compiler {
 public:
-    Compiler(Heap& heap, const Ast& ast, std::string_view source, std::string_view chunk_name)
-        : heap_(heap), ast_(ast), chunk_name_(chunk_name), source_(heap.new_string(source)),
-          env_name_(heap.new_string("_ENV")), break_name_(heap.new_string("break")),
-          for_state_name_(heap.new_string("(for state)")) {}
+    Compiler(Heap& heap, const Ast& ast, std::string_view source, std::string_view chunk_name,
+             std::string_view text)
+        : heap_(heap), ast_(ast), chunk_name_(chunk_name), source_text_(text),
+          source_(heap.new_string(source)), env_name_(heap.new_string("_ENV")),
+          break_name_(heap.new_string("break")), for_state_name_(heap.new_string("(for state)")) {}
 
     std::expected<Proto*, SyntaxError> compile_main();
 
 private:
     // ---- Errors ----
 
+    // A limit the compiler checks ("too many registers", "too many
+    // upvalues", ...): Lua raises it while parsing, near the token it is at;
+    // the compiler shows the first token of the expression it is compiling.
     void error(std::string_view message) {
         if (!error_) {
-            error_ = make_syntax_error(chunk_name_, last_line_, message, "");
+            error_ = make_syntax_error(chunk_name_, last_line_, message, near_text());
+        }
+    }
+
+    [[nodiscard]] std::string near_text() const {
+        if (!near_offset_ || *near_offset_ >= source_text_.size()) {
+            return {};
+        }
+        Lexer lexer{source_text_.substr(*near_offset_), chunk_name_};
+        const auto token = lexer.next();
+        return token ? near_token(*token, source_text_.substr(*near_offset_)) : std::string{};
+    }
+
+    // A limit Lua's memory functions check (luaM_growvector), whose error
+    // has no position.
+    void limit_error(std::string_view message) {
+        if (!error_) {
+            error_ = SyntaxError{
+                .message = std::string{message},
+                .line = last_line_,
+                .origin = std::source_location::current(),
+            };
         }
     }
 
@@ -472,6 +501,9 @@ private:
     // ---- lparser.c: expressions ----
 
     [[nodiscard]] int first_line(ExprId id) const;
+    std::vector<ExprId> left_chain(ExprId id, bool binary, ExprId& start) const;
+    void binary_chain(ExprId id, ExpDesc& v);
+    void suffix_chain(ExprId id, ExpDesc& v);
     int explist(IdRange<ExprId> list, ExpDesc& v);
     void funcargs(ExpDesc& f, IdRange<ExprId> arguments, int line, int end_line);
     void constructor(const TableExpr& table, ExpDesc& t, int end_line);
@@ -497,7 +529,7 @@ private:
     void repeatstat(const RepeatStat& s, StatId id);
     void exp1(ExprId e);
     void fixforjump(int pc, int dest, bool back);
-    void forbody(int base, int line, int nvars, bool isgen, const Block& b);
+    void forbody(int base, int line, int do_line, int nvars, bool isgen, const Block& b);
     void fornum(const NumericForStat& s, int line);
     void forlist(const GenericForStat& s);
     void test_then_block(int& escapelist, const IfClause& clause, bool more);
@@ -513,7 +545,9 @@ private:
     const Ast& ast_;
     // NOLINTEND(cppcoreguidelines-avoid-const-or-ref-data-members)
     std::string_view chunk_name_;
+    std::string_view source_text_;
     const String* source_;
+    std::optional<std::uint32_t> near_offset_; // the expression being compiled, for error()
     const String* env_name_;
     const String* break_name_;
     const String* for_state_name_;
@@ -1822,6 +1856,9 @@ void Compiler::adjustlocalvars(int nvars) {
         const int vidx = fs_->nactvar++;
         VarDesc& var = getlocalvardesc(fs_, vidx);
         var.ridx = level++;
+        if (fs_->f->locals.size() >= max_debug_locals) { // registerlocalvar
+            limit_error("too many local variables (limit is 32767)");
+        }
         fs_->f->locals.push_back(Proto::LocalInfo{.name = var.name, .start_pc = fs_->pc()});
         var.pidx = static_cast<int>(fs_->f->locals.size()) - 1;
     }
@@ -2131,21 +2168,108 @@ void Compiler::body(ExpDesc& e, FunctionId id, int line) {
 // ---- lparser.c: expressions ----
 
 int Compiler::first_line(ExprId id) const {
-    // The line of an expression's first token.
-    return std::visit(Overloaded{
-                          [&](const BinaryExpr& e) { return first_line(e.left); },
-                          [&](const CallExpr& e) { return first_line(e.function); },
-                          [&](const MethodCallExpr& e) { return first_line(e.object); },
-                          [&](const IndexExpr& e) { return first_line(e.object); },
-                          [&](const auto&) { return ast_.line(id); },
-                      },
-                      ast_.expression(id));
+    // The line of an expression's first token: down its left side, in a
+    // loop (the side can be as long as the source).
+    for (;;) {
+        const Expr& e = ast_.expression(id);
+        if (const auto* b = std::get_if<BinaryExpr>(&e)) {
+            id = b->left;
+        } else if (const auto* c = std::get_if<CallExpr>(&e)) {
+            id = c->function;
+        } else if (const auto* m = std::get_if<MethodCallExpr>(&e)) {
+            id = m->object;
+        } else if (const auto* x = std::get_if<IndexExpr>(&e)) {
+            id = x->object;
+        } else {
+            return ast_.line(id);
+        }
+    }
+}
+
+// The left side of a chain the parser builds in a loop, as Lua's subexpr
+// and suffixedexp do: `a + b + c ...` is a BinaryExpr whose left operand is
+// a BinaryExpr..., and `a.b(c):d()[e] ...` an Index/Call/MethodCall node
+// whose object is another. Such a chain can be as long as the source, so
+// expr() compiles it in a loop instead of recursing down it (the parser's
+// depth limit never sees it). Returns the nodes from the innermost one out,
+// after the expression at the chain's start.
+std::vector<ExprId> Compiler::left_chain(ExprId id, bool binary, ExprId& start) const {
+    std::vector<ExprId> chain;
+    for (;;) {
+        const Expr& e = ast_.expression(id);
+        ExprId next{};
+        if (binary) {
+            const auto* b = std::get_if<BinaryExpr>(&e);
+            if (b == nullptr) {
+                break;
+            }
+            next = b->left;
+        } else if (const auto* c = std::get_if<CallExpr>(&e)) {
+            next = c->function;
+        } else if (const auto* m = std::get_if<MethodCallExpr>(&e)) {
+            next = m->object;
+        } else if (const auto* x = std::get_if<IndexExpr>(&e)) {
+            next = x->object;
+        } else {
+            break;
+        }
+        chain.push_back(id);
+        id = next;
+    }
+    start = id;
+    std::ranges::reverse(chain);
+    return chain;
+}
+
+void Compiler::binary_chain(ExprId id, ExpDesc& v) {
+    ExprId start{};
+    const std::vector<ExprId> chain = left_chain(id, true, start);
+    expr(start, v);
+    for (const ExprId link : chain) {
+        const auto& e = *std::get_if<BinaryExpr>(&ast_.expression(link)); // (left_chain saw it)
+        const int line = ast_.line(link);
+        const BinOpr op = binary_operator(e.op);
+        last_line_ = line; // the operator
+        infix(op, v);
+        ExpDesc v2;
+        expr(e.right, v2);
+        posfix(op, v, v2, line);
+    }
+}
+
+void Compiler::suffix_chain(ExprId id, ExpDesc& v) {
+    ExprId start{};
+    const std::vector<ExprId> chain = left_chain(id, false, start);
+    expr(start, v);
+    for (const ExprId link : chain) {
+        const int line = ast_.line(link);
+        const int end_line = ast_.end_line(link);
+        const Expr& node = ast_.expression(link);
+        if (const auto* x = std::get_if<IndexExpr>(&node)) {
+            exp2anyregup(v);
+            ExpDesc key;
+            expr(x->key, key);
+            exp2val(key);
+            last_line_ = end_line; // the name, or ']'
+            indexed(v, key);
+        } else if (const auto* c = std::get_if<CallExpr>(&node)) {
+            exp2nextreg(v);
+            funcargs(v, c->arguments, line, end_line);
+        } else if (const auto* m = std::get_if<MethodCallExpr>(&node)) {
+            ExpDesc key;
+            codestring(key, string_of(m->method));
+            last_line_ = m->method_line;
+            self(v, key);
+            funcargs(v, m->arguments, line, end_line);
+        }
+    }
 }
 
 int Compiler::explist(IdRange<ExprId> list, ExpDesc& v) {
     const auto expressions = ast_.expressions(list);
     expr(expressions[0], v);
     for (std::size_t i = 1; i < expressions.size(); ++i) {
+        near_offset_ = ast_.offset(expressions[i]); // Lua is past the ',' here
         exp2nextreg(v);
         expr(expressions[i], v);
     }
@@ -2243,6 +2367,7 @@ void Compiler::constructor(const TableExpr& table, ExpDesc& t, int end_line) {
 
 void Compiler::expr(ExprId id, ExpDesc& v) {
     // subexpr and simpleexp, one tree node at a time.
+    near_offset_ = ast_.offset(id);
     const int line = ast_.line(id);
     const int end_line = ast_.end_line(id);
     std::visit(Overloaded{
@@ -2281,15 +2406,7 @@ void Compiler::expr(ExprId id, ExpDesc& v) {
                        expr(e.operand, v);
                        prefix(unary_operator(e.op), v, line);
                    },
-                   [&](const BinaryExpr& e) {
-                       const BinOpr op = binary_operator(e.op);
-                       expr(e.left, v);
-                       last_line_ = line; // the operator
-                       infix(op, v);
-                       ExpDesc v2;
-                       expr(e.right, v2);
-                       posfix(op, v, v2, line);
-                   },
+                   [&](const BinaryExpr&) { binary_chain(id, v); },
                    [&](const NameExpr& e) {
                        last_line_ = end_line;
                        singlevar(string_of(e.name), v);
@@ -2300,28 +2417,9 @@ void Compiler::expr(ExprId id, ExpDesc& v) {
                        last_line_ = end_line; // ')'
                        dischargevars(v);
                    },
-                   [&](const IndexExpr& e) {
-                       expr(e.object, v);
-                       exp2anyregup(v);
-                       ExpDesc key;
-                       expr(e.key, key);
-                       exp2val(key);
-                       last_line_ = end_line; // the name, or ']'
-                       indexed(v, key);
-                   },
-                   [&](const CallExpr& e) {
-                       expr(e.function, v);
-                       exp2nextreg(v);
-                       funcargs(v, e.arguments, line, end_line);
-                   },
-                   [&](const MethodCallExpr& e) {
-                       expr(e.object, v);
-                       ExpDesc key;
-                       codestring(key, string_of(e.method));
-                       last_line_ = e.method_line;
-                       self(v, key);
-                       funcargs(v, e.arguments, line, end_line);
-                   },
+                   [&](const IndexExpr&) { suffix_chain(id, v); },
+                   [&](const CallExpr&) { suffix_chain(id, v); },
+                   [&](const MethodCallExpr&) { suffix_chain(id, v); },
                    [&](const TableExpr& e) { constructor(e, v, end_line); },
                    [&](const FunctionExpr& e) {
                        last_line_ = line;
@@ -2350,8 +2448,8 @@ void Compiler::statlist(std::span<const StatId> statements, bool repeat_body) {
             for (std::size_t j = end; j-- > i;) {
                 const StatId id = statements[j];
                 last_line_ = ast_.end_line(id);
-                labelstat(string_of(std::get<LabelStat>(ast_.statement(id)).name), ast_.line(id),
-                          last);
+                labelstat(string_of(std::get_if<LabelStat>(&ast_.statement(id))->name),
+                          ast_.line(id), last);
                 fs_->freereg = nvarstack();
             }
             (void)label;
@@ -2591,8 +2689,10 @@ void Compiler::fixforjump(int pc, int dest, bool back) {
     jmp = set_bx(jmp, offset);
 }
 
-void Compiler::forbody(int base, int line, int nvars, bool isgen, const Block& b) {
-    // forbody: the loop variables are in a block around the body.
+void Compiler::forbody(int base, int line, int do_line, int nvars, bool isgen, const Block& b) {
+    // forbody: the loop variables are in a block around the body. The
+    // prep instruction comes right after `do` is read: it gets its line.
+    last_line_ = do_line;
     const int prep = code_abx(isgen ? OpCode::TForPrep : OpCode::ForPrep, base, 0);
     BlockCnt bl;
     enterblock(bl, false);
@@ -2627,7 +2727,7 @@ void Compiler::fornum(const NumericForStat& s, int line) {
         reserveregs(1);
     }
     adjustlocalvars(3);
-    forbody(base, line, 1, false, s.body);
+    forbody(base, line, s.do_line, 1, false, s.body);
 }
 
 void Compiler::forlist(const GenericForStat& s) {
@@ -2649,7 +2749,7 @@ void Compiler::forlist(const GenericForStat& s) {
     adjustlocalvars(4);
     marktobeclosed(fs_); // the closing value is to be closed
     checkstack(3);       // room to call the iterator
-    forbody(base, line, nvars - 4, true, s.body);
+    forbody(base, line, s.do_line, nvars - 4, true, s.body);
 }
 
 void Compiler::test_then_block(int& escapelist, const IfClause& clause, bool more) {
@@ -2814,8 +2914,8 @@ std::expected<Proto*, SyntaxError> Compiler::compile_main() {
 } // namespace
 
 std::expected<Proto*, SyntaxError> compile(Heap& heap, const Ast& ast, std::string_view source,
-                                           std::string_view chunk_name) {
-    Compiler compiler{heap, ast, source, chunk_name};
+                                           std::string_view chunk_name, std::string_view text) {
+    Compiler compiler{heap, ast, source, chunk_name, text};
     return compiler.compile_main();
 }
 

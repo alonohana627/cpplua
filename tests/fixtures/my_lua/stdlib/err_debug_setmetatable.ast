@@ -1,0 +1,27 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name debug
+          String "setmetatable"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name debug
+          String "setmetatable"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name debug
+          String "setmetatable"
+        Integer 10
+        Nil

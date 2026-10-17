@@ -14,6 +14,9 @@ void open_coroutine(Heap& heap);
 void open_math(Heap& heap);
 void open_utf8(Heap& heap);
 void open_io(Heap& heap);
+// Flushes every open file and deletes io.tmpfile's files, as the C
+// library's exit() does (os.exit without closing the interpreter).
+void flush_all_files(Heap& heap);
 void open_os(Heap& heap);
 void open_package(Heap& heap);
 void open_debug(Heap& heap);

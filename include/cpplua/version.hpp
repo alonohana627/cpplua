@@ -4,8 +4,8 @@
 
 namespace cpplua {
 
-// The banner `lua -v` prints. A placeholder so the build, the executable and
-// the tests have one real function to exercise end to end.
+// The banner `cpplua -v` prints, like `lua -v`'s: the version, the Lua
+// version it implements, and the copyrights.
 std::string_view version();
 
 } // namespace cpplua

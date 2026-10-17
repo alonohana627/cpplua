@@ -37,6 +37,17 @@ configure_package_config_file(cmake/cppluaConfig.cmake.in
 write_basic_package_version_file(${PROJECT_BINARY_DIR}/cppluaConfigVersion.cmake
   VERSION ${PROJECT_VERSION}
   COMPATIBILITY SameMinorVersion)
+if(CPPLUA_VERSION_SUFFIX)
+  # A pre-release (5.4.9-beta) comes before its release: it satisfies a
+  # request for an older 5.4 version, but not find_package(cpplua 5.4.9).
+  file(APPEND ${PROJECT_BINARY_DIR}/cppluaConfigVersion.cmake "
+set(PACKAGE_VERSION \"${CPPLUA_VERSION_STRING}\")
+if(PACKAGE_FIND_VERSION AND PACKAGE_FIND_VERSION VERSION_GREATER_EQUAL \"${PROJECT_VERSION}\")
+  set(PACKAGE_VERSION_COMPATIBLE FALSE)
+  set(PACKAGE_VERSION_EXACT FALSE)
+endif()
+")
+endif()
 install(FILES
     ${PROJECT_BINARY_DIR}/cppluaConfig.cmake
     ${PROJECT_BINARY_DIR}/cppluaConfigVersion.cmake

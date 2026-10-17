@@ -13,6 +13,10 @@
 #include <string>
 #include <system_error>
 
+#ifndef _WIN32
+#include <sys/wait.h>
+#endif
+
 #include "gc/heap.hpp"
 #include "value/convert.hpp"
 #include "value/number.hpp"
@@ -220,9 +224,19 @@ int exec_result(State& state, int stat) {
     if (stat != 0 && errno != 0) { // an error with an errno
         return file_result(state, false, nullptr);
     }
-    // Windows has no signals: the status is always an exit code.
-    push(state, stat == 0 ? Value::boolean(true) : Value::nil());
-    push_string(state, "exit");
+    // l_inspectstat: on POSIX, system() gives a wait status, an exit code
+    // or the signal that ended the command; Windows has no signals.
+    std::string_view what = "exit"; // NOLINT(misc-const-correctness): not on Windows
+#ifndef _WIN32
+    if (WIFEXITED(stat)) {
+        stat = WEXITSTATUS(stat);
+    } else if (WIFSIGNALED(stat)) {
+        stat = WTERMSIG(stat);
+        what = "signal";
+    }
+#endif
+    push(state, what == "exit" && stat == 0 ? Value::boolean(true) : Value::nil());
+    push_string(state, what);
     push(state, Value::integer(stat));
     return 3;
 }

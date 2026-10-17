@@ -437,7 +437,7 @@ int debug_getmetatable(State& state) {
 
 int debug_setmetatable(State& state) {
     const Value mt = arg(state, 2);
-    if (!mt.is_nil() && !mt.is_table()) {
+    if (arg_is_none(state, 2) || (!mt.is_nil() && !mt.is_table())) { // (a nil, not none)
         return arg_type_error(state, 2, "nil or table");
     }
     Heap& heap = state.heap();
@@ -540,6 +540,7 @@ int debug_sethook(State& state) {
         if (smask.contains('l')) {
             mask |= hook_line;
         }
+        count = static_cast<int>(count); // (int)luaL_optinteger, before the test, as Lua does
         if (count > 0) {
             mask |= hook_count;
         }

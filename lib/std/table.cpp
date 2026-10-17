@@ -192,8 +192,11 @@ int table_move(State& state) {
         if (t > max_integer - n + 1) {
             return arg_error(state, 4, "destination wrap around");
         }
+        // The tables are compared (with __eq) only when the ranges overlap,
+        // as Lua's condition short-circuits.
         bool same = tt == 1;
-        if (!same && equal_values(state, source, destination, same) != Status::Ok) {
+        if (!same && t <= e && t > f &&
+            equal_values(state, source, destination, same) != Status::Ok) {
             return c_function_error;
         }
         const auto copy = [&](std::int64_t i) {

@@ -1,0 +1,54 @@
+Chunk
+  LocalFunction h
+    Function()
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "sethook"
+      Name h (local 0)
+      String "l"
+      Integer 7
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function()
+  CallStatement
+    Call
+      Name print
+      Binary ==
+        Call
+          Index
+            Name debug
+            String "gethook"
+          Name co (local 1)
+        Nil
+      Call
+        Name select
+        Integer 2
+        Call
+          Index
+            Name debug
+            String "gethook"
+          Name co (local 1)
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "sethook"
+  Local co2
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function()
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name debug
+          String "gethook"
+        Name co2 (local 2)

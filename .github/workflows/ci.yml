@@ -1,7 +1,9 @@
 # Builds cpplua with clang and libc++ on Windows (MSYS2 CLANG64) and Ubuntu
 # (x86-64), runs every test, then checks every way of installing it
-# (.github/scripts/verify_install.sh). The packages it makes are kept as
-# artifacts; pushing a tag v<version> also publishes them as a GitHub release.
+# (.github/scripts/verify_install.sh). On Ubuntu it also runs the tests under
+# AddressSanitizer and UndefinedBehaviorSanitizer, and checks clang-format and
+# clang-tidy. The packages it makes are kept as artifacts; pushing a tag
+# v<version> also publishes them as a GitHub release.
 name: CI
 
 on:
@@ -57,19 +59,22 @@ jobs:
 
   ubuntu:
     name: Ubuntu (x86-64)
-    runs-on: ubuntu-latest
+    # Pinned: apt.llvm.org's packages come for an Ubuntu release some time
+    # after it is out, and ubuntu-latest moves to each new one.
+    runs-on: ubuntu-24.04
     env:
       LLVM_VERSION: 23
       CXX: clang++-23
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/cache@v4
+        with:
+          path: ~/apt-cache
+          key: llvm-${{ env.LLVM_VERSION }}-ubuntu-24.04-v1
+
       - name: Install clang and libc++
-        run: |
-          wget -qO llvm.sh https://apt.llvm.org/llvm.sh
-          sudo bash llvm.sh "$LLVM_VERSION"
-          sudo apt-get install -y "libc++-$LLVM_VERSION-dev" "libc++abi-$LLVM_VERSION-dev" ninja-build pkg-config
-          "$CXX" --version
+        run: sh .github/scripts/install_llvm.sh "$LLVM_VERSION"
 
       - name: Configure
         run: >
@@ -93,6 +98,78 @@ jobs:
             build/release/*.deb
             build/release/*.sha256
           if-no-files-found: error
+
+  sanitizers:
+    # AddressSanitizer and UndefinedBehaviorSanitizer over every test and the
+    # official suite (the `sanitize` preset).
+    name: Ubuntu, ASan + UBSan
+    runs-on: ubuntu-24.04
+    env:
+      LLVM_VERSION: 23
+      CXX: clang++-23
+      ASAN_OPTIONS: detect_leaks=0
+      UBSAN_OPTIONS: print_stacktrace=1
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/apt-cache
+          key: llvm-${{ env.LLVM_VERSION }}-ubuntu-24.04-v1
+
+      - name: Install clang and libc++
+        run: sh .github/scripts/install_llvm.sh "$LLVM_VERSION"
+
+      - name: Configure
+        run: >
+          cmake --preset sanitize -DCPPLUA_REFERENCE_LUA=OFF
+          -DCMAKE_C_COMPILER=clang-$LLVM_VERSION -DCMAKE_CXX_COMPILER=$CXX
+
+      - name: Build
+        run: cmake --build --preset sanitize
+
+      - name: Test
+        run: ctest --preset sanitize -j 4
+
+  lint:
+    # clang-format and clang-tidy must have nothing to say.
+    name: Format and tidy
+    runs-on: ubuntu-24.04
+    env:
+      LLVM_VERSION: 23
+      CXX: clang++-23
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/apt-cache
+          key: llvm-lint-${{ env.LLVM_VERSION }}-ubuntu-24.04-v1
+
+      - name: Install clang, libc++, clang-format and clang-tidy
+        run: >
+          sh .github/scripts/install_llvm.sh "$LLVM_VERSION"
+          "clang-format-$LLVM_VERSION" "clang-tidy-$LLVM_VERSION"
+
+      - name: Configure
+        run: >
+          cmake --preset debug -DCPPLUA_REFERENCE_LUA=OFF
+          -DCMAKE_C_COMPILER=clang-$LLVM_VERSION -DCMAKE_CXX_COMPILER=$CXX
+          -DCLANG_FORMAT=/usr/bin/clang-format-$LLVM_VERSION
+          -DCLANG_TIDY=/usr/bin/clang-tidy-$LLVM_VERSION
+          -DRUN_CLANG_TIDY=/usr/bin/run-clang-tidy-$LLVM_VERSION
+          -DCMAKE_CXX_SCAN_FOR_MODULES=OFF
+
+      - name: clang-format
+        run: cmake --build --preset debug --target format-check
+
+      - name: clang-tidy
+        run: |
+          cmake --build --preset debug --target tidy 2>&1 | tee tidy.log
+          if grep -E "(warning|error):" tidy.log; then
+            echo "clang-tidy reported the problems above"
+            exit 1
+          fi
 
   release:
     name: GitHub release

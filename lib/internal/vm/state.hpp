@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <bit>
 #include <cstddef>
 #include <cstdint>
@@ -97,6 +98,9 @@ inline constexpr std::uint8_t hook_call = 1;
 inline constexpr std::uint8_t hook_return = 2;
 inline constexpr std::uint8_t hook_line = 4;
 inline constexpr std::uint8_t hook_count = 8;
+// Call or return hooks.
+inline constexpr std::uint8_t hook_calls = 3;
+static_assert(hook_calls == (hook_call | hook_return));
 
 enum class HookEvent : std::uint8_t { Call, Return, Line, Count, TailCall };
 
@@ -136,16 +140,16 @@ public:
 
     void push(Value v) { set(top++, v); }
 
-    // Makes room for `n` more slots above top (luaD_checkstack): false when
-    // the stack would pass max_stack, with the error ("stack overflow",
-    // still without its position, or "error in error handling" when the
-    // stack is already past the limit) in error_value.
     // How many usable slots there are from `from` on: negative when `from`
     // is past them, in the extra slots (as Lua's pointer difference is).
     [[nodiscard]] std::int64_t free_slots(std::uint32_t from) const {
         return std::int64_t{stack_last} - std::int64_t{from};
     }
 
+    // Makes room for `n` more slots above top (luaD_checkstack): false when
+    // the stack would pass max_stack, with the error ("stack overflow",
+    // still without its position, or "error in error handling" when the
+    // stack is already past the limit) in error_value.
     [[nodiscard]] bool check_stack(std::uint32_t n) {
         if (free_slots(top) > n) [[likely]] {
             return true;
@@ -252,6 +256,15 @@ public:
     int base_hook_count = 0;
     int hook_count_left = 0;
     int old_pc = 0;
+
+    // The table of instruction handlers the VM dispatches through: the plain
+    // one, or one that runs the hooks first while this thread has hooks or
+    // an interrupt is waiting (update_dispatch, vm/execute.cpp). Per thread,
+    // so a hook costs the other threads and interpreters nothing.
+    const void* dispatch = nullptr;
+    // request_interrupt was called for this thread, maybe from a signal
+    // handler or another thread of the program.
+    std::atomic<bool> interrupt_requested{false};
 
     // The error that stopped execute(), until a protected call takes it
     // (R1.1). A root of the collector.

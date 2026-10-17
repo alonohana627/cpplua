@@ -1,7 +1,10 @@
 # Catch2's TEST_CASE macros expand to static registrars these checks dislike.
+# Tests also ignore results on purpose (the embedding guide's examples ignore
+# what Interpreter::set_function returns, as most programs will).
 InheritParentConfig: true
 Checks: >
   -bugprone-throwing-static-initialization,
   -cert-err58-cpp,
   -misc-use-anonymous-namespace,
-  -cppcoreguidelines-avoid-non-const-global-variables
+  -cppcoreguidelines-avoid-non-const-global-variables,
+  -bugprone-unused-return-value

@@ -235,6 +235,10 @@ public:
     [[nodiscard]] const std::string& error() const { return error_; }
 
 private:
+    // Deeper than any chunk the compiler makes: its parser stops at 200
+    // nested levels of any kind (LUAI_MAXCCALLS).
+    static constexpr int max_nesting = 200;
+
     bool fail(std::string_view why) {
         if (error_.empty()) {
             error_ = std::format("{}: bad binary format ({})", name_, why);
@@ -376,6 +380,11 @@ private:
         if (!size(n)) {
             return false;
         }
+        // Every constant takes at least its tag byte: a bigger count is a
+        // corrupted chunk, not something to allocate.
+        if (n > bytes_.size() - at_) {
+            return fail("truncated chunk");
+        }
         f.constants.assign(n, Value::nil());
         for (Value& k : f.constants) {
             std::uint8_t t = 0;
@@ -466,6 +475,15 @@ private:
         if (!size(n)) {
             return false;
         }
+        if (n > bytes_.size() - at_) {
+            return fail("truncated chunk");
+        }
+        // The loader recurses once per nesting level, so a crafted chunk
+        // could exhaust the native stack; the parser never nests deeper.
+        if (n > 0 && depth_ >= max_nesting) {
+            return fail("too many nested functions");
+        }
+        ++depth_;
         for (std::size_t j = 0; j < n; ++j) {
             Proto* p = heap_.new_proto();
             f.protos.push_back(p);
@@ -473,6 +491,7 @@ private:
                 return false;
             }
         }
+        --depth_;
         if (!debug(f)) {
             return false;
         }
@@ -559,6 +578,7 @@ private:
     std::size_t at_ = 0;
     std::string name_;
     std::string error_;
+    int depth_ = 0; // of nested prototypes being loaded
 };
 
 } // namespace

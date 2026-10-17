@@ -85,7 +85,7 @@ std::expected<std::string, std::string> bytecode_dump(std::string_view source,
     // file, as luac names it.
     Heap heap;
     const std::string file_source = "@" + std::string{chunk_name};
-    auto proto = compile(heap, *ast, file_source, chunk_name);
+    auto proto = compile(heap, *ast, file_source, chunk_name, source);
     if (!proto) {
         return std::unexpected(std::move(proto.error().message));
     }

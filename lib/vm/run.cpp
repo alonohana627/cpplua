@@ -2,10 +2,12 @@
 
 #include <cerrno>
 #include <cstring>
+#include <filesystem>
 #include <format>
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <new>
 #include <string>
 
 #include <cpplua/source_file.hpp>
@@ -59,7 +61,9 @@ std::expected<void, std::string> load_chunk(State& state, std::string_view sourc
     if (!ast) {
         return std::unexpected(std::move(ast.error().message));
     }
-    auto proto = compile(heap, *ast, source_name, chunk_name);
+    // (the name Lua keeps for the chunk, then its text)
+    // NOLINTNEXTLINE(readability-suspicious-call-argument)
+    auto proto = compile(heap, *ast, source_name, chunk_name, source);
     if (!proto) {
         return std::unexpected(std::move(proto.error().message));
     }
@@ -102,7 +106,17 @@ std::expected<std::string, std::string> read_chunk_file(const std::string& path)
         // NOLINTNEXTLINE(concurrency-mt-unsafe): the message of the open that failed
         return std::unexpected(std::format("cannot open {}: {}", path, std::strerror(errno)));
     }
+    // A directory opens on POSIX, but cannot be read (luaL_loadfilex's
+    // "cannot read").
+    if (std::error_code ec; std::filesystem::is_directory(path, ec)) {
+        // NOLINTNEXTLINE(concurrency-mt-unsafe): as Lua's errfile
+        return std::unexpected(std::format("cannot read {}: {}", path, std::strerror(EISDIR)));
+    }
     const std::string text{std::istreambuf_iterator<char>{file}, std::istreambuf_iterator<char>{}};
+    if (file.bad()) {
+        // NOLINTNEXTLINE(concurrency-mt-unsafe): as Lua's errfile
+        return std::unexpected(std::format("cannot read {}: {}", path, std::strerror(errno)));
+    }
     return chunk_text(text);
 }
 
@@ -161,8 +175,12 @@ std::expected<void, std::string> run_protected(State& state, std::string_view so
 
 } // namespace
 
-std::expected<std::vector<std::string>, std::string>
-run_text(State& state, std::string_view source, std::string_view chunk_name, ErrorReport report) {
+namespace {
+
+std::expected<std::vector<std::string>, std::string> run_text_body(State& state,
+                                                                   std::string_view source,
+                                                                   std::string_view chunk_name,
+                                                                   ErrorReport report) {
     const std::uint32_t base = state.top;
     if (auto ran = run_protected(state, source, chunk_name, base, report); !ran) {
         return std::unexpected(std::move(ran.error()));
@@ -183,10 +201,32 @@ run_text(State& state, std::string_view source, std::string_view chunk_name, Err
     return texts;
 }
 
+} // namespace
+
+std::expected<std::vector<std::string>, std::string>
+run_text(State& state, std::string_view source, std::string_view chunk_name, ErrorReport report) {
+    // Loading and converting the results to text are not protected calls:
+    // out of memory there is the same error as inside.
+    const std::uint32_t base = state.top;
+    try {
+        return run_text_body(state, source, chunk_name, report);
+    } catch (const std::bad_alloc&) {
+        state.top = base;
+        return std::unexpected(std::string{"not enough memory"});
+    }
+}
+
 std::expected<std::vector<Value>, std::string> run(State& state, std::string_view source,
                                                    std::string_view chunk_name) {
     const std::uint32_t base = state.top;
-    if (auto ran = run_protected(state, source, chunk_name, base, ErrorReport::Message); !ran) {
+    std::expected<void, std::string> ran;
+    try {
+        ran = run_protected(state, source, chunk_name, base, ErrorReport::Message);
+    } catch (const std::bad_alloc&) {
+        state.top = base;
+        ran = std::unexpected(std::string{"not enough memory"});
+    }
+    if (!ran) {
         return std::unexpected(std::move(ran.error()));
     }
     std::vector<Value> results;

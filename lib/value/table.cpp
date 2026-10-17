@@ -386,8 +386,10 @@ void Table::set_array(Heap& heap, std::uint32_t old_size, std::uint32_t new_size
         values = static_cast<std::uint64_t*>(block);
         tags = reinterpret_cast<Tag*>(values + new_size); // NOLINT(*-reinterpret-cast)
         const std::uint32_t kept = std::min(old_size, new_size);
-        std::memcpy(values, array_values_, kept * sizeof(std::uint64_t));
-        std::memcpy(tags, array_tags_, kept * sizeof(Tag));
+        if (kept > 0) { // (memcpy from a null array is undefined, even for 0 bytes)
+            std::memcpy(values, array_values_, kept * sizeof(std::uint64_t));
+            std::memcpy(tags, array_tags_, kept * sizeof(Tag));
+        }
         std::fill(tags + kept, tags + new_size, Tag::Nil);
         std::fill(values + kept, values + new_size, 0);
     }
@@ -401,15 +403,16 @@ void Table::set_array(Heap& heap, std::uint32_t old_size, std::uint32_t new_size
 void Table::resize(Heap& heap, std::uint32_t array_size, std::uint32_t hash_size) {
     // luaH_resize: build the new hash part aside; move the entries of a
     // shrinking array into it; resize the array; then put the old hash
-    // part's entries into the new parts.
+    // part's entries into the new parts. Out of memory (std::bad_alloc),
+    // the table is left as it was, as Lua's is.
     const std::uint32_t old_array_size = set_limit_to_size();
     Node* const old_nodes = nodes_;
-    const Node* const old_last_free = last_free_;
+    Node* const old_last_free = last_free_;
     const std::uint8_t old_log = own_byte;
     set_node_vector(heap, hash_size); // the new hash part, now the table's
     if (array_size < old_array_size) {
-        // Pretend the array has its new size, and move the vanishing slice
-        // into the new hash part.
+        // Pretend the array has its new size, and copy the vanishing slice
+        // into the new hash part (the array keeps it until it shrinks).
         own_word = array_size;
         for (std::uint32_t i = array_size; i < old_array_size; ++i) {
             if (array_tags_[i] != Tag::Nil) {
@@ -417,8 +420,17 @@ void Table::resize(Heap& heap, std::uint32_t array_size, std::uint32_t hash_size
                         Value::from_parts(array_tags_[i], array_values_[i]));
             }
         }
+        own_word = old_array_size;
     }
-    set_array(heap, old_array_size, array_size);
+    try {
+        set_array(heap, old_array_size, array_size);
+    } catch (...) {
+        free_nodes(heap); // the new hash part
+        nodes_ = old_nodes;
+        last_free_ = old_last_free;
+        own_byte = old_log;
+        throw;
+    }
     own_word = array_size;
     set_limit_is_size(true);
     // Re-insert the old hash part (reinsert).

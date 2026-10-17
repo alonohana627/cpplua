@@ -1,0 +1,70 @@
+Chunk
+  CallStatement
+    Call
+      Name collectgarbage
+      String "stop"
+  Local events
+    Integer 0
+  Local in_gc
+    False
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "sethook"
+      Function() [upvalues: in_gc, events]
+        If
+          If
+            Name in_gc (upvalue 0)
+            Then
+              Assign
+                Targets
+                  Name events (upvalue 1)
+                Values
+                  Binary +
+                    Name events (upvalue 1)
+                    Integer 1
+      String "crl"
+  Do
+    Local _
+      Call
+        Name setmetatable
+        Table
+        Table
+          Field __gc
+            Function() [upvalues: in_gc]
+              Assign
+                Targets
+                  Name in_gc (upvalue 0)
+                Values
+                  True
+              Local x
+                Integer 1
+              NumericFor i
+                Integer 1
+                Integer 3
+                Body
+                  Assign
+                    Targets
+                      Name x (local 0)
+                    Values
+                      Binary +
+                        Name x (local 0)
+                        Name i (local 4)
+              Assign
+                Targets
+                  Name in_gc (upvalue 0)
+                Values
+                  False
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Index
+        Name debug
+        String "sethook"
+  CallStatement
+    Call
+      Name print
+      Name events (local 0)

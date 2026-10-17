@@ -98,7 +98,8 @@ int coro_wrap_step(State& state) {
         close_thread(*co, state);
         error = co->error_value;
     }
-    if (error.is_string()) { // with the position of the caller
+    // With the position of the caller; not for out of memory (LUA_ERRMEM).
+    if (error.is_string() && error.as_string() != state.heap().memory_error_string()) {
         error = Value::string(
             state.heap().new_string(where(state, 1) + std::string{error.as_string()->view()}));
     }

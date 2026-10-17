@@ -148,6 +148,18 @@ public:
     // "__name", for luaT_objtypename.
     [[nodiscard]] const String* name_string() const { return name_string_; }
 
+    // "not enough memory" (Lua's memerrmsg): the error object of a failed
+    // allocation, made in advance since there may be no memory to make it.
+    [[nodiscard]] const String* memory_error_string() const { return memory_error_string_; }
+
+    // "_HOOKKEY" and the names of the hook events ("call", "return", ...),
+    // which every hook event needs.
+    [[nodiscard]] const String* hook_key_string() const { return hook_key_string_; }
+
+    [[nodiscard]] const String* hook_event_string(std::size_t event) const {
+        return hook_event_strings_.at(event);
+    }
+
     // The metatable of every value of a type that is not a table (Lua's
     // G(L)->mt): none until the string library (stage 9). Roots.
     [[nodiscard]] Table* type_metatable(Type type) const {
@@ -194,7 +206,13 @@ public:
     // each line as Lua does; tests capture it.
     void set_output(std::function<void(std::string_view)> output) { output_ = std::move(output); }
 
-    void write_output(std::string_view text);
+    // `flush_lines`: flush after a newline (print does; io.write does not).
+    void write_output(std::string_view text, bool flush_lines = true);
+
+    // Whether set_output and set_error_output replaced stdout and stderr.
+    [[nodiscard]] bool captures_output() const { return static_cast<bool>(output_); }
+
+    [[nodiscard]] bool captures_error_output() const { return static_cast<bool>(error_output_); }
 
     // Flushes the standard output when it is where output goes (io.flush).
     void flush_output();
@@ -228,6 +246,10 @@ public:
     [[nodiscard]] std::size_t total_bytes() const {
         return static_cast<std::size_t>(total_bytes_ + debt_);
     }
+
+    // A cap on total_bytes(), 0 for none: allocate() throws std::bad_alloc
+    // instead of passing it, as if the system had run out.
+    void set_memory_limit(std::size_t bytes) { memory_limit_ = bytes; }
 
     // ---- Collection ----
 
@@ -445,6 +467,7 @@ private:
     std::ptrdiff_t total_bytes_ = 0;
     std::ptrdiff_t debt_ = 0;
     std::ptrdiff_t estimate_ = 0; // memory in use after the last cycle (GCestimate)
+    std::size_t memory_limit_ = 0;
     std::size_t last_atomic_ = 0; // generational: objects seen by a bad collection
 
     // Interned short strings (Lua's strt): an array of buckets, a power of
@@ -464,6 +487,9 @@ private:
     std::array<Table*, 8> type_metatables_{};
     std::array<const String*, event_count> event_strings_{};
     const String* name_string_ = nullptr;
+    const String* memory_error_string_ = nullptr;
+    const String* hook_key_string_ = nullptr;
+    std::array<const String*, 5> hook_event_strings_{};
     std::function<void(std::string_view)> output_;
     std::function<void(std::string_view)> error_output_;
     bool warnings_on_ = false;

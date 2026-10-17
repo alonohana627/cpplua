@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.28)
+# 3.30: the first CMake that knows cxx_std_26.
+cmake_minimum_required(VERSION 3.30)
 # The release line follows the Lua version it implements (5.4.9). The suffix
 # marks a pre-release; drop it once installing has been verified by hand.
 project(cpplua VERSION 5.4.9 LANGUAGES CXX
@@ -20,9 +21,21 @@ endif()
 
 # Tests, the benchmark runner, the reference Lua and the tooling targets are
 # for working on cpplua itself: a project that pulls cpplua in with
-# add_subdirectory or FetchContent gets only the library and the binary.
+# add_subdirectory or FetchContent gets only the library (and the `cpplua`
+# program if it sets CPPLUA_BUILD_CLI).
 option(CPPLUA_BUILD_TESTS "Build cpplua's tests" ${PROJECT_IS_TOP_LEVEL})
 option(CPPLUA_INSTALL "Generate cpplua's install rules" ${PROJECT_IS_TOP_LEVEL})
+option(CPPLUA_BUILD_CLI "Build the cpplua program" ${PROJECT_IS_TOP_LEVEL})
+if(CPPLUA_BUILD_TESTS OR CPPLUA_INSTALL)
+  set(CPPLUA_BUILD_CLI ON) # the tests run it, and the install has it
+endif()
+
+# A sanitized build's frames are bigger: on Windows, where the main thread
+# gets 1 MB by default, its programs get 8 MB (the linker option exists for
+# PE files only).
+if(WIN32 AND CMAKE_CXX_FLAGS MATCHES "-fsanitize=")
+  add_link_options(-Wl,--stack,8388608)
+endif()
 
 # Warnings applied to our own targets only (not to Catch2).
 add_library(cpplua_warnings INTERFACE)
@@ -118,6 +131,7 @@ if(CPPLUA_DISPATCH STREQUAL "switch")
 endif()
 
 # The command-line front end, built on the public API only.
+if(CPPLUA_BUILD_CLI)
 add_executable(cpplua src/main.cpp)
 target_link_libraries(cpplua PRIVATE cpplua::cpplua cpplua_warnings)
 # Optimized builds link the C++ runtime in: loading libc++.dll costs a
@@ -131,6 +145,7 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_BUILD_TYPE STREQUAL "Release
   # needs only the C library.
   target_link_options(cpplua PRIVATE -nostdlib++)
   target_link_libraries(cpplua PRIVATE -Wl,-Bstatic c++ c++abi -Wl,-Bdynamic m)
+endif()
 endif()
 
 # Tests
@@ -179,8 +194,11 @@ if(CPPLUA_BUILD_TESTS)
 
   # The public API's tests, which see only include/cpplua (no lib/internal):
   # what a program embedding cpplua can use.
-  add_executable(cpplua_api_tests tests/embedding_test.cpp)
-  target_link_libraries(cpplua_api_tests PRIVATE cpplua::cpplua cpplua_warnings Catch2::Catch2WithMain)
+  # (api_robustness_test.cpp runs interpreters in two threads at once.)
+  find_package(Threads REQUIRED)
+  add_executable(cpplua_api_tests tests/embedding_test.cpp tests/api_robustness_test.cpp)
+  target_link_libraries(cpplua_api_tests PRIVATE cpplua::cpplua cpplua_warnings Catch2::Catch2WithMain
+    Threads::Threads)
 
   include(Catch)
   # ctest lists the tests when it runs. Test names must not contain ';':
@@ -193,6 +211,14 @@ if(CPPLUA_BUILD_TESTS)
   # The official Lua 5.4.9 test suite (stage 11): all.lua prints
   # "final OK !!!" when every file passes. _port skips the tests that need
   # a POSIX system.
+  # The cpplua program itself (tests/cli/): what only a whole process shows.
+  add_test(NAME cli_os_exit_flush
+    COMMAND ${CMAKE_COMMAND} -DCPPLUA=$<TARGET_FILE:cpplua> -DWORK=${CMAKE_CURRENT_BINARY_DIR}/cli_tests
+      -P ${PROJECT_SOURCE_DIR}/tests/cli/os_exit_flush.cmake)
+  add_test(NAME cli_stdin_seek
+    COMMAND ${CMAKE_COMMAND} -DCPPLUA=$<TARGET_FILE:cpplua> -DWORK=${CMAKE_CURRENT_BINARY_DIR}/cli_tests
+      -P ${PROJECT_SOURCE_DIR}/tests/cli/stdin_seek.cmake)
+
   add_test(NAME lua_5_4_test_suite
     COMMAND cpplua -e "_port=true" all.lua
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/tests/fixtures/lua-5.4.9-tests)

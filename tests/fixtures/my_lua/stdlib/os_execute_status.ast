@@ -1,0 +1,17 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "execute"
+        String "exit 3"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name os
+          String "execute"
+        String "exit 0"

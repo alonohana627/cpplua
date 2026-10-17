@@ -15,6 +15,8 @@ topic:
 | `errors/`         | `error`, `pcall`, `xpcall`, `assert` (`error_*`, `err_error_*`, `err_assert*`) |
 | `stdlib/`         | the standard library: `base_*`, `string_*`, `table_*`, `math_*`, `utf8_*`, `io_*`, `os_*`, and their errors (`err_*`) |
 | `coroutines/`     | coroutines (`co_*`): resume, yield, wrap, status, close, yields in metamethods, iterators and `pcall`, collection; and their errors (`err_co_*`) |
+| `hooks/`          | debug hooks (`hook_*`): which events fire, in coroutines and finalizers |
+| `robustness/`     | hostile input that must give an error, never a crash: corrupted binary chunks, upvalues changed with `debug.setupvalue`, huge sizes, out of memory, deep nesting |
 
 A program and its golden files stay together in one folder:
 

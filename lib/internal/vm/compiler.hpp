@@ -23,8 +23,9 @@ namespace cpplua {
 // The protos are objects of `heap`. Nothing is collected while compiling,
 // so nothing needs anchoring until the caller runs the result. Compiling
 // fails only at Lua's limits: "function or expression needs too many
-// registers", "control structure too long".
+// registers", "control structure too long". `text` is the source code the
+// Ast was parsed from, for the "near" part of those errors.
 std::expected<Proto*, SyntaxError> compile(Heap& heap, const Ast& ast, std::string_view source,
-                                           std::string_view chunk_name);
+                                           std::string_view chunk_name, std::string_view text = {});
 
 } // namespace cpplua

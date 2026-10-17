@@ -1503,7 +1503,7 @@ TEST_CASE("G3.12 local function sees itself, local f = function does not", "[par
                                                          "        Name f\n");
 }
 
-TEST_CASE("G10 at most 255 upvalues per function", "[parser][resolve]") {
+TEST_CASE("G10 the parser leaves the limit of 255 upvalues to the compiler", "[parser][resolve]") {
     // 199 locals in the main chunk (f is the 200th) and more in f: g returns
     // all of them, so it needs one upvalue for each.
     const auto names = [](std::string_view prefix, int count) {
@@ -1521,9 +1521,9 @@ TEST_CASE("G10 at most 255 upvalues per function", "[parser][resolve]") {
                "return " + names("a", 199) + ", " + names("b", f_locals) + "\n" + "end\nend\n";
     };
     CHECK_NOTHROW(ast_of(source(56))); // exactly 255
-    // Like Lua, the name is resolved after it is read, so "near" is the token after it.
-    CHECK(parse_error(source(57)) ==
-          "input:6: too many upvalues (limit is 255) in function at line 4 near 'end'");
+    // The compiler checks the limit, not the parser: it knows which <const>
+    // locals are compile-time constants, which need no upvalue (issue #11).
+    CHECK_NOTHROW(ast_of(source(57)));
 }
 
 // ---- Part 11: the AST as a graph ----

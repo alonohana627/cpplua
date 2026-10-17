@@ -1,0 +1,128 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Binary +
+        String "1"
+        String "2"
+      Binary *
+        String "10"
+        Integer 2
+      Binary -
+        Integer 3
+        String "1"
+      Binary ^
+        String "2"
+        String "3"
+      Binary //
+        String "7"
+        String "2"
+      Unary -
+        String "3"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary //
+              String "1"
+              String "0"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary +
+              String "a"
+              Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local x
+            Table
+          Return
+            Binary +
+              String "1"
+              Name x (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary &
+              String "1"
+              Integer 3
+      Call
+        Name pcall
+        Function()
+          Return
+            Binary |
+              String "1.5"
+              Integer 0
+  Assign
+    Targets
+      Index
+        Call
+          Name getmetatable
+          String ""
+        String "__add"
+    Values
+      Function()
+        Return
+          String "mt"
+  CallStatement
+    Call
+      Name print
+      Binary +
+        String "1"
+        String "2"
+  Assign
+    Targets
+      Index
+        Call
+          Name getmetatable
+          String ""
+        String "__add"
+    Values
+      Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local s
+            String "1"
+          Return
+            Binary +
+              Name s (local 0)
+              Integer 2
+  Assign
+    Targets
+      Index
+        Call
+          Name getmetatable
+          String ""
+        String "__unm"
+    Values
+      Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Function()
+          Local s
+            String "3"
+          Return
+            Unary -
+              Name s (local 0)

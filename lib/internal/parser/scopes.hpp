@@ -30,9 +30,6 @@ public:
 
     // ---- Functions ----
 
-    // The most upvalues one function may have (Lua's MAXUPVAL).
-    static constexpr std::size_t max_upvalues = 255;
-
     // Starts the main chunk: line 0, with _ENV (named by `env_name`) as its
     // one upvalue, as Lua's loader provides (G2.4).
     void open_main_function(TextRange env_name);
@@ -81,13 +78,10 @@ public:
     // Resolves a name for the tree (G5.6), like Lua's singlevaraux(): a local
     // of the current function gives its slot; a local of an enclosing
     // function becomes an upvalue here (and in every function in between,
-    // each capturing it from its parent); anything else is a global. Fails
-    // with the line of the function that would get more than max_upvalues.
-    struct TooManyUpvalues {
-        int function_line;
-    };
-
-    std::expected<VariableRef, TooManyUpvalues> resolve(TextRange name);
+    // each capturing it from its parent); anything else is a global. (The
+    // compiler checks the limit of 255 upvalues: a <const> local with a
+    // constant value is no upvalue for it, so the tree may list more.)
+    VariableRef resolve(TextRange name);
 
     // ---- goto, labels and break ----
 
@@ -99,10 +93,16 @@ public:
 
     // A goto: resolved now if its label is already visible (a backward jump),
     // otherwise pending until the label appears or the function ends.
-    void add_goto(TextRange name, int line);
+    std::expected<void, std::string> add_goto(TextRange name, int line);
 
     // A break: pending until the enclosing loop block closes.
-    void add_break(int line);
+    std::expected<void, std::string> add_break(int line);
+
+    // The most labels, and pending gotos, the open functions may have
+    // (luaM_growvector's limit of SHRT_MAX in newlabelentry), and Lua's
+    // message, which has no position.
+    static constexpr std::size_t max_labels = 32767;
+    static constexpr std::string_view too_many_labels = "too many labels/gotos (limit is 32767)";
 
 private:
     struct Variable {
@@ -110,14 +110,18 @@ private:
         LocalName::Attribute attribute = LocalName::Attribute::None;
     };
 
+    // Labels and gotos keep their name's hash, so the searches through them
+    // compare numbers first (a function may have thousands).
     struct Label {
         TextRange name;
+        std::size_t hash = 0;
         int line = 0;
         std::size_t active = 0; // locals active at the label (Lua's nactvar)
     };
 
     struct Goto {
         TextRange name; // unused for a break
+        std::size_t hash = 0;
         int line = 0;
         std::size_t active = 0; // locals active at the goto
         bool is_break = false;
@@ -143,11 +147,11 @@ private:
 
     // resolve() for function `level` (0 is the main chunk). Returns nothing
     // for a global.
-    std::expected<std::optional<VariableRef>, TooManyUpvalues> resolve_in(std::size_t level,
-                                                                          TextRange name);
+    std::optional<VariableRef> resolve_in(std::size_t level, TextRange name);
 
     // The first visible label of the current function with this name.
-    [[nodiscard]] const Label* find_label(TextRange name) const;
+    [[nodiscard]] const Label* find_label(TextRange name, std::size_t hash) const;
+    [[nodiscard]] std::size_t hash_of(TextRange name) const;
 
     // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members): owned by the parser
     const Ast& ast_;

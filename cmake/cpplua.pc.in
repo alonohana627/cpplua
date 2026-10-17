@@ -6,5 +6,5 @@ Name: cpplua
 Description: @PROJECT_DESCRIPTION@ (build with clang, libc++ and -std=c++2c)
 URL: @PROJECT_HOMEPAGE_URL@
 Version: @CPPLUA_VERSION_STRING@
-Cflags: -I${includedir}
-Libs: -L${libdir} -lcpplua
+Cflags: -std=c++2c -stdlib=libc++ -I${includedir}
+Libs: -stdlib=libc++ -L${libdir} -lcpplua

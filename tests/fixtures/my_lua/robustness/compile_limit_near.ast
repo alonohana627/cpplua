@@ -1,0 +1,62 @@
+Chunk
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Integer 2
+        Call
+          Name load
+          Binary ..
+            String "a = f(x"
+            Binary ..
+              Call
+                Index
+                  Name string
+                  String "rep"
+                String ",x"
+                Integer 260
+              String ")"
+  Local t
+    Table
+  NumericFor i
+    Integer 1
+    Integer 300
+    Body
+      Assign
+        Targets
+          Index
+            Name t (local 0)
+            Name i (local 4)
+        Values
+          Binary ..
+            String "a"
+            Name i (local 4)
+  Local names
+    Call
+      Index
+        Name table
+        String "concat"
+      Name t (local 0)
+      String ","
+      Integer 1
+      Integer 150
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        Integer 2
+        Call
+          Name load
+          Binary ..
+            String "local "
+            Binary ..
+              Name names (local 1)
+              Binary ..
+                String " return "
+                Binary ..
+                  Name names (local 1)
+                  Binary ..
+                    String ","
+                    Name names (local 1)

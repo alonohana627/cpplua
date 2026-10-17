@@ -61,9 +61,11 @@ std::expected<Block, SyntaxError> Parser::parse_scoped_block(bool is_loop) {
 }
 
 std::expected<Block, SyntaxError> Parser::parse_block() {
-    // The statements are collected here first, then stored in the Ast in one
-    // go, so they sit next to each other (see Ast::add_statement_list).
-    std::vector<StatId> statements;
+    // The statements are collected on statement_stack_ first (above what
+    // the enclosing blocks have there), then stored in the Ast in one go, so
+    // they sit next to each other (see Ast::add_statement_list). One stack
+    // for all blocks spares an allocation per block.
+    const std::size_t first_statement = statement_stack_.size();
 
     // Labels are registered with the scopes only once the statements right
     // after them are known: Lua's labelstat() first skips any ';' and further
@@ -100,7 +102,7 @@ std::expected<Block, SyntaxError> Parser::parse_block() {
         if (!*statement) { // an empty statement ';' adds nothing
             continue;
         }
-        statements.push_back(**statement);
+        statement_stack_.push_back(**statement);
         if (const auto* label = std::get_if<LabelStat>(&ast_.statement(**statement))) {
             pending_labels.emplace_back(label->name, ast_.line(**statement));
         }
@@ -117,9 +119,12 @@ std::expected<Block, SyntaxError> Parser::parse_block() {
         if (!statement) {
             return std::unexpected(std::move(statement.error()));
         }
-        statements.push_back(*statement);
+        statement_stack_.push_back(*statement);
     }
-    return Block{.statements = ast_.add_statement_list(statements)};
+    const auto statements =
+        ast_.add_statement_list(std::span{statement_stack_}.subspan(first_statement));
+    statement_stack_.resize(first_statement);
+    return Block{.statements = statements};
 }
 
 std::expected<StatId, SyntaxError> Parser::parse_return() {
@@ -250,16 +255,18 @@ std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
 
     // An assignment: `var { ',' var } '=' explist`.
     if (check(TokenKind::Assign) || check(TokenKind::Comma)) {
-        std::vector<ExprId> targets{*first};
+        // (on expression_stack_, as in parse_expression_list)
+        const std::size_t first_target = expression_stack_.size();
+        expression_stack_.push_back(*first);
         DepthLevels levels{depth_};
         for (;;) {
             // Like Lua, each target is checked once the token after it is
             // read, so the error points there: `f() = 1` is "syntax error
             // near '='" (G3.9).
-            if (!is_variable(ast_.expression(targets.back()))) {
+            if (!is_variable(ast_.expression(expression_stack_.back()))) {
                 return error("syntax error");
             }
-            if (auto assignable = check_assignable(targets.back()); !assignable) {
+            if (auto assignable = check_assignable(expression_stack_.back()); !assignable) {
                 return std::unexpected(std::move(assignable.error()));
             }
             auto comma = accept(TokenKind::Comma);
@@ -273,11 +280,14 @@ std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
             if (!target) {
                 return std::unexpected(std::move(target.error()));
             }
-            targets.push_back(*target);
+            expression_stack_.push_back(*target);
             if (!levels.enter()) {
                 return semantic_error("C stack overflow");
             }
         }
+        const auto targets =
+            ast_.add_expression_list(std::span{expression_stack_}.subspan(first_target));
+        expression_stack_.resize(first_target);
         if (auto assign = expect(TokenKind::Assign); !assign) {
             return std::unexpected(std::move(assign.error()));
         }
@@ -285,8 +295,7 @@ std::expected<StatId, SyntaxError> Parser::parse_expression_statement() {
         if (!values) {
             return std::unexpected(std::move(values.error()));
         }
-        return add_statement(
-            AssignStat{.targets = ast_.add_expression_list(targets), .values = *values}, line);
+        return add_statement(AssignStat{.targets = targets, .values = *values}, line);
     }
 
     // Otherwise it must be a call; `x` or `a.b` alone does nothing, so Lua
@@ -409,7 +418,7 @@ std::expected<LocalName::Attribute, SyntaxError> Parser::parse_attribute() {
     if (!check(TokenKind::Name)) {
         return error_expected(TokenKind::Name);
     }
-    const std::string attribute = std::get<std::string>(current_.value);
+    const std::string attribute = *std::get_if<std::string>(&current_.value);
     if (auto moved = advance(); !moved) {
         return std::unexpected(std::move(moved.error()));
     }
@@ -586,7 +595,10 @@ std::expected<StatId, SyntaxError> Parser::parse_jump() {
         return std::unexpected(std::move(moved.error()));
     }
     if (keyword == TokenKind::Break) {
-        scopes_.add_break(line); // resolved when the enclosing loop ends (G8.6)
+        // resolved when the enclosing loop ends (G8.6)
+        if (auto added = scopes_.add_break(line); !added) {
+            return semantic_error(added.error());
+        }
         return add_statement(BreakStat{}, line);
     }
 
@@ -596,7 +608,10 @@ std::expected<StatId, SyntaxError> Parser::parse_jump() {
         return std::unexpected(std::move(name.error()));
     }
     if (keyword == TokenKind::Goto) {
-        scopes_.add_goto(*name, name_line); // resolved now, or when its label appears (G8.2)
+        // resolved now, or when its label appears (G8.2)
+        if (auto added = scopes_.add_goto(*name, name_line); !added) {
+            return semantic_error(added.error());
+        }
         return add_statement(GotoStat{.label = *name}, line);
     }
     // ::Name:: (G3.4). parse_block() registers the label with the scopes,
@@ -794,7 +809,7 @@ std::expected<StatId, SyntaxError> Parser::parse_numeric_for(TextRange variable,
     }
 
     scopes_.activate(3); // the hidden control variables
-    auto body = parse_for_body(line, 1);
+    auto body = parse_for_body(line, 1, statement.do_line);
     if (!body) {
         return std::unexpected(std::move(body.error()));
     }
@@ -836,16 +851,24 @@ std::expected<StatId, SyntaxError> Parser::parse_generic_for(TextRange first_nam
         return std::unexpected(std::move(values.error()));
     }
     scopes_.activate(4); // the hidden control variables
-    auto body = parse_for_body(line, names.size());
+    int do_line = 0;
+    auto body = parse_for_body(line, names.size(), do_line);
     if (!body) {
         return std::unexpected(std::move(body.error()));
     }
     return add_statement(
-        GenericForStat{.names = ast_.add_local_name_list(names), .values = *values, .body = *body},
+        GenericForStat{
+            .names = ast_.add_local_name_list(names),
+            .values = *values,
+            .body = *body,
+            .do_line = do_line,
+        },
         line);
 }
 
-std::expected<Block, SyntaxError> Parser::parse_for_body(int line, std::size_t variables) {
+std::expected<Block, SyntaxError> Parser::parse_for_body(int line, std::size_t variables,
+                                                         int& do_line) {
+    do_line = current_.line;
     if (auto keyword = expect(TokenKind::Do); !keyword) {
         return std::unexpected(std::move(keyword.error()));
     }
@@ -865,20 +888,24 @@ std::expected<Block, SyntaxError> Parser::parse_for_body(int line, std::size_t v
 }
 
 std::expected<IdRange<ExprId>, SyntaxError> Parser::parse_expression_list() {
-    std::vector<ExprId> expressions;
+    // The expressions gather on expression_stack_, above any list being
+    // read around this one, so a list costs no allocation of its own.
+    const std::size_t first = expression_stack_.size();
     for (;;) {
         auto expression = parse_expression();
         if (!expression) {
             return std::unexpected(std::move(expression.error()));
         }
-        expressions.push_back(*expression);
+        expression_stack_.push_back(*expression);
 
         auto comma = accept(TokenKind::Comma);
         if (!comma) {
             return std::unexpected(std::move(comma.error()));
         }
         if (!*comma) {
-            return ast_.add_expression_list(expressions);
+            const auto list = ast_.add_expression_list(std::span{expression_stack_}.subspan(first));
+            expression_stack_.resize(first);
+            return list;
         }
     }
 }
@@ -981,6 +1008,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_subexpression(int limit) {
     ExprId left;
     if (const auto unary = unary_operator(current_.kind)) {
         const int line = current_.line;
+        const std::uint32_t start = current_.offset;
         if (auto moved = advance(); !moved) {
             return std::unexpected(std::move(moved.error()));
         }
@@ -988,7 +1016,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_subexpression(int limit) {
         if (!operand) {
             return std::unexpected(std::move(operand.error()));
         }
-        left = add_expression(UnaryExpr{.op = *unary, .operand = *operand}, line);
+        left = add_expression(UnaryExpr{.op = *unary, .operand = *operand}, line, start);
     } else {
         auto simple = parse_simple_expression();
         if (!simple) {
@@ -1020,6 +1048,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_subexpression(int limit) {
 
 std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
     const int line = current_.line;
+    const std::uint32_t start = current_.offset;
     Expr expression;
     switch (current_.kind) {
     case TokenKind::Nil: expression = NilExpr{}; break;
@@ -1033,11 +1062,13 @@ std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
         expression = VarargExpr{};
         break;
     case TokenKind::Integer:
-        expression = IntegerExpr{.value = std::get<std::int64_t>(current_.value)};
+        expression = IntegerExpr{.value = *std::get_if<std::int64_t>(&current_.value)};
         break;
-    case TokenKind::Float: expression = FloatExpr{.value = std::get<double>(current_.value)}; break;
+    case TokenKind::Float:
+        expression = FloatExpr{.value = *std::get_if<double>(&current_.value)};
+        break;
     case TokenKind::String:
-        expression = StringExpr{.text = ast_.add_text(std::get<std::string>(current_.value))};
+        expression = StringExpr{.text = ast_.add_text(*std::get_if<std::string>(&current_.value))};
         break;
     case TokenKind::LBrace: return parse_table();
     case TokenKind::Function: { // function funcbody (G5.1)
@@ -1048,7 +1079,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_simple_expression() {
         if (!function) {
             return std::unexpected(std::move(function.error()));
         }
-        return add_expression(FunctionExpr{.function = *function}, line);
+        return add_expression(FunctionExpr{.function = *function}, line, start);
     }
     default:
         // Names and '(' start a suffixed expression; anything else is
@@ -1144,6 +1175,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_suffixed_expression() {
 
 std::expected<ExprId, SyntaxError> Parser::parse_primary_expression() {
     const int line = current_.line;
+    const std::uint32_t start = current_.offset;
     switch (current_.kind) {
     case TokenKind::Name: {
         auto name = expect_name();
@@ -1163,7 +1195,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_primary_expression() {
         if (auto closed = expect_match(TokenKind::RParen, TokenKind::LParen, line); !closed) {
             return std::unexpected(std::move(closed.error()));
         }
-        return add_expression(ParenExpr{.inner = *inner}, line);
+        return add_expression(ParenExpr{.inner = *inner}, line, start);
     }
     default: return error("unexpected symbol"); // G4.7
     }
@@ -1205,6 +1237,7 @@ std::expected<IdRange<ExprId>, SyntaxError> Parser::parse_call_arguments() {
 
 std::expected<ExprId, SyntaxError> Parser::parse_table() {
     const int line = current_.line;
+    const std::uint32_t start = current_.offset;
     if (auto moved = advance(); !moved) { // '{'
         return std::unexpected(std::move(moved.error()));
     }
@@ -1238,7 +1271,7 @@ std::expected<ExprId, SyntaxError> Parser::parse_table() {
     if (auto closed = expect_match(TokenKind::RBrace, TokenKind::LBrace, line); !closed) {
         return std::unexpected(std::move(closed.error()));
     }
-    return add_expression(TableExpr{.fields = ast_.add_field_list(fields)}, line);
+    return add_expression(TableExpr{.fields = ast_.add_field_list(fields)}, line, start);
 }
 
 std::expected<TableField, SyntaxError> Parser::parse_table_field() {
@@ -1303,35 +1336,22 @@ std::expected<TableField, SyntaxError> Parser::parse_table_field() {
 std::expected<ExprId, SyntaxError> Parser::make_name(TextRange name, int line) {
     // Like Lua's singlevar(): resolve the name; for a global, also resolve
     // _ENV, since `x` means `_ENV.x` (G5.6).
-    auto variable = scopes_.resolve(name);
-    if (!variable) {
-        return upvalue_limit_error(variable.error().function_line);
-    }
+    // (The limit of 255 upvalues is the compiler's to check: it knows which
+    // <const> locals are compile-time constants, which need no upvalue.)
+    const VariableRef variable = scopes_.resolve(name);
     VariableRef environment;
-    if (variable->kind == VariableRef::Kind::Global) {
-        auto env = scopes_.resolve(env_name_);
-        if (!env) {
-            return upvalue_limit_error(env.error().function_line);
-        }
-        environment = *env;
+    if (variable.kind == VariableRef::Kind::Global) {
+        environment = scopes_.resolve(env_name_);
     }
-    return add_expression(NameExpr{.name = name, .variable = *variable, .environment = environment},
+    return add_expression(NameExpr{.name = name, .variable = variable, .environment = environment},
                           line);
-}
-
-std::unexpected<SyntaxError> Parser::upvalue_limit_error(int function_line) const {
-    // Lua's errorlimit(): a syntax error, so it shows the current token.
-    const std::string where = function_line == 0
-                                  ? std::string("main function")
-                                  : std::format("function at line {}", function_line);
-    return error(std::format("too many upvalues (limit is {}) in {}", Scopes::max_upvalues, where));
 }
 
 std::expected<TextRange, SyntaxError> Parser::expect_name() {
     if (!check(TokenKind::Name)) {
         return error_expected(TokenKind::Name);
     }
-    const TextRange name = ast_.add_text(std::get<std::string>(current_.value));
+    const TextRange name = ast_.add_text(*std::get_if<std::string>(&current_.value));
     if (auto moved = advance(); !moved) {
         return std::unexpected(std::move(moved.error()));
     }
@@ -1366,6 +1386,7 @@ bool Parser::block_follow() const noexcept {
 
 std::expected<void, SyntaxError> Parser::advance() {
     previous_line_ = current_.end_line;
+    previous_offset_ = current_.offset;
     if (lookahead_) {
         current_ = std::move(*lookahead_);
         lookahead_.reset();
@@ -1417,6 +1438,11 @@ std::unexpected<SyntaxError> Parser::error(std::string_view message,
 
 std::unexpected<SyntaxError> Parser::semantic_error(std::string_view message,
                                                     std::source_location origin) const {
+    if (message == Scopes::too_many_labels) {
+        // A memory limit in Lua (luaM_growvector), raised without a position.
+        return std::unexpected(
+            SyntaxError{.message = std::string{message}, .line = current_.line, .origin = origin});
+    }
     return std::unexpected(
         make_syntax_error(lexer_.chunk_name(), current_.line, message, "", origin));
 }
@@ -1426,23 +1452,47 @@ std::unexpected<SyntaxError> Parser::error_expected(TokenKind kind,
     return error(std::format("{} expected", expected_text(kind)), origin);
 }
 
+std::uint32_t Parser::first_offset(const Expr& expr) const {
+    if (const auto* b = std::get_if<BinaryExpr>(&expr)) {
+        return ast_.offset(b->left);
+    }
+    if (const auto* x = std::get_if<IndexExpr>(&expr)) {
+        return ast_.offset(x->object);
+    }
+    if (const auto* c = std::get_if<CallExpr>(&expr)) {
+        return ast_.offset(c->function);
+    }
+    if (const auto* m = std::get_if<MethodCallExpr>(&expr)) {
+        return ast_.offset(m->object);
+    }
+    return previous_offset_;
+}
+
 std::string Parser::near_current() const {
+    return near_token(current_, source_);
+}
+
+std::string near_token(const Token& token, std::string_view source) {
     // G9.2: <eof> at the end, and otherwise the token as written, in quotes.
-    if (current_.kind == TokenKind::EndOfStream) {
+    if (token.kind == TokenKind::EndOfStream) {
         return std::string{near_eof};
     }
-    const std::string_view text = source_.substr(current_.offset, current_.length);
-    // A stray byte shows as '@', or as its value when unprintable: '<\200>'.
-    if (current_.kind == TokenKind::Other) {
+    const std::string_view text = source.substr(token.offset, token.length);
+    // A stray byte shows as '@', or as its value when unprintable: '<\200>';
+    // a NUL byte not at all (Lua's lexerror tests `if (token)`).
+    if (token.kind == TokenKind::Other) {
+        if (text.front() == '\0') {
+            return "";
+        }
         return near_char(static_cast<unsigned char>(text.front()));
     }
     // A short string is the exception: like Lua, show its value after escapes,
     // between its own quotes ("\65" shows as '"A"'). A long string keeps its
     // text as written, brackets included.
-    if (current_.kind == TokenKind::String && (text.front() == '"' || text.front() == '\'')) {
+    if (token.kind == TokenKind::String && (text.front() == '"' || text.front() == '\'')) {
         const char quote = text.front();
         return near_text(
-            std::format("{}{}{}", quote, std::get<std::string>(current_.value), quote));
+            std::format("{}{}{}", quote, *std::get_if<std::string>(&token.value), quote));
     }
     return near_text(text);
 }

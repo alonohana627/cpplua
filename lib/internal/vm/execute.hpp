@@ -65,13 +65,20 @@ Status protected_call_k(State& thread, std::uint32_t func, int wanted, Value han
 // table, as debug.sethook keeps it.
 void set_hook(State& thread, std::uint8_t mask, int count);
 
-// Stops the running Lua code at its next instruction with the error
-// "interrupted!" (lua.c's Ctrl-C). Safe to call from a signal handler.
-void request_interrupt();
+// Chooses the table thread's instructions dispatch through (H2): the
+// hooked one while it has hooks or an interrupt is waiting, else the plain
+// one. set_hook and take_interrupt call it; a new State starts with it.
+void update_dispatch(State& thread);
 
-// Whether an interrupt was requested, which this takes back (the VM's
-// side of request_interrupt).
-bool take_interrupt();
+// Stops the Lua code `thread` runs at its next instruction with the error
+// "interrupted!" (lua.c's Ctrl-C, which interrupts the main thread). Only
+// that thread is affected. Safe to call from a signal handler or another
+// thread of the program.
+void request_interrupt(State& thread);
+
+// Whether an interrupt was requested for `thread`, which this takes back
+// (the VM's side of request_interrupt).
+bool take_interrupt(State& thread);
 
 // ---- Coroutines (docs/spec/coroutines.md) ----
 

@@ -56,6 +56,25 @@ std::filesystem::path with_extension(const std::filesystem::path& path, std::str
     return std::filesystem::path{path}.replace_extension(ext);
 }
 
+// Built with AddressSanitizer, a program that makes an allocation fail on
+// purpose (`-- not under AddressSanitizer` in it) is not run: the sanitizer
+// stops the process instead of letting operator new throw std::bad_alloc.
+#ifdef __has_feature
+#if __has_feature(address_sanitizer)
+constexpr bool sanitized = true;
+#else
+constexpr bool sanitized = false;
+#endif
+#elifdef __SANITIZE_ADDRESS__
+constexpr bool sanitized = true;
+#else
+constexpr bool sanitized = false;
+#endif
+
+bool skipped(std::string_view source) {
+    return sanitized && source.contains("-- not under AddressSanitizer");
+}
+
 // Runs a program the way `cpplua file.lua` does, and returns its output: what
 // it printed, then its results joined with tabs, as `print(...)` writes
 // them (what `lua_ref -e "print(dofile('name.lua'))"` writes), then what
@@ -152,6 +171,9 @@ TEST_CASE("my_lua programs run to their golden results", "[my_lua][vm]") {
         REQUIRE(has_out != has_runerror);
         const std::string expected = read_bytes(has_out ? out_path : runerror_path);
         const std::string source = read_bytes(path);
+        if (skipped(source)) {
+            continue;
+        }
         CHECK(run_output(cpplua::skip_file_prefix(source), name, cpplua::GcMode::Incremental,
                          cpplua::GcStress::Off) == expected);
         CHECK(run_output(cpplua::skip_file_prefix(source), name, cpplua::GcMode::Generational,
@@ -173,6 +195,9 @@ TEST_CASE("E9.2 my_lua programs give the same results under GC stress", "[my_lua
         const std::string expected =
             read_bytes(std::filesystem::exists(out_path) ? out_path : runerror_path);
         const std::string source = read_bytes(path);
+        if (skipped(source)) {
+            continue;
+        }
         const std::string_view program = cpplua::skip_file_prefix(source);
         for (const auto mode : {cpplua::GcMode::Incremental, cpplua::GcMode::Generational}) {
             for (const auto stress : {cpplua::GcStress::Steps, cpplua::GcStress::FullCycles}) {

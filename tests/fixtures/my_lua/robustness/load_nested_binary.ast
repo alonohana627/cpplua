@@ -1,0 +1,63 @@
+Chunk
+  Local header
+    Binary ..
+      MethodCall sub
+        Call
+          Index
+            Name string
+            String "dump"
+          Call
+            Name load
+            String ""
+        Integer 1
+        Integer 31
+      String "\x00"
+  Local level
+    String "\x80\x80\x80\x00\x00\x02\x80\x80\x80\x81"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        Binary ..
+          Name header (local 0)
+          MethodCall rep
+            Name level (local 1)
+            Integer 300000
+        String "=nested"
+        String "b"
+  Local leaf
+    String "\x80\x80\x80\x00\x00\x02\x80\x80\x80\x80\x80\x80\x80\x80"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Call
+          Name load
+          Binary ..
+            Name header (local 0)
+            Binary ..
+              MethodCall rep
+                Name level (local 1)
+                Integer 199
+              Binary ..
+                Name leaf (local 2)
+                MethodCall rep
+                  Paren
+                    String "\x80\x80\x80\x80"
+                  Integer 199
+          String "=ok"
+          String "b"
+  Local consts
+    String "\x80\x80\x80\x00\x00\x02\x80\x07\x7F\x7F\x7F\xFF"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name load
+        Binary ..
+          Name header (local 0)
+          Name consts (local 3)
+        String "=consts"
+        String "b"

@@ -5,10 +5,12 @@
 // goes through the heap's output functions, as print's does, so an
 // embedding program (and the tests) can capture it.
 
+#include <algorithm>
 #include <array>
 #include <bit>
 #include <cerrno>
 #include <cstdint>
+#include <cstdio>
 #include <filesystem>
 #include <format>
 #include <fstream>
@@ -27,6 +29,7 @@
 #include "std/libs.hpp"
 #include "value/convert.hpp"
 #include "value/locale.hpp"
+#include "value/number.hpp"
 #include "value/table.hpp"
 #include "value/userdata.hpp"
 #include "vm/execute.hpp"
@@ -53,6 +56,7 @@ struct Stream {
     Standard standard = Standard::None;
     Closer closer = Closer::Closed;
     bool line_buffered = false; // setvbuf "line": flush at each newline
+    bool directory = false;     // POSIX opens a directory; reading it fails (EISDIR)
     bool text = false;
     bool readable = false;                 // opened for reading, for writing
     bool writable = false;                 // Windows text mode: "\n" is "\r\n" in the file
@@ -65,6 +69,8 @@ struct Stream {
 constexpr char file_tag = 0;
 constexpr char input_key = 0;
 constexpr char output_key = 0;
+// Every file userdata, in a table with weak keys: what os.exit flushes.
+constexpr char all_files_key = 0;
 
 Value registry_get(Heap& heap, const void* key) {
     return heap.references().get(Value::light_userdata(key)).value();
@@ -113,6 +119,7 @@ Stream* new_stream(Heap& heap, Value& out) {
     u->destructor = [](void* data) { static_cast<Stream*>(data)->~Stream(); };
     heap.set_metatable(u, table_object(registry_get(heap, &file_tag)));
     out = Value::userdata(u);
+    table_object(registry_get(heap, &all_files_key))->set(heap, out, Value::boolean(true));
     return s;
 }
 
@@ -160,6 +167,8 @@ bool open_file(Stream& s, const std::string& name, std::ios::openmode mode) {
     }
     s.buffer = file.get();
     s.file = std::move(file);
+    std::error_code ec;
+    s.directory = std::filesystem::is_directory(name, ec);
     s.readable = (mode & std::ios::in) != 0;
     s.writable = (mode & (std::ios::out | std::ios::app)) != 0;
     s.closer = Closer::File;
@@ -202,7 +211,7 @@ int aux_close(State& state, Stream& s) {
 // Writes to s; the standard output and error go through the heap.
 bool write_bytes(Heap& heap, Stream& s, std::string_view text) {
     switch (s.standard) {
-    case Standard::Output: heap.write_output(text); return true;
+    case Standard::Output: heap.write_output(text, false); return true;
     case Standard::Error: heap.write_error(text); return true;
     case Standard::Input: errno = EBADF; return false;
     case Standard::None: break;
@@ -429,6 +438,9 @@ int read_values(State& state, Stream& s, int first) {
     if (buffer == nullptr || (s.standard == Standard::None && !s.readable)) {
         // reading an output stream: the C library's EBADF
         return error_result(state, EBADF, nullptr);
+    }
+    if (s.directory) {
+        return error_result(state, EISDIR, nullptr);
     }
     Reader reader{*buffer, s.text};
     const int nargs = arg_count(state) - first + 1;
@@ -681,17 +693,24 @@ constexpr int max_line_arguments = 250; // MAXARGLINE
 int lines_step(State& state) {
     const auto* closure = state.get(state.ci->func).as_c_closure();
     const auto upvalues = closure->upvalues();
+    // debug.setupvalue can replace any upvalue, so none of them is trusted.
     Stream* s = to_stream(upvalues[0]);
+    if (s == nullptr) {
+        return raise_error(state, "bad file in 'lines' iterator");
+    }
     if (s->closer == Closer::Closed) {
         return raise_error(state, "file is already closed");
     }
-    const auto n = static_cast<int>(upvalues[1].as_integer());
+    // lua_tointeger: 0 when it is not an integer; the formats past the
+    // closure's upvalues are nil, as lua_upvalueindex past the count reads.
+    const auto count = to_integer(upvalues[1]).value_or(0);
+    const auto n = static_cast<int>(std::clamp<std::int64_t>(count, 0, max_line_arguments));
     state.top = arg_slot(state, 1) + 1; // lua_settop(L, 1)
     if (!state.check_stack(static_cast<std::uint32_t>(n) + 20)) {
         return raise_error(state, "stack overflow (too many arguments)");
     }
-    for (int i = 0; i < n; ++i) {
-        state.push(upvalues[3 + static_cast<std::size_t>(i)]);
+    for (std::size_t i = 0; std::cmp_less(i, n); ++i) {
+        state.push(3 + i < upvalues.size() ? upvalues[3 + i] : Value::nil());
     }
     const int results = read_values(state, *s, 2);
     if (results == c_function_error) {
@@ -806,8 +825,38 @@ int f_seek(State& state) {
     if (!check_option(state, 2, "cur", names, op) || !opt_integer(state, 3, 0, offset)) {
         return c_function_error;
     }
-    if (s->standard == Standard::Output || s->standard == Standard::Error) {
-        return error_result(state, ESPIPE, nullptr); // the heap's output has no position
+    if (s->standard != Standard::None) {
+        // The standard streams go through the C library's (std::cout and
+        // friends are synchronized with stdio): seek there, as Lua does, so
+        // a redirected stdin can seek. Output an embedder captures has no
+        // position.
+        Heap& heap = state.heap();
+        const bool captured = (s->standard == Standard::Output && heap.captures_output()) ||
+                              (s->standard == Standard::Error && heap.captures_error_output());
+        if (captured) {
+            return error_result(state, ESPIPE, nullptr);
+        }
+        std::FILE* c_file = stderr;
+        if (s->standard == Standard::Input) {
+            c_file = stdin;
+        } else if (s->standard == Standard::Output) {
+            c_file = stdout;
+        }
+        static constexpr std::array<int, 3> whence{SEEK_SET, SEEK_CUR, SEEK_END};
+        std::cout.flush();
+        errno = 0;
+#ifdef _WIN32
+        const bool failed = _fseeki64(c_file, offset, whence.at(op)) != 0;
+        const std::int64_t position = failed ? -1 : _ftelli64(c_file);
+#else
+        const bool failed = fseeko(c_file, static_cast<off_t>(offset), whence.at(op)) != 0;
+        const std::int64_t position = failed ? -1 : ftello(c_file);
+#endif
+        if (failed || position < 0) {
+            return error_result(state, errno != 0 ? errno : ESPIPE, nullptr);
+        }
+        push(state, Value::integer(position));
+        return 1;
     }
     const auto at = s->buffer->pubseekoff(static_cast<std::streamoff>(offset), directions.at(op),
                                           std::ios::in | std::ios::out);
@@ -829,9 +878,19 @@ int f_setvbuf(State& state) {
     if (!check_option(state, 2, "", names, op) || !opt_integer(state, 3, 1024, size)) {
         return c_function_error;
     }
-    // "no": every write reaches the file at once; "line": at each newline.
-    if (op == 0 && s->standard == Standard::None) {
-        s->buffer->pubsetbuf(nullptr, 0);
+    // "no": every write reaches the file at once; "full" and "line" buffer
+    // again ("line" flushing at each newline). A filebuf drops what its
+    // buffer holds when it changes buffers, so what waits to be written is
+    // written first, and the position (past what was read ahead) comes back.
+    if (s->standard == Standard::None) {
+        std::streambuf& buffer = *s->buffer;
+        const auto position = buffer.pubseekoff(0, std::ios::cur, std::ios::in | std::ios::out);
+        buffer.pubsync();
+        const auto bytes = size > 0 ? static_cast<std::streamsize>(size) : 1024;
+        buffer.pubsetbuf(nullptr, op == 0 ? 0 : bytes);
+        if (position != std::streampos{std::streamoff{-1}}) {
+            buffer.pubseekpos(position, std::ios::in | std::ios::out);
+        }
     }
     s->line_buffered = op == 2;
     push(state, Value::boolean(true));
@@ -927,8 +986,37 @@ void standard_file(Heap& heap, Table& library, Standard which, std::streambuf* b
 
 } // namespace
 
+void flush_all_files(Heap& heap) {
+    // What the C library's exit() does with its FILE*s: flush every open
+    // file, and delete io.tmpfile's files.
+    const Value all = registry_get(heap, &all_files_key);
+    if (!all.is_table()) {
+        return;
+    }
+    Value key;
+    Value value;
+    while (table_object(all)->next_entry(key, value) == Table::NextResult::Found) {
+        Stream* s = to_stream(key);
+        if (s == nullptr || s->closer == Closer::Closed || s->buffer == nullptr) {
+            continue;
+        }
+        s->buffer->pubsync();
+        if (!s->remove_on_close.empty() && s->file != nullptr) {
+            s->file->close();
+            std::error_code ec;
+            std::filesystem::remove(s->remove_on_close, ec);
+        }
+    }
+}
+
 void open_io(Heap& heap) {
     Table* library = open_library(heap, "io", io_functions);
+    Table* all_files = heap.new_table();
+    Table* weak_keys = heap.new_table();
+    weak_keys->set(heap, Value::string(heap.new_string("__mode")),
+                   Value::string(heap.new_string("k")));
+    heap.set_metatable(all_files, weak_keys);
+    registry_set(heap, &all_files_key, Value::table(all_files));
     // createmeta: the metatable of files, named "FILE*", with the methods
     // as its __index.
     Table* mt = heap.new_table();

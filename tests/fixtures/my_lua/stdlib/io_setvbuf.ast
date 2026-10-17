@@ -1,0 +1,89 @@
+Chunk
+  Local name
+    Call
+      Index
+        Name os
+        String "tmpname"
+  Local f
+    Call
+      Index
+        Name io
+        String "open"
+      Name name (local 0)
+      String "w"
+  CallStatement
+    MethodCall write
+      Name f (local 1)
+      String "abc"
+  CallStatement
+    MethodCall setvbuf
+      Name f (local 1)
+      String "no"
+  CallStatement
+    MethodCall write
+      Name f (local 1)
+      String "def"
+  CallStatement
+    MethodCall setvbuf
+      Name f (local 1)
+      String "full"
+      Integer 64
+  CallStatement
+    MethodCall write
+      Name f (local 1)
+      String "ghi"
+  CallStatement
+    MethodCall setvbuf
+      Name f (local 1)
+      String "line"
+  CallStatement
+    MethodCall write
+      Name f (local 1)
+      String "jkl\n"
+  CallStatement
+    MethodCall close
+      Name f (local 1)
+  Assign
+    Targets
+      Name f (local 1)
+    Values
+      Call
+        Index
+          Name io
+          String "open"
+        Name name (local 0)
+  CallStatement
+    Call
+      Name print
+      MethodCall read
+        Name f (local 1)
+        Integer 1
+  CallStatement
+    MethodCall setvbuf
+      Name f (local 1)
+      String "no"
+  CallStatement
+    Call
+      Name print
+      MethodCall read
+        Name f (local 1)
+        Integer 2
+  CallStatement
+    MethodCall setvbuf
+      Name f (local 1)
+      String "full"
+  CallStatement
+    Call
+      Name print
+      MethodCall read
+        Name f (local 1)
+        String "a"
+  CallStatement
+    MethodCall close
+      Name f (local 1)
+  CallStatement
+    Call
+      Index
+        Name os
+        String "remove"
+      Name name (local 0)

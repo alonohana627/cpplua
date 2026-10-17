@@ -15,6 +15,10 @@
 
 namespace cpplua {
 
+// The "near" part of a syntax error for `token` of `source`: <eof>, or the
+// token as written, in quotes (G9.2).
+std::string near_token(const Token& token, std::string_view source);
+
 // Turns Lua source text into an Ast (docs/spec/grammar.md).
 //
 // A recursive-descent parser, like Lua's lparser.c: one function per grammar
@@ -99,7 +103,8 @@ private:
     // 'do' block 'end', the body shared by both fors. `line` is the line of
     // 'for', for the "to close 'for'" message; `variables` is how many loop
     // variables become visible in the body.
-    std::expected<Block, SyntaxError> parse_for_body(int line, std::size_t variables);
+    // `do block end`; `do_line` gets the line of `do`.
+    std::expected<Block, SyntaxError> parse_for_body(int line, std::size_t variables, int& do_line);
 
     // explist ::= exp { ',' exp } (G4.6)
     std::expected<IdRange<ExprId>, SyntaxError> parse_expression_list();
@@ -136,9 +141,6 @@ private:
     // A NameExpr for a name just read, resolved to a local, an upvalue or a
     // global (G5.6). Lua's singlevar().
     std::expected<ExprId, SyntaxError> make_name(TextRange name, int line);
-
-    // "too many upvalues (limit is 255) in function at line N" (G10).
-    [[nodiscard]] std::unexpected<SyntaxError> upvalue_limit_error(int function_line) const;
 
     // The current token must be a Name: moves past it and returns its text,
     // or the error "<name> expected".
@@ -198,9 +200,18 @@ private:
 
     // Adds a node to the tree with the line of the last token read, which
     // is where the node ends.
+    // A new expression node. Its first token is its leftmost child's for an
+    // operator, index or call, else the token just read (a name, a
+    // literal); the others give `start`.
     ExprId add_expression(Expr expr, int line) {
-        return ast_.add_expression(expr, line, previous_line_);
+        return ast_.add_expression(expr, line, previous_line_, first_offset(expr));
     }
+
+    ExprId add_expression(Expr expr, int line, std::uint32_t start) {
+        return ast_.add_expression(expr, line, previous_line_, start);
+    }
+
+    [[nodiscard]] std::uint32_t first_offset(const Expr& expr) const;
 
     StatId add_statement(Stat stat, int line) {
         return ast_.add_statement(stat, line, previous_line_);
@@ -208,13 +219,19 @@ private:
 
     std::string_view source_;
     Lexer lexer_;
-    Token current_;                  // the token being looked at
-    std::optional<Token> lookahead_; // the next one, once peek() has read it
-    int previous_line_ = 1;          // the line of the token before current_ (Lua's lastline)
+    Token current_;                     // the token being looked at
+    std::optional<Token> lookahead_;    // the next one, once peek() has read it
+    int previous_line_ = 1;             // the line of the token before current_ (Lua's lastline)
+    std::uint32_t previous_offset_ = 0; // where that token starts in the source
     Ast ast_;
 
     // What is visible where: functions, blocks, locals, labels, gotos.
     Scopes scopes_;
+    // Where lists of expressions and the statements of blocks gather while
+    // they are read, nested ones above the outer ones (no allocation per
+    // list or block).
+    std::vector<ExprId> expression_stack_;
+    std::vector<StatId> statement_stack_;
 
     // For each function being parsed, innermost last: whether it is vararg,
     // so '...' can be checked (G4.12). The main chunk is vararg (G2.4).

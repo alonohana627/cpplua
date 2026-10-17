@@ -1,0 +1,77 @@
+Chunk
+  LocalFunction first_line
+    Function(_, message)
+      Return
+        Paren
+          MethodCall match
+            Name message (local 1)
+            String "^[^\n]*"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name first_line (local 0)
+        Call
+          Name load
+          MethodCall rep
+            Paren
+              String "do local a = 1 end\n"
+            Integer 33000
+  Local s
+    Table
+  NumericFor i
+    Integer 1
+    Integer 33000
+    Body
+      Assign
+        Targets
+          Index
+            Name s (local 1)
+            Binary +
+              Unary #
+                Name s (local 1)
+              Integer 1
+        Values
+          Binary ..
+            String "goto l"
+            Name i (local 5)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name first_line (local 0)
+        Call
+          Name load
+          Call
+            Index
+              Name table
+              String "concat"
+            Name s (local 1)
+            String "\n"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Call
+          Name load
+          String "for i = 1,\n'x'\ndo end"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Call
+          Name load
+          String "for i = 1,\n2, {}\ndo end"
+  CallStatement
+    Call
+      Name print
+      MethodCall match
+        Call
+          Name select
+          Integer 2
+          Call
+            Name load
+            String "x = 1 \x00 2"
+        String ": .*"

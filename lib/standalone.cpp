@@ -40,9 +40,13 @@ namespace {
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables): argv[0], as Lua's
 const char* progname = "cpplua";
 
-// lua_writestringerror and l_message
+// lua_writestringerror and l_message: the program's name first, except in
+// the interactive loop, where lua.c sets it to NULL.
 void error_message(std::string_view text) {
-    std::cerr << progname << ": " << text << '\n';
+    if (progname != nullptr) {
+        std::cerr << progname << ": ";
+    }
+    std::cerr << text << '\n';
     std::cerr.flush();
 }
 
@@ -57,17 +61,25 @@ Status report(State& state, Status status) {
     return status;
 }
 
+// The thread a Ctrl-C interrupts (lua.c's globalL): a signal handler gets
+// no arguments, so it has to be here.
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables): read by the signal handler
+std::atomic<State*> interrupt_target{nullptr};
+
 // laction: Ctrl-C stops the running Lua code at its next instruction
 // ("interrupted!").
 extern "C" void on_interrupt(int /*signal*/) {
     std::signal(SIGINT, SIG_DFL); // a second Ctrl-C ends the program
-    request_interrupt();
+    if (State* state = interrupt_target.load()) {
+        request_interrupt(*state);
+    }
 }
 
 // docall: the function and its `nargs` arguments on the top, called with
 // the traceback message handler.
 Status docall(State& state, int nargs, int nresults) {
     const std::uint32_t func = state.top - static_cast<std::uint32_t>(nargs) - 1;
+    interrupt_target.store(&state);
     std::signal(SIGINT, &on_interrupt);
     const Status status =
         protected_call(state, func, nresults, Value::c_function(&traceback_handler));
@@ -350,9 +362,11 @@ std::expected<void, std::string> load_line(State& state, bool& end) {
     }
 }
 
-void repl(State& state) {
+// doREPL. False when it stops on an error, which lua.c's luaL_checkstack
+// raises out of the loop (with progname still NULL).
+bool repl(State& state) {
     const char* const old_progname = progname;
-    progname = "";
+    progname = nullptr;
     for (;;) {
         const std::uint32_t base = state.top;
         bool end = false;
@@ -369,6 +383,11 @@ void repl(State& state) {
         }
         if (status == Status::Ok && state.top > base) {
             // l_print: the results, through print.
+            if (!state.check_stack(min_stack)) {
+                error_message("stack overflow (too many results to print)");
+                state.top = base;
+                return false;
+            }
             Heap& heap = state.heap();
             const Value print = heap.globals().get(Value::string(heap.new_string("print"))).value();
             state.push(Value::nil());
@@ -390,6 +409,7 @@ void repl(State& state) {
     }
     state.heap().write_output("\n");
     progname = old_progname;
+    return true;
 }
 
 // The body of pmain: true when everything ran without an error.
@@ -427,14 +447,14 @@ bool run(State& state, std::span<char* const> argv, bool generational) {
         return false;
     }
     if (options.interactive) {
-        repl(state);
-    } else if (options.script < 1 && !options.execute && !options.version) {
+        return repl(state);
+    }
+    if (options.script < 1 && !options.execute && !options.version) {
         if (stdin_is_terminal()) {
             print_version(heap);
-            repl(state);
-        } else {
-            dofile(state, "");
+            return repl(state);
         }
+        dofile(state, "");
     }
     return true;
 }

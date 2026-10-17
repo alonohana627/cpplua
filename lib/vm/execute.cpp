@@ -27,9 +27,12 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
+#include <exception>
 #include <format>
 #include <limits>
+#include <new>
 #include <span>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -510,9 +513,8 @@ std::string operand_info(const State* state, const Operand& o) {
 Status arith_slow(State* state, const Instruction* pc, const Operand& p1, const Operand& p2,
                   int event, std::uint32_t result) {
     protect(state, pc);
-    Heap& heap = state->heap();
+    const Heap& heap = state->heap();
     const auto e = static_cast<Event>(event);
-    const bool string_library = !is_bitwise(event); // strings have arithmetic metamethods
     const auto call_tm = [&](Value tm) {
         Value r;
         if (const Status status = call_metamethod(*state, tm, p1.value, p2.value, r);
@@ -522,37 +524,21 @@ Status arith_slow(State* state, const Instruction* pc, const Operand& p1, const 
         state->set(result, r);
         return Status::Ok;
     };
-    // The string library's metamethod: both as numbers, else the other
-    // operand's metamethod (trymt).
-    const auto string_arith = [&] {
-        const ArithResult r = arith_event(event, p1.value, p2.value);
-        if (r) {
-            state->set(result, *r);
-            return Status::Ok;
-        }
-        if (!p2.value.is_string()) {
-            const Value tm = metamethod_of(heap, p2.value, e);
-            if (!tm.is_nil()) {
-                return call_tm(tm);
-            }
-        }
-        return runtime_error(*state, r.error().message);
-    };
-    if (p1.value.is_string() && string_library) {
-        return string_arith();
-    }
+    // Strings convert through their metatable's arithmetic metamethods
+    // (lstrlib's), like any other value's metamethods: a program that
+    // changes or removes them changes string arithmetic, as in Lua.
     if (const Value tm = metamethod_of(heap, p1.value, e); !tm.is_nil()) {
         return call_tm(tm);
-    }
-    if (p2.value.is_string() && string_library) {
-        return string_arith();
     }
     if (const Value tm = metamethod_of(heap, p2.value, e); !tm.is_nil()) {
         return call_tm(tm);
     }
-    if (const ArithResult r = arith_event(event, p1.value, p2.value)) {
-        state->set(result, *r); // numbers (a path the fast code left out)
-        return Status::Ok;
+    if (p1.value.is_number() && p2.value.is_number()) {
+        // numbers (a path the fast code left out)
+        if (const ArithResult r = arith_event(event, p1.value, p2.value)) {
+            state->set(result, *r);
+            return Status::Ok;
+        }
     }
     return binary_error(state, p1, p2, event);
 }
@@ -660,7 +646,10 @@ bool joinable(Value v) {
     state->ci->saved_pc = pc;
     std::uint32_t top = first + u32(total);
     state->top = top;
-    std::vector<Value> run;
+    // The joinable values of a run, gathered from the split stack: in a
+    // buffer on the C++ stack for the usual short runs.
+    std::array<Value, 32> small{};
+    std::vector<Value> large;
     while (total > 1) {
         const Value a = state->get(top - 2);
         const Value b = state->get(top - 1);
@@ -669,9 +658,15 @@ bool joinable(Value v) {
             while (n < total && joinable(state->get(top - u32(n) - 1))) {
                 ++n;
             }
-            run.clear();
-            for (std::uint32_t slot = top - u32(n); slot < top; ++slot) {
-                run.push_back(state->get(slot));
+            std::span<Value> run;
+            if (std::cmp_less_equal(n, small.size())) {
+                run = std::span{small}.first(static_cast<std::size_t>(n));
+            } else {
+                large.resize(static_cast<std::size_t>(n));
+                run = large;
+            }
+            for (std::size_t j = 0; j < run.size(); ++j) {
+                run[j] = state->get(top - u32(n) + static_cast<std::uint32_t>(j));
             }
             const auto joined = concatenate(state->heap(), run);
             if (!joined) {
@@ -951,6 +946,51 @@ void move_results(State* state, std::uint32_t res, int nres, int wanted) {
 Status run_hook(State* state, HookEvent event, int line, int first_transfer, int transfer_count);
 Status return_hook(State* state, const CallInfo* ci, std::uint32_t first, int count);
 
+// A C++ exception, caught where an error stops (a protected call, a C++
+// function's frame): the error it stands for goes in error_value, as if the
+// code that threw had raised it. Out of memory (std::bad_alloc, or a size
+// the library refuses with std::length_error) is "not enough memory", as
+// Lua's LUA_ERRMEM, from the string made in advance; any other exception
+// gives its what(). Called from inside a catch block.
+[[gnu::cold]] Status exception_error(State* state) noexcept {
+    const auto memory_error = [state] {
+        state->set_error(Value::string(state->heap().memory_error_string()));
+    };
+    try {
+        throw;
+    } catch (const std::bad_alloc&) {
+        memory_error();
+    } catch (const std::length_error&) {
+        memory_error();
+    } catch (const std::exception& e) {
+        try {
+            state->set_error(std::string_view{e.what()});
+        } catch (...) {
+            memory_error();
+        }
+    } catch (...) {
+        try {
+            state->set_error(std::string_view{"C++ exception"});
+        } catch (...) {
+            memory_error();
+        }
+    }
+    return Status::Error;
+}
+
+// Runs `body`, which returns a Status; a C++ exception from it is the error
+// it stands for (exception_error). The VM's errors are return values, so
+// nothing between the throw and here has cleanup to do that the protected
+// call catching the error does not do anyway, as with Lua's longjmp.
+template <typename Body>
+Status guarded(State* state, Body&& body) {
+    try {
+        return std::forward<Body>(body)();
+    } catch (...) {
+        return exception_error(state);
+    }
+}
+
 // precallC with luaD_poscall: runs the C++ function in slot `func` with the
 // arguments up to `top`, and leaves `wanted` of its results at `func`. A C++
 // function gets min_stack free slots, and its own frame. On an error the
@@ -980,7 +1020,12 @@ Status call_c(State* state, std::uint32_t func, std::uint32_t top, int wanted) {
             return status;
         }
     }
-    const int n = function(*state);
+    int n = 0;
+    try {
+        n = function(*state);
+    } catch (...) {
+        return exception_error(state); // the frame stays, as for an error
+    }
     if (n < 0) [[unlikely]] {
         // An error, or a yield (C1): either way the frame stays.
         return n == c_function_yield ? Status::Yield : Status::Error;
@@ -1117,7 +1162,7 @@ void run_message_handler(State* state, Value handler) {
     state->set(top, handler);
     state->set(top + 1, state->error_value);
     state->top = top + 2;
-    if (call_no_yield(*state, top, 1) == Status::Ok) {
+    if (guarded(state, [&] { return call_no_yield(*state, top, 1); }) == Status::Ok) {
         state->error_value = state->get(top);
         state->top = top;
         return;
@@ -1133,7 +1178,8 @@ bool close_protected(State* state, std::uint32_t level, Value handler, bool erro
     CallInfo* const ci = state->ci;
     Value error_object = state->error_value; // what each __close gets
     for (;;) {
-        if (close_level(state, level, error, false, error_object) == Status::Ok) {
+        if (guarded(state, [&] { return close_level(state, level, error, false, error_object); }) ==
+            Status::Ok) {
             state->error_value = error_object;
             return error;
         }
@@ -1167,7 +1213,8 @@ Status close_after_pcall_error(State* state, CallInfo* ci) {
     ci->pcall_error = true;
     for (;;) {
         state->error_value = state->get(func);
-        const Status status = close_level(state, func, true, true, state->get(func));
+        const Status status =
+            guarded(state, [&] { return close_level(state, func, true, true, state->get(func)); });
         if (status == Status::Ok) {
             break;
         }
@@ -1223,15 +1270,6 @@ void recover(State* state, CallInfo* ci, std::uint32_t func, Value handler, int 
 
 // ---- Debug hooks (ldo.c's luaD_hook, ldebug.c's luaG_traceexec; H1) ----
 
-// Set by request_interrupt: the running Lua code stops at its next
-// instruction (lua.c's laction).
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables): set by a signal handler
-std::atomic<bool> interrupt_requested{false};
-
-constexpr std::array<std::string_view, 5> hook_event_names{
-    "call", "return", "line", "count", "tail call",
-};
-
 // luaD_hook with ldblib.c's hookf: the thread's hook function (in the
 // registry's _HOOKKEY table, as debug.sethook leaves it) gets the event's
 // name and the line, if any. Not inside another hook. `first_transfer` and
@@ -1241,7 +1279,7 @@ Status run_hook(State* state, HookEvent event, int line, int first_transfer, int
         return Status::Ok;
     }
     Heap& heap = state->heap();
-    const Value hooks = heap.registry().get(Value::string(heap.new_string("_HOOKKEY"))).value();
+    const Value hooks = heap.registry().get(Value::string(heap.hook_key_string())).value();
     if (!hooks.is_table()) {
         return Status::Ok;
     }
@@ -1266,10 +1304,12 @@ Status run_hook(State* state, HookEvent event, int line, int first_transfer, int
     ci->top = std::max(ci->top, state->top + min_stack);
     state->allow_hook = false; // no hooks inside a hook
     ci->hooked = true;
-    const std::uint32_t func = state->top;
+    // As ldblib's hookf: the hook table, then the function called above it
+    // (debug.getlocal sees that slot as a temporary of the hooked frame).
+    state->set(state->top, hooks);
+    const std::uint32_t func = state->top + 1;
     state->set(func, function);
-    state->set(func + 1, Value::string(heap.new_string(
-                             hook_event_names.at(static_cast<std::size_t>(event)))));
+    state->set(func + 1, Value::string(heap.hook_event_string(static_cast<std::size_t>(event))));
     state->set(func + 2, line >= 0 ? Value::integer(line) : Value::nil());
     state->top = func + 3;
     if (const Status status = call_no_yield(*state, func, 0); status != Status::Ok) {
@@ -1325,7 +1365,8 @@ bool uses_top(Instruction i) {
 // call hook to come for a CALL.
 [[gnu::noinline]] Status trace_instruction(State* state, const Instruction* pc, Instruction i) {
     CallInfo* ci = state->ci;
-    if (interrupt_requested.load(std::memory_order_relaxed) && take_interrupt()) { // lstop
+    if (state->interrupt_requested.load(std::memory_order_relaxed) && take_interrupt(*state)) {
+        // lstop
         ci->saved_pc = pc;
         return runtime_error(*state, "interrupted!");
     }
@@ -1564,25 +1605,32 @@ constexpr std::array<Handler, 128> plain_handlers = [] {
     return table;
 }();
 
-// The table the VM dispatches through (H2): plain_handlers, or op_hooked
-// in every entry while some thread has hooks, so hooks cost nothing when
-// no thread has any. Its entries are read and written atomically, since
-// interpreters may run in several threads of the program (a relaxed load
-// is a plain load).
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables): swapped while hooks are on
-constinit std::array<Handler, 128> handlers = plain_handlers;
-
-Handler handler_for(std::size_t op) {
-    return std::atomic_ref<Handler>(handlers[op]).load(std::memory_order_relaxed);
-}
-
 CPPLUA_HANDLER_CC Status op_hooked(VM_PARAMS);
 
-void install_hook_dispatch(bool on) {
-    for (std::size_t op = 0; op < handlers.size(); ++op) {
-        std::atomic_ref<Handler>(handlers[op])
-            .store(on ? &op_hooked : plain_handlers[op], std::memory_order_relaxed);
-    }
+// The table a thread dispatches through while it has hooks or an interrupt
+// is waiting (H2): op_hooked in every entry. Each thread has its own
+// choice (State::dispatch), so hooks in one thread, or one interpreter,
+// cost the others nothing.
+constexpr std::array<Handler, 128> hooked_handlers = [] {
+    std::array<Handler, 128> table{};
+    table.fill(&op_hooked);
+    return table;
+}();
+
+// State::dispatch is written by the thread itself, and by an interrupt
+// from anywhere (a signal handler, another thread): read and written
+// atomically (a relaxed load is a plain load).
+const Handler* dispatch_of(State* state) {
+    return static_cast<const Handler*>(
+        std::atomic_ref<const void*>(state->dispatch).load(std::memory_order_relaxed));
+}
+
+const void* plain_dispatch() {
+    return static_cast<const void*>(plain_handlers.data());
+}
+
+const void* hooked_dispatch() {
+    return static_cast<const void*>(hooked_handlers.data());
 }
 
 #define VM_HANDLER(name) CPPLUA_HANDLER_DEFINITION Status op_##name(VM_PARAMS)
@@ -1594,7 +1642,7 @@ void install_hook_dispatch(bool on) {
 #define VM_NEXT()                                                                                  \
     do {                                                                                           \
         const Instruction next_ = *pc;                                                             \
-        [[clang::musttail]] return handler_for(static_cast<std::size_t>(get_op(next_)))(           \
+        [[clang::musttail]] return dispatch_of(state)[static_cast<std::size_t>(get_op(next_))](    \
             state, pc + 1, tags, vals, k, next_);                                                  \
     } while (false)
 // (Again without the hooks: they saw this instruction already.)
@@ -1615,7 +1663,7 @@ void install_hook_dispatch(bool on) {
 // if it has any, then the instruction itself.
 CPPLUA_HANDLER_DEFINITION Status op_hooked(VM_PARAMS) {
     if (state->hook_mask != 0 || state->pending_call_hook != 0 ||
-        interrupt_requested.load(std::memory_order_relaxed)) [[unlikely]] {
+        state->interrupt_requested.load(std::memory_order_relaxed)) [[unlikely]] {
         const std::uint32_t base = base_index(state, tags);
         if (const Status status = trace_instruction(state, pc, i); status != Status::Ok) {
             return status;
@@ -1635,16 +1683,21 @@ Status execute(State* state) { // NOLINT(misc-const-correctness): the VM changes
     const Value* k = closure_of(vals)->proto->constants.data();
     const Instruction* pc = ci->saved_pc;
     const Instruction i = *pc;
-    return handler_for(static_cast<std::size_t>(get_op(i)))(state, pc + 1, tags, vals, k, i);
+    return dispatch_of(state)[static_cast<std::size_t>(get_op(i))](state, pc + 1, tags, vals, k, i);
 }
 
 #else // a switch in a loop
 
-// Whether some thread has hooks (H2): then each instruction checks them.
-std::atomic<bool> hooks_installed{false};
+// Without a table of handlers, State::dispatch only says whether the
+// thread has hooks (H2): non-null, and each instruction checks them.
+constexpr int hooked_marker = 0;
 
-void install_hook_dispatch(bool on) {
-    hooks_installed.store(on, std::memory_order_relaxed);
+const void* plain_dispatch() {
+    return nullptr;
+}
+
+const void* hooked_dispatch() {
+    return &hooked_marker;
 }
 
 Status execute(State* state) {
@@ -1655,9 +1708,10 @@ Status execute(State* state) {
     const Instruction* pc = entry->saved_pc;
     for (;;) {
     dispatch:
-        if (hooks_installed.load(std::memory_order_relaxed) &&
+        if (std::atomic_ref<const void*>(state->dispatch).load(std::memory_order_relaxed) !=
+                nullptr &&
             (state->hook_mask != 0 || state->pending_call_hook != 0 ||
-             interrupt_requested.load(std::memory_order_relaxed))) [[unlikely]] {
+             state->interrupt_requested.load(std::memory_order_relaxed))) [[unlikely]] {
             const std::uint32_t base = base_index(state, tags);
             if (const Status status = trace_instruction(state, pc + 1, *pc); status != Status::Ok) {
                 return status;
@@ -1894,7 +1948,8 @@ Status protected_call(State& thread, std::uint32_t func, int wanted, Value handl
     const int c_calls = state->c_calls;
     const int non_yieldable = state->non_yieldable;
     const bool allow_hook = state->allow_hook;
-    if (call_no_yield(thread, func, wanted) == Status::Ok) [[likely]] {
+    if (guarded(state, [&] { return call_no_yield(thread, func, wanted); }) == Status::Ok)
+        [[likely]] {
         return Status::Ok;
     }
     recover(state, ci, func, handler, c_calls, non_yieldable, allow_hook);
@@ -1919,7 +1974,7 @@ Status protected_call_k(State& thread, std::uint32_t func, int wanted, Value han
     ci->pcall_func = func;
     ci->pcall_handler = handler;
     ci->yieldable_pcall = true;
-    const Status status = call_body(thread, func, wanted, 1);
+    const Status status = guarded(state, [&] { return call_body(thread, func, wanted, 1); });
     if (status == Status::Yield) {
         return status; // the frame keeps its continuation
     }
@@ -2118,7 +2173,7 @@ Status recover_errors(State* state, Status status, int c_calls) {
         state->ci = ci;
         state->c_calls = c_calls;
         state->non_yieldable = 0;
-        status = unroll(state, true);
+        status = guarded(state, [&] { return unroll(state, true); });
     }
     return status;
 }
@@ -2177,7 +2232,7 @@ Status resume(State& co, const State& from, int nargs, int& results) {
     Heap& heap = co.heap();
     State* const resumer = heap.running_thread();
     heap.set_running_thread(&co);
-    Status status = resume_body(&co, nargs);
+    Status status = guarded(&co, [&] { return resume_body(&co, nargs); });
     status = recover_errors(&co, status, c_calls);
     heap.set_running_thread(resumer);
     if (status == Status::Yield) {
@@ -2234,27 +2289,32 @@ Status close_thread(State& co, const State& from) {
     return error ? Status::Error : Status::Ok;
 }
 
-namespace {
-
-// How many threads have hooks: while some do, the VM dispatches through
-// op_hooked (H2).
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables): counts across all heaps
-std::atomic<int> hooked_threads{0};
-
-} // namespace
-
-void request_interrupt() {
-    interrupt_requested.store(true, std::memory_order_relaxed);
-    install_hook_dispatch(true);
+void update_dispatch(State& thread) {
+    const bool hooked =
+        thread.hook_mask != 0 || thread.interrupt_requested.load(std::memory_order_seq_cst);
+    std::atomic_ref<const void*>(thread.dispatch)
+        .store(hooked ? hooked_dispatch() : plain_dispatch(), std::memory_order_seq_cst);
+    // An interrupt that came after the check above stored the hooked table
+    // already, or comes after this: either way it is not lost.
+    if (!hooked && thread.interrupt_requested.load(std::memory_order_seq_cst)) {
+        std::atomic_ref<const void*>(thread.dispatch)
+            .store(hooked_dispatch(), std::memory_order_seq_cst);
+    }
 }
 
-bool take_interrupt() {
-    if (!interrupt_requested.exchange(false, std::memory_order_relaxed)) {
+void request_interrupt(State& thread) {
+    // The flag first, then the table: the thread sees the flag whenever it
+    // runs op_hooked.
+    thread.interrupt_requested.store(true, std::memory_order_seq_cst);
+    std::atomic_ref<const void*>(thread.dispatch)
+        .store(hooked_dispatch(), std::memory_order_seq_cst);
+}
+
+bool take_interrupt(State& thread) {
+    if (!thread.interrupt_requested.exchange(false, std::memory_order_seq_cst)) {
         return false;
     }
-    if (hooked_threads.load(std::memory_order_relaxed) == 0) {
-        install_hook_dispatch(false);
-    }
+    update_dispatch(thread);
     return true;
 }
 
@@ -2263,21 +2323,13 @@ void set_hook(State& thread, std::uint8_t mask, int count) {
     if (mask == 0) {
         count = 0;
     }
-    const bool had_hooks = thread.hook_mask != 0;
     thread.hook_mask = mask;
     thread.base_hook_count = count;
     thread.hook_count_left = count;
-    if (had_hooks == (mask != 0)) {
-        return;
-    }
-    if (mask != 0) {
-        if (hooked_threads.fetch_add(1, std::memory_order_relaxed) == 0) {
-            install_hook_dispatch(true);
-        }
-    } else if (hooked_threads.fetch_sub(1, std::memory_order_relaxed) == 1) {
-        install_hook_dispatch(false);
+    if (mask == 0) {
         thread.pending_call_hook = 0;
     }
+    update_dispatch(thread);
 }
 
 Status close_variables(State& thread, std::uint32_t level) {

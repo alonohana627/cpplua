@@ -16,8 +16,8 @@ namespace cpplua {
 class Heap;
 
 // A Lua interpreter: its own memory, garbage collector and main thread, and
-// the globals with the standard library so far (the base library and
-// debug.traceback). C++ functions, values and classes go in through it
+// the globals with the whole standard library. C++ functions, values and
+// classes go in through it
 // (docs/how_to_put_cpp_functions_and_classes_into_lua.md). Destroying it
 // closes it like lua_close: pending to-be-closed variables and finalizers
 // run first; every Ref must be gone by then.
@@ -53,19 +53,21 @@ public:
     [[nodiscard]] Ref get(std::string_view name);
 
     // global `name` = value: a number, a string, a boolean, a Ref, nullptr
-    // for nil, or an object of a bound class (copied).
+    // for nil, or an object of a bound class (copied). Like an assignment in
+    // Lua, it goes through _G's __newindex, if any: the error is its error.
     template <class V>
-    void set(std::string_view name, V&& value) {
-        ScopedStack stack{main_thread()};
+    std::expected<void, std::string> set(std::string_view name, V&& value) {
+        const Ref g = globals();
+        ScopedStack stack{*g.state()};
         detail::push_result(stack, std::forward<V>(value));
-        set_global_from_top(name);
+        return g.set_from_top(name);
     }
 
     // global `name` = a C++ function: any callable, converted as bind()
     // describes (or an `int(Context&)` used as it is).
     template <class F>
-    void set_function(std::string_view name, F f) {
-        set_global_function(name, bind(std::move(f)));
+    std::expected<void, std::string> set_function(std::string_view name, F f) {
+        return set_global_function(name, bind(std::move(f)));
     }
 
     // ---- Values ----
@@ -106,12 +108,22 @@ public:
     void set_generational(bool generational);
     [[nodiscard]] std::size_t memory_in_use() const;
 
+    // A cap on memory_in_use(), 0 for none (the default): an allocation
+    // that would pass it fails like one the system refuses, with the Lua
+    // error "not enough memory", which pcall catches. For sandboxes.
+    void set_memory_limit(std::size_t bytes);
+
+    // Stops the Lua code running in this interpreter's main thread at its
+    // next instruction with the error "interrupted!", as Ctrl-C does in the
+    // cpplua program. Only this interpreter is affected. Safe to call from
+    // another thread or a signal handler.
+    void request_interrupt();
+
     // The main thread, for a ScopedStack (the stack-level API).
     [[nodiscard]] State& main_thread();
 
 private:
-    void set_global_from_top(std::string_view name);
-    void set_global_function(std::string_view name, Function f);
+    std::expected<void, std::string> set_global_function(std::string_view name, Function f);
     Ref make_function(Function f);
 
     std::unique_ptr<Heap> heap_;
