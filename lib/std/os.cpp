@@ -4,6 +4,7 @@
 // functions where C++ has nothing else (it has no time zone database here).
 
 #include <array>
+#include <atomic>
 #include <cerrno>
 #include <chrono>
 #include <climits>
@@ -122,7 +123,8 @@ int os_rename(State& state) {
 int os_tmpname(State& state) {
     std::error_code ec;
     const std::filesystem::path folder = std::filesystem::temp_directory_path(ec);
-    static unsigned int counter = 0;
+    // (atomic: interpreters in several threads may ask at once)
+    static std::atomic<unsigned int> counter{0};
     const auto stamp =
         static_cast<std::uint64_t>(std::chrono::steady_clock::now().time_since_epoch().count());
     for (int attempt = 0; !ec && attempt < 100; ++attempt) {
@@ -130,10 +132,16 @@ int os_tmpname(State& state) {
         if (std::filesystem::exists(path, ec) || ec) {
             continue;
         }
-        if (std::ofstream{path}) { // create it
+#ifdef _WIN32
+        // Lua's Windows build uses tmpnam, which only names the file.
+        push_string(state, path.string());
+        return 1;
+#else
+        if (std::ofstream{path}) { // create it, as mkstemp does
             push_string(state, path.string());
             return 1;
         }
+#endif
     }
     return raise_error(state, "unable to generate a unique filename");
 }
