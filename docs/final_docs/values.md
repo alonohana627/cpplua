@@ -8,8 +8,9 @@ in [../learn/values.md](../learn/values.md), and the remaining work in
 **Status:** parts 0 to 5 of the plan. A `Value` holds `nil`, a boolean, an integer, a float or
 a string, and knows its Lua type and its truthiness; numbers convert between integer and
 float; the arithmetic, bitwise and comparison operators work with Lua's rules and error
-messages; strings are interned like Lua's and have a length. Still to come: conversions between
-strings and numbers (parts 6 to 8).
+messages; strings are interned like Lua's and have a length; numbers convert to text like
+Lua's `tostring`. Still to come: strings to numbers, and the coercions that use both
+directions (parts 7 and 8).
 
 ## Where it lives
 
@@ -26,11 +27,14 @@ strings and numbers (parts 6 to 8).
 | `lib/value/compare.cpp`          | its implementation                                   |
 | `lib/internal/value/string.hpp`  | `String`, the `Heap` that owns strings, the hash, `length()` |
 | `lib/value/string.cpp`           | its implementation                                   |
+| `lib/internal/value/convert.hpp` | conversions between numbers and text                 |
+| `lib/value/convert.cpp`          | its implementation                                   |
 | `lib/internal/runtime_error.hpp` | `RuntimeError`, an error raised while Lua code runs  |
 | `tests/arith_test.cpp`           | arithmetic tests, tagged `[value][arith]`            |
 | `tests/bitwise_test.cpp`         | bitwise tests, tagged `[value][bitwise]`             |
 | `tests/compare_test.cpp`         | comparison tests, tagged `[value][compare]`          |
 | `tests/string_test.cpp`          | string tests, tagged `[value][string]`               |
+| `tests/convert_test.cpp`         | conversion tests, tagged `[value][convert]`          |
 | `tests/value_printer.hpp`        | shows a `Value` in Catch2 failure messages           |
 | `tests/value_test.cpp`           | tests, tagged `[value]`                              |
 
@@ -359,3 +363,28 @@ The Heap is neither copyable nor movable: strings' links point into it.
 Besides the tests, the string code was run under AddressSanitizer
 (`clang++ -fsanitize=address`) making 20,000 strings, short and long, through several table
 growths, with no errors.
+## Numbers to strings
+
+`convert.hpp` turns a number into its text, the way Lua's `tostringbuff` does (V6). This is
+what `tostring`, `print` and concatenation (part 8) will show.
+
+The text lives in a `NumberText`: a 44-byte buffer (Lua's `MAXNUMBER2STR`) and a length,
+returned by value, so making it never allocates; `view()` reads it. A `String` is made from it
+only when one is needed.
+
+- **`integer_text(i)`** writes the integer in decimal with `std::to_chars` (V6.1), what Lua's
+  `"%lld"` writes: `-9223372036854775808` included.
+- **`float_text(f)`** (V6.2):
+  1. `inf`, `-inf`, `nan` and `-nan` are written directly (V6.3), from the sign bit for `nan`.
+     They are the same on every platform: on Windows, `std::to_chars` would write `-nan(ind)`.
+  2. Every other float goes through `std::to_chars` with `chars_format::general` and precision
+     14, which the C++ standard defines as exactly what `printf("%.14g")` writes, Lua's
+     `LUAI_NUMFFORMAT`, without `printf`'s locale or varargs.
+  3. If the result has only digits and `-`, it would read back as an integer, so `.0` is
+     added: `1.0`, `-0.0`, `10000000000000.0`. Text with an exponent or a point is left alone:
+     `1e+14`, `0.1`, `3.1415926535898`.
+- **`number_text(value)`** does either for a number value, and returns nothing for others.
+
+Fourteen digits is fewer than a double needs to read back exactly (17), so `0.1 + 0.2` shows as
+`0.3`, as in Lua. The tests use `strings.lua`'s cases and the borders of `%g`: the switch to an
+exponent at `1e14` and below `0.0001`, the smallest and largest doubles, 2^53 and 2^63.
