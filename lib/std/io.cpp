@@ -836,9 +836,12 @@ int f_seek(State& state) {
         if (captured) {
             return error_result(state, ESPIPE, nullptr);
         }
-        std::FILE* c_file = s->standard == Standard::Input    ? stdin
-                            : s->standard == Standard::Output ? stdout
-                                                              : stderr;
+        std::FILE* c_file = stderr;
+        if (s->standard == Standard::Input) {
+            c_file = stdin;
+        } else if (s->standard == Standard::Output) {
+            c_file = stdout;
+        }
         static constexpr std::array<int, 3> whence{SEEK_SET, SEEK_CUR, SEEK_END};
         std::cout.flush();
         errno = 0;
@@ -885,7 +888,7 @@ int f_setvbuf(State& state) {
         buffer.pubsync();
         const auto bytes = size > 0 ? static_cast<std::streamsize>(size) : 1024;
         buffer.pubsetbuf(nullptr, op == 0 ? 0 : bytes);
-        if (position != std::streampos(std::streamoff(-1))) {
+        if (position != std::streampos{std::streamoff{-1}}) {
             buffer.pubseekpos(position, std::ios::in | std::ios::out);
         }
     }

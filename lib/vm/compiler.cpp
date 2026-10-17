@@ -317,9 +317,11 @@ private:
     // has no position.
     void limit_error(std::string_view message) {
         if (!error_) {
-            error_ = SyntaxError{.message = std::string{message},
-                                 .line = last_line_,
-                                 .origin = std::source_location::current()};
+            error_ = SyntaxError{
+                .message = std::string{message},
+                .line = last_line_,
+                .origin = std::source_location::current(),
+            };
         }
     }
 

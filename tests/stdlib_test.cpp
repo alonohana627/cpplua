@@ -344,10 +344,10 @@ TEST_CASE("S6.10 os.remove and os.rename follow the C library of the system", "[
     const std::string d = lua_string(folder / "d");
 #ifdef _WIN32
     // rename never replaces a file, remove never deletes a folder
-    CHECK(run("return os.rename(" + a + ", " + b + ")") == "nil,File exists,17");
-    CHECK(run("return select(3, os.remove(" + d + "))") == "13");
+    CHECK(run(std::format("return os.rename({}, {})", a, b)) == "nil,File exists,17");
+    CHECK(run(std::format("return select(3, os.remove({}))", d)) == "13");
 #else
-    CHECK(run("return os.rename(" + a + ", " + b + ")") == "true");
-    CHECK(run("return os.remove(" + d + ")") == "true");
+    CHECK(run(std::format("return os.rename({}, {})", a, b)) == "true");
+    CHECK(run(std::format("return os.remove({})", d)) == "true");
 #endif
 }

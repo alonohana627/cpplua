@@ -93,7 +93,7 @@ TEST_CASE("API1.1 out of memory outside pcall stops run() with the error", "[api
 TEST_CASE("API2 an exception from the output callback is a Lua error", "[api]") {
     cpplua::Interpreter lua;
     lua.set_output([](std::string_view text) {
-        if (text.find("boom") != std::string_view::npos) {
+        if (text.contains("boom")) {
             throw std::runtime_error("output failed");
         }
     });
@@ -171,9 +171,8 @@ TEST_CASE("API5 an error in __gc is a warning", "[api][gc]") {
         collectgarbage()
     )",
                     "=gc"));
-    CHECK(warnings.find("Lua warning: error in __gc (in gc)\n") != std::string::npos);
-    CHECK(warnings.find("Lua warning: error in __gc (error object is not a string)\n") !=
-          std::string::npos);
+    CHECK(warnings.contains("Lua warning: error in __gc (in gc)\n"));
+    CHECK(warnings.contains("Lua warning: error in __gc (error object is not a string)\n"));
 }
 
 namespace {
@@ -252,14 +251,15 @@ TEST_CASE("API8 a class's own __index and __newindex work with properties", "[ap
     cpplua::Interpreter lua;
     lua.new_class<Vehicle>("Vehicle")
         .constructor<>()
-        .meta("__index", [](Vehicle& /*v*/, std::string key) { return "dyn:" + key; })
+        .meta("__index", [](Vehicle& /*v*/, const std::string& key) { return "dyn:" + key; })
         .method("get_id", &Vehicle::get_id)
         .property("id", &Vehicle::id);
     lua.new_class<Engine>("Engine").property("hp", &Engine::hp, &Engine::hp);
     lua.new_class<Truck>("Truck")
         .constructor<>()
         .property("load", &Truck::load, &Truck::load)
-        .meta("__newindex", [](Truck& t, std::string /*key*/, int value) { t.load = -value; })
+        .meta("__newindex",
+              [](Truck& t, const std::string& /*key*/, int value) { t.load = -value; })
         .method("get_id", &Truck::get_id); // inherited from Vehicle
     const auto result = lua.run(R"(
         local v = Vehicle.new()
@@ -346,8 +346,7 @@ TEST_CASE("API14 Ref::index reports what get() turns into nil", "[api]") {
     REQUIRE(lua.run("n = 5 t = setmetatable({}, {__index = function() error('no', 0) end})", "=t"));
     CHECK(lua.get("t").get("k").is_nil());
     CHECK(lua.get("t").index("k").error() == "no");
-    CHECK(lua.get("n").index("k").error().find("attempt to index a number value") !=
-          std::string::npos);
+    CHECK(lua.get("n").index("k").error().contains("attempt to index a number value"));
 }
 
 TEST_CASE("API15 C++ called from a coroutine calls back in that coroutine", "[api]") {
@@ -366,8 +365,9 @@ TEST_CASE("API15 C++ called from a coroutine calls back in that coroutine", "[ap
 
 TEST_CASE("API16 move-only callables and stack indices", "[api]") {
     cpplua::Interpreter lua;
-    auto owned = std::make_unique<int>(41);
-    REQUIRE(lua.set_function("owned", [p = std::move(owned)] { return *p + 1; }));
+    auto owned = [p = std::make_unique<int>(41)] { return *p + 1; };
+    const bool set = lua.set_function("owned", std::move(owned)).has_value();
+    REQUIRE(set);
     CHECK(lua.run("return owned()", "=m").value().at(0) == "42");
     REQUIRE(lua.set_function("trim", [](cpplua::Context& ctx) {
         ctx.set_top(-2); // drops the last argument
@@ -380,4 +380,19 @@ TEST_CASE("API16 move-only callables and stack indices", "[api]") {
     const auto result = lua.run("return select('#', trim(1, 2, 3)), pcall(bad_index)", "=t");
     REQUIRE(result.has_value());
     CHECK(*result == std::vector<std::string>{"2", "false", "attempt to index a nil value"});
+}
+
+TEST_CASE("API17 an exception from a bound function is a Lua error pcall catches", "[api]") {
+    cpplua::Interpreter lua;
+    REQUIRE(lua.set_function("fails", [](int n) -> int {
+        if (n > 0) {
+            throw std::runtime_error("too big");
+        }
+        return n;
+    }));
+    const auto result = lua.run("return pcall(fails, 1)", "=throw");
+    REQUIRE(result.has_value());
+    // (no position: pcall, a C function, called it)
+    CHECK(*result == std::vector<std::string>{"false", "too big"});
+    CHECK(lua.run("return fails(0)", "=ok").value().at(0) == "0");
 }

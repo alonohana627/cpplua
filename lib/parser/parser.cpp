@@ -856,11 +856,14 @@ std::expected<StatId, SyntaxError> Parser::parse_generic_for(TextRange first_nam
     if (!body) {
         return std::unexpected(std::move(body.error()));
     }
-    return add_statement(GenericForStat{.names = ast_.add_local_name_list(names),
-                                        .values = *values,
-                                        .body = *body,
-                                        .do_line = do_line},
-                         line);
+    return add_statement(
+        GenericForStat{
+            .names = ast_.add_local_name_list(names),
+            .values = *values,
+            .body = *body,
+            .do_line = do_line,
+        },
+        line);
 }
 
 std::expected<Block, SyntaxError> Parser::parse_for_body(int line, std::size_t variables,

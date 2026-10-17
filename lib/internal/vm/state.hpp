@@ -98,6 +98,9 @@ inline constexpr std::uint8_t hook_call = 1;
 inline constexpr std::uint8_t hook_return = 2;
 inline constexpr std::uint8_t hook_line = 4;
 inline constexpr std::uint8_t hook_count = 8;
+// Call or return hooks.
+inline constexpr std::uint8_t hook_calls = 3;
+static_assert(hook_calls == (hook_call | hook_return));
 
 enum class HookEvent : std::uint8_t { Call, Return, Line, Count, TailCall };
 

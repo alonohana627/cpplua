@@ -57,8 +57,9 @@ Heap::Heap(std::uint32_t seed)
     fix(memory_error_string_);
     hook_key_string_ = new_string("_HOOKKEY");
     fix(hook_key_string_);
-    constexpr std::array<std::string_view, 5> hook_events{"call", "return", "line", "count",
-                                                          "tail call"};
+    constexpr std::array<std::string_view, 5> hook_events{
+        "call", "return", "line", "count", "tail call",
+    };
     for (std::size_t e = 0; e < hook_events.size(); ++e) {
         hook_event_strings_.at(e) = new_string(hook_events.at(e));
         fix(hook_event_strings_.at(e));
@@ -139,7 +140,7 @@ void Heap::set_debt(std::ptrdiff_t debt) {
 State* Heap::new_thread() {
     // lua_newthread: the new thread has the hooks of the running one (its
     // hook function stays the running thread's, in _HOOKKEY).
-    State* thread = link_new<State>(allocate(sizeof(State)), ObjectType::Thread);
+    auto* thread = link_new<State>(allocate(sizeof(State)), ObjectType::Thread);
     set_hook(*thread, running_->hook_mask, running_->base_hook_count);
     return thread;
 }

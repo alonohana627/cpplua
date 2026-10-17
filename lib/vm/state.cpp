@@ -112,7 +112,7 @@ void State::shrink_stack() {
     if (in_use <= max_stack && stack_last > max) {
         try {
             resize_stack(in_use > max_stack / 2 ? max_stack : in_use * 2);
-        } catch (const std::bad_alloc&) {
+        } catch (const std::bad_alloc&) { // NOLINT(bugprone-empty-catch): as Lua's
             // Lua ignores a failed shrink too; it runs inside the collector
             // and after errors, where nothing may throw.
         }

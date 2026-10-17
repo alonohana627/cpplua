@@ -580,9 +580,11 @@ struct Signature<R (C::*)(P...) noexcept> : Signature<R (*)(P...)> {};
 
 template <class F, class R, class... P, std::size_t... I>
 int invoke(F& f, Context& ctx, std::index_sequence<I...> /*indices*/) {
+    // NOLINTBEGIN(misc-const-correctness): fetch() changes them, unless P is empty
     std::tuple<Arg<P>...> args;
     int n = 1;
     bool ok = true;
+    // NOLINTEND(misc-const-correctness)
     ((ok = ok && std::get<I>(args).fetch(ctx, n)), ...);
     if (!ok) {
         return function_error;
@@ -661,7 +663,7 @@ public:
     template <class F>
         requires(!std::is_same_v<std::remove_cvref_t<F>, Function> &&
                  std::is_invocable_r_v<int, std::decay_t<F>&, Context&>)
-    Function(F&& f) // NOLINT(google-explicit-constructor): like std::function
+    Function(F&& f) // NOLINT(*-explicit-constructor): converts like std::function
         : callable_(std::make_unique<Callable<std::decay_t<F>>>(std::forward<F>(f))) {}
 
     int operator()(Context& ctx) const { return callable_->call(ctx); }
@@ -822,7 +824,7 @@ public:
     template <class... A>
     Class& constructor(std::string_view name = "new") {
         add_function(name, [](Context& ctx) -> int {
-            std::tuple<detail::Arg<A>...> args;
+            std::tuple<detail::Arg<A>...> args; // NOLINT(misc-const-correctness): unless A is empty
             int n = 1;
             bool ok = true;
             std::apply([&](auto&... a) { ((ok = ok && a.fetch(ctx, n)), ...); }, args);
@@ -893,13 +895,16 @@ private:
             } else {
                 // A member of a bound class type is the member itself, not a
                 // copy: `car.engine.hp = 1` changes the car's engine.
-                return Function{[getter](Context& ctx) -> int {
-                    T* self = ctx.to_object<T>(1);
-                    if (self == nullptr) {
-                        return ctx.type_error(1, ctx.class_name(&class_tag<T>));
-                    }
-                    return ctx.push_member(1, &(self->*getter), &class_tag<M>) ? 1 : function_error;
-                }};
+                return Function{
+                    [getter](Context& ctx) -> int {
+                        T* self = ctx.to_object<T>(1);
+                        if (self == nullptr) {
+                            return ctx.type_error(1, ctx.class_name(&class_tag<T>));
+                        }
+                        return ctx.push_member(1, &(self->*getter), &class_tag<M>) ? 1
+                                                                                   : function_error;
+                    },
+                };
             }
         } else {
             return bind(detail::method_callable<T>(getter));

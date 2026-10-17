@@ -5,8 +5,9 @@ The plan is in [docs/ROADMAP.md](docs/ROADMAP.md); background reading for each s
 
 ## Requirements
 
-- clang++ with libc++ (C++26, `-std=c++2c`)
-- CMake 3.28+ and Ninja
+- clang++ with libc++ (C++26, `-std=c++2c`). CI uses clang and libc++ 23; libc++ 18 is too old
+  (it has no floating-point `std::from_chars` or `std::atomic_ref`)
+- CMake 3.30+ (the first to know `cxx_std_26`) and Ninja
 - Python 3 (for `run-clang-tidy`)
 - clang-format and clang-tidy
 
@@ -33,14 +34,19 @@ cmake --build --preset debug     # build
 ./build/debug/cpplua             # run
 ```
 
-Use `release` instead of `debug` for an optimized build, and `asan` for a debug build with
-AddressSanitizer (it gives the programs an 8 MB stack, since sanitized frames are larger).
+Use `release` instead of `debug` for an optimized build, `asan` for a debug build with
+AddressSanitizer, and `sanitize` for AddressSanitizer and UndefinedBehaviorSanitizer together
+(what CI runs on Linux). On Windows the sanitized programs get an 8 MB stack, since sanitized
+frames are larger.
 
 ## Install
 
 cpplua installs as two parts: the `cpplua` interpreter, and the library for embedding
 (`libcpplua.a`, `include/cpplua/`, a CMake package and a pkg-config file). A program that
 embeds cpplua must be built with clang, libc++ and C++26, like cpplua itself.
+
+A project that adds cpplua with `add_subdirectory` or FetchContent gets the library only; set
+`CPPLUA_BUILD_CLI=ON` to build the `cpplua` program too.
 
 From a release build:
 
@@ -83,7 +89,9 @@ Without CMake: `clang++ -std=c++2c -stdlib=libc++ main.cpp $(pkg-config --cflags
 
 `.github/workflows/ci.yml` builds a release on Windows (MSYS2 CLANG64) and Ubuntu (x86-64,
 clang and libc++ from apt.llvm.org), runs every test, and checks every install above
-(`.github/scripts/verify_install.sh`); the packages are kept as the run's artifacts. Pushing a
+(`.github/scripts/verify_install.sh`); the packages are kept as the run's artifacts. On Ubuntu it
+also runs the tests with the `sanitize` preset (ASan + UBSan) and fails on any clang-format or
+clang-tidy finding. Pushing a
 tag `v<version>` (such as `v5.4.9-beta`) also publishes them as a GitHub release. To check the
 installs locally, after a release build:
 
@@ -139,6 +147,7 @@ ctest --preset debug                         # run all tests
 ctest --preset debug -R lua_5_4_test_suite   # the official Lua 5.4.9 test suite, whole (all.lua)
 cd tests/fixtures/lua-5.4.9-tests && ../../../build/release/cpplua -e "_port=true" all.lua # by hand
 cmake --preset asan && cmake --build --preset asan && ctest --preset asan   # under AddressSanitizer
+cmake --preset sanitize && cmake --build --preset sanitize && ctest --preset sanitize   # ASan + UBSan
 ```
 
 Lua programs used as tests live in `tests/fixtures/`: the official Lua 5.4.9 suite (unchanged

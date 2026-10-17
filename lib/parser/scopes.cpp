@@ -241,11 +241,13 @@ std::expected<void, std::string> Scopes::add_goto(TextRange name, int line) {
     if (gotos_.size() >= max_labels) {
         return std::unexpected(std::string{too_many_labels});
     }
-    gotos_.push_back(Goto{.name = name,
-                          .hash = hash,
-                          .line = line,
-                          .active = functions_.back().active,
-                          .is_break = false});
+    gotos_.push_back(Goto{
+        .name = name,
+        .hash = hash,
+        .line = line,
+        .active = functions_.back().active,
+        .is_break = false,
+    });
     return {};
 }
 

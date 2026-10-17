@@ -42,7 +42,7 @@ constexpr std::size_t round_up(std::size_t size, std::size_t to) {
 void* system_page(std::size_t size) {
 #ifdef _WIN32
     // VirtualAlloc's granularity is 64 KB: its blocks are aligned to that.
-    static_assert(Pool::page_size == 64 * 1024);
+    static_assert(Pool::page_size == std::size_t{64} * 1024);
     void* page = VirtualAlloc(nullptr, size, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
     if (page == nullptr) {
         throw std::bad_alloc{};
@@ -147,7 +147,7 @@ Pool::Page* Pool::new_page(std::size_t size_class) {
         }
         all_pages_ = page;
     }
-    auto* bytes = std::bit_cast<std::byte*>(page);
+    auto* bytes = reinterpret_cast<std::byte*>(page); // NOLINT(*-reinterpret-cast): its bytes
     page->free = nullptr;
     page->bump = bytes + header_size;
     page->end = bytes + page_size;

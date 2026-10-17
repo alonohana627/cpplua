@@ -226,7 +226,7 @@ int exec_result(State& state, int stat) {
     }
     // l_inspectstat: on POSIX, system() gives a wait status, an exit code
     // or the signal that ended the command; Windows has no signals.
-    std::string_view what = "exit";
+    std::string_view what = "exit"; // NOLINT(misc-const-correctness): not on Windows
 #ifndef _WIN32
     if (WIFEXITED(stat)) {
         stat = WEXITSTATUS(stat);

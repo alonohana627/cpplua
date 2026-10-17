@@ -513,7 +513,7 @@ std::string operand_info(const State* state, const Operand& o) {
 Status arith_slow(State* state, const Instruction* pc, const Operand& p1, const Operand& p2,
                   int event, std::uint32_t result) {
     protect(state, pc);
-    Heap& heap = state->heap();
+    const Heap& heap = state->heap();
     const auto e = static_cast<Event>(event);
     const auto call_tm = [&](Value tm) {
         Value r;
@@ -1626,11 +1626,11 @@ const Handler* dispatch_of(State* state) {
 }
 
 const void* plain_dispatch() {
-    return plain_handlers.data();
+    return static_cast<const void*>(plain_handlers.data());
 }
 
 const void* hooked_dispatch() {
-    return hooked_handlers.data();
+    return static_cast<const void*>(hooked_handlers.data());
 }
 
 #define VM_HANDLER(name) CPPLUA_HANDLER_DEFINITION Status op_##name(VM_PARAMS)

@@ -249,7 +249,7 @@ VM_WARM_HANDLER(ForIterator) {
     const auto iterator = std::bit_cast<CFunction>(vals[a + 4]);
     // (Not with call or return hooks: they must see the iterator's calls.)
     if (tags[a + 4] == Tag::CFunction && tags[a + 5] == Tag::Table &&
-        (state->hook_mask & (hook_call | hook_return)) == 0) {
+        (state->hook_mask & hook_calls) == 0) {
         Table* t = table_of(vals[a + 5]);
         std::array<Value, 2> results{};
         int n = -1;
