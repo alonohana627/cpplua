@@ -208,6 +208,11 @@ int base_next(State& state) {
 
 namespace {
 
+// pairscont: the three results of __pairs.
+int finish_pairs(State& /*state*/, Status /*status*/, std::intptr_t /*context*/) {
+    return 3;
+}
+
 int pairs(State& state) {
     if (!check_any(state, 1)) {
         return c_function_error;
@@ -220,12 +225,14 @@ int pairs(State& state) {
         push(state, Value::nil());
         return 3;
     }
-    // __pairs(t), three results (M2.6).
+    // __pairs(t), three results (M2.6); it may yield (pairscont).
     const std::uint32_t func = state.top;
     push(state, tm);
     push(state, t);
-    if (call(state, func, 3) != Status::Ok) {
-        return c_function_error;
+    switch (call_k(state, func, 3, &finish_pairs, 0)) {
+    case Status::Ok: return 3;
+    case Status::Error: return c_function_error;
+    case Status::Yield: return c_function_yield;
     }
     return 3;
 }
@@ -351,6 +358,25 @@ int assert_value(State& state) {
     return raise_at_level(state, message, 1);
 }
 
+// finishpcall: what pcall and xpcall return once their call has ended,
+// `first` being the slot of their "true": true and the results, or false
+// and the error object (which the failed call left after it).
+int finish_pcall(State& state, Status status, std::intptr_t first) {
+    if (status == Status::Error) {
+        state.set(static_cast<std::uint32_t>(first), Value::boolean(false));
+        return 2;
+    }
+    return static_cast<int>(state.top - static_cast<std::uint32_t>(first));
+}
+
+// The end of pcall and xpcall, or their yield (C3).
+int pcall_result(State& state, Status status, std::uint32_t first) {
+    if (status == Status::Yield) {
+        return c_function_yield;
+    }
+    return finish_pcall(state, status, first);
+}
+
 int pcall(State& state) {
     // [f, args...] becomes [true, f, args...]; the call leaves its results
     // after the true, or the error object.
@@ -363,11 +389,9 @@ int pcall(State& state) {
     }
     ++state.top;
     state.set(first, Value::boolean(true));
-    if (protected_call(state, first + 1, all_results, Value::nil()) != Status::Ok) {
-        state.set(first, Value::boolean(false)); // false, the error object
-        return 2;
-    }
-    return static_cast<int>(state.top - first);
+    const Status status =
+        protected_call_k(state, first + 1, all_results, Value::nil(), &finish_pcall, first);
+    return pcall_result(state, status, first);
 }
 
 int xpcall(State& state) {
@@ -385,11 +409,9 @@ int xpcall(State& state) {
     state.top += 2;
     state.set(args, Value::boolean(true));
     state.set(args + 1, state.get(first));
-    if (protected_call(state, args + 1, all_results, handler) != Status::Ok) {
-        state.set(args, Value::boolean(false));
-        return 2;
-    }
-    return static_cast<int>(state.top - args);
+    const Status status =
+        protected_call_k(state, args + 1, all_results, handler, &finish_pcall, args);
+    return pcall_result(state, status, args);
 }
 
 // ---- The collector ----
@@ -489,31 +511,6 @@ int collectgarbage(State& state) {
         return 1;
     }
     }
-}
-
-// ---- debug.traceback (the debug library comes with stage 9) ----
-
-int traceback(State& state) {
-    // db_traceback: a message that is not a string (or number) comes back
-    // as it is.
-    const Value message = arg(state, 1);
-    if (!message.is_string() && !message.is_number() && !message.is_nil()) {
-        push(state, message);
-        return 1;
-    }
-    std::int64_t level = 1;
-    if (!opt_integer(state, 2, 1, level)) {
-        return c_function_error;
-    }
-    std::optional<std::string> text;
-    if (!message.is_nil()) {
-        std::string s;
-        static_cast<void>(check_string(state, 1, s));
-        text = s;
-    }
-    push(state, Value::string(state.heap().new_string(
-                    lua2::traceback(state, text, static_cast<int>(level)))));
-    return 1;
 }
 
 // ---- Loading chunks ----
@@ -622,6 +619,11 @@ int loadfile(State& state) {
     return load_result(state, load_file(state, name, mode), env);
 }
 
+// dofilecont: all the chunk's results, from slot `func`.
+int finish_dofile(State& state, Status /*status*/, std::intptr_t func) {
+    return static_cast<int>(state.top - static_cast<std::uint32_t>(func));
+}
+
 int dofile(State& state) {
     std::string_view name;
     if (!opt_view(state, 1, "", name)) {
@@ -633,10 +635,12 @@ int dofile(State& state) {
         state.set_error(loaded.error()); // raised as it is, without a position
         return c_function_error;
     }
-    if (call(state, func, all_results) != Status::Ok) {
-        return c_function_error;
+    switch (call_k(state, func, all_results, &finish_dofile, func)) {
+    case Status::Ok: break;
+    case Status::Error: return c_function_error;
+    case Status::Yield: return c_function_yield;
     }
-    return static_cast<int>(state.top - func);
+    return finish_dofile(state, Status::Ok, func);
 }
 
 // warn(msg1, ...): the pieces as one warning, or "@on" and "@off" (luaB_warn
@@ -703,14 +707,6 @@ void open_base(Heap& heap) {
     g.set(heap, Value::string(heap.new_string("_G")), Value::table(&g));
     g.set(heap, Value::string(heap.new_string("_VERSION")),
           Value::string(heap.new_string("Lua 5.4")));
-}
-
-void open_debug(Heap& heap) {
-    // luaopen_debug, for now only traceback: a `debug` global and module.
-    Table* debug = heap.new_table();
-    heap.globals().set(heap, Value::string(heap.new_string("debug")), Value::table(debug));
-    heap.loaded().set(heap, Value::string(heap.new_string("debug")), Value::table(debug));
-    set_function(heap, *debug, "traceback", &traceback);
 }
 
 } // namespace lua2

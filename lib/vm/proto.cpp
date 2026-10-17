@@ -86,6 +86,7 @@ char constant_kind(Value k) {
     case Tag::CClosure:
     case Tag::LightUserdata:
     case Tag::Userdata:
+    case Tag::Thread:
     case Tag::Table: break; // never a constant
     }
     return '?';

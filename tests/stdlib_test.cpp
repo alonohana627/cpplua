@@ -80,7 +80,7 @@ TEST_CASE("S1.2 the reference files in std/ declare exactly the C++ functions", 
     // field of the libraries, the globals that are not libraries, and the
     // methods of files.
     const std::set<std::string> libraries{
-        "string", "table", "math", "utf8", "io", "os", "package", "debug",
+        "string", "table", "math", "utf8", "io", "os", "package", "debug", "coroutine",
     };
     std::set<std::string> declared;
     const std::regex function_line{R"(^function ([A-Za-z_][\w.:]*)\()"};
@@ -102,7 +102,7 @@ TEST_CASE("S1.2 the reference files in std/ declare exactly the C++ functions", 
     }
     const std::string names = run(R"(
         local names = {}
-        local libraries = {"string", "table", "math", "utf8", "io", "os", "package", "debug"}
+        local libraries = {"string", "table", "math", "utf8", "io", "os", "package", "debug", "coroutine"}
         local is_library = {}
         for _, name in ipairs(libraries) do
             is_library[name] = true
@@ -121,7 +121,12 @@ TEST_CASE("S1.2 the reference files in std/ declare exactly the C++ functions", 
     CHECK(names == expected);
 }
 
-TEST_CASE("S2.5 string.dump has nothing to dump", "[stdlib]") {
+TEST_CASE("S2.5 string.dump makes Lua 5.4 binary chunks", "[stdlib]") {
+    CHECK(run("local f = load(string.dump(function(a) return a * 2, 'k' end)) return f(21)") ==
+          "42,k");
+    CHECK(run("local d = string.dump(function() return 1 end, true) "
+              "return d:sub(1, 4) == '\\27Lua', #d < #string.dump(function() return 1 end)") ==
+          "true,true");
     CHECK(run("return pcall(string.dump, print)") == "false,unable to dump given function");
     CHECK(run("return pcall(string.dump, 1)")
               .starts_with("false,bad argument #1 to 'string.dump' (function expected"));
@@ -234,7 +239,7 @@ TEST_CASE("S8.1 load: strings, readers, modes and environments", "[stdlib]") {
     CHECK(run("return load('return 1', 'chunk', 'b')") ==
           "nil,attempt to load a text chunk (mode is 'b')");
     CHECK(run("return load('\\27Lua')") ==
-          "nil,[string \"\x1bLua\"]: bad binary format (lua2 loads only source code)");
+          "nil,binary string: bad binary format (truncated chunk)");
     CHECK(run("return load(function() error('stop') end)") == "nil,input:1: stop");
     CHECK(run("return load(function() return {} end)") ==
           "nil,input:1: reader function must return a string");

@@ -1,0 +1,470 @@
+Chunk
+  LocalFunction closer
+    Function(name) [upvalues: _ENV]
+      Return
+        Call
+          Name setmetatable
+          Table
+          Table
+            Field __close
+              Function(_, e) [upvalues: _ENV, name]
+                CallStatement
+                  Call
+                    Name print
+                    String "close"
+                    Name name (upvalue 1)
+                    Name e (local 1)
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: closer, _ENV]
+        Local a <close>
+          Call
+            Name closer (upvalue 0)
+            String "a"
+        Local b <close>
+          Call
+            Name closer (upvalue 0)
+            String "b"
+        CallStatement
+          Call
+            Index
+              Name coroutine
+              String "yield"
+            String "suspended with two"
+        CallStatement
+          Call
+            Name print
+            String "never here"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Name co (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Name co (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Name print
+  Local done
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function()
+        Return
+          Integer 1
+  CallStatement
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name done (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Name done (local 2)
+  Local bad
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV]
+        CallStatement
+          Call
+            Name error
+            String "died"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name bad (local 3)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Name bad (local 3)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Name bad (local 3)
+  Local badt
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV]
+        CallStatement
+          Call
+            Name error
+            Table
+  CallStatement
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name badt (local 4)
+  Local ok, e
+    Call
+      Index
+        Name coroutine
+        String "close"
+      Name badt (local 4)
+  CallStatement
+    Call
+      Name print
+      Name ok (local 5)
+      Call
+        Name type
+        Name e (local 6)
+  Local co2
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV, closer]
+        Local x <close>
+          Call
+            Name setmetatable
+            Table
+            Table
+              Field __close
+                Function() [upvalues: _ENV]
+                  CallStatement
+                    Call
+                      Name error
+                      String "close failed"
+                      Integer 0
+        Local y <close>
+          Call
+            Name closer (upvalue 1)
+            String "y"
+        CallStatement
+          Call
+            Index
+              Name coroutine
+              String "yield"
+  CallStatement
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name co2 (local 7)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Name co2 (local 7)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co2 (local 7)
+  Local co3
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV]
+        Local x <close>
+          Call
+            Name setmetatable
+            Table
+            Table
+              Field __close
+                Function(_, e) [upvalues: _ENV]
+                  CallStatement
+                    Call
+                      Name print
+                      String "x sees"
+                      Name e (local 1)
+                  CallStatement
+                    Call
+                      Name error
+                      String "x failed"
+                      Integer 0
+        Local y <close>
+          Call
+            Name setmetatable
+            Table
+            Table
+              Field __close
+                Function(_, e) [upvalues: _ENV]
+                  CallStatement
+                    Call
+                      Name print
+                      String "y sees"
+                      Name e (local 1)
+                  CallStatement
+                    Call
+                      Name error
+                      String "y failed"
+                      Integer 0
+        CallStatement
+          Call
+            Index
+              Name coroutine
+              String "yield"
+  CallStatement
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name co3 (local 8)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Name co3 (local 8)
+  Local self
+  Assign
+    Targets
+      Name self (local 9)
+    Values
+      Call
+        Index
+          Name coroutine
+          String "create"
+        Function() [upvalues: _ENV, self]
+          CallStatement
+            Call
+              Name print
+              Call
+                Name pcall
+                Index
+                  Name coroutine
+                  String "close"
+                Name self (upvalue 1)
+          Local inner
+            Call
+              Index
+                Name coroutine
+                String "create"
+              Function() [upvalues: _ENV, self]
+                CallStatement
+                  Call
+                    Name print
+                    Call
+                      Name pcall
+                      Index
+                        Name coroutine
+                        String "close"
+                      Name self (upvalue 1)
+          CallStatement
+            Call
+              Index
+                Name coroutine
+                String "resume"
+              Name inner (local 0)
+          Return
+            String "self ok"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name self (local 9)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "close"
+        Call
+          Index
+            Name coroutine
+            String "running"
+  Local co4
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV]
+        CallStatement
+          Call
+            Name pcall
+            Function() [upvalues: _ENV]
+              CallStatement
+                Call
+                  Index
+                    Name coroutine
+                    String "yield"
+                  String "in pcall"
+        CallStatement
+          Call
+            Name print
+            String "never"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co4 (local 10)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Name co4 (local 10)
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co4 (local 10)
+  Local w
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: closer, _ENV]
+        Local v <close>
+          Call
+            Name closer (upvalue 0)
+            String "v"
+        CallStatement
+          Call
+            Index
+              Name coroutine
+              String "yield"
+            Integer 1
+        CallStatement
+          Call
+            Name error
+            String "wrap error"
+            Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name w (local 11)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name w (local 11)
+  Local co5
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: closer, _ENV]
+        Local z <close>
+          Call
+            Name closer (upvalue 0)
+            String "z"
+        CallStatement
+          Call
+            Name error
+            String "unwinding"
+            Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co5 (local 12)
+  CallStatement
+    Call
+      Name print
+      String "before close"
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co5 (local 12)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Name co5 (local 12)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Name co5 (local 12)
+  Return
+    String "end"

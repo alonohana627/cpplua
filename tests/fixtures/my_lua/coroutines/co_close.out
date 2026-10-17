@@ -1,0 +1,34 @@
+true	suspended with two
+close	b	nil
+close	a	nil
+true
+dead
+false	cannot resume dead coroutine
+true
+true
+true
+false	co_close.lua:23: died
+false	co_close.lua:23: died
+true
+false	table
+close	y	nil
+false	close failed
+dead
+y sees	nil
+x sees	y failed
+false	x failed
+false	cannot close a running coroutine
+false	cannot close a normal coroutine
+true	self ok
+false	cannot close a running coroutine
+true	in pcall
+true	dead
+1
+close	v	wrap error
+false	wrap error
+false	unwinding
+before close	dead
+close	z	unwinding
+false	unwinding
+true
+end

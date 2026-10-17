@@ -1,0 +1,218 @@
+Chunk
+  Local Y
+    Index
+      Name coroutine
+      String "yield"
+  Local callable
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __call
+          Function(self, a, b) [upvalues: Y]
+            Local r
+              Call
+                Name Y (upvalue 0)
+                String "call"
+                Name a (local 1)
+                Name b (local 2)
+            Return
+              Name r (local 3)
+              Binary *
+                Name r (local 3)
+                Integer 2
+  Local sized
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __len
+          Function() [upvalues: Y]
+            Return
+              Call
+                Name Y (upvalue 0)
+                String "len"
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV, sized, callable, Y]
+        CallStatement
+          Call
+            Name print
+            String "len"
+            Unary #
+              Name sized (upvalue 1)
+            Binary +
+              Unary #
+                Name sized (upvalue 1)
+              Integer 1
+        CallStatement
+          Call
+            Name print
+            String "call"
+            Call
+              Name callable (upvalue 2)
+              Integer 3
+              Integer 4
+        Local x, y
+          Call
+            Name callable (upvalue 2)
+            Integer 5
+        CallStatement
+          Call
+            Name print
+            String "call2"
+            Name x (local 0)
+            Name y (local 1)
+        CallStatement
+          Call
+            Name print
+            String "in args"
+            Call
+              Name select
+              String "#"
+              Call
+                Name callable (upvalue 2)
+                Integer 1
+                Integer 2
+            Paren
+              Call
+                Name callable (upvalue 2)
+                Integer 0
+        LocalFunction tail
+          Function() [upvalues: callable]
+            Return
+              Call
+                Name callable (upvalue 0)
+                String "t"
+        CallStatement
+          Call
+            Name print
+            String "tail"
+            Call
+              Name tail (local 2)
+        Local obj
+          Table
+            Field f
+              Name callable (upvalue 2)
+        CallStatement
+          Call
+            Name print
+            String "method"
+            MethodCall f
+              Name obj (local 3)
+              Integer 9
+        Do
+          Local res <close>
+            Call
+              Name setmetatable
+              Table
+              Table
+                Field __close
+                  Function(_, e) [upvalues: Y]
+                    CallStatement
+                      Call
+                        Name Y (upvalue 0)
+                        String "close"
+                        Name e (local 1)
+          CallStatement
+            Call
+              Name print
+              String "leaving block"
+        CallStatement
+          Call
+            Name print
+            String "after close"
+        Return
+          String "done"
+  Local r
+    Table
+      Item
+        Call
+          Name co (local 3)
+  While
+    Binary ~=
+      Index
+        Name r (local 4)
+        Integer 1
+      String "done"
+    Body
+      NumericFor i
+        Integer 1
+        Unary #
+          Name r (local 4)
+        Body
+          If
+            If
+              Binary ==
+                Call
+                  Name type
+                  Index
+                    Name r (local 4)
+                    Name i (local 8)
+                String "table"
+              Then
+                Assign
+                  Targets
+                    Index
+                      Name r (local 4)
+                      Name i (local 8)
+                  Values
+                    String "a table"
+      CallStatement
+        Call
+          Name print
+          String "  yield"
+          Call
+            Index
+              Name table
+              String "unpack"
+            Name r (local 4)
+      Local k
+        Index
+          Name r (local 4)
+          Integer 1
+      If
+        If
+          Binary ==
+            Name k (local 5)
+            String "len"
+          Then
+            Assign
+              Targets
+                Name r (local 4)
+              Values
+                Table
+                  Item
+                    Call
+                      Name co (local 3)
+                      Integer 7
+        ElseIf
+          Binary ==
+            Name k (local 5)
+            String "call"
+          Then
+            Assign
+              Targets
+                Name r (local 4)
+              Values
+                Table
+                  Item
+                    Call
+                      Name co (local 3)
+                      Integer 10
+        Else
+          Assign
+            Targets
+              Name r (local 4)
+            Values
+              Table
+                Item
+                  Call
+                    Name co (local 3)
+  Return
+    Index
+      Name r (local 4)
+      Integer 1

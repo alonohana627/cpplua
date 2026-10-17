@@ -25,6 +25,7 @@
 #include "std/auxlib.hpp"
 #include "std/libs.hpp"
 #include "value/convert.hpp"
+#include "value/locale.hpp"
 #include "value/number.hpp"
 #include "value/table.hpp"
 #include "vm/execute.hpp"
@@ -371,6 +372,7 @@ int os_setlocale(State& state) {
     }
     // NOLINTNEXTLINE(concurrency-mt-unsafe): as Lua's
     const char* result = std::setlocale(categories.at(op), locale ? locale->c_str() : nullptr);
+    refresh_locale(); // string order and numerals follow it (P4)
     if (result == nullptr) {
         push(state, Value::nil());
     } else {

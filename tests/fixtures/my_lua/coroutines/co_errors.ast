@@ -1,0 +1,314 @@
+Chunk
+  LocalFunction run
+    Function(f, ...) [upvalues: _ENV]
+      Local co
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Name f (local 0)
+      Local r
+        Call
+          Index
+            Name table
+            String "pack"
+          Call
+            Index
+              Name coroutine
+              String "resume"
+            Name co (local 1)
+            Vararg
+      Return
+        Call
+          Index
+            Name coroutine
+            String "status"
+          Name co (local 1)
+        Index
+          Name r (local 2)
+          String "n"
+        Call
+          Index
+            Name table
+            String "unpack"
+          Name r (local 2)
+          Integer 1
+          Index
+            Name r (local 2)
+            String "n"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "plain"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              String "no position"
+              Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function() [upvalues: _ENV]
+          LocalFunction g
+            Function() [upvalues: _ENV]
+              CallStatement
+                Call
+                  Name error
+                  String "level 2"
+                  Integer 2
+          CallStatement
+            Call
+              Name g (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              False
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              Float 3.5
+  Local obj
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __tostring
+          Function()
+            Return
+              String "custom error"
+  Local status, n, ok, e
+    Call
+      Name run (local 0)
+      Function() [upvalues: _ENV, obj]
+        CallStatement
+          Call
+            Name error
+            Name obj (upvalue 1)
+  CallStatement
+    Call
+      Name print
+      Name status (local 2)
+      Name n (local 3)
+      Name ok (local 4)
+      Binary ==
+        Name e (local 5)
+        Name obj (local 1)
+      Call
+        Name tostring
+        Name e (local 5)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function()
+          Local x
+            Binary +
+              Integer 1
+              Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function(t)
+          Return
+            Index
+              Index
+                Name t (local 0)
+                String "a"
+              String "b"
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function()
+          Return
+            Unary #
+              Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function() [upvalues: _ENV]
+          CallStatement
+            Call
+              Name undefined_function
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function()
+          Return
+            MethodCall bad
+              Paren
+                String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function()
+          Return
+            Binary <
+              Integer 1
+              String "2"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function() [upvalues: _ENV]
+          Local t
+            Call
+              Name setmetatable
+              Table
+              Table
+                Field __index
+                  Function() [upvalues: _ENV]
+                    CallStatement
+                      Call
+                        Name error
+                        String "from __index"
+          Return
+            Index
+              Name t (local 0)
+              String "k"
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV]
+        NumericFor i
+          Integer 1
+          Integer 3
+          Body
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+                Name i (local 3)
+        CallStatement
+          Call
+            Name error
+            Table
+              Field msg
+                String "table after yields"
+  NumericFor i
+    Integer 1
+    Integer 4
+    Body
+      Local ok, v
+        Call
+          Index
+            Name coroutine
+            String "resume"
+          Name co (local 6)
+      CallStatement
+        Call
+          Name print
+          Name ok (local 11)
+          Binary or
+            Binary and
+              Binary ==
+                Call
+                  Name type
+                  Name v (local 12)
+                String "table"
+              Index
+                Name v (local 12)
+                String "msg"
+            Name v (local 12)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co (local 6)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function() [upvalues: _ENV]
+          Return
+            Call
+              Name xpcall
+              Name error
+              Function() [upvalues: _ENV]
+                CallStatement
+                  Call
+                    Name error
+                    String "handler fails"
+              String "E"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name run (local 0)
+        Function(...) [upvalues: _ENV]
+          CallStatement
+            Call
+              Name error
+              Call
+                Name select
+                Integer 2
+                Vararg
+        String "a"
+        String "b"
+        String "c"
+  Return
+    String "end"

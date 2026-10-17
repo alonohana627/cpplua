@@ -1,0 +1,290 @@
+Chunk
+  Local Y
+    Index
+      Name coroutine
+      String "yield"
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV, Y]
+        CallStatement
+          Call
+            Name print
+            String "pcall1"
+            Call
+              Name pcall
+              Function(a) [upvalues: Y]
+                Local b
+                  Call
+                    Name Y (upvalue 0)
+                    String "in pcall"
+                    Name a (local 0)
+                Return
+                  Binary +
+                    Name a (local 0)
+                    Name b (local 1)
+              Integer 1
+        CallStatement
+          Call
+            Name print
+            String "pcall2"
+            Call
+              Name pcall
+              Function() [upvalues: Y, _ENV]
+                CallStatement
+                  Call
+                    Name Y (upvalue 0)
+                    String "before error"
+                CallStatement
+                  Call
+                    Name error
+                    String "failed after yield"
+        Local ok, e
+          Call
+            Name pcall
+            Function() [upvalues: Y, _ENV]
+              CallStatement
+                Call
+                  Name Y (upvalue 0)
+                  String "before table error"
+              CallStatement
+                Call
+                  Name error
+                  Table
+                    Field code
+                      Integer 7
+        CallStatement
+          Call
+            Name print
+            String "pcall3"
+            Name ok (local 0)
+            Call
+              Name type
+              Name e (local 1)
+            Index
+              Name e (local 1)
+              String "code"
+        CallStatement
+          Call
+            Name print
+            String "xpcall1"
+            Call
+              Name xpcall
+              Function(...) [upvalues: Y, _ENV]
+                Local x
+                  Call
+                    Name Y (upvalue 0)
+                    String "in xpcall"
+                    Vararg
+                CallStatement
+                  Call
+                    Name error
+                    Binary ..
+                      String "xp "
+                      Name x (local 0)
+              Function(m)
+                Return
+                  Binary ..
+                    String "handled: "
+                    Name m (local 0)
+              String "p"
+              String "q"
+        CallStatement
+          Call
+            Name print
+            String "xpcall2"
+            Call
+              Name xpcall
+              Function() [upvalues: Y]
+                CallStatement
+                  Call
+                    Name Y (upvalue 0)
+                    String "again"
+                Local t
+                  Nil
+                Return
+                  Index
+                    Name t (local 0)
+                    String "k"
+              Function(m)
+                Return
+                  Paren
+                    MethodCall gsub
+                      Name m (local 0)
+                      String "^.-:%d+: "
+                      String ""
+        CallStatement
+          Call
+            Name print
+            String "nested"
+            Call
+              Name pcall
+              Function() [upvalues: Y, _ENV]
+                CallStatement
+                  Call
+                    Name Y (upvalue 0)
+                    String "level 1"
+                Local ok, e
+                  Call
+                    Name pcall
+                    Function() [upvalues: Y, _ENV]
+                      CallStatement
+                        Call
+                          Name Y (upvalue 0)
+                          String "level 2"
+                      CallStatement
+                        Call
+                          Name error
+                          String "inner"
+                          Integer 0
+                CallStatement
+                  Call
+                    Name Y (upvalue 0)
+                    String "level 1 again"
+                    Name ok (local 0)
+                    Name e (local 1)
+                CallStatement
+                  Call
+                    Name error
+                    String "outer"
+                    Integer 0
+        CallStatement
+          Call
+            Name print
+            String "direct"
+            Call
+              Name pcall
+              Name Y (upvalue 1)
+              String "direct"
+        CallStatement
+          Call
+            Name print
+            String "status inside"
+            Call
+              Index
+                Name coroutine
+                String "status"
+              Call
+                Index
+                  Name coroutine
+                  String "running"
+        Return
+          String "end"
+  Local ok, a, b, c
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name co (local 1)
+  While
+    Binary ==
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co (local 1)
+      String "suspended"
+    Body
+      CallStatement
+        Call
+          Name print
+          String "  yielded"
+          Name a (local 3)
+          Name b (local 4)
+          Name c (local 5)
+      Assign
+        Targets
+          Name ok (local 2)
+          Name a (local 3)
+          Name b (local 4)
+          Name c (local 5)
+        Values
+          Call
+            Index
+              Name coroutine
+              String "resume"
+            Name co (local 1)
+            Integer 41
+  CallStatement
+    Call
+      Name print
+      Name ok (local 2)
+      Name a (local 3)
+  Local co2
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV, Y]
+        Local ok, e
+          Call
+            Name pcall
+            Name Y (upvalue 1)
+            Integer 1
+        CallStatement
+          Call
+            Name print
+            String "pcall returned"
+            Name ok (local 0)
+            Name e (local 1)
+        CallStatement
+          Call
+            Name error
+            String "after the pcall"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co2 (local 6)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co2 (local 6)
+        String "v"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co2 (local 6)
+  Local co3
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV, Y]
+        Return
+          Call
+            Name xpcall
+            Function() [upvalues: Y]
+              CallStatement
+                Call
+                  Name Y (upvalue 0)
+              Return
+                Binary +
+                  Integer 1
+                  Table
+            Function(m)
+              Return
+                Binary ..
+                  String "H("
+                  Binary ..
+                    Name m (local 0)
+                    String ")"
+  CallStatement
+    Call
+      Name co3 (local 7)
+  Return
+    Call
+      Name co3 (local 7)

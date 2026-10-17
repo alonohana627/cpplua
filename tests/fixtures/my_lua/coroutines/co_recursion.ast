@@ -1,0 +1,394 @@
+Chunk
+  LocalFunction walk
+    Function(node) [upvalues: walk, _ENV]
+      If
+        If
+          Binary ==
+            Name node (local 0)
+            Nil
+          Then
+            Return
+      CallStatement
+        Call
+          Name walk (upvalue 0)
+          Index
+            Name node (local 0)
+            String "left"
+      CallStatement
+        Call
+          Index
+            Name coroutine
+            String "yield"
+          Index
+            Name node (local 0)
+            String "key"
+      CallStatement
+        Call
+          Name walk (upvalue 0)
+          Index
+            Name node (local 0)
+            String "right"
+  LocalFunction insert
+    Function(node, k) [upvalues: insert]
+      If
+        If
+          Binary ==
+            Name node (local 0)
+            Nil
+          Then
+            Return
+              Table
+                Field key
+                  Name k (local 1)
+      If
+        If
+          Binary <
+            Name k (local 1)
+            Index
+              Name node (local 0)
+              String "key"
+          Then
+            Assign
+              Targets
+                Index
+                  Name node (local 0)
+                  String "left"
+              Values
+                Call
+                  Name insert (upvalue 0)
+                  Index
+                    Name node (local 0)
+                    String "left"
+                  Name k (local 1)
+        Else
+          Assign
+            Targets
+              Index
+                Name node (local 0)
+                String "right"
+            Values
+              Call
+                Name insert (upvalue 0)
+                Index
+                  Name node (local 0)
+                  String "right"
+                Name k (local 1)
+      Return
+        Name node (local 0)
+  Local root
+  GenericFor _, k
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            Integer 50
+          Item
+            Integer 30
+          Item
+            Integer 70
+          Item
+            Integer 20
+          Item
+            Integer 40
+          Item
+            Integer 60
+          Item
+            Integer 80
+          Item
+            Integer 35
+          Item
+            Integer 65
+    Body
+      Assign
+        Targets
+          Name root (local 2)
+        Values
+          Call
+            Name insert (local 1)
+            Name root (local 2)
+            Name k (local 8)
+  Local keys
+    Table
+  GenericFor k
+    In
+      Call
+        Index
+          Name coroutine
+          String "wrap"
+        Function() [upvalues: walk, root]
+          CallStatement
+            Call
+              Name walk (upvalue 0)
+              Name root (upvalue 1)
+    Body
+      Assign
+        Targets
+          Index
+            Name keys (local 3)
+            Binary +
+              Unary #
+                Name keys (local 3)
+              Integer 1
+        Values
+          Name k (local 8)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name table
+          String "concat"
+        Name keys (local 3)
+        String " "
+  LocalFunction permgen
+    Function(a, n) [upvalues: _ENV, permgen]
+      Assign
+        Targets
+          Name n (local 1)
+        Values
+          Binary or
+            Name n (local 1)
+            Unary #
+              Name a (local 0)
+      If
+        If
+          Binary <=
+            Name n (local 1)
+            Integer 1
+          Then
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+                Name a (local 0)
+        Else
+          NumericFor i
+            Integer 1
+            Name n (local 1)
+            Body
+              Assign
+                Targets
+                  Index
+                    Name a (local 0)
+                    Name n (local 1)
+                  Index
+                    Name a (local 0)
+                    Name i (local 5)
+                Values
+                  Index
+                    Name a (local 0)
+                    Name i (local 5)
+                  Index
+                    Name a (local 0)
+                    Name n (local 1)
+              CallStatement
+                Call
+                  Name permgen (upvalue 1)
+                  Name a (local 0)
+                  Binary -
+                    Name n (local 1)
+                    Integer 1
+              Assign
+                Targets
+                  Index
+                    Name a (local 0)
+                    Name n (local 1)
+                  Index
+                    Name a (local 0)
+                    Name i (local 5)
+                Values
+                  Index
+                    Name a (local 0)
+                    Name i (local 5)
+                  Index
+                    Name a (local 0)
+                    Name n (local 1)
+  Local count
+    Integer 0
+  GenericFor p
+    In
+      Call
+        Index
+          Name coroutine
+          String "wrap"
+        Function() [upvalues: permgen]
+          CallStatement
+            Call
+              Name permgen (upvalue 0)
+              Table
+                Item
+                  String "a"
+                Item
+                  String "b"
+                Item
+                  String "c"
+                Item
+                  String "d"
+    Body
+      Assign
+        Targets
+          Name count (local 5)
+        Values
+          Binary +
+            Name count (local 5)
+            Integer 1
+      If
+        If
+          Binary <=
+            Name count (local 5)
+            Integer 6
+          Then
+            CallStatement
+              Call
+                Name print
+                Call
+                  Index
+                    Name table
+                    String "concat"
+                  Name p (local 10)
+  CallStatement
+    Call
+      Name print
+      String "permutations"
+      Name count (local 5)
+  LocalFunction deep
+    Function(n) [upvalues: _ENV, deep]
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+                String "bottom"
+      If
+        If
+          Binary ==
+            Binary %
+              Name n (local 0)
+              Integer 1000
+            Integer 0
+          Then
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+                String "down"
+                Name n (local 0)
+      Local r
+        Call
+          Name deep (upvalue 1)
+          Binary -
+            Name n (local 0)
+            Integer 1
+      If
+        If
+          Binary ==
+            Binary %
+              Name n (local 0)
+              Integer 1000
+            Integer 0
+          Then
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+                String "up"
+                Name n (local 0)
+      Return
+        Binary +
+          Name r (local 1)
+          Integer 1
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Name deep (local 6)
+  Local ok, a, b
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name co (local 7)
+      Integer 5000
+  While
+    Binary ==
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co (local 7)
+      String "suspended"
+    Body
+      CallStatement
+        Call
+          Name print
+          Name a (local 9)
+          Name b (local 10)
+      Assign
+        Targets
+          Name ok (local 8)
+          Name a (local 9)
+          Name b (local 10)
+        Values
+          Call
+            Index
+              Name coroutine
+              String "resume"
+            Name co (local 7)
+            Binary or
+              Binary and
+                Binary ==
+                  Name a (local 9)
+                  String "bottom"
+                Integer 0
+              Nil
+  CallStatement
+    Call
+      Name print
+      Name ok (local 8)
+      Name a (local 9)
+  LocalFunction nest
+    Function(n) [upvalues: _ENV, nest]
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              Integer 0
+      Local co
+        Call
+          Index
+            Name coroutine
+            String "wrap"
+          Function() [upvalues: _ENV, nest, n]
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+                Binary +
+                  Call
+                    Name nest (upvalue 1)
+                    Binary -
+                      Name n (upvalue 2)
+                      Integer 1
+                  Integer 1
+      Return
+        Call
+          Name co (local 1)
+  Return
+    Call
+      Name nest (local 11)
+      Integer 50

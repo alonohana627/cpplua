@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 # Pre-release: bump by 0.0.1 per step. The release becomes 5.4.
-project(lua2 VERSION 0.0.9 LANGUAGES CXX)
+project(lua2 VERSION 0.0.11 LANGUAGES CXX)
 
 # C++26 (clang spells it -std=c++2c), no compiler extensions.
 set(CMAKE_CXX_STANDARD 26)
@@ -38,6 +38,7 @@ add_library(lua2_lib
   lib/value/bitwise.cpp
   lib/value/compare.cpp
   lib/value/convert.cpp
+  lib/value/locale.cpp
   lib/value/string.cpp
   lib/gc/pool.cpp
   lib/gc/heap.cpp
@@ -46,12 +47,15 @@ add_library(lua2_lib
   lib/vm/state.cpp
   lib/vm/compiler.cpp
   lib/vm/debug_info.cpp
+  lib/vm/dump.cpp
   lib/vm/execute.cpp
   lib/vm/run.cpp
   lib/vm/metamethods.cpp
   lib/value/table.cpp
   lib/std/base.cpp
   lib/std/auxlib.cpp
+  lib/std/coroutine.cpp
+  lib/std/debug.cpp
   lib/std/io.cpp
   lib/std/libs.cpp
   lib/std/math.cpp
@@ -61,6 +65,7 @@ add_library(lua2_lib
   lib/std/table.cpp
   lib/std/utf8.cpp
   lib/api.cpp
+  lib/standalone.cpp
 )
 add_library(lua2::lua2 ALIAS lua2_lib)
 target_include_directories(lua2_lib
@@ -139,8 +144,22 @@ if(BUILD_TESTING)
   target_link_libraries(lua2_api_tests PRIVATE lua2::lua2 lua2_warnings Catch2::Catch2WithMain)
 
   include(Catch)
-  catch_discover_tests(lua2_tests)
+  # ctest lists the tests when it runs. Test names must not contain ';':
+  # Catch2's CatchAddTests.cmake reads the listing as a CMake list, and a ';'
+  # after an unbalanced '[' in some name (the order changes run to run) cut
+  # it, so every test came out NOTFOUND now and then.
+  catch_discover_tests(lua2_tests DISCOVERY_MODE PRE_TEST)
   catch_discover_tests(lua2_api_tests)
+
+  # The official Lua 5.4.9 test suite (stage 11): all.lua prints
+  # "final OK !!!" when every file passes. _port skips the tests that need
+  # a POSIX system.
+  add_test(NAME lua_5_4_test_suite
+    COMMAND lua2 -e "_port=true" all.lua
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/tests/fixtures/lua-5.4.9-tests)
+  set_tests_properties(lua_5_4_test_suite PROPERTIES
+    PASS_REGULAR_EXPRESSION "final OK !!!"
+    TIMEOUT 600)
 endif()
 
 # The benchmark runner (bench/README.md).

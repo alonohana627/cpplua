@@ -1,0 +1,264 @@
+Chunk
+  LocalFunction range
+    Function(n) [upvalues: _ENV]
+      Return
+        Call
+          Index
+            Name coroutine
+            String "wrap"
+          Function() [upvalues: n, _ENV]
+            NumericFor i
+              Integer 1
+              Name n (upvalue 0)
+              Body
+                CallStatement
+                  Call
+                    Index
+                      Name coroutine
+                      String "yield"
+                    Name i (local 3)
+  Local gen
+    Call
+      Name range (local 0)
+      Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name gen (local 1)
+      Call
+        Name gen (local 1)
+      Call
+        Name gen (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Name gen (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name gen (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name gen (local 1)
+  Local w
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function(x) [upvalues: _ENV]
+        CallStatement
+          Call
+            Index
+              Name coroutine
+              String "yield"
+            Name x (local 0)
+        CallStatement
+          Call
+            Name error
+            String "boom"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name w (local 2)
+        Integer 10
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name w (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name w (local 2)
+  Local t
+    Table
+  Local wt
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV, t]
+        CallStatement
+          Call
+            Name error
+            Name t (upvalue 1)
+  Local ok, e
+    Call
+      Name pcall
+      Name wt (local 4)
+  CallStatement
+    Call
+      Name print
+      Name ok (local 5)
+      Binary ==
+        Name e (local 6)
+        Name t (local 3)
+  Local wn
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV]
+        CallStatement
+          Call
+            Name error
+            Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name wn (local 7)
+  Local w2
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV]
+        CallStatement
+          Call
+            Name error
+            Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name w2 (local 8)
+  Local w3
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV]
+        CallStatement
+          Call
+            Name error
+            String "no position"
+            Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name w3 (local 9)
+  Local w4
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function()
+        Local x
+          Nil
+        Return
+          Index
+            Name x (local 0)
+            String "field"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name w4 (local 10)
+  Local outer
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV]
+        Local inner
+          Call
+            Index
+              Name coroutine
+              String "wrap"
+            Function() [upvalues: _ENV]
+              CallStatement
+                Call
+                  Name error
+                  String "deep"
+        CallStatement
+          Call
+            Name inner (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name outer (local 11)
+  Local echo
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function(...) [upvalues: _ENV]
+        Local args
+          Call
+            Index
+              Name table
+              String "pack"
+            Vararg
+        While
+          True
+          Body
+            Assign
+              Targets
+                Name args (local 0)
+              Values
+                Call
+                  Index
+                    Name table
+                    String "pack"
+                  Call
+                    Index
+                      Name coroutine
+                      String "yield"
+                    Index
+                      Name args (local 0)
+                      String "n"
+                    Call
+                      Index
+                        Name table
+                        String "unpack"
+                      Name args (local 0)
+                      Integer 1
+                      Index
+                        Name args (local 0)
+                        String "n"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name echo (local 12)
+        Integer 1
+        Nil
+        Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name echo (local 12)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name echo (local 12)
+        Nil
+  Return
+    Call
+      Name echo (local 12)
+      String "a"
+      String "b"

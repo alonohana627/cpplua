@@ -1,0 +1,235 @@
+Chunk
+  LocalFunction producer
+    Function(items) [upvalues: _ENV]
+      Return
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Function() [upvalues: _ENV, items]
+            GenericFor _, x
+              In
+                Call
+                  Name ipairs
+                  Name items (upvalue 1)
+              Body
+                CallStatement
+                  Call
+                    Index
+                      Name coroutine
+                      String "yield"
+                    Name x (local 5)
+            Return
+              Nil
+  LocalFunction receive
+    Function(prod) [upvalues: _ENV]
+      Local ok, x
+        Call
+          Index
+            Name coroutine
+            String "resume"
+          Name prod (local 0)
+      CallStatement
+        Call
+          Name assert
+          Name ok (local 1)
+          Name x (local 2)
+      Return
+        Name x (local 2)
+  LocalFunction filter
+    Function(prod, f) [upvalues: _ENV, receive]
+      Return
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Function() [upvalues: receive, prod, f, _ENV]
+            While
+              True
+              Body
+                Local x
+                  Call
+                    Name receive (upvalue 0)
+                    Name prod (upvalue 1)
+                If
+                  If
+                    Binary ==
+                      Name x (local 0)
+                      Nil
+                    Then
+                      Return
+                        Nil
+                Local y
+                  Call
+                    Name f (upvalue 2)
+                    Name x (local 0)
+                If
+                  If
+                    Binary ~=
+                      Name y (local 1)
+                      Nil
+                    Then
+                      CallStatement
+                        Call
+                          Index
+                            Name coroutine
+                            String "yield"
+                          Name y (local 1)
+  LocalFunction line_numbers
+    Function(prod) [upvalues: filter, _ENV]
+      Local n
+        Integer 0
+      Return
+        Call
+          Name filter (upvalue 0)
+          Name prod (local 0)
+          Function(x) [upvalues: n, _ENV]
+            Assign
+              Targets
+                Name n (upvalue 0)
+              Values
+                Binary +
+                  Name n (upvalue 0)
+                  Integer 1
+            Return
+              Call
+                Index
+                  Name string
+                  String "format"
+                String "%3d %s"
+                Name n (upvalue 0)
+                Name x (local 0)
+  Local p
+    Call
+      Name producer (local 0)
+      Table
+        Item
+          String "alpha"
+        Item
+          String "beta"
+        Item
+          String ""
+        Item
+          String "gamma"
+        Item
+          String "delta"
+        Item
+          String ""
+  Local non_empty
+    Call
+      Name filter (local 2)
+      Name p (local 4)
+      Function(x)
+        If
+          If
+            Binary ~=
+              Name x (local 0)
+              String ""
+            Then
+              Return
+                Name x (local 0)
+  Local upper
+    Call
+      Name filter (local 2)
+      Name non_empty (local 5)
+      Index
+        Name string
+        String "upper"
+  Local numbered
+    Call
+      Name line_numbers (local 3)
+      Name upper (local 6)
+  Local out
+    Table
+  While
+    True
+    Body
+      Local x
+        Call
+          Name receive (local 1)
+          Name numbered (local 7)
+      If
+        If
+          Binary ==
+            Name x (local 9)
+            Nil
+          Then
+            Break
+      CallStatement
+        Call
+          Name print
+          Name x (local 9)
+      Assign
+        Targets
+          Index
+            Name out (local 8)
+            Binary +
+              Unary #
+                Name out (local 8)
+              Integer 1
+        Values
+          Name x (local 9)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name numbered (local 7)
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name p (local 4)
+  Local consumer
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV]
+        Local total
+          Integer 0
+        While
+          True
+          Body
+            Local v
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+                Name total (local 0)
+            If
+              If
+                Binary ==
+                  Name v (local 1)
+                  Nil
+                Then
+                  Break
+            Assign
+              Targets
+                Name total (local 0)
+              Values
+                Binary +
+                  Name total (local 0)
+                  Name v (local 1)
+        Return
+          String "total"
+          Name total (local 0)
+  CallStatement
+    Call
+      Name consumer (local 9)
+  NumericFor i
+    Integer 1
+    Integer 10
+    Body
+      CallStatement
+        Call
+          Name consumer (local 9)
+          Name i (local 13)
+  Return
+    Unary #
+      Name out (local 8)
+    Call
+      Name consumer (local 9)
+      Nil

@@ -1,0 +1,38 @@
+Chunk
+  Local sorter
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function(t) [upvalues: _ENV]
+        CallStatement
+          Call
+            Index
+              Name table
+              String "sort"
+            Name t (local 0)
+            Function(a, b) [upvalues: _ENV]
+              CallStatement
+                Call
+                  Index
+                    Name coroutine
+                    String "yield"
+                  Name a (local 0)
+              Return
+                Binary <
+                  Name a (local 0)
+                  Name b (local 1)
+        Return
+          Name t (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name sorter (local 0)
+        Table
+          Item
+            Integer 3
+          Item
+            Integer 1
+          Item
+            Integer 2

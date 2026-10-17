@@ -60,7 +60,7 @@ TEST_CASE("M2.1 __index: a table, a function, a chain", "[meta]") {
           "input:1: attempt to index a number value");
 }
 
-TEST_CASE("M2.2 __newindex: a function or a table; present keys are raw", "[meta]") {
+TEST_CASE("M2.2 __newindex: a function or a table, and present keys are raw", "[meta]") {
     CHECK(run("local log = {} local t = setmetatable({}, {__newindex = function(t, k, v) "
               "rawset(t, k, v * 2) end}) t.a = 1 t.a = 5 return t.a") == "5");
     CHECK(run("local store = {} local t = setmetatable({}, {__newindex = store}) t.x = 1 "

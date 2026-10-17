@@ -1,0 +1,422 @@
+Chunk
+  CallStatement
+    Call
+      Name collectgarbage
+      String "stop"
+  Local weak
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __mode
+          String "v"
+  LocalFunction make_garbage
+    Function() [upvalues: _ENV, weak]
+      Local co
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Function(x) [upvalues: weak, _ENV]
+            Local local_table
+              Table
+            Assign
+              Targets
+                Index
+                  Name weak (upvalue 0)
+                  String "inner"
+              Values
+                Name local_table (local 1)
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+                Name x (local 0)
+      CallStatement
+        Call
+          Index
+            Name coroutine
+            String "resume"
+          Name co (local 0)
+          Integer 1
+      Assign
+        Targets
+          Index
+            Name weak (upvalue 1)
+            String "suspended"
+        Values
+          Name co (local 0)
+      Local dead
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Function()
+            Return
+              Integer 1
+      CallStatement
+        Call
+          Index
+            Name coroutine
+            String "resume"
+          Name dead (local 1)
+      Assign
+        Targets
+          Index
+            Name weak (upvalue 1)
+            String "dead"
+        Values
+          Name dead (local 1)
+      Local f
+        Function()
+      Assign
+        Targets
+          Index
+            Name weak (upvalue 1)
+            String "fn"
+        Values
+          Name f (local 2)
+      Assign
+        Targets
+          Index
+            Name weak (upvalue 1)
+            String "fresh"
+        Values
+          Call
+            Index
+              Name coroutine
+              String "create"
+            Name f (local 2)
+      Local t
+        Table
+      Assign
+        Targets
+          Index
+            Name weak (upvalue 1)
+            String "gen_table"
+        Values
+          Name t (local 3)
+      Local gen
+        Call
+          Index
+            Name coroutine
+            String "wrap"
+          Function() [upvalues: t, _ENV]
+            Local keep
+              Name t (upvalue 0)
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+                Integer 1
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+                Integer 2
+      CallStatement
+        Call
+          Name gen (local 4)
+  CallStatement
+    Call
+      Name make_garbage (local 1)
+  Local kept
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV]
+        CallStatement
+          Call
+            Index
+              Name coroutine
+              String "yield"
+  CallStatement
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name kept (local 2)
+  Assign
+    Targets
+      Index
+        Name weak (local 0)
+        String "kept"
+    Values
+      Name kept (local 2)
+  Local names
+    Table
+      Item
+        String "suspended"
+      Item
+        String "inner"
+      Item
+        String "dead"
+      Item
+        String "fn"
+      Item
+        String "fresh"
+      Item
+        String "gen_table"
+      Item
+        String "kept"
+  LocalFunction show
+    Function(when) [upvalues: _ENV, names, weak]
+      Local parts
+        Table
+      GenericFor _, k
+        In
+          Call
+            Name ipairs
+            Name names (upvalue 1)
+        Body
+          Assign
+            Targets
+              Index
+                Name parts (local 1)
+                Binary +
+                  Unary #
+                    Name parts (local 1)
+                  Integer 1
+            Values
+              Binary ..
+                Name k (local 7)
+                Binary ..
+                  String "="
+                  Paren
+                    Binary or
+                      Binary and
+                        Index
+                          Name weak (upvalue 2)
+                          Name k (local 7)
+                        String "yes"
+                      String "no"
+      CallStatement
+        Call
+          Name print
+          Name when (local 0)
+          Call
+            Index
+              Name table
+              String "concat"
+            Name parts (local 1)
+            String " "
+  CallStatement
+    Call
+      Name show (local 4)
+      String "before"
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name show (local 4)
+      String "after"
+  Local holder
+    Table
+  LocalFunction make_chain
+    Function() [upvalues: _ENV, weak, holder]
+      Local inner
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Function() [upvalues: _ENV]
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+      CallStatement
+        Call
+          Index
+            Name coroutine
+            String "resume"
+          Name inner (local 0)
+      Assign
+        Targets
+          Index
+            Name weak (upvalue 1)
+            String "chained"
+        Values
+          Name inner (local 0)
+      Local outer
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Function() [upvalues: inner, _ENV]
+            Local i
+              Name inner (upvalue 0)
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+      CallStatement
+        Call
+          Index
+            Name coroutine
+            String "resume"
+          Name outer (local 1)
+      Assign
+        Targets
+          Index
+            Name weak (upvalue 1)
+            String "outer"
+        Values
+          Name outer (local 1)
+      Assign
+        Targets
+          Index
+            Name holder (upvalue 2)
+            String "outer"
+        Values
+          Name outer (local 1)
+  CallStatement
+    Call
+      Name make_chain (local 6)
+  Assign
+    Targets
+      Name names (local 3)
+    Values
+      Table
+        Item
+          String "chained"
+        Item
+          String "outer"
+        Item
+          String "kept"
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name show (local 4)
+      String "held"
+  Assign
+    Targets
+      Index
+        Name holder (local 5)
+        String "outer"
+    Values
+      Nil
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name show (local 4)
+      String "released"
+  LocalFunction make_closing
+    Function() [upvalues: _ENV]
+      Local co
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Function() [upvalues: _ENV]
+            Local x <close>
+              Call
+                Name setmetatable
+                Table
+                Table
+                  Field __close
+                    Function() [upvalues: _ENV]
+                      CallStatement
+                        Call
+                          Name print
+                          String "__close runs"
+                  Field __gc
+                    Function() [upvalues: _ENV]
+                      CallStatement
+                        Call
+                          Name print
+                          String "__gc runs"
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+      CallStatement
+        Call
+          Index
+            Name coroutine
+            String "resume"
+          Name co (local 0)
+  CallStatement
+    Call
+      Name make_closing (local 7)
+  CallStatement
+    Call
+      Name collectgarbage
+  CallStatement
+    Call
+      Name print
+      String "after finalizer"
+  Local wk
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __mode
+          String "k"
+  Local alive
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Name print
+  Assign
+    Targets
+      Index
+        Name wk (local 8)
+        Name alive (local 9)
+    Values
+      String "alive"
+  LocalFunction add_key
+    Function() [upvalues: wk, _ENV]
+      Assign
+        Targets
+          Index
+            Name wk (upvalue 0)
+            Call
+              Index
+                Name coroutine
+                String "create"
+              Name print
+        Values
+          String "garbage"
+  CallStatement
+    Call
+      Name add_key (local 10)
+  CallStatement
+    Call
+      Name collectgarbage
+  Local count
+    Integer 0
+  GenericFor k, v
+    In
+      Call
+        Name pairs
+        Name wk (local 8)
+    Body
+      Assign
+        Targets
+          Name count (local 11)
+        Values
+          Binary +
+            Name count (local 11)
+            Integer 1
+      CallStatement
+        Call
+          Name print
+          Call
+            Name type
+            Name k (local 16)
+          Name v (local 17)
+  Return
+    Name count (local 11)

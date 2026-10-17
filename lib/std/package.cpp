@@ -346,8 +346,10 @@ std::string program_directory() {
 }
 
 // setpath: package[field] from the environment (LUA_PATH_5_4, then
-// LUA_PATH), where ";;" stands for the default; else the default.
-std::string initial_path(std::string_view variable, std::string_view fallback) {
+// LUA_PATH), where ";;" stands for the default; else the default, as also
+// when `no_environment` (registry.LUA_NOENV, lua2 -E).
+std::string initial_path(std::string_view variable, std::string_view fallback,
+                         bool no_environment) {
     // NOLINTBEGIN(concurrency-mt-unsafe): read once, when the library opens
     const char* value = std::getenv(std::format("{}_5_4", variable).c_str());
     if (value == nullptr) {
@@ -355,7 +357,7 @@ std::string initial_path(std::string_view variable, std::string_view fallback) {
     }
     // NOLINTEND(concurrency-mt-unsafe)
     std::string path;
-    if (value == nullptr) {
+    if (value == nullptr || no_environment) {
         path = fallback;
     } else {
         const std::string_view text{value};
@@ -407,9 +409,13 @@ void open_package(Heap& heap) {
         closure->upvalues()[0] = package_value;
         searchers->set_int(heap, static_cast<std::int64_t>(i) + 1, Value::c_closure(closure));
     }
-    set(*package, "path", Value::string(heap.new_string(initial_path("LUA_PATH", path_default))));
+    // noenv: the stand-alone program's -E option
+    const bool no_environment =
+        heap.registry().get(Value::string(heap.new_string("LUA_NOENV"))).value().is_truthy();
+    set(*package, "path",
+        Value::string(heap.new_string(initial_path("LUA_PATH", path_default, no_environment))));
     set(*package, "cpath",
-        Value::string(heap.new_string(initial_path("LUA_CPATH", cpath_default))));
+        Value::string(heap.new_string(initial_path("LUA_CPATH", cpath_default, no_environment))));
     set(*package, "config",
         Value::string(heap.new_string(std::format("{}\n;\n?\n!\n-\n", dir_separator))));
     set(*package, "loaded", Value::table(&heap.loaded()));

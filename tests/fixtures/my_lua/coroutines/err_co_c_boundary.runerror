@@ -1,0 +1,1 @@
+err_co_c_boundary.lua:6: attempt to yield across a C-call boundary

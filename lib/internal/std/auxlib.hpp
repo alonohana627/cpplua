@@ -126,6 +126,11 @@ std::string error_text(State& state, Value error);
 
 // ---- Debug information (ldebug.c's lua_getinfo, for lauxlib) ----
 
+// The prototype of a Lua frame's function, and the instruction the frame is
+// at (currentpc).
+[[nodiscard]] const Proto& frame_proto(const State& state, const CallInfo* frame);
+[[nodiscard]] int frame_pc(const State& state, const CallInfo* frame);
+
 // The name of the function at `level`, as its caller calls it: kind
 // ("global", "local", "method", "field", "upvalue", "metamethod", "for
 // iterator") and name; empty when unknown (getfuncname).

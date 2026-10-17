@@ -8,6 +8,7 @@ void open_libraries(Heap& heap) {
     // In luaL_openlibs's order (linit.c).
     open_base(heap);
     open_package(heap);
+    open_coroutine(heap);
     open_table(heap);
     open_io(heap);
     open_os(heap);

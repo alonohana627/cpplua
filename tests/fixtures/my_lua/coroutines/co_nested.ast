@@ -1,0 +1,276 @@
+Chunk
+  Local inner
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function(a) [upvalues: _ENV]
+        CallStatement
+          Call
+            Name print
+            String "inner start"
+            Name a (local 0)
+        Local b
+          Call
+            Index
+              Name coroutine
+              String "yield"
+            String "inner y1"
+            Binary *
+              Name a (local 0)
+              Integer 2
+        CallStatement
+          Call
+            Name print
+            String "inner got"
+            Name b (local 1)
+        Local c
+          Call
+            Index
+              Name coroutine
+              String "yield"
+            String "inner y2"
+        Return
+          String "inner done"
+          Name c (local 2)
+  Local outer
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function(x) [upvalues: _ENV, inner]
+        CallStatement
+          Call
+            Name print
+            String "outer start"
+            Name x (local 0)
+        CallStatement
+          Call
+            Name print
+            String "resume inner"
+            Call
+              Index
+                Name coroutine
+                String "resume"
+              Name inner (upvalue 1)
+              Binary +
+                Name x (local 0)
+                Integer 1
+        Local y
+          Call
+            Index
+              Name coroutine
+              String "yield"
+            String "outer y1"
+        CallStatement
+          Call
+            Name print
+            String "outer got"
+            Name y (local 1)
+        CallStatement
+          Call
+            Name print
+            String "resume inner"
+            Call
+              Index
+                Name coroutine
+                String "resume"
+              Name inner (upvalue 1)
+              Name y (local 1)
+        CallStatement
+          Call
+            Name print
+            String "resume inner"
+            Call
+              Index
+                Name coroutine
+                String "resume"
+              Name inner (upvalue 1)
+              String "last"
+        CallStatement
+          Call
+            Name print
+            String "resume inner"
+            Call
+              Index
+                Name coroutine
+                String "resume"
+              Name inner (upvalue 1)
+        Return
+          String "outer done"
+  CallStatement
+    Call
+      Name print
+      String "main"
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name outer (local 1)
+        Integer 10
+  CallStatement
+    Call
+      Name print
+      String "main"
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name outer (local 1)
+        String "Y"
+  CallStatement
+    Call
+      Name print
+      String "main"
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name outer (local 1)
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name inner (local 0)
+  LocalFunction chain
+    Function(n) [upvalues: _ENV, chain]
+      If
+        If
+          Binary ==
+            Name n (local 0)
+            Integer 0
+          Then
+            Return
+              Call
+                Index
+                  Name coroutine
+                  String "create"
+                Function(v) [upvalues: _ENV]
+                  CallStatement
+                    Call
+                      Index
+                        Name coroutine
+                        String "yield"
+                      Binary +
+                        Name v (local 0)
+                        Integer 1
+                  Return
+                    Binary +
+                      Name v (local 0)
+                      Integer 100
+      Local next
+        Call
+          Name chain (upvalue 1)
+          Binary -
+            Name n (local 0)
+            Integer 1
+      Return
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Function(v) [upvalues: _ENV, next, n]
+            Local ok, r
+              Call
+                Index
+                  Name coroutine
+                  String "resume"
+                Name next (upvalue 1)
+                Binary *
+                  Name v (local 0)
+                  Integer 2
+            CallStatement
+              Call
+                Index
+                  Name coroutine
+                  String "yield"
+                Name r (local 2)
+            Local ok2, r2
+              Call
+                Index
+                  Name coroutine
+                  String "resume"
+                Name next (upvalue 1)
+            Return
+              Binary +
+                Name r2 (local 4)
+                Name n (upvalue 2)
+  Local top
+    Call
+      Name chain (local 2)
+      Integer 5
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name top (local 3)
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name top (local 3)
+  Local outer2
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV]
+        Local bad
+          Call
+            Index
+              Name coroutine
+              String "create"
+            Function() [upvalues: _ENV]
+              CallStatement
+                Call
+                  Index
+                    Name coroutine
+                    String "yield"
+                  Integer 1
+              CallStatement
+                Call
+                  Name error
+                  String "inner failure"
+        CallStatement
+          Call
+            Name print
+            Call
+              Index
+                Name coroutine
+                String "resume"
+              Name bad (local 0)
+        CallStatement
+          Call
+            Name print
+            Call
+              Index
+                Name coroutine
+                String "resume"
+              Name bad (local 0)
+        CallStatement
+          Call
+            Index
+              Name coroutine
+              String "yield"
+            String "outer still alive"
+        Return
+          Call
+            Index
+              Name coroutine
+              String "status"
+            Name bad (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name outer2 (local 4)
+  Return
+    Call
+      Name outer2 (local 4)

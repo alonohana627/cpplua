@@ -40,6 +40,9 @@ Heap::Heap(std::uint32_t seed)
     // made in the member initializers.)
     // NOLINTNEXTLINE(cppcoreguidelines-prefer-member-initializer)
     main_thread_ = link_new<State>(allocate(sizeof(State)), ObjectType::Thread);
+    main_thread_->non_yieldable = 1; // the main thread cannot yield
+    // NOLINTNEXTLINE(cppcoreguidelines-prefer-member-initializer): the same
+    running_ = main_thread_;
     // The names of the metamethods, kept forever (luaT_init).
     for (std::size_t e = 0; e < event_count; ++e) {
         event_strings_.at(e) = new_string(event_names.at(e));
@@ -56,6 +59,11 @@ Heap::Heap(std::uint32_t seed)
     loaded_->set(*this, Value::string(new_string("_G")), Value::table(globals_));
     // NOLINTNEXTLINE(cppcoreguidelines-prefer-member-initializer): the same
     references_ = new_table();
+    // NOLINTNEXTLINE(cppcoreguidelines-prefer-member-initializer): the same
+    registry_ = new_table();
+    registry_->set_int(*this, 1, Value::thread(main_thread_));
+    registry_->set_int(*this, 2, Value::table(globals_));
+    registry_->set(*this, Value::string(new_string("_LOADED")), Value::table(loaded_));
 }
 
 Heap::~Heap() {
@@ -103,6 +111,10 @@ void Heap::set_debt(std::ptrdiff_t debt) {
     const auto total = static_cast<std::ptrdiff_t>(total_bytes());
     total_bytes_ = total - debt;
     debt_ = debt;
+}
+
+State* Heap::new_thread() {
+    return link_new<State>(allocate(sizeof(State)), ObjectType::Thread);
 }
 
 template <typename T>
@@ -435,9 +447,14 @@ void Heap::free_object(GcObject* o) {
         free(u, size);
         break;
     }
-    case ObjectType::Thread:
-        // Only the main thread exists, and it is never collected.
+    case ObjectType::Thread: {
+        // luaE_freethread: open upvalues into its stack close first.
+        auto* thread = object_cast<State>(o);
+        thread->close_upvalues(0);
+        thread->~State();
+        free(thread, sizeof(State));
         break;
+    }
     }
 }
 

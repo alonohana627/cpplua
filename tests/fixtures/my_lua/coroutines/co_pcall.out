@@ -1,0 +1,23 @@
+  yielded	in pcall	1	nil
+pcall1	true	42
+  yielded	before error	nil	nil
+pcall2	false	co_pcall.lua:10: failed after yield
+  yielded	before table error	nil	nil
+pcall3	false	table	7
+  yielded	in xpcall	p	q
+xpcall1	false	handled: co_pcall.lua:19: xp 41
+  yielded	again	nil	nil
+xpcall2	false	attempt to index a nil value (local 't')
+  yielded	level 1	nil	nil
+  yielded	level 2	nil	nil
+  yielded	level 1 again	false	inner
+nested	false	outer
+  yielded	direct	nil	nil
+direct	true	41
+status inside	running
+true	end
+true	1
+pcall returned	true	v
+false	co_pcall.lua:51: after the pcall
+dead
+false	H(co_pcall.lua:58: attempt to perform arithmetic on a table value)

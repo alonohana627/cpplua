@@ -1,7 +1,8 @@
 # Standard library
 
-**Status:** stage 9 is done (version 0.0.9): the whole Lua 5.4 standard library but
-`coroutine` (stage 10) and the debug library beyond `debug.traceback`. Every function is C++;
+**Status:** stage 9 is done (version 0.0.9): the whole Lua 5.4 standard library. Stage 10
+added `coroutine` and the rest of `debug` ([coroutines.md](coroutines.md), [debug.md](debug.md)),
+and stage 11 binary chunks ([dump.md](dump.md)). Every function is C++;
 the Lua files in `std/` are only a reference. The rules are in
 [../spec/stdlib.md](../spec/stdlib.md), the plan in [../plan/stdlib.md](../plan/stdlib.md), and
 the background in [../learn/stdlib.md](../learn/stdlib.md).
@@ -11,6 +12,7 @@ the background in [../learn/stdlib.md](../learn/stdlib.md).
 | Library | Functions | Port of |
 | ------- | --------- | ------- |
 | base | `assert`, `collectgarbage`, `dofile`, `error`, `getmetatable`, `ipairs`, `load`, `loadfile`, `next`, `pairs`, `pcall`, `print`, `rawequal`, `rawget`, `rawlen`, `rawset`, `select`, `setmetatable`, `tonumber`, `tostring`, `type`, `warn`, `xpcall`, `_G`, `_VERSION` | `lbaselib.c` |
+| `coroutine` | `close`, `create`, `isyieldable`, `resume`, `running`, `status`, `wrap`, `yield` | `lcorolib.c` |
 | `package` | `require`, `package.loadlib`, `searchpath`, `path`, `cpath`, `config`, `loaded`, `preload`, `searchers` | `loadlib.c` |
 | `string` | `byte`, `char`, `dump`, `find`, `format`, `gmatch`, `gsub`, `len`, `lower`, `match`, `pack`, `packsize`, `rep`, `reverse`, `sub`, `unpack`, `upper`, and the strings' metatable | `lstrlib.c` |
 | `table` | `concat`, `insert`, `move`, `pack`, `remove`, `sort`, `unpack` | `ltablib.c` |
@@ -18,26 +20,25 @@ the background in [../learn/stdlib.md](../learn/stdlib.md).
 | `utf8` | `char`, `charpattern`, `codepoint`, `codes`, `len`, `offset` | `lutf8lib.c` |
 | `io` | `close`, `flush`, `input`, `lines`, `open`, `output`, `popen`, `read`, `tmpfile`, `type`, `write`, `stdin`, `stdout`, `stderr`, and the file methods | `liolib.c` |
 | `os` | `clock`, `date`, `difftime`, `execute`, `exit`, `getenv`, `remove`, `rename`, `setlocale`, `time`, `tmpname` | `loslib.c` |
-| `debug` | `traceback` | `ldblib.c` |
+| `debug` | all of 5.4's ([debug.md](debug.md)) | `ldblib.c` |
 
 Where lua2 differs from the real Lua (all in [../spec/stdlib.md](../spec/stdlib.md)):
 
-- no binary chunks: `string.dump` is an error, `load` refuses binary chunks (S2.5, S8.1);
 - no C libraries: `package.loadlib` and the C searchers answer as a Lua without dynamic
   libraries does (S9.2); C++ adds functions through the C++ API instead;
 - `io` and `os` use only the C++ standard library (S6.1, S7.1): so no `io.popen` (S6.4),
   and `os.rename` replaces an existing file (S7.2);
 - a reader function given to `load` is read to the end before parsing (S8.1);
 - `%a` in `string.format` takes flags and widths, as C99 does (S2.2);
-- a function with two names in a library is named the same way every run (S1.3);
-- pattern character classes are the C locale's (S7.2).
+- a function with two names in a library is named the same way every run (S1.3).
 
 ## Where it lives
 
 | File | Contents |
 | ---- | -------- |
 | `lib/internal/std/libs.hpp`, `lib/std/libs.cpp` | an `open_` function per library, and `open_libraries` |
-| `lib/std/base.cpp` (`lib/internal/std/base.hpp`) | the base library and `debug.traceback` |
+| `lib/std/base.cpp` (`lib/internal/std/base.hpp`) | the base library |
+| `lib/std/coroutine.cpp`, `lib/std/debug.cpp` | `coroutine` and `debug` (stage 10) |
 | `lib/std/string.cpp` | patterns, `format`, `pack`, the strings' metatable |
 | `lib/std/table.cpp`, `math.cpp`, `utf8.cpp`, `io.cpp`, `os.cpp`, `package.cpp` | one library each |
 | `lib/internal/std/auxlib.hpp`, `lib/std/auxlib.cpp` | the helpers of `lauxlib.c`: arguments, errors, tables, files, tracebacks |

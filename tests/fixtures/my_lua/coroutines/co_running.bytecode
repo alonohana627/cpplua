@@ -1,0 +1,237 @@
+
+main <co_running.lua:0,0> (73 instructions)
+0+ params, 10 slots, 1 upvalue, 6 locals, 13 constants, 2 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	3	[2]	GETFIELD 	0 0 1	; "running"
+	4	[2]	CALL     	0 1 3	; 0 in 2 out
+	5	[3]	GETTABUP 	2 0 2	; _ENV "print"
+	6	[3]	GETTABUP 	3 0 3	; _ENV "type"
+	7	[3]	MOVE     	4 0
+	8	[3]	CALL     	3 2 2	; 1 in 1 out
+	9	[3]	MOVE     	4 1
+	10	[3]	CALL     	2 3 1	; 2 in 0 out
+	11	[4]	GETTABUP 	2 0 2	; _ENV "print"
+	12	[4]	GETTABUP 	3 0 0	; _ENV "coroutine"
+	13	[4]	GETFIELD 	3 3 4	; "isyieldable"
+	14	[4]	CALL     	3 1 0	; 0 in all out
+	15	[4]	CALL     	2 0 1	; all in 0 out
+	16	[5]	GETTABUP 	2 0 2	; _ENV "print"
+	17	[5]	GETTABUP 	3 0 0	; _ENV "coroutine"
+	18	[5]	GETFIELD 	3 3 4	; "isyieldable"
+	19	[5]	MOVE     	4 0
+	20	[5]	CALL     	3 2 0	; 1 in all out
+	21	[5]	CALL     	2 0 1	; all in 0 out
+	22	[6]	LOADNIL  	2 0	; 1 out
+	23	[7]	GETTABUP 	3 0 0	; _ENV "coroutine"
+	24	[7]	GETFIELD 	3 3 5	; "create"
+	25	[17]	CLOSURE  	4 0
+	26	[7]	CALL     	3 2 2	; 1 in 1 out
+	27	[17]	MOVE     	2 3
+	28	[18]	GETTABUP 	3 0 6	; _ENV "print"
+	29	[18]	GETTABUP 	4 0 7	; _ENV "coroutine"
+	30	[18]	GETFIELD 	4 4 8	; "isyieldable"
+	31	[18]	MOVE     	5 2
+	32	[18]	CALL     	4 2 0	; 1 in all out
+	33	[18]	CALL     	3 0 1	; all in 0 out
+	34	[19]	GETTABUP 	3 0 7	; _ENV "coroutine"
+	35	[19]	GETFIELD 	3 3 9	; "resume"
+	36	[19]	MOVE     	4 2
+	37	[19]	CALL     	3 2 3	; 1 in 2 out
+	38	[20]	GETTABUP 	5 0 6	; _ENV "print"
+	39	[20]	MOVE     	6 3
+	40	[20]	EQ       	4 2 1
+	41	[20]	JMP      	1	; to 43
+	42	[20]	LFALSESKIP	7
+	43	[20]	LOADTRUE 	7
+	44	[20]	CALL     	5 3 1	; 2 in 0 out
+	45	[21]	GETTABUP 	5 0 6	; _ENV "print"
+	46	[21]	GETTABUP 	6 0 7	; _ENV "coroutine"
+	47	[21]	GETFIELD 	6 6 8	; "isyieldable"
+	48	[21]	MOVE     	7 2
+	49	[21]	CALL     	6 2 0	; 1 in all out
+	50	[21]	CALL     	5 0 1	; all in 0 out
+	51	[23]	GETTABUP 	5 0 7	; _ENV "coroutine"
+	52	[23]	GETFIELD 	5 5 10	; "wrap"
+	53	[27]	CLOSURE  	6 1
+	54	[23]	CALL     	5 2 2	; 1 in 1 out
+	55	[28]	GETTABUP 	6 0 6	; _ENV "print"
+	56	[28]	MOVE     	7 5
+	57	[28]	CALL     	7 1 0	; 0 in all out
+	58	[28]	CALL     	6 0 1	; all in 0 out
+	59	[29]	GETTABUP 	6 0 6	; _ENV "print"
+	60	[29]	MOVE     	7 5
+	61	[29]	CALL     	7 1 0	; 0 in all out
+	62	[29]	CALL     	6 0 1	; all in 0 out
+	63	[30]	GETTABUP 	6 0 3	; _ENV "type"
+	64	[30]	MOVE     	7 0
+	65	[30]	CALL     	6 2 2	; 1 in 1 out
+	66	[30]	GETTABUP 	7 0 11	; _ENV "select"
+	67	[30]	LOADK    	8 12	; "#"
+	68	[30]	GETTABUP 	9 0 0	; _ENV "coroutine"
+	69	[30]	GETFIELD 	9 9 1	; "running"
+	70	[30]	CALL     	9 1 0	; 0 in all out
+	71	[30]	CALL     	7 0 0	; all in all out
+	72	[30]	RETURN   	6 0 1k	; all out
+	73	[30]	RETURN   	6 1 1k	; 0 out
+constants (13):
+	0	S	"coroutine"
+	1	S	"running"
+	2	S	"print"
+	3	S	"type"
+	4	S	"isyieldable"
+	5	S	"create"
+	6	S	"print"
+	7	S	"coroutine"
+	8	S	"isyieldable"
+	9	S	"resume"
+	10	S	"wrap"
+	11	S	"select"
+	12	S	"#"
+locals (6):
+	0	main	5	74
+	1	ismain	5	74
+	2	co	23	74
+	3	ok	38	74
+	4	me	38	74
+	5	w	55	74
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_running.lua:7,17> (53 instructions)
+0 params, 8 slots, 3 upvalues, 2 locals, 11 constants, 1 function
+	1	[8]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[8]	GETFIELD 	0 0 1	; "running"
+	3	[8]	CALL     	0 1 3	; 0 in 2 out
+	4	[9]	GETTABUP 	2 0 2	; _ENV "print"
+	5	[9]	LOADK    	3 3	; "inside"
+	6	[9]	GETTABUP 	4 0 4	; _ENV "type"
+	7	[9]	MOVE     	5 0
+	8	[9]	CALL     	4 2 2	; 1 in 1 out
+	9	[9]	MOVE     	5 1
+	10	[9]	GETUPVAL 	6 1	; co
+	11	[9]	EQ       	0 6 1
+	12	[9]	JMP      	1	; to 14
+	13	[9]	LFALSESKIP	6
+	14	[9]	LOADTRUE 	6
+	15	[9]	GETUPVAL 	7 2	; main
+	16	[9]	EQ       	0 7 1
+	17	[9]	JMP      	1	; to 19
+	18	[9]	LFALSESKIP	7
+	19	[9]	LOADTRUE 	7
+	20	[9]	CALL     	2 6 1	; 5 in 0 out
+	21	[10]	GETTABUP 	2 0 2	; _ENV "print"
+	22	[10]	LOADK    	3 5	; "yieldable"
+	23	[10]	GETTABUP 	4 0 0	; _ENV "coroutine"
+	24	[10]	GETFIELD 	4 4 6	; "isyieldable"
+	25	[10]	CALL     	4 1 2	; 0 in 1 out
+	26	[10]	GETTABUP 	5 0 0	; _ENV "coroutine"
+	27	[10]	GETFIELD 	5 5 6	; "isyieldable"
+	28	[10]	GETUPVAL 	6 2	; main
+	29	[10]	CALL     	5 2 2	; 1 in 1 out
+	30	[10]	GETTABUP 	6 0 0	; _ENV "coroutine"
+	31	[10]	GETFIELD 	6 6 6	; "isyieldable"
+	32	[10]	GETUPVAL 	7 1	; co
+	33	[10]	CALL     	6 2 0	; 1 in all out
+	34	[10]	CALL     	2 0 1	; all in 0 out
+	35	[11]	GETTABUP 	2 0 2	; _ENV "print"
+	36	[11]	LOADK    	3 7	; "in pcall"
+	37	[11]	GETTABUP 	4 0 8	; _ENV "pcall"
+	38	[11]	GETTABUP 	5 0 0	; _ENV "coroutine"
+	39	[11]	GETFIELD 	5 5 6	; "isyieldable"
+	40	[11]	CALL     	4 2 0	; 1 in all out
+	41	[11]	CALL     	2 0 1	; all in 0 out
+	42	[12]	GETTABUP 	2 0 9	; _ENV "table"
+	43	[12]	GETFIELD 	2 2 10	; "sort"
+	44	[12]	NEWTABLE 	3 0 3	; 3
+	45	[12]	EXTRAARG 	0
+	46	[12]	LOADI    	4 3
+	47	[12]	LOADI    	5 2
+	48	[12]	LOADI    	6 1
+	49	[12]	SETLIST  	3 3 0
+	50	[15]	CLOSURE  	4 0
+	51	[12]	CALL     	2 3 1	; 2 in 0 out
+	52	[16]	RETURN1  	0
+	53	[17]	RETURN0  	
+constants (11):
+	0	S	"coroutine"
+	1	S	"running"
+	2	S	"print"
+	3	S	"inside"
+	4	S	"type"
+	5	S	"yieldable"
+	6	S	"isyieldable"
+	7	S	"in pcall"
+	8	S	"pcall"
+	9	S	"table"
+	10	S	"sort"
+locals (2):
+	0	me	4	54
+	1	m	4	54
+upvalues (3):
+	0	_ENV	0	0
+	1	co	1	2
+	2	main	1	0
+
+function <co_running.lua:12,15> (14 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 4 constants, 0 functions
+	1	[13]	EQI      	0 3 0
+	2	[13]	JMP      	6	; to 9
+	3	[13]	GETTABUP 	2 0 0	; _ENV "print"
+	4	[13]	LOADK    	3 1	; "in sort"
+	5	[13]	GETTABUP 	4 0 2	; _ENV "coroutine"
+	6	[13]	GETFIELD 	4 4 3	; "isyieldable"
+	7	[13]	CALL     	4 1 0	; 0 in all out
+	8	[13]	CALL     	2 0 1	; all in 0 out
+	9	[14]	LT       	0 1 1
+	10	[14]	JMP      	1	; to 12
+	11	[14]	LFALSESKIP	2
+	12	[14]	LOADTRUE 	2
+	13	[14]	RETURN1  	2
+	14	[15]	RETURN0  	
+constants (4):
+	0	S	"print"
+	1	S	"in sort"
+	2	S	"coroutine"
+	3	S	"isyieldable"
+locals (2):
+	0	a	1	15
+	1	b	1	15
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_running.lua:23,27> (21 instructions)
+0 params, 7 slots, 2 upvalues, 2 locals, 5 constants, 0 functions
+	1	[24]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[24]	GETFIELD 	0 0 1	; "running"
+	3	[24]	CALL     	0 1 3	; 0 in 2 out
+	4	[25]	GETTABUP 	2 0 0	; _ENV "coroutine"
+	5	[25]	GETFIELD 	2 2 2	; "yield"
+	6	[25]	GETTABUP 	3 0 3	; _ENV "type"
+	7	[25]	MOVE     	4 0
+	8	[25]	CALL     	3 2 2	; 1 in 1 out
+	9	[25]	MOVE     	4 1
+	10	[25]	GETTABUP 	5 0 0	; _ENV "coroutine"
+	11	[25]	GETFIELD 	5 5 4	; "status"
+	12	[25]	MOVE     	6 0
+	13	[25]	CALL     	5 2 0	; 1 in all out
+	14	[25]	CALL     	2 0 1	; all in 0 out
+	15	[26]	GETUPVAL 	2 1	; main
+	16	[26]	EQ       	0 2 1
+	17	[26]	JMP      	1	; to 19
+	18	[26]	LFALSESKIP	2
+	19	[26]	LOADTRUE 	2
+	20	[26]	RETURN1  	2
+	21	[27]	RETURN0  	
+constants (5):
+	0	S	"coroutine"
+	1	S	"running"
+	2	S	"yield"
+	3	S	"type"
+	4	S	"status"
+locals (2):
+	0	me	4	22
+	1	m	4	22
+upvalues (2):
+	0	_ENV	0	0
+	1	main	1	0

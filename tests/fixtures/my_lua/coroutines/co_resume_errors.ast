@@ -1,0 +1,271 @@
+Chunk
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function()
+        Return
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co (local 0)
+        String "again"
+  Local self
+  Assign
+    Targets
+      Name self (local 1)
+    Values
+      Call
+        Index
+          Name coroutine
+          String "create"
+        Function() [upvalues: _ENV, self]
+          CallStatement
+            Call
+              Name print
+              String "self"
+              Call
+                Index
+                  Name coroutine
+                  String "resume"
+                Name self (upvalue 1)
+          Return
+            String "ok"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name self (local 1)
+  Local outer, inner
+  Assign
+    Targets
+      Name inner (local 3)
+    Values
+      Call
+        Index
+          Name coroutine
+          String "create"
+        Function() [upvalues: _ENV, outer]
+          CallStatement
+            Call
+              Name print
+              String "normal"
+              Call
+                Index
+                  Name coroutine
+                  String "resume"
+                Name outer (upvalue 1)
+  Assign
+    Targets
+      Name outer (local 2)
+    Values
+      Call
+        Index
+          Name coroutine
+          String "create"
+        Function() [upvalues: _ENV, inner]
+          CallStatement
+            Call
+              Index
+                Name coroutine
+                String "resume"
+              Name inner (upvalue 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name outer (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Call
+          Index
+            Name coroutine
+            String "running"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "create"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "create"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Name print
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "resume"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "resume"
+        Table
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "resume"
+        Function()
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "status"
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "status"
+        String "co"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "wrap"
+        Integer 42
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "close"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "isyieldable"
+        Integer 1
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Index
+          Name coroutine
+          String "yield"
+        Integer 1
+  Local cf
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Name print
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name cf (local 4)
+        String "from"
+        String "print"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name cf (local 4)
+  Local sel
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Name select
+  CallStatement
+    Call
+      Name print
+      Call
+        Name sel (local 5)
+        Integer 2
+        String "a"
+        String "b"
+        String "c"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name pcall
+        Name sel (local 5)
+        Integer 1
+  Return
+    String "end"

@@ -43,10 +43,11 @@ enum class Tag : std::uint8_t {
     CClosure,   // a C++ function with upvalues (Lua's C closure)
     Table,
     Userdata, // a block of memory with a metatable (Lua's full userdata)
+    Thread,   // a coroutine (Lua's thread)
 };
 
 // The largest tag (the VM packs two tags in a byte).
-inline constexpr Tag last_tag = Tag::Userdata;
+inline constexpr Tag last_tag = Tag::Thread;
 
 // Tags from here on hold a pointer to an object the collector manages.
 inline constexpr Tag first_collectable_tag = Tag::ShortString;
@@ -104,6 +105,9 @@ public:
     // A full userdata (value/userdata.hpp).
     static Value userdata(const Userdata* u);
 
+    // A coroutine (vm/state.hpp).
+    static Value thread(const State* thread);
+
     // A C++ pointer, compared by address (light userdata).
     static Value light_userdata(const void* p) {
         return Value{Tag::LightUserdata, std::bit_cast<std::uint64_t>(p)};
@@ -139,6 +143,7 @@ public:
         case Tag::Table: return Type::Table;
         case Tag::LightUserdata:
         case Tag::Userdata: return Type::Userdata;
+        case Tag::Thread: return Type::Thread;
         }
         return Type::Nil; // not reached: every Tag is handled above
     }
@@ -170,6 +175,8 @@ public:
     [[nodiscard]] constexpr bool is_c_closure() const { return tag_ == Tag::CClosure; }
 
     [[nodiscard]] constexpr bool is_userdata() const { return tag_ == Tag::Userdata; }
+
+    [[nodiscard]] constexpr bool is_thread() const { return tag_ == Tag::Thread; }
 
     [[nodiscard]] constexpr bool is_light_userdata() const { return tag_ == Tag::LightUserdata; }
 
@@ -250,6 +257,14 @@ public:
             wrong_access("C++ closure", caller);
         }
         return std::bit_cast<const CClosure*>(payload_);
+    }
+
+    [[nodiscard]] State*
+    as_thread(std::source_location caller = std::source_location::current()) const {
+        if (!is_thread()) [[unlikely]] {
+            wrong_access("thread", caller);
+        }
+        return std::bit_cast<State*>(payload_);
     }
 
     [[nodiscard]] Userdata*

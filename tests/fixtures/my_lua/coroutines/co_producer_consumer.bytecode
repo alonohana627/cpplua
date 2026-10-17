@@ -1,0 +1,308 @@
+
+main <co_producer_consumer.lua:0,0> (73 instructions)
+0+ params, 16 slots, 1 upvalue, 15 locals, 12 constants, 6 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	CLOSURE  	0 0
+	3	[12]	CLOSURE  	1 1
+	4	[22]	CLOSURE  	2 2
+	5	[26]	CLOSURE  	3 3
+	6	[27]	MOVE     	4 0
+	7	[27]	NEWTABLE 	5 0 6	; 6
+	8	[27]	EXTRAARG 	0
+	9	[27]	LOADK    	6 0	; "alpha"
+	10	[27]	LOADK    	7 1	; "beta"
+	11	[27]	LOADK    	8 2	; ""
+	12	[27]	LOADK    	9 3	; "gamma"
+	13	[27]	LOADK    	10 4	; "delta"
+	14	[27]	LOADK    	11 2	; ""
+	15	[27]	SETLIST  	5 6 0
+	16	[27]	CALL     	4 2 2	; 1 in 1 out
+	17	[28]	MOVE     	5 2
+	18	[28]	MOVE     	6 4
+	19	[28]	CLOSURE  	7 4
+	20	[28]	CALL     	5 3 2	; 2 in 1 out
+	21	[29]	MOVE     	6 2
+	22	[29]	MOVE     	7 5
+	23	[29]	GETTABUP 	8 0 5	; _ENV "string"
+	24	[29]	GETFIELD 	8 8 6	; "upper"
+	25	[29]	CALL     	6 3 2	; 2 in 1 out
+	26	[30]	MOVE     	7 3
+	27	[30]	MOVE     	8 6
+	28	[30]	CALL     	7 2 2	; 1 in 1 out
+	29	[31]	NEWTABLE 	8 0 0	; 0
+	30	[31]	EXTRAARG 	0
+	31	[33]	MOVE     	9 1
+	32	[33]	MOVE     	10 7
+	33	[33]	CALL     	9 2 2	; 1 in 1 out
+	34	[34]	EQK      	9 7 1	; nil
+	35	[34]	JMP      	8	; to 44
+	36	[35]	GETTABUP 	10 0 8	; _ENV "print"
+	37	[35]	MOVE     	11 9
+	38	[35]	CALL     	10 2 1	; 1 in 0 out
+	39	[36]	LEN      	10 8
+	40	[36]	ADDI     	10 10 1
+	41	[36]	MMBINI   	10 1 6 0	; __add
+	42	[36]	SETTABLE 	8 10 9
+	43	[36]	JMP      	-13	; to 31
+	44	[38]	GETTABUP 	9 0 8	; _ENV "print"
+	45	[38]	GETTABUP 	10 0 9	; _ENV "coroutine"
+	46	[38]	GETFIELD 	10 10 10	; "status"
+	47	[38]	MOVE     	11 7
+	48	[38]	CALL     	10 2 2	; 1 in 1 out
+	49	[38]	GETTABUP 	11 0 9	; _ENV "coroutine"
+	50	[38]	GETFIELD 	11 11 10	; "status"
+	51	[38]	MOVE     	12 4
+	52	[38]	CALL     	11 2 0	; 1 in all out
+	53	[38]	CALL     	9 0 1	; all in 0 out
+	54	[40]	GETTABUP 	9 0 9	; _ENV "coroutine"
+	55	[40]	GETFIELD 	9 9 11	; "wrap"
+	56	[48]	CLOSURE  	10 5
+	57	[40]	CALL     	9 2 2	; 1 in 1 out
+	58	[49]	MOVE     	10 9
+	59	[49]	CALL     	10 1 1	; 0 in 0 out
+	60	[50]	LOADI    	10 1
+	61	[50]	LOADI    	11 10
+	62	[50]	LOADI    	12 1
+	63	[50]	FORPREP  	10 3	; exit to 68
+	64	[50]	MOVE     	14 9
+	65	[50]	MOVE     	15 13
+	66	[50]	CALL     	14 2 1	; 1 in 0 out
+	67	[50]	FORLOOP  	10 4	; to 64
+	68	[51]	LEN      	10 8
+	69	[51]	MOVE     	11 9
+	70	[51]	LOADNIL  	12 0	; 1 out
+	71	[51]	CALL     	11 2 0	; 1 in all out
+	72	[51]	RETURN   	10 0 1k	; all out
+	73	[51]	RETURN   	10 1 1k	; 0 out
+constants (12):
+	0	S	"alpha"
+	1	S	"beta"
+	2	S	""
+	3	S	"gamma"
+	4	S	"delta"
+	5	S	"string"
+	6	S	"upper"
+	7	N	nil
+	8	S	"print"
+	9	S	"coroutine"
+	10	S	"status"
+	11	S	"wrap"
+locals (15):
+	0	producer	3	74
+	1	receive	4	74
+	2	filter	5	74
+	3	line_numbers	6	74
+	4	p	17	74
+	5	non_empty	21	74
+	6	upper	26	74
+	7	numbered	29	74
+	8	out	31	74
+	9	x	34	43
+	10	consumer	58	74
+	11	(for state)	63	68
+	12	(for state)	63	68
+	13	(for state)	63	68
+	14	i	64	67
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_producer_consumer.lua:2,7> (6 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 2 constants, 1 function
+	1	[3]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	2	[3]	GETFIELD 	1 1 1	; "create"
+	3	[6]	CLOSURE  	2 0
+	4	[3]	TAILCALL 	1 2 0k	; 1 in
+	5	[6]	RETURN   	1 0 0k	; all out
+	6	[7]	RETURN   	1 1 0k	; 0 out
+constants (2):
+	0	S	"coroutine"
+	1	S	"create"
+locals (1):
+	0	items	1	7
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_producer_consumer.lua:3,6> (14 instructions)
+0 params, 8 slots, 2 upvalues, 6 locals, 3 constants, 0 functions
+	1	[4]	GETTABUP 	0 0 0	; _ENV "ipairs"
+	2	[4]	GETUPVAL 	1 1	; items
+	3	[4]	CALL     	0 2 5	; 1 in 4 out
+	4	[4]	TFORPREP 	0 4	; to 9
+	5	[4]	GETTABUP 	6 0 1	; _ENV "coroutine"
+	6	[4]	GETFIELD 	6 6 2	; "yield"
+	7	[4]	MOVE     	7 5
+	8	[4]	CALL     	6 2 1	; 1 in 0 out
+	9	[4]	TFORCALL 	0 2
+	10	[4]	TFORLOOP 	0 6	; to 5
+	11	[4]	CLOSE    	0
+	12	[5]	LOADNIL  	0 0	; 1 out
+	13	[5]	RETURN   	0 2 0k	; 1 out
+	14	[6]	RETURN   	0 1 0k	; 0 out
+constants (3):
+	0	S	"ipairs"
+	1	S	"coroutine"
+	2	S	"yield"
+locals (6):
+	0	(for state)	4	11
+	1	(for state)	4	11
+	2	(for state)	4	11
+	3	(for state)	4	11
+	4	_	5	9
+	5	x	5	9
+upvalues (2):
+	0	_ENV	0	0
+	1	items	1	0
+
+function <co_producer_consumer.lua:8,12> (10 instructions)
+1 param, 6 slots, 1 upvalue, 3 locals, 3 constants, 0 functions
+	1	[9]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	2	[9]	GETFIELD 	1 1 1	; "resume"
+	3	[9]	MOVE     	2 0
+	4	[9]	CALL     	1 2 3	; 1 in 2 out
+	5	[10]	GETTABUP 	3 0 2	; _ENV "assert"
+	6	[10]	MOVE     	4 1
+	7	[10]	MOVE     	5 2
+	8	[10]	CALL     	3 3 1	; 2 in 0 out
+	9	[11]	RETURN1  	2
+	10	[12]	RETURN0  	
+constants (3):
+	0	S	"coroutine"
+	1	S	"resume"
+	2	S	"assert"
+locals (3):
+	0	prod	1	11
+	1	ok	5	11
+	2	x	5	11
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_producer_consumer.lua:13,22> (6 instructions)
+2 params, 4 slots, 2 upvalues, 2 locals, 2 constants, 1 function
+	1	[14]	GETTABUP 	2 0 0	; _ENV "coroutine"
+	2	[14]	GETFIELD 	2 2 1	; "create"
+	3	[21]	CLOSURE  	3 0
+	4	[14]	TAILCALL 	2 2 0k	; 1 in
+	5	[21]	RETURN   	2 0 0k	; all out
+	6	[22]	RETURN   	2 1 0k	; 0 out
+constants (2):
+	0	S	"coroutine"
+	1	S	"create"
+locals (2):
+	0	prod	1	7
+	1	f	1	7
+upvalues (2):
+	0	_ENV	0	0
+	1	receive	1	1
+
+function <co_producer_consumer.lua:14,21> (18 instructions)
+0 params, 4 slots, 4 upvalues, 2 locals, 3 constants, 0 functions
+	1	[16]	GETUPVAL 	0 0	; receive
+	2	[16]	GETUPVAL 	1 1	; prod
+	3	[16]	CALL     	0 2 2	; 1 in 1 out
+	4	[17]	EQK      	0 0 0	; nil
+	5	[17]	JMP      	2	; to 8
+	6	[17]	LOADNIL  	1 0	; 1 out
+	7	[17]	RETURN1  	1
+	8	[18]	GETUPVAL 	1 2	; f
+	9	[18]	MOVE     	2 0
+	10	[18]	CALL     	1 2 2	; 1 in 1 out
+	11	[19]	EQK      	1 0 1	; nil
+	12	[19]	JMP      	-12	; to 1
+	13	[19]	GETTABUP 	2 3 1	; _ENV "coroutine"
+	14	[19]	GETFIELD 	2 2 2	; "yield"
+	15	[19]	MOVE     	3 1
+	16	[19]	CALL     	2 2 1	; 1 in 0 out
+	17	[19]	JMP      	-17	; to 1
+	18	[21]	RETURN0  	
+constants (3):
+	0	N	nil
+	1	S	"coroutine"
+	2	S	"yield"
+locals (2):
+	0	x	4	17
+	1	y	11	17
+upvalues (4):
+	0	receive	0	1
+	1	prod	1	0
+	2	f	1	1
+	3	_ENV	0	0
+
+function <co_producer_consumer.lua:23,26> (7 instructions)
+1 param, 5 slots, 2 upvalues, 2 locals, 0 constants, 1 function
+	1	[24]	LOADI    	1 0
+	2	[25]	GETUPVAL 	2 0	; filter
+	3	[25]	MOVE     	3 0
+	4	[25]	CLOSURE  	4 0
+	5	[25]	TAILCALL 	2 3 0k	; 2 in
+	6	[25]	RETURN   	2 0 0k	; all out
+	7	[26]	RETURN   	2 1 0k	; 0 out
+constants (0):
+locals (2):
+	0	prod	1	8
+	1	n	2	8
+upvalues (2):
+	0	filter	1	2
+	1	_ENV	0	0
+
+function <co_producer_consumer.lua:25,25> (12 instructions)
+1 param, 5 slots, 2 upvalues, 1 local, 3 constants, 0 functions
+	1	[25]	GETUPVAL 	1 0	; n
+	2	[25]	ADDI     	1 1 1
+	3	[25]	MMBINI   	1 1 6 0	; __add
+	4	[25]	SETUPVAL 	1 0	; n
+	5	[25]	GETTABUP 	1 1 0	; _ENV "string"
+	6	[25]	GETFIELD 	1 1 1	; "format"
+	7	[25]	LOADK    	2 2	; "%3d %s"
+	8	[25]	GETUPVAL 	3 0	; n
+	9	[25]	MOVE     	4 0
+	10	[25]	TAILCALL 	1 4 0	; 3 in
+	11	[25]	RETURN   	1 0 0	; all out
+	12	[25]	RETURN0  	
+constants (3):
+	0	S	"string"
+	1	S	"format"
+	2	S	"%3d %s"
+locals (1):
+	0	x	1	13
+upvalues (2):
+	0	n	1	1
+	1	_ENV	0	1
+
+function <co_producer_consumer.lua:28,28> (4 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[28]	EQK      	0 0 1	; ""
+	2	[28]	JMP      	1	; to 4
+	3	[28]	RETURN1  	0
+	4	[28]	RETURN0  	
+constants (1):
+	0	S	""
+locals (1):
+	0	x	1	5
+upvalues (0):
+
+function <co_producer_consumer.lua:40,48> (14 instructions)
+0 params, 3 slots, 1 upvalue, 2 locals, 4 constants, 0 functions
+	1	[41]	LOADI    	0 0
+	2	[43]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	3	[43]	GETFIELD 	1 1 1	; "yield"
+	4	[43]	MOVE     	2 0
+	5	[43]	CALL     	1 2 2	; 1 in 1 out
+	6	[44]	EQK      	1 2 1	; nil
+	7	[44]	JMP      	3	; to 11
+	8	[45]	ADD      	0 0 1
+	9	[45]	MMBIN    	0 1 6	; __add
+	10	[45]	JMP      	-9	; to 2
+	11	[47]	LOADK    	1 3	; "total"
+	12	[47]	MOVE     	2 0
+	13	[47]	RETURN   	1 3 0	; 2 out
+	14	[48]	RETURN0  	
+constants (4):
+	0	S	"coroutine"
+	1	S	"yield"
+	2	N	nil
+	3	S	"total"
+locals (2):
+	0	total	2	15
+	1	v	6	10
+upvalues (1):
+	0	_ENV	0	0

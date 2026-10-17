@@ -244,6 +244,8 @@ void Heap::restart_collection() {
     // restartcollection: empty the gray lists and mark the roots.
     clear_gray_lists();
     mark_object(main_thread_);
+    mark_object(running_);
+    mark_object(registry_);
     mark_object(globals_); // (Lua marks the registry, which holds them)
     mark_object(loaded_);
     mark_object(references_);
@@ -559,8 +561,10 @@ std::size_t Heap::atomic() {
     GcObject* again = gray_again_;
     gray_again_ = nullptr;
     phase_ = Phase::Atomic;
-    mark_object(main_thread_); // the running thread
-    mark_object(globals_);     // the registry may have changed
+    mark_object(main_thread_);
+    mark_object(running_); // the running thread
+    mark_object(registry_);
+    mark_object(globals_); // the registry may have changed
     mark_object(loaded_);
     mark_object(references_);
     mark_type_metatables();
@@ -1182,7 +1186,7 @@ void Heap::call_finalizer() {
     if (tm.is_nil()) {
         return;
     }
-    State& thread = *main_thread_;
+    State& thread = *running_; // GCTM runs in the running thread
     const bool was_in_finalizer = in_finalizer_;
     in_finalizer_ = true;
     const std::uint32_t top = thread.top;
@@ -1215,11 +1219,11 @@ void Heap::call_all_pending_finalizers() {
 
 bool Heap::can_run_finalizers() {
     // luaD_checkminstack: room for a simple function.
-    State& thread = *main_thread_;
+    State& thread = *running_;
     if (thread.c_calls >= max_c_calls - 2) {
         return false;
     }
-    if (thread.stack_last - thread.top >= basic_stack_size) {
+    if (thread.free_slots(thread.top) >= basic_stack_size) {
         return true;
     }
     const Value error = thread.error_value; // a failed growth must not change it

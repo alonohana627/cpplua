@@ -1,0 +1,185 @@
+Chunk
+  Local results
+    Table
+  LocalFunction check
+    Function() [upvalues: _ENV, results]
+      Local point
+        MethodCall sub
+          Call
+            Index
+              Name string
+              String "format"
+            String "%.1f"
+            Float 0.5
+          Integer 2
+          Integer 2
+      Assign
+        Targets
+          Index
+            Name results (upvalue 1)
+            Binary +
+              Unary #
+                Name results (upvalue 1)
+              Integer 1
+        Values
+          Binary ==
+            Call
+              Name tostring
+              Float 3.5
+            Binary ..
+              String "3"
+              Binary ..
+                Name point (local 0)
+                String "5"
+      Assign
+        Targets
+          Index
+            Name results (upvalue 1)
+            Binary +
+              Unary #
+                Name results (upvalue 1)
+              Integer 1
+        Values
+          Binary ==
+            Call
+              Name tostring
+              Unary -
+                Float 0.0
+            Binary ..
+              String "-0"
+              Binary ..
+                Name point (local 0)
+                String "0"
+      Assign
+        Targets
+          Index
+            Name results (upvalue 1)
+            Binary +
+              Unary #
+                Name results (upvalue 1)
+              Integer 1
+        Values
+          Binary ==
+            Binary ..
+              Float 2.5
+              String ""
+            Binary ..
+              String "2"
+              Binary ..
+                Name point (local 0)
+                String "5"
+      Assign
+        Targets
+          Index
+            Name results (upvalue 1)
+            Binary +
+              Unary #
+                Name results (upvalue 1)
+              Integer 1
+        Values
+          Binary ==
+            Call
+              Name tonumber
+              Binary ..
+                String "3"
+                Binary ..
+                  Name point (local 0)
+                  String "25"
+            Float 3.25
+      Assign
+        Targets
+          Index
+            Name results (upvalue 1)
+            Binary +
+              Unary #
+                Name results (upvalue 1)
+              Integer 1
+        Values
+          Binary ==
+            Call
+              Name tonumber
+              String "3.25"
+            Float 3.25
+      Assign
+        Targets
+          Index
+            Name results (upvalue 1)
+            Binary +
+              Unary #
+                Name results (upvalue 1)
+              Integer 1
+        Values
+          Binary ==
+            Call
+              Call
+                Name load
+                Binary ..
+                  String "return "
+                  Call
+                    Index
+                      Name string
+                      String "format"
+                    String "%q"
+                    Float 0.1
+            Float 0.1
+  CallStatement
+    Call
+      Name check (local 1)
+  Local _
+    Binary or
+      Binary or
+        Call
+          Index
+            Name os
+            String "setlocale"
+          String "ptb"
+          String "numeric"
+        Call
+          Index
+            Name os
+            String "setlocale"
+          String "pt_BR.UTF-8"
+          String "numeric"
+      Call
+        Index
+          Name os
+          String "setlocale"
+        String "de_DE.UTF-8"
+        String "numeric"
+  CallStatement
+    Call
+      Name check (local 1)
+  CallStatement
+    Call
+      Index
+        Name os
+        String "setlocale"
+      String "C"
+      String "numeric"
+  CallStatement
+    Call
+      Name check (local 1)
+  Local text
+    Table
+  GenericFor i, ok
+    In
+      Call
+        Name ipairs
+        Name results (local 0)
+    Body
+      Assign
+        Targets
+          Index
+            Name text (local 3)
+            Name i (local 8)
+        Values
+          Call
+            Name tostring
+            Name ok (local 9)
+  Return
+    Call
+      Index
+        Name table
+        String "concat"
+      Name text (local 3)
+      String " "

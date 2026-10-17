@@ -1,0 +1,19 @@
+Chunk
+  Local gen
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function()
+        Return
+          String "only"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name gen (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name gen (local 0)

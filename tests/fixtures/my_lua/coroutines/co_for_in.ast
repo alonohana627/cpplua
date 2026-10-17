@@ -1,0 +1,240 @@
+Chunk
+  Local Y
+    Index
+      Name coroutine
+      String "yield"
+  LocalFunction slow_ipairs
+    Function(t) [upvalues: Y]
+      Return
+        Function(s, i) [upvalues: Y]
+          Assign
+            Targets
+              Name i (local 1)
+            Values
+              Binary +
+                Name i (local 1)
+                Integer 1
+          Local v
+            Index
+              Name s (local 0)
+              Name i (local 1)
+          If
+            If
+              Binary ==
+                Name v (local 2)
+                Nil
+              Then
+                Return
+                  Nil
+          CallStatement
+            Call
+              Name Y (upvalue 0)
+              String "step"
+              Name i (local 1)
+          Return
+            Name i (local 1)
+            Name v (local 2)
+        Name t (local 0)
+        Integer 0
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: slow_ipairs, _ENV, Y]
+        GenericFor i, v
+          In
+            Call
+              Name slow_ipairs (upvalue 0)
+              Table
+                Item
+                  String "a"
+                Item
+                  String "b"
+                Item
+                  String "c"
+          Body
+            CallStatement
+              Call
+                Name print
+                String "body"
+                Name i (local 4)
+                Name v (local 5)
+        LocalFunction gen
+          Function(n) [upvalues: _ENV, Y]
+            Return
+              Call
+                Index
+                  Name coroutine
+                  String "wrap"
+                Function() [upvalues: n, Y]
+                  NumericFor i
+                    Integer 1
+                    Name n (upvalue 0)
+                    Body
+                      CallStatement
+                        Call
+                          Name Y (upvalue 1)
+                          Name i (local 3)
+                          Binary *
+                            Name i (local 3)
+                            Name i (local 3)
+        GenericFor i, sq
+          In
+            Call
+              Name gen (local 0)
+              Integer 4
+          Body
+            CallStatement
+              Call
+                Name Y (upvalue 2)
+                String "outer"
+                Name i (local 5)
+                Name sq (local 6)
+        Local iter
+          Call
+            Name setmetatable
+            Table
+            Table
+              Field __call
+                Function(_, s, c) [upvalues: Y]
+                  If
+                    If
+                      Binary >=
+                        Name c (local 2)
+                        Integer 2
+                      Then
+                        Return
+                          Nil
+                  CallStatement
+                    Call
+                      Name Y (upvalue 0)
+                      String "call-iter"
+                      Name c (local 2)
+                  Return
+                    Binary +
+                      Name c (local 2)
+                      Integer 1
+        GenericFor k
+          In
+            Name iter (local 1)
+            Nil
+            Integer 0
+          Body
+            CallStatement
+              Call
+                Name print
+                String "k"
+                Name k (local 6)
+        Local acc
+          Integer 0
+        NumericFor i
+          Integer 10
+          Integer 1
+          Unary -
+            Integer 3
+          Body
+            Assign
+              Targets
+                Name acc (local 2)
+              Values
+                Binary +
+                  Name acc (local 2)
+                  Call
+                    Name Y (upvalue 2)
+                    String "num"
+                    Name i (local 6)
+        CallStatement
+          Call
+            Name print
+            String "acc"
+            Name acc (local 2)
+        Return
+          String "done"
+  Local r
+    Table
+      Item
+        Call
+          Name co (local 2)
+  While
+    Binary ~=
+      Index
+        Name r (local 3)
+        Integer 1
+      String "done"
+    Body
+      CallStatement
+        Call
+          Name print
+          Call
+            Index
+              Name table
+              String "unpack"
+            Name r (local 3)
+      Assign
+        Targets
+          Name r (local 3)
+        Values
+          Table
+            Item
+              Call
+                Name co (local 2)
+                Index
+                  Name r (local 3)
+                  Integer 2
+  Local words
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function(s) [upvalues: _ENV, Y]
+        GenericFor w
+          In
+            Call
+              Index
+                Name string
+                String "gmatch"
+              Name s (local 0)
+              String "%a+"
+          Body
+            CallStatement
+              Call
+                Name Y (upvalue 1)
+                MethodCall upper
+                  Name w (local 5)
+        GenericFor i, v
+          In
+            Call
+              Name ipairs
+              Table
+                Item
+                  Integer 7
+                Item
+                  Integer 8
+          Body
+            CallStatement
+              Call
+                Name Y (upvalue 1)
+                Binary ..
+                  Name i (local 5)
+                  Binary ..
+                    String "="
+                    Name v (local 6)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name words (local 4)
+        String "one two three"
+      Call
+        Name words (local 4)
+      Call
+        Name words (local 4)
+      Call
+        Name words (local 4)
+      Call
+        Name words (local 4)
+  Return
+    Index
+      Name r (local 3)
+      Integer 1

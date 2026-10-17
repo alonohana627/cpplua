@@ -1,0 +1,403 @@
+
+main <co_recursion.lua:0,0> (116 instructions)
+0+ params, 14 slots, 1 upvalue, 28 locals, 15 constants, 7 functions
+	1	[1]	VARARGPREP	0
+	2	[7]	CLOSURE  	0 0
+	3	[12]	CLOSURE  	1 1
+	4	[13]	LOADNIL  	2 0	; 1 out
+	5	[14]	GETTABUP 	3 0 0	; _ENV "ipairs"
+	6	[14]	NEWTABLE 	4 0 9	; 9
+	7	[14]	EXTRAARG 	0
+	8	[14]	LOADI    	5 50
+	9	[14]	LOADI    	6 30
+	10	[14]	LOADI    	7 70
+	11	[14]	LOADI    	8 20
+	12	[14]	LOADI    	9 40
+	13	[14]	LOADI    	10 60
+	14	[14]	LOADI    	11 80
+	15	[14]	LOADI    	12 35
+	16	[14]	LOADI    	13 65
+	17	[14]	SETLIST  	4 9 0
+	18	[14]	CALL     	3 2 5	; 1 in 4 out
+	19	[14]	TFORPREP 	3 5	; to 25
+	20	[14]	MOVE     	9 1
+	21	[14]	MOVE     	10 2
+	22	[14]	MOVE     	11 8
+	23	[14]	CALL     	9 3 2	; 2 in 1 out
+	24	[14]	MOVE     	2 9
+	25	[14]	TFORCALL 	3 2
+	26	[14]	TFORLOOP 	3 7	; to 20
+	27	[14]	CLOSE    	3
+	28	[15]	NEWTABLE 	3 0 0	; 0
+	29	[15]	EXTRAARG 	0
+	30	[16]	GETTABUP 	4 0 1	; _ENV "coroutine"
+	31	[16]	GETFIELD 	4 4 2	; "wrap"
+	32	[16]	CLOSURE  	5 2
+	33	[16]	CALL     	4 2 5	; 1 in 4 out
+	34	[16]	TFORPREP 	4 4	; to 39
+	35	[16]	LEN      	9 3
+	36	[16]	ADDI     	9 9 1
+	37	[16]	MMBINI   	9 1 6 0	; __add
+	38	[16]	SETTABLE 	3 9 8
+	39	[16]	TFORCALL 	4 1
+	40	[16]	TFORLOOP 	4 6	; to 35
+	41	[16]	CLOSE    	4
+	42	[17]	GETTABUP 	4 0 3	; _ENV "print"
+	43	[17]	GETTABUP 	5 0 4	; _ENV "table"
+	44	[17]	GETFIELD 	5 5 5	; "concat"
+	45	[17]	MOVE     	6 3
+	46	[17]	LOADK    	7 6	; " "
+	47	[17]	CALL     	5 3 0	; 2 in all out
+	48	[17]	CALL     	4 0 1	; all in 0 out
+	49	[29]	CLOSURE  	4 3
+	50	[30]	LOADI    	5 0
+	51	[31]	GETTABUP 	6 0 7	; _ENV "coroutine"
+	52	[31]	GETFIELD 	6 6 2	; "wrap"
+	53	[31]	CLOSURE  	7 4
+	54	[31]	CALL     	6 2 5	; 1 in 4 out
+	55	[31]	TFORPREP 	6 10	; to 66
+	56	[32]	ADDI     	5 5 1
+	57	[32]	MMBINI   	5 1 6 0	; __add
+	58	[33]	LEI      	5 6 0
+	59	[33]	JMP      	6	; to 66
+	60	[33]	GETTABUP 	11 0 3	; _ENV "print"
+	61	[33]	GETTABUP 	12 0 4	; _ENV "table"
+	62	[33]	GETFIELD 	12 12 5	; "concat"
+	63	[33]	MOVE     	13 10
+	64	[33]	CALL     	12 2 0	; 1 in all out
+	65	[33]	CALL     	11 0 1	; all in 0 out
+	66	[31]	TFORCALL 	6 1
+	67	[31]	TFORLOOP 	6 12	; to 56
+	68	[34]	CLOSE    	6
+	69	[35]	GETTABUP 	6 0 3	; _ENV "print"
+	70	[35]	LOADK    	7 8	; "permutations"
+	71	[35]	MOVE     	8 5
+	72	[35]	CALL     	6 3 1	; 2 in 0 out
+	73	[43]	CLOSURE  	6 5
+	74	[44]	GETTABUP 	7 0 9	; _ENV "coroutine"
+	75	[44]	GETFIELD 	7 7 10	; "create"
+	76	[44]	MOVE     	8 6
+	77	[44]	CALL     	7 2 2	; 1 in 1 out
+	78	[45]	GETTABUP 	8 0 9	; _ENV "coroutine"
+	79	[45]	GETFIELD 	8 8 11	; "resume"
+	80	[45]	MOVE     	9 7
+	81	[45]	LOADI    	10 5000
+	82	[45]	CALL     	8 3 4	; 2 in 3 out
+	83	[46]	GETTABUP 	11 0 9	; _ENV "coroutine"
+	84	[46]	GETFIELD 	11 11 12	; "status"
+	85	[46]	MOVE     	12 7
+	86	[46]	CALL     	11 2 2	; 1 in 1 out
+	87	[46]	EQK      	11 13 0	; "suspended"
+	88	[46]	JMP      	18	; to 107
+	89	[47]	GETTABUP 	11 0 3	; _ENV "print"
+	90	[47]	MOVE     	12 9
+	91	[47]	MOVE     	13 10
+	92	[47]	CALL     	11 3 1	; 2 in 0 out
+	93	[48]	GETTABUP 	11 0 9	; _ENV "coroutine"
+	94	[48]	GETFIELD 	11 11 11	; "resume"
+	95	[48]	MOVE     	12 7
+	96	[48]	EQK      	9 14 0	; "bottom"
+	97	[48]	JMP      	3	; to 101
+	98	[48]	LOADI    	13 0
+	99	[48]	TEST     	13 1
+	100	[48]	JMP      	1	; to 102
+	101	[48]	LOADNIL  	13 0	; 1 out
+	102	[48]	CALL     	11 3 4	; 2 in 3 out
+	103	[48]	MOVE     	10 13
+	104	[48]	MOVE     	9 12
+	105	[48]	MOVE     	8 11
+	106	[48]	JMP      	-24	; to 83
+	107	[50]	GETTABUP 	11 0 3	; _ENV "print"
+	108	[50]	MOVE     	12 8
+	109	[50]	MOVE     	13 9
+	110	[50]	CALL     	11 3 1	; 2 in 0 out
+	111	[56]	CLOSURE  	11 6
+	112	[57]	MOVE     	12 11
+	113	[57]	LOADI    	13 50
+	114	[57]	TAILCALL 	12 2 1k	; 1 in
+	115	[57]	RETURN   	12 0 1k	; all out
+	116	[57]	RETURN   	12 1 1k	; 0 out
+constants (15):
+	0	S	"ipairs"
+	1	S	"coroutine"
+	2	S	"wrap"
+	3	S	"print"
+	4	S	"table"
+	5	S	"concat"
+	6	S	" "
+	7	S	"coroutine"
+	8	S	"permutations"
+	9	S	"coroutine"
+	10	S	"create"
+	11	S	"resume"
+	12	S	"status"
+	13	S	"suspended"
+	14	S	"bottom"
+locals (28):
+	0	walk	3	117
+	1	insert	4	117
+	2	root	5	117
+	3	(for state)	19	27
+	4	(for state)	19	27
+	5	(for state)	19	27
+	6	(for state)	19	27
+	7	_	20	25
+	8	k	20	25
+	9	keys	30	117
+	10	(for state)	34	41
+	11	(for state)	34	41
+	12	(for state)	34	41
+	13	(for state)	34	41
+	14	k	35	39
+	15	permgen	50	117
+	16	count	51	117
+	17	(for state)	55	68
+	18	(for state)	55	68
+	19	(for state)	55	68
+	20	(for state)	55	68
+	21	p	56	66
+	22	deep	74	117
+	23	co	78	117
+	24	ok	83	117
+	25	a	83	117
+	26	b	83	117
+	27	nest	112	117
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_recursion.lua:2,7> (14 instructions)
+1 param, 3 slots, 2 upvalues, 1 local, 6 constants, 0 functions
+	1	[3]	EQK      	0 0 0	; nil
+	2	[3]	JMP      	1	; to 4
+	3	[3]	RETURN0  	
+	4	[4]	GETUPVAL 	1 0	; walk
+	5	[4]	GETFIELD 	2 0 1	; "left"
+	6	[4]	CALL     	1 2 1	; 1 in 0 out
+	7	[5]	GETTABUP 	1 1 2	; _ENV "coroutine"
+	8	[5]	GETFIELD 	1 1 3	; "yield"
+	9	[5]	GETFIELD 	2 0 4	; "key"
+	10	[5]	CALL     	1 2 1	; 1 in 0 out
+	11	[6]	GETUPVAL 	1 0	; walk
+	12	[6]	GETFIELD 	2 0 5	; "right"
+	13	[6]	CALL     	1 2 1	; 1 in 0 out
+	14	[7]	RETURN0  	
+constants (6):
+	0	N	nil
+	1	S	"left"
+	2	S	"coroutine"
+	3	S	"yield"
+	4	S	"key"
+	5	S	"right"
+locals (1):
+	0	node	1	15
+upvalues (2):
+	0	walk	1	0
+	1	_ENV	0	0
+
+function <co_recursion.lua:8,12> (22 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 4 constants, 0 functions
+	1	[9]	EQK      	0 0 0	; nil
+	2	[9]	JMP      	4	; to 7
+	3	[9]	NEWTABLE 	2 1 0	; 0
+	4	[9]	EXTRAARG 	0
+	5	[9]	SETFIELD 	2 1 1	; "key"
+	6	[9]	RETURN1  	2
+	7	[10]	GETFIELD 	2 0 1	; "key"
+	8	[10]	LT       	1 2 0
+	9	[10]	JMP      	6	; to 16
+	10	[10]	GETUPVAL 	2 0	; insert
+	11	[10]	GETFIELD 	3 0 2	; "left"
+	12	[10]	MOVE     	4 1
+	13	[10]	CALL     	2 3 2	; 2 in 1 out
+	14	[10]	SETFIELD 	0 2 2	; "left"
+	15	[10]	JMP      	5	; to 21
+	16	[10]	GETUPVAL 	2 0	; insert
+	17	[10]	GETFIELD 	3 0 3	; "right"
+	18	[10]	MOVE     	4 1
+	19	[10]	CALL     	2 3 2	; 2 in 1 out
+	20	[10]	SETFIELD 	0 3 2	; "right"
+	21	[11]	RETURN1  	0
+	22	[12]	RETURN0  	
+constants (4):
+	0	N	nil
+	1	S	"key"
+	2	S	"left"
+	3	S	"right"
+locals (2):
+	0	node	1	23
+	1	k	1	23
+upvalues (1):
+	0	insert	1	1
+
+function <co_recursion.lua:16,16> (4 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 0 constants, 0 functions
+	1	[16]	GETUPVAL 	0 0	; walk
+	2	[16]	GETUPVAL 	1 1	; root
+	3	[16]	CALL     	0 2 1	; 1 in 0 out
+	4	[16]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (2):
+	0	walk	1	0
+	1	root	1	2
+
+function <co_recursion.lua:19,29> (29 instructions)
+2 params, 9 slots, 2 upvalues, 6 locals, 2 constants, 0 functions
+	1	[20]	TEST     	1 1
+	2	[20]	JMP      	1	; to 4
+	3	[20]	LEN      	1 0
+	4	[21]	LEI      	1 1 0
+	5	[21]	JMP      	5	; to 11
+	6	[21]	GETTABUP 	2 0 0	; _ENV "coroutine"
+	7	[21]	GETFIELD 	2 2 1	; "yield"
+	8	[21]	MOVE     	3 0
+	9	[21]	CALL     	2 2 1	; 1 in 0 out
+	10	[21]	JMP      	18	; to 29
+	11	[23]	LOADI    	2 1
+	12	[23]	MOVE     	3 1
+	13	[23]	LOADI    	4 1
+	14	[23]	FORPREP  	2 13	; exit to 29
+	15	[24]	GETTABLE 	6 0 5
+	16	[24]	GETTABLE 	7 0 1
+	17	[24]	SETTABLE 	0 5 7
+	18	[24]	SETTABLE 	0 1 6
+	19	[25]	GETUPVAL 	6 1	; permgen
+	20	[25]	MOVE     	7 0
+	21	[25]	ADDI     	8 1 -1
+	22	[25]	MMBINI   	1 1 7 0	; __sub
+	23	[25]	CALL     	6 3 1	; 2 in 0 out
+	24	[26]	GETTABLE 	6 0 5
+	25	[26]	GETTABLE 	7 0 1
+	26	[26]	SETTABLE 	0 5 7
+	27	[26]	SETTABLE 	0 1 6
+	28	[23]	FORLOOP  	2 14	; to 15
+	29	[29]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"yield"
+locals (6):
+	0	a	1	30
+	1	n	1	30
+	2	(for state)	14	29
+	3	(for state)	14	29
+	4	(for state)	14	29
+	5	i	15	28
+upvalues (2):
+	0	_ENV	0	0
+	1	permgen	1	4
+
+function <co_recursion.lua:31,31> (10 instructions)
+0 params, 6 slots, 1 upvalue, 0 locals, 4 constants, 0 functions
+	1	[31]	GETUPVAL 	0 0	; permgen
+	2	[31]	NEWTABLE 	1 0 4	; 4
+	3	[31]	EXTRAARG 	0
+	4	[31]	LOADK    	2 0	; "a"
+	5	[31]	LOADK    	3 1	; "b"
+	6	[31]	LOADK    	4 2	; "c"
+	7	[31]	LOADK    	5 3	; "d"
+	8	[31]	SETLIST  	1 4 0
+	9	[31]	CALL     	0 2 1	; 1 in 0 out
+	10	[31]	RETURN0  	
+constants (4):
+	0	S	"a"
+	1	S	"b"
+	2	S	"c"
+	3	S	"d"
+locals (0):
+upvalues (1):
+	0	permgen	1	4
+
+function <co_recursion.lua:37,43> (33 instructions)
+1 param, 5 slots, 2 upvalues, 2 locals, 6 constants, 0 functions
+	1	[38]	EQI      	0 0 0
+	2	[38]	JMP      	5	; to 8
+	3	[38]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	4	[38]	GETFIELD 	1 1 1	; "yield"
+	5	[38]	LOADK    	2 2	; "bottom"
+	6	[38]	TAILCALL 	1 2 0	; 1 in
+	7	[38]	RETURN   	1 0 0	; all out
+	8	[39]	MODK     	1 0 3	; 1000
+	9	[39]	MMBINK   	0 3 9 0	; __mod 1000
+	10	[39]	EQI      	1 0 0
+	11	[39]	JMP      	5	; to 17
+	12	[39]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	13	[39]	GETFIELD 	1 1 1	; "yield"
+	14	[39]	LOADK    	2 4	; "down"
+	15	[39]	MOVE     	3 0
+	16	[39]	CALL     	1 3 1	; 2 in 0 out
+	17	[40]	GETUPVAL 	1 1	; deep
+	18	[40]	ADDI     	2 0 -1
+	19	[40]	MMBINI   	0 1 7 0	; __sub
+	20	[40]	CALL     	1 2 2	; 1 in 1 out
+	21	[41]	MODK     	2 0 3	; 1000
+	22	[41]	MMBINK   	0 3 9 0	; __mod 1000
+	23	[41]	EQI      	2 0 0
+	24	[41]	JMP      	5	; to 30
+	25	[41]	GETTABUP 	2 0 0	; _ENV "coroutine"
+	26	[41]	GETFIELD 	2 2 1	; "yield"
+	27	[41]	LOADK    	3 5	; "up"
+	28	[41]	MOVE     	4 0
+	29	[41]	CALL     	2 3 1	; 2 in 0 out
+	30	[42]	ADDI     	2 1 1
+	31	[42]	MMBINI   	1 1 6 0	; __add
+	32	[42]	RETURN1  	2
+	33	[43]	RETURN0  	
+constants (6):
+	0	S	"coroutine"
+	1	S	"yield"
+	2	S	"bottom"
+	3	I	1000
+	4	S	"down"
+	5	S	"up"
+locals (2):
+	0	n	1	34
+	1	r	21	34
+upvalues (2):
+	0	_ENV	0	0
+	1	deep	1	6
+
+function <co_recursion.lua:52,56> (12 instructions)
+1 param, 3 slots, 2 upvalues, 2 locals, 2 constants, 1 function
+	1	[53]	EQI      	0 0 0
+	2	[53]	JMP      	2	; to 5
+	3	[53]	LOADI    	1 0
+	4	[53]	RETURN   	1 2 0k	; 1 out
+	5	[54]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	6	[54]	GETFIELD 	1 1 1	; "wrap"
+	7	[54]	CLOSURE  	2 0
+	8	[54]	CALL     	1 2 2	; 1 in 1 out
+	9	[55]	MOVE     	2 1
+	10	[55]	TAILCALL 	2 1 0k	; 0 in
+	11	[55]	RETURN   	2 0 0k	; all out
+	12	[56]	RETURN   	2 1 0k	; 0 out
+constants (2):
+	0	S	"coroutine"
+	1	S	"wrap"
+locals (2):
+	0	n	1	13
+	1	co	9	13
+upvalues (2):
+	0	_ENV	0	0
+	1	nest	1	11
+
+function <co_recursion.lua:54,54> (11 instructions)
+0 params, 3 slots, 3 upvalues, 0 locals, 2 constants, 0 functions
+	1	[54]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[54]	GETFIELD 	0 0 1	; "yield"
+	3	[54]	GETUPVAL 	1 1	; nest
+	4	[54]	GETUPVAL 	2 2	; n
+	5	[54]	ADDI     	2 2 -1
+	6	[54]	MMBINI   	2 1 7 0	; __sub
+	7	[54]	CALL     	1 2 2	; 1 in 1 out
+	8	[54]	ADDI     	1 1 1
+	9	[54]	MMBINI   	1 1 6 0	; __add
+	10	[54]	CALL     	0 2 1	; 1 in 0 out
+	11	[54]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"yield"
+locals (0):
+upvalues (3):
+	0	_ENV	0	0
+	1	nest	0	1
+	2	n	1	0

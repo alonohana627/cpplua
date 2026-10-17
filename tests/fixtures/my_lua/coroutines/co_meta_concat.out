@@ -1,0 +1,15 @@
+  concat	<a>	x
+1:	<a>+x
+  concat	x	<a>
+2:	x+<a>
+  concat	<a>	rs
+3:	pq<a>+rs
+  concat	<b>	<c>
+  concat	<a>	<b>+<c>
+4:	<a>+<b>+<c>
+  concat	<a>	3
+5:	12<a>+3
+  concat	<b>	!
+  concat	<a>	<b>+!
+6:	n=10<a>+<b>+!
+8

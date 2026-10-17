@@ -1,0 +1,298 @@
+Chunk
+  Local Y
+    Index
+      Name coroutine
+      String "yield"
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function(...) [upvalues: Y, _ENV]
+        Local t
+          Table
+            Item
+              Call
+                Name Y (upvalue 0)
+                Integer 1
+            Item
+              Call
+                Name Y (upvalue 0)
+                Integer 2
+            Item
+              Call
+                Name Y (upvalue 0)
+                Integer 3
+        CallStatement
+          Call
+            Name print
+            String "ctor"
+            Index
+              Name t (local 0)
+              Integer 1
+            Index
+              Name t (local 0)
+              Integer 2
+            Index
+              Name t (local 0)
+              Integer 3
+            Index
+              Name t (local 0)
+              Integer 4
+            Index
+              Name t (local 0)
+              Integer 5
+            Index
+              Name t (local 0)
+              Integer 6
+        LocalFunction f
+          Function(...) [upvalues: _ENV]
+            Return
+              Call
+                Name select
+                String "#"
+                Vararg
+              Vararg
+        CallStatement
+          Call
+            Name print
+            String "args"
+            Call
+              Name f (local 1)
+              Call
+                Name Y (upvalue 0)
+                String "a"
+              Call
+                Name Y (upvalue 0)
+                String "b"
+        CallStatement
+          Call
+            Name print
+            String "arith"
+            Binary +
+              Binary *
+                Call
+                  Name Y (upvalue 0)
+                  String "x"
+                Integer 10
+              Call
+                Name Y (upvalue 0)
+                String "y"
+        CallStatement
+          Call
+            Name print
+            String "concat"
+            Binary ..
+              String "<"
+              Binary ..
+                Call
+                  Name Y (upvalue 0)
+                  String "s1"
+                Binary ..
+                  Call
+                    Name Y (upvalue 0)
+                    String "s2"
+                  String ">"
+        CallStatement
+          Call
+            Name print
+            String "and/or"
+            Binary or
+              Binary and
+                Call
+                  Name Y (upvalue 0)
+                  String "p"
+                Call
+                  Name Y (upvalue 0)
+                  String "q"
+              Call
+                Name Y (upvalue 0)
+                String "r"
+        CallStatement
+          Call
+            Name print
+            String "varargs"
+            Vararg
+        LocalFunction tail
+          Function(n) [upvalues: Y, tail]
+            If
+              If
+                Binary ==
+                  Name n (local 0)
+                  Integer 0
+                Then
+                  Return
+                    Call
+                      Name Y (upvalue 0)
+                      String "tail"
+            Return
+              Call
+                Name tail (upvalue 1)
+                Binary -
+                  Name n (local 0)
+                  Integer 1
+        CallStatement
+          Call
+            Name print
+            String "tail"
+            Call
+              Name tail (local 2)
+              Integer 100
+        Local a, b, c
+          Call
+            Name Y (upvalue 0)
+            String "multi"
+        CallStatement
+          Call
+            Name print
+            String "multi"
+            Name a (local 3)
+            Name b (local 4)
+            Name c (local 5)
+        Return
+          Call
+            Name Y (upvalue 0)
+            String "last"
+  Local feed
+    Table
+      Field
+        Integer 1
+        Table
+          Item
+            String "one"
+          Item
+            String "extra"
+      Field
+        Integer 2
+        Table
+      Field
+        Integer 3
+        Table
+          Item
+            String "three"
+          Item
+            String "x"
+          Item
+            String "y"
+      Field a
+        Table
+          Item
+            String "A1"
+          Item
+            String "A2"
+      Field b
+        Table
+          Item
+            String "B1"
+          Item
+            String "B2"
+      Field x
+        Table
+          Item
+            Integer 4
+      Field y
+        Table
+          Item
+            Integer 2
+      Field s1
+        Table
+          Item
+            String "S1"
+      Field s2
+        Table
+          Item
+            String "S2"
+      Field p
+        Table
+          Item
+            False
+      Field q
+        Table
+          Item
+            String "Q"
+      Field r
+        Table
+          Item
+            String "R"
+      Field tail
+        Table
+          Item
+            String "T"
+          Item
+            String "U"
+      Field multi
+        Table
+          Item
+            String "m1"
+          Item
+            Nil
+          Item
+            String "m3"
+      Field last
+        Table
+          Item
+            String "L1"
+          Item
+            String "L2"
+  Local ok, v
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name co (local 1)
+      String "v1"
+      Nil
+      String "v3"
+  While
+    Binary ==
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co (local 1)
+      String "suspended"
+    Body
+      Local reply
+        Index
+          Name feed (local 2)
+          Name v (local 4)
+      Assign
+        Targets
+          Name ok (local 3)
+          Name v (local 4)
+        Values
+          Call
+            Index
+              Name coroutine
+              String "resume"
+            Name co (local 1)
+            Call
+              Index
+                Name table
+                String "unpack"
+              Name reply (local 5)
+              Integer 1
+              Integer 3
+  CallStatement
+    Call
+      Name print
+      Name ok (local 3)
+      Name v (local 4)
+  Local co2
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: Y]
+        Return
+          Call
+            Name Y (upvalue 0)
+            String "last"
+  CallStatement
+    Call
+      Name co2 (local 5)
+  Return
+    Call
+      Name co2 (local 5)
+      String "L1"
+      String "L2"

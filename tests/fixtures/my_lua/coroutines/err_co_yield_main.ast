@@ -1,0 +1,16 @@
+Chunk
+  LocalFunction f
+    Function() [upvalues: _ENV]
+      CallStatement
+        Call
+          Index
+            Name coroutine
+            String "yield"
+          Integer 1
+  CallStatement
+    Call
+      Name print
+      String "before"
+  CallStatement
+    Call
+      Name f (local 0)

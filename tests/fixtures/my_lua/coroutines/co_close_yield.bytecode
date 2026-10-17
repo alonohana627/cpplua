@@ -1,0 +1,328 @@
+
+main <co_close_yield.lua:0,0> (81 instructions)
+0+ params, 13 slots, 1 upvalue, 9 locals, 10 constants, 4 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	3	[2]	GETFIELD 	0 0 1	; "yield"
+	4	[8]	CLOSURE  	1 0
+	5	[9]	GETTABUP 	2 0 0	; _ENV "coroutine"
+	6	[9]	GETFIELD 	2 2 2	; "create"
+	7	[31]	CLOSURE  	3 1
+	8	[9]	CALL     	2 2 2	; 1 in 1 out
+	9	[32]	LOADI    	3 0
+	10	[33]	GETTABUP 	4 0 0	; _ENV "coroutine"
+	11	[33]	GETFIELD 	4 4 3	; "resume"
+	12	[33]	MOVE     	5 2
+	13	[33]	CALL     	4 2 4	; 1 in 3 out
+	14	[34]	GETTABUP 	7 0 0	; _ENV "coroutine"
+	15	[34]	GETFIELD 	7 7 4	; "status"
+	16	[34]	MOVE     	8 2
+	17	[34]	CALL     	7 2 2	; 1 in 1 out
+	18	[34]	EQK      	7 5 0	; "suspended"
+	19	[34]	JMP      	16	; to 36
+	20	[35]	ADDI     	3 3 1
+	21	[35]	MMBINI   	3 1 6 0	; __add
+	22	[36]	GETTABUP 	7 0 6	; _ENV "print"
+	23	[36]	LOADK    	8 7	; "yielded"
+	24	[36]	MOVE     	9 5
+	25	[36]	MOVE     	10 6
+	26	[36]	CALL     	7 4 1	; 3 in 0 out
+	27	[37]	GETTABUP 	7 0 0	; _ENV "coroutine"
+	28	[37]	GETFIELD 	7 7 3	; "resume"
+	29	[37]	MOVE     	8 2
+	30	[37]	MOVE     	9 3
+	31	[37]	CALL     	7 3 4	; 2 in 3 out
+	32	[37]	MOVE     	6 9
+	33	[37]	MOVE     	5 8
+	34	[37]	MOVE     	4 7
+	35	[37]	JMP      	-22	; to 14
+	36	[39]	GETTABUP 	7 0 6	; _ENV "print"
+	37	[39]	MOVE     	8 4
+	38	[39]	MOVE     	9 5
+	39	[39]	MOVE     	10 6
+	40	[39]	CALL     	7 4 1	; 3 in 0 out
+	41	[41]	GETTABUP 	7 0 0	; _ENV "coroutine"
+	42	[41]	GETFIELD 	7 7 2	; "create"
+	43	[44]	CLOSURE  	8 2
+	44	[41]	CALL     	7 2 2	; 1 in 1 out
+	45	[45]	GETTABUP 	8 0 6	; _ENV "print"
+	46	[45]	GETTABUP 	9 0 0	; _ENV "coroutine"
+	47	[45]	GETFIELD 	9 9 3	; "resume"
+	48	[45]	MOVE     	10 7
+	49	[45]	CALL     	9 2 0	; 1 in all out
+	50	[45]	CALL     	8 0 1	; all in 0 out
+	51	[46]	GETTABUP 	8 0 6	; _ENV "print"
+	52	[46]	GETTABUP 	9 0 0	; _ENV "coroutine"
+	53	[46]	GETFIELD 	9 9 8	; "close"
+	54	[46]	MOVE     	10 7
+	55	[46]	CALL     	9 2 0	; 1 in all out
+	56	[46]	CALL     	8 0 1	; all in 0 out
+	57	[48]	GETTABUP 	8 0 0	; _ENV "coroutine"
+	58	[48]	GETFIELD 	8 8 2	; "create"
+	59	[51]	CLOSURE  	9 3
+	60	[48]	CALL     	8 2 2	; 1 in 1 out
+	61	[52]	GETTABUP 	9 0 6	; _ENV "print"
+	62	[52]	GETTABUP 	10 0 0	; _ENV "coroutine"
+	63	[52]	GETFIELD 	10 10 3	; "resume"
+	64	[52]	MOVE     	11 8
+	65	[52]	CALL     	10 2 0	; 1 in all out
+	66	[52]	CALL     	9 0 1	; all in 0 out
+	67	[53]	GETTABUP 	9 0 6	; _ENV "print"
+	68	[53]	GETTABUP 	10 0 0	; _ENV "coroutine"
+	69	[53]	GETFIELD 	10 10 3	; "resume"
+	70	[53]	MOVE     	11 8
+	71	[53]	LOADK    	12 9	; "resumed"
+	72	[53]	CALL     	10 3 0	; 2 in all out
+	73	[53]	CALL     	9 0 1	; all in 0 out
+	74	[54]	GETTABUP 	9 0 6	; _ENV "print"
+	75	[54]	GETTABUP 	10 0 0	; _ENV "coroutine"
+	76	[54]	GETFIELD 	10 10 4	; "status"
+	77	[54]	MOVE     	11 8
+	78	[54]	CALL     	10 2 0	; 1 in all out
+	79	[54]	CALL     	9 0 1	; all in 0 out
+	80	[55]	RETURN   	3 2 1k	; 1 out
+	81	[55]	RETURN   	9 1 1k	; 0 out
+constants (10):
+	0	S	"coroutine"
+	1	S	"yield"
+	2	S	"create"
+	3	S	"resume"
+	4	S	"status"
+	5	S	"suspended"
+	6	S	"print"
+	7	S	"yielded"
+	8	S	"close"
+	9	S	"resumed"
+locals (9):
+	0	Y	4	82
+	1	yclose	5	82
+	2	co	9	82
+	3	n	10	82
+	4	ok	14	82
+	5	a	14	82
+	6	b	14	82
+	7	co2	45	82
+	8	co3	61	82
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_close_yield.lua:3,8> (10 instructions)
+1 param, 5 slots, 2 upvalues, 1 local, 2 constants, 1 function
+	1	[4]	GETTABUP 	1 0 0	; _ENV "setmetatable"
+	2	[4]	NEWTABLE 	2 0 0	; 0
+	3	[4]	EXTRAARG 	0
+	4	[4]	NEWTABLE 	3 1 0	; 0
+	5	[4]	EXTRAARG 	0
+	6	[7]	CLOSURE  	4 0
+	7	[7]	SETFIELD 	3 1 4	; "__close"
+	8	[4]	TAILCALL 	1 3 0k	; 2 in
+	9	[7]	RETURN   	1 0 0k	; all out
+	10	[8]	RETURN   	1 1 0k	; 0 out
+constants (2):
+	0	S	"setmetatable"
+	1	S	"__close"
+locals (1):
+	0	name	1	11
+upvalues (2):
+	0	_ENV	0	0
+	1	Y	1	0
+
+function <co_close_yield.lua:4,7> (12 instructions)
+2 params, 7 slots, 3 upvalues, 3 locals, 3 constants, 0 functions
+	1	[5]	GETUPVAL 	2 0	; Y
+	2	[5]	LOADK    	3 0	; "closing "
+	3	[5]	GETUPVAL 	4 1	; name
+	4	[5]	CONCAT   	3 2
+	5	[5]	MOVE     	4 1
+	6	[5]	CALL     	2 3 2	; 2 in 1 out
+	7	[6]	GETTABUP 	3 2 1	; _ENV "print"
+	8	[6]	LOADK    	4 2	; "closed"
+	9	[6]	GETUPVAL 	5 1	; name
+	10	[6]	MOVE     	6 2
+	11	[6]	CALL     	3 4 1	; 3 in 0 out
+	12	[7]	RETURN0  	
+constants (3):
+	0	S	"closing "
+	1	S	"print"
+	2	S	"closed"
+locals (3):
+	0	_	1	13
+	1	e	1	13
+	2	r	7	13
+upvalues (3):
+	0	Y	0	1
+	1	name	1	0
+	2	_ENV	0	0
+
+function <co_close_yield.lua:9,31> (48 instructions)
+0 params, 7 slots, 2 upvalues, 11 locals, 9 constants, 2 functions
+	1	[11]	GETUPVAL 	0 0	; yclose
+	2	[11]	LOADK    	1 0	; "a"
+	3	[11]	CALL     	0 2 2	; 1 in 1 out
+	4	[11]	TBC      	0
+	5	[12]	GETUPVAL 	1 0	; yclose
+	6	[12]	LOADK    	2 1	; "b"
+	7	[12]	CALL     	1 2 2	; 1 in 1 out
+	8	[12]	TBC      	1
+	9	[13]	GETTABUP 	2 1 2	; _ENV "print"
+	10	[13]	LOADK    	3 3	; "block body"
+	11	[13]	CALL     	2 2 1	; 1 in 0 out
+	12	[13]	CLOSE    	0
+	13	[15]	LOADI    	0 1
+	14	[15]	LOADI    	1 3
+	15	[15]	LOADI    	2 1
+	16	[15]	FORPREP  	0 9	; exit to 27
+	17	[16]	GETUPVAL 	4 0	; yclose
+	18	[16]	LOADK    	5 4	; "c"
+	19	[16]	MOVE     	6 3
+	20	[16]	CONCAT   	5 2
+	21	[16]	CALL     	4 2 2	; 1 in 1 out
+	22	[16]	TBC      	4
+	23	[17]	EQI      	3 2 1
+	24	[17]	JMP      	2	; to 27
+	25	[17]	CLOSE    	4
+	26	[15]	FORLOOP  	0 10	; to 17
+	27	[18]	CLOSE    	0
+	28	[22]	CLOSURE  	0 0
+	29	[23]	GETTABUP 	1 1 2	; _ENV "print"
+	30	[23]	LOADK    	2 5	; "f returned"
+	31	[23]	MOVE     	3 0
+	32	[23]	CALL     	3 1 0	; 0 in all out
+	33	[23]	CALL     	1 0 1	; all in 0 out
+	34	[24]	GETTABUP 	1 1 6	; _ENV "pcall"
+	35	[27]	CLOSURE  	2 1
+	36	[24]	CALL     	1 2 3	; 1 in 2 out
+	37	[28]	GETTABUP 	3 1 2	; _ENV "print"
+	38	[28]	LOADK    	4 6	; "pcall"
+	39	[28]	MOVE     	5 1
+	40	[28]	MOVE     	6 2
+	41	[28]	CALL     	3 4 1	; 3 in 0 out
+	42	[29]	GETUPVAL 	3 0	; yclose
+	43	[29]	LOADK    	4 7	; "h"
+	44	[29]	CALL     	3 2 2	; 1 in 1 out
+	45	[29]	TBC      	3
+	46	[30]	LOADK    	4 8	; "body done"
+	47	[30]	RETURN   	4 2 0k	; 1 out
+	48	[31]	RETURN   	4 1 0k	; 0 out
+constants (9):
+	0	S	"a"
+	1	S	"b"
+	2	S	"print"
+	3	S	"block body"
+	4	S	"c"
+	5	S	"f returned"
+	6	S	"pcall"
+	7	S	"h"
+	8	S	"body done"
+locals (11):
+	0	a	4	12
+	1	b	8	12
+	2	(for state)	16	27
+	3	(for state)	16	27
+	4	(for state)	16	27
+	5	i	17	26
+	6	c	22	25
+	7	f	29	49
+	8	ok	37	49
+	9	e	37	49
+	10	h	45	49
+upvalues (2):
+	0	yclose	1	1
+	1	_ENV	0	0
+
+function <co_close_yield.lua:19,22> (8 instructions)
+0 params, 3 slots, 1 upvalue, 1 local, 2 constants, 0 functions
+	1	[20]	GETUPVAL 	0 0	; yclose
+	2	[20]	LOADK    	1 0	; "d"
+	3	[20]	CALL     	0 2 2	; 1 in 1 out
+	4	[20]	TBC      	0
+	5	[21]	LOADK    	1 1	; "f result"
+	6	[21]	LOADI    	2 2
+	7	[21]	RETURN   	1 3 0k	; 2 out
+	8	[22]	RETURN   	1 1 0k	; 0 out
+constants (2):
+	0	S	"d"
+	1	S	"f result"
+locals (1):
+	0	d	4	9
+upvalues (1):
+	0	yclose	0	0
+
+function <co_close_yield.lua:24,27> (9 instructions)
+0 params, 4 slots, 2 upvalues, 1 local, 3 constants, 0 functions
+	1	[25]	GETUPVAL 	0 0	; yclose
+	2	[25]	LOADK    	1 0	; "g"
+	3	[25]	CALL     	0 2 2	; 1 in 1 out
+	4	[25]	TBC      	0
+	5	[26]	GETTABUP 	1 1 1	; _ENV "error"
+	6	[26]	LOADK    	2 2	; "pcall error"
+	7	[26]	LOADI    	3 0
+	8	[26]	CALL     	1 3 1	; 2 in 0 out
+	9	[27]	RETURN   	1 1 0k	; 0 out
+constants (3):
+	0	S	"g"
+	1	S	"error"
+	2	S	"pcall error"
+locals (1):
+	0	g	4	10
+upvalues (2):
+	0	yclose	0	0
+	1	_ENV	0	1
+
+function <co_close_yield.lua:41,44> (13 instructions)
+0 params, 4 slots, 2 upvalues, 1 local, 3 constants, 1 function
+	1	[42]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[42]	NEWTABLE 	1 0 0	; 0
+	3	[42]	EXTRAARG 	0
+	4	[42]	NEWTABLE 	2 1 0	; 0
+	5	[42]	EXTRAARG 	0
+	6	[42]	CLOSURE  	3 0
+	7	[42]	SETFIELD 	2 1 3	; "__close"
+	8	[42]	CALL     	0 3 2	; 2 in 1 out
+	9	[42]	TBC      	0
+	10	[43]	GETUPVAL 	1 1	; Y
+	11	[43]	LOADK    	2 2	; "first"
+	12	[43]	CALL     	1 2 1	; 1 in 0 out
+	13	[44]	RETURN   	1 1 0k	; 0 out
+constants (3):
+	0	S	"setmetatable"
+	1	S	"__close"
+	2	S	"first"
+locals (1):
+	0	x	9	14
+upvalues (2):
+	0	_ENV	0	0
+	1	Y	1	0
+
+function <co_close_yield.lua:42,42> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[42]	GETUPVAL 	0 0	; Y
+	2	[42]	LOADK    	1 0	; "cannot"
+	3	[42]	CALL     	0 2 1	; 1 in 0 out
+	4	[42]	RETURN0  	
+constants (1):
+	0	S	"cannot"
+locals (0):
+upvalues (1):
+	0	Y	0	1
+
+function <co_close_yield.lua:48,51> (9 instructions)
+0 params, 4 slots, 2 upvalues, 1 local, 3 constants, 0 functions
+	1	[49]	GETUPVAL 	0 0	; yclose
+	2	[49]	LOADK    	1 0	; "z"
+	3	[49]	CALL     	0 2 2	; 1 in 1 out
+	4	[49]	TBC      	0
+	5	[50]	GETTABUP 	1 1 1	; _ENV "error"
+	6	[50]	LOADK    	2 2	; "unwinding"
+	7	[50]	LOADI    	3 0
+	8	[50]	CALL     	1 3 1	; 2 in 0 out
+	9	[51]	RETURN   	1 1 0k	; 0 out
+constants (3):
+	0	S	"z"
+	1	S	"error"
+	2	S	"unwinding"
+locals (1):
+	0	z	4	10
+upvalues (2):
+	0	yclose	1	1
+	1	_ENV	0	0

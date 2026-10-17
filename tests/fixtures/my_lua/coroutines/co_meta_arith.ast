@@ -1,0 +1,352 @@
+Chunk
+  Local Y
+    Index
+      Name coroutine
+      String "yield"
+  Local mt
+    Table
+  LocalFunction V
+    Function(n) [upvalues: _ENV, mt]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field n
+              Name n (local 0)
+          Name mt (upvalue 1)
+  LocalFunction val
+    Function(x) [upvalues: _ENV]
+      Return
+        Binary or
+          Binary and
+            Binary ==
+              Call
+                Name type
+                Name x (local 0)
+              String "table"
+            Index
+              Name x (local 0)
+              String "n"
+          Name x (local 0)
+  GenericFor _, ev
+    In
+      Call
+        Name ipairs
+        Table
+          Item
+            String "add"
+          Item
+            String "sub"
+          Item
+            String "mul"
+          Item
+            String "div"
+          Item
+            String "mod"
+          Item
+            String "pow"
+          Item
+            String "idiv"
+          Item
+            String "band"
+          Item
+            String "bor"
+          Item
+            String "bxor"
+          Item
+            String "shl"
+          Item
+            String "shr"
+    Body
+      Assign
+        Targets
+          Index
+            Name mt (local 1)
+            Binary ..
+              String "__"
+              Name ev (local 9)
+        Values
+          Function(a, b) [upvalues: Y, ev, val]
+            Local r
+              Call
+                Name Y (upvalue 0)
+                Name ev (upvalue 1)
+                Call
+                  Name val (upvalue 2)
+                  Name a (local 0)
+                Call
+                  Name val (upvalue 2)
+                  Name b (local 1)
+            Return
+              Name r (local 2)
+  Assign
+    Targets
+      Index
+        Name mt (local 1)
+        String "__unm"
+    Values
+      Function(a) [upvalues: Y]
+        Return
+          Call
+            Name Y (upvalue 0)
+            String "unm"
+            Index
+              Name a (local 0)
+              String "n"
+  Assign
+    Targets
+      Index
+        Name mt (local 1)
+        String "__bnot"
+    Values
+      Function(a) [upvalues: Y]
+        Return
+          Call
+            Name Y (upvalue 0)
+            String "bnot"
+            Index
+              Name a (local 0)
+              String "n"
+  Local ops
+    Table
+      Field add
+        Function(a, b)
+          Return
+            Binary +
+              Name a (local 0)
+              Name b (local 1)
+      Field sub
+        Function(a, b)
+          Return
+            Binary -
+              Name a (local 0)
+              Name b (local 1)
+      Field mul
+        Function(a, b)
+          Return
+            Binary *
+              Name a (local 0)
+              Name b (local 1)
+      Field div
+        Function(a, b)
+          Return
+            Binary /
+              Name a (local 0)
+              Name b (local 1)
+      Field mod
+        Function(a, b)
+          Return
+            Binary %
+              Name a (local 0)
+              Name b (local 1)
+      Field pow
+        Function(a, b)
+          Return
+            Binary ^
+              Name a (local 0)
+              Name b (local 1)
+      Field idiv
+        Function(a, b)
+          Return
+            Binary //
+              Name a (local 0)
+              Name b (local 1)
+      Field band
+        Function(a, b)
+          Return
+            Binary &
+              Name a (local 0)
+              Name b (local 1)
+      Field bor
+        Function(a, b)
+          Return
+            Binary |
+              Name a (local 0)
+              Name b (local 1)
+      Field bxor
+        Function(a, b)
+          Return
+            Binary ~
+              Name a (local 0)
+              Name b (local 1)
+      Field shl
+        Function(a, b)
+          Return
+            Binary <<
+              Name a (local 0)
+              Name b (local 1)
+      Field shr
+        Function(a, b)
+          Return
+            Binary >>
+              Name a (local 0)
+              Name b (local 1)
+      Field unm
+        Function(a)
+          Return
+            Unary -
+              Name a (local 0)
+      Field bnot
+        Function(a)
+          Return
+            Unary ~
+              Name a (local 0)
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: V, _ENV]
+        Local a, b
+          Call
+            Name V (upvalue 0)
+            Integer 12
+          Call
+            Name V (upvalue 0)
+            Integer 5
+        CallStatement
+          Call
+            Name print
+            Binary +
+              Name a (local 0)
+              Name b (local 1)
+            Binary -
+              Name a (local 0)
+              Name b (local 1)
+            Binary *
+              Name a (local 0)
+              Name b (local 1)
+            Binary /
+              Name a (local 0)
+              Name b (local 1)
+        CallStatement
+          Call
+            Name print
+            Binary %
+              Name a (local 0)
+              Name b (local 1)
+            Binary ^
+              Name a (local 0)
+              Integer 2
+            Binary //
+              Name a (local 0)
+              Name b (local 1)
+            Binary //
+              Integer 7
+              Name a (local 0)
+        CallStatement
+          Call
+            Name print
+            Binary &
+              Name a (local 0)
+              Name b (local 1)
+            Binary |
+              Name a (local 0)
+              Integer 3
+            Binary ~
+              Integer 1
+              Name b (local 1)
+            Binary <<
+              Name a (local 0)
+              Integer 1
+            Binary >>
+              Name a (local 0)
+              Name b (local 1)
+        CallStatement
+          Call
+            Name print
+            Unary -
+              Name a (local 0)
+            Unary ~
+              Name b (local 1)
+        Local e
+          Binary -
+            Binary *
+              Paren
+                Binary +
+                  Name a (local 0)
+                  Integer 1
+              Integer 2
+            Unary -
+              Name b (local 1)
+        CallStatement
+          Call
+            Name print
+            String "e"
+            Name e (local 2)
+        Local count
+          Integer 0
+        NumericFor i
+          Integer 1
+          Binary +
+            Name a (local 0)
+            Integer 0
+          Body
+            Assign
+              Targets
+                Name count (local 3)
+              Values
+                Binary +
+                  Name count (local 3)
+                  Integer 1
+        If
+          If
+            Binary ==
+              Binary -
+                Name a (local 0)
+                Integer 2
+              Integer 10
+            Then
+              CallStatement
+                Call
+                  Name print
+                  String "cond ok"
+                  Name count (local 3)
+        Return
+          String "end"
+  Local ok, r1, r2, r3
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name co (local 5)
+  Local steps
+    Integer 0
+  While
+    Binary ==
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co (local 5)
+      String "suspended"
+    Body
+      Assign
+        Targets
+          Name steps (local 10)
+        Values
+          Binary +
+            Name steps (local 10)
+            Integer 1
+      Assign
+        Targets
+          Name ok (local 6)
+          Name r1 (local 7)
+          Name r2 (local 8)
+          Name r3 (local 9)
+        Values
+          Call
+            Index
+              Name coroutine
+              String "resume"
+            Name co (local 5)
+            Call
+              Index
+                Name ops (local 4)
+                Name r1 (local 7)
+              Name r2 (local 8)
+              Name r3 (local 9)
+  Return
+    Name ok (local 6)
+    Name r1 (local 7)
+    Name steps (local 10)

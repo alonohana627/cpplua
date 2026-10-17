@@ -85,8 +85,9 @@ loaded modules have it, else how its caller called it, else `main chunk`, `funct
 <chunk:line>` or `?`. A function entered by a tail call has lost its caller, so it has no name and
 gets a `(...tail calls...)` line (`CallInfo::tail_call`, Lua's `CIST_TAIL`).
 
-`lua2 file.lua` runs the chunk the way `lua.c` does: from a C++ function (`run_chunk`, like
-`pmain`, which is why tracebacks end with `[C]: in ?`), in a protected call whose message handler
+`lua2 file.lua` runs the chunk the way `lua.c` does: from a C++ function (`pmain` in
+`lib/standalone.cpp` since stage 11, `run_chunk` for `Interpreter::run`; that is why tracebacks
+end with `[C]: in ?`), in a protected call whose message handler
 (`message_handler`, `msghandler`) adds the traceback. An error object that is not a string shows
 as its `__tostring` result, or `(error object is a X value)` (R2.5). The tests compare lua2's
 tracebacks with the real Lua's (`tests/error_test.cpp`).

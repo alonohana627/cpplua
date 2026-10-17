@@ -25,14 +25,18 @@
 
 namespace lua2 {
 
-namespace {
-
-const Proto& proto_of(const State& state, const CallInfo* frame) {
+const Proto& frame_proto(const State& state, const CallInfo* frame) {
     return *std::bit_cast<const LuaClosure*>(state.stack_values[frame->func])->proto;
 }
 
 int frame_pc(const State& state, const CallInfo* frame) {
-    return static_cast<int>(frame->saved_pc - proto_of(state, frame).code.data()) - 1;
+    return static_cast<int>(frame->saved_pc - frame_proto(state, frame).code.data()) - 1;
+}
+
+namespace {
+
+const Proto& proto_of(const State& state, const CallInfo* frame) {
+    return frame_proto(state, frame);
 }
 
 // lua_getinfo's "S" and "l": the chunk as messages show it, and the line the
@@ -130,6 +134,8 @@ int arg_type_error(State& state, int n, std::string_view expected) {
     const Value name = metafield(state.heap(), v, "__name");
     if (name.is_string()) {
         got = name.as_string()->view();
+    } else if (v.is_light_userdata()) {
+        got = "light userdata";
     } else if (arg_is_none(state, n)) {
         got = "no value";
     } else {
@@ -453,6 +459,9 @@ FunctionName function_name(const State& state, const CallInfo* frame) {
     if (caller == nullptr) {
         return {};
     }
+    if (caller->hooked) {
+        return {.kind = "hook", .name = "?"};
+    }
     if (caller->finalizer) {
         return {.kind = "metamethod", .name = "__gc"};
     }
@@ -517,10 +526,14 @@ std::string traceback(const State& state, std::optional<std::string_view> messag
         out += '\n';
     }
     out += "stack traceback:";
-    int last = 0;
-    while (state.frame_at(last + 1) != nullptr) {
+    // lastlevel: the deepest level (counted once: a stack may hold a
+    // million frames).
+    int last = -1;
+    for (const CallInfo* frame = state.ci; frame != nullptr && frame != &state.base_ci;
+         frame = frame->previous) {
         ++last;
     }
+    last = std::max(last, 0);
     int limit = last - level > levels1 + levels2 ? levels1 : -1;
     while (const CallInfo* frame = state.frame_at(level++)) {
         if (limit-- == 0) {

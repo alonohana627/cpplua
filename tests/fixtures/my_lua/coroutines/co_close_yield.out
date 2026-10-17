@@ -1,0 +1,24 @@
+block body
+yielded	closing b	nil
+closed	b	1
+yielded	closing a	nil
+closed	a	2
+yielded	closing c1	nil
+closed	c1	3
+yielded	closing c2	nil
+closed	c2	4
+yielded	closing d	nil
+closed	d	5
+f returned	f result	2
+yielded	closing g	pcall error
+closed	g	6
+pcall	false	pcall error
+yielded	closing h	nil
+closed	h	7
+true	body done	nil
+true	first
+false	attempt to yield across a C-call boundary
+false	unwinding
+false	cannot resume dead coroutine
+dead
+7

@@ -121,6 +121,15 @@ public:
     // The main thread: its stack is where the collector starts marking.
     [[nodiscard]] State& main_thread() { return *main_thread_; }
 
+    // The thread running now: the main thread, or the coroutine it resumed
+    // (and so on). Finalizers run in it, as in Lua.
+    [[nodiscard]] State* running_thread() const { return running_; }
+
+    void set_running_thread(State* thread) { running_ = thread; }
+
+    // A new coroutine with an empty stack (lua_newthread).
+    State* new_thread();
+
     // The globals table, every chunk's _ENV (E1.2, E2.3). A root of the
     // collector, like Lua's registry that holds it.
     [[nodiscard]] Table& globals() { return *globals_; }
@@ -156,6 +165,11 @@ public:
 
     // The same for a userdata.
     void set_metatable(Userdata* u, Table* mt);
+
+    // The registry (LUA_REGISTRYINDEX, debug.getregistry): [1] the main
+    // thread, [2] the globals, _LOADED the loaded modules, and what the
+    // libraries keep there (_PRELOAD, _HOOKKEY).
+    [[nodiscard]] Table& registry() { return *registry_; }
 
     // The registry's table of references (luaL_ref): C++ keeps Lua values
     // alive by storing them here under integer keys. A root. It also maps
@@ -440,9 +454,11 @@ private:
     std::size_t short_count_ = 0;
 
     State* main_thread_ = nullptr;
+    State* running_ = nullptr;
     Table* globals_ = nullptr;
     Table* loaded_ = nullptr;
     Table* references_ = nullptr;
+    Table* registry_ = nullptr;
     std::vector<std::int64_t> free_references_;
     std::int64_t next_reference_ = 1;
     std::array<Table*, 8> type_metatables_{};

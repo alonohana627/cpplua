@@ -1,0 +1,109 @@
+Chunk
+  Local depth
+    Integer 0
+  LocalFunction nest
+    Function() [upvalues: depth, _ENV, nest]
+      Assign
+        Targets
+          Name depth (upvalue 0)
+        Values
+          Binary +
+            Name depth (upvalue 0)
+            Integer 1
+      Local co
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Name nest (upvalue 2)
+      Local ok, e
+        Call
+          Index
+            Name coroutine
+            String "resume"
+          Name co (local 0)
+      If
+        If
+          Unary not
+            Name ok (local 1)
+          Then
+            CallStatement
+              Call
+                Name error
+                Name e (local 2)
+                Integer 0
+      Return
+        Name e (local 2)
+  Local ok, e
+    Call
+      Name pcall
+      Name nest (local 1)
+  CallStatement
+    Call
+      Name print
+      Name ok (local 2)
+      Name e (local 3)
+  CallStatement
+    Call
+      Name print
+      Binary >
+        Name depth (local 0)
+        Integer 150
+      Binary <
+        Name depth (local 0)
+        Integer 250
+  Local level
+    Integer 0
+  LocalFunction wrapnest
+    Function() [upvalues: level, _ENV, wrapnest]
+      Assign
+        Targets
+          Name level (upvalue 0)
+        Values
+          Binary +
+            Name level (upvalue 0)
+            Integer 1
+      Return
+        Call
+          Call
+            Index
+              Name coroutine
+              String "wrap"
+            Name wrapnest (upvalue 2)
+  Local ok2, e2
+    Call
+      Name pcall
+      Name wrapnest (local 5)
+  CallStatement
+    Call
+      Name print
+      Name ok2 (local 6)
+      Paren
+        Call
+          Index
+            Name string
+            String "gsub"
+          Name e2 (local 7)
+          String "co_cstack.lua:%d+: "
+          String ""
+  CallStatement
+    Call
+      Name print
+      Binary >
+        Name level (local 4)
+        Integer 150
+      Binary <
+        Name level (local 4)
+        Integer 250
+      Binary ==
+        Name depth (local 0)
+        Name level (local 4)
+  Return
+    Call
+      Call
+        Index
+          Name coroutine
+          String "wrap"
+        Function()
+          Return
+            String "fine"

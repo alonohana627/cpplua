@@ -1,0 +1,355 @@
+
+main <co_wrap.lua:0,0> (136 instructions)
+0+ params, 18 slots, 1 upvalue, 13 locals, 11 constants, 9 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	CLOSURE  	0 0
+	3	[7]	MOVE     	1 0
+	4	[7]	LOADI    	2 3
+	5	[7]	CALL     	1 2 2	; 1 in 1 out
+	6	[8]	GETTABUP 	2 0 0	; _ENV "print"
+	7	[8]	MOVE     	3 1
+	8	[8]	CALL     	3 1 2	; 0 in 1 out
+	9	[8]	MOVE     	4 1
+	10	[8]	CALL     	4 1 2	; 0 in 1 out
+	11	[8]	MOVE     	5 1
+	12	[8]	CALL     	5 1 0	; 0 in all out
+	13	[8]	CALL     	2 0 1	; all in 0 out
+	14	[9]	GETTABUP 	2 0 0	; _ENV "print"
+	15	[9]	GETTABUP 	3 0 1	; _ENV "select"
+	16	[9]	LOADK    	4 2	; "#"
+	17	[9]	MOVE     	5 1
+	18	[9]	CALL     	5 1 0	; 0 in all out
+	19	[9]	CALL     	3 0 0	; all in all out
+	20	[9]	CALL     	2 0 1	; all in 0 out
+	21	[10]	GETTABUP 	2 0 0	; _ENV "print"
+	22	[10]	GETTABUP 	3 0 3	; _ENV "pcall"
+	23	[10]	MOVE     	4 1
+	24	[10]	CALL     	3 2 0	; 1 in all out
+	25	[10]	CALL     	2 0 1	; all in 0 out
+	26	[11]	GETTABUP 	2 0 0	; _ENV "print"
+	27	[11]	GETTABUP 	3 0 3	; _ENV "pcall"
+	28	[11]	MOVE     	4 1
+	29	[11]	CALL     	3 2 0	; 1 in all out
+	30	[11]	CALL     	2 0 1	; all in 0 out
+	31	[13]	GETTABUP 	2 0 4	; _ENV "coroutine"
+	32	[13]	GETFIELD 	2 2 5	; "wrap"
+	33	[16]	CLOSURE  	3 1
+	34	[13]	CALL     	2 2 2	; 1 in 1 out
+	35	[17]	GETTABUP 	3 0 0	; _ENV "print"
+	36	[17]	MOVE     	4 2
+	37	[17]	LOADI    	5 10
+	38	[17]	CALL     	4 2 0	; 1 in all out
+	39	[17]	CALL     	3 0 1	; all in 0 out
+	40	[18]	GETTABUP 	3 0 0	; _ENV "print"
+	41	[18]	GETTABUP 	4 0 3	; _ENV "pcall"
+	42	[18]	MOVE     	5 2
+	43	[18]	CALL     	4 2 0	; 1 in all out
+	44	[18]	CALL     	3 0 1	; all in 0 out
+	45	[19]	GETTABUP 	3 0 0	; _ENV "print"
+	46	[19]	GETTABUP 	4 0 3	; _ENV "pcall"
+	47	[19]	MOVE     	5 2
+	48	[19]	CALL     	4 2 0	; 1 in all out
+	49	[19]	CALL     	3 0 1	; all in 0 out
+	50	[21]	NEWTABLE 	3 0 0	; 0
+	51	[21]	EXTRAARG 	0
+	52	[22]	GETTABUP 	4 0 6	; _ENV "coroutine"
+	53	[22]	GETFIELD 	4 4 5	; "wrap"
+	54	[22]	CLOSURE  	5 2
+	55	[22]	CALL     	4 2 2	; 1 in 1 out
+	56	[23]	GETTABUP 	5 0 3	; _ENV "pcall"
+	57	[23]	MOVE     	6 4
+	58	[23]	CALL     	5 2 3	; 1 in 2 out
+	59	[24]	GETTABUP 	7 0 0	; _ENV "print"
+	60	[24]	MOVE     	8 5
+	61	[24]	EQ       	6 3 1
+	62	[24]	JMP      	1	; to 64
+	63	[24]	LFALSESKIP	9
+	64	[24]	LOADTRUE 	9
+	65	[24]	CALL     	7 3 1	; 2 in 0 out
+	66	[25]	GETTABUP 	7 0 6	; _ENV "coroutine"
+	67	[25]	GETFIELD 	7 7 5	; "wrap"
+	68	[25]	CLOSURE  	8 3
+	69	[25]	CALL     	7 2 2	; 1 in 1 out
+	70	[26]	GETTABUP 	8 0 0	; _ENV "print"
+	71	[26]	GETTABUP 	9 0 3	; _ENV "pcall"
+	72	[26]	MOVE     	10 7
+	73	[26]	CALL     	9 2 0	; 1 in all out
+	74	[26]	CALL     	8 0 1	; all in 0 out
+	75	[27]	GETTABUP 	8 0 6	; _ENV "coroutine"
+	76	[27]	GETFIELD 	8 8 5	; "wrap"
+	77	[27]	CLOSURE  	9 4
+	78	[27]	CALL     	8 2 2	; 1 in 1 out
+	79	[28]	GETTABUP 	9 0 0	; _ENV "print"
+	80	[28]	GETTABUP 	10 0 3	; _ENV "pcall"
+	81	[28]	MOVE     	11 8
+	82	[28]	CALL     	10 2 0	; 1 in all out
+	83	[28]	CALL     	9 0 1	; all in 0 out
+	84	[29]	GETTABUP 	9 0 6	; _ENV "coroutine"
+	85	[29]	GETFIELD 	9 9 5	; "wrap"
+	86	[29]	CLOSURE  	10 5
+	87	[29]	CALL     	9 2 2	; 1 in 1 out
+	88	[30]	GETTABUP 	10 0 0	; _ENV "print"
+	89	[30]	GETTABUP 	11 0 3	; _ENV "pcall"
+	90	[30]	MOVE     	12 9
+	91	[30]	CALL     	11 2 0	; 1 in all out
+	92	[30]	CALL     	10 0 1	; all in 0 out
+	93	[31]	GETTABUP 	10 0 6	; _ENV "coroutine"
+	94	[31]	GETFIELD 	10 10 5	; "wrap"
+	95	[31]	CLOSURE  	11 6
+	96	[31]	CALL     	10 2 2	; 1 in 1 out
+	97	[32]	GETTABUP 	11 0 0	; _ENV "print"
+	98	[32]	GETTABUP 	12 0 3	; _ENV "pcall"
+	99	[32]	MOVE     	13 10
+	100	[32]	CALL     	12 2 0	; 1 in all out
+	101	[32]	CALL     	11 0 1	; all in 0 out
+	102	[34]	GETTABUP 	11 0 6	; _ENV "coroutine"
+	103	[34]	GETFIELD 	11 11 5	; "wrap"
+	104	[37]	CLOSURE  	12 7
+	105	[34]	CALL     	11 2 2	; 1 in 1 out
+	106	[38]	GETTABUP 	12 0 0	; _ENV "print"
+	107	[38]	GETTABUP 	13 0 3	; _ENV "pcall"
+	108	[38]	MOVE     	14 11
+	109	[38]	CALL     	13 2 0	; 1 in all out
+	110	[38]	CALL     	12 0 1	; all in 0 out
+	111	[40]	GETTABUP 	12 0 7	; _ENV "coroutine"
+	112	[40]	GETFIELD 	12 12 8	; "wrap"
+	113	[45]	CLOSURE  	13 8
+	114	[40]	CALL     	12 2 2	; 1 in 1 out
+	115	[46]	GETTABUP 	13 0 0	; _ENV "print"
+	116	[46]	MOVE     	14 12
+	117	[46]	LOADI    	15 1
+	118	[46]	LOADNIL  	16 0	; 1 out
+	119	[46]	LOADI    	17 3
+	120	[46]	CALL     	14 4 0	; 3 in all out
+	121	[46]	CALL     	13 0 1	; all in 0 out
+	122	[47]	GETTABUP 	13 0 0	; _ENV "print"
+	123	[47]	MOVE     	14 12
+	124	[47]	CALL     	14 1 0	; 0 in all out
+	125	[47]	CALL     	13 0 1	; all in 0 out
+	126	[48]	GETTABUP 	13 0 0	; _ENV "print"
+	127	[48]	MOVE     	14 12
+	128	[48]	LOADNIL  	15 0	; 1 out
+	129	[48]	CALL     	14 2 0	; 1 in all out
+	130	[48]	CALL     	13 0 1	; all in 0 out
+	131	[49]	MOVE     	13 12
+	132	[49]	LOADK    	14 9	; "a"
+	133	[49]	LOADK    	15 10	; "b"
+	134	[49]	TAILCALL 	13 3 1k	; 2 in
+	135	[49]	RETURN   	13 0 1k	; all out
+	136	[49]	RETURN   	13 1 1k	; 0 out
+constants (11):
+	0	S	"print"
+	1	S	"select"
+	2	S	"#"
+	3	S	"pcall"
+	4	S	"coroutine"
+	5	S	"wrap"
+	6	S	"coroutine"
+	7	S	"coroutine"
+	8	S	"wrap"
+	9	S	"a"
+	10	S	"b"
+locals (13):
+	0	range	3	137
+	1	gen	6	137
+	2	w	35	137
+	3	t	52	137
+	4	wt	56	137
+	5	ok	59	137
+	6	e	59	137
+	7	wn	70	137
+	8	w2	79	137
+	9	w3	88	137
+	10	w4	97	137
+	11	outer	106	137
+	12	echo	115	137
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_wrap.lua:2,6> (6 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 2 constants, 1 function
+	1	[3]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	2	[3]	GETFIELD 	1 1 1	; "wrap"
+	3	[5]	CLOSURE  	2 0
+	4	[3]	TAILCALL 	1 2 0k	; 1 in
+	5	[5]	RETURN   	1 0 0k	; all out
+	6	[6]	RETURN   	1 1 0k	; 0 out
+constants (2):
+	0	S	"coroutine"
+	1	S	"wrap"
+locals (1):
+	0	n	1	7
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_wrap.lua:3,5> (10 instructions)
+0 params, 6 slots, 2 upvalues, 4 locals, 2 constants, 0 functions
+	1	[4]	LOADI    	0 1
+	2	[4]	GETUPVAL 	1 0	; n
+	3	[4]	LOADI    	2 1
+	4	[4]	FORPREP  	0 4	; exit to 10
+	5	[4]	GETTABUP 	4 1 0	; _ENV "coroutine"
+	6	[4]	GETFIELD 	4 4 1	; "yield"
+	7	[4]	MOVE     	5 3
+	8	[4]	CALL     	4 2 1	; 1 in 0 out
+	9	[4]	FORLOOP  	0 5	; to 5
+	10	[5]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"yield"
+locals (4):
+	0	(for state)	4	10
+	1	(for state)	4	10
+	2	(for state)	4	10
+	3	i	5	9
+upvalues (2):
+	0	n	1	0
+	1	_ENV	0	0
+
+function <co_wrap.lua:13,16> (8 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 4 constants, 0 functions
+	1	[14]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	2	[14]	GETFIELD 	1 1 1	; "yield"
+	3	[14]	MOVE     	2 0
+	4	[14]	CALL     	1 2 1	; 1 in 0 out
+	5	[15]	GETTABUP 	1 0 2	; _ENV "error"
+	6	[15]	LOADK    	2 3	; "boom"
+	7	[15]	CALL     	1 2 1	; 1 in 0 out
+	8	[16]	RETURN0  	
+constants (4):
+	0	S	"coroutine"
+	1	S	"yield"
+	2	S	"error"
+	3	S	"boom"
+locals (1):
+	0	x	1	9
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_wrap.lua:22,22> (4 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 1 constant, 0 functions
+	1	[22]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[22]	GETUPVAL 	1 1	; t
+	3	[22]	CALL     	0 2 1	; 1 in 0 out
+	4	[22]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (2):
+	0	_ENV	0	0
+	1	t	1	3
+
+function <co_wrap.lua:25,25> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[25]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[25]	LOADNIL  	1 0	; 1 out
+	3	[25]	CALL     	0 2 1	; 1 in 0 out
+	4	[25]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_wrap.lua:27,27> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[27]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[27]	LOADI    	1 42
+	3	[27]	CALL     	0 2 1	; 1 in 0 out
+	4	[27]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_wrap.lua:29,29> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[29]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[29]	LOADK    	1 1	; "no position"
+	3	[29]	LOADI    	2 0
+	4	[29]	CALL     	0 3 1	; 2 in 0 out
+	5	[29]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"no position"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_wrap.lua:31,31> (4 instructions)
+0 params, 2 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[31]	LOADNIL  	0 0	; 1 out
+	2	[31]	GETFIELD 	1 0 0	; "field"
+	3	[31]	RETURN1  	1
+	4	[31]	RETURN0  	
+constants (1):
+	0	S	"field"
+locals (1):
+	0	x	2	5
+upvalues (0):
+
+function <co_wrap.lua:34,37> (7 instructions)
+0 params, 2 slots, 1 upvalue, 1 local, 2 constants, 1 function
+	1	[35]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[35]	GETFIELD 	0 0 1	; "wrap"
+	3	[35]	CLOSURE  	1 0
+	4	[35]	CALL     	0 2 2	; 1 in 1 out
+	5	[36]	MOVE     	1 0
+	6	[36]	CALL     	1 1 1	; 0 in 0 out
+	7	[37]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"wrap"
+locals (1):
+	0	inner	5	8
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_wrap.lua:35,35> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[35]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[35]	LOADK    	1 1	; "deep"
+	3	[35]	CALL     	0 2 1	; 1 in 0 out
+	4	[35]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"deep"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_wrap.lua:40,45> (21 instructions)
+0+ params, 8 slots, 1 upvalue, 1 local, 6 constants, 0 functions
+	1	[40]	VARARGPREP	0
+	2	[41]	GETTABUP 	0 0 0	; _ENV "table"
+	3	[41]	GETFIELD 	0 0 1	; "pack"
+	4	[41]	VARARG   	1 0	; all out
+	5	[41]	CALL     	0 0 2	; all in 1 out
+	6	[43]	GETTABUP 	1 0 0	; _ENV "table"
+	7	[43]	GETFIELD 	1 1 1	; "pack"
+	8	[43]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	9	[43]	GETFIELD 	2 2 3	; "yield"
+	10	[43]	GETFIELD 	3 0 4	; "n"
+	11	[43]	GETTABUP 	4 0 0	; _ENV "table"
+	12	[43]	GETFIELD 	4 4 5	; "unpack"
+	13	[43]	MOVE     	5 0
+	14	[43]	LOADI    	6 1
+	15	[43]	GETFIELD 	7 0 4	; "n"
+	16	[43]	CALL     	4 4 0	; 3 in all out
+	17	[43]	CALL     	2 0 0	; all in all out
+	18	[43]	CALL     	1 0 2	; all in 1 out
+	19	[43]	MOVE     	0 1
+	20	[43]	JMP      	-15	; to 6
+	21	[45]	RETURN   	1 1 1	; 0 out
+constants (6):
+	0	S	"table"
+	1	S	"pack"
+	2	S	"coroutine"
+	3	S	"yield"
+	4	S	"n"
+	5	S	"unpack"
+locals (1):
+	0	args	6	22
+upvalues (1):
+	0	_ENV	0	0

@@ -1,0 +1,230 @@
+Chunk
+  Local Y
+    Index
+      Name coroutine
+      String "yield"
+  LocalFunction yclose
+    Function(name) [upvalues: _ENV, Y]
+      Return
+        Call
+          Name setmetatable
+          Table
+          Table
+            Field __close
+              Function(_, e) [upvalues: Y, name, _ENV]
+                Local r
+                  Call
+                    Name Y (upvalue 0)
+                    Binary ..
+                      String "closing "
+                      Name name (upvalue 1)
+                    Name e (local 1)
+                CallStatement
+                  Call
+                    Name print
+                    String "closed"
+                    Name name (upvalue 1)
+                    Name r (local 2)
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: yclose, _ENV]
+        Do
+          Local a <close>
+            Call
+              Name yclose (upvalue 0)
+              String "a"
+          Local b <close>
+            Call
+              Name yclose (upvalue 0)
+              String "b"
+          CallStatement
+            Call
+              Name print
+              String "block body"
+        NumericFor i
+          Integer 1
+          Integer 3
+          Body
+            Local c <close>
+              Call
+                Name yclose (upvalue 0)
+                Binary ..
+                  String "c"
+                  Name i (local 3)
+            If
+              If
+                Binary ==
+                  Name i (local 3)
+                  Integer 2
+                Then
+                  Break
+        LocalFunction f
+          Function() [upvalues: yclose]
+            Local d <close>
+              Call
+                Name yclose (upvalue 0)
+                String "d"
+            Return
+              String "f result"
+              Integer 2
+        CallStatement
+          Call
+            Name print
+            String "f returned"
+            Call
+              Name f (local 0)
+        Local ok, e
+          Call
+            Name pcall
+            Function() [upvalues: yclose, _ENV]
+              Local g <close>
+                Call
+                  Name yclose (upvalue 0)
+                  String "g"
+              CallStatement
+                Call
+                  Name error
+                  String "pcall error"
+                  Integer 0
+        CallStatement
+          Call
+            Name print
+            String "pcall"
+            Name ok (local 1)
+            Name e (local 2)
+        Local h <close>
+          Call
+            Name yclose (upvalue 0)
+            String "h"
+        Return
+          String "body done"
+  Local n
+    Integer 0
+  Local ok, a, b
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name co (local 2)
+  While
+    Binary ==
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co (local 2)
+      String "suspended"
+    Body
+      Assign
+        Targets
+          Name n (local 3)
+        Values
+          Binary +
+            Name n (local 3)
+            Integer 1
+      CallStatement
+        Call
+          Name print
+          String "yielded"
+          Name a (local 5)
+          Name b (local 6)
+      Assign
+        Targets
+          Name ok (local 4)
+          Name a (local 5)
+          Name b (local 6)
+        Values
+          Call
+            Index
+              Name coroutine
+              String "resume"
+            Name co (local 2)
+            Name n (local 3)
+  CallStatement
+    Call
+      Name print
+      Name ok (local 4)
+      Name a (local 5)
+      Name b (local 6)
+  Local co2
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV, Y]
+        Local x <close>
+          Call
+            Name setmetatable
+            Table
+            Table
+              Field __close
+                Function() [upvalues: Y]
+                  CallStatement
+                    Call
+                      Name Y (upvalue 0)
+                      String "cannot"
+        CallStatement
+          Call
+            Name Y (upvalue 1)
+            String "first"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co2 (local 7)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "close"
+        Name co2 (local 7)
+  Local co3
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: yclose, _ENV]
+        Local z <close>
+          Call
+            Name yclose (upvalue 0)
+            String "z"
+        CallStatement
+          Call
+            Name error
+            String "unwinding"
+            Integer 0
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co3 (local 8)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co3 (local 8)
+        String "resumed"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co3 (local 8)
+  Return
+    Name n (local 3)

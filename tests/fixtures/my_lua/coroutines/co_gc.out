@@ -1,0 +1,8 @@
+before	suspended=yes inner=yes dead=yes fn=yes fresh=yes gen_table=yes kept=yes
+after	suspended=no inner=no dead=no fn=no fresh=no gen_table=no kept=yes
+held	chained=yes outer=yes kept=yes
+released	chained=no outer=no kept=yes
+__gc runs
+after finalizer
+thread	alive
+1

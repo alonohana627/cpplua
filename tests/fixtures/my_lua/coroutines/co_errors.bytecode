@@ -1,0 +1,533 @@
+
+main <co_errors.lua:0,0> (144 instructions)
+0+ params, 17 slots, 1 upvalue, 13 locals, 16 constants, 20 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	CLOSURE  	0 0
+	3	[7]	GETTABUP 	1 0 0	; _ENV "print"
+	4	[7]	MOVE     	2 0
+	5	[7]	CLOSURE  	3 1
+	6	[7]	CALL     	2 2 0	; 1 in all out
+	7	[7]	CALL     	1 0 1	; all in 0 out
+	8	[8]	GETTABUP 	1 0 0	; _ENV "print"
+	9	[8]	MOVE     	2 0
+	10	[8]	CLOSURE  	3 2
+	11	[8]	CALL     	2 2 0	; 1 in all out
+	12	[8]	CALL     	1 0 1	; all in 0 out
+	13	[9]	GETTABUP 	1 0 0	; _ENV "print"
+	14	[9]	MOVE     	2 0
+	15	[9]	CLOSURE  	3 3
+	16	[9]	CALL     	2 2 0	; 1 in all out
+	17	[9]	CALL     	1 0 1	; all in 0 out
+	18	[10]	GETTABUP 	1 0 0	; _ENV "print"
+	19	[10]	MOVE     	2 0
+	20	[10]	CLOSURE  	3 4
+	21	[10]	CALL     	2 2 0	; 1 in all out
+	22	[10]	CALL     	1 0 1	; all in 0 out
+	23	[11]	GETTABUP 	1 0 0	; _ENV "print"
+	24	[11]	MOVE     	2 0
+	25	[11]	CLOSURE  	3 5
+	26	[11]	CALL     	2 2 0	; 1 in all out
+	27	[11]	CALL     	1 0 1	; all in 0 out
+	28	[12]	GETTABUP 	1 0 0	; _ENV "print"
+	29	[12]	MOVE     	2 0
+	30	[12]	CLOSURE  	3 6
+	31	[12]	CALL     	2 2 0	; 1 in all out
+	32	[12]	CALL     	1 0 1	; all in 0 out
+	33	[13]	GETTABUP 	1 0 0	; _ENV "print"
+	34	[13]	MOVE     	2 0
+	35	[13]	CLOSURE  	3 7
+	36	[13]	CALL     	2 2 0	; 1 in all out
+	37	[13]	CALL     	1 0 1	; all in 0 out
+	38	[14]	GETTABUP 	1 0 1	; _ENV "setmetatable"
+	39	[14]	NEWTABLE 	2 0 0	; 0
+	40	[14]	EXTRAARG 	0
+	41	[14]	NEWTABLE 	3 1 0	; 0
+	42	[14]	EXTRAARG 	0
+	43	[14]	CLOSURE  	4 8
+	44	[14]	SETFIELD 	3 2 4	; "__tostring"
+	45	[14]	CALL     	1 3 2	; 2 in 1 out
+	46	[15]	MOVE     	2 0
+	47	[15]	CLOSURE  	3 9
+	48	[15]	CALL     	2 2 5	; 1 in 4 out
+	49	[16]	GETTABUP 	6 0 0	; _ENV "print"
+	50	[16]	MOVE     	7 2
+	51	[16]	MOVE     	8 3
+	52	[16]	MOVE     	9 4
+	53	[16]	EQ       	5 1 1
+	54	[16]	JMP      	1	; to 56
+	55	[16]	LFALSESKIP	10
+	56	[16]	LOADTRUE 	10
+	57	[16]	GETTABUP 	11 0 3	; _ENV "tostring"
+	58	[16]	MOVE     	12 5
+	59	[16]	CALL     	11 2 0	; 1 in all out
+	60	[16]	CALL     	6 0 1	; all in 0 out
+	61	[17]	GETTABUP 	6 0 0	; _ENV "print"
+	62	[17]	MOVE     	7 0
+	63	[17]	CLOSURE  	8 10
+	64	[17]	CALL     	7 2 0	; 1 in all out
+	65	[17]	CALL     	6 0 1	; all in 0 out
+	66	[18]	GETTABUP 	6 0 0	; _ENV "print"
+	67	[18]	MOVE     	7 0
+	68	[18]	CLOSURE  	8 11
+	69	[18]	NEWTABLE 	9 0 0	; 0
+	70	[18]	EXTRAARG 	0
+	71	[18]	CALL     	7 3 0	; 2 in all out
+	72	[18]	CALL     	6 0 1	; all in 0 out
+	73	[19]	GETTABUP 	6 0 0	; _ENV "print"
+	74	[19]	MOVE     	7 0
+	75	[19]	CLOSURE  	8 12
+	76	[19]	CALL     	7 2 0	; 1 in all out
+	77	[19]	CALL     	6 0 1	; all in 0 out
+	78	[20]	GETTABUP 	6 0 0	; _ENV "print"
+	79	[20]	MOVE     	7 0
+	80	[20]	CLOSURE  	8 13
+	81	[20]	CALL     	7 2 0	; 1 in all out
+	82	[20]	CALL     	6 0 1	; all in 0 out
+	83	[21]	GETTABUP 	6 0 0	; _ENV "print"
+	84	[21]	MOVE     	7 0
+	85	[21]	CLOSURE  	8 14
+	86	[21]	CALL     	7 2 0	; 1 in all out
+	87	[21]	CALL     	6 0 1	; all in 0 out
+	88	[22]	GETTABUP 	6 0 0	; _ENV "print"
+	89	[22]	MOVE     	7 0
+	90	[22]	CLOSURE  	8 15
+	91	[22]	CALL     	7 2 0	; 1 in all out
+	92	[22]	CALL     	6 0 1	; all in 0 out
+	93	[23]	GETTABUP 	6 0 0	; _ENV "print"
+	94	[23]	MOVE     	7 0
+	95	[23]	CLOSURE  	8 16
+	96	[23]	CALL     	7 2 0	; 1 in all out
+	97	[23]	CALL     	6 0 1	; all in 0 out
+	98	[25]	GETTABUP 	6 0 4	; _ENV "coroutine"
+	99	[25]	GETFIELD 	6 6 5	; "create"
+	100	[28]	CLOSURE  	7 17
+	101	[25]	CALL     	6 2 2	; 1 in 1 out
+	102	[29]	LOADI    	7 1
+	103	[29]	LOADI    	8 4
+	104	[29]	LOADI    	9 1
+	105	[29]	FORPREP  	7 16	; exit to 123
+	106	[30]	GETTABUP 	11 0 6	; _ENV "coroutine"
+	107	[30]	GETFIELD 	11 11 7	; "resume"
+	108	[30]	MOVE     	12 6
+	109	[30]	CALL     	11 2 3	; 1 in 2 out
+	110	[31]	GETTABUP 	13 0 0	; _ENV "print"
+	111	[31]	MOVE     	14 11
+	112	[31]	GETTABUP 	15 0 8	; _ENV "type"
+	113	[31]	MOVE     	16 12
+	114	[31]	CALL     	15 2 2	; 1 in 1 out
+	115	[31]	EQK      	15 9 0	; "table"
+	116	[31]	JMP      	3	; to 120
+	117	[31]	GETFIELD 	15 12 10	; "msg"
+	118	[31]	TEST     	15 1
+	119	[31]	JMP      	1	; to 121
+	120	[31]	MOVE     	15 12
+	121	[31]	CALL     	13 3 1	; 2 in 0 out
+	122	[29]	FORLOOP  	7 17	; to 106
+	123	[33]	GETTABUP 	7 0 0	; _ENV "print"
+	124	[33]	GETTABUP 	8 0 6	; _ENV "coroutine"
+	125	[33]	GETFIELD 	8 8 11	; "status"
+	126	[33]	MOVE     	9 6
+	127	[33]	CALL     	8 2 0	; 1 in all out
+	128	[33]	CALL     	7 0 1	; all in 0 out
+	129	[35]	GETTABUP 	7 0 0	; _ENV "print"
+	130	[35]	MOVE     	8 0
+	131	[35]	CLOSURE  	9 18
+	132	[35]	CALL     	8 2 0	; 1 in all out
+	133	[35]	CALL     	7 0 1	; all in 0 out
+	134	[37]	GETTABUP 	7 0 0	; _ENV "print"
+	135	[37]	MOVE     	8 0
+	136	[37]	CLOSURE  	9 19
+	137	[37]	LOADK    	10 12	; "a"
+	138	[37]	LOADK    	11 13	; "b"
+	139	[37]	LOADK    	12 14	; "c"
+	140	[37]	CALL     	8 5 0	; 4 in all out
+	141	[37]	CALL     	7 0 1	; all in 0 out
+	142	[38]	LOADK    	7 15	; "end"
+	143	[38]	RETURN   	7 2 1k	; 1 out
+	144	[38]	RETURN   	7 1 1k	; 0 out
+constants (16):
+	0	S	"print"
+	1	S	"setmetatable"
+	2	S	"__tostring"
+	3	S	"tostring"
+	4	S	"coroutine"
+	5	S	"create"
+	6	S	"coroutine"
+	7	S	"resume"
+	8	S	"type"
+	9	S	"table"
+	10	S	"msg"
+	11	S	"status"
+	12	S	"a"
+	13	S	"b"
+	14	S	"c"
+	15	S	"end"
+locals (13):
+	0	run	3	145
+	1	obj	46	145
+	2	status	49	145
+	3	n	49	145
+	4	ok	49	145
+	5	e	49	145
+	6	co	102	145
+	7	(for state)	105	123
+	8	(for state)	105	123
+	9	(for state)	105	123
+	10	i	106	122
+	11	ok	110	122
+	12	v	110	122
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_errors.lua:2,6> (26 instructions)
+1+ param, 9 slots, 1 upvalue, 3 locals, 8 constants, 0 functions
+	1	[2]	VARARGPREP	1
+	2	[3]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	3	[3]	GETFIELD 	1 1 1	; "create"
+	4	[3]	MOVE     	2 0
+	5	[3]	CALL     	1 2 2	; 1 in 1 out
+	6	[4]	GETTABUP 	2 0 2	; _ENV "table"
+	7	[4]	GETFIELD 	2 2 3	; "pack"
+	8	[4]	GETTABUP 	3 0 0	; _ENV "coroutine"
+	9	[4]	GETFIELD 	3 3 4	; "resume"
+	10	[4]	MOVE     	4 1
+	11	[4]	VARARG   	5 0	; all out
+	12	[4]	CALL     	3 0 0	; all in all out
+	13	[4]	CALL     	2 0 2	; all in 1 out
+	14	[5]	GETTABUP 	3 0 0	; _ENV "coroutine"
+	15	[5]	GETFIELD 	3 3 5	; "status"
+	16	[5]	MOVE     	4 1
+	17	[5]	CALL     	3 2 2	; 1 in 1 out
+	18	[5]	GETFIELD 	4 2 6	; "n"
+	19	[5]	GETTABUP 	5 0 2	; _ENV "table"
+	20	[5]	GETFIELD 	5 5 7	; "unpack"
+	21	[5]	MOVE     	6 2
+	22	[5]	LOADI    	7 1
+	23	[5]	GETFIELD 	8 2 6	; "n"
+	24	[5]	CALL     	5 4 0	; 3 in all out
+	25	[5]	RETURN   	3 0 2	; all out
+	26	[6]	RETURN   	3 1 2	; 0 out
+constants (8):
+	0	S	"coroutine"
+	1	S	"create"
+	2	S	"table"
+	3	S	"pack"
+	4	S	"resume"
+	5	S	"status"
+	6	S	"n"
+	7	S	"unpack"
+locals (3):
+	0	f	1	27
+	1	co	6	27
+	2	r	14	27
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:7,7> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[7]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[7]	LOADK    	1 1	; "plain"
+	3	[7]	CALL     	0 2 1	; 1 in 0 out
+	4	[7]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"plain"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:8,8> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[8]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[8]	LOADK    	1 1	; "no position"
+	3	[8]	LOADI    	2 0
+	4	[8]	CALL     	0 3 1	; 2 in 0 out
+	5	[8]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"no position"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:9,9> (4 instructions)
+0 params, 2 slots, 1 upvalue, 1 local, 0 constants, 1 function
+	1	[9]	CLOSURE  	0 0
+	2	[9]	MOVE     	1 0
+	3	[9]	CALL     	1 1 1	; 0 in 0 out
+	4	[9]	RETURN0  	
+constants (0):
+locals (1):
+	0	g	2	5
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:9,9> (5 instructions)
+0 params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[9]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[9]	LOADK    	1 1	; "level 2"
+	3	[9]	LOADI    	2 2
+	4	[9]	CALL     	0 3 1	; 2 in 0 out
+	5	[9]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"level 2"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:10,10> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[10]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[10]	CALL     	0 1 1	; 0 in 0 out
+	3	[10]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:11,11> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[11]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[11]	LOADNIL  	1 0	; 1 out
+	3	[11]	CALL     	0 2 1	; 1 in 0 out
+	4	[11]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:12,12> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[12]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[12]	LOADFALSE	1
+	3	[12]	CALL     	0 2 1	; 1 in 0 out
+	4	[12]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:13,13> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[13]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[13]	LOADK    	1 1	; 3.5
+	3	[13]	CALL     	0 2 1	; 1 in 0 out
+	4	[13]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	F	3.5
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:14,14> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[14]	LOADK    	0 0	; "custom error"
+	2	[14]	RETURN1  	0
+	3	[14]	RETURN0  	
+constants (1):
+	0	S	"custom error"
+locals (0):
+upvalues (0):
+
+function <co_errors.lua:15,15> (4 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 1 constant, 0 functions
+	1	[15]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[15]	GETUPVAL 	1 1	; obj
+	3	[15]	CALL     	0 2 1	; 1 in 0 out
+	4	[15]	RETURN0  	
+constants (1):
+	0	S	"error"
+locals (0):
+upvalues (2):
+	0	_ENV	0	0
+	1	obj	1	1
+
+function <co_errors.lua:17,17> (4 instructions)
+0 params, 2 slots, 0 upvalues, 1 local, 0 constants, 0 functions
+	1	[17]	LOADNIL  	0 0	; 1 out
+	2	[17]	ADDI     	0 0 1
+	3	[17]	MMBINI   	0 1 6 1	; __add flip
+	4	[17]	RETURN0  	
+constants (0):
+locals (1):
+	0	x	4	5
+upvalues (0):
+
+function <co_errors.lua:18,18> (4 instructions)
+1 param, 2 slots, 0 upvalues, 1 local, 2 constants, 0 functions
+	1	[18]	GETFIELD 	1 0 0	; "a"
+	2	[18]	GETFIELD 	1 1 1	; "b"
+	3	[18]	RETURN1  	1
+	4	[18]	RETURN0  	
+constants (2):
+	0	S	"a"
+	1	S	"b"
+locals (1):
+	0	t	1	5
+upvalues (0):
+
+function <co_errors.lua:19,19> (4 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[19]	LOADI    	0 5
+	2	[19]	LEN      	0 0
+	3	[19]	RETURN1  	0
+	4	[19]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <co_errors.lua:20,20> (3 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 0 functions
+	1	[20]	GETTABUP 	0 0 0	; _ENV "undefined_function"
+	2	[20]	CALL     	0 1 1	; 0 in 0 out
+	3	[20]	RETURN0  	
+constants (1):
+	0	S	"undefined_function"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:21,21> (5 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 2 constants, 0 functions
+	1	[21]	LOADK    	0 0	; "x"
+	2	[21]	SELF     	0 0 1k	; "bad"
+	3	[21]	TAILCALL 	0 2 0	; 1 in
+	4	[21]	RETURN   	0 0 0	; all out
+	5	[21]	RETURN0  	
+constants (2):
+	0	S	"x"
+	1	S	"bad"
+locals (0):
+upvalues (0):
+
+function <co_errors.lua:22,22> (7 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[22]	LOADK    	0 0	; "2"
+	2	[22]	GTI      	0 1 1
+	3	[22]	JMP      	1	; to 5
+	4	[22]	LFALSESKIP	0
+	5	[22]	LOADTRUE 	0
+	6	[22]	RETURN1  	0
+	7	[22]	RETURN0  	
+constants (1):
+	0	S	"2"
+locals (0):
+upvalues (0):
+
+function <co_errors.lua:23,23> (11 instructions)
+0 params, 4 slots, 1 upvalue, 1 local, 3 constants, 1 function
+	1	[23]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[23]	NEWTABLE 	1 0 0	; 0
+	3	[23]	EXTRAARG 	0
+	4	[23]	NEWTABLE 	2 1 0	; 0
+	5	[23]	EXTRAARG 	0
+	6	[23]	CLOSURE  	3 0
+	7	[23]	SETFIELD 	2 1 3	; "__index"
+	8	[23]	CALL     	0 3 2	; 2 in 1 out
+	9	[23]	GETFIELD 	1 0 2	; "k"
+	10	[23]	RETURN1  	1
+	11	[23]	RETURN0  	
+constants (3):
+	0	S	"setmetatable"
+	1	S	"__index"
+	2	S	"k"
+locals (1):
+	0	t	9	12
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:23,23> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[23]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[23]	LOADK    	1 1	; "from __index"
+	3	[23]	CALL     	0 2 1	; 1 in 0 out
+	4	[23]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"from __index"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:25,28> (15 instructions)
+0 params, 6 slots, 1 upvalue, 4 locals, 5 constants, 0 functions
+	1	[26]	LOADI    	0 1
+	2	[26]	LOADI    	1 3
+	3	[26]	LOADI    	2 1
+	4	[26]	FORPREP  	0 4	; exit to 10
+	5	[26]	GETTABUP 	4 0 0	; _ENV "coroutine"
+	6	[26]	GETFIELD 	4 4 1	; "yield"
+	7	[26]	MOVE     	5 3
+	8	[26]	CALL     	4 2 1	; 1 in 0 out
+	9	[26]	FORLOOP  	0 5	; to 5
+	10	[27]	GETTABUP 	0 0 2	; _ENV "error"
+	11	[27]	NEWTABLE 	1 1 0	; 0
+	12	[27]	EXTRAARG 	0
+	13	[27]	SETFIELD 	1 3 4k	; "msg" "table after yields"
+	14	[27]	CALL     	0 2 1	; 1 in 0 out
+	15	[28]	RETURN0  	
+constants (5):
+	0	S	"coroutine"
+	1	S	"yield"
+	2	S	"error"
+	3	S	"msg"
+	4	S	"table after yields"
+locals (4):
+	0	(for state)	4	10
+	1	(for state)	4	10
+	2	(for state)	4	10
+	3	i	5	9
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:35,35> (7 instructions)
+0 params, 4 slots, 1 upvalue, 0 locals, 3 constants, 1 function
+	1	[35]	GETTABUP 	0 0 0	; _ENV "xpcall"
+	2	[35]	GETTABUP 	1 0 1	; _ENV "error"
+	3	[35]	CLOSURE  	2 0
+	4	[35]	LOADK    	3 2	; "E"
+	5	[35]	TAILCALL 	0 4 0	; 3 in
+	6	[35]	RETURN   	0 0 0	; all out
+	7	[35]	RETURN0  	
+constants (3):
+	0	S	"xpcall"
+	1	S	"error"
+	2	S	"E"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:35,35> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[35]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[35]	LOADK    	1 1	; "handler fails"
+	3	[35]	CALL     	0 2 1	; 1 in 0 out
+	4	[35]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"handler fails"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_errors.lua:37,37> (8 instructions)
+0+ params, 4 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[37]	VARARGPREP	0
+	2	[37]	GETTABUP 	0 0 0	; _ENV "error"
+	3	[37]	GETTABUP 	1 0 1	; _ENV "select"
+	4	[37]	LOADI    	2 2
+	5	[37]	VARARG   	3 0	; all out
+	6	[37]	CALL     	1 0 0	; all in all out
+	7	[37]	CALL     	0 0 1	; all in 0 out
+	8	[37]	RETURN   	0 1 1	; 0 out
+constants (2):
+	0	S	"error"
+	1	S	"select"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0

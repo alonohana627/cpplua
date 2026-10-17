@@ -1,0 +1,17 @@
+thread
+start	1	2	3	nil	v	nil
+true	3	nil	two
+got	x	nil	z
+true
+count	0
+true	nil	nil	nil
+packed	4	nil	false	nil	nil
+true	done	nil	3
+dead
+1
+3
+true	1	nil	3	nil
+true	0
+201	true	2	400
+true	150	2	300
+dead

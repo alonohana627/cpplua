@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <bit>
 #include <cstddef>
 #include <cstdint>
@@ -390,8 +391,9 @@ Status finish_get(State* state, Value t, Value key, std::uint32_t result, Source
         }
         if (tm.is_function()) {
             Value value;
-            if (call_metamethod(*state, tm, t, key, value) != Status::Ok) {
-                return Status::Error;
+            if (const Status status = call_metamethod(*state, tm, t, key, value);
+                status != Status::Ok) {
+                return status;
             }
             state->set(result, value);
             return Status::Ok;
@@ -513,8 +515,9 @@ Status arith_slow(State* state, const Instruction* pc, const Operand& p1, const 
     const bool string_library = !is_bitwise(event); // strings have arithmetic metamethods
     const auto call_tm = [&](Value tm) {
         Value r;
-        if (call_metamethod(*state, tm, p1.value, p2.value, r) != Status::Ok) {
-            return Status::Error;
+        if (const Status status = call_metamethod(*state, tm, p1.value, p2.value, r);
+            status != Status::Ok) {
+            return status;
         }
         state->set(result, r);
         return Status::Ok;
@@ -577,8 +580,8 @@ Status order_metamethod(State* state, Value a, Value b, bool less_or_equal, bool
     }
     Value r;
     if (!tm.is_nil()) {
-        if (call_metamethod(*state, tm, a, b, r) != Status::Ok) {
-            return Status::Error;
+        if (const Status status = call_metamethod(*state, tm, a, b, r); status != Status::Ok) {
+            return status;
         }
         cond = r.is_truthy();
         return Status::Ok;
@@ -589,8 +592,14 @@ Status order_metamethod(State* state, Value a, Value b, bool less_or_equal, bool
             tm = metamethod_of(heap, a, Event::Lt);
         }
         if (!tm.is_nil()) {
-            if (call_metamethod(*state, tm, b, a, r) != Status::Ok) {
-                return Status::Error;
+            CallInfo* ci = state->ci;
+            ci->negate_compare = true; // for a yield in __lt (luaV_finishOp)
+            const Status status = call_metamethod(*state, tm, b, a, r);
+            if (status != Status::Yield) {
+                ci->negate_compare = false;
+            }
+            if (status != Status::Ok) {
+                return status;
             }
             cond = r.is_falsy();
             return Status::Ok;
@@ -630,8 +639,8 @@ Status equal_slow(State* state, const Instruction* pc, Value a, Value b, bool& c
         return Status::Ok;
     }
     Value r;
-    if (call_metamethod(*state, tm, a, b, r) != Status::Ok) {
-        return Status::Error;
+    if (const Status status = call_metamethod(*state, tm, a, b, r); status != Status::Ok) {
+        return status;
     }
     cond = r.is_truthy();
     return Status::Ok;
@@ -682,8 +691,8 @@ bool joinable(Value v) {
                     register_info_here(state, static_cast<int>(culprit - state->ci->func - 1)));
             }
             Value r;
-            if (call_metamethod(*state, tm, a, b, r) != Status::Ok) {
-                return Status::Error;
+            if (const Status status = call_metamethod(*state, tm, a, b, r); status != Status::Ok) {
+                return status;
             }
             state->set(top - 2, r);
         }
@@ -758,8 +767,8 @@ Status length_slow(State* state, const Instruction* pc, Value v, int reg, std::u
         }
     }
     Value r;
-    if (call_metamethod(*state, tm, v, v, r) != Status::Ok) {
-        return Status::Error;
+    if (const Status status = call_metamethod(*state, tm, v, v, r); status != Status::Ok) {
+        return status;
     }
     state->set(result, r);
     return Status::Ok;
@@ -938,13 +947,17 @@ void move_results(State* state, std::uint32_t res, int nres, int wanted) {
     state->top = res + static_cast<std::uint32_t>(wanted);
 }
 
+// The hooks (below).
+Status run_hook(State* state, HookEvent event, int line, int first_transfer, int transfer_count);
+Status return_hook(State* state, const CallInfo* ci, std::uint32_t first, int count);
+
 // precallC with luaD_poscall: runs the C++ function in slot `func` with the
 // arguments up to `top`, and leaves `wanted` of its results at `func`. A C++
 // function gets min_stack free slots, and its own frame. On an error the
 // frame stays, for the message handler and tracebacks.
 Status call_c(State* state, std::uint32_t func, std::uint32_t top, int wanted) {
     state->top = top;
-    if (state->stack_last - top <= min_stack && !grow_for_call(state, min_stack)) {
+    if (state->free_slots(top) <= min_stack && !grow_for_call(state, min_stack)) {
         return stack_error(state);
     }
     CallInfo* ci = state->next_call_info();
@@ -960,12 +973,32 @@ Status call_c(State* state, std::uint32_t func, std::uint32_t top, int wanted) {
         state->stack_tags[func] == Tag::CClosure
             ? std::bit_cast<const CClosure*>(state->stack_values[func])->function
             : std::bit_cast<CFunction>(state->stack_values[func]);
+    if ((state->hook_mask & hook_call) != 0) [[unlikely]] {
+        const int count = static_cast<int>(state->top - func) - 1;
+        if (const Status status = run_hook(state, HookEvent::Call, -1, 1, count);
+            status != Status::Ok) {
+            return status;
+        }
+    }
     const int n = function(*state);
     if (n < 0) [[unlikely]] {
-        return Status::Error;
+        // An error, or a yield (C1): either way the frame stays.
+        return n == c_function_yield ? Status::Yield : Status::Error;
+    }
+    if (state->hook_mask != 0) [[unlikely]] {
+        if (const Status status = return_hook(state, ci, state->top - u32(n), n);
+            status != Status::Ok) {
+            return status;
+        }
     }
     move_results(state, func, n, wanted);
     state->ci = ci->previous;
+    // What the function allocated may call for a collection step: Lua's
+    // API functions check after each allocation (luaC_checkGC), lua2
+    // here, with the results anchored below the top.
+    if (state->heap().wants_step()) [[unlikely]] {
+        collect_step(state);
+    }
     return Status::Ok;
 }
 
@@ -980,7 +1013,7 @@ bool is_function_tag(Tag tag) {
     while (!is_function_tag(state->stack_tags[func])) {
         const Value value = state->get(func);
         state->top = top;
-        if (state->stack_last - top <= 1 && !grow_for_call(state, 1)) {
+        if (state->free_slots(top) <= 1 && !grow_for_call(state, 1)) {
             return stack_error(state);
         }
         const Value tm = metamethod_of(state->heap(), value, Event::Call);
@@ -1004,7 +1037,7 @@ bool room_for_lua(State* state, std::uint32_t func, std::uint32_t top) {
     const Proto* p = std::bit_cast<const LuaClosure*>(state->stack_values[func])->proto;
     state->top = top;
     const std::uint32_t needed = p->max_stack_size + 1U;
-    if (state->stack_last - top < needed && !grow_for_call(state, needed)) {
+    if (state->free_slots(top) < needed && !grow_for_call(state, needed)) {
         return false;
     }
     state->reserve_call_info();
@@ -1031,25 +1064,31 @@ Status new_to_be_closed(State* state, const Instruction* pc, std::uint32_t slot,
 // __close metamethod of each to-be-closed variable there, the last one
 // first (M6.2). When `unwinding`, each call gets the error object, and goes
 // just above its variable (prepcallclosemth), since nothing above is alive.
-Status close_level(State* state, std::uint32_t level, bool unwinding) {
+Status call_body(State& thread, std::uint32_t func, int wanted, int c_calls_increment);
+
+// `yieldable`: a __close may yield even when called from C++ (a protected
+// call closing after an error, which then finishes in its continuation).
+// When `unwinding`, each __close gets `error` (an error inside one that a
+// pcall there catches changes nothing for the others).
+Status close_level(State* state, std::uint32_t level, bool unwinding, bool yieldable = false,
+                   Value error = Value::nil()) {
     state->close_upvalues(level);
     while (!state->to_be_closed.empty() && state->to_be_closed.back() >= level) {
         const std::uint32_t slot = state->to_be_closed.back();
         state->to_be_closed.pop_back();
         const Value object = state->get(slot);
-        Value error;
         if (unwinding) {
-            error = state->error_value;
-            state->set(slot + 1, error);
+            state->set(slot + 1, error); // anchored there
             state->top = slot + 2;
         }
         const std::uint32_t func = state->top; // EXTRA_STACK has room
         state->set(func, metamethod_of(state->heap(), object, Event::Close));
         state->set(func + 1, object);
-        state->set(func + 2, error);
+        state->set(func + 2, unwinding ? error : Value::nil());
         state->top = func + 3;
-        if (call(*state, func, 0) != Status::Ok) {
-            return Status::Error;
+        const Status status = yieldable ? call_body(*state, func, 0, 1) : call(*state, func, 0);
+        if (status != Status::Ok) {
+            return status;
         }
     }
     return Status::Ok;
@@ -1063,9 +1102,12 @@ Status close_level(State* state, std::uint32_t level, bool unwinding) {
 // fails goes deeper until "C stack overflow", and from 220 levels on the
 // error is "error in error handling" (R2.4, R3.2).
 void run_message_handler(State* state, Value handler) {
+    if (state->error_in_handler) {
+        return; // LUA_ERRERR goes to no handler
+    }
     constexpr int error_in_error_limit = max_c_calls / 10 * 11;
     if (state->c_calls + 1 >= error_in_error_limit) {
-        state->set_error("error in error handling"); // luaD_errerr
+        state->set_error_in_error_handling(); // luaD_errerr
         return;
     }
     std::uint32_t top = state->top;
@@ -1075,7 +1117,7 @@ void run_message_handler(State* state, Value handler) {
     state->set(top, handler);
     state->set(top + 1, state->error_value);
     state->top = top + 2;
-    if (call(*state, top, 1) == Status::Ok) {
+    if (call_no_yield(*state, top, 1) == Status::Ok) {
         state->error_value = state->get(top);
         state->top = top;
         return;
@@ -1089,8 +1131,10 @@ void run_message_handler(State* state, Value handler) {
 // whether there was an error at the end.
 bool close_protected(State* state, std::uint32_t level, Value handler, bool error) {
     CallInfo* const ci = state->ci;
+    Value error_object = state->error_value; // what each __close gets
     for (;;) {
-        if (close_level(state, level, error) == Status::Ok) {
+        if (close_level(state, level, error, false, error_object) == Status::Ok) {
+            state->error_value = error_object;
             return error;
         }
         if (!handler.is_nil()) {
@@ -1098,7 +1142,276 @@ bool close_protected(State* state, std::uint32_t level, Value handler, bool erro
         }
         state->ci = ci;
         error = true;
+        error_object = state->error_value; // the new error
     }
+}
+
+// The marks a frame keeps while running, for a frame given up after an
+// error (Lua's callstatus is set afresh for every call).
+void reset_frame_flags(CallInfo* ci) {
+    ci->negate_compare = false;
+    ci->yieldable_pcall = false;
+    ci->pcall_error = false;
+    ci->hooked = false;
+    ci->transfer = false;
+}
+
+// finishpcallk after an error: the variables above the called function
+// close, each __close getting the error, which waits in the function's
+// slot meanwhile. A __close may yield (the frame's continuation finishes
+// the job after the resume) or fail (its error replaces the first, and the
+// closing goes on). Ends with Status::Error, the error at the function's
+// slot and the top past it.
+Status close_after_pcall_error(State* state, CallInfo* ci) {
+    const std::uint32_t func = ci->pcall_func;
+    ci->pcall_error = true;
+    for (;;) {
+        state->error_value = state->get(func);
+        const Status status = close_level(state, func, true, true, state->get(func));
+        if (status == Status::Ok) {
+            break;
+        }
+        if (status == Status::Yield) {
+            return status;
+        }
+        if (!ci->pcall_handler.is_nil()) {
+            run_message_handler(state, ci->pcall_handler);
+        }
+        for (CallInfo* dropped = state->ci; dropped != ci && dropped != nullptr;
+             dropped = dropped->previous) {
+            reset_frame_flags(dropped);
+        }
+        state->ci = ci;
+        state->set(func, state->error_value);
+    }
+    state->error_value = state->get(func);
+    state->top = func + 1;
+    state->shrink_stack();
+    ci->pcall_error = false;
+    ci->yieldable_pcall = false;
+    return Status::Error;
+}
+
+// The rest of a protected call that failed (luaD_pcall after the longjmp):
+// the message handler where the error happened, then back to frame `ci`,
+// closing what the dropped frames left open, the error object at `func`.
+void recover(State* state, CallInfo* ci, std::uint32_t func, Value handler, int c_calls,
+             int non_yieldable, bool allow_hook) {
+    if (!handler.is_nil()) {
+        run_message_handler(state, handler);
+    }
+    for (CallInfo* dropped = state->ci; dropped != ci && dropped != nullptr;
+         dropped = dropped->previous) {
+        reset_frame_flags(dropped);
+    }
+    ci->hooked = false;
+    ci->transfer = false;
+    state->allow_hook = allow_hook;
+    state->pending_call_hook = 0;
+    state->ci = ci;
+    state->c_calls = c_calls;
+    state->non_yieldable = non_yieldable;
+    ++state->non_yieldable; // closing after an error cannot yield
+    close_protected(state, func, handler, true);
+    state->ci = ci;
+    state->c_calls = c_calls;
+    state->non_yieldable = non_yieldable;
+    state->set(func, state->error_value);
+    state->top = func + 1;
+    state->shrink_stack(); // back to normal after a stack overflow
+}
+
+// ---- Debug hooks (ldo.c's luaD_hook, ldebug.c's luaG_traceexec; H1) ----
+
+// Set by request_interrupt: the running Lua code stops at its next
+// instruction (lua.c's laction).
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables): set by a signal handler
+std::atomic<bool> interrupt_requested{false};
+
+constexpr std::array<std::string_view, 5> hook_event_names{
+    "call", "return", "line", "count", "tail call",
+};
+
+// luaD_hook with ldblib.c's hookf: the thread's hook function (in the
+// registry's _HOOKKEY table, as debug.sethook leaves it) gets the event's
+// name and the line, if any. Not inside another hook. `first_transfer` and
+// `transfer_count` say which values the call or return passes.
+Status run_hook(State* state, HookEvent event, int line, int first_transfer, int transfer_count) {
+    if (!state->allow_hook) {
+        return Status::Ok;
+    }
+    Heap& heap = state->heap();
+    const Value hooks = heap.registry().get(Value::string(heap.new_string("_HOOKKEY"))).value();
+    if (!hooks.is_table()) {
+        return Status::Ok;
+    }
+    const Value function = table_of(hooks)->get(Value::thread(state)).value();
+    if (!function.is_function()) {
+        return Status::Ok;
+    }
+    CallInfo* ci = state->ci;
+    const std::uint32_t top = state->top;
+    const std::uint32_t ci_top = ci->top;
+    if (transfer_count != 0) {
+        ci->transfer = true;
+        ci->first_transfer = first_transfer;
+        ci->transfer_count = transfer_count;
+    }
+    if (state->is_lua(ci) && state->top < ci->top) {
+        state->top = ci->top; // protect every register
+    }
+    if (!state->check_stack(min_stack)) {
+        return stack_error(state);
+    }
+    ci->top = std::max(ci->top, state->top + min_stack);
+    state->allow_hook = false; // no hooks inside a hook
+    ci->hooked = true;
+    const std::uint32_t func = state->top;
+    state->set(func, function);
+    state->set(func + 1, Value::string(heap.new_string(
+                             hook_event_names.at(static_cast<std::size_t>(event)))));
+    state->set(func + 2, line >= 0 ? Value::integer(line) : Value::nil());
+    state->top = func + 3;
+    if (const Status status = call_no_yield(*state, func, 0); status != Status::Ok) {
+        return status; // the protected call that catches it restores allow_hook
+    }
+    state->allow_hook = true;
+    ci->top = ci_top;
+    state->top = top;
+    ci->hooked = false;
+    ci->transfer = false;
+    return Status::Ok;
+}
+
+// The instruction a Lua frame is at (pcRel of savedpc: the call it made),
+// as the line hook's "old pc".
+int next_pc_index(const State* state, const CallInfo* frame) {
+    return static_cast<int>(frame->saved_pc - proto_of(state, frame).code.data()) - 1;
+}
+
+// rethook: the return hook of frame `ci`, its `count` results from slot
+// `first`; then the line hook sees the caller as having already started its
+// line.
+Status return_hook(State* state, const CallInfo* ci, std::uint32_t first, int count) {
+    if ((state->hook_mask & hook_return) != 0) {
+        const auto first_transfer = static_cast<int>(first - ci->func);
+        if (const Status status = run_hook(state, HookEvent::Return, -1, first_transfer, count);
+            status != Status::Ok) {
+            return status;
+        }
+    }
+    const CallInfo* caller = ci->previous;
+    if (caller != nullptr && state->is_lua(caller)) {
+        state->old_pc = next_pc_index(state, caller);
+    }
+    return Status::Ok;
+}
+
+// Whether an instruction takes its values up to the top (isIT).
+bool uses_top(Instruction i) {
+    switch (get_op(i)) {
+    case OpCode::Call:
+    case OpCode::TailCall:
+    case OpCode::Return:
+    case OpCode::SetList: return get_b(i) == 0;
+    case OpCode::VarArgPrep: return true;
+    default: return false;
+    }
+}
+
+// luaG_traceexec and luaG_tracecall, before instruction `i` of the running
+// Lua frame (`pc` is past it): a call hook waiting for the function's first
+// instruction, the count and line hooks, the return hook of a RETURN, and a
+// call hook to come for a CALL.
+[[gnu::noinline]] Status trace_instruction(State* state, const Instruction* pc, Instruction i) {
+    CallInfo* ci = state->ci;
+    if (interrupt_requested.load(std::memory_order_relaxed) && take_interrupt()) { // lstop
+        ci->saved_pc = pc;
+        return runtime_error(*state, "interrupted!");
+    }
+    const Proto& p = proto_of(state, ci);
+    const OpCode op = get_op(i);
+    const int index = static_cast<int>(pc - p.code.data()) - 1;
+    if (state->pending_call_hook != 0) {
+        if (op == OpCode::VarArgPrep) {
+            return Status::Ok; // a vararg function's hooks start after it
+        }
+        const HookEvent event =
+            state->pending_call_hook == 2 ? HookEvent::TailCall : HookEvent::Call;
+        state->pending_call_hook = 0;
+        if ((state->hook_mask & hook_call) != 0) {
+            ci->saved_pc = pc;
+            if (const Status status = run_hook(state, event, -1, 1, p.parameter_count);
+                status != Status::Ok) {
+                return status;
+            }
+        }
+        state->old_pc = index; // the first instruction is a new line
+    }
+    const std::uint8_t mask = state->hook_mask; // (the call hook may have changed it)
+    if ((mask & hook_line) != 0 || (mask & hook_count) != 0) {
+        ci->saved_pc = pc;
+        const bool count_hook = (mask & hook_count) != 0 && --state->hook_count_left == 0;
+        if (count_hook) {
+            state->hook_count_left = state->base_hook_count;
+        }
+        if (count_hook || (mask & hook_line) != 0) {
+            if (!uses_top(i)) {
+                state->top = ci->top;
+            }
+            if (count_hook) {
+                if (const Status status = run_hook(state, HookEvent::Count, -1, 0, 0);
+                    status != Status::Ok) {
+                    return status;
+                }
+            }
+            if ((mask & hook_line) != 0) {
+                const int old_pc = std::cmp_less(state->old_pc, p.code.size()) ? state->old_pc : 0;
+                if (index <= old_pc || line_of(p, old_pc) != line_of(p, index)) {
+                    if (const Status status =
+                            run_hook(state, HookEvent::Line, line_of(p, index), 0, 0);
+                        status != Status::Ok) {
+                        return status;
+                    }
+                }
+                state->old_pc = index;
+            }
+        }
+    }
+    const std::uint32_t base = ci->func + 1;
+    switch (op) {
+    case OpCode::Return0:
+    case OpCode::Return1:
+    case OpCode::Return:
+        if (op == OpCode::Return && get_k(i)) {
+            break; // after closing its variables (ReturnClose)
+        }
+        {
+            ci->saved_pc = pc;
+            const std::uint32_t first = base + u32(get_a(i));
+            int count = op == OpCode::Return0 ? 0 : 1;
+            if (op == OpCode::Return) {
+                count = get_b(i) != 0 ? get_b(i) - 1 : static_cast<int>(state->top - first);
+            }
+            const std::uint32_t top = state->top;
+            state->top = first + u32(count);
+            const Status status = return_hook(state, ci, first, count);
+            state->top = top;
+            if (status != Status::Ok) {
+                return status;
+            }
+        }
+        break;
+    case OpCode::Call:
+    case OpCode::TailCall:
+    case OpCode::TForCall:
+        if (state->stack_tags[base + u32(get_a(i))] == Tag::LuaClosure) {
+            state->pending_call_hook = op == OpCode::TailCall ? 2 : 1;
+        }
+        break;
+    default: break;
+    }
+    return Status::Ok;
 }
 
 // ---- Dispatch ----
@@ -1242,7 +1555,7 @@ LUA2_HANDLER_CC Status op_invalid(VM_PARAMS) {
 }
 
 // The opcode is 7 bits: 128 entries, the unused ones invalid.
-constexpr std::array<Handler, 128> handlers = [] {
+constexpr std::array<Handler, 128> plain_handlers = [] {
     std::array<Handler, 128> table{};
     table.fill(&op_invalid);
 #define LUA2_TABLE_ENTRY(name) table[static_cast<std::size_t>(OpCode::name)] = &op_##name;
@@ -1250,6 +1563,27 @@ constexpr std::array<Handler, 128> handlers = [] {
 #undef LUA2_TABLE_ENTRY
     return table;
 }();
+
+// The table the VM dispatches through (H2): plain_handlers, or op_hooked
+// in every entry while some thread has hooks, so hooks cost nothing when
+// no thread has any. Its entries are read and written atomically, since
+// interpreters may run in several threads of the program (a relaxed load
+// is a plain load).
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables): swapped while hooks are on
+constinit std::array<Handler, 128> handlers = plain_handlers;
+
+Handler handler_for(std::size_t op) {
+    return std::atomic_ref<Handler>(handlers[op]).load(std::memory_order_relaxed);
+}
+
+LUA2_HANDLER_CC Status op_hooked(VM_PARAMS);
+
+void install_hook_dispatch(bool on) {
+    for (std::size_t op = 0; op < handlers.size(); ++op) {
+        std::atomic_ref<Handler>(handlers[op])
+            .store(on ? &op_hooked : plain_handlers[op], std::memory_order_relaxed);
+    }
+}
 
 #define VM_HANDLER(name) LUA2_HANDLER_DEFINITION Status op_##name(VM_PARAMS)
 #define VM_COLD_HANDLER(name)                                                                      \
@@ -1260,12 +1594,13 @@ constexpr std::array<Handler, 128> handlers = [] {
 #define VM_NEXT()                                                                                  \
     do {                                                                                           \
         const Instruction next_ = *pc;                                                             \
-        [[clang::musttail]] return handlers[static_cast<std::size_t>(get_op(next_))](              \
+        [[clang::musttail]] return handler_for(static_cast<std::size_t>(get_op(next_)))(           \
             state, pc + 1, tags, vals, k, next_);                                                  \
     } while (false)
+// (Again without the hooks: they saw this instruction already.)
 #define VM_RETRY()                                                                                 \
-    [[clang::musttail]] return handlers[static_cast<std::size_t>(get_op(i))](state, pc, tags,      \
-                                                                             vals, k, i)
+    [[clang::musttail]] return plain_handlers[static_cast<std::size_t>(get_op(i))](                \
+        state, pc, tags, vals, k, i)
 
 #include "handlers.inc"
 
@@ -1276,6 +1611,22 @@ constexpr std::array<Handler, 128> handlers = [] {
 #undef VM_NEXT
 #undef VM_RETRY
 
+// Every instruction while hooks are on: the hooks of the running thread,
+// if it has any, then the instruction itself.
+LUA2_HANDLER_DEFINITION Status op_hooked(VM_PARAMS) {
+    if (state->hook_mask != 0 || state->pending_call_hook != 0 ||
+        interrupt_requested.load(std::memory_order_relaxed)) [[unlikely]] {
+        const std::uint32_t base = base_index(state, tags);
+        if (const Status status = trace_instruction(state, pc, i); status != Status::Ok) {
+            return status;
+        }
+        tags = state->stack_tags + base;
+        vals = state->stack_values + base;
+    }
+    [[clang::musttail]] return plain_handlers[static_cast<std::size_t>(get_op(i))](state, pc, tags,
+                                                                                   vals, k, i);
+}
+
 // Runs the Lua function of state->ci until it returns.
 Status execute(State* state) { // NOLINT(misc-const-correctness): the VM changes it
     const CallInfo* ci = state->ci;
@@ -1284,10 +1635,17 @@ Status execute(State* state) { // NOLINT(misc-const-correctness): the VM changes
     const Value* k = closure_of(vals)->proto->constants.data();
     const Instruction* pc = ci->saved_pc;
     const Instruction i = *pc;
-    return handlers[static_cast<std::size_t>(get_op(i))](state, pc + 1, tags, vals, k, i);
+    return handler_for(static_cast<std::size_t>(get_op(i)))(state, pc + 1, tags, vals, k, i);
 }
 
 #else // a switch in a loop
+
+// Whether some thread has hooks (H2): then each instruction checks them.
+std::atomic<bool> hooks_installed{false};
+
+void install_hook_dispatch(bool on) {
+    hooks_installed.store(on, std::memory_order_relaxed);
+}
 
 Status execute(State* state) {
     const CallInfo* entry = state->ci;
@@ -1297,6 +1655,17 @@ Status execute(State* state) {
     const Instruction* pc = entry->saved_pc;
     for (;;) {
     dispatch:
+        if (hooks_installed.load(std::memory_order_relaxed) &&
+            (state->hook_mask != 0 || state->pending_call_hook != 0 ||
+             interrupt_requested.load(std::memory_order_relaxed))) [[unlikely]] {
+            const std::uint32_t base = base_index(state, tags);
+            if (const Status status = trace_instruction(state, pc + 1, *pc); status != Status::Ok) {
+                return status;
+            }
+            tags = state->stack_tags + base;
+            vals = state->stack_values + base;
+        }
+    dispatch_untraced:
         const Instruction i = *pc++;
         switch (get_op(i)) {
 #define VM_HANDLER(name) case OpCode::name:
@@ -1306,7 +1675,7 @@ Status execute(State* state) {
 #define VM_NEXT() goto dispatch
 #define VM_RETRY()                                                                                 \
     --pc;                                                                                          \
-    goto dispatch
+    goto dispatch_untraced
 #include "handlers.inc"
 #undef VM_HANDLER
 #undef VM_COLD_HANDLER
@@ -1351,8 +1720,8 @@ Status call_metamethod(State& thread, Value f, Value p1, Value p2, Value& result
     thread.set(func + 1, p1);
     thread.set(func + 2, p2);
     thread.top = func + 3;
-    if (call(thread, func, 1) != Status::Ok) {
-        return Status::Error;
+    if (const Status status = call(thread, func, 1); status != Status::Ok) {
+        return status;
     }
     result = thread.get(func);
     thread.top = func;
@@ -1369,8 +1738,8 @@ Status index_value(State& thread, Value t, Value key, Value& result) {
     }
     const std::uint32_t slot = thread.top;
     thread.top = slot + 1;
-    if (finish_get(&thread, t, key, slot, {}) != Status::Ok) {
-        return Status::Error;
+    if (const Status status = finish_get(&thread, t, key, slot, {}); status != Status::Ok) {
+        return status;
     }
     result = thread.get(slot);
     thread.top = slot;
@@ -1408,8 +1777,8 @@ Status equal_values(State& thread, Value a, Value b, bool& result) {
         return Status::Ok;
     }
     Value r;
-    if (call_metamethod(thread, tm, a, b, r) != Status::Ok) {
-        return Status::Error;
+    if (const Status status = call_metamethod(thread, tm, a, b, r); status != Status::Ok) {
+        return status;
     }
     result = r.is_truthy();
     return Status::Ok;
@@ -1436,18 +1805,22 @@ Status length_value(State& thread, Value v, Value& result) {
     return call_metamethod(thread, tm, v, v, result);
 }
 
-Status call(State& thread, std::uint32_t func, int wanted) {
-    // ccall and luaD_precall, from C++. On an error the count of C++ calls
-    // stays where the error was, as Lua's does until its longjmp; the
-    // protected call that catches the error restores it.
+namespace {
+
+// ccall and luaD_precall, from C++, counting `c_calls_increment` C++ calls
+// (0 when lua_resume has counted it). On an error or a yield the count of
+// C++ calls stays where it was, as Lua's does until its longjmp; the
+// protected call (or the resume) that catches it restores it.
+Status call_body(State& thread, std::uint32_t func, int wanted, int c_calls_increment) {
     State* state = &thread;
-    if (++state->c_calls >= max_c_calls) [[unlikely]] {
+    state->c_calls += c_calls_increment;
+    if (state->c_calls >= max_c_calls) [[unlikely]] {
         // luaE_checkcstack: room is left above the limit to handle the error.
         if (state->c_calls == max_c_calls) {
             return runtime_error(thread, "C stack overflow");
         }
         if (state->c_calls >= max_c_calls / 10 * 11) {
-            thread.set_error("error in error handling");
+            thread.set_error_in_error_handling();
             return Status::Error;
         }
     }
@@ -1457,13 +1830,13 @@ Status call(State& thread, std::uint32_t func, int wanted) {
         return Status::Error;
     }
     if (state->stack_tags[func] != Tag::LuaClosure) {
-        if (call_c(state, func, top, wanted) != Status::Ok) {
-            return Status::Error;
+        if (const Status status = call_c(state, func, top, wanted); status != Status::Ok) {
+            return status;
         }
     } else {
         const Proto* p = std::bit_cast<const LuaClosure*>(state->stack_values[func])->proto;
         const std::uint32_t size = p->max_stack_size;
-        if (state->stack_last - state->top <= size && !grow_for_call(state, size)) {
+        if (state->free_slots(state->top) <= size && !grow_for_call(state, size)) {
             return stack_error(state);
         }
         CallInfo* ci = state->next_call_info();
@@ -1480,12 +1853,36 @@ Status call(State& thread, std::uint32_t func, int wanted) {
             state->stack_values[state->top] = 0;
             ++state->top;
         }
-        if (execute(state) != Status::Ok) {
-            return Status::Error;
+        if (state->hook_mask != 0) [[unlikely]] {
+            state->pending_call_hook = 1; // the call hook, at its first instruction
+        }
+        if (const Status status = execute(state); status != Status::Ok) {
+            return status;
         }
     }
-    --state->c_calls;
+    state->c_calls -= c_calls_increment;
     return Status::Ok;
+}
+
+} // namespace
+
+Status call(State& thread, std::uint32_t func, int wanted) {
+    // luaT_callTM's rule: a call from Lua code (the VM, for a metamethod)
+    // may yield; a call from a C++ function cannot (C2).
+    if (thread.is_lua(thread.ci)) {
+        return call_body(thread, func, wanted, 1);
+    }
+    return call_no_yield(thread, func, wanted);
+}
+
+Status call_no_yield(State& thread, std::uint32_t func, int wanted) {
+    // luaD_callnoyield: the count stays up after an error, as c_calls does.
+    ++thread.non_yieldable;
+    const Status status = call_body(thread, func, wanted, 1);
+    if (status == Status::Ok) {
+        --thread.non_yieldable;
+    }
+    return status;
 }
 
 Status protected_call(State& thread, std::uint32_t func, int wanted, Value handler) {
@@ -1495,21 +1892,392 @@ Status protected_call(State& thread, std::uint32_t func, int wanted, Value handl
     State* state = &thread;
     CallInfo* const ci = state->ci;
     const int c_calls = state->c_calls;
-    if (call(thread, func, wanted) == Status::Ok) [[likely]] {
+    const int non_yieldable = state->non_yieldable;
+    const bool allow_hook = state->allow_hook;
+    if (call_no_yield(thread, func, wanted) == Status::Ok) [[likely]] {
         return Status::Ok;
     }
+    recover(state, ci, func, handler, c_calls, non_yieldable, allow_hook);
+    return Status::Error;
+}
+
+Status protected_call_k(State& thread, std::uint32_t func, int wanted, Value handler,
+                        Continuation continuation, std::intptr_t context) {
+    // lua_pcallk: where the thread can yield, the call may yield; after the
+    // resume, `continuation` finishes the C++ function (C3). Its frame keeps
+    // what an error after the resume needs (CIST_YPCALL).
+    if (!is_yieldable(thread)) {
+        return protected_call(thread, func, wanted, handler);
+    }
+    State* state = &thread;
+    CallInfo* const ci = state->ci;
+    const int c_calls = state->c_calls;
+    const int non_yieldable = state->non_yieldable;
+    const bool allow_hook = state->allow_hook;
+    ci->continuation = continuation;
+    ci->context = context;
+    ci->pcall_func = func;
+    ci->pcall_handler = handler;
+    ci->yieldable_pcall = true;
+    const Status status = call_body(thread, func, wanted, 1);
+    if (status == Status::Yield) {
+        return status; // the frame keeps its continuation
+    }
+    if (status == Status::Ok) {
+        ci->yieldable_pcall = false;
+        return status;
+    }
+    // The error: the handler where it happened, then back to this frame.
     if (!handler.is_nil()) {
         run_message_handler(state, handler);
     }
+    for (CallInfo* dropped = state->ci; dropped != ci && dropped != nullptr;
+         dropped = dropped->previous) {
+        reset_frame_flags(dropped);
+    }
     state->ci = ci;
     state->c_calls = c_calls;
-    close_protected(state, func, handler, true);
-    state->ci = ci;
-    state->c_calls = c_calls;
+    state->non_yieldable = non_yieldable;
+    state->allow_hook = allow_hook;
+    state->pending_call_hook = 0;
     state->set(func, state->error_value);
-    state->top = func + 1;
-    state->shrink_stack(); // back to normal after a stack overflow
-    return Status::Error;
+    return close_after_pcall_error(state, ci);
+}
+
+Status call_k(State& thread, std::uint32_t func, int wanted, Continuation continuation,
+              std::intptr_t context) {
+    // lua_callk
+    if (!is_yieldable(thread)) {
+        return call_no_yield(thread, func, wanted);
+    }
+    thread.ci->continuation = continuation;
+    thread.ci->context = context;
+    return call_body(thread, func, wanted, 1);
+}
+
+// ---- Coroutines (ldo.c's resume, lvm.c's luaV_finishOp) ----
+
+namespace {
+
+// luaV_finishOp: the Lua frame on top was stopped by a yield in the middle
+// of an instruction that called a metamethod; this does what the
+// instruction had left to do with the metamethod's result (on the top of
+// the stack), so that the frame can go on with the next one (C4).
+Status finish_instruction(State* state) {
+    CallInfo* ci = state->ci;
+    const std::uint32_t base = ci->func + 1;
+    const Instruction i = ci->saved_pc[-1]; // the interrupted instruction
+    switch (get_op(i)) {
+    case OpCode::MmBin:
+    case OpCode::MmBinI:
+    case OpCode::MmBinK:
+        --state->top;
+        state->set(base + u32(get_a(ci->saved_pc[-2])), state->get(state->top));
+        break;
+    case OpCode::Unm:
+    case OpCode::BNot:
+    case OpCode::Len:
+    case OpCode::GetTabUp:
+    case OpCode::GetTable:
+    case OpCode::GetI:
+    case OpCode::GetField:
+    case OpCode::Self:
+        --state->top;
+        state->set(base + u32(get_a(i)), state->get(state->top));
+        break;
+    case OpCode::Lt:
+    case OpCode::Le:
+    case OpCode::LtI:
+    case OpCode::LeI:
+    case OpCode::GtI:
+    case OpCode::GeI:
+    case OpCode::Eq: { // (EQI and EQK cannot yield)
+        bool result = state->get(state->top - 1).is_truthy();
+        --state->top;
+        if (ci->negate_compare) { // "<=" through "<"
+            ci->negate_compare = false;
+            result = !result;
+        }
+        if (result != get_k(i)) {
+            ++ci->saved_pc; // the condition failed: skip the jump
+        }
+        break;
+    }
+    case OpCode::Concat: {
+        const std::uint32_t top = state->top - 1; // the top when __concat was called
+        const std::uint32_t first = base + u32(get_a(i));
+        const int total = static_cast<int>(top - 1 - first); // still to join
+        state->set(top - 2, state->get(top));                // the metamethod's result
+        state->top = top - 1;
+        return concat_slow(state, ci->saved_pc, first, total); // may yield again
+    }
+    case OpCode::Close: // a __close yielded: close the other variables
+        --ci->saved_pc;
+        break;
+    case OpCode::Return: // the same, then return
+        state->top = base + u32(get_a(i)) + u32(ci->return_count);
+        --ci->saved_pc;
+        break;
+    default: // TFORCALL, CALL, TAILCALL, SETTABUP, SETTABLE, SETI, SETFIELD
+        break;
+    }
+    return Status::Ok;
+}
+
+// luaD_poscall for C++ frame `ci` with n results on the top, with its
+// return hook.
+Status finish_c_frame(State* state, const CallInfo* ci, int n) {
+    if (state->hook_mask != 0) [[unlikely]] {
+        if (const Status status = return_hook(state, ci, state->top - u32(n), n);
+            status != Status::Ok) {
+            return status;
+        }
+    }
+    move_results(state, ci->func, n, ci->wanted);
+    state->ci = ci->previous;
+    return Status::Ok;
+}
+
+// finishpcallk and finishCcall: the C++ frame on top made a call with a
+// continuation, which ended after a resume; `error` when it ended with an
+// error inside a protected call (precover).
+Status finish_c_call(State* state, CallInfo* ci, bool error) {
+    Status status = Status::Yield;
+    if (ci->yieldable_pcall) {
+        if (error) { // an error after the resume, which this call catches
+            state->set(ci->pcall_func, state->error_value);
+            ci->pcall_error = true;
+        }
+        if (ci->pcall_error) { // closing after the error, maybe not the first time
+            status = close_after_pcall_error(state, ci);
+            if (status == Status::Yield) {
+                return status;
+            }
+        }
+        ci->yieldable_pcall = false;
+    }
+    const int n = ci->continuation(*state, status, ci->context);
+    if (n < 0) {
+        return n == c_function_yield ? Status::Yield : Status::Error;
+    }
+    return finish_c_frame(state, ci, n);
+}
+
+// unroll: runs what is left of every frame of the thread, top down, until
+// none is left, or a yield or an error stops it again. A Lua frame finishes
+// its interrupted instruction then runs; execute() returns when the first
+// frame entered from C++ returns, and the C++ frame below goes on in its
+// continuation.
+Status unroll(State* state, bool error) {
+    while (state->ci != &state->base_ci) {
+        CallInfo* ci = state->ci;
+        Status status = Status::Ok;
+        if (!state->is_lua(ci)) {
+            status = finish_c_call(state, ci, error);
+            error = false;
+        } else {
+            status = finish_instruction(state);
+            if (status == Status::Ok) {
+                status = execute(state);
+            }
+        }
+        if (status != Status::Ok) {
+            return status;
+        }
+    }
+    return Status::Ok;
+}
+
+// findpcall: the innermost frame in a yieldable protected call.
+CallInfo* find_pcall(const State* state) {
+    for (CallInfo* ci = state->ci; ci != nullptr; ci = ci->previous) {
+        if (ci->yieldable_pcall) {
+            return ci;
+        }
+    }
+    return nullptr;
+}
+
+// precover: after an error, while a protected call that yielded before is
+// below it, that call catches the error (its message handler first, where
+// the error happened) and the thread goes on from there.
+Status recover_errors(State* state, Status status, int c_calls) {
+    while (status == Status::Error) {
+        CallInfo* ci = find_pcall(state);
+        if (ci == nullptr) {
+            break;
+        }
+        if (!ci->pcall_handler.is_nil()) {
+            run_message_handler(state, ci->pcall_handler);
+        }
+        for (CallInfo* dropped = state->ci; dropped != ci; dropped = dropped->previous) {
+            reset_frame_flags(dropped);
+        }
+        state->allow_hook = true;
+        state->pending_call_hook = 0;
+        state->ci = ci;
+        state->c_calls = c_calls;
+        state->non_yieldable = 0;
+        status = unroll(state, true);
+    }
+    return status;
+}
+
+// The body of lua_resume, `nargs` values on the thread's top.
+Status resume_body(State* co, int nargs) {
+    if (co->status == ThreadStatus::Ok) { // starting the coroutine
+        const std::uint32_t first = co->top - static_cast<std::uint32_t>(nargs);
+        return call_body(*co, first - 1, all_results, 0);
+    }
+    // Resuming from a yield: the values are the results of the C++ function
+    // that yielded (or of its continuation).
+    co->status = ThreadStatus::Ok;
+    const CallInfo* ci = co->ci;
+    int n = nargs;
+    if (ci->continuation != nullptr) { // lua_yieldk's continuation
+        n = ci->continuation(*co, Status::Yield, ci->context);
+        if (n < 0) {
+            return n == c_function_yield ? Status::Yield : Status::Error;
+        }
+    }
+    if (const Status status = finish_c_frame(co, ci, n); status != Status::Ok) {
+        return status;
+    }
+    return unroll(co, false);
+}
+
+} // namespace
+
+Status resume(State& co, const State& from, int nargs, int& results) {
+    // lua_resume
+    // resume_error: the message on the coroutine's top, the coroutine as it
+    // was.
+    const auto refuse = [&](std::string_view message) {
+        co.top -= static_cast<std::uint32_t>(nargs);
+        co.push(Value::string(co.heap().new_string(message)));
+        return Status::Error;
+    };
+    if (co.status == ThreadStatus::Ok) { // may be starting a coroutine
+        if (co.ci != &co.base_ci) {
+            return refuse("cannot resume non-suspended coroutine");
+        }
+        if (co.top - (co.base_ci.func + 1) == static_cast<std::uint32_t>(nargs)) { // no function
+            return refuse("cannot resume dead coroutine");
+        }
+    } else if (co.status != ThreadStatus::Yield) {
+        return refuse("cannot resume dead coroutine");
+    }
+    co.c_calls = from.c_calls;
+    if (co.c_calls >= max_c_calls) {
+        return refuse("C stack overflow");
+    }
+    ++co.c_calls;
+    co.non_yieldable = 0;
+    const int c_calls = co.c_calls;
+    Heap& heap = co.heap();
+    State* const resumer = heap.running_thread();
+    heap.set_running_thread(&co);
+    Status status = resume_body(&co, nargs);
+    status = recover_errors(&co, status, c_calls);
+    heap.set_running_thread(resumer);
+    if (status == Status::Yield) {
+        results = co.yielded;
+    } else if (status == Status::Ok) {
+        results = static_cast<int>(co.top - (co.ci->func + 1));
+    } else {
+        co.status = ThreadStatus::Dead; // the frames stay, for tracebacks
+        co.push(co.error_value);        // luaD_seterrorobj, on its top
+        results = 0;
+    }
+    return status;
+}
+
+int yield_values(State& thread, int n) {
+    // lua_yield from a C++ function: its top n values go to the resume.
+    if (!is_yieldable(thread)) {
+        const bool main = &thread == &thread.heap().main_thread();
+        runtime_error(thread, main ? "attempt to yield from outside a coroutine"
+                                   : "attempt to yield across a C-call boundary");
+        return c_function_error;
+    }
+    thread.status = ThreadStatus::Yield;
+    thread.yielded = n;
+    thread.ci->continuation = nullptr; // lua_yield has none
+    return c_function_yield;
+}
+
+Status close_thread(State& co, const State& from) {
+    // lua_closethread and luaE_resetthread: close what a suspended or dead
+    // coroutine left open, its __close methods getting its error, if any.
+    co.c_calls = from.c_calls;
+    const bool had_error = co.status == ThreadStatus::Dead;
+    for (CallInfo* frame = co.ci; frame != nullptr; frame = frame->previous) {
+        reset_frame_flags(frame);
+    }
+    co.allow_hook = true;
+    co.pending_call_hook = 0;
+    co.ci = &co.base_ci;
+    co.status = ThreadStatus::Ok;
+    co.top = std::max<std::uint32_t>(co.top, 1);
+    ++co.non_yieldable;
+    Heap& heap = co.heap();
+    State* const resumer = heap.running_thread();
+    heap.set_running_thread(&co);
+    const bool error = close_protected(&co, 1, Value::nil(), had_error);
+    heap.set_running_thread(resumer);
+    co.non_yieldable = 0;
+    co.top = 1;
+    co.to_be_closed.clear();
+    co.shrink_call_infos();
+    // Dead: its status is ok again, with nothing on its stack (as
+    // luaE_resetthread leaves it once the error is taken).
+    return error ? Status::Error : Status::Ok;
+}
+
+namespace {
+
+// How many threads have hooks: while some do, the VM dispatches through
+// op_hooked (H2).
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables): counts across all heaps
+std::atomic<int> hooked_threads{0};
+
+} // namespace
+
+void request_interrupt() {
+    interrupt_requested.store(true, std::memory_order_relaxed);
+    install_hook_dispatch(true);
+}
+
+bool take_interrupt() {
+    if (!interrupt_requested.exchange(false, std::memory_order_relaxed)) {
+        return false;
+    }
+    if (hooked_threads.load(std::memory_order_relaxed) == 0) {
+        install_hook_dispatch(false);
+    }
+    return true;
+}
+
+void set_hook(State& thread, std::uint8_t mask, int count) {
+    // lua_sethook
+    if (mask == 0) {
+        count = 0;
+    }
+    const bool had_hooks = thread.hook_mask != 0;
+    thread.hook_mask = mask;
+    thread.base_hook_count = count;
+    thread.hook_count_left = count;
+    if (had_hooks == (mask != 0)) {
+        return;
+    }
+    if (mask != 0) {
+        if (hooked_threads.fetch_add(1, std::memory_order_relaxed) == 0) {
+            install_hook_dispatch(true);
+        }
+    } else if (hooked_threads.fetch_sub(1, std::memory_order_relaxed) == 1) {
+        install_hook_dispatch(false);
+        thread.pending_call_hook = 0;
+    }
 }
 
 Status close_variables(State& thread, std::uint32_t level) {

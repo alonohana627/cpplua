@@ -1,0 +1,20 @@
+yielded	index	alpha
+a =	A
+yielded	index	1
+yielded	index	2
+b =	3
+yielded	newindex	x	X
+yielded	newindex	y	Y
+raw	X	refused
+x via table	X
+yielded	deep	key
+s =	K!
+yielded	index	p
+yielded	index	q
+t	P	Q
+yielded	method	greet
+greet:bob
+yielded	index	10
+yielded	index	20
+yielded	index	30
+sum	60

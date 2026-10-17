@@ -1,0 +1,32 @@
+
+main <err_co_yield_main.lua:0,0> (8 instructions)
+0+ params, 3 slots, 1 upvalue, 1 local, 2 constants, 1 function
+	1	[1]	VARARGPREP	0
+	2	[2]	CLOSURE  	0 0
+	3	[3]	GETTABUP 	1 0 0	; _ENV "print"
+	4	[3]	LOADK    	2 1	; "before"
+	5	[3]	CALL     	1 2 1	; 1 in 0 out
+	6	[4]	MOVE     	1 0
+	7	[4]	CALL     	1 1 1	; 0 in 0 out
+	8	[4]	RETURN   	1 1 1	; 0 out
+constants (2):
+	0	S	"print"
+	1	S	"before"
+locals (1):
+	0	f	3	9
+upvalues (1):
+	0	_ENV	1	0
+
+function <err_co_yield_main.lua:2,2> (5 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[2]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[2]	GETFIELD 	0 0 1	; "yield"
+	3	[2]	LOADI    	1 1
+	4	[2]	CALL     	0 2 1	; 1 in 0 out
+	5	[2]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"yield"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0

@@ -1,0 +1,10 @@
+ctor	one	nil	three	x	y	nil
+args	4	A1	B1	B2	nil
+arith	42
+concat	<S1S2>
+and/or	R
+varargs	v1	nil	v3
+tail	T	U	nil
+multi	m1	nil	m3
+true	L1
+L1	L2

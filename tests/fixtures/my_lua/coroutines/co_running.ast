@@ -1,0 +1,196 @@
+Chunk
+  Local main, ismain
+    Call
+      Index
+        Name coroutine
+        String "running"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Name main (local 0)
+      Name ismain (local 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "isyieldable"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "isyieldable"
+        Name main (local 0)
+  Local co
+  Assign
+    Targets
+      Name co (local 2)
+    Values
+      Call
+        Index
+          Name coroutine
+          String "create"
+        Function() [upvalues: _ENV, co, main]
+          Local me, m
+            Call
+              Index
+                Name coroutine
+                String "running"
+          CallStatement
+            Call
+              Name print
+              String "inside"
+              Call
+                Name type
+                Name me (local 0)
+              Name m (local 1)
+              Binary ==
+                Name me (local 0)
+                Name co (upvalue 1)
+              Binary ==
+                Name me (local 0)
+                Name main (upvalue 2)
+          CallStatement
+            Call
+              Name print
+              String "yieldable"
+              Call
+                Index
+                  Name coroutine
+                  String "isyieldable"
+              Call
+                Index
+                  Name coroutine
+                  String "isyieldable"
+                Name main (upvalue 2)
+              Call
+                Index
+                  Name coroutine
+                  String "isyieldable"
+                Name co (upvalue 1)
+          CallStatement
+            Call
+              Name print
+              String "in pcall"
+              Call
+                Name pcall
+                Index
+                  Name coroutine
+                  String "isyieldable"
+          CallStatement
+            Call
+              Index
+                Name table
+                String "sort"
+              Table
+                Item
+                  Integer 3
+                Item
+                  Integer 2
+                Item
+                  Integer 1
+              Function(a, b) [upvalues: _ENV]
+                If
+                  If
+                    Binary ==
+                      Name a (local 0)
+                      Integer 3
+                    Then
+                      CallStatement
+                        Call
+                          Name print
+                          String "in sort"
+                          Call
+                            Index
+                              Name coroutine
+                              String "isyieldable"
+                Return
+                  Binary <
+                    Name a (local 0)
+                    Name b (local 1)
+          Return
+            Name me (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "isyieldable"
+        Name co (local 2)
+  Local ok, me
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name co (local 2)
+  CallStatement
+    Call
+      Name print
+      Name ok (local 3)
+      Binary ==
+        Name me (local 4)
+        Name co (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "isyieldable"
+        Name co (local 2)
+  Local w
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV, main]
+        Local me, m
+          Call
+            Index
+              Name coroutine
+              String "running"
+        CallStatement
+          Call
+            Index
+              Name coroutine
+              String "yield"
+            Call
+              Name type
+              Name me (local 0)
+            Name m (local 1)
+            Call
+              Index
+                Name coroutine
+                String "status"
+              Name me (local 0)
+        Return
+          Binary ==
+            Name me (local 0)
+            Name main (upvalue 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name w (local 5)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name w (local 5)
+  Return
+    Call
+      Name type
+      Name main (local 0)
+    Call
+      Name select
+      String "#"
+      Call
+        Index
+          Name coroutine
+          String "running"

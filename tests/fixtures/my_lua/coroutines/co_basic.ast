@@ -1,0 +1,318 @@
+Chunk
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function(a, b, ...) [upvalues: _ENV]
+        CallStatement
+          Call
+            Name print
+            String "start"
+            Name a (local 0)
+            Name b (local 1)
+            Call
+              Name select
+              String "#"
+              Vararg
+            Vararg
+        Local x, y, z
+          Call
+            Index
+              Name coroutine
+              String "yield"
+            Binary +
+              Name a (local 0)
+              Name b (local 1)
+            Nil
+            String "two"
+        CallStatement
+          Call
+            Name print
+            String "got"
+            Name x (local 2)
+            Name y (local 3)
+            Name z (local 4)
+        Local n
+          Call
+            Name select
+            String "#"
+            Call
+              Index
+                Name coroutine
+                String "yield"
+        CallStatement
+          Call
+            Name print
+            String "count"
+            Name n (local 5)
+        Local t
+          Call
+            Index
+              Name table
+              String "pack"
+            Call
+              Index
+                Name coroutine
+                String "yield"
+              Nil
+              Nil
+              Nil
+        CallStatement
+          Call
+            Name print
+            String "packed"
+            Index
+              Name t (local 6)
+              String "n"
+            Index
+              Name t (local 6)
+              Integer 1
+            Index
+              Name t (local 6)
+              Integer 2
+            Index
+              Name t (local 6)
+              Integer 3
+            Index
+              Name t (local 6)
+              Integer 4
+        Return
+          String "done"
+          Nil
+          Integer 3
+  CallStatement
+    Call
+      Name print
+      Call
+        Name type
+        Name co (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co (local 0)
+        Integer 1
+        Integer 2
+        Nil
+        String "v"
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co (local 0)
+        String "x"
+        Nil
+        String "z"
+        String "extra"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co (local 0)
+        Nil
+        False
+        Nil
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name coroutine
+            String "resume"
+          Call
+            Index
+              Name coroutine
+              String "create"
+            Function()
+  CallStatement
+    Call
+      Name print
+      Call
+        Name select
+        String "#"
+        Call
+          Index
+            Name coroutine
+            String "resume"
+          Call
+            Index
+              Name coroutine
+              String "create"
+            Function()
+              Return
+                Nil
+                Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Function(...)
+            Return
+              Vararg
+        Integer 1
+        Nil
+        Integer 3
+        Nil
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Function(...) [upvalues: _ENV]
+            Return
+              Call
+                Name select
+                String "#"
+                Vararg
+  Local big
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function(...) [upvalues: _ENV]
+        Local args
+          Call
+            Index
+              Name table
+              String "pack"
+            Vararg
+        Local got
+          Call
+            Index
+              Name table
+              String "pack"
+            Call
+              Index
+                Name coroutine
+                String "yield"
+              Call
+                Index
+                  Name table
+                  String "unpack"
+                Name args (local 0)
+                Integer 1
+                Index
+                  Name args (local 0)
+                  String "n"
+        Return
+          Index
+            Name got (local 1)
+            String "n"
+          Index
+            Name got (local 1)
+            Integer 1
+          Index
+            Name got (local 1)
+            Index
+              Name got (local 1)
+              String "n"
+  Local vals
+    Table
+  NumericFor i
+    Integer 1
+    Integer 200
+    Body
+      Assign
+        Targets
+          Index
+            Name vals (local 2)
+            Name i (local 6)
+        Values
+          Binary *
+            Name i (local 6)
+            Integer 2
+  Local res
+    Call
+      Index
+        Name table
+        String "pack"
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name big (local 1)
+        Call
+          Index
+            Name table
+            String "unpack"
+          Name vals (local 2)
+  CallStatement
+    Call
+      Name print
+      Index
+        Name res (local 3)
+        String "n"
+      Index
+        Name res (local 3)
+        Integer 1
+      Index
+        Name res (local 3)
+        Integer 2
+      Index
+        Name res (local 3)
+        Integer 201
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name big (local 1)
+        Call
+          Index
+            Name table
+            String "unpack"
+          Name vals (local 2)
+          Integer 1
+          Integer 150
+  Return
+    Call
+      Index
+        Name coroutine
+        String "status"
+      Name big (local 1)

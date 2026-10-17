@@ -342,7 +342,8 @@ dead frames' upvalues and to-be-closed variables ([errors.md](errors.md)).
   `set_generational()`, `memory_in_use()`. Destroying it closes it like `lua_close`.
 - `lua2 file.lua` runs a file (its `print`s go to stdout), then prints what it returns, if
   anything, separated by tabs; `lua2 --generational file.lua` runs it in generational mode;
-  errors go to stderr with a traceback, as the real `lua` prints them.
+  errors go to stderr with a traceback, as the real `lua` prints them. (Since stage 11, `lua2`
+  is the real `lua` program and prints no results: [standalone.md](standalone.md).)
 
 ## Benchmarks
 
@@ -373,8 +374,9 @@ Where the time goes:
 
 - **Dispatch.** Tail calls with `preserve_none` keep the VM's state in registers; Lua's
   `luaV_execute` reloads `base` and tests `trap` for hooks at every instruction.
-- **No hooks.** Lua checks for debug hooks on every instruction and every call; lua2 has no
-  debug library yet. (When it comes, hooks will have to cost nothing when off.)
+- **No hooks.** Lua checks for debug hooks on every instruction and every call; lua2's hooks (stage 10)
+  cost nothing when off: the dispatch table is swapped only while a thread has one
+  ([debug.md](debug.md)).
 - **Allocation.** Closures, upvalues and strings come from the pool, not `malloc` (`closures`,
   `strings`).
 - **Frameless hot paths.** Rare work is in cold handlers, so common instructions need no stack

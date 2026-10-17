@@ -14,6 +14,7 @@ topic:
 | `gc/`             | finalizers and weak tables (`gc_*`)                                   |
 | `errors/`         | `error`, `pcall`, `xpcall`, `assert` (`error_*`, `err_error_*`, `err_assert*`) |
 | `stdlib/`         | the standard library: `base_*`, `string_*`, `table_*`, `math_*`, `utf8_*`, `io_*`, `os_*`, and their errors (`err_*`) |
+| `coroutines/`     | coroutines (`co_*`): resume, yield, wrap, status, close, yields in metamethods, iterators and `pcall`, collection; and their errors (`err_co_*`) |
 
 A program and its golden files stay together in one folder:
 
@@ -24,7 +25,7 @@ A program and its golden files stay together in one folder:
 | `name.error` | the expected error message, if it does not (one line)        |
 | `name.dot`   | optional: the expected `lua2 --ast=dot name.lua` output      |
 | `name.bytecode` | optional: the expected `lua2 --bytecode name.lua` output, which is the real `luac -l -l -p` listing without its memory addresses |
-| `name.out`   | optional: what running it prints, then what it returns, then what finalizers print when the interpreter closes, as `lua2 name.lua` writes it (from the real Lua: `lua_ref -e "print(dofile('name.lua'))"`) |
+| `name.out`   | optional: what running it prints, then what it returns, then what finalizers print when the interpreter closes, as `lua2 -e "print(dofile('name.lua'))"` writes it (from the real Lua: `lua_ref -e "print(dofile('name.lua'))"`) |
 | `name.runerror` | optional: the runtime error it stops with (the real Lua's message) |
 
 `tests/my_lua_test.cpp` (tag `[my_lua]`) finds every `.lua` file in these folders, parses it and compares the result with

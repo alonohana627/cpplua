@@ -4,6 +4,7 @@
 #include <cstring>
 #include <new>
 
+#include "vm/execute.hpp"
 #include "vm/function.hpp"
 
 namespace lua2 {
@@ -24,6 +25,7 @@ State::State(Heap& heap) : stack_last(basic_stack_size), top(1), heap_(&heap) {
 }
 
 State::~State() {
+    set_hook(*this, 0, 0); // a thread with hooks no longer counts
     ci = &base_ci;
     while (base_ci.next != nullptr) {
         CallInfo* next = base_ci.next;
@@ -74,7 +76,7 @@ bool State::grow_stack(std::uint32_t n) {
     const std::uint32_t size = stack_last;
     if (size > max_stack) {
         // Already using the extra room: an error while handling an error.
-        set_error("error in error handling");
+        set_error_in_error_handling();
         return false;
     }
     if (n < max_stack) {
@@ -108,6 +110,12 @@ void State::shrink_stack() {
 
 void State::set_error(std::string_view message) {
     error_value = Value::string(heap_->new_string(message));
+    error_in_handler = false;
+}
+
+void State::set_error_in_error_handling() {
+    error_value = Value::string(heap_->new_string("error in error handling"));
+    error_in_handler = true;
 }
 
 const CallInfo* State::frame_at(int level) const {

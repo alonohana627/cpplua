@@ -279,6 +279,7 @@ ConstKey key_of(Value v) {
     case Tag::CClosure:
     case Tag::LightUserdata:
     case Tag::Userdata:
+    case Tag::Thread:
     case Tag::Table: break;
     }
     return {.kind = ConstKey::Kind::String, .bits = v.payload()};
@@ -931,6 +932,7 @@ void Compiler::const2exp(Value v, ExpDesc& e) {
     case Tag::CClosure:
     case Tag::LightUserdata:
     case Tag::Userdata:
+    case Tag::Thread:
     case Tag::Table: break; // never a constant
     }
 }
@@ -1858,9 +1860,11 @@ int Compiler::newupvalue(FuncState* fs, const String* name, const ExpDesc& v) {
     if (v.k == ExpKind::Local) {
         up.in_stack = true;
         up.index = static_cast<std::uint8_t>(v.var_ridx);
+        up.kind = static_cast<std::uint8_t>(getlocalvardesc(fs->prev, v.var_vidx).kind);
     } else {
         up.in_stack = false;
         up.index = static_cast<std::uint8_t>(v.info);
+        up.kind = fs->prev->f->upvalues[index(v.info)].kind;
     }
     upvalues.push_back(up);
     return static_cast<int>(upvalues.size()) - 1;

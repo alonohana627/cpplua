@@ -1,0 +1,249 @@
+
+main <co_status.lua:0,0> (94 instructions)
+0+ params, 8 slots, 1 upvalue, 5 locals, 11 constants, 4 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	LOADNIL  	0 1	; 2 out
+	3	[3]	GETTABUP 	2 0 0	; _ENV "coroutine"
+	4	[3]	GETFIELD 	2 2 1	; "create"
+	5	[8]	CLOSURE  	3 0
+	6	[3]	CALL     	2 2 2	; 1 in 1 out
+	7	[8]	MOVE     	1 2
+	8	[9]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	9	[9]	GETFIELD 	2 2 1	; "create"
+	10	[17]	CLOSURE  	3 1
+	11	[9]	CALL     	2 2 2	; 1 in 1 out
+	12	[17]	MOVE     	0 2
+	13	[18]	GETTABUP 	2 0 3	; _ENV "print"
+	14	[18]	LOADK    	3 4	; "before"
+	15	[18]	GETTABUP 	4 0 2	; _ENV "coroutine"
+	16	[18]	GETFIELD 	4 4 5	; "status"
+	17	[18]	MOVE     	5 0
+	18	[18]	CALL     	4 2 2	; 1 in 1 out
+	19	[18]	GETTABUP 	5 0 2	; _ENV "coroutine"
+	20	[18]	GETFIELD 	5 5 5	; "status"
+	21	[18]	MOVE     	6 1
+	22	[18]	CALL     	5 2 0	; 1 in all out
+	23	[18]	CALL     	2 0 1	; all in 0 out
+	24	[19]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	25	[19]	GETFIELD 	2 2 6	; "resume"
+	26	[19]	MOVE     	3 0
+	27	[19]	CALL     	2 2 1	; 1 in 0 out
+	28	[20]	GETTABUP 	2 0 3	; _ENV "print"
+	29	[20]	LOADK    	3 7	; "outer yielded"
+	30	[20]	GETTABUP 	4 0 2	; _ENV "coroutine"
+	31	[20]	GETFIELD 	4 4 5	; "status"
+	32	[20]	MOVE     	5 0
+	33	[20]	CALL     	4 2 2	; 1 in 1 out
+	34	[20]	GETTABUP 	5 0 2	; _ENV "coroutine"
+	35	[20]	GETFIELD 	5 5 5	; "status"
+	36	[20]	MOVE     	6 1
+	37	[20]	CALL     	5 2 0	; 1 in all out
+	38	[20]	CALL     	2 0 1	; all in 0 out
+	39	[21]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	40	[21]	GETFIELD 	2 2 6	; "resume"
+	41	[21]	MOVE     	3 0
+	42	[21]	CALL     	2 2 1	; 1 in 0 out
+	43	[22]	GETTABUP 	2 0 3	; _ENV "print"
+	44	[22]	LOADK    	3 8	; "outer done"
+	45	[22]	GETTABUP 	4 0 2	; _ENV "coroutine"
+	46	[22]	GETFIELD 	4 4 5	; "status"
+	47	[22]	MOVE     	5 0
+	48	[22]	CALL     	4 2 2	; 1 in 1 out
+	49	[22]	GETTABUP 	5 0 2	; _ENV "coroutine"
+	50	[22]	GETFIELD 	5 5 5	; "status"
+	51	[22]	MOVE     	6 1
+	52	[22]	CALL     	5 2 0	; 1 in all out
+	53	[22]	CALL     	2 0 1	; all in 0 out
+	54	[24]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	55	[24]	GETFIELD 	2 2 1	; "create"
+	56	[24]	CLOSURE  	3 2
+	57	[24]	CALL     	2 2 2	; 1 in 1 out
+	58	[25]	GETTABUP 	3 0 3	; _ENV "print"
+	59	[25]	GETTABUP 	4 0 2	; _ENV "coroutine"
+	60	[25]	GETFIELD 	4 4 6	; "resume"
+	61	[25]	MOVE     	5 2
+	62	[25]	CALL     	4 2 0	; 1 in all out
+	63	[25]	CALL     	3 0 1	; all in 0 out
+	64	[26]	GETTABUP 	3 0 3	; _ENV "print"
+	65	[26]	GETTABUP 	4 0 2	; _ENV "coroutine"
+	66	[26]	GETFIELD 	4 4 5	; "status"
+	67	[26]	MOVE     	5 2
+	68	[26]	CALL     	4 2 0	; 1 in all out
+	69	[26]	CALL     	3 0 1	; all in 0 out
+	70	[28]	GETTABUP 	3 0 2	; _ENV "coroutine"
+	71	[28]	GETFIELD 	3 3 9	; "running"
+	72	[28]	CALL     	3 1 2	; 0 in 1 out
+	73	[29]	GETTABUP 	4 0 2	; _ENV "coroutine"
+	74	[29]	GETFIELD 	4 4 1	; "create"
+	75	[29]	CLOSURE  	5 3
+	76	[29]	CALL     	4 2 2	; 1 in 1 out
+	77	[30]	GETTABUP 	5 0 3	; _ENV "print"
+	78	[30]	GETTABUP 	6 0 0	; _ENV "coroutine"
+	79	[30]	GETFIELD 	6 6 6	; "resume"
+	80	[30]	MOVE     	7 4
+	81	[30]	CALL     	6 2 0	; 1 in all out
+	82	[30]	CALL     	5 0 1	; all in 0 out
+	83	[31]	GETTABUP 	5 0 3	; _ENV "print"
+	84	[31]	GETTABUP 	6 0 0	; _ENV "coroutine"
+	85	[31]	GETFIELD 	6 6 10	; "status"
+	86	[31]	MOVE     	7 3
+	87	[31]	CALL     	6 2 0	; 1 in all out
+	88	[31]	CALL     	5 0 1	; all in 0 out
+	89	[32]	GETTABUP 	5 0 0	; _ENV "coroutine"
+	90	[32]	GETFIELD 	5 5 10	; "status"
+	91	[32]	MOVE     	6 4
+	92	[32]	TAILCALL 	5 2 1k	; 1 in
+	93	[32]	RETURN   	5 0 1k	; all out
+	94	[32]	RETURN   	5 1 1k	; 0 out
+constants (11):
+	0	S	"coroutine"
+	1	S	"create"
+	2	S	"coroutine"
+	3	S	"print"
+	4	S	"before"
+	5	S	"status"
+	6	S	"resume"
+	7	S	"outer yielded"
+	8	S	"outer done"
+	9	S	"running"
+	10	S	"status"
+locals (5):
+	0	outer	3	95
+	1	inner	3	95
+	2	bad	58	95
+	3	main	73	95
+	4	co	77	95
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_status.lua:3,8> (29 instructions)
+0 params, 5 slots, 3 upvalues, 0 locals, 7 constants, 0 functions
+	1	[4]	GETTABUP 	0 0 0	; _ENV "print"
+	2	[4]	LOADK    	1 1	; "inner sees inner"
+	3	[4]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	4	[4]	GETFIELD 	2 2 3	; "status"
+	5	[4]	GETUPVAL 	3 1	; inner
+	6	[4]	CALL     	2 2 0	; 1 in all out
+	7	[4]	CALL     	0 0 1	; all in 0 out
+	8	[5]	GETTABUP 	0 0 0	; _ENV "print"
+	9	[5]	LOADK    	1 4	; "inner sees outer"
+	10	[5]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	11	[5]	GETFIELD 	2 2 3	; "status"
+	12	[5]	GETUPVAL 	3 2	; outer
+	13	[5]	CALL     	2 2 0	; 1 in all out
+	14	[5]	CALL     	0 0 1	; all in 0 out
+	15	[6]	GETTABUP 	0 0 2	; _ENV "coroutine"
+	16	[6]	GETFIELD 	0 0 5	; "yield"
+	17	[6]	CALL     	0 1 1	; 0 in 0 out
+	18	[7]	GETTABUP 	0 0 0	; _ENV "print"
+	19	[7]	LOADK    	1 6	; "inner again"
+	20	[7]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	21	[7]	GETFIELD 	2 2 3	; "status"
+	22	[7]	GETUPVAL 	3 1	; inner
+	23	[7]	CALL     	2 2 2	; 1 in 1 out
+	24	[7]	GETTABUP 	3 0 2	; _ENV "coroutine"
+	25	[7]	GETFIELD 	3 3 3	; "status"
+	26	[7]	GETUPVAL 	4 2	; outer
+	27	[7]	CALL     	3 2 0	; 1 in all out
+	28	[7]	CALL     	0 0 1	; all in 0 out
+	29	[8]	RETURN0  	
+constants (7):
+	0	S	"print"
+	1	S	"inner sees inner"
+	2	S	"coroutine"
+	3	S	"status"
+	4	S	"inner sees outer"
+	5	S	"yield"
+	6	S	"inner again"
+locals (0):
+upvalues (3):
+	0	_ENV	0	0
+	1	inner	1	1
+	2	outer	1	0
+
+function <co_status.lua:9,17> (40 instructions)
+0 params, 4 slots, 3 upvalues, 0 locals, 9 constants, 0 functions
+	1	[10]	GETTABUP 	0 0 0	; _ENV "print"
+	2	[10]	LOADK    	1 1	; "outer sees outer"
+	3	[10]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	4	[10]	GETFIELD 	2 2 3	; "status"
+	5	[10]	GETUPVAL 	3 1	; outer
+	6	[10]	CALL     	2 2 0	; 1 in all out
+	7	[10]	CALL     	0 0 1	; all in 0 out
+	8	[11]	GETTABUP 	0 0 0	; _ENV "print"
+	9	[11]	LOADK    	1 4	; "outer sees inner"
+	10	[11]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	11	[11]	GETFIELD 	2 2 3	; "status"
+	12	[11]	GETUPVAL 	3 2	; inner
+	13	[11]	CALL     	2 2 0	; 1 in all out
+	14	[11]	CALL     	0 0 1	; all in 0 out
+	15	[12]	GETTABUP 	0 0 2	; _ENV "coroutine"
+	16	[12]	GETFIELD 	0 0 5	; "resume"
+	17	[12]	GETUPVAL 	1 2	; inner
+	18	[12]	CALL     	0 2 1	; 1 in 0 out
+	19	[13]	GETTABUP 	0 0 0	; _ENV "print"
+	20	[13]	LOADK    	1 6	; "after inner yield"
+	21	[13]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	22	[13]	GETFIELD 	2 2 3	; "status"
+	23	[13]	GETUPVAL 	3 2	; inner
+	24	[13]	CALL     	2 2 0	; 1 in all out
+	25	[13]	CALL     	0 0 1	; all in 0 out
+	26	[14]	GETTABUP 	0 0 2	; _ENV "coroutine"
+	27	[14]	GETFIELD 	0 0 7	; "yield"
+	28	[14]	CALL     	0 1 1	; 0 in 0 out
+	29	[15]	GETTABUP 	0 0 2	; _ENV "coroutine"
+	30	[15]	GETFIELD 	0 0 5	; "resume"
+	31	[15]	GETUPVAL 	1 2	; inner
+	32	[15]	CALL     	0 2 1	; 1 in 0 out
+	33	[16]	GETTABUP 	0 0 0	; _ENV "print"
+	34	[16]	LOADK    	1 8	; "after inner end"
+	35	[16]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	36	[16]	GETFIELD 	2 2 3	; "status"
+	37	[16]	GETUPVAL 	3 2	; inner
+	38	[16]	CALL     	2 2 0	; 1 in all out
+	39	[16]	CALL     	0 0 1	; all in 0 out
+	40	[17]	RETURN0  	
+constants (9):
+	0	S	"print"
+	1	S	"outer sees outer"
+	2	S	"coroutine"
+	3	S	"status"
+	4	S	"outer sees inner"
+	5	S	"resume"
+	6	S	"after inner yield"
+	7	S	"yield"
+	8	S	"after inner end"
+locals (0):
+upvalues (3):
+	0	_ENV	0	0
+	1	outer	1	0
+	2	inner	1	1
+
+function <co_status.lua:24,24> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[24]	GETTABUP 	0 0 0	; _ENV "error"
+	2	[24]	LOADK    	1 1	; "x"
+	3	[24]	CALL     	0 2 1	; 1 in 0 out
+	4	[24]	RETURN0  	
+constants (2):
+	0	S	"error"
+	1	S	"x"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_status.lua:29,29> (6 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 2 constants, 0 functions
+	1	[29]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[29]	GETFIELD 	0 0 1	; "status"
+	3	[29]	GETUPVAL 	1 1	; main
+	4	[29]	TAILCALL 	0 2 0	; 1 in
+	5	[29]	RETURN   	0 0 0	; all out
+	6	[29]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"status"
+locals (0):
+upvalues (2):
+	0	_ENV	0	0
+	1	main	1	3

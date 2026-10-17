@@ -19,7 +19,8 @@ in [../learn/stdlib.md](../learn/stdlib.md).
 - **The reference Lua decides.** Behavior is checked against `lua_ref` (built with
   `LUA_COMPAT_5_3`, so the 5.3 math functions are there too) by 48 golden programs.
 - **Where lua2 cannot do what Lua does**, it answers as a Lua built without that feature: no
-  binary chunks (`string.dump`), no C libraries (`package.loadlib`, C searchers).
+  binary chunks (`string.dump`; stage 11 added them), no C libraries (`package.loadlib`, C
+  searchers).
 - **The standard streams go through the interpreter's output functions**, so an embedding
   program captures `print`, `io.write` and warnings alike.
 - **Speed after correctness**: the libraries were made to work first, then measured with three

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <bit>
 #include <cstddef>
 #include <cstdint>
 #include <vector>
@@ -12,6 +13,19 @@
 namespace lua2 {
 
 struct Upvalue;
+class State;
+
+// How a run of the VM, or a call, ended.
+enum class Status : std::uint8_t {
+    Ok,
+    Error, // the error object is in State::error_value
+    Yield, // the thread yielded: everything up to the resume stops, frames intact (C1)
+};
+
+// A C++ function's continuation (Lua's lua_KFunction): what runs after a
+// call it made yielded and the thread was resumed, with Status::Yield, or
+// Status::Error when the call was protected and failed (C3).
+using Continuation = int (*)(State& state, Status status, std::intptr_t context);
 
 // Stack sizes, as in Lua (llimits.h, lstate.h, luaconf.h).
 inline constexpr std::uint32_t extra_stack = 5; // EXTRA_STACK: slots past the end for the VM
@@ -43,12 +57,60 @@ struct CallInfo {
     // Running a finalizer called from here (CIST_FIN): the finalizer's frame
     // is named "metamethod '__gc'".
     bool finalizer = false;
+
+    // ---- Coroutines (C3) ----
+
+    // A Lua frame: "a <= b" is being run as "not (b < a)" (CIST_LEQ), so the
+    // result of a yielded __lt must be negated.
+    bool negate_compare = false;
+    // A C++ frame inside a protected call that may yield (CIST_YPCALL),
+    // and whether that call failed and is closing variables (CIST_RECST).
+    bool yieldable_pcall = false;
+    bool pcall_error = false;
+    // A Lua frame closing variables in RETURN: how many values it returns
+    // (u2.nres).
+    int return_count = 0;
+    // A C++ frame: what to run when a call it made yields and the thread is
+    // resumed (u.c.k and u.c.ctx).
+    Continuation continuation = nullptr;
+    std::intptr_t context = 0;
+    // A C++ frame in a yieldable protected call: the called function's slot,
+    // where the error goes, and the message handler (u2.funcidx, old_errfunc).
+    std::uint32_t pcall_func = 0;
+    Value pcall_handler;
+
+    // ---- Debug hooks (H1) ----
+
+    // A hook is running for this frame (CIST_HOOKED): the hook function's
+    // frame is named "hook '?'".
+    bool hooked = false;
+    // In a call or return hook (CIST_TRAN): which values the call passes
+    // (debug.getinfo's "r"), counted from the function's slot.
+    bool transfer = false;
+    int first_transfer = 0;
+    int transfer_count = 0;
+};
+
+// The events a hook can watch (LUA_MASK*), and the events it gets
+// (LUA_HOOK*).
+inline constexpr std::uint8_t hook_call = 1;
+inline constexpr std::uint8_t hook_return = 2;
+inline constexpr std::uint8_t hook_line = 4;
+inline constexpr std::uint8_t hook_count = 8;
+
+enum class HookEvent : std::uint8_t { Call, Return, Line, Count, TailCall };
+
+// What a thread is doing (Lua's status codes).
+enum class ThreadStatus : std::uint8_t {
+    Ok,    // running, or able to run (a new coroutine, a finished one)
+    Yield, // suspended by a yield
+    Dead,  // stopped by an error
 };
 
 // A thread of execution (Lua's lua_State): the stack, the frames, the open
-// upvalues and to-be-closed variables, and the error being raised. Only
-// the main thread exists, which the Heap owns; coroutines (stage 10) will
-// make more.
+// upvalues and to-be-closed variables, and the error being raised. The
+// main thread belongs to the Heap; the others are coroutines, collected
+// like any object (docs/final_docs/coroutines.md).
 //
 // The stack stores tags and payloads in two arrays (docs/plan/vm.md). Both
 // are allocated through the Heap, so they count toward its pacing.
@@ -78,8 +140,14 @@ public:
     // the stack would pass max_stack, with the error ("stack overflow",
     // still without its position, or "error in error handling" when the
     // stack is already past the limit) in error_value.
+    // How many usable slots there are from `from` on: negative when `from`
+    // is past them, in the extra slots (as Lua's pointer difference is).
+    [[nodiscard]] std::int64_t free_slots(std::uint32_t from) const {
+        return std::int64_t{stack_last} - std::int64_t{from};
+    }
+
     [[nodiscard]] bool check_stack(std::uint32_t n) {
-        if (stack_last - top > n) [[likely]] {
+        if (free_slots(top) > n) [[likely]] {
             return true;
         }
         return grow_stack(n);
@@ -135,7 +203,14 @@ public:
 
     // The error being raised (Lua keeps it on the stack top): a string for
     // runtime errors, any value for error().
-    void set_error(Value v) { error_value = v; }
+    void set_error(Value v) {
+        error_value = v;
+        error_in_handler = false;
+    }
+
+    // luaD_errerr: "error in error handling" (LUA_ERRERR), which no message
+    // handler sees (R2.4).
+    void set_error_in_error_handling();
 
     void set_error(std::string_view message);
 
@@ -157,9 +232,31 @@ public:
     // How many C++ calls into the VM are active (Lua's nCcalls).
     int c_calls = 0;
 
+    // How many calls in the stack cannot be yielded across (the high half of
+    // Lua's nCcalls): the main thread has one, and every call from a C++
+    // function without a continuation adds one (C2).
+    int non_yieldable = 0;
+
+    // Coroutines (C1): the thread's status, and how many values its last
+    // yield passed (u2.nyield).
+    ThreadStatus status = ThreadStatus::Ok;
+    int yielded = 0;
+
+    // Debug hooks (H1, lua_sethook): the events watched, the instruction
+    // count between count hooks and how many are left, whether a hook may
+    // run (not inside one), the last instruction a line hook saw, and a
+    // call hook to run at the next instruction (1 a call, 2 a tail call).
+    std::uint8_t hook_mask = 0;
+    std::uint8_t pending_call_hook = 0;
+    bool allow_hook = true;
+    int base_hook_count = 0;
+    int hook_count_left = 0;
+    int old_pc = 0;
+
     // The error that stopped execute(), until a protected call takes it
     // (R1.1). A root of the collector.
     Value error_value;
+    bool error_in_handler = false; // error_value is luaD_errerr's (LUA_ERRERR)
 
     // The stack slots of the to-be-closed variables (M6), lowest first
     // (Lua's tbclist).
@@ -174,5 +271,14 @@ private:
     Heap* heap_;
     std::size_t call_info_count_ = 0;
 };
+
+inline Value Value::thread(const State* thread) {
+    return Value{Tag::Thread, std::bit_cast<std::uint64_t>(thread)};
+}
+
+// Whether a thread can yield now (lua_isyieldable).
+inline bool is_yieldable(const State& thread) {
+    return thread.non_yieldable == 0;
+}
 
 } // namespace lua2

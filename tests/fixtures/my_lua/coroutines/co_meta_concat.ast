@@ -1,0 +1,183 @@
+Chunk
+  Local Y
+    Index
+      Name coroutine
+      String "yield"
+  Local mt
+    Table
+  Assign
+    Targets
+      Index
+        Name mt (local 1)
+        String "__concat"
+    Values
+      Function(a, b) [upvalues: _ENV, Y]
+        Local sa
+          Binary or
+            Binary and
+              Binary ==
+                Call
+                  Name type
+                  Name a (local 0)
+                String "table"
+              Binary ..
+                String "<"
+                Binary ..
+                  Index
+                    Name a (local 0)
+                    String "s"
+                  String ">"
+            Call
+              Name tostring
+              Name a (local 0)
+        Local sb
+          Binary or
+            Binary and
+              Binary ==
+                Call
+                  Name type
+                  Name b (local 1)
+                String "table"
+              Binary ..
+                String "<"
+                Binary ..
+                  Index
+                    Name b (local 1)
+                    String "s"
+                  String ">"
+            Call
+              Name tostring
+              Name b (local 1)
+        Local r
+          Call
+            Name Y (upvalue 1)
+            Name sa (local 2)
+            Name sb (local 3)
+        Return
+          Name r (local 4)
+  LocalFunction S
+    Function(s) [upvalues: _ENV, mt]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field s
+              Name s (local 0)
+          Name mt (upvalue 1)
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: S, _ENV]
+        Local a, b, c
+          Call
+            Name S (upvalue 0)
+            String "a"
+          Call
+            Name S (upvalue 0)
+            String "b"
+          Call
+            Name S (upvalue 0)
+            String "c"
+        CallStatement
+          Call
+            Name print
+            String "1:"
+            Binary ..
+              Name a (local 0)
+              String "x"
+        CallStatement
+          Call
+            Name print
+            String "2:"
+            Binary ..
+              String "x"
+              Name a (local 0)
+        CallStatement
+          Call
+            Name print
+            String "3:"
+            Binary ..
+              String "p"
+              Binary ..
+                String "q"
+                Binary ..
+                  Name a (local 0)
+                  Binary ..
+                    String "r"
+                    String "s"
+        CallStatement
+          Call
+            Name print
+            String "4:"
+            Binary ..
+              Name a (local 0)
+              Binary ..
+                Name b (local 1)
+                Name c (local 2)
+        CallStatement
+          Call
+            Name print
+            String "5:"
+            Binary ..
+              Integer 1
+              Binary ..
+                Integer 2
+                Binary ..
+                  Name a (local 0)
+                  Integer 3
+        Local n
+          Integer 10
+        CallStatement
+          Call
+            Name print
+            String "6:"
+            Binary ..
+              String "n="
+              Binary ..
+                Name n (local 3)
+                Binary ..
+                  Name a (local 0)
+                  Binary ..
+                    Name b (local 1)
+                    String "!"
+        Return
+          String "fin"
+  Local r1, r2
+    Call
+      Name co (local 3)
+  Local steps
+    Integer 0
+  While
+    Binary ~=
+      Name r1 (local 4)
+      String "fin"
+    Body
+      Assign
+        Targets
+          Name steps (local 6)
+        Values
+          Binary +
+            Name steps (local 6)
+            Integer 1
+      CallStatement
+        Call
+          Name print
+          String "  concat"
+          Name r1 (local 4)
+          Name r2 (local 5)
+      Assign
+        Targets
+          Name r1 (local 4)
+          Name r2 (local 5)
+        Values
+          Call
+            Name co (local 3)
+            Binary ..
+              Name r1 (local 4)
+              Binary ..
+                String "+"
+                Name r2 (local 5)
+  Return
+    Name steps (local 6)

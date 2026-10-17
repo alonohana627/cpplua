@@ -15,9 +15,6 @@ namespace lua2 {
 // pcall, xpcall, collectgarbage, and _G and _VERSION.
 void open_base(Heap& heap);
 
-// The debug library, for now only debug.traceback (R4).
-void open_debug(Heap& heap);
-
 // The iterators of pairs (next) and ipairs: the VM runs them itself for
 // plain tables in a generic for, and knows them by address.
 int base_next(State& state);

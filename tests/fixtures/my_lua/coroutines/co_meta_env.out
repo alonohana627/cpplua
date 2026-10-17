@@ -1,0 +1,11 @@
+  	set	answer	4
+raw	40	40
+  	get	alpha
+  	get	beta
+sum	9
+  	get	alpha
+  	set	gamma	5
+gamma	50
+  	get	fn
+  	fn	3
+end

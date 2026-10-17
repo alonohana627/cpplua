@@ -1,0 +1,441 @@
+
+main <co_pcall.lua:0,0> (70 instructions)
+0+ params, 11 slots, 1 upvalue, 8 locals, 12 constants, 3 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	3	[2]	GETFIELD 	0 0 1	; "yield"
+	4	[3]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	5	[3]	GETFIELD 	1 1 2	; "create"
+	6	[40]	CLOSURE  	2 0
+	7	[3]	CALL     	1 2 2	; 1 in 1 out
+	8	[41]	GETTABUP 	2 0 3	; _ENV "coroutine"
+	9	[41]	GETFIELD 	2 2 4	; "resume"
+	10	[41]	MOVE     	3 1
+	11	[41]	CALL     	2 2 5	; 1 in 4 out
+	12	[42]	GETTABUP 	6 0 3	; _ENV "coroutine"
+	13	[42]	GETFIELD 	6 6 5	; "status"
+	14	[42]	MOVE     	7 1
+	15	[42]	CALL     	6 2 2	; 1 in 1 out
+	16	[42]	EQK      	6 6 0	; "suspended"
+	17	[42]	JMP      	16	; to 34
+	18	[43]	GETTABUP 	6 0 7	; _ENV "print"
+	19	[43]	LOADK    	7 8	; "  yielded"
+	20	[43]	MOVE     	8 3
+	21	[43]	MOVE     	9 4
+	22	[43]	MOVE     	10 5
+	23	[43]	CALL     	6 5 1	; 4 in 0 out
+	24	[44]	GETTABUP 	6 0 3	; _ENV "coroutine"
+	25	[44]	GETFIELD 	6 6 4	; "resume"
+	26	[44]	MOVE     	7 1
+	27	[44]	LOADI    	8 41
+	28	[44]	CALL     	6 3 5	; 2 in 4 out
+	29	[44]	MOVE     	5 9
+	30	[44]	MOVE     	4 8
+	31	[44]	MOVE     	3 7
+	32	[44]	MOVE     	2 6
+	33	[44]	JMP      	-22	; to 12
+	34	[46]	GETTABUP 	6 0 7	; _ENV "print"
+	35	[46]	MOVE     	7 2
+	36	[46]	MOVE     	8 3
+	37	[46]	CALL     	6 3 1	; 2 in 0 out
+	38	[48]	GETTABUP 	6 0 3	; _ENV "coroutine"
+	39	[48]	GETFIELD 	6 6 2	; "create"
+	40	[52]	CLOSURE  	7 1
+	41	[48]	CALL     	6 2 2	; 1 in 1 out
+	42	[53]	GETTABUP 	7 0 9	; _ENV "print"
+	43	[53]	GETTABUP 	8 0 3	; _ENV "coroutine"
+	44	[53]	GETFIELD 	8 8 4	; "resume"
+	45	[53]	MOVE     	9 6
+	46	[53]	CALL     	8 2 0	; 1 in all out
+	47	[53]	CALL     	7 0 1	; all in 0 out
+	48	[54]	GETTABUP 	7 0 9	; _ENV "print"
+	49	[54]	GETTABUP 	8 0 3	; _ENV "coroutine"
+	50	[54]	GETFIELD 	8 8 4	; "resume"
+	51	[54]	MOVE     	9 6
+	52	[54]	LOADK    	10 10	; "v"
+	53	[54]	CALL     	8 3 0	; 2 in all out
+	54	[54]	CALL     	7 0 1	; all in 0 out
+	55	[55]	GETTABUP 	7 0 9	; _ENV "print"
+	56	[55]	GETTABUP 	8 0 3	; _ENV "coroutine"
+	57	[55]	GETFIELD 	8 8 5	; "status"
+	58	[55]	MOVE     	9 6
+	59	[55]	CALL     	8 2 0	; 1 in all out
+	60	[55]	CALL     	7 0 1	; all in 0 out
+	61	[57]	GETTABUP 	7 0 3	; _ENV "coroutine"
+	62	[57]	GETFIELD 	7 7 11	; "wrap"
+	63	[59]	CLOSURE  	8 2
+	64	[57]	CALL     	7 2 2	; 1 in 1 out
+	65	[60]	MOVE     	8 7
+	66	[60]	CALL     	8 1 1	; 0 in 0 out
+	67	[61]	MOVE     	8 7
+	68	[61]	TAILCALL 	8 1 1k	; 0 in
+	69	[61]	RETURN   	8 0 1k	; all out
+	70	[61]	RETURN   	8 1 1k	; 0 out
+constants (12):
+	0	S	"coroutine"
+	1	S	"yield"
+	2	S	"create"
+	3	S	"coroutine"
+	4	S	"resume"
+	5	S	"status"
+	6	S	"suspended"
+	7	S	"print"
+	8	S	"  yielded"
+	9	S	"print"
+	10	S	"v"
+	11	S	"wrap"
+locals (8):
+	0	Y	4	71
+	1	co	8	71
+	2	ok	12	71
+	3	a	12	71
+	4	b	12	71
+	5	c	12	71
+	6	co2	42	71
+	7	co3	65	71
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_pcall.lua:3,40> (65 instructions)
+0 params, 9 slots, 2 upvalues, 2 locals, 20 constants, 8 functions
+	1	[4]	GETTABUP 	0 0 0	; _ENV "print"
+	2	[4]	LOADK    	1 1	; "pcall1"
+	3	[4]	GETTABUP 	2 0 2	; _ENV "pcall"
+	4	[7]	CLOSURE  	3 0
+	5	[7]	LOADI    	4 1
+	6	[4]	CALL     	2 3 0	; 2 in all out
+	7	[4]	CALL     	0 0 1	; all in 0 out
+	8	[8]	GETTABUP 	0 0 0	; _ENV "print"
+	9	[8]	LOADK    	1 3	; "pcall2"
+	10	[8]	GETTABUP 	2 0 2	; _ENV "pcall"
+	11	[11]	CLOSURE  	3 1
+	12	[8]	CALL     	2 2 0	; 1 in all out
+	13	[8]	CALL     	0 0 1	; all in 0 out
+	14	[12]	GETTABUP 	0 0 2	; _ENV "pcall"
+	15	[15]	CLOSURE  	1 2
+	16	[12]	CALL     	0 2 3	; 1 in 2 out
+	17	[16]	GETTABUP 	2 0 0	; _ENV "print"
+	18	[16]	LOADK    	3 4	; "pcall3"
+	19	[16]	MOVE     	4 0
+	20	[16]	GETTABUP 	5 0 5	; _ENV "type"
+	21	[16]	MOVE     	6 1
+	22	[16]	CALL     	5 2 2	; 1 in 1 out
+	23	[16]	GETFIELD 	6 1 6	; "code"
+	24	[16]	CALL     	2 5 1	; 4 in 0 out
+	25	[17]	GETTABUP 	2 0 0	; _ENV "print"
+	26	[17]	LOADK    	3 7	; "xpcall1"
+	27	[17]	GETTABUP 	4 0 8	; _ENV "xpcall"
+	28	[20]	CLOSURE  	5 3
+	29	[20]	CLOSURE  	6 4
+	30	[20]	LOADK    	7 9	; "p"
+	31	[20]	LOADK    	8 10	; "q"
+	32	[17]	CALL     	4 5 0	; 4 in all out
+	33	[17]	CALL     	2 0 1	; all in 0 out
+	34	[21]	GETTABUP 	2 0 0	; _ENV "print"
+	35	[21]	LOADK    	3 11	; "xpcall2"
+	36	[21]	GETTABUP 	4 0 8	; _ENV "xpcall"
+	37	[25]	CLOSURE  	5 5
+	38	[25]	CLOSURE  	6 6
+	39	[21]	CALL     	4 3 0	; 2 in all out
+	40	[21]	CALL     	2 0 1	; all in 0 out
+	41	[27]	GETTABUP 	2 0 0	; _ENV "print"
+	42	[27]	LOADK    	3 12	; "nested"
+	43	[27]	GETTABUP 	4 0 2	; _ENV "pcall"
+	44	[35]	CLOSURE  	5 7
+	45	[27]	CALL     	4 2 0	; 1 in all out
+	46	[27]	CALL     	2 0 1	; all in 0 out
+	47	[37]	GETTABUP 	2 0 0	; _ENV "print"
+	48	[37]	LOADK    	3 13	; "direct"
+	49	[37]	GETTABUP 	4 0 14	; _ENV "pcall"
+	50	[37]	GETUPVAL 	5 1	; Y
+	51	[37]	LOADK    	6 13	; "direct"
+	52	[37]	CALL     	4 3 0	; 2 in all out
+	53	[37]	CALL     	2 0 1	; all in 0 out
+	54	[38]	GETTABUP 	2 0 0	; _ENV "print"
+	55	[38]	LOADK    	3 15	; "status inside"
+	56	[38]	GETTABUP 	4 0 16	; _ENV "coroutine"
+	57	[38]	GETFIELD 	4 4 17	; "status"
+	58	[38]	GETTABUP 	5 0 16	; _ENV "coroutine"
+	59	[38]	GETFIELD 	5 5 18	; "running"
+	60	[38]	CALL     	5 1 0	; 0 in all out
+	61	[38]	CALL     	4 0 0	; all in all out
+	62	[38]	CALL     	2 0 1	; all in 0 out
+	63	[39]	LOADK    	2 19	; "end"
+	64	[39]	RETURN1  	2
+	65	[40]	RETURN0  	
+constants (20):
+	0	S	"print"
+	1	S	"pcall1"
+	2	S	"pcall"
+	3	S	"pcall2"
+	4	S	"pcall3"
+	5	S	"type"
+	6	S	"code"
+	7	S	"xpcall1"
+	8	S	"xpcall"
+	9	S	"p"
+	10	S	"q"
+	11	S	"xpcall2"
+	12	S	"nested"
+	13	S	"direct"
+	14	S	"pcall"
+	15	S	"status inside"
+	16	S	"coroutine"
+	17	S	"status"
+	18	S	"running"
+	19	S	"end"
+locals (2):
+	0	ok	17	66
+	1	e	17	66
+upvalues (2):
+	0	_ENV	0	0
+	1	Y	1	0
+
+function <co_pcall.lua:4,7> (8 instructions)
+1 param, 4 slots, 1 upvalue, 2 locals, 1 constant, 0 functions
+	1	[5]	GETUPVAL 	1 0	; Y
+	2	[5]	LOADK    	2 0	; "in pcall"
+	3	[5]	MOVE     	3 0
+	4	[5]	CALL     	1 3 2	; 2 in 1 out
+	5	[6]	ADD      	2 0 1
+	6	[6]	MMBIN    	0 1 6	; __add
+	7	[6]	RETURN1  	2
+	8	[7]	RETURN0  	
+constants (1):
+	0	S	"in pcall"
+locals (2):
+	0	a	1	9
+	1	b	5	9
+upvalues (1):
+	0	Y	0	1
+
+function <co_pcall.lua:8,11> (7 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 3 constants, 0 functions
+	1	[9]	GETUPVAL 	0 0	; Y
+	2	[9]	LOADK    	1 0	; "before error"
+	3	[9]	CALL     	0 2 1	; 1 in 0 out
+	4	[10]	GETTABUP 	0 1 1	; _ENV "error"
+	5	[10]	LOADK    	1 2	; "failed after yield"
+	6	[10]	CALL     	0 2 1	; 1 in 0 out
+	7	[11]	RETURN0  	
+constants (3):
+	0	S	"before error"
+	1	S	"error"
+	2	S	"failed after yield"
+locals (0):
+upvalues (2):
+	0	Y	0	1
+	1	_ENV	0	0
+
+function <co_pcall.lua:12,15> (9 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 4 constants, 0 functions
+	1	[13]	GETUPVAL 	0 0	; Y
+	2	[13]	LOADK    	1 0	; "before table error"
+	3	[13]	CALL     	0 2 1	; 1 in 0 out
+	4	[14]	GETTABUP 	0 1 1	; _ENV "error"
+	5	[14]	NEWTABLE 	1 1 0	; 0
+	6	[14]	EXTRAARG 	0
+	7	[14]	SETFIELD 	1 2 3k	; "code" 7
+	8	[14]	CALL     	0 2 1	; 1 in 0 out
+	9	[15]	RETURN0  	
+constants (4):
+	0	S	"before table error"
+	1	S	"error"
+	2	S	"code"
+	3	I	7
+locals (0):
+upvalues (2):
+	0	Y	0	1
+	1	_ENV	0	0
+
+function <co_pcall.lua:17,20> (11 instructions)
+0+ params, 4 slots, 2 upvalues, 1 local, 3 constants, 0 functions
+	1	[17]	VARARGPREP	0
+	2	[18]	GETUPVAL 	0 0	; Y
+	3	[18]	LOADK    	1 0	; "in xpcall"
+	4	[18]	VARARG   	2 0	; all out
+	5	[18]	CALL     	0 0 2	; all in 1 out
+	6	[19]	GETTABUP 	1 1 1	; _ENV "error"
+	7	[19]	LOADK    	2 2	; "xp "
+	8	[19]	MOVE     	3 0
+	9	[19]	CONCAT   	2 2
+	10	[19]	CALL     	1 2 1	; 1 in 0 out
+	11	[20]	RETURN   	1 1 1	; 0 out
+constants (3):
+	0	S	"in xpcall"
+	1	S	"error"
+	2	S	"xp "
+locals (1):
+	0	x	6	12
+upvalues (2):
+	0	Y	0	1
+	1	_ENV	0	0
+
+function <co_pcall.lua:20,20> (5 instructions)
+1 param, 3 slots, 0 upvalues, 1 local, 1 constant, 0 functions
+	1	[20]	LOADK    	1 0	; "handled: "
+	2	[20]	MOVE     	2 0
+	3	[20]	CONCAT   	1 2
+	4	[20]	RETURN1  	1
+	5	[20]	RETURN0  	
+constants (1):
+	0	S	"handled: "
+locals (1):
+	0	m	1	6
+upvalues (0):
+
+function <co_pcall.lua:21,25> (7 instructions)
+0 params, 2 slots, 1 upvalue, 1 local, 2 constants, 0 functions
+	1	[22]	GETUPVAL 	0 0	; Y
+	2	[22]	LOADK    	1 0	; "again"
+	3	[22]	CALL     	0 2 1	; 1 in 0 out
+	4	[23]	LOADNIL  	0 0	; 1 out
+	5	[24]	GETFIELD 	1 0 1	; "k"
+	6	[24]	RETURN1  	1
+	7	[25]	RETURN0  	
+constants (2):
+	0	S	"again"
+	1	S	"k"
+locals (1):
+	0	t	5	8
+upvalues (1):
+	0	Y	0	1
+
+function <co_pcall.lua:25,25> (6 instructions)
+1 param, 5 slots, 0 upvalues, 1 local, 3 constants, 0 functions
+	1	[25]	SELF     	1 0 0k	; "gsub"
+	2	[25]	LOADK    	3 1	; "^.-:%d+: "
+	3	[25]	LOADK    	4 2	; ""
+	4	[25]	CALL     	1 4 2	; 3 in 1 out
+	5	[25]	RETURN1  	1
+	6	[25]	RETURN0  	
+constants (3):
+	0	S	"gsub"
+	1	S	"^.-:%d+: "
+	2	S	""
+locals (1):
+	0	m	1	7
+upvalues (0):
+
+function <co_pcall.lua:27,35> (16 instructions)
+0 params, 6 slots, 2 upvalues, 2 locals, 5 constants, 1 function
+	1	[28]	GETUPVAL 	0 0	; Y
+	2	[28]	LOADK    	1 0	; "level 1"
+	3	[28]	CALL     	0 2 1	; 1 in 0 out
+	4	[29]	GETTABUP 	0 1 1	; _ENV "pcall"
+	5	[32]	CLOSURE  	1 0
+	6	[29]	CALL     	0 2 3	; 1 in 2 out
+	7	[33]	GETUPVAL 	2 0	; Y
+	8	[33]	LOADK    	3 2	; "level 1 again"
+	9	[33]	MOVE     	4 0
+	10	[33]	MOVE     	5 1
+	11	[33]	CALL     	2 4 1	; 3 in 0 out
+	12	[34]	GETTABUP 	2 1 3	; _ENV "error"
+	13	[34]	LOADK    	3 4	; "outer"
+	14	[34]	LOADI    	4 0
+	15	[34]	CALL     	2 3 1	; 2 in 0 out
+	16	[35]	RETURN0  	
+constants (5):
+	0	S	"level 1"
+	1	S	"pcall"
+	2	S	"level 1 again"
+	3	S	"error"
+	4	S	"outer"
+locals (2):
+	0	ok	7	17
+	1	e	7	17
+upvalues (2):
+	0	Y	0	1
+	1	_ENV	0	0
+
+function <co_pcall.lua:29,32> (8 instructions)
+0 params, 3 slots, 2 upvalues, 0 locals, 3 constants, 0 functions
+	1	[30]	GETUPVAL 	0 0	; Y
+	2	[30]	LOADK    	1 0	; "level 2"
+	3	[30]	CALL     	0 2 1	; 1 in 0 out
+	4	[31]	GETTABUP 	0 1 1	; _ENV "error"
+	5	[31]	LOADK    	1 2	; "inner"
+	6	[31]	LOADI    	2 0
+	7	[31]	CALL     	0 3 1	; 2 in 0 out
+	8	[32]	RETURN0  	
+constants (3):
+	0	S	"level 2"
+	1	S	"error"
+	2	S	"inner"
+locals (0):
+upvalues (2):
+	0	Y	0	0
+	1	_ENV	0	1
+
+function <co_pcall.lua:48,52> (13 instructions)
+0 params, 6 slots, 2 upvalues, 2 locals, 5 constants, 0 functions
+	1	[49]	GETTABUP 	0 0 0	; _ENV "pcall"
+	2	[49]	GETUPVAL 	1 1	; Y
+	3	[49]	LOADI    	2 1
+	4	[49]	CALL     	0 3 3	; 2 in 2 out
+	5	[50]	GETTABUP 	2 0 1	; _ENV "print"
+	6	[50]	LOADK    	3 2	; "pcall returned"
+	7	[50]	MOVE     	4 0
+	8	[50]	MOVE     	5 1
+	9	[50]	CALL     	2 4 1	; 3 in 0 out
+	10	[51]	GETTABUP 	2 0 3	; _ENV "error"
+	11	[51]	LOADK    	3 4	; "after the pcall"
+	12	[51]	CALL     	2 2 1	; 1 in 0 out
+	13	[52]	RETURN0  	
+constants (5):
+	0	S	"pcall"
+	1	S	"print"
+	2	S	"pcall returned"
+	3	S	"error"
+	4	S	"after the pcall"
+locals (2):
+	0	ok	5	14
+	1	e	5	14
+upvalues (2):
+	0	_ENV	0	0
+	1	Y	1	0
+
+function <co_pcall.lua:57,59> (6 instructions)
+0 params, 3 slots, 2 upvalues, 0 locals, 1 constant, 2 functions
+	1	[58]	GETTABUP 	0 0 0	; _ENV "xpcall"
+	2	[58]	CLOSURE  	1 0
+	3	[58]	CLOSURE  	2 1
+	4	[58]	TAILCALL 	0 3 0	; 2 in
+	5	[58]	RETURN   	0 0 0	; all out
+	6	[59]	RETURN0  	
+constants (1):
+	0	S	"xpcall"
+locals (0):
+upvalues (2):
+	0	_ENV	0	0
+	1	Y	1	0
+
+function <co_pcall.lua:58,58> (8 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 0 constants, 0 functions
+	1	[58]	GETUPVAL 	0 0	; Y
+	2	[58]	CALL     	0 1 1	; 0 in 0 out
+	3	[58]	NEWTABLE 	0 0 0	; 0
+	4	[58]	EXTRAARG 	0
+	5	[58]	ADDI     	0 0 1
+	6	[58]	MMBINI   	0 1 6 1	; __add flip
+	7	[58]	RETURN1  	0
+	8	[58]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (1):
+	0	Y	0	1
+
+function <co_pcall.lua:58,58> (6 instructions)
+1 param, 4 slots, 0 upvalues, 1 local, 2 constants, 0 functions
+	1	[58]	LOADK    	1 0	; "H("
+	2	[58]	MOVE     	2 0
+	3	[58]	LOADK    	3 1	; ")"
+	4	[58]	CONCAT   	1 3
+	5	[58]	RETURN1  	1
+	6	[58]	RETURN0  	
+constants (2):
+	0	S	"H("
+	1	S	")"
+locals (1):
+	0	m	1	7
+upvalues (0):

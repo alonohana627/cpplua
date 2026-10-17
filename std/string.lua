@@ -21,8 +21,11 @@ function string.byte(s, i, j) end
 ---@return string
 function string.char(...) end
 
----Would return a binary chunk of function `f`. lua2 has no binary chunks, so it always
----raises the error "unable to dump given function".
+---Returns a binary chunk of Lua function `f`, for `load` to load again. It is in Lua 5.4's own
+---format, byte for byte, so luac output loads in lua2 and lua2's dumps load in Lua 5.4. With
+---`strip` true, the debug information (lines, local and upvalue names, source) is left out.
+---The upvalues are not saved: the loaded function gets fresh ones. A C++ function cannot be
+---dumped ("unable to dump given function").
 ---@param f function
 ---@param strip? boolean
 ---@return string

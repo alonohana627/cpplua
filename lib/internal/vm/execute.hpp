@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <string_view>
 
@@ -7,16 +8,14 @@
 
 namespace lua2 {
 
-// How a run of the VM, or a call, ended.
-enum class Status : std::uint8_t {
-    Ok,
-    Error, // the error object is in State::error_value
-};
-
 // What a C++ function returns to raise an error (lua_error): the error
 // object is in State::error_value. Any other result is how many values it
 // returns.
 inline constexpr int c_function_error = -1;
+
+// What a C++ function returns to yield (lua_yield), after yield_values():
+// the thread stops, its frames as they are, until it is resumed (C1).
+inline constexpr int c_function_yield = -2;
 
 // LUAI_MAXCCALLS: calls through C++ (into the VM, metamethods, pcall) that
 // may be nested (R3.2).
@@ -32,7 +31,19 @@ inline constexpr int max_c_calls = 200;
 // On an error the error object is in thread.error_value, and the stack and
 // frames are left as they were where it happened (so a message handler can
 // look at them); a protected call cleans up.
+//
+// The call may yield (Status::Yield, C2) when the running frame is Lua code
+// (a metamethod called by the VM, as luaT_callTM decides); a call from a
+// C++ function cannot: a yield inside is an error.
 Status call(State& thread, std::uint32_t func, int wanted);
+
+// A call that cannot yield (luaD_callnoyield).
+Status call_no_yield(State& thread, std::uint32_t func, int wanted);
+
+// lua_callk: a call from a C++ function that may yield; after the resume,
+// `continuation` runs in place of the rest of the function (C3).
+Status call_k(State& thread, std::uint32_t func, int wanted, Continuation continuation,
+              std::intptr_t context);
 
 // A protected call (luaD_pcall with lua_pcall's settings, R2): like call(),
 // but an error stops here. If `handler` is not nil, it is called with the
@@ -41,6 +52,47 @@ Status call(State& thread, std::uint32_t func, int wanted);
 // and to-be-closed variables closed (R2.2), and the error object is left in
 // slot `func`, with thread.top just past it.
 Status protected_call(State& thread, std::uint32_t func, int wanted, Value handler);
+
+// lua_pcallk: protected_call that may yield, then finishes in
+// `continuation`, with Status::Error if an error ended the call after a
+// resume (C3). pcall and xpcall use it.
+Status protected_call_k(State& thread, std::uint32_t func, int wanted, Value handler,
+                        Continuation continuation, std::intptr_t context);
+
+// lua_sethook: thread's hooks watch the events in `mask` (hook_call and
+// the others), a count hook every `count` instructions (H1). A mask of 0
+// turns them off. The hook function itself is in the registry's _HOOKKEY
+// table, as debug.sethook keeps it.
+void set_hook(State& thread, std::uint8_t mask, int count);
+
+// Stops the running Lua code at its next instruction with the error
+// "interrupted!" (lua.c's Ctrl-C). Safe to call from a signal handler.
+void request_interrupt();
+
+// Whether an interrupt was requested, which this takes back (the VM's
+// side of request_interrupt).
+bool take_interrupt();
+
+// ---- Coroutines (docs/spec/coroutines.md) ----
+
+// lua_resume: runs coroutine `co` with the `nargs` values on its top as
+// arguments (to its function, or as the results of the yield it stopped
+// in), until it returns (Status::Ok: `results` values on its top), yields
+// (Status::Yield: `results` values on its top) or fails (Status::Error: the
+// coroutine is dead, the error in co.error_value). `from` is the running
+// thread.
+Status resume(State& co, const State& from, int nargs, int& results);
+
+// lua_yield, for a C++ function: the thread stops, passing its top `n`
+// values to the resume. Returns what the function must return:
+// c_function_yield, or c_function_error when the thread cannot yield.
+int yield_values(State& thread, int n);
+
+// lua_closethread: closes the to-be-closed variables and upvalues of a
+// suspended or dead coroutine, which becomes dead and empty. Status::Error
+// when a __close fails or the coroutine had died of an error (in
+// co.error_value).
+Status close_thread(State& co, const State& from);
 
 // Closes the upvalues and to-be-closed variables at stack slot `level` and
 // above, as leaving their scope normally does (luaF_close with no error).

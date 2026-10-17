@@ -22,6 +22,7 @@ struct Proto : GcObject {
         const String* name = nullptr; // for messages and listings
         bool in_stack = false;        // a register of the enclosing function, or
         std::uint8_t index = 0;       // one of its upvalues; which one
+        std::uint8_t kind = 0;        // the variable's kind: regular, const, close (for dumps)
     };
 
     // A local variable's name and the instructions where it is active (Lua's

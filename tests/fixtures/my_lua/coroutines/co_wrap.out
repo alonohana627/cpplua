@@ -1,0 +1,17 @@
+1	2	3
+0
+false	cannot resume dead coroutine
+false	cannot resume dead coroutine
+10
+false	co_wrap.lua:15: boom
+false	cannot resume dead coroutine
+false	true
+false	nil
+false	42
+false	no position
+false	co_wrap.lua:31: attempt to index a nil value (local 'x')
+false	co_wrap.lua:36: co_wrap.lua:35: deep
+3	1	nil	3
+0
+1	nil
+2	a	b

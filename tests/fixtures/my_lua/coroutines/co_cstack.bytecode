@@ -1,0 +1,150 @@
+
+main <co_cstack.lua:0,0> (59 instructions)
+0+ params, 14 slots, 1 upvalue, 8 locals, 8 constants, 3 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	LOADI    	0 0
+	3	[9]	CLOSURE  	1 0
+	4	[10]	GETTABUP 	2 0 0	; _ENV "pcall"
+	5	[10]	MOVE     	3 1
+	6	[10]	CALL     	2 2 3	; 1 in 2 out
+	7	[11]	GETTABUP 	4 0 1	; _ENV "print"
+	8	[11]	MOVE     	5 2
+	9	[11]	MOVE     	6 3
+	10	[11]	CALL     	4 3 1	; 2 in 0 out
+	11	[12]	GETTABUP 	4 0 1	; _ENV "print"
+	12	[12]	LOADI    	5 150
+	13	[12]	LT       	5 0 1
+	14	[12]	JMP      	1	; to 16
+	15	[12]	LFALSESKIP	5
+	16	[12]	LOADTRUE 	5
+	17	[12]	LOADI    	6 250
+	18	[12]	LT       	0 6 1
+	19	[12]	JMP      	1	; to 21
+	20	[12]	LFALSESKIP	6
+	21	[12]	LOADTRUE 	6
+	22	[12]	CALL     	4 3 1	; 2 in 0 out
+	23	[14]	LOADI    	4 0
+	24	[18]	CLOSURE  	5 1
+	25	[19]	GETTABUP 	6 0 0	; _ENV "pcall"
+	26	[19]	MOVE     	7 5
+	27	[19]	CALL     	6 2 3	; 1 in 2 out
+	28	[20]	GETTABUP 	8 0 1	; _ENV "print"
+	29	[20]	MOVE     	9 6
+	30	[20]	GETTABUP 	10 0 2	; _ENV "string"
+	31	[20]	GETFIELD 	10 10 3	; "gsub"
+	32	[20]	MOVE     	11 7
+	33	[20]	LOADK    	12 4	; "co_cstack.lua:%d+: "
+	34	[20]	LOADK    	13 5	; ""
+	35	[20]	CALL     	10 4 2	; 3 in 1 out
+	36	[20]	CALL     	8 3 1	; 2 in 0 out
+	37	[21]	GETTABUP 	8 0 1	; _ENV "print"
+	38	[21]	LOADI    	9 150
+	39	[21]	LT       	9 4 1
+	40	[21]	JMP      	1	; to 42
+	41	[21]	LFALSESKIP	9
+	42	[21]	LOADTRUE 	9
+	43	[21]	LOADI    	10 250
+	44	[21]	LT       	4 10 1
+	45	[21]	JMP      	1	; to 47
+	46	[21]	LFALSESKIP	10
+	47	[21]	LOADTRUE 	10
+	48	[21]	EQ       	0 4 1
+	49	[21]	JMP      	1	; to 51
+	50	[21]	LFALSESKIP	11
+	51	[21]	LOADTRUE 	11
+	52	[21]	CALL     	8 4 1	; 3 in 0 out
+	53	[23]	GETTABUP 	8 0 6	; _ENV "coroutine"
+	54	[23]	GETFIELD 	8 8 7	; "wrap"
+	55	[23]	CLOSURE  	9 2
+	56	[23]	CALL     	8 2 2	; 1 in 1 out
+	57	[23]	TAILCALL 	8 1 1k	; 0 in
+	58	[23]	RETURN   	8 0 1k	; all out
+	59	[23]	RETURN   	8 1 1k	; 0 out
+constants (8):
+	0	S	"pcall"
+	1	S	"print"
+	2	S	"string"
+	3	S	"gsub"
+	4	S	"co_cstack.lua:%d+: "
+	5	S	""
+	6	S	"coroutine"
+	7	S	"wrap"
+locals (8):
+	0	depth	3	60
+	1	nest	4	60
+	2	ok	7	60
+	3	e	7	60
+	4	level	24	60
+	5	wrapnest	25	60
+	6	ok2	28	60
+	7	e2	28	60
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_cstack.lua:3,9> (20 instructions)
+0 params, 6 slots, 3 upvalues, 3 locals, 4 constants, 0 functions
+	1	[4]	GETUPVAL 	0 0	; depth
+	2	[4]	ADDI     	0 0 1
+	3	[4]	MMBINI   	0 1 6 0	; __add
+	4	[4]	SETUPVAL 	0 0	; depth
+	5	[5]	GETTABUP 	0 1 0	; _ENV "coroutine"
+	6	[5]	GETFIELD 	0 0 1	; "create"
+	7	[5]	GETUPVAL 	1 2	; nest
+	8	[5]	CALL     	0 2 2	; 1 in 1 out
+	9	[6]	GETTABUP 	1 1 0	; _ENV "coroutine"
+	10	[6]	GETFIELD 	1 1 2	; "resume"
+	11	[6]	MOVE     	2 0
+	12	[6]	CALL     	1 2 3	; 1 in 2 out
+	13	[7]	TEST     	1 1
+	14	[7]	JMP      	4	; to 19
+	15	[7]	GETTABUP 	3 1 3	; _ENV "error"
+	16	[7]	MOVE     	4 2
+	17	[7]	LOADI    	5 0
+	18	[7]	CALL     	3 3 1	; 2 in 0 out
+	19	[8]	RETURN1  	2
+	20	[9]	RETURN0  	
+constants (4):
+	0	S	"coroutine"
+	1	S	"create"
+	2	S	"resume"
+	3	S	"error"
+locals (3):
+	0	co	9	21
+	1	ok	13	21
+	2	e	13	21
+upvalues (3):
+	0	depth	1	0
+	1	_ENV	0	0
+	2	nest	1	1
+
+function <co_cstack.lua:15,18> (11 instructions)
+0 params, 2 slots, 3 upvalues, 0 locals, 2 constants, 0 functions
+	1	[16]	GETUPVAL 	0 0	; level
+	2	[16]	ADDI     	0 0 1
+	3	[16]	MMBINI   	0 1 6 0	; __add
+	4	[16]	SETUPVAL 	0 0	; level
+	5	[17]	GETTABUP 	0 1 0	; _ENV "coroutine"
+	6	[17]	GETFIELD 	0 0 1	; "wrap"
+	7	[17]	GETUPVAL 	1 2	; wrapnest
+	8	[17]	CALL     	0 2 2	; 1 in 1 out
+	9	[17]	TAILCALL 	0 1 0	; 0 in
+	10	[17]	RETURN   	0 0 0	; all out
+	11	[18]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"wrap"
+locals (0):
+upvalues (3):
+	0	level	1	4
+	1	_ENV	0	0
+	2	wrapnest	1	5
+
+function <co_cstack.lua:23,23> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[23]	LOADK    	0 0	; "fine"
+	2	[23]	RETURN1  	0
+	3	[23]	RETURN0  	
+constants (1):
+	0	S	"fine"
+locals (0):
+upvalues (0):

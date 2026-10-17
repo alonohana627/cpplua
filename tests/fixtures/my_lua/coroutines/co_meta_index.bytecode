@@ -1,0 +1,357 @@
+
+main <co_meta_index.lua:0,0> (93 instructions)
+0+ params, 11 slots, 1 upvalue, 7 locals, 31 constants, 4 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	3	[2]	GETFIELD 	0 0 1	; "yield"
+	4	[3]	NEWTABLE 	1 0 0	; 0
+	5	[3]	EXTRAARG 	0
+	6	[4]	GETTABUP 	2 0 2	; _ENV "setmetatable"
+	7	[4]	NEWTABLE 	3 0 0	; 0
+	8	[4]	EXTRAARG 	0
+	9	[4]	NEWTABLE 	4 2 0	; 0
+	10	[4]	EXTRAARG 	0
+	11	[5]	CLOSURE  	5 0
+	12	[5]	SETFIELD 	4 3 5	; "__index"
+	13	[6]	CLOSURE  	5 1
+	14	[6]	SETFIELD 	4 4 5	; "__newindex"
+	15	[4]	CALL     	2 3 2	; 2 in 1 out
+	16	[8]	GETTABUP 	3 0 2	; _ENV "setmetatable"
+	17	[8]	NEWTABLE 	4 0 0	; 0
+	18	[8]	EXTRAARG 	0
+	19	[8]	NEWTABLE 	5 1 0	; 0
+	20	[8]	EXTRAARG 	0
+	21	[8]	GETTABUP 	6 0 2	; _ENV "setmetatable"
+	22	[8]	NEWTABLE 	7 0 0	; 0
+	23	[8]	EXTRAARG 	0
+	24	[8]	NEWTABLE 	8 1 0	; 0
+	25	[8]	EXTRAARG 	0
+	26	[8]	CLOSURE  	9 2
+	27	[8]	SETFIELD 	8 3 9	; "__index"
+	28	[8]	CALL     	6 3 2	; 2 in 1 out
+	29	[8]	SETFIELD 	5 3 6	; "__index"
+	30	[8]	CALL     	3 3 2	; 2 in 1 out
+	31	[9]	GETTABUP 	4 0 0	; _ENV "coroutine"
+	32	[9]	GETFIELD 	4 4 5	; "wrap"
+	33	[32]	CLOSURE  	5 3
+	34	[9]	CALL     	4 2 2	; 1 in 1 out
+	35	[33]	NEWTABLE 	5 0 0	; 0
+	36	[33]	EXTRAARG 	0
+	37	[33]	MOVE     	6 4
+	38	[33]	CALL     	6 1 0	; 0 in all out
+	39	[33]	SETLIST  	5 0 0
+	40	[34]	NEWTABLE 	6 5 0	; 0
+	41	[34]	EXTRAARG 	0
+	42	[34]	SETFIELD 	6 6 7k	; "alpha" "A"
+	43	[34]	SETI     	6 1 8k	; 1
+	44	[34]	SETI     	6 2 9k	; 2
+	45	[34]	SETFIELD 	6 10 11k	; "x" true
+	46	[34]	SETFIELD 	6 12 13k	; "y" false
+	47	[34]	SETFIELD 	6 14 15k	; "key" "K"
+	48	[35]	SETFIELD 	6 16 17k	; "p" "P"
+	49	[35]	SETFIELD 	6 18 19k	; "q" "Q"
+	50	[35]	SETFIELD 	6 20 21k	; "greet" nil
+	51	[35]	SETI     	6 10 22k	; 10
+	52	[35]	SETI     	6 20 23k	; 20
+	53	[35]	SETI     	6 30 24k	; 30
+	54	[36]	GETI     	7 5 1
+	55	[36]	EQK      	7 25 1	; "sum"
+	56	[36]	JMP      	31	; to 88
+	57	[37]	GETTABUP 	7 0 26	; _ENV "print"
+	58	[37]	LOADK    	8 27	; "yielded"
+	59	[37]	GETTABUP 	9 0 28	; _ENV "table"
+	60	[37]	GETFIELD 	9 9 29	; "unpack"
+	61	[37]	MOVE     	10 5
+	62	[37]	CALL     	9 2 0	; 1 in all out
+	63	[37]	CALL     	7 0 1	; all in 0 out
+	64	[38]	GETI     	7 5 1
+	65	[38]	EQK      	7 30 0	; "newindex"
+	66	[38]	JMP      	12	; to 79
+	67	[38]	NEWTABLE 	7 0 0	; 0
+	68	[38]	EXTRAARG 	0
+	69	[38]	MOVE     	8 4
+	70	[38]	GETI     	9 5 2
+	71	[38]	EQK      	9 10 1	; "x"
+	72	[38]	JMP      	1	; to 74
+	73	[38]	LFALSESKIP	9
+	74	[38]	LOADTRUE 	9
+	75	[38]	CALL     	8 2 0	; 1 in all out
+	76	[38]	SETLIST  	7 0 0
+	77	[38]	MOVE     	5 7
+	78	[38]	JMP      	-25	; to 54
+	79	[39]	NEWTABLE 	7 0 0	; 0
+	80	[39]	EXTRAARG 	0
+	81	[39]	MOVE     	8 4
+	82	[39]	GETI     	9 5 2
+	83	[39]	GETTABLE 	9 6 9
+	84	[39]	CALL     	8 2 0	; 1 in all out
+	85	[39]	SETLIST  	7 0 0
+	86	[39]	MOVE     	5 7
+	87	[39]	JMP      	-34	; to 54
+	88	[41]	GETTABUP 	7 0 28	; _ENV "table"
+	89	[41]	GETFIELD 	7 7 29	; "unpack"
+	90	[41]	MOVE     	8 5
+	91	[41]	TAILCALL 	7 2 1k	; 1 in
+	92	[41]	RETURN   	7 0 1k	; all out
+	93	[41]	RETURN   	7 1 1k	; 0 out
+constants (31):
+	0	S	"coroutine"
+	1	S	"yield"
+	2	S	"setmetatable"
+	3	S	"__index"
+	4	S	"__newindex"
+	5	S	"wrap"
+	6	S	"alpha"
+	7	S	"A"
+	8	I	1
+	9	I	2
+	10	S	"x"
+	11	B	true
+	12	S	"y"
+	13	B	false
+	14	S	"key"
+	15	S	"K"
+	16	S	"p"
+	17	S	"P"
+	18	S	"q"
+	19	S	"Q"
+	20	S	"greet"
+	21	N	nil
+	22	I	10
+	23	I	20
+	24	I	30
+	25	S	"sum"
+	26	S	"print"
+	27	S	"yielded"
+	28	S	"table"
+	29	S	"unpack"
+	30	S	"newindex"
+locals (7):
+	0	Y	4	94
+	1	log	6	94
+	2	proxy	16	94
+	3	chain	31	94
+	4	co	35	94
+	5	r	40	94
+	6	answers	54	94
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_meta_index.lua:5,5> (6 instructions)
+2 params, 5 slots, 1 upvalue, 3 locals, 1 constant, 0 functions
+	1	[5]	GETUPVAL 	2 0	; Y
+	2	[5]	LOADK    	3 0	; "index"
+	3	[5]	MOVE     	4 1
+	4	[5]	CALL     	2 3 2	; 2 in 1 out
+	5	[5]	RETURN1  	2
+	6	[5]	RETURN0  	
+constants (1):
+	0	S	"index"
+locals (3):
+	0	t	1	7
+	1	k	1	7
+	2	v	5	7
+upvalues (1):
+	0	Y	1	0
+
+function <co_meta_index.lua:6,6> (15 instructions)
+3 params, 8 slots, 2 upvalues, 4 locals, 3 constants, 0 functions
+	1	[6]	GETUPVAL 	3 0	; Y
+	2	[6]	LOADK    	4 0	; "newindex"
+	3	[6]	MOVE     	5 1
+	4	[6]	MOVE     	6 2
+	5	[6]	CALL     	3 4 2	; 3 in 1 out
+	6	[6]	GETTABUP 	4 1 1	; _ENV "rawset"
+	7	[6]	MOVE     	5 0
+	8	[6]	MOVE     	6 1
+	9	[6]	TEST     	3 0
+	10	[6]	JMP      	2	; to 13
+	11	[6]	TESTSET  	7 2 1
+	12	[6]	JMP      	1	; to 14
+	13	[6]	LOADK    	7 2	; "refused"
+	14	[6]	CALL     	4 4 1	; 3 in 0 out
+	15	[6]	RETURN0  	
+constants (3):
+	0	S	"newindex"
+	1	S	"rawset"
+	2	S	"refused"
+locals (4):
+	0	t	1	16
+	1	k	1	16
+	2	v	1	16
+	3	ok	6	16
+upvalues (2):
+	0	Y	1	0
+	1	_ENV	0	0
+
+function <co_meta_index.lua:8,8> (8 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[8]	GETUPVAL 	2 0	; Y
+	2	[8]	LOADK    	3 0	; "deep"
+	3	[8]	MOVE     	4 1
+	4	[8]	CALL     	2 3 2	; 2 in 1 out
+	5	[8]	LOADK    	3 1	; "!"
+	6	[8]	CONCAT   	2 2
+	7	[8]	RETURN1  	2
+	8	[8]	RETURN0  	
+constants (2):
+	0	S	"deep"
+	1	S	"!"
+locals (2):
+	0	_	1	9
+	1	k	1	9
+upvalues (1):
+	0	Y	1	0
+
+function <co_meta_index.lua:9,32> (77 instructions)
+0 params, 12 slots, 4 upvalues, 10 locals, 23 constants, 1 function
+	1	[10]	GETTABUP 	0 0 0	; proxy "alpha"
+	2	[11]	GETTABUP 	1 1 1	; _ENV "print"
+	3	[11]	LOADK    	2 2	; "a ="
+	4	[11]	MOVE     	3 0
+	5	[11]	CALL     	1 3 1	; 2 in 0 out
+	6	[12]	GETUPVAL 	1 0	; proxy
+	7	[12]	GETI     	1 1 1
+	8	[12]	GETUPVAL 	2 0	; proxy
+	9	[12]	GETI     	2 2 2
+	10	[12]	ADD      	1 1 2
+	11	[12]	MMBIN    	1 2 6	; __add
+	12	[13]	GETTABUP 	2 1 1	; _ENV "print"
+	13	[13]	LOADK    	3 3	; "b ="
+	14	[13]	MOVE     	4 1
+	15	[13]	CALL     	2 3 1	; 2 in 0 out
+	16	[14]	SETTABUP 	0 4 5k	; proxy "x" "X"
+	17	[15]	SETTABUP 	0 6 7k	; proxy "y" "Y"
+	18	[16]	GETTABUP 	2 1 1	; _ENV "print"
+	19	[16]	LOADK    	3 8	; "raw"
+	20	[16]	GETTABUP 	4 1 9	; _ENV "rawget"
+	21	[16]	GETUPVAL 	5 0	; proxy
+	22	[16]	LOADK    	6 4	; "x"
+	23	[16]	CALL     	4 3 2	; 2 in 1 out
+	24	[16]	GETTABUP 	5 1 9	; _ENV "rawget"
+	25	[16]	GETUPVAL 	6 0	; proxy
+	26	[16]	LOADK    	7 6	; "y"
+	27	[16]	CALL     	5 3 0	; 2 in all out
+	28	[16]	CALL     	2 0 1	; all in 0 out
+	29	[17]	GETTABUP 	2 1 1	; _ENV "print"
+	30	[17]	LOADK    	3 10	; "x via table"
+	31	[17]	GETTABUP 	4 0 4	; proxy "x"
+	32	[17]	CALL     	2 3 1	; 2 in 0 out
+	33	[18]	GETTABUP 	2 2 11	; chain "key"
+	34	[19]	GETTABUP 	3 1 1	; _ENV "print"
+	35	[19]	LOADK    	4 12	; "s ="
+	36	[19]	MOVE     	5 2
+	37	[19]	CALL     	3 3 1	; 2 in 0 out
+	38	[21]	NEWTABLE 	3 1 1	; 1
+	39	[21]	EXTRAARG 	0
+	40	[21]	GETTABUP 	4 0 13	; proxy "p"
+	41	[21]	GETTABUP 	5 0 15	; proxy "q"
+	42	[21]	SETFIELD 	3 14 5	; "n"
+	43	[21]	SETLIST  	3 1 0
+	44	[22]	GETTABUP 	4 1 1	; _ENV "print"
+	45	[22]	LOADK    	5 16	; "t"
+	46	[22]	GETI     	6 3 1
+	47	[22]	GETFIELD 	7 3 14	; "n"
+	48	[22]	CALL     	4 4 1	; 3 in 0 out
+	49	[23]	GETTABUP 	4 1 17	; _ENV "setmetatable"
+	50	[23]	NEWTABLE 	5 0 0	; 0
+	51	[23]	EXTRAARG 	0
+	52	[23]	NEWTABLE 	6 1 0	; 0
+	53	[23]	EXTRAARG 	0
+	54	[26]	CLOSURE  	7 0
+	55	[26]	SETFIELD 	6 18 7	; "__index"
+	56	[23]	CALL     	4 3 2	; 2 in 1 out
+	57	[27]	GETTABUP 	5 1 1	; _ENV "print"
+	58	[27]	SELF     	6 4 19k	; "greet"
+	59	[27]	LOADK    	8 20	; "bob"
+	60	[27]	CALL     	6 3 0	; 2 in all out
+	61	[27]	CALL     	5 0 1	; all in 0 out
+	62	[29]	LOADI    	5 0
+	63	[30]	LOADI    	6 1
+	64	[30]	LOADI    	7 3
+	65	[30]	LOADI    	8 1
+	66	[30]	FORPREP  	6 6	; exit to 74
+	67	[30]	MULK     	11 9 21	; 10
+	68	[30]	MMBINK   	9 21 8 0	; __mul 10
+	69	[30]	GETUPVAL 	10 0	; proxy
+	70	[30]	GETTABLE 	10 10 11
+	71	[30]	ADD      	5 5 10
+	72	[30]	MMBIN    	5 10 6	; __add
+	73	[30]	FORLOOP  	6 7	; to 67
+	74	[31]	LOADK    	6 22	; "sum"
+	75	[31]	MOVE     	7 5
+	76	[31]	RETURN   	6 3 0	; 2 out
+	77	[32]	RETURN0  	
+constants (23):
+	0	S	"alpha"
+	1	S	"print"
+	2	S	"a ="
+	3	S	"b ="
+	4	S	"x"
+	5	S	"X"
+	6	S	"y"
+	7	S	"Y"
+	8	S	"raw"
+	9	S	"rawget"
+	10	S	"x via table"
+	11	S	"key"
+	12	S	"s ="
+	13	S	"p"
+	14	S	"n"
+	15	S	"q"
+	16	S	"t"
+	17	S	"setmetatable"
+	18	S	"__index"
+	19	S	"greet"
+	20	S	"bob"
+	21	I	10
+	22	S	"sum"
+locals (10):
+	0	a	2	78
+	1	b	12	78
+	2	s	34	78
+	3	t	44	78
+	4	obj	57	78
+	5	sum	63	78
+	6	(for state)	66	74
+	7	(for state)	66	74
+	8	(for state)	66	74
+	9	i	67	73
+upvalues (4):
+	0	proxy	1	2
+	1	_ENV	0	0
+	2	chain	1	3
+	3	Y	1	0
+
+function <co_meta_index.lua:23,26> (7 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 1 constant, 1 function
+	1	[24]	GETUPVAL 	2 0	; Y
+	2	[24]	LOADK    	3 0	; "method"
+	3	[24]	MOVE     	4 1
+	4	[24]	CALL     	2 3 1	; 2 in 0 out
+	5	[25]	CLOSURE  	2 0
+	6	[25]	RETURN   	2 2 0k	; 1 out
+	7	[26]	RETURN   	2 1 0k	; 0 out
+constants (1):
+	0	S	"method"
+locals (2):
+	0	_	1	8
+	1	k	1	8
+upvalues (1):
+	0	Y	0	3
+
+function <co_meta_index.lua:25,25> (6 instructions)
+2 params, 5 slots, 1 upvalue, 2 locals, 1 constant, 0 functions
+	1	[25]	GETUPVAL 	2 0	; k
+	2	[25]	LOADK    	3 0	; ":"
+	3	[25]	MOVE     	4 1
+	4	[25]	CONCAT   	2 3
+	5	[25]	RETURN1  	2
+	6	[25]	RETURN0  	
+constants (1):
+	0	S	":"
+locals (2):
+	0	self	1	7
+	1	v	1	7
+upvalues (1):
+	0	k	1	1

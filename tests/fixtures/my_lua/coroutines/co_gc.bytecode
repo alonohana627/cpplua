@@ -1,0 +1,513 @@
+
+main <co_gc.lua:0,0> (108 instructions)
+0+ params, 21 slots, 1 upvalue, 18 locals, 33 constants, 6 functions
+	1	[1]	VARARGPREP	0
+	2	[3]	GETTABUP 	0 0 0	; _ENV "collectgarbage"
+	3	[3]	LOADK    	1 1	; "stop"
+	4	[3]	CALL     	0 2 1	; 1 in 0 out
+	5	[4]	GETTABUP 	0 0 2	; _ENV "setmetatable"
+	6	[4]	NEWTABLE 	1 0 0	; 0
+	7	[4]	EXTRAARG 	0
+	8	[4]	NEWTABLE 	2 1 0	; 0
+	9	[4]	EXTRAARG 	0
+	10	[4]	SETFIELD 	2 3 4k	; "__mode" "v"
+	11	[4]	CALL     	0 3 2	; 2 in 1 out
+	12	[27]	CLOSURE  	1 0
+	13	[28]	MOVE     	2 1
+	14	[28]	CALL     	2 1 1	; 0 in 0 out
+	15	[30]	GETTABUP 	2 0 5	; _ENV "coroutine"
+	16	[30]	GETFIELD 	2 2 6	; "create"
+	17	[30]	CLOSURE  	3 1
+	18	[30]	CALL     	2 2 2	; 1 in 1 out
+	19	[31]	GETTABUP 	3 0 7	; _ENV "coroutine"
+	20	[31]	GETFIELD 	3 3 8	; "resume"
+	21	[31]	MOVE     	4 2
+	22	[31]	CALL     	3 2 1	; 1 in 0 out
+	23	[32]	SETFIELD 	0 9 2	; "kept"
+	24	[33]	NEWTABLE 	3 0 7	; 7
+	25	[33]	EXTRAARG 	0
+	26	[33]	LOADK    	4 10	; "suspended"
+	27	[33]	LOADK    	5 11	; "inner"
+	28	[33]	LOADK    	6 12	; "dead"
+	29	[33]	LOADK    	7 13	; "fn"
+	30	[33]	LOADK    	8 14	; "fresh"
+	31	[33]	LOADK    	9 15	; "gen_table"
+	32	[33]	LOADK    	10 9	; "kept"
+	33	[33]	SETLIST  	3 7 0
+	34	[38]	CLOSURE  	4 2
+	35	[39]	MOVE     	5 4
+	36	[39]	LOADK    	6 16	; "before"
+	37	[39]	CALL     	5 2 1	; 1 in 0 out
+	38	[40]	GETTABUP 	5 0 0	; _ENV "collectgarbage"
+	39	[40]	CALL     	5 1 1	; 0 in 0 out
+	40	[41]	MOVE     	5 4
+	41	[41]	LOADK    	6 17	; "after"
+	42	[41]	CALL     	5 2 1	; 1 in 0 out
+	43	[43]	NEWTABLE 	5 0 0	; 0
+	44	[43]	EXTRAARG 	0
+	45	[52]	CLOSURE  	6 3
+	46	[53]	MOVE     	7 6
+	47	[53]	CALL     	7 1 1	; 0 in 0 out
+	48	[54]	NEWTABLE 	7 0 3	; 3
+	49	[54]	EXTRAARG 	0
+	50	[54]	LOADK    	8 18	; "chained"
+	51	[54]	LOADK    	9 19	; "outer"
+	52	[54]	LOADK    	10 9	; "kept"
+	53	[54]	SETLIST  	7 3 0
+	54	[54]	MOVE     	3 7
+	55	[55]	GETTABUP 	7 0 0	; _ENV "collectgarbage"
+	56	[55]	CALL     	7 1 1	; 0 in 0 out
+	57	[56]	MOVE     	7 4
+	58	[56]	LOADK    	8 20	; "held"
+	59	[56]	CALL     	7 2 1	; 1 in 0 out
+	60	[57]	SETFIELD 	5 19 21k	; "outer" nil
+	61	[58]	GETTABUP 	7 0 0	; _ENV "collectgarbage"
+	62	[58]	CALL     	7 1 1	; 0 in 0 out
+	63	[59]	MOVE     	7 4
+	64	[59]	LOADK    	8 22	; "released"
+	65	[59]	CALL     	7 2 1	; 1 in 0 out
+	66	[69]	CLOSURE  	7 4
+	67	[70]	MOVE     	8 7
+	68	[70]	CALL     	8 1 1	; 0 in 0 out
+	69	[71]	GETTABUP 	8 0 0	; _ENV "collectgarbage"
+	70	[71]	CALL     	8 1 1	; 0 in 0 out
+	71	[72]	GETTABUP 	8 0 23	; _ENV "print"
+	72	[72]	LOADK    	9 24	; "after finalizer"
+	73	[72]	CALL     	8 2 1	; 1 in 0 out
+	74	[74]	GETTABUP 	8 0 25	; _ENV "setmetatable"
+	75	[74]	NEWTABLE 	9 0 0	; 0
+	76	[74]	EXTRAARG 	0
+	77	[74]	NEWTABLE 	10 1 0	; 0
+	78	[74]	EXTRAARG 	0
+	79	[74]	SETFIELD 	10 3 26k	; "__mode" "k"
+	80	[74]	CALL     	8 3 2	; 2 in 1 out
+	81	[75]	GETTABUP 	9 0 27	; _ENV "coroutine"
+	82	[75]	GETFIELD 	9 9 28	; "create"
+	83	[75]	GETTABUP 	10 0 23	; _ENV "print"
+	84	[75]	CALL     	9 2 2	; 1 in 1 out
+	85	[76]	SETTABLE 	8 9 29k	; "alive"
+	86	[77]	CLOSURE  	10 5
+	87	[78]	MOVE     	11 10
+	88	[78]	CALL     	11 1 1	; 0 in 0 out
+	89	[79]	GETTABUP 	11 0 0	; _ENV "collectgarbage"
+	90	[79]	CALL     	11 1 1	; 0 in 0 out
+	91	[80]	LOADI    	11 0
+	92	[81]	GETTABUP 	12 0 30	; _ENV "pairs"
+	93	[81]	MOVE     	13 8
+	94	[81]	CALL     	12 2 5	; 1 in 4 out
+	95	[81]	TFORPREP 	12 8	; to 104
+	96	[81]	ADDI     	11 11 1
+	97	[81]	MMBINI   	11 1 6 0	; __add
+	98	[81]	GETTABUP 	18 0 31	; _ENV "print"
+	99	[81]	GETTABUP 	19 0 32	; _ENV "type"
+	100	[81]	MOVE     	20 16
+	101	[81]	CALL     	19 2 2	; 1 in 1 out
+	102	[81]	MOVE     	20 17
+	103	[81]	CALL     	18 3 1	; 2 in 0 out
+	104	[81]	TFORCALL 	12 2
+	105	[81]	TFORLOOP 	12 10	; to 96
+	106	[81]	CLOSE    	12
+	107	[82]	RETURN   	11 2 1k	; 1 out
+	108	[82]	RETURN   	12 1 1k	; 0 out
+constants (33):
+	0	S	"collectgarbage"
+	1	S	"stop"
+	2	S	"setmetatable"
+	3	S	"__mode"
+	4	S	"v"
+	5	S	"coroutine"
+	6	S	"create"
+	7	S	"coroutine"
+	8	S	"resume"
+	9	S	"kept"
+	10	S	"suspended"
+	11	S	"inner"
+	12	S	"dead"
+	13	S	"fn"
+	14	S	"fresh"
+	15	S	"gen_table"
+	16	S	"before"
+	17	S	"after"
+	18	S	"chained"
+	19	S	"outer"
+	20	S	"held"
+	21	N	nil
+	22	S	"released"
+	23	S	"print"
+	24	S	"after finalizer"
+	25	S	"setmetatable"
+	26	S	"k"
+	27	S	"coroutine"
+	28	S	"create"
+	29	S	"alive"
+	30	S	"pairs"
+	31	S	"print"
+	32	S	"type"
+locals (18):
+	0	weak	12	109
+	1	make_garbage	13	109
+	2	kept	19	109
+	3	names	34	109
+	4	show	35	109
+	5	holder	45	109
+	6	make_chain	46	109
+	7	make_closing	67	109
+	8	wk	81	109
+	9	alive	85	109
+	10	add_key	87	109
+	11	count	92	109
+	12	(for state)	95	106
+	13	(for state)	95	106
+	14	(for state)	95	106
+	15	(for state)	95	106
+	16	k	96	104
+	17	v	96	104
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_gc.lua:5,27> (36 instructions)
+0 params, 6 slots, 2 upvalues, 5 locals, 10 constants, 4 functions
+	1	[7]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[7]	GETFIELD 	0 0 1	; "create"
+	3	[11]	CLOSURE  	1 0
+	4	[7]	CALL     	0 2 2	; 1 in 1 out
+	5	[12]	GETTABUP 	1 0 2	; _ENV "coroutine"
+	6	[12]	GETFIELD 	1 1 3	; "resume"
+	7	[12]	MOVE     	2 0
+	8	[12]	LOADI    	3 1
+	9	[12]	CALL     	1 3 1	; 2 in 0 out
+	10	[13]	SETTABUP 	1 4 0	; weak "suspended"
+	11	[15]	GETTABUP 	1 0 2	; _ENV "coroutine"
+	12	[15]	GETFIELD 	1 1 1	; "create"
+	13	[15]	CLOSURE  	2 1
+	14	[15]	CALL     	1 2 2	; 1 in 1 out
+	15	[16]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	16	[16]	GETFIELD 	2 2 3	; "resume"
+	17	[16]	MOVE     	3 1
+	18	[16]	CALL     	2 2 1	; 1 in 0 out
+	19	[17]	SETTABUP 	1 5 1	; weak "dead"
+	20	[19]	CLOSURE  	2 2
+	21	[20]	SETTABUP 	1 6 2	; weak "fn"
+	22	[21]	GETTABUP 	3 0 2	; _ENV "coroutine"
+	23	[21]	GETFIELD 	3 3 1	; "create"
+	24	[21]	MOVE     	4 2
+	25	[21]	CALL     	3 2 2	; 1 in 1 out
+	26	[21]	SETTABUP 	1 7 3	; weak "fresh"
+	27	[23]	NEWTABLE 	3 0 0	; 0
+	28	[23]	EXTRAARG 	0
+	29	[24]	SETTABUP 	1 8 3	; weak "gen_table"
+	30	[25]	GETTABUP 	4 0 2	; _ENV "coroutine"
+	31	[25]	GETFIELD 	4 4 9	; "wrap"
+	32	[25]	CLOSURE  	5 3
+	33	[25]	CALL     	4 2 2	; 1 in 1 out
+	34	[26]	MOVE     	5 4
+	35	[26]	CALL     	5 1 1	; 0 in 0 out
+	36	[27]	RETURN   	5 1 0k	; 0 out
+constants (10):
+	0	S	"coroutine"
+	1	S	"create"
+	2	S	"coroutine"
+	3	S	"resume"
+	4	S	"suspended"
+	5	S	"dead"
+	6	S	"fn"
+	7	S	"fresh"
+	8	S	"gen_table"
+	9	S	"wrap"
+locals (5):
+	0	co	5	37
+	1	dead	15	37
+	2	f	21	37
+	3	t	29	37
+	4	gen	34	37
+upvalues (2):
+	0	_ENV	0	0
+	1	weak	1	0
+
+function <co_gc.lua:7,11> (8 instructions)
+1 param, 4 slots, 2 upvalues, 2 locals, 3 constants, 0 functions
+	1	[8]	NEWTABLE 	1 0 0	; 0
+	2	[8]	EXTRAARG 	0
+	3	[9]	SETTABUP 	0 0 1	; weak "inner"
+	4	[10]	GETTABUP 	2 1 1	; _ENV "coroutine"
+	5	[10]	GETFIELD 	2 2 2	; "yield"
+	6	[10]	MOVE     	3 0
+	7	[10]	CALL     	2 2 1	; 1 in 0 out
+	8	[11]	RETURN0  	
+constants (3):
+	0	S	"inner"
+	1	S	"coroutine"
+	2	S	"yield"
+locals (2):
+	0	x	1	9
+	1	local_table	3	9
+upvalues (2):
+	0	weak	0	1
+	1	_ENV	0	0
+
+function <co_gc.lua:15,15> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[15]	LOADI    	0 1
+	2	[15]	RETURN1  	0
+	3	[15]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <co_gc.lua:19,19> (1 instruction)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[19]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <co_gc.lua:25,25> (10 instructions)
+0 params, 3 slots, 2 upvalues, 1 local, 2 constants, 0 functions
+	1	[25]	GETUPVAL 	0 0	; t
+	2	[25]	GETTABUP 	1 1 0	; _ENV "coroutine"
+	3	[25]	GETFIELD 	1 1 1	; "yield"
+	4	[25]	LOADI    	2 1
+	5	[25]	CALL     	1 2 1	; 1 in 0 out
+	6	[25]	GETTABUP 	1 1 0	; _ENV "coroutine"
+	7	[25]	GETFIELD 	1 1 1	; "yield"
+	8	[25]	LOADI    	2 2
+	9	[25]	CALL     	1 2 1	; 1 in 0 out
+	10	[25]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"yield"
+locals (1):
+	0	keep	2	11
+upvalues (2):
+	0	t	1	3
+	1	_ENV	0	0
+
+function <co_gc.lua:30,30> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[30]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[30]	GETFIELD 	0 0 1	; "yield"
+	3	[30]	CALL     	0 1 1	; 0 in 0 out
+	4	[30]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"yield"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_gc.lua:34,38> (33 instructions)
+1 param, 12 slots, 3 upvalues, 8 locals, 8 constants, 0 functions
+	1	[35]	NEWTABLE 	1 0 0	; 0
+	2	[35]	EXTRAARG 	0
+	3	[36]	GETTABUP 	2 0 0	; _ENV "ipairs"
+	4	[36]	GETUPVAL 	3 1	; names
+	5	[36]	CALL     	2 2 5	; 1 in 4 out
+	6	[36]	TFORPREP 	2 15	; to 22
+	7	[36]	LEN      	8 1
+	8	[36]	ADDI     	8 8 1
+	9	[36]	MMBINI   	8 1 6 0	; __add
+	10	[36]	MOVE     	9 7
+	11	[36]	LOADK    	10 1	; "="
+	12	[36]	GETUPVAL 	11 2	; weak
+	13	[36]	GETTABLE 	11 11 7
+	14	[36]	TEST     	11 0
+	15	[36]	JMP      	3	; to 19
+	16	[36]	LOADK    	11 2	; "yes"
+	17	[36]	TEST     	11 1
+	18	[36]	JMP      	1	; to 20
+	19	[36]	LOADK    	11 3	; "no"
+	20	[36]	CONCAT   	9 3
+	21	[36]	SETTABLE 	1 8 9
+	22	[36]	TFORCALL 	2 2
+	23	[36]	TFORLOOP 	2 17	; to 7
+	24	[36]	CLOSE    	2
+	25	[37]	GETTABUP 	2 0 4	; _ENV "print"
+	26	[37]	MOVE     	3 0
+	27	[37]	GETTABUP 	4 0 5	; _ENV "table"
+	28	[37]	GETFIELD 	4 4 6	; "concat"
+	29	[37]	MOVE     	5 1
+	30	[37]	LOADK    	6 7	; " "
+	31	[37]	CALL     	4 3 0	; 2 in all out
+	32	[37]	CALL     	2 0 1	; all in 0 out
+	33	[38]	RETURN   	2 1 0k	; 0 out
+constants (8):
+	0	S	"ipairs"
+	1	S	"="
+	2	S	"yes"
+	3	S	"no"
+	4	S	"print"
+	5	S	"table"
+	6	S	"concat"
+	7	S	" "
+locals (8):
+	0	when	1	34
+	1	parts	3	34
+	2	(for state)	6	24
+	3	(for state)	6	24
+	4	(for state)	6	24
+	5	(for state)	6	24
+	6	_	7	22
+	7	k	7	22
+upvalues (3):
+	0	_ENV	0	0
+	1	names	1	3
+	2	weak	1	0
+
+function <co_gc.lua:44,52> (20 instructions)
+0 params, 4 slots, 3 upvalues, 2 locals, 5 constants, 2 functions
+	1	[45]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[45]	GETFIELD 	0 0 1	; "create"
+	3	[45]	CLOSURE  	1 0
+	4	[45]	CALL     	0 2 2	; 1 in 1 out
+	5	[46]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	6	[46]	GETFIELD 	1 1 2	; "resume"
+	7	[46]	MOVE     	2 0
+	8	[46]	CALL     	1 2 1	; 1 in 0 out
+	9	[47]	SETTABUP 	1 3 0	; weak "chained"
+	10	[48]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	11	[48]	GETFIELD 	1 1 1	; "create"
+	12	[48]	CLOSURE  	2 1
+	13	[48]	CALL     	1 2 2	; 1 in 1 out
+	14	[49]	GETTABUP 	2 0 0	; _ENV "coroutine"
+	15	[49]	GETFIELD 	2 2 2	; "resume"
+	16	[49]	MOVE     	3 1
+	17	[49]	CALL     	2 2 1	; 1 in 0 out
+	18	[50]	SETTABUP 	1 4 1	; weak "outer"
+	19	[51]	SETTABUP 	2 4 1	; holder "outer"
+	20	[52]	RETURN   	2 1 0k	; 0 out
+constants (5):
+	0	S	"coroutine"
+	1	S	"create"
+	2	S	"resume"
+	3	S	"chained"
+	4	S	"outer"
+locals (2):
+	0	inner	5	21
+	1	outer	14	21
+upvalues (3):
+	0	_ENV	0	0
+	1	weak	1	0
+	2	holder	1	5
+
+function <co_gc.lua:45,45> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[45]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[45]	GETFIELD 	0 0 1	; "yield"
+	3	[45]	CALL     	0 1 1	; 0 in 0 out
+	4	[45]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"yield"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_gc.lua:48,48> (5 instructions)
+0 params, 2 slots, 2 upvalues, 1 local, 2 constants, 0 functions
+	1	[48]	GETUPVAL 	0 0	; inner
+	2	[48]	GETTABUP 	1 1 0	; _ENV "coroutine"
+	3	[48]	GETFIELD 	1 1 1	; "yield"
+	4	[48]	CALL     	1 1 1	; 0 in 0 out
+	5	[48]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"yield"
+locals (1):
+	0	i	2	6
+upvalues (2):
+	0	inner	1	0
+	1	_ENV	0	0
+
+function <co_gc.lua:61,69> (9 instructions)
+0 params, 3 slots, 1 upvalue, 1 local, 4 constants, 1 function
+	1	[62]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[62]	GETFIELD 	0 0 1	; "create"
+	3	[67]	CLOSURE  	1 0
+	4	[62]	CALL     	0 2 2	; 1 in 1 out
+	5	[68]	GETTABUP 	1 0 2	; _ENV "coroutine"
+	6	[68]	GETFIELD 	1 1 3	; "resume"
+	7	[68]	MOVE     	2 0
+	8	[68]	CALL     	1 2 1	; 1 in 0 out
+	9	[69]	RETURN0  	
+constants (4):
+	0	S	"coroutine"
+	1	S	"create"
+	2	S	"coroutine"
+	3	S	"resume"
+locals (1):
+	0	co	5	10
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_gc.lua:62,67> (15 instructions)
+0 params, 4 slots, 1 upvalue, 1 local, 5 constants, 2 functions
+	1	[63]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[63]	NEWTABLE 	1 0 0	; 0
+	3	[63]	EXTRAARG 	0
+	4	[63]	NEWTABLE 	2 2 0	; 0
+	5	[63]	EXTRAARG 	0
+	6	[64]	CLOSURE  	3 0
+	7	[64]	SETFIELD 	2 1 3	; "__close"
+	8	[65]	CLOSURE  	3 1
+	9	[65]	SETFIELD 	2 2 3	; "__gc"
+	10	[63]	CALL     	0 3 2	; 2 in 1 out
+	11	[65]	TBC      	0
+	12	[66]	GETTABUP 	1 0 3	; _ENV "coroutine"
+	13	[66]	GETFIELD 	1 1 4	; "yield"
+	14	[66]	CALL     	1 1 1	; 0 in 0 out
+	15	[67]	RETURN   	1 1 0k	; 0 out
+constants (5):
+	0	S	"setmetatable"
+	1	S	"__close"
+	2	S	"__gc"
+	3	S	"coroutine"
+	4	S	"yield"
+locals (1):
+	0	x	11	16
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_gc.lua:64,64> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[64]	GETTABUP 	0 0 0	; _ENV "print"
+	2	[64]	LOADK    	1 1	; "__close runs"
+	3	[64]	CALL     	0 2 1	; 1 in 0 out
+	4	[64]	RETURN0  	
+constants (2):
+	0	S	"print"
+	1	S	"__close runs"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_gc.lua:65,65> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[65]	GETTABUP 	0 0 0	; _ENV "print"
+	2	[65]	LOADK    	1 1	; "__gc runs"
+	3	[65]	CALL     	0 2 1	; 1 in 0 out
+	4	[65]	RETURN0  	
+constants (2):
+	0	S	"print"
+	1	S	"__gc runs"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_gc.lua:77,77> (7 instructions)
+0 params, 2 slots, 2 upvalues, 0 locals, 4 constants, 0 functions
+	1	[77]	GETTABUP 	0 1 0	; _ENV "coroutine"
+	2	[77]	GETFIELD 	0 0 1	; "create"
+	3	[77]	GETTABUP 	1 1 2	; _ENV "print"
+	4	[77]	CALL     	0 2 2	; 1 in 1 out
+	5	[77]	GETUPVAL 	1 0	; wk
+	6	[77]	SETTABLE 	1 0 3k	; "garbage"
+	7	[77]	RETURN0  	
+constants (4):
+	0	S	"coroutine"
+	1	S	"create"
+	2	S	"print"
+	3	S	"garbage"
+locals (0):
+upvalues (2):
+	0	wk	1	8
+	1	_ENV	0	0

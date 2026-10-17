@@ -1,0 +1,287 @@
+Chunk
+  Local Y
+    Index
+      Name coroutine
+      String "yield"
+  Local log
+    Table
+  Local proxy
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Function(t, k) [upvalues: Y]
+            Local v
+              Call
+                Name Y (upvalue 0)
+                String "index"
+                Name k (local 1)
+            Return
+              Name v (local 2)
+        Field __newindex
+          Function(t, k, v) [upvalues: Y, _ENV]
+            Local ok
+              Call
+                Name Y (upvalue 0)
+                String "newindex"
+                Name k (local 1)
+                Name v (local 2)
+            CallStatement
+              Call
+                Name rawset
+                Name t (local 0)
+                Name k (local 1)
+                Binary or
+                  Binary and
+                    Name ok (local 3)
+                    Name v (local 2)
+                  String "refused"
+  Local chain
+    Call
+      Name setmetatable
+      Table
+      Table
+        Field __index
+          Call
+            Name setmetatable
+            Table
+            Table
+              Field __index
+                Function(_, k) [upvalues: Y]
+                  Return
+                    Binary ..
+                      Call
+                        Name Y (upvalue 0)
+                        String "deep"
+                        Name k (local 1)
+                      String "!"
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: proxy, _ENV, chain, Y]
+        Local a
+          Index
+            Name proxy (upvalue 0)
+            String "alpha"
+        CallStatement
+          Call
+            Name print
+            String "a ="
+            Name a (local 0)
+        Local b
+          Binary +
+            Index
+              Name proxy (upvalue 0)
+              Integer 1
+            Index
+              Name proxy (upvalue 0)
+              Integer 2
+        CallStatement
+          Call
+            Name print
+            String "b ="
+            Name b (local 1)
+        Assign
+          Targets
+            Index
+              Name proxy (upvalue 0)
+              String "x"
+          Values
+            String "X"
+        Assign
+          Targets
+            Index
+              Name proxy (upvalue 0)
+              String "y"
+          Values
+            String "Y"
+        CallStatement
+          Call
+            Name print
+            String "raw"
+            Call
+              Name rawget
+              Name proxy (upvalue 0)
+              String "x"
+            Call
+              Name rawget
+              Name proxy (upvalue 0)
+              String "y"
+        CallStatement
+          Call
+            Name print
+            String "x via table"
+            Index
+              Name proxy (upvalue 0)
+              String "x"
+        Local s
+          Index
+            Name chain (upvalue 2)
+            String "key"
+        CallStatement
+          Call
+            Name print
+            String "s ="
+            Name s (local 2)
+        Local t
+          Table
+            Item
+              Index
+                Name proxy (upvalue 0)
+                String "p"
+            Field n
+              Index
+                Name proxy (upvalue 0)
+                String "q"
+        CallStatement
+          Call
+            Name print
+            String "t"
+            Index
+              Name t (local 3)
+              Integer 1
+            Index
+              Name t (local 3)
+              String "n"
+        Local obj
+          Call
+            Name setmetatable
+            Table
+            Table
+              Field __index
+                Function(_, k) [upvalues: Y]
+                  CallStatement
+                    Call
+                      Name Y (upvalue 0)
+                      String "method"
+                      Name k (local 1)
+                  Return
+                    Function(self, v) [upvalues: k]
+                      Return
+                        Binary ..
+                          Name k (upvalue 0)
+                          Binary ..
+                            String ":"
+                            Name v (local 1)
+        CallStatement
+          Call
+            Name print
+            MethodCall greet
+              Name obj (local 4)
+              String "bob"
+        Local sum
+          Integer 0
+        NumericFor i
+          Integer 1
+          Integer 3
+          Body
+            Assign
+              Targets
+                Name sum (local 5)
+              Values
+                Binary +
+                  Name sum (local 5)
+                  Index
+                    Name proxy (upvalue 0)
+                    Binary *
+                      Name i (local 9)
+                      Integer 10
+        Return
+          String "sum"
+          Name sum (local 5)
+  Local r
+    Table
+      Item
+        Call
+          Name co (local 4)
+  Local answers
+    Table
+      Field alpha
+        String "A"
+      Field
+        Integer 1
+        Integer 1
+      Field
+        Integer 2
+        Integer 2
+      Field x
+        True
+      Field y
+        False
+      Field key
+        String "K"
+      Field p
+        String "P"
+      Field q
+        String "Q"
+      Field greet
+        Nil
+      Field
+        Integer 10
+        Integer 10
+      Field
+        Integer 20
+        Integer 20
+      Field
+        Integer 30
+        Integer 30
+  While
+    Binary ~=
+      Index
+        Name r (local 5)
+        Integer 1
+      String "sum"
+    Body
+      CallStatement
+        Call
+          Name print
+          String "yielded"
+          Call
+            Index
+              Name table
+              String "unpack"
+            Name r (local 5)
+      If
+        If
+          Binary ==
+            Index
+              Name r (local 5)
+              Integer 1
+            String "newindex"
+          Then
+            Assign
+              Targets
+                Name r (local 5)
+              Values
+                Table
+                  Item
+                    Call
+                      Name co (local 4)
+                      Binary ==
+                        Index
+                          Name r (local 5)
+                          Integer 2
+                        String "x"
+        Else
+          Assign
+            Targets
+              Name r (local 5)
+            Values
+              Table
+                Item
+                  Call
+                    Name co (local 4)
+                    Index
+                      Name answers (local 6)
+                      Index
+                        Name r (local 5)
+                        Integer 2
+  Return
+    Call
+      Index
+        Name table
+        String "unpack"
+      Name r (local 5)

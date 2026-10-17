@@ -1,0 +1,225 @@
+
+main <locale_numbers.lua:0,0> (54 instructions)
+0+ params, 12 slots, 1 upvalue, 10 locals, 12 constants, 1 function
+	1	[1]	VARARGPREP	0
+	2	[3]	NEWTABLE 	0 0 0	; 0
+	3	[3]	EXTRAARG 	0
+	4	[13]	CLOSURE  	1 0
+	5	[15]	MOVE     	2 1
+	6	[15]	CALL     	2 1 1	; 0 in 0 out
+	7	[16]	GETTABUP 	2 0 0	; _ENV "os"
+	8	[16]	GETFIELD 	2 2 1	; "setlocale"
+	9	[16]	LOADK    	3 2	; "ptb"
+	10	[16]	LOADK    	4 3	; "numeric"
+	11	[16]	CALL     	2 3 2	; 2 in 1 out
+	12	[16]	TEST     	2 1
+	13	[16]	JMP      	12	; to 26
+	14	[16]	GETTABUP 	2 0 0	; _ENV "os"
+	15	[16]	GETFIELD 	2 2 1	; "setlocale"
+	16	[16]	LOADK    	3 4	; "pt_BR.UTF-8"
+	17	[16]	LOADK    	4 3	; "numeric"
+	18	[16]	CALL     	2 3 2	; 2 in 1 out
+	19	[17]	TEST     	2 1
+	20	[17]	JMP      	5	; to 26
+	21	[17]	GETTABUP 	2 0 0	; _ENV "os"
+	22	[17]	GETFIELD 	2 2 1	; "setlocale"
+	23	[17]	LOADK    	3 5	; "de_DE.UTF-8"
+	24	[17]	LOADK    	4 3	; "numeric"
+	25	[17]	CALL     	2 3 2	; 2 in 1 out
+	26	[18]	MOVE     	3 1
+	27	[18]	CALL     	3 1 1	; 0 in 0 out
+	28	[19]	GETTABUP 	3 0 0	; _ENV "os"
+	29	[19]	GETFIELD 	3 3 1	; "setlocale"
+	30	[19]	LOADK    	4 6	; "C"
+	31	[19]	LOADK    	5 3	; "numeric"
+	32	[19]	CALL     	3 3 1	; 2 in 0 out
+	33	[20]	MOVE     	3 1
+	34	[20]	CALL     	3 1 1	; 0 in 0 out
+	35	[22]	NEWTABLE 	3 0 0	; 0
+	36	[22]	EXTRAARG 	0
+	37	[23]	GETTABUP 	4 0 7	; _ENV "ipairs"
+	38	[23]	MOVE     	5 0
+	39	[23]	CALL     	4 2 5	; 1 in 4 out
+	40	[23]	TFORPREP 	4 4	; to 45
+	41	[24]	GETTABUP 	10 0 8	; _ENV "tostring"
+	42	[24]	MOVE     	11 9
+	43	[24]	CALL     	10 2 2	; 1 in 1 out
+	44	[24]	SETTABLE 	3 8 10
+	45	[23]	TFORCALL 	4 2
+	46	[23]	TFORLOOP 	4 6	; to 41
+	47	[25]	CLOSE    	4
+	48	[26]	GETTABUP 	4 0 9	; _ENV "table"
+	49	[26]	GETFIELD 	4 4 10	; "concat"
+	50	[26]	MOVE     	5 3
+	51	[26]	LOADK    	6 11	; " "
+	52	[26]	TAILCALL 	4 3 1k	; 2 in
+	53	[26]	RETURN   	4 0 1k	; all out
+	54	[26]	RETURN   	4 1 1k	; 0 out
+constants (12):
+	0	S	"os"
+	1	S	"setlocale"
+	2	S	"ptb"
+	3	S	"numeric"
+	4	S	"pt_BR.UTF-8"
+	5	S	"de_DE.UTF-8"
+	6	S	"C"
+	7	S	"ipairs"
+	8	S	"tostring"
+	9	S	"table"
+	10	S	"concat"
+	11	S	" "
+locals (10):
+	0	results	4	55
+	1	check	5	55
+	2	_	26	55
+	3	text	37	55
+	4	(for state)	40	47
+	5	(for state)	40	47
+	6	(for state)	40	47
+	7	(for state)	40	47
+	8	i	41	45
+	9	ok	41	45
+upvalues (1):
+	0	_ENV	1	0
+
+function <locale_numbers.lua:5,13> (111 instructions)
+0 params, 8 slots, 2 upvalues, 1 local, 22 constants, 0 functions
+	1	[6]	GETTABUP 	0 0 0	; _ENV "string"
+	2	[6]	GETFIELD 	0 0 1	; "format"
+	3	[6]	LOADK    	1 2	; "%.1f"
+	4	[6]	LOADK    	2 3	; 0.5
+	5	[6]	CALL     	0 3 2	; 2 in 1 out
+	6	[6]	SELF     	0 0 4k	; "sub"
+	7	[6]	LOADI    	2 2
+	8	[6]	LOADI    	3 2
+	9	[6]	CALL     	0 4 2	; 3 in 1 out
+	10	[7]	GETUPVAL 	1 1	; results
+	11	[7]	LEN      	1 1
+	12	[7]	ADDI     	2 1 1
+	13	[7]	MMBINI   	1 1 6 0	; __add
+	14	[7]	GETUPVAL 	1 1	; results
+	15	[7]	GETTABUP 	3 0 5	; _ENV "tostring"
+	16	[7]	LOADK    	4 6	; 3.5
+	17	[7]	CALL     	3 2 2	; 1 in 1 out
+	18	[7]	LOADK    	4 7	; "3"
+	19	[7]	MOVE     	5 0
+	20	[7]	LOADK    	6 8	; "5"
+	21	[7]	CONCAT   	4 3
+	22	[7]	EQ       	3 4 1
+	23	[7]	JMP      	1	; to 25
+	24	[7]	LFALSESKIP	3
+	25	[7]	LOADTRUE 	3
+	26	[7]	SETTABLE 	1 2 3
+	27	[8]	GETUPVAL 	1 1	; results
+	28	[8]	LEN      	1 1
+	29	[8]	ADDI     	2 1 1
+	30	[8]	MMBINI   	1 1 6 0	; __add
+	31	[8]	GETUPVAL 	1 1	; results
+	32	[8]	GETTABUP 	3 0 5	; _ENV "tostring"
+	33	[8]	LOADF    	4 0
+	34	[8]	UNM      	4 4
+	35	[8]	CALL     	3 2 2	; 1 in 1 out
+	36	[8]	LOADK    	4 9	; "-0"
+	37	[8]	MOVE     	5 0
+	38	[8]	LOADK    	6 10	; "0"
+	39	[8]	CONCAT   	4 3
+	40	[8]	EQ       	3 4 1
+	41	[8]	JMP      	1	; to 43
+	42	[8]	LFALSESKIP	3
+	43	[8]	LOADTRUE 	3
+	44	[8]	SETTABLE 	1 2 3
+	45	[9]	GETUPVAL 	1 1	; results
+	46	[9]	LEN      	1 1
+	47	[9]	ADDI     	2 1 1
+	48	[9]	MMBINI   	1 1 6 0	; __add
+	49	[9]	GETUPVAL 	1 1	; results
+	50	[9]	LOADK    	3 11	; 2.5
+	51	[9]	LOADK    	4 12	; ""
+	52	[9]	CONCAT   	3 2
+	53	[9]	LOADK    	4 13	; "2"
+	54	[9]	MOVE     	5 0
+	55	[9]	LOADK    	6 8	; "5"
+	56	[9]	CONCAT   	4 3
+	57	[9]	EQ       	3 4 1
+	58	[9]	JMP      	1	; to 60
+	59	[9]	LFALSESKIP	3
+	60	[9]	LOADTRUE 	3
+	61	[9]	SETTABLE 	1 2 3
+	62	[10]	GETUPVAL 	1 1	; results
+	63	[10]	LEN      	1 1
+	64	[10]	ADDI     	2 1 1
+	65	[10]	MMBINI   	1 1 6 0	; __add
+	66	[10]	GETUPVAL 	1 1	; results
+	67	[10]	GETTABUP 	3 0 14	; _ENV "tonumber"
+	68	[10]	LOADK    	4 7	; "3"
+	69	[10]	MOVE     	5 0
+	70	[10]	LOADK    	6 15	; "25"
+	71	[10]	CONCAT   	4 3
+	72	[10]	CALL     	3 2 2	; 1 in 1 out
+	73	[10]	EQK      	3 16 1	; 3.25
+	74	[10]	JMP      	1	; to 76
+	75	[10]	LFALSESKIP	3
+	76	[10]	LOADTRUE 	3
+	77	[10]	SETTABLE 	1 2 3
+	78	[11]	GETUPVAL 	1 1	; results
+	79	[11]	LEN      	1 1
+	80	[11]	ADDI     	2 1 1
+	81	[11]	MMBINI   	1 1 6 0	; __add
+	82	[11]	GETUPVAL 	1 1	; results
+	83	[11]	GETTABUP 	3 0 14	; _ENV "tonumber"
+	84	[11]	LOADK    	4 17	; "3.25"
+	85	[11]	CALL     	3 2 2	; 1 in 1 out
+	86	[11]	EQK      	3 16 1	; 3.25
+	87	[11]	JMP      	1	; to 89
+	88	[11]	LFALSESKIP	3
+	89	[11]	LOADTRUE 	3
+	90	[11]	SETTABLE 	1 2 3
+	91	[12]	GETUPVAL 	1 1	; results
+	92	[12]	LEN      	1 1
+	93	[12]	ADDI     	2 1 1
+	94	[12]	MMBINI   	1 1 6 0	; __add
+	95	[12]	GETUPVAL 	1 1	; results
+	96	[12]	GETTABUP 	3 0 18	; _ENV "load"
+	97	[12]	LOADK    	4 19	; "return "
+	98	[12]	GETTABUP 	5 0 0	; _ENV "string"
+	99	[12]	GETFIELD 	5 5 1	; "format"
+	100	[12]	LOADK    	6 20	; "%q"
+	101	[12]	LOADK    	7 21	; 0.1
+	102	[12]	CALL     	5 3 2	; 2 in 1 out
+	103	[12]	CONCAT   	4 2
+	104	[12]	CALL     	3 2 2	; 1 in 1 out
+	105	[12]	CALL     	3 1 2	; 0 in 1 out
+	106	[12]	EQK      	3 21 1	; 0.1
+	107	[12]	JMP      	1	; to 109
+	108	[12]	LFALSESKIP	3
+	109	[12]	LOADTRUE 	3
+	110	[12]	SETTABLE 	1 2 3
+	111	[13]	RETURN0  	
+constants (22):
+	0	S	"string"
+	1	S	"format"
+	2	S	"%.1f"
+	3	F	0.5
+	4	S	"sub"
+	5	S	"tostring"
+	6	F	3.5
+	7	S	"3"
+	8	S	"5"
+	9	S	"-0"
+	10	S	"0"
+	11	F	2.5
+	12	S	""
+	13	S	"2"
+	14	S	"tonumber"
+	15	S	"25"
+	16	F	3.25
+	17	S	"3.25"
+	18	S	"load"
+	19	S	"return "
+	20	S	"%q"
+	21	F	0.1
+locals (1):
+	0	point	10	112
+upvalues (2):
+	0	_ENV	0	0
+	1	results	1	0

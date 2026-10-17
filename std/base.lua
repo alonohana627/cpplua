@@ -31,7 +31,8 @@ function assert(v, message, ...) end
 function collectgarbage(opt, ...) end
 
 ---Opens the named file and runs its contents as a Lua chunk, returning all its results.
----Without `filename`, runs the standard input. Errors propagate to the caller.
+---Without `filename`, runs the standard input. The chunk may be text or binary (Lua 5.4's
+---format). Errors propagate to the caller.
 ---@param filename? string
 ---@return any ...
 function dofile(filename) end
@@ -58,8 +59,10 @@ function getmetatable(object) end
 function ipairs(t) end
 
 ---Loads a chunk from a string or from a function returning pieces of it, without running it.
----Returns the compiled function, or nil plus an error message. lua2 accepts only text chunks:
----a binary chunk fails with "bad binary format" even when `mode` allows "b".
+---Returns the compiled function, or nil plus an error message. The chunk may be text or binary
+---(Lua 5.4's format, from `string.dump` or luac); `mode` "t" refuses binary chunks and "b" text
+---ones (default "bt"). Loading untrusted binary chunks is unsafe, as in Lua: a malicious one
+---can crash the interpreter, so use mode "t" for chunks you do not trust.
 ---@param chunk string|fun(): string?
 ---@param chunkname? string
 ---@param mode? "b"|"t"|"bt"
@@ -69,7 +72,8 @@ function ipairs(t) end
 function load(chunk, chunkname, mode, env) end
 
 ---Like `load`, but takes the chunk from the file `filename` (or the standard input).
----lua2 accepts only text chunks.
+---The file may hold a text or a binary chunk, as `mode` allows; the same warning about
+---untrusted binary chunks applies.
 ---@param filename? string
 ---@param mode? "b"|"t"|"bt"
 ---@param env? table

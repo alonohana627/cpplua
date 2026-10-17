@@ -1,0 +1,18 @@
+  yield	len
+  yield	len
+len	7	8
+  yield	call	3	4
+call	10	20
+  yield	call	5
+call2	10	20
+  yield	call	1	2
+  yield	call	0
+in args	2	10
+  yield	call	t
+tail	10	20
+  yield	call	a table	9
+method	10	20
+leaving block
+  yield	close
+after close
+done

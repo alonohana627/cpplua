@@ -1,0 +1,29 @@
+Chunk
+  Local gen
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV]
+        CallStatement
+          Call
+            Index
+              Name coroutine
+              String "yield"
+            Integer 1
+        Local t
+          Nil
+        Return
+          Index
+            Name t (local 0)
+            String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Name gen (local 0)
+  CallStatement
+    Call
+      Name print
+      Call
+        Name gen (local 0)

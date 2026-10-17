@@ -1,0 +1,17 @@
+outer start	10
+inner start	11
+resume inner	true	inner y1	22
+main	true	outer y1
+outer got	Y
+inner got	Y
+resume inner	true	inner y2
+resume inner	true	inner done	last
+resume inner	false	cannot resume dead coroutine
+main	true	outer done
+main	dead	dead
+true	33
+true	147
+true	1
+false	co_nested.lua:40: inner failure
+outer still alive
+dead

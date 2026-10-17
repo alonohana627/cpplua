@@ -1,0 +1,21 @@
+step	1
+body	1	a
+step	2
+body	2	b
+step	3
+body	3	c
+outer	1	1
+outer	2	4
+outer	3	9
+outer	4	16
+call-iter	0
+k	1
+call-iter	1
+k	2
+num	10
+num	7
+num	4
+num	1
+acc	22
+ONE	TWO	THREE	1=7	2=8
+done

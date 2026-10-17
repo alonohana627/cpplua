@@ -6,3 +6,6 @@ compile_commands.json
 # The real Lua 5.4.9, only a reference to build and compare against;
 # cmake/ReferenceLua.cmake downloads it here when it is missing.
 /original_lua_src/
+
+# Written by the official test suite (all.lua) when it runs.
+/tests/fixtures/lua-5.4.9-tests/time.txt

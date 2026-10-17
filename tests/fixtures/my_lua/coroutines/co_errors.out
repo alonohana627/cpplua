@@ -1,0 +1,23 @@
+dead	2	false	co_errors.lua:7: plain
+dead	2	false	no position
+dead	2	false	co_errors.lua:9: level 2
+dead	2	false	nil
+dead	2	false	nil
+dead	2	false	false
+dead	2	false	3.5
+dead	2	false	true	custom error
+dead	2	false	co_errors.lua:17: attempt to perform arithmetic on a nil value
+dead	2	false	co_errors.lua:18: attempt to index a nil value (field 'a')
+dead	2	false	co_errors.lua:19: attempt to get length of a number value
+dead	2	false	co_errors.lua:20: attempt to call a nil value (global 'undefined_function')
+dead	2	false	co_errors.lua:21: attempt to call a nil value (method 'bad')
+dead	2	false	co_errors.lua:22: attempt to compare number with string
+dead	2	false	co_errors.lua:23: from __index
+true	1
+true	2
+true	3
+false	table after yields
+dead
+dead	3	true	false	error in error handling
+dead	2	false	co_errors.lua:37: bad argument #2 to 'error' (number expected, got string)
+end

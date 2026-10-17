@@ -1,0 +1,15 @@
+before	suspended	suspended
+outer sees outer	running
+outer sees inner	suspended
+inner sees inner	running
+inner sees outer	normal
+after inner yield	suspended
+outer yielded	suspended	suspended
+inner again	running	normal
+after inner end	dead
+outer done	dead	dead
+false	co_status.lua:24: x
+dead
+true	normal
+running
+dead

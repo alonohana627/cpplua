@@ -1,0 +1,13 @@
+thread	true
+false
+false
+true
+inside	thread	false	true	false
+yieldable	true	false	true
+in pcall	true	true
+in sort	false
+true	true
+true
+thread	false	running
+false
+thread	2

@@ -10,11 +10,13 @@ namespace lua2 {
 
 void open_string(Heap& heap);
 void open_table(Heap& heap);
+void open_coroutine(Heap& heap);
 void open_math(Heap& heap);
 void open_utf8(Heap& heap);
 void open_io(Heap& heap);
 void open_os(Heap& heap);
 void open_package(Heap& heap);
+void open_debug(Heap& heap);
 
 void open_libraries(Heap& heap);
 

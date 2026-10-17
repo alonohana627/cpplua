@@ -1,0 +1,218 @@
+Chunk
+  LocalFunction try
+    Function(f, ...) [upvalues: _ENV]
+      Local co
+        Call
+          Index
+            Name coroutine
+            String "create"
+          Name f (local 0)
+      CallStatement
+        Call
+          Name print
+          Call
+            Index
+              Name coroutine
+              String "resume"
+            Name co (local 1)
+            Vararg
+      CallStatement
+        Call
+          Name print
+          String ""
+          Call
+            Index
+              Name coroutine
+              String "status"
+            Name co (local 1)
+  CallStatement
+    Call
+      Name try (local 0)
+      Function() [upvalues: _ENV]
+        Local t
+          Table
+            Item
+              Integer 3
+            Item
+              Integer 1
+            Item
+              Integer 2
+        CallStatement
+          Call
+            Index
+              Name table
+              String "sort"
+            Name t (local 0)
+            Function(a, b) [upvalues: _ENV]
+              CallStatement
+                Call
+                  Index
+                    Name coroutine
+                    String "yield"
+                  String "cmp"
+              Return
+                Binary <
+                  Name a (local 0)
+                  Name b (local 1)
+        Return
+          String "sorted"
+  CallStatement
+    Call
+      Name try (local 0)
+      Function() [upvalues: _ENV]
+        Return
+          Paren
+            Call
+              Index
+                Name string
+                String "gsub"
+              String "abc"
+              String "%w"
+              Function(c) [upvalues: _ENV]
+                CallStatement
+                  Call
+                    Index
+                      Name coroutine
+                      String "yield"
+                    Name c (local 0)
+  CallStatement
+    Call
+      Name try (local 0)
+      Function() [upvalues: _ENV]
+        Return
+          Call
+            Name tostring
+            Call
+              Name setmetatable
+              Table
+              Table
+                Field __tostring
+                  Function() [upvalues: _ENV]
+                    CallStatement
+                      Call
+                        Index
+                          Name coroutine
+                          String "yield"
+                    Return
+                      String "s"
+  CallStatement
+    Call
+      Name try (local 0)
+      Function() [upvalues: _ENV]
+        Return
+          Call
+            Name load
+            Function() [upvalues: _ENV]
+              CallStatement
+                Call
+                  Index
+                    Name coroutine
+                    String "yield"
+  CallStatement
+    Call
+      Name try (local 0)
+      Function() [upvalues: _ENV]
+        Local ok, e
+          Call
+            Name pcall
+            Index
+              Name table
+              String "sort"
+            Table
+              Item
+                Integer 2
+              Item
+                Integer 1
+            Function(a, b) [upvalues: _ENV]
+              CallStatement
+                Call
+                  Index
+                    Name coroutine
+                    String "yield"
+              Return
+                Binary <
+                  Name a (local 0)
+                  Name b (local 1)
+        CallStatement
+          Call
+            Index
+              Name coroutine
+              String "yield"
+            String "caught"
+            Name ok (local 0)
+            Name e (local 1)
+        Return
+          String "after"
+  CallStatement
+    Call
+      Name try (local 0)
+      Function() [upvalues: _ENV]
+        Local t
+          Call
+            Name setmetatable
+            Table
+            Table
+              Field __pairs
+                Function(t) [upvalues: _ENV]
+                  CallStatement
+                    Call
+                      Index
+                        Name coroutine
+                        String "yield"
+                      String "in __pairs"
+                  Return
+                    Name next
+                    Table
+                      Item
+                        Integer 10
+                    Nil
+        GenericFor k, v
+          In
+            Call
+              Name pairs
+              Name t (local 0)
+          Body
+            Return
+              Name k (local 5)
+              Name v (local 6)
+  CallStatement
+    Call
+      Name try (local 0)
+      Function() [upvalues: _ENV]
+        Return
+          Call
+            Name select
+            String "#"
+            Call
+              Index
+                Name coroutine
+                String "yield"
+              Call
+                Index
+                  Name string
+                  String "rep"
+                String "ab"
+                Integer 2
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: _ENV]
+        Local ok, e
+          Call
+            Name pcall
+            Index
+              Name string
+              String "gsub"
+            String "x"
+            String "x"
+            Index
+              Name coroutine
+              String "yield"
+        Return
+          Name ok (local 0)
+          Name e (local 1)
+  Return
+    Call
+      Name co (local 1)

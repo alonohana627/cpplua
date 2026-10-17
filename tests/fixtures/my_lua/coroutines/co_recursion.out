@@ -1,0 +1,21 @@
+20 30 35 40 50 60 65 70 80
+bcda
+cbda
+cdba
+dcba
+bdca
+dbca
+permutations	24
+down	5000
+down	4000
+down	3000
+down	2000
+down	1000
+bottom	nil
+up	1000
+up	2000
+up	3000
+up	4000
+up	5000
+true	5000
+50

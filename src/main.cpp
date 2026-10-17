@@ -8,20 +8,13 @@
 #include <span>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include <lua2/debug.hpp>
-#include <lua2/interpreter.hpp>
 #include <lua2/source_file.hpp>
-#include <lua2/version.hpp>
+#include <lua2/standalone.hpp>
 
 namespace {
-
-constexpr std::string_view usage = "usage: lua2 [-v | --version]\n"
-                                   "       lua2 [--generational] <file.lua>\n"
-                                   "       lua2 --bytecode <file.lua>\n"
-                                   "       lua2 --tokens <file.lua>\n"
-                                   "       lua2 --ast <file.lua>\n"
-                                   "       lua2 --ast=dot <file.lua>\n";
 
 // The debug views: each turns source text into printable text or an error.
 using Dump = std::expected<std::string, std::string> (*)(std::string_view, std::string_view);
@@ -53,61 +46,36 @@ int print_dump(const std::string& path, Dump dump_view) {
     return EXIT_SUCCESS;
 }
 
-// `lua2 file.lua`: runs the file (its `print`s write to stdout), then prints
-// what it returns, if anything, separated by tabs, as `print(...)` would. An
-// error goes to stderr with a stack traceback, as the real lua prints it.
-int run_file(const std::string& path, bool generational) {
-    const auto source = read_file(path);
-    if (!source) {
-        std::println(stderr, "lua2: {}", source.error());
-        return EXIT_FAILURE;
-    }
-    lua2::Interpreter interpreter;
-    interpreter.set_generational(generational);
-    const auto results = interpreter.run(lua2::skip_file_prefix(*source), path, true);
-    if (!results) {
-        std::println(stderr, "lua2: {}", results.error());
-        return EXIT_FAILURE;
-    }
-    if (!results->empty()) {
-        std::string line;
-        for (std::size_t n = 0; n < results->size(); ++n) {
-            if (n > 0) {
-                line += '	';
-            }
-            line += (*results)[n];
-        }
-        std::println("{}", line);
-    }
-    return EXIT_SUCCESS;
-}
-
+// lua2's own options come first: a debug view of a file, or the collector's
+// mode; everything else is the real `lua`'s command line (lua2/standalone.hpp).
 int run(std::span<char*> args) {
-    if (args.size() <= 1 || (args.size() == 2 && (std::string_view{args[1]} == "-v" ||
-                                                  std::string_view{args[1]} == "--version"))) {
-        std::println("{}", lua2::version());
-        return EXIT_SUCCESS;
+    if (args.size() == 3) {
+        const std::string_view option = args[1];
+        if (option == "--tokens") {
+            return print_dump(args[2], &lua2::token_dump);
+        }
+        if (option == "--ast") {
+            return print_dump(args[2], &lua2::ast_dump);
+        }
+        if (option == "--ast=dot") {
+            return print_dump(args[2], &lua2::ast_dot_dump);
+        }
+        if (option == "--bytecode") {
+            return print_dump(args[2], &lua2::bytecode_dump);
+        }
     }
-    if (args.size() == 3 && std::string_view{args[1]} == "--tokens") {
-        return print_dump(args[2], &lua2::token_dump);
+    if (args.size() >= 2 && (std::string_view{args[1]} == "--incremental" ||
+                             std::string_view{args[1]} == "--generational")) {
+        const bool generational = std::string_view{args[1]} == "--generational";
+        std::vector<char*> rest{args[0]};
+        rest.insert(rest.end(), args.begin() + 2, args.end());
+        return lua2::run_standalone(rest, generational);
     }
-    if (args.size() == 3 && std::string_view{args[1]} == "--ast") {
-        return print_dump(args[2], &lua2::ast_dump);
+    if (args.size() == 2 && std::string_view{args[1]} == "--version") {
+        args[1][1] = 'v'; // the same as -v
+        args[1][2] = '\0';
     }
-    if (args.size() == 3 && std::string_view{args[1]} == "--ast=dot") {
-        return print_dump(args[2], &lua2::ast_dot_dump);
-    }
-    if (args.size() == 3 && std::string_view{args[1]} == "--bytecode") {
-        return print_dump(args[2], &lua2::bytecode_dump);
-    }
-    if (args.size() == 3 && std::string_view{args[1]} == "--generational") {
-        return run_file(args[2], true);
-    }
-    if (args.size() == 2 && !std::string_view{args[1]}.starts_with('-')) {
-        return run_file(args[1], false);
-    }
-    std::print(stderr, "{}", usage);
-    return EXIT_FAILURE;
+    return lua2::run_standalone(args);
 }
 
 } // namespace

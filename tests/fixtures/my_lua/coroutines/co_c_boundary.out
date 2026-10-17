@@ -1,0 +1,15 @@
+false	attempt to yield across a C-call boundary
+	dead
+false	attempt to yield across a C-call boundary
+	dead
+false	attempt to yield across a C-call boundary
+	dead
+true	nil	attempt to yield across a C-call boundary
+	dead
+true	caught	false	attempt to yield across a C-call boundary
+	suspended
+true	in __pairs
+	suspended
+true	abab
+	suspended
+false	attempt to yield across a C-call boundary

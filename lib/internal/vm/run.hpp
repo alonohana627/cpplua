@@ -31,6 +31,10 @@ std::expected<void, std::string> load_chunk(State& state, std::string_view sourc
 // "cannot open name: reason". An empty path reads stdin.
 std::expected<std::string, std::string> read_chunk_file(const std::string& path);
 
+// lua.c's msghandler: the error object as text with a stack traceback
+// after it (R2.5); an object with __tostring is shown by it alone.
+int traceback_handler(State& state);
+
 // How run_text reports an error.
 enum class ErrorReport : std::uint8_t {
     Message,   // the message only, as a .runerror file has it

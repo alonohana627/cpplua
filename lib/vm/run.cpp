@@ -17,6 +17,7 @@
 #include "value/string.hpp"
 #include "value/table.hpp"
 #include "vm/compiler.hpp"
+#include "vm/dump.hpp"
 #include "vm/execute.hpp"
 #include "vm/function.hpp"
 #include "vm/metamethods.hpp"
@@ -31,23 +32,33 @@ std::expected<void, std::string> load(State& state, std::string_view source,
 
 std::expected<void, std::string> load_chunk(State& state, std::string_view source,
                                             std::string_view source_name, std::string_view mode) {
-    // checkmode: a binary chunk starts with "Lua".
-    const bool binary = source.starts_with('');
+    // checkmode: a binary chunk starts with "\x1bLua".
+    const bool binary = source.starts_with('\x1b');
     if (!mode.contains(binary ? 'b' : 't')) {
         return std::unexpected(std::format("attempt to load a {} chunk (mode is '{}')",
                                            binary ? "binary" : "text", mode));
     }
-    const std::string chunk_name = chunk_id(source_name);
-    if (binary) {
-        return std::unexpected(
-            std::format("{}: bad binary format (lua2 loads only source code)", chunk_name));
+    Heap& heap = state.heap();
+    if (binary) { // lua2's binary chunks are Lua 5.4's (luaU_undump)
+        auto closure = undump(heap, source, source_name);
+        if (!closure) {
+            return std::unexpected(std::move(closure.error()));
+        }
+        if (!(*closure)->upvalues().empty()) { // the first upvalue: the globals
+            (*closure)->upvalues()[0]->set(Value::table(&heap.globals()));
+        }
+        if (!state.check_stack(1)) {
+            return std::unexpected(std::string{"stack overflow"});
+        }
+        state.push(Value::closure(*closure));
+        return {};
     }
+    const std::string chunk_name = chunk_id(source_name);
     Parser parser{source, chunk_name};
     auto ast = parser.parse_chunk();
     if (!ast) {
         return std::unexpected(std::move(ast.error().message));
     }
-    Heap& heap = state.heap();
     auto proto = compile(heap, *ast, source_name, chunk_name);
     if (!proto) {
         return std::unexpected(std::move(proto.error().message));
@@ -66,11 +77,25 @@ std::expected<void, std::string> load_chunk(State& state, std::string_view sourc
     return {};
 }
 
+namespace {
+
+// skipcomment: a file without its byte order mark and '#' line; the line's
+// newline stays (for line numbers), except before a binary chunk.
+std::string chunk_text(std::string_view file) {
+    std::string_view text = skip_file_prefix(file);
+    if (text.starts_with("\n\x1b") && text.size() < file.size()) {
+        text.remove_prefix(1);
+    }
+    return std::string{text};
+}
+
+} // namespace
+
 std::expected<std::string, std::string> read_chunk_file(const std::string& path) {
     if (path.empty()) {
         const std::string text{std::istreambuf_iterator<char>{std::cin},
                                std::istreambuf_iterator<char>{}};
-        return std::string{skip_file_prefix(text)};
+        return chunk_text(text);
     }
     std::ifstream file{path, std::ios::binary};
     if (!file) {
@@ -78,14 +103,10 @@ std::expected<std::string, std::string> read_chunk_file(const std::string& path)
         return std::unexpected(std::format("cannot open {}: {}", path, std::strerror(errno)));
     }
     const std::string text{std::istreambuf_iterator<char>{file}, std::istreambuf_iterator<char>{}};
-    return std::string{skip_file_prefix(text)};
+    return chunk_text(text);
 }
 
-namespace {
-
-// lua.c's msghandler: the error object as text, with a traceback from where
-// it happened (R2.5). An object with __tostring is shown by it alone.
-int message_handler(State& state) { // NOLINT(misc-const-correctness)
+int traceback_handler(State& state) { // NOLINT(misc-const-correctness)
     const Value error = arg(state, 1);
     std::string message;
     if (error.is_string() || error.is_number()) {
@@ -102,6 +123,8 @@ int message_handler(State& state) { // NOLINT(misc-const-correctness)
     push(state, Value::string(state.heap().new_string(traceback(state, message, 1))));
     return 1;
 }
+
+namespace {
 
 // The C++ function that runs a chunk, as lua.c's pmain does: so a traceback
 // ends with "[C]: in ?", as the real Lua's.
@@ -127,7 +150,7 @@ std::expected<void, std::string> run_protected(State& state, std::string_view so
         return std::unexpected(std::move(loaded.error()));
     }
     const Value handler =
-        report == ErrorReport::Traceback ? Value::c_function(&message_handler) : Value::nil();
+        report == ErrorReport::Traceback ? Value::c_function(&traceback_handler) : Value::nil();
     if (protected_call(state, base, all_results, handler) != Status::Ok) {
         std::string text = error_text(state, state.get(base));
         state.top = base;
@@ -189,6 +212,7 @@ std::string display_text(Value value) {
     case Tag::CClosure:
     case Tag::LightUserdata:
     case Tag::Userdata:
+    case Tag::Thread:
     case Tag::Table:
         // "%s: %p" (luaL_tolstring), with the address the way the C library's
         // %p writes it: 16 hex digits on Windows, 0x and the digits elsewhere.

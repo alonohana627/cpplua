@@ -1,0 +1,391 @@
+
+main <co_c_boundary.lua:0,0> (31 instructions)
+0+ params, 3 slots, 1 upvalue, 2 locals, 2 constants, 9 functions
+	1	[1]	VARARGPREP	0
+	2	[6]	CLOSURE  	0 0
+	3	[8]	MOVE     	1 0
+	4	[12]	CLOSURE  	2 1
+	5	[8]	CALL     	1 2 1	; 1 in 0 out
+	6	[14]	MOVE     	1 0
+	7	[16]	CLOSURE  	2 2
+	8	[14]	CALL     	1 2 1	; 1 in 0 out
+	9	[18]	MOVE     	1 0
+	10	[20]	CLOSURE  	2 3
+	11	[18]	CALL     	1 2 1	; 1 in 0 out
+	12	[22]	MOVE     	1 0
+	13	[24]	CLOSURE  	2 4
+	14	[22]	CALL     	1 2 1	; 1 in 0 out
+	15	[26]	MOVE     	1 0
+	16	[30]	CLOSURE  	2 5
+	17	[26]	CALL     	1 2 1	; 1 in 0 out
+	18	[32]	MOVE     	1 0
+	19	[38]	CLOSURE  	2 6
+	20	[32]	CALL     	1 2 1	; 1 in 0 out
+	21	[40]	MOVE     	1 0
+	22	[40]	CLOSURE  	2 7
+	23	[40]	CALL     	1 2 1	; 1 in 0 out
+	24	[42]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	25	[42]	GETFIELD 	1 1 1	; "wrap"
+	26	[45]	CLOSURE  	2 8
+	27	[42]	CALL     	1 2 2	; 1 in 1 out
+	28	[46]	MOVE     	2 1
+	29	[46]	TAILCALL 	2 1 1	; 0 in
+	30	[46]	RETURN   	2 0 1	; all out
+	31	[46]	RETURN   	2 1 1	; 0 out
+constants (2):
+	0	S	"coroutine"
+	1	S	"wrap"
+locals (2):
+	0	try	3	32
+	1	co	28	32
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_c_boundary.lua:2,6> (20 instructions)
+1+ param, 6 slots, 1 upvalue, 2 locals, 6 constants, 0 functions
+	1	[2]	VARARGPREP	1
+	2	[3]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	3	[3]	GETFIELD 	1 1 1	; "create"
+	4	[3]	MOVE     	2 0
+	5	[3]	CALL     	1 2 2	; 1 in 1 out
+	6	[4]	GETTABUP 	2 0 2	; _ENV "print"
+	7	[4]	GETTABUP 	3 0 0	; _ENV "coroutine"
+	8	[4]	GETFIELD 	3 3 3	; "resume"
+	9	[4]	MOVE     	4 1
+	10	[4]	VARARG   	5 0	; all out
+	11	[4]	CALL     	3 0 0	; all in all out
+	12	[4]	CALL     	2 0 1	; all in 0 out
+	13	[5]	GETTABUP 	2 0 2	; _ENV "print"
+	14	[5]	LOADK    	3 4	; ""
+	15	[5]	GETTABUP 	4 0 0	; _ENV "coroutine"
+	16	[5]	GETFIELD 	4 4 5	; "status"
+	17	[5]	MOVE     	5 1
+	18	[5]	CALL     	4 2 0	; 1 in all out
+	19	[5]	CALL     	2 0 1	; all in 0 out
+	20	[6]	RETURN   	2 1 2	; 0 out
+constants (6):
+	0	S	"coroutine"
+	1	S	"create"
+	2	S	"print"
+	3	S	"resume"
+	4	S	""
+	5	S	"status"
+locals (2):
+	0	f	1	21
+	1	co	6	21
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:8,12> (14 instructions)
+0 params, 4 slots, 1 upvalue, 1 local, 3 constants, 1 function
+	1	[9]	NEWTABLE 	0 0 3	; 3
+	2	[9]	EXTRAARG 	0
+	3	[9]	LOADI    	1 3
+	4	[9]	LOADI    	2 1
+	5	[9]	LOADI    	3 2
+	6	[9]	SETLIST  	0 3 0
+	7	[10]	GETTABUP 	1 0 0	; _ENV "table"
+	8	[10]	GETFIELD 	1 1 1	; "sort"
+	9	[10]	MOVE     	2 0
+	10	[10]	CLOSURE  	3 0
+	11	[10]	CALL     	1 3 1	; 2 in 0 out
+	12	[11]	LOADK    	1 2	; "sorted"
+	13	[11]	RETURN1  	1
+	14	[12]	RETURN0  	
+constants (3):
+	0	S	"table"
+	1	S	"sort"
+	2	S	"sorted"
+locals (1):
+	0	t	7	15
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:10,10> (10 instructions)
+2 params, 4 slots, 1 upvalue, 2 locals, 3 constants, 0 functions
+	1	[10]	GETTABUP 	2 0 0	; _ENV "coroutine"
+	2	[10]	GETFIELD 	2 2 1	; "yield"
+	3	[10]	LOADK    	3 2	; "cmp"
+	4	[10]	CALL     	2 2 1	; 1 in 0 out
+	5	[10]	LT       	0 1 1
+	6	[10]	JMP      	1	; to 8
+	7	[10]	LFALSESKIP	2
+	8	[10]	LOADTRUE 	2
+	9	[10]	RETURN1  	2
+	10	[10]	RETURN0  	
+constants (3):
+	0	S	"coroutine"
+	1	S	"yield"
+	2	S	"cmp"
+locals (2):
+	0	a	1	11
+	1	b	1	11
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:14,16> (8 instructions)
+0 params, 4 slots, 1 upvalue, 0 locals, 4 constants, 1 function
+	1	[15]	GETTABUP 	0 0 0	; _ENV "string"
+	2	[15]	GETFIELD 	0 0 1	; "gsub"
+	3	[15]	LOADK    	1 2	; "abc"
+	4	[15]	LOADK    	2 3	; "%w"
+	5	[15]	CLOSURE  	3 0
+	6	[15]	CALL     	0 4 2	; 3 in 1 out
+	7	[15]	RETURN1  	0
+	8	[16]	RETURN0  	
+constants (4):
+	0	S	"string"
+	1	S	"gsub"
+	2	S	"abc"
+	3	S	"%w"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:15,15> (5 instructions)
+1 param, 3 slots, 1 upvalue, 1 local, 2 constants, 0 functions
+	1	[15]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	2	[15]	GETFIELD 	1 1 1	; "yield"
+	3	[15]	MOVE     	2 0
+	4	[15]	CALL     	1 2 1	; 1 in 0 out
+	5	[15]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"yield"
+locals (1):
+	0	c	1	6
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:18,20> (12 instructions)
+0 params, 5 slots, 1 upvalue, 0 locals, 3 constants, 1 function
+	1	[19]	GETTABUP 	0 0 0	; _ENV "tostring"
+	2	[19]	GETTABUP 	1 0 1	; _ENV "setmetatable"
+	3	[19]	NEWTABLE 	2 0 0	; 0
+	4	[19]	EXTRAARG 	0
+	5	[19]	NEWTABLE 	3 1 0	; 0
+	6	[19]	EXTRAARG 	0
+	7	[19]	CLOSURE  	4 0
+	8	[19]	SETFIELD 	3 2 4	; "__tostring"
+	9	[19]	CALL     	1 3 0	; 2 in all out
+	10	[19]	TAILCALL 	0 0 0	; -1 in
+	11	[19]	RETURN   	0 0 0	; all out
+	12	[20]	RETURN0  	
+constants (3):
+	0	S	"tostring"
+	1	S	"setmetatable"
+	2	S	"__tostring"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:19,19> (6 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 3 constants, 0 functions
+	1	[19]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[19]	GETFIELD 	0 0 1	; "yield"
+	3	[19]	CALL     	0 1 1	; 0 in 0 out
+	4	[19]	LOADK    	0 2	; "s"
+	5	[19]	RETURN1  	0
+	6	[19]	RETURN0  	
+constants (3):
+	0	S	"coroutine"
+	1	S	"yield"
+	2	S	"s"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:22,24> (5 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 1 constant, 1 function
+	1	[23]	GETTABUP 	0 0 0	; _ENV "load"
+	2	[23]	CLOSURE  	1 0
+	3	[23]	TAILCALL 	0 2 0	; 1 in
+	4	[23]	RETURN   	0 0 0	; all out
+	5	[24]	RETURN0  	
+constants (1):
+	0	S	"load"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:23,23> (4 instructions)
+0 params, 2 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[23]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	2	[23]	GETFIELD 	0 0 1	; "yield"
+	3	[23]	CALL     	0 1 1	; 0 in 0 out
+	4	[23]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"yield"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:26,30> (19 instructions)
+0 params, 6 slots, 1 upvalue, 2 locals, 7 constants, 1 function
+	1	[27]	GETTABUP 	0 0 0	; _ENV "pcall"
+	2	[27]	GETTABUP 	1 0 1	; _ENV "table"
+	3	[27]	GETFIELD 	1 1 2	; "sort"
+	4	[27]	NEWTABLE 	2 0 2	; 2
+	5	[27]	EXTRAARG 	0
+	6	[27]	LOADI    	3 2
+	7	[27]	LOADI    	4 1
+	8	[27]	SETLIST  	2 2 0
+	9	[27]	CLOSURE  	3 0
+	10	[27]	CALL     	0 4 3	; 3 in 2 out
+	11	[28]	GETTABUP 	2 0 3	; _ENV "coroutine"
+	12	[28]	GETFIELD 	2 2 4	; "yield"
+	13	[28]	LOADK    	3 5	; "caught"
+	14	[28]	MOVE     	4 0
+	15	[28]	MOVE     	5 1
+	16	[28]	CALL     	2 4 1	; 3 in 0 out
+	17	[29]	LOADK    	2 6	; "after"
+	18	[29]	RETURN1  	2
+	19	[30]	RETURN0  	
+constants (7):
+	0	S	"pcall"
+	1	S	"table"
+	2	S	"sort"
+	3	S	"coroutine"
+	4	S	"yield"
+	5	S	"caught"
+	6	S	"after"
+locals (2):
+	0	ok	11	20
+	1	e	11	20
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:27,27> (9 instructions)
+2 params, 3 slots, 1 upvalue, 2 locals, 2 constants, 0 functions
+	1	[27]	GETTABUP 	2 0 0	; _ENV "coroutine"
+	2	[27]	GETFIELD 	2 2 1	; "yield"
+	3	[27]	CALL     	2 1 1	; 0 in 0 out
+	4	[27]	LT       	0 1 1
+	5	[27]	JMP      	1	; to 7
+	6	[27]	LFALSESKIP	2
+	7	[27]	LOADTRUE 	2
+	8	[27]	RETURN1  	2
+	9	[27]	RETURN0  	
+constants (2):
+	0	S	"coroutine"
+	1	S	"yield"
+locals (2):
+	0	a	1	10
+	1	b	1	10
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:32,38> (19 instructions)
+0 params, 9 slots, 1 upvalue, 7 locals, 3 constants, 1 function
+	1	[33]	GETTABUP 	0 0 0	; _ENV "setmetatable"
+	2	[33]	NEWTABLE 	1 0 0	; 0
+	3	[33]	EXTRAARG 	0
+	4	[33]	NEWTABLE 	2 1 0	; 0
+	5	[33]	EXTRAARG 	0
+	6	[36]	CLOSURE  	3 0
+	7	[36]	SETFIELD 	2 1 3	; "__pairs"
+	8	[33]	CALL     	0 3 2	; 2 in 1 out
+	9	[37]	GETTABUP 	1 0 2	; _ENV "pairs"
+	10	[37]	MOVE     	2 0
+	11	[37]	CALL     	1 2 5	; 1 in 4 out
+	12	[37]	TFORPREP 	1 3	; to 16
+	13	[37]	MOVE     	7 5
+	14	[37]	MOVE     	8 6
+	15	[37]	RETURN   	7 3 0k	; 2 out
+	16	[37]	TFORCALL 	1 2
+	17	[37]	TFORLOOP 	1 5	; to 13
+	18	[37]	CLOSE    	1
+	19	[38]	RETURN   	1 1 0k	; 0 out
+constants (3):
+	0	S	"setmetatable"
+	1	S	"__pairs"
+	2	S	"pairs"
+locals (7):
+	0	t	9	20
+	1	(for state)	12	18
+	2	(for state)	12	18
+	3	(for state)	12	18
+	4	(for state)	12	18
+	5	k	13	16
+	6	v	13	16
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:33,36> (12 instructions)
+1 param, 4 slots, 1 upvalue, 1 local, 4 constants, 0 functions
+	1	[34]	GETTABUP 	1 0 0	; _ENV "coroutine"
+	2	[34]	GETFIELD 	1 1 1	; "yield"
+	3	[34]	LOADK    	2 2	; "in __pairs"
+	4	[34]	CALL     	1 2 1	; 1 in 0 out
+	5	[35]	GETTABUP 	1 0 3	; _ENV "next"
+	6	[35]	NEWTABLE 	2 0 1	; 1
+	7	[35]	EXTRAARG 	0
+	8	[35]	LOADI    	3 10
+	9	[35]	SETLIST  	2 1 0
+	10	[35]	LOADNIL  	3 0	; 1 out
+	11	[35]	RETURN   	1 4 0	; 3 out
+	12	[36]	RETURN0  	
+constants (4):
+	0	S	"coroutine"
+	1	S	"yield"
+	2	S	"in __pairs"
+	3	S	"next"
+locals (1):
+	0	t	1	13
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:40,40> (13 instructions)
+0 params, 6 slots, 1 upvalue, 0 locals, 7 constants, 0 functions
+	1	[40]	GETTABUP 	0 0 0	; _ENV "select"
+	2	[40]	LOADK    	1 1	; "#"
+	3	[40]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	4	[40]	GETFIELD 	2 2 3	; "yield"
+	5	[40]	GETTABUP 	3 0 4	; _ENV "string"
+	6	[40]	GETFIELD 	3 3 5	; "rep"
+	7	[40]	LOADK    	4 6	; "ab"
+	8	[40]	LOADI    	5 2
+	9	[40]	CALL     	3 3 0	; 2 in all out
+	10	[40]	CALL     	2 0 0	; all in all out
+	11	[40]	TAILCALL 	0 0 0	; -1 in
+	12	[40]	RETURN   	0 0 0	; all out
+	13	[40]	RETURN0  	
+constants (7):
+	0	S	"select"
+	1	S	"#"
+	2	S	"coroutine"
+	3	S	"yield"
+	4	S	"string"
+	5	S	"rep"
+	6	S	"ab"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_c_boundary.lua:42,45> (12 instructions)
+0 params, 5 slots, 1 upvalue, 2 locals, 6 constants, 0 functions
+	1	[43]	GETTABUP 	0 0 0	; _ENV "pcall"
+	2	[43]	GETTABUP 	1 0 1	; _ENV "string"
+	3	[43]	GETFIELD 	1 1 2	; "gsub"
+	4	[43]	LOADK    	2 3	; "x"
+	5	[43]	LOADK    	3 3	; "x"
+	6	[43]	GETTABUP 	4 0 4	; _ENV "coroutine"
+	7	[43]	GETFIELD 	4 4 5	; "yield"
+	8	[43]	CALL     	0 5 3	; 4 in 2 out
+	9	[44]	MOVE     	2 0
+	10	[44]	MOVE     	3 1
+	11	[44]	RETURN   	2 3 0	; 2 out
+	12	[45]	RETURN0  	
+constants (6):
+	0	S	"pcall"
+	1	S	"string"
+	2	S	"gsub"
+	3	S	"x"
+	4	S	"coroutine"
+	5	S	"yield"
+locals (2):
+	0	ok	9	13
+	1	e	9	13
+upvalues (1):
+	0	_ENV	0	0

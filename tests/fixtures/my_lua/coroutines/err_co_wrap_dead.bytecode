@@ -1,0 +1,35 @@
+
+main <err_co_wrap_dead.lua:0,0> (14 instructions)
+0+ params, 3 slots, 1 upvalue, 1 local, 3 constants, 1 function
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	3	[2]	GETFIELD 	0 0 1	; "wrap"
+	4	[2]	CLOSURE  	1 0
+	5	[2]	CALL     	0 2 2	; 1 in 1 out
+	6	[3]	GETTABUP 	1 0 2	; _ENV "print"
+	7	[3]	MOVE     	2 0
+	8	[3]	CALL     	2 1 0	; 0 in all out
+	9	[3]	CALL     	1 0 1	; all in 0 out
+	10	[4]	GETTABUP 	1 0 2	; _ENV "print"
+	11	[4]	MOVE     	2 0
+	12	[4]	CALL     	2 1 0	; 0 in all out
+	13	[4]	CALL     	1 0 1	; all in 0 out
+	14	[4]	RETURN   	1 1 1	; 0 out
+constants (3):
+	0	S	"coroutine"
+	1	S	"wrap"
+	2	S	"print"
+locals (1):
+	0	gen	6	15
+upvalues (1):
+	0	_ENV	1	0
+
+function <err_co_wrap_dead.lua:2,2> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 1 constant, 0 functions
+	1	[2]	LOADK    	0 0	; "only"
+	2	[2]	RETURN1  	0
+	3	[2]	RETURN0  	
+constants (1):
+	0	S	"only"
+locals (0):
+upvalues (0):

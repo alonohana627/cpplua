@@ -26,6 +26,7 @@
 #include "std/auxlib.hpp"
 #include "std/libs.hpp"
 #include "value/convert.hpp"
+#include "value/locale.hpp"
 #include "value/table.hpp"
 #include "value/userdata.hpp"
 #include "vm/execute.hpp"
@@ -51,7 +52,10 @@ struct Stream {
     std::streambuf* buffer = nullptr;   // where reads and writes go
     Standard standard = Standard::None;
     Closer closer = Closer::Closed;
-    bool line_buffered = false;            // setvbuf "line": flush at each newline
+    bool line_buffered = false; // setvbuf "line": flush at each newline
+    bool text = false;
+    bool readable = false;                 // opened for reading, for writing
+    bool writable = false;                 // Windows text mode: "\n" is "\r\n" in the file
     std::filesystem::path remove_on_close; // io.tmpfile's file
 };
 
@@ -138,11 +142,16 @@ std::ios::openmode open_mode(std::string_view mode) {
     return m;
 }
 
-// Opens `name` into s; false with errno set when it cannot.
+// Opens `name` into s; false with errno set when it cannot. Files open in
+// binary mode; on Windows a text-mode file translates newlines itself
+// (Reader, write_bytes).
 bool open_file(Stream& s, const std::string& name, std::ios::openmode mode) {
     auto file = std::make_unique<std::filebuf>();
     errno = 0;
-    if (file->open(name, mode) == nullptr) {
+#ifdef _WIN32
+    s.text = (mode & std::ios::binary) == 0;
+#endif
+    if (file->open(name, mode | std::ios::binary) == nullptr) {
         if (errno == 0) { // NOLINT(clang-analyzer-unix.Errno): set to 0 above, maybe by open
             std::error_code ec;
             errno = std::filesystem::exists(name, ec) ? EACCES : ENOENT;
@@ -151,6 +160,8 @@ bool open_file(Stream& s, const std::string& name, std::ios::openmode mode) {
     }
     s.buffer = file.get();
     s.file = std::move(file);
+    s.readable = (mode & std::ios::in) != 0;
+    s.writable = (mode & (std::ios::out | std::ios::app)) != 0;
     s.closer = Closer::File;
     return true;
 }
@@ -196,6 +207,20 @@ bool write_bytes(Heap& heap, Stream& s, std::string_view text) {
     case Standard::Input: errno = EBADF; return false;
     case Standard::None: break;
     }
+    if (!s.writable) { // the C library's EBADF
+        errno = EBADF;
+        return false;
+    }
+    std::string translated;
+    if (s.text && text.contains('\n')) { // "\n" is "\r\n" in a text file
+        for (const char c : text) {
+            if (c == '\n') {
+                translated += '\r';
+            }
+            translated += c;
+        }
+        text = translated;
+    }
     const auto n = static_cast<std::streamsize>(text.size());
     // NOLINTNEXTLINE(bugprone-suspicious-stringview-data-usage): writes n bytes
     if (s.buffer->sputn(text.data(), n) != n) {
@@ -238,6 +263,73 @@ std::streambuf* read_buffer(const Stream& s) {
     return s.standard == Standard::Output || s.standard == Standard::Error ? nullptr : s.buffer;
 }
 
+// Reads a stream's characters (getc, ungetc). A file opened in text mode
+// on Windows reads "\r\n" as "\n", as the C library's text files do there
+// (lua2 opens every file in binary mode, so positions are the file's
+// bytes, as ftell gives them).
+class Reader {
+public:
+    Reader(std::streambuf& buffer, bool text) : buffer_(buffer), text_(text) {}
+
+    // The next character, not taken.
+    int peek() {
+        const int c = buffer_.sgetc();
+        if (!text_ || c != '\r') {
+            return c;
+        }
+        buffer_.sbumpc();
+        const int next = buffer_.sgetc();
+        buffer_.sungetc();
+        return next == '\n' ? '\n' : c;
+    }
+
+    // The next character, taken.
+    int get() {
+        const int c = buffer_.sbumpc();
+        if (text_ && c == '\r' && buffer_.sgetc() == '\n') {
+            return buffer_.sbumpc();
+        }
+        return c;
+    }
+
+    // Up to n characters.
+    std::string read(std::size_t n) {
+        std::string out;
+        if (!text_) {
+            out.resize(n);
+            const std::streamsize got = buffer_.sgetn(out.data(), static_cast<std::streamsize>(n));
+            out.resize(static_cast<std::size_t>(got));
+            return out;
+        }
+        for (int c = 0; out.size() < n && (c = get()) != Traits::eof();) {
+            out += static_cast<char>(c);
+        }
+        return out;
+    }
+
+    std::string read_all() {
+        std::string out;
+        std::array<char, 4096> chunk{};
+        std::streamsize got = 0;
+        if (!text_) {
+            do {
+                got = buffer_.sgetn(chunk.data(), chunk.size());
+                out.append(chunk.data(), static_cast<std::size_t>(got));
+            } while (std::cmp_equal(got, chunk.size()));
+            return out;
+        }
+        for (int c = 0; (c = get()) != Traits::eof();) {
+            out += static_cast<char>(c);
+        }
+        return out;
+    }
+
+private:
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members): lives only during a read
+    std::streambuf& buffer_;
+    bool text_;
+};
+
 bool is_space(int c) {
     return c == ' ' || (c >= '\t' && c <= '\r');
 }
@@ -252,7 +344,7 @@ bool is_digit(int c, bool hex) {
 constexpr std::size_t max_number_length = 200; // L_MAXLENNUM
 
 struct NumberReader {
-    std::streambuf* buffer;
+    Reader* reader;
     int c = Traits::eof();
     std::string buff;
     bool overflow = false;
@@ -263,7 +355,8 @@ struct NumberReader {
             return false;
         }
         buff += static_cast<char>(c);
-        c = buffer->snextc();
+        reader->get();
+        c = reader->peek();
         return true;
     }
 
@@ -278,11 +371,11 @@ struct NumberReader {
     }
 };
 
-bool read_number(State& state, std::streambuf& buffer) {
-    while (is_space(buffer.sgetc())) {
-        buffer.sbumpc();
+bool read_number(State& state, Reader& reader) {
+    while (is_space(reader.peek())) {
+        reader.get();
     }
-    NumberReader rn{.buffer = &buffer, .c = buffer.sgetc(), .buff = {}, .overflow = false};
+    NumberReader rn{.reader = &reader, .c = reader.peek(), .buff = {}, .overflow = false};
     int count = 0;
     bool hex = false;
     rn.test2("-+");
@@ -294,7 +387,8 @@ bool read_number(State& state, std::streambuf& buffer) {
         }
     }
     count += rn.digits(hex);
-    if (rn.test2("..")) { // the C locale's decimal point
+    const char point = locale_decimal_point();
+    if (rn.test2(std::string{point, '.'})) { // the locale's decimal point, or a dot
         count += rn.digits(hex);
     }
     if (count > 0 && rn.test2(hex ? "pP" : "eE")) {
@@ -311,15 +405,15 @@ bool read_number(State& state, std::streambuf& buffer) {
     return false;
 }
 
-bool test_eof(State& state, std::streambuf& buffer) {
+bool test_eof(State& state, Reader& reader) {
     push_string(state, "");
-    return buffer.sgetc() != Traits::eof();
+    return reader.peek() != Traits::eof();
 }
 
-bool read_line(State& state, std::streambuf& buffer, bool chop) {
+bool read_line(State& state, Reader& reader, bool chop) {
     std::string line;
     int c = Traits::eof();
-    while ((c = buffer.sbumpc()) != Traits::eof() && c != '\n') {
+    while ((c = reader.get()) != Traits::eof() && c != '\n') {
         line += static_cast<char>(c);
     }
     if (!chop && c == '\n') {
@@ -329,37 +423,20 @@ bool read_line(State& state, std::streambuf& buffer, bool chop) {
     return c == '\n' || !line.empty();
 }
 
-void read_all(State& state, std::streambuf& buffer) {
-    std::string text;
-    std::array<char, 4096> chunk{};
-    std::streamsize nr = 0;
-    do {
-        nr = buffer.sgetn(chunk.data(), chunk.size());
-        text.append(chunk.data(), static_cast<std::size_t>(nr));
-    } while (std::cmp_equal(nr, chunk.size()));
-    push_string(state, text);
-}
-
-bool read_chars(State& state, std::streambuf& buffer, std::size_t n) {
-    std::string text(n, '\0');
-    const std::streamsize nr = buffer.sgetn(text.data(), static_cast<std::streamsize>(n));
-    text.resize(static_cast<std::size_t>(nr));
-    push_string(state, text);
-    return nr > 0;
-}
-
 // g_read: a value per format, the arguments from `first` on.
 int read_values(State& state, Stream& s, int first) {
     std::streambuf* buffer = read_buffer(s);
-    if (buffer == nullptr) { // reading an output stream: the C library's EBADF
+    if (buffer == nullptr || (s.standard == Standard::None && !s.readable)) {
+        // reading an output stream: the C library's EBADF
         return error_result(state, EBADF, nullptr);
     }
+    Reader reader{*buffer, s.text};
     const int nargs = arg_count(state) - first + 1;
     errno = 0;
     bool success = true;
     int n = first;
     if (nargs <= 0) {
-        success = read_line(state, *buffer, true);
+        success = read_line(state, reader, true);
         n = first + 1;
     } else {
         if (!state.check_stack(static_cast<std::uint32_t>(nargs) + 20)) {
@@ -372,8 +449,13 @@ int read_values(State& state, Stream& s, int first) {
                 if (!check_integer(state, n, l)) {
                     return c_function_error;
                 }
-                success = l == 0 ? test_eof(state, *buffer)
-                                 : read_chars(state, *buffer, static_cast<std::size_t>(l));
+                if (l == 0) {
+                    success = test_eof(state, reader);
+                } else {
+                    const std::string text = reader.read(static_cast<std::size_t>(l));
+                    push_string(state, text);
+                    success = !text.empty();
+                }
                 continue;
             }
             std::string_view p;
@@ -384,11 +466,11 @@ int read_values(State& state, Stream& s, int first) {
                 p.remove_prefix(1); // the optional '*' of Lua 5.2
             }
             switch (p.empty() ? '\0' : p.front()) {
-            case 'n': success = read_number(state, *buffer); break;
-            case 'l': success = read_line(state, *buffer, true); break;
-            case 'L': success = read_line(state, *buffer, false); break;
+            case 'n': success = read_number(state, reader); break;
+            case 'l': success = read_line(state, reader, true); break;
+            case 'L': success = read_line(state, reader, false); break;
             case 'a':
-                read_all(state, *buffer);
+                push_string(state, reader.read_all());
                 success = true;
                 break;
             default: return arg_error(state, n, "invalid format");

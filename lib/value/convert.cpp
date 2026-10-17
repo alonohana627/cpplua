@@ -1,10 +1,12 @@
 #include "value/convert.hpp"
 
+#include <algorithm>
 #include <charconv>
 #include <cmath>
 #include <string_view>
 
 #include "numeral.hpp"
+#include "value/locale.hpp"
 
 namespace lua2 {
 
@@ -48,12 +50,17 @@ NumberText float_text(double f) {
     char* const last = first + text.chars_.size();
     const auto result = std::to_chars(first, last, f, std::chars_format::general, digits);
     auto length = static_cast<std::size_t>(result.ptr - first);
+    // printf writes the locale's decimal point (P4.3)
+    const char point = locale_decimal_point();
+    if (point != '.') {
+        std::replace(first, first + length, '.', point);
+    }
 
     // "looks like an int?": only '-' and digits. Then add ".0", so a float
     // never reads back as an integer (Lua's tostringbuff).
     const std::string_view written{first, length};
     if (written.find_first_not_of("-0123456789") == std::string_view::npos) {
-        text.chars_[length++] = '.';
+        text.chars_[length++] = point;
         text.chars_[length++] = '0';
     }
     text.length_ = length;
@@ -91,6 +98,19 @@ std::optional<Value> string_to_number(std::string_view text) {
     }
     if (const auto number = float_numeral(text)) {
         return Value::number(negative ? -*number : *number);
+    }
+    // l_str2d's second try: the locale's decimal point in place of the dot
+    // (P4.2), when it is not a dot.
+    const char point = locale_decimal_point();
+    if (point != '.') {
+        if (const std::size_t at = text.find(point);
+            at != std::string_view::npos && !text.contains('.')) {
+            std::string with_dot{text};
+            with_dot[at] = '.';
+            if (const auto number = float_numeral(with_dot)) {
+                return Value::number(negative ? -*number : *number);
+            }
+        }
     }
     return std::nullopt;
 }

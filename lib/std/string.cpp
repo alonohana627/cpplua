@@ -23,8 +23,10 @@
 #include "std/libs.hpp"
 #include "value/arith.hpp"
 #include "value/convert.hpp"
+#include "value/locale.hpp"
 #include "value/table.hpp"
 #include "value/userdata.hpp"
+#include "vm/dump.hpp"
 #include "vm/execute.hpp"
 #include "vm/function.hpp"
 #include "vm/metamethods.hpp"
@@ -198,10 +200,17 @@ int str_char(State& state) {
 }
 
 int str_dump(State& state) {
+    // A Lua function as a binary chunk, in Lua 5.4's format (vm/dump.hpp).
+    const bool strip = arg(state, 2).is_truthy();
     if (!check_function(state, 1)) {
         return c_function_error;
     }
-    return raise_error(state, "unable to dump given function"); // lua2 has no binary chunks
+    const Value f = arg(state, 1);
+    if (!f.is_closure()) {
+        return raise_error(state, "unable to dump given function");
+    }
+    push_string(state, dump(*f.as_closure()->proto, strip));
+    return 1;
 }
 
 // ---- The metatable's arithmetic (tonum, trymt, arith) ----
@@ -378,7 +387,30 @@ bool has_class(int c, std::uint16_t bits) {
     return (char_classes[static_cast<std::size_t>(c) & 0xFFU] & bits) != 0;
 }
 
+// match_class in another LC_CTYPE: the C library's classes, as Lua's.
+bool match_class_locale(int c, int cl) {
+    bool res = false;
+    switch (std::tolower(cl)) {
+    case 'a': res = std::isalpha(c) != 0; break;
+    case 'c': res = std::iscntrl(c) != 0; break;
+    case 'd': res = std::isdigit(c) != 0; break;
+    case 'g': res = std::isgraph(c) != 0; break;
+    case 'l': res = std::islower(c) != 0; break;
+    case 'p': res = std::ispunct(c) != 0; break;
+    case 's': res = std::isspace(c) != 0; break;
+    case 'u': res = std::isupper(c) != 0; break;
+    case 'w': res = std::isalnum(c) != 0; break;
+    case 'x': res = std::isxdigit(c) != 0; break;
+    case 'z': res = c == 0; break; // deprecated option
+    default: return cl == c;
+    }
+    return std::islower(cl) != 0 ? res : !res;
+}
+
 bool match_class(int c, int cl) {
+    if (!ctype_is_c()) [[unlikely]] {
+        return match_class_locale(c, cl);
+    }
     bool res = false;
     switch (static_cast<unsigned int>(cl) | 0x20U) { // tolower for letters
     case 'a': res = has_class(c, class_alpha); break;
@@ -1190,7 +1222,15 @@ int str_format(State& state) {
                 } else if (n != n) {
                     b += "(0/0)";
                 } else {
-                    b += format_one(std::string{"%a"}, n);
+                    // quotefloat: with a dot, whatever the locale's decimal point
+                    std::string text = format_one(std::string{"%a"}, n);
+                    if (!text.contains('.')) {
+                        if (const std::size_t at = text.find(locale_decimal_point());
+                            at != std::string::npos) {
+                            text[at] = '.';
+                        }
+                    }
+                    b += text;
                 }
             } else if (v.is_nil() || v.is_boolean()) {
                 b += display_text(v);

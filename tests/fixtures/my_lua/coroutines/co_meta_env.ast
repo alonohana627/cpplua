@@ -1,0 +1,160 @@
+Chunk
+  Local Y, print, rawget, rawset, setmetatable
+    Index
+      Name coroutine
+      String "yield"
+    Name print
+    Name rawget
+    Name rawset
+    Name setmetatable
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "wrap"
+      Function() [upvalues: setmetatable, Y, rawset, print, rawget]
+        Local _ENV
+          Call
+            Name setmetatable (upvalue 0)
+            Table
+            Table
+              Field __index
+                Function(t, k) [upvalues: Y]
+                  Return
+                    Call
+                      Name Y (upvalue 0)
+                      String "get"
+                      Name k (local 1)
+              Field __newindex
+                Function(t, k, v) [upvalues: Y, rawset]
+                  CallStatement
+                    Call
+                      Name Y (upvalue 0)
+                      String "set"
+                      Name k (local 1)
+                      Name v (local 2)
+                  CallStatement
+                    Call
+                      Name rawset (upvalue 1)
+                      Name t (local 0)
+                      Name k (local 1)
+                      Binary *
+                        Name v (local 2)
+                        Integer 10
+        Assign
+          Targets
+            Name answer
+          Values
+            Integer 4
+        CallStatement
+          Call
+            Name print (upvalue 3)
+            String "raw"
+            Call
+              Name rawget (upvalue 4)
+              Name _ENV (local 0)
+              String "answer"
+            Name answer
+        Local s
+          Binary +
+            Name alpha
+            Name beta
+        CallStatement
+          Call
+            Name print (upvalue 3)
+            String "sum"
+            Name s (local 1)
+        Assign
+          Targets
+            Name gamma
+          Values
+            Name alpha
+        CallStatement
+          Call
+            Name print (upvalue 3)
+            String "gamma"
+            Name gamma
+        Return
+          Call
+            Name fn
+            Integer 1
+            Integer 2
+  Local r
+    Table
+      Item
+        Call
+          Name co (local 5)
+  While
+    True
+    Body
+      CallStatement
+        Call
+          Name print (local 1)
+          String "  "
+          Call
+            Index
+              Name table
+              String "unpack"
+            Name r (local 6)
+      If
+        If
+          Binary ==
+            Index
+              Name r (local 6)
+              Integer 1
+            String "get"
+          Then
+            If
+              If
+                Binary ==
+                  Index
+                    Name r (local 6)
+                    Integer 2
+                  String "fn"
+                Then
+                  Assign
+                    Targets
+                      Name r (local 6)
+                    Values
+                      Table
+                        Item
+                          Call
+                            Name co (local 5)
+                            Function(a, b)
+                              Return
+                                String "fn"
+                                Binary +
+                                  Name a (local 0)
+                                  Name b (local 1)
+              Else
+                Assign
+                  Targets
+                    Name r (local 6)
+                  Values
+                    Table
+                      Item
+                        Call
+                          Name co (local 5)
+                          Unary #
+                            Index
+                              Name r (local 6)
+                              Integer 2
+        ElseIf
+          Binary ==
+            Index
+              Name r (local 6)
+              Integer 1
+            String "set"
+          Then
+            Assign
+              Targets
+                Name r (local 6)
+              Values
+                Table
+                  Item
+                    Call
+                      Name co (local 5)
+        Else
+          Break
+  Return
+    String "end"

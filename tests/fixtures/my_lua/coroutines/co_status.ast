@@ -1,0 +1,229 @@
+Chunk
+  Local outer, inner
+  Assign
+    Targets
+      Name inner (local 1)
+    Values
+      Call
+        Index
+          Name coroutine
+          String "create"
+        Function() [upvalues: _ENV, inner, outer]
+          CallStatement
+            Call
+              Name print
+              String "inner sees inner"
+              Call
+                Index
+                  Name coroutine
+                  String "status"
+                Name inner (upvalue 1)
+          CallStatement
+            Call
+              Name print
+              String "inner sees outer"
+              Call
+                Index
+                  Name coroutine
+                  String "status"
+                Name outer (upvalue 2)
+          CallStatement
+            Call
+              Index
+                Name coroutine
+                String "yield"
+          CallStatement
+            Call
+              Name print
+              String "inner again"
+              Call
+                Index
+                  Name coroutine
+                  String "status"
+                Name inner (upvalue 1)
+              Call
+                Index
+                  Name coroutine
+                  String "status"
+                Name outer (upvalue 2)
+  Assign
+    Targets
+      Name outer (local 0)
+    Values
+      Call
+        Index
+          Name coroutine
+          String "create"
+        Function() [upvalues: _ENV, outer, inner]
+          CallStatement
+            Call
+              Name print
+              String "outer sees outer"
+              Call
+                Index
+                  Name coroutine
+                  String "status"
+                Name outer (upvalue 1)
+          CallStatement
+            Call
+              Name print
+              String "outer sees inner"
+              Call
+                Index
+                  Name coroutine
+                  String "status"
+                Name inner (upvalue 2)
+          CallStatement
+            Call
+              Index
+                Name coroutine
+                String "resume"
+              Name inner (upvalue 2)
+          CallStatement
+            Call
+              Name print
+              String "after inner yield"
+              Call
+                Index
+                  Name coroutine
+                  String "status"
+                Name inner (upvalue 2)
+          CallStatement
+            Call
+              Index
+                Name coroutine
+                String "yield"
+          CallStatement
+            Call
+              Index
+                Name coroutine
+                String "resume"
+              Name inner (upvalue 2)
+          CallStatement
+            Call
+              Name print
+              String "after inner end"
+              Call
+                Index
+                  Name coroutine
+                  String "status"
+                Name inner (upvalue 2)
+  CallStatement
+    Call
+      Name print
+      String "before"
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name outer (local 0)
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name inner (local 1)
+  CallStatement
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name outer (local 0)
+  CallStatement
+    Call
+      Name print
+      String "outer yielded"
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name outer (local 0)
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name inner (local 1)
+  CallStatement
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name outer (local 0)
+  CallStatement
+    Call
+      Name print
+      String "outer done"
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name outer (local 0)
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name inner (local 1)
+  Local bad
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV]
+        CallStatement
+          Call
+            Name error
+            String "x"
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name bad (local 2)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name bad (local 2)
+  Local main
+    Call
+      Index
+        Name coroutine
+        String "running"
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: _ENV, main]
+        Return
+          Call
+            Index
+              Name coroutine
+              String "status"
+            Name main (upvalue 1)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "resume"
+        Name co (local 4)
+  CallStatement
+    Call
+      Name print
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name main (local 3)
+  Return
+    Call
+      Index
+        Name coroutine
+        String "status"
+      Name co (local 4)

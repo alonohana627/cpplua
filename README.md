@@ -38,10 +38,26 @@ AddressSanitizer (it gives the programs an 8 MB stack, since sanitized frames ar
 
 ## Run
 
+`lua2` is the real `lua` program (a port of `lua.c`), with the same options
+([docs/final_docs/standalone.md](docs/final_docs/standalone.md)):
+
 ```sh
-./build/debug/lua2 file.lua             # run a file; then prints what it returns, if anything
-./build/debug/lua2 --generational file.lua   # the same, with the generational collector
-./build/debug/lua2                      # print the version (also -v, --version)
+./build/debug/lua2 file.lua a b         # run a file, with arg[1] = "a", arg[2] = "b"
+./build/debug/lua2                      # the interactive loop (Ctrl-C stops running code)
+./build/debug/lua2 -e "print(1+1)"      # run a string (-e and -l may repeat, in order)
+./build/debug/lua2 -l mod file.lua      # require "mod" into the global mod first (-l m=mod: into m)
+./build/debug/lua2 -i file.lua          # run a file, then the interactive loop
+./build/debug/lua2 -v                   # print the version (also --version)
+./build/debug/lua2 -E file.lua          # ignore LUA_INIT, LUA_PATH and LUA_CPATH
+./build/debug/lua2 -W file.lua          # turn warnings on
+./build/debug/lua2 - < file.lua         # run the standard input
+./build/debug/lua2 file.luac            # binary chunks load too (string.dump, luac_ref -o)
+./build/debug/lua2 --incremental file.lua    # the incremental collector (generational is the default)
+```
+
+lua2's own debug views come first on the command line:
+
+```sh
 ./build/debug/lua2 --tokens file.lua    # print every token of a file (lexer debugging)
 ./build/debug/lua2 --ast file.lua       # print the syntax tree of a file (parser debugging)
 ./build/debug/lua2 --ast=dot file.lua > tree.dot   # the tree as a Graphviz graph
@@ -49,10 +65,11 @@ dot -Tsvg tree.dot -o tree.svg          # draw it (needs Graphviz: pacman -S min
 ./build/debug/lua2 --bytecode file.lua  # the compiled bytecode, listed like `luac -l -l`
 ```
 
-The whole language runs, with tables, metatables, `<close>`, finalizers and weak tables, and the
-standard library: the base library, `require` and `package`, `string`, `table`, `math`, `utf8`,
-`io`, `os` and `debug.traceback`, all written in C++; coroutines come in stage 10
-([docs/final_docs/stdlib.md](docs/final_docs/stdlib.md)). The Lua files in `std/` describe every
+The whole language runs, with tables, metatables, `<close>`, finalizers, weak tables and
+coroutines, and the whole standard library: the base library, `require` and `package`,
+`coroutine`, `string`, `table`, `math`, `utf8`, `io`, `os` and `debug`, all written in C++
+([docs/final_docs/stdlib.md](docs/final_docs/stdlib.md)). It passes the official Lua 5.4.9 test
+suite ([docs/final_docs/conformance.md](docs/final_docs/conformance.md)). The Lua files in `std/` describe every
 library function for readers and editors: point lua-language-server at them
 (`"workspace.library": ["std"]`) for completion and hover help. An uncaught error goes to stderr as
 `lua2: file.lua:3: message` followed by a stack traceback, as the real `lua` prints it.
@@ -63,11 +80,14 @@ library function for readers and editors: point lua-language-server at them
 ctest --preset debug                         # run all tests
 ./build/debug/lua2_tests                     # run Catch2 directly
 ./build/debug/lua2_tests "[some-tag]"        # run tests with a tag
-./build/debug/lua2_tests "[conformance]"     # only the official Lua test suite checks
+./build/debug/lua2_tests "[conformance]"     # every file of the official suite lexes, parses and compiles
+ctest --preset debug -R lua_5_4_test_suite   # the official Lua 5.4.9 test suite, whole (all.lua)
+cd tests/fixtures/lua-5.4.9-tests && ../../../build/release/lua2 -e "_port=true" all.lua   # by hand
 cmake --preset asan && cmake --build --preset asan && ctest --preset asan   # under AddressSanitizer
 ```
 
-Lua programs used as tests live in `tests/fixtures/`: the official Lua 5.4.9 suite, and
+Lua programs used as tests live in `tests/fixtures/`: the official Lua 5.4.9 suite (unchanged
+from lua.org; `_port=true` skips its Unix-only parts), and
 `my_lua/`, where every Lua program written while developing lua2 is kept with its expected
 `--ast` output, and optionally its `--ast=dot` and `--bytecode` output and what running it
 returns or the error it stops with (see `tests/fixtures/my_lua/README.md`).
@@ -103,6 +123,7 @@ lua2 without them.
 ./build/release/lua_ref file.lua            # run a file with the real Lua
 ./build/release/lua_ref -e "print(dofile('file.lua'))"   # print what it returns, like lua2 does
 ./build/release/luac_ref -l -l -p file.lua  # the real Lua's bytecode for a file
+./build/release/luac_ref -o file.luac file.lua   # a binary chunk, which lua2 runs too
 cmake --preset release -DLUA2_REFERENCE_LUA=OFF   # build without them (and never download)
 rm -rf original_lua_src && cmake --preset release # download a fresh copy
 ```

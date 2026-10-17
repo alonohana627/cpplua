@@ -1,0 +1,343 @@
+
+main <co_basic.lua:0,0> (147 instructions)
+0+ params, 11 slots, 1 upvalue, 8 locals, 19 constants, 6 functions
+	1	[1]	VARARGPREP	0
+	2	[2]	GETTABUP 	0 0 0	; _ENV "coroutine"
+	3	[2]	GETFIELD 	0 0 1	; "create"
+	4	[11]	CLOSURE  	1 0
+	5	[2]	CALL     	0 2 2	; 1 in 1 out
+	6	[12]	GETTABUP 	1 0 2	; _ENV "print"
+	7	[12]	GETTABUP 	2 0 3	; _ENV "type"
+	8	[12]	MOVE     	3 0
+	9	[12]	CALL     	2 2 0	; 1 in all out
+	10	[12]	CALL     	1 0 1	; all in 0 out
+	11	[13]	GETTABUP 	1 0 2	; _ENV "print"
+	12	[13]	GETTABUP 	2 0 4	; _ENV "coroutine"
+	13	[13]	GETFIELD 	2 2 5	; "resume"
+	14	[13]	MOVE     	3 0
+	15	[13]	LOADI    	4 1
+	16	[13]	LOADI    	5 2
+	17	[13]	LOADNIL  	6 0	; 1 out
+	18	[13]	LOADK    	7 6	; "v"
+	19	[13]	LOADNIL  	8 0	; 1 out
+	20	[13]	CALL     	2 7 0	; 6 in all out
+	21	[13]	CALL     	1 0 1	; all in 0 out
+	22	[14]	GETTABUP 	1 0 2	; _ENV "print"
+	23	[14]	GETTABUP 	2 0 4	; _ENV "coroutine"
+	24	[14]	GETFIELD 	2 2 5	; "resume"
+	25	[14]	MOVE     	3 0
+	26	[14]	LOADK    	4 7	; "x"
+	27	[14]	LOADNIL  	5 0	; 1 out
+	28	[14]	LOADK    	6 8	; "z"
+	29	[14]	LOADK    	7 9	; "extra"
+	30	[14]	CALL     	2 6 0	; 5 in all out
+	31	[14]	CALL     	1 0 1	; all in 0 out
+	32	[15]	GETTABUP 	1 0 2	; _ENV "print"
+	33	[15]	GETTABUP 	2 0 4	; _ENV "coroutine"
+	34	[15]	GETFIELD 	2 2 5	; "resume"
+	35	[15]	MOVE     	3 0
+	36	[15]	CALL     	2 2 0	; 1 in all out
+	37	[15]	CALL     	1 0 1	; all in 0 out
+	38	[16]	GETTABUP 	1 0 2	; _ENV "print"
+	39	[16]	GETTABUP 	2 0 4	; _ENV "coroutine"
+	40	[16]	GETFIELD 	2 2 5	; "resume"
+	41	[16]	MOVE     	3 0
+	42	[16]	LOADNIL  	4 0	; 1 out
+	43	[16]	LOADFALSE	5
+	44	[16]	LOADNIL  	6 1	; 2 out
+	45	[16]	CALL     	2 6 0	; 5 in all out
+	46	[16]	CALL     	1 0 1	; all in 0 out
+	47	[17]	GETTABUP 	1 0 2	; _ENV "print"
+	48	[17]	GETTABUP 	2 0 4	; _ENV "coroutine"
+	49	[17]	GETFIELD 	2 2 10	; "status"
+	50	[17]	MOVE     	3 0
+	51	[17]	CALL     	2 2 0	; 1 in all out
+	52	[17]	CALL     	1 0 1	; all in 0 out
+	53	[18]	GETTABUP 	1 0 2	; _ENV "print"
+	54	[18]	GETTABUP 	2 0 11	; _ENV "select"
+	55	[18]	LOADK    	3 12	; "#"
+	56	[18]	GETTABUP 	4 0 4	; _ENV "coroutine"
+	57	[18]	GETFIELD 	4 4 5	; "resume"
+	58	[18]	GETTABUP 	5 0 4	; _ENV "coroutine"
+	59	[18]	GETFIELD 	5 5 1	; "create"
+	60	[18]	CLOSURE  	6 1
+	61	[18]	CALL     	5 2 0	; 1 in all out
+	62	[18]	CALL     	4 0 0	; all in all out
+	63	[18]	CALL     	2 0 0	; all in all out
+	64	[18]	CALL     	1 0 1	; all in 0 out
+	65	[19]	GETTABUP 	1 0 2	; _ENV "print"
+	66	[19]	GETTABUP 	2 0 11	; _ENV "select"
+	67	[19]	LOADK    	3 12	; "#"
+	68	[19]	GETTABUP 	4 0 4	; _ENV "coroutine"
+	69	[19]	GETFIELD 	4 4 5	; "resume"
+	70	[19]	GETTABUP 	5 0 4	; _ENV "coroutine"
+	71	[19]	GETFIELD 	5 5 1	; "create"
+	72	[19]	CLOSURE  	6 2
+	73	[19]	CALL     	5 2 0	; 1 in all out
+	74	[19]	CALL     	4 0 0	; all in all out
+	75	[19]	CALL     	2 0 0	; all in all out
+	76	[19]	CALL     	1 0 1	; all in 0 out
+	77	[20]	GETTABUP 	1 0 2	; _ENV "print"
+	78	[20]	GETTABUP 	2 0 4	; _ENV "coroutine"
+	79	[20]	GETFIELD 	2 2 5	; "resume"
+	80	[20]	GETTABUP 	3 0 4	; _ENV "coroutine"
+	81	[20]	GETFIELD 	3 3 1	; "create"
+	82	[20]	CLOSURE  	4 3
+	83	[20]	CALL     	3 2 2	; 1 in 1 out
+	84	[20]	LOADI    	4 1
+	85	[20]	LOADNIL  	5 0	; 1 out
+	86	[20]	LOADI    	6 3
+	87	[20]	LOADNIL  	7 0	; 1 out
+	88	[20]	CALL     	2 6 0	; 5 in all out
+	89	[20]	CALL     	1 0 1	; all in 0 out
+	90	[21]	GETTABUP 	1 0 2	; _ENV "print"
+	91	[21]	GETTABUP 	2 0 4	; _ENV "coroutine"
+	92	[21]	GETFIELD 	2 2 5	; "resume"
+	93	[21]	GETTABUP 	3 0 4	; _ENV "coroutine"
+	94	[21]	GETFIELD 	3 3 1	; "create"
+	95	[21]	CLOSURE  	4 4
+	96	[21]	CALL     	3 2 0	; 1 in all out
+	97	[21]	CALL     	2 0 0	; all in all out
+	98	[21]	CALL     	1 0 1	; all in 0 out
+	99	[23]	GETTABUP 	1 0 4	; _ENV "coroutine"
+	100	[23]	GETFIELD 	1 1 1	; "create"
+	101	[27]	CLOSURE  	2 5
+	102	[23]	CALL     	1 2 2	; 1 in 1 out
+	103	[28]	NEWTABLE 	2 0 0	; 0
+	104	[28]	EXTRAARG 	0
+	105	[29]	LOADI    	3 1
+	106	[29]	LOADI    	4 200
+	107	[29]	LOADI    	5 1
+	108	[29]	FORPREP  	3 3	; exit to 113
+	109	[29]	MULK     	7 6 13	; 2
+	110	[29]	MMBINK   	6 13 8 0	; __mul 2
+	111	[29]	SETTABLE 	2 6 7
+	112	[29]	FORLOOP  	3 4	; to 109
+	113	[30]	GETTABUP 	3 0 14	; _ENV "table"
+	114	[30]	GETFIELD 	3 3 15	; "pack"
+	115	[30]	GETTABUP 	4 0 16	; _ENV "coroutine"
+	116	[30]	GETFIELD 	4 4 5	; "resume"
+	117	[30]	MOVE     	5 1
+	118	[30]	GETTABUP 	6 0 14	; _ENV "table"
+	119	[30]	GETFIELD 	6 6 17	; "unpack"
+	120	[30]	MOVE     	7 2
+	121	[30]	CALL     	6 2 0	; 1 in all out
+	122	[30]	CALL     	4 0 0	; all in all out
+	123	[30]	CALL     	3 0 2	; all in 1 out
+	124	[31]	GETTABUP 	4 0 2	; _ENV "print"
+	125	[31]	GETFIELD 	5 3 18	; "n"
+	126	[31]	GETI     	6 3 1
+	127	[31]	GETI     	7 3 2
+	128	[31]	GETI     	8 3 201
+	129	[31]	CALL     	4 5 1	; 4 in 0 out
+	130	[32]	GETTABUP 	4 0 2	; _ENV "print"
+	131	[32]	GETTABUP 	5 0 16	; _ENV "coroutine"
+	132	[32]	GETFIELD 	5 5 5	; "resume"
+	133	[32]	MOVE     	6 1
+	134	[32]	GETTABUP 	7 0 14	; _ENV "table"
+	135	[32]	GETFIELD 	7 7 17	; "unpack"
+	136	[32]	MOVE     	8 2
+	137	[32]	LOADI    	9 1
+	138	[32]	LOADI    	10 150
+	139	[32]	CALL     	7 4 0	; 3 in all out
+	140	[32]	CALL     	5 0 0	; all in all out
+	141	[32]	CALL     	4 0 1	; all in 0 out
+	142	[33]	GETTABUP 	4 0 16	; _ENV "coroutine"
+	143	[33]	GETFIELD 	4 4 10	; "status"
+	144	[33]	MOVE     	5 1
+	145	[33]	TAILCALL 	4 2 1	; 1 in
+	146	[33]	RETURN   	4 0 1	; all out
+	147	[33]	RETURN   	4 1 1	; 0 out
+constants (19):
+	0	S	"coroutine"
+	1	S	"create"
+	2	S	"print"
+	3	S	"type"
+	4	S	"coroutine"
+	5	S	"resume"
+	6	S	"v"
+	7	S	"x"
+	8	S	"z"
+	9	S	"extra"
+	10	S	"status"
+	11	S	"select"
+	12	S	"#"
+	13	I	2
+	14	S	"table"
+	15	S	"pack"
+	16	S	"coroutine"
+	17	S	"unpack"
+	18	S	"n"
+locals (8):
+	0	co	6	148
+	1	big	103	148
+	2	vals	105	148
+	3	(for state)	108	113
+	4	(for state)	108	113
+	5	(for state)	108	113
+	6	i	109	112
+	7	res	124	148
+upvalues (1):
+	0	_ENV	1	0
+
+function <co_basic.lua:2,11> (54 instructions)
+2+ params, 14 slots, 1 upvalue, 7 locals, 14 constants, 0 functions
+	1	[2]	VARARGPREP	2
+	2	[3]	GETTABUP 	2 0 0	; _ENV "print"
+	3	[3]	LOADK    	3 1	; "start"
+	4	[3]	MOVE     	4 0
+	5	[3]	MOVE     	5 1
+	6	[3]	GETTABUP 	6 0 2	; _ENV "select"
+	7	[3]	LOADK    	7 3	; "#"
+	8	[3]	VARARG   	8 0	; all out
+	9	[3]	CALL     	6 0 2	; all in 1 out
+	10	[3]	VARARG   	7 0	; all out
+	11	[3]	CALL     	2 0 1	; all in 0 out
+	12	[4]	GETTABUP 	2 0 4	; _ENV "coroutine"
+	13	[4]	GETFIELD 	2 2 5	; "yield"
+	14	[4]	ADD      	3 0 1
+	15	[4]	MMBIN    	0 1 6	; __add
+	16	[4]	LOADNIL  	4 0	; 1 out
+	17	[4]	LOADK    	5 6	; "two"
+	18	[4]	CALL     	2 4 4	; 3 in 3 out
+	19	[5]	GETTABUP 	5 0 0	; _ENV "print"
+	20	[5]	LOADK    	6 7	; "got"
+	21	[5]	MOVE     	7 2
+	22	[5]	MOVE     	8 3
+	23	[5]	MOVE     	9 4
+	24	[5]	CALL     	5 5 1	; 4 in 0 out
+	25	[6]	GETTABUP 	5 0 2	; _ENV "select"
+	26	[6]	LOADK    	6 3	; "#"
+	27	[6]	GETTABUP 	7 0 4	; _ENV "coroutine"
+	28	[6]	GETFIELD 	7 7 5	; "yield"
+	29	[6]	CALL     	7 1 0	; 0 in all out
+	30	[6]	CALL     	5 0 2	; all in 1 out
+	31	[7]	GETTABUP 	6 0 0	; _ENV "print"
+	32	[7]	LOADK    	7 8	; "count"
+	33	[7]	MOVE     	8 5
+	34	[7]	CALL     	6 3 1	; 2 in 0 out
+	35	[8]	GETTABUP 	6 0 9	; _ENV "table"
+	36	[8]	GETFIELD 	6 6 10	; "pack"
+	37	[8]	GETTABUP 	7 0 4	; _ENV "coroutine"
+	38	[8]	GETFIELD 	7 7 5	; "yield"
+	39	[8]	LOADNIL  	8 2	; 3 out
+	40	[8]	CALL     	7 4 0	; 3 in all out
+	41	[8]	CALL     	6 0 2	; all in 1 out
+	42	[9]	GETTABUP 	7 0 0	; _ENV "print"
+	43	[9]	LOADK    	8 11	; "packed"
+	44	[9]	GETFIELD 	9 6 12	; "n"
+	45	[9]	GETI     	10 6 1
+	46	[9]	GETI     	11 6 2
+	47	[9]	GETI     	12 6 3
+	48	[9]	GETI     	13 6 4
+	49	[9]	CALL     	7 7 1	; 6 in 0 out
+	50	[10]	LOADK    	7 13	; "done"
+	51	[10]	LOADNIL  	8 0	; 1 out
+	52	[10]	LOADI    	9 3
+	53	[10]	RETURN   	7 4 3	; 3 out
+	54	[11]	RETURN   	7 1 3	; 0 out
+constants (14):
+	0	S	"print"
+	1	S	"start"
+	2	S	"select"
+	3	S	"#"
+	4	S	"coroutine"
+	5	S	"yield"
+	6	S	"two"
+	7	S	"got"
+	8	S	"count"
+	9	S	"table"
+	10	S	"pack"
+	11	S	"packed"
+	12	S	"n"
+	13	S	"done"
+locals (7):
+	0	a	1	55
+	1	b	1	55
+	2	x	19	55
+	3	y	19	55
+	4	z	19	55
+	5	n	31	55
+	6	t	42	55
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_basic.lua:18,18> (1 instruction)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[18]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <co_basic.lua:19,19> (3 instructions)
+0 params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[19]	LOADNIL  	0 1	; 2 out
+	2	[19]	RETURN   	0 3 0	; 2 out
+	3	[19]	RETURN0  	
+constants (0):
+locals (0):
+upvalues (0):
+
+function <co_basic.lua:20,20> (4 instructions)
+0+ params, 2 slots, 0 upvalues, 0 locals, 0 constants, 0 functions
+	1	[20]	VARARGPREP	0
+	2	[20]	VARARG   	0 0	; all out
+	3	[20]	RETURN   	0 0 1	; all out
+	4	[20]	RETURN   	0 1 1	; 0 out
+constants (0):
+locals (0):
+upvalues (0):
+
+function <co_basic.lua:21,21> (7 instructions)
+0+ params, 3 slots, 1 upvalue, 0 locals, 2 constants, 0 functions
+	1	[21]	VARARGPREP	0
+	2	[21]	GETTABUP 	0 0 0	; _ENV "select"
+	3	[21]	LOADK    	1 1	; "#"
+	4	[21]	VARARG   	2 0	; all out
+	5	[21]	TAILCALL 	0 0 1	; -1 in
+	6	[21]	RETURN   	0 0 1	; all out
+	7	[21]	RETURN   	0 1 1	; 0 out
+constants (2):
+	0	S	"select"
+	1	S	"#"
+locals (0):
+upvalues (1):
+	0	_ENV	0	0
+
+function <co_basic.lua:23,27> (23 instructions)
+0+ params, 7 slots, 1 upvalue, 2 locals, 6 constants, 0 functions
+	1	[23]	VARARGPREP	0
+	2	[24]	GETTABUP 	0 0 0	; _ENV "table"
+	3	[24]	GETFIELD 	0 0 1	; "pack"
+	4	[24]	VARARG   	1 0	; all out
+	5	[24]	CALL     	0 0 2	; all in 1 out
+	6	[25]	GETTABUP 	1 0 0	; _ENV "table"
+	7	[25]	GETFIELD 	1 1 1	; "pack"
+	8	[25]	GETTABUP 	2 0 2	; _ENV "coroutine"
+	9	[25]	GETFIELD 	2 2 3	; "yield"
+	10	[25]	GETTABUP 	3 0 0	; _ENV "table"
+	11	[25]	GETFIELD 	3 3 4	; "unpack"
+	12	[25]	MOVE     	4 0
+	13	[25]	LOADI    	5 1
+	14	[25]	GETFIELD 	6 0 5	; "n"
+	15	[25]	CALL     	3 4 0	; 3 in all out
+	16	[25]	CALL     	2 0 0	; all in all out
+	17	[25]	CALL     	1 0 2	; all in 1 out
+	18	[26]	GETFIELD 	2 1 5	; "n"
+	19	[26]	GETI     	3 1 1
+	20	[26]	GETFIELD 	4 1 5	; "n"
+	21	[26]	GETTABLE 	4 1 4
+	22	[26]	RETURN   	2 4 1	; 3 out
+	23	[27]	RETURN   	2 1 1	; 0 out
+constants (6):
+	0	S	"table"
+	1	S	"pack"
+	2	S	"coroutine"
+	3	S	"yield"
+	4	S	"unpack"
+	5	S	"n"
+locals (2):
+	0	args	6	24
+	1	got	18	24
+upvalues (1):
+	0	_ENV	0	0

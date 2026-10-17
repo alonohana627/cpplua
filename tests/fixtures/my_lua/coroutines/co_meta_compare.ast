@@ -1,0 +1,283 @@
+Chunk
+  Local Y
+    Index
+      Name coroutine
+      String "yield"
+  Local mt
+    Table
+      Field __eq
+        Function(a, b) [upvalues: Y]
+          Return
+            Call
+              Name Y (upvalue 0)
+              String "eq"
+              Index
+                Name a (local 0)
+                String "v"
+              Index
+                Name b (local 1)
+                String "v"
+      Field __lt
+        Function(a, b) [upvalues: Y]
+          Return
+            Call
+              Name Y (upvalue 0)
+              String "lt"
+              Index
+                Name a (local 0)
+                String "v"
+              Index
+                Name b (local 1)
+                String "v"
+      Field __le
+        Function(a, b) [upvalues: Y]
+          Return
+            Call
+              Name Y (upvalue 0)
+              String "le"
+              Index
+                Name a (local 0)
+                String "v"
+              Index
+                Name b (local 1)
+                String "v"
+  LocalFunction O
+    Function(v) [upvalues: _ENV, mt]
+      Return
+        Call
+          Name setmetatable
+          Table
+            Field v
+              Name v (local 0)
+          Name mt (upvalue 1)
+  Local co
+    Call
+      Index
+        Name coroutine
+        String "create"
+      Function() [upvalues: O, _ENV]
+        Local one, two, other
+          Call
+            Name O (upvalue 0)
+            Integer 1
+          Call
+            Name O (upvalue 0)
+            Integer 2
+          Call
+            Name O (upvalue 0)
+            Integer 1
+        CallStatement
+          Call
+            Name print
+            String "eq"
+            Binary ==
+              Name one (local 0)
+              Name other (local 2)
+            Binary ~=
+              Name one (local 0)
+              Name other (local 2)
+            Binary ==
+              Name one (local 0)
+              Name two (local 1)
+        CallStatement
+          Call
+            Name print
+            String "lt"
+            Binary <
+              Name one (local 0)
+              Name two (local 1)
+            Binary <
+              Name two (local 1)
+              Name one (local 0)
+            Binary >
+              Name one (local 0)
+              Name two (local 1)
+        CallStatement
+          Call
+            Name print
+            String "le"
+            Binary <=
+              Name one (local 0)
+              Name two (local 1)
+            Binary >=
+              Name two (local 1)
+              Name one (local 0)
+            Binary <=
+              Name two (local 1)
+              Name one (local 0)
+        CallStatement
+          Call
+            Name print
+            String "not"
+            Unary not
+              Paren
+                Binary <
+                  Name one (local 0)
+                  Name two (local 1)
+            Unary not
+              Paren
+                Binary ==
+                  Name one (local 0)
+                  Name other (local 2)
+        If
+          If
+            Binary and
+              Binary <
+                Name one (local 0)
+                Name two (local 1)
+              Binary >
+                Name two (local 1)
+                Name one (local 0)
+            Then
+              CallStatement
+                Call
+                  Name print
+                  String "if ok"
+        Local n
+          Integer 0
+        Local i
+          Call
+            Name O (upvalue 0)
+            Integer 0
+        While
+          Binary <
+            Name i (local 4)
+            Call
+              Name O (upvalue 0)
+              Integer 3
+          Body
+            Assign
+              Targets
+                Name n (local 3)
+              Values
+                Binary +
+                  Name n (local 3)
+                  Integer 1
+            Assign
+              Targets
+                Name i (local 4)
+              Values
+                Call
+                  Name O (upvalue 0)
+                  Binary +
+                    Index
+                      Name i (local 4)
+                      String "v"
+                    Integer 1
+        CallStatement
+          Call
+            Name print
+            String "while"
+            Name n (local 3)
+        Local t
+          Table
+        Repeat
+          Body
+            Assign
+              Targets
+                Index
+                  Name t (local 5)
+                  Binary +
+                    Unary #
+                      Name t (local 5)
+                    Integer 1
+              Values
+                Unary #
+                  Name t (local 5)
+          Until
+            Binary >=
+              Call
+                Name O (upvalue 0)
+                Unary #
+                  Name t (local 5)
+              Call
+                Name O (upvalue 0)
+                Integer 2
+        CallStatement
+          Call
+            Name print
+            String "repeat"
+            Unary #
+              Name t (local 5)
+        Return
+          Binary ==
+            Name one (local 0)
+            Name other (local 2)
+          Binary <
+            Name one (local 0)
+            Name two (local 1)
+  Local answers
+    Table
+      Field eq
+        Function(a, b)
+          Return
+            Binary or
+              Binary and
+                Binary ==
+                  Name a (local 0)
+                  Name b (local 1)
+                String "yes"
+              Nil
+      Field lt
+        Function(a, b)
+          Return
+            Binary or
+              Binary and
+                Binary <
+                  Name a (local 0)
+                  Name b (local 1)
+                Integer 1
+              False
+      Field le
+        Function(a, b)
+          Return
+            Binary <=
+              Name a (local 0)
+              Name b (local 1)
+  Local ok, op, a, b
+    Call
+      Index
+        Name coroutine
+        String "resume"
+      Name co (local 3)
+  Local count
+    Integer 0
+  While
+    Binary ==
+      Call
+        Index
+          Name coroutine
+          String "status"
+        Name co (local 3)
+      String "suspended"
+    Body
+      Assign
+        Targets
+          Name count (local 9)
+        Values
+          Binary +
+            Name count (local 9)
+            Integer 1
+      Assign
+        Targets
+          Name ok (local 5)
+          Name op (local 6)
+          Name a (local 7)
+          Name b (local 8)
+        Values
+          Call
+            Index
+              Name coroutine
+              String "resume"
+            Name co (local 3)
+            Call
+              Index
+                Name answers (local 4)
+                Name op (local 6)
+              Name a (local 7)
+              Name b (local 8)
+  Return
+    Name ok (local 5)
+    Name op (local 6)
+    Name a (local 7)
+    Name count (local 9)

@@ -1,8 +1,10 @@
 #include "value/compare.hpp"
 
+#include <cstring>
 #include <string>
 #include <string_view>
 
+#include "value/locale.hpp"
 #include "value/string.hpp"
 
 namespace lua2 {
@@ -28,11 +30,42 @@ RuntimeError order_error(Value a, Value b) {
     return RuntimeError{std::move(message)};
 }
 
-// Strings order byte by byte, as unsigned bytes (V8.4). std::string_view
-// compares through std::char_traits<char>, which compares chars as unsigned
-// char, like memcmp.
+// l_strcmp: strings order byte by byte, as unsigned bytes (V8.4), in the
+// "C" locale (std::string_view compares through std::char_traits<char>,
+// which compares chars as unsigned char, like memcmp). In another locale
+// they order as strcoll orders them (P4.1), piece by piece between the
+// '\0's they may hold (Lua's strings, like lua2's, end with one).
 int compare_strings(Value a, Value b) {
-    return a.as_string()->view().compare(b.as_string()->view());
+    const std::string_view x = a.as_string()->view();
+    const std::string_view y = b.as_string()->view();
+    if (collation_is_bytes()) [[likely]] {
+        return x.compare(y);
+    }
+    const char* s1 = x.data();
+    const char* s2 = y.data();
+    std::size_t rest1 = x.size();
+    std::size_t rest2 = y.size();
+    for (;;) {
+        // NOLINTNEXTLINE(concurrency-mt-unsafe): the locale is the program's, as in Lua
+        const int t = std::strcoll(s1, s2);
+        if (t != 0) {
+            return t;
+        }
+        std::size_t piece1 = std::strlen(s1);
+        std::size_t piece2 = std::strlen(s2);
+        if (piece2 == rest2) {
+            return piece1 == rest1 ? 0 : 1; // y is finished: equal, or x is longer
+        }
+        if (piece1 == rest1) {
+            return -1; // x is finished and y is not
+        }
+        ++piece1; // past the '\0'
+        ++piece2;
+        s1 += piece1; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+        s2 += piece2; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+        rest1 -= piece1;
+        rest2 -= piece2;
+    }
 }
 
 } // namespace
@@ -63,6 +96,7 @@ bool equals(Value a, Value b) {
     case Tag::CClosure:
     case Tag::LightUserdata:
     case Tag::Userdata:
+    case Tag::Thread:
     case Tag::Table: return a.payload() == b.payload(); // by identity (V7.5)
     }
     return false; // not reached: every Tag is handled above

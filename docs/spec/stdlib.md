@@ -1,10 +1,11 @@
 # Lua 5.4 standard library
 
 The rules for lua2's standard library (roadmap stage 9). The library is the one of the Lua 5.4
-Reference Manual §6 (the base library, `package`, `string`, `utf8`, `table`, `math`, `io`, `os`
-and `debug.traceback`; `coroutine` is stage 10), with every function's behavior, results and
-error messages as in the reference implementation (Lua 5.4.9's `lbaselib.c`, `lstrlib.c`,
-`ltablib.c`, `lmathlib.c`, `lutf8lib.c`, `liolib.c`, `loslib.c`, `loadlib.c`, `lauxlib.c`),
+Reference Manual §6 (the base library, `package`, `string`, `utf8`, `table`, `math`, `io` and
+`os`; `coroutine` and `debug` came in stage 10, with their rules in
+[coroutines.md](coroutines.md)), with every function's behavior, results and error messages as
+in the reference implementation (Lua 5.4.9's `lbaselib.c`, `lstrlib.c`, `ltablib.c`,
+`lmathlib.c`, `lutf8lib.c`, `liolib.c`, `loslib.c`, `loadlib.c`, `lauxlib.c`),
 built with `LUA_COMPAT_5_3` like the reference Lua (`lua_ref`). The manual is not restated
 here: these rules name what lua2 adds, leaves out or decides where Lua leaves a choice open.
 
@@ -17,8 +18,8 @@ output. Tests of the rules below are in `tests/stdlib_test.cpp` and name their r
 ## S1. The libraries
 
 - **S1.1** Every function is C++ (`lib/std/`). `lua2::Interpreter` opens all the libraries, in
-  `luaL_openlibs`'s order: base, `package`, `table`, `io`, `os`, `string`, `math`, `utf8`,
-  `debug`. Each is a global and an entry of `package.loaded`.
+  `luaL_openlibs`'s order: base, `package`, `coroutine`, `table`, `io`, `os`, `string`, `math`,
+  `utf8`, `debug`. Each is a global and an entry of `package.loaded`.
 - **S1.2** `std/*.lua` declares every library function as an empty Lua function with its
   documentation, and every field as an assignment (for readers and editors, like Python's stubs
   for modules written in C). They are never run. The set of names declared there is exactly the
@@ -40,7 +41,9 @@ output. Tests of the rules below are in `tests/stdlib_test.cpp` and name their r
   native byte order and alignment taken as little-endian.
 - **S2.4** Strings have a metatable whose `__index` is the `string` table and whose arithmetic
   metamethods convert strings to numbers (`"10" + 1`); bitwise operators do not convert strings.
-- **S2.5** `string.dump` raises `unable to dump given function`: lua2 has no binary chunks.
+- **S2.5** `string.dump` makes a Lua 5.4 binary chunk, byte for byte the real Lua's (stage 11,
+  P2.1 in [conformance.md](conformance.md)); a C++ function is `unable to dump given
+  function`.
 
 ## S3. Tables
 
@@ -88,15 +91,16 @@ output. Tests of the rules below are in `tests/stdlib_test.cpp` and name their r
   existing file, as POSIX `rename` does), and report failures with the `errno` value and text.
   `os.tmpname` creates the file it names in the temporary folder, as POSIX Lua's `mkstemp` does.
   `os.getenv`, `os.execute`, `os.exit`, `os.clock` and `os.setlocale` are `<cstdlib>`'s,
-  `<ctime>`'s and `<clocale>`'s functions, as in Lua. Character classes in patterns are the C
-  locale's whatever `os.setlocale` sets.
+  `<ctime>`'s and `<clocale>`'s functions, as in Lua. What the locale changes (string order,
+  numerals, character classes) follows `os.setlocale` as in Lua (P4 in
+  [conformance.md](conformance.md)).
 
 ## S8. Loading chunks
 
 - **S8.1** `load` takes a string or a reader function, a chunk name, a mode and an environment.
   A reader is called until it returns `nil` or an empty string, and then the pieces are parsed
-  (Lua parses while it reads). Only text chunks load: a binary chunk (starting with `"\27"`) is
-  `bad binary format`, and a mode without `t` refuses text.
+  (Lua parses while it reads). Binary chunks load too (P2.2 in [conformance.md](conformance.md));
+  a mode without `b` refuses them, and a mode without `t` refuses text.
 - **S8.2** `loadfile` and `dofile` read files as `lua2 file.lua` does (a byte order mark and a
   first line starting with `#` are skipped); no name means stdin.
 
