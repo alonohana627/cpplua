@@ -1,4 +1,4 @@
-#my_lua
+# my_lua
 
 Every Lua program written while developing cpplua, kept as a regression test, in a folder per
 topic:
